@@ -23,7 +23,7 @@ class ListRoleController extends AbstractController
     ) {}
 
     #[Route('', name: 'list', methods: ['GET'])]
-    public function index(Request $request, GetRolesQueryHandler $usersQueryHandler): Response
+    public function list(Request $request, GetRolesQueryHandler $usersQueryHandler): Response
     {
         try {
             return $this->json([

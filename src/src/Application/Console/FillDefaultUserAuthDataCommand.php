@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types = 1);
+
 namespace App\Application\Console;
 
 use App\Domain\Entity\User;
@@ -31,8 +33,8 @@ class FillDefaultUserAuthDataCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Filling Employee table with data...');
-        $this->user->setEmail('admin@hrapp.com');
-        $this->user->setPassword('admin');
+        $this->user->setEmail('admin.hrapp@gmail.com');
+        $this->user->setPassword('Admin123!');
         $this->entityManager->persist($this->user);
         $this->entityManager->flush();
 

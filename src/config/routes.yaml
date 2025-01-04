@@ -2,4 +2,7 @@ api_login_check:
     path: /api/login_check
 api_role_list:
     path: api/roles
-    controller: App\Presentation\API\Role\ListRoleController::index
+    controller: App\Presentation\API\Role\ListRoleController::list
+api_role_get:
+    path: api/roles/{uuid}
+    controller: App\Presentation\API\Role\GetRoleController::get
