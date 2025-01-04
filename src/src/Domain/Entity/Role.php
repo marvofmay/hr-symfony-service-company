@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Domain\Entity;
 
+use App\User\Domain\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\UuidInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use ReflectionClass;
+use ReflectionProperty;
 
 #[ORM\Entity]
 #[ORM\Table(name: "role")]
@@ -46,9 +48,9 @@ class Role
     #[Groups("role_info")]
     private \DateTimeInterface $createdAt;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups("role_info")]
-    private \DateTimeInterface $updatedAt;
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups("role_info")]
@@ -118,12 +120,6 @@ class Role
     public function setCreatedAtValue(): void
     {
         $this->{self::COLUMN_CREATED_AT} = new \DateTime();
-    }
-
-    #[ORM\PrePersist]
-    public function setUpdatedAtValue(): void
-    {
-        $this->{self::COLUMN_UPDATED_AT} = new \DateTime();
     }
 
     public static function getAttributes(): array
