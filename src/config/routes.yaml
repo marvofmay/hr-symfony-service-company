@@ -1,0 +1,5 @@
+role_list:
+    path: api/roles
+    controller: App\Presentation\API\Role\ListRoleController::index
+#api_login_check:
+#    path: /api/login_check
