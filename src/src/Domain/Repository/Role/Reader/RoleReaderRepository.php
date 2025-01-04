@@ -18,15 +18,25 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
     }
     public function getRoleByUUID(string $uuid): ?Role
     {
-        $user = $this->getEntityManager()
+        $role = $this->getEntityManager()
             ->createQuery('SELECT r FROM App\Domain\Entity\Role r WHERE r.uuid = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
-        if (!$user) {
+        if (!$role) {
             throw new NotFindByUUIDException('Role not found by uuid: ' . $uuid);
         }
 
-        return $user;
+        return $role;
+    }
+
+    public function getRoleByName(string $name): ?Role
+    {
+        $role = $this->getEntityManager()
+            ->createQuery('SELECT r FROM App\Domain\Entity\Role r WHERE r.name = :name')
+            ->setParameter('name', $name)
+            ->getOneOrNullResult();
+
+        return $role;
     }
 }

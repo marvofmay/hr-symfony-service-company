@@ -7,6 +7,7 @@ namespace App\Presentation\API\Role;
 use App\Domain\Interface\Role\RoleReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -20,8 +21,8 @@ class GetRoleController extends AbstractController
         private readonly SerializerInterface $serializer
     ) {}
 
-    #[Route('/{uuid}', name: 'show', methods: ['GET'])]
-    public function get(string $uuid): Response
+    #[Route('/{uuid}', name: 'get', methods: ['GET'])]
+    public function get(string $uuid): JsonResponse
     {
         try {
             return $this->json([
@@ -33,7 +34,7 @@ class GetRoleController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('get role by uuid: ' . $e->getMessage());
 
-            return $this->json(['errors' => 'Upss... problem with get role data'],Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['errors' => 'Upss... problem with get role data'],Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

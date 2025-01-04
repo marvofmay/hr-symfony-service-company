@@ -95,7 +95,7 @@ class Role
         $this->{self::COLUMN_NAME} = $name;
     }
 
-    public function setDescription(string $description): void
+    public function setDescription(?string $description): void
     {
         $this->{self::COLUMN_DESCRIPTION} = $description;
     }

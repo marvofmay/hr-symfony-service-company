@@ -93,6 +93,7 @@
       <path value="$PROJECT_DIR$/src/vendor/doctrine/lexer" />
       <path value="$PROJECT_DIR$/src/vendor/doctrine/sql-formatter" />
       <path value="$PROJECT_DIR$/src/vendor/nelmio/cors-bundle" />
+      <path value="$PROJECT_DIR$/src/vendor/symfony/messenger" />
     </include_path>
   </component>
   <component name="PhpProjectSharedConfiguration" php_language_level="8.2">
