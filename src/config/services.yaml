@@ -30,12 +30,9 @@ services:
     App\Application\CommandHandler\Role\UpdateRoleCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\User\Application\CommandHandler\SelectOption\DeleteSelectOptionCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\User\Application\CommandHandler\SelectOption\RestoreDeletedSelectOptionCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Application\CommandHandler\Role\DeleteRoleCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 
     gedmo.listener.softdeleteable:
         class: Gedmo\SoftDeleteable\SoftDeleteableListener

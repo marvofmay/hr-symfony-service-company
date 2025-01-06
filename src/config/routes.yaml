@@ -16,3 +16,7 @@ api_role_update:
     path: api/roles/{uuid}
     controller: App\Presentation\API\Role\UpdateRoleController::update
     methods: [PUT]
+api_role_delete:
+    path: api/roles/{uuid}
+    controller: App\Presentation\API\Role\DeleteRoleController::delete
+    methods: [DELETE]

@@ -39,23 +39,16 @@ use App\Domain\Repository\Role\Reader\RoleReaderRepository;
 
 class UniqueRoleNameValidator extends ConstraintValidator
 {
-    private RoleReaderRepository $roleRepository;
+    public function __construct(private readonly RoleReaderRepository $roleRepository) {}
 
-    public function __construct(RoleReaderRepository $roleRepository)
-    {
-        $this->roleRepository = $roleRepository;
-    }
-
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         if (null === $value || '' === $value) {
             return;
         }
 
         $dto = $this->context->getObject();
-
         $uuid = method_exists($dto, 'getUuid') ? $dto->getUuid() : null;
-
         $existingRole = $this->roleRepository->getRoleByName($value);
         if ($existingRole && ($uuid === null || $existingRole->getUuid()->toString() !== $uuid)) {
             $this->context->buildViolation($constraint->message)
