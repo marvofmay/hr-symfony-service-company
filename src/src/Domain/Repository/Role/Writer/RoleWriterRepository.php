@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Domain\Repository\Role\Reader;
+namespace App\Domain\Repository\Role\Writer;
 
 use App\Domain\Entity\Role;
 use App\Domain\Interface\Role\RoleWriterInterface;

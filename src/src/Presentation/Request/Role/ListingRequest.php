@@ -17,10 +17,10 @@ class ListingRequest
         public array $filters = []
     ) {
         $this->data = ! empty($request->query->all()) ? $request->query->all() : [];
-        $this->limit = $this->data['limit'] ?? null;
-        $this->page = $this->data['page'] ?? null;
-        $this->orderBy = ! empty($this->data['sort']) ? str_starts_with($this->data['sort'], '-') ? substr($this->data['sort'], 1) : $this->data['sort'] : null;
-        $this->orderDirection = ! empty($this->data['sort']) ? str_starts_with($this->data['sort'], '-') ? 'DESC' : 'ASC' : null;
+        $this->limit = $this->data['pageSize'] ?? null;
+        $this->page = $this->data['pageIndex'] ?? null;
+        $this->orderBy = $this->data['sortBy'] ?? null;
+        $this->orderDirection = $this->data['sortDirection'] ?? null;
         $this->filters = array_filter($this->data, fn ($key) => in_array($key, Role::getAttributes()), ARRAY_FILTER_USE_KEY);
 
         foreach ($this->data as $key => $val) {

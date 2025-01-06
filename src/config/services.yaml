@@ -27,9 +27,9 @@ services:
     App\Application\CommandHandler\Role\CreateRoleCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\User\Application\CommandHandler\SelectOption\UpdateSelectOptionCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Application\CommandHandler\Role\UpdateRoleCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 #    App\User\Application\CommandHandler\SelectOption\DeleteSelectOptionCommandHandler:
 #        tags:
 #            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
