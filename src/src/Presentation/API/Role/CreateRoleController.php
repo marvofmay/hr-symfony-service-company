@@ -24,11 +24,11 @@ class CreateRoleController extends AbstractController
         try {
             $createRoleAction->execute($createDTO);
 
-            return new JsonResponse(['message' => 'Role has been created.'], Response::HTTP_OK);
+            return new JsonResponse(['message' => 'role.add.success'], Response::HTTP_OK);
         } catch (\Exception $e) {
             $this->logger->error('trying create new role: ' .  $e->getMessage());
 
-            return new JsonResponse(['errors' => 'Upss... problem with create role'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => 'role.add.error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

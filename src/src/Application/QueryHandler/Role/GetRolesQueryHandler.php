@@ -72,6 +72,8 @@ class GetRolesQueryHandler
                 )
                 ->setParameter('searchPhrase', '%' . strtolower($filters['phrase']) . '%');
             }
+        } else {
+            $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNull('r.' . Role::COLUMN_DELETED_AT));
         }
 
         return $queryBuilder;

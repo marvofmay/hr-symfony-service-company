@@ -24,17 +24,17 @@ class UpdateRoleController extends AbstractController
     {
         try {
             if ($uuid !== $updateDTO->getUUID()) {
-                return $this->json(['errors' => 'Different UUID in body raw and url'], Response::HTTP_BAD_REQUEST);
+                return $this->json(['message' => 'Different UUID in body raw and url'], Response::HTTP_BAD_REQUEST);
             }
 
             $updateRoleAction->setRoleToUpdate($this->roleReaderRepository->getRoleByUUID($uuid))
                 ->execute($updateDTO);
 
-            return $this->json(['message' => 'Role has been updated.'], Response::HTTP_OK);
+            return $this->json(['message' => 'role.update.success'], Response::HTTP_OK);
         } catch (Exception $e) {
-            $this->logger->error('trying role update: ' .  $e->getMessage());
+            $this->logger->error('trying role update: ' . $e->getMessage());
 
-            return $this->json(['errors' => 'Upss... Problem with update role.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['message' => 'role.update.error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -23,11 +23,11 @@ class DeleteRoleController extends AbstractController
             $deleteRoleAction->setRoleToDelete($this->roleReaderRepository->getRoleByUUID($uuid))
                 ->execute();
 
-            return $this->json(['message' => 'Role has been deleted.'], Response::HTTP_OK);
+            return $this->json(['message' => 'role.deleted.success'], Response::HTTP_OK);
         } catch (\Exception $e) {
             $this->logger->error('trying role delete: ' .  $e->getMessage());
 
-            return $this->json(['errors' => 'Upss... Problem with delete role.'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

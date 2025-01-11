@@ -34,7 +34,7 @@ class GetRoleController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('get role by uuid: ' . $e->getMessage());
 
-            return new JsonResponse(['errors' => 'Upss... problem with get role data'],Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => 'Upss... problem with get role data'],Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -39,7 +39,7 @@ class ListRoleController extends AbstractController
         } catch (\Exception $e) {
             $this->logger->error('show roles: ' . $e->getMessage());
 
-            return new JsonResponse(['data' => [], 'errors' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['data' => [], 'message' => $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
