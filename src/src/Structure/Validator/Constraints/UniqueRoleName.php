@@ -8,7 +8,7 @@ use Attribute;
 #[\Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)]
 final class UniqueRoleName extends Constraint
 {
-    public string $message = 'Role with the name "{{ name }}" already exists.';
+    public string $message = 'role.validate.roleAlreadyExists';
 
     public function __construct(
         array $options = [],

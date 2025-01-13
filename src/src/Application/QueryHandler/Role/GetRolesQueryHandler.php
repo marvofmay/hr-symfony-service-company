@@ -63,7 +63,7 @@ class GetRolesQueryHandler
                 }
             }
 
-            if (array_key_exists('phrase', $filters)) {
+            if (array_key_exists('phrase', $filters) && !empty($filters['phrase'])) {
                 $queryBuilder = $queryBuilder->andWhere(
                     $queryBuilder->expr()->orX(
                         $queryBuilder->expr()->like('LOWER(r. ' . Role::COLUMN_NAME . ')', ':searchPhrase'),

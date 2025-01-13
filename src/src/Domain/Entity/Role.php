@@ -67,7 +67,7 @@ class Role
 
     public function getDescription(): string
     {
-        return $this->{self::COLUMN_NAME};
+        return $this->{self::COLUMN_DESCRIPTION};
     }
 
     public function getCreatedAt(): \DateTimeInterface
