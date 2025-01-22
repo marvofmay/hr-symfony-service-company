@@ -1,0 +1,8 @@
+role:
+  name:
+      roleAlreadyExists: "Rola istnieje"
+      nameIsRequired: "Nazwa roli jest wymagana"
+      minimum3Letters: "Minimalnie 3 litery"
+  add:
+      success: "Rola została pomyślnie dodana"
+      error: "Wystąpił błąd - rola nie została dodana"

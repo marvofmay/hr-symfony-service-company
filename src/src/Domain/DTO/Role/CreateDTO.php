@@ -9,8 +9,8 @@ use App\Structure\Validator\Constraints as CustomAssert;
 
 class CreateDTO
 {
-    #[Assert\NotBlank(message: "role's name is required!!!")]
-    #[Assert\Length(min: 3, max: 50, minMessage: 'minimum 3 letters', maxMessage: 'maximum 50 letters')]
+    #[Assert\NotBlank(message: "role.name.required")]
+    #[Assert\Length(min: 3, max: 50, minMessage: 'role.name.minimum3Letters', maxMessage: 'role.name.maximum50Letters')]
     #[CustomAssert\UniqueRoleName]
     public string $name = '';
 

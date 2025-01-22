@@ -12,11 +12,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Contracts\Translation\TranslatorInterface;
+use Exception;
 
 #[Route('/api/roles', name: 'api.roles.')]
 class CreateRoleController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger) { }
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator) { }
 
     #[Route('', name: 'create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
@@ -24,12 +26,13 @@ class CreateRoleController extends AbstractController
         try {
             $createRoleAction->execute($createDTO);
 
-            return new JsonResponse(['message' => 'role.add.success'], Response::HTTP_OK);
-        } catch (\Exception $e) {
+            return new JsonResponse([
+                'message' => $this->translator->trans('role.add.success')
+            ], Response::HTTP_OK);
+        } catch (Exception $e) {
             $this->logger->error('trying create new role: ' .  $e->getMessage());
 
             return new JsonResponse(['message' => 'role.add.error'], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 }

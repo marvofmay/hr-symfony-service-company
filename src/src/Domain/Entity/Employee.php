@@ -21,7 +21,7 @@ use ReflectionProperty;
 class Employee
 {
     public const COLUMN_UUID = 'uuid';
-    public const COLUMN_EXTERNALU_UUID = 'external_uuid';
+    public const COLUMN_EXTERNAL_UUID = 'external_uuid';
     public const COLUMN_COMPANY_UUID = 'company_uuid';
     public const COLUMN_DEPARTMENT_UUID = 'department_uuid';
     public const COLUMN_SUPERIOR_UUID = 'superior_uuid';

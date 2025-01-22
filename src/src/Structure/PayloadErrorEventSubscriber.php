@@ -10,9 +10,13 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PayloadErrorEventSubscriber implements EventSubscriberInterface
 {
+
+    public function __construct(private TranslatorInterface $translator) {}
+
     public static function getSubscribedEvents(): array
     {
         return [
@@ -32,7 +36,7 @@ class PayloadErrorEventSubscriber implements EventSubscriberInterface
         $validationException = $event->getThrowable()->getPrevious();
         $errorMessages = [];
         foreach ($validationException->getViolations() as $violation) {
-            $errorMessages[$violation->getPropertyPath()] = $violation->getMessage();
+            $errorMessages[$violation->getPropertyPath()] = $this->translator->trans($violation->getMessage());
         }
 
         $event->setResponse(new JsonResponse(['errors' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY));

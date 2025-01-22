@@ -61,6 +61,8 @@ class GetRolesQueryHandler
                         $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('r.' . Role::COLUMN_DELETED_AT));
                         break;
                 }
+            } else {
+                $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNull('r.' . Role::COLUMN_DELETED_AT));
             }
 
             if (array_key_exists('phrase', $filters) && !empty($filters['phrase'])) {
