@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
+use Exception;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/api/roles', name: 'api.roles.')]
 class GetRoleController extends AbstractController
@@ -18,7 +20,8 @@ class GetRoleController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly RoleReaderInterface $roleReaderRepository,
-        private readonly SerializerInterface $serializer
+        private readonly SerializerInterface $serializer,
+        private readonly TranslatorInterface $translator
     ) {}
 
     #[Route('/{uuid}', name: 'get', methods: ['GET'])]
@@ -31,10 +34,15 @@ class GetRoleController extends AbstractController
                     'json', ['groups' => ['role_info']],
                 ))
             ], Response::HTTP_OK);
-        } catch (\Exception $e) {
-            $this->logger->error('get role by uuid: ' . $e->getMessage());
+        } catch (Exception $error) {
+            $this->logger->error(
+                sprintf('%s: %s', $this->translator->trans('role.view.error'),  $error->getMessage())
+            );
 
-            return new JsonResponse(['message' => 'Upss... problem with get role data'],Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(
+                ['message' => $this->translator->trans('role.view.error')],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }

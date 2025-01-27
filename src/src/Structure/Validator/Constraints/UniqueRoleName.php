@@ -2,31 +2,7 @@
 
 namespace App\Structure\Validator\Constraints;
 
-//use Symfony\Component\Validator\Constraint;
-//use Attribute;
-//use Symfony\Contracts\Translation\TranslatorInterface;
-//
-//#[\Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)]
-//final class UniqueRoleName extends Constraint
-//{
-//    public string $message = 'role.validate.roleAlreadyExists';
-//
-//    public function __construct(
-//        TranslatorInterface $translator,
-//        array $options = [],
-//        ?string $message = null,
-//    ) {
-//        parent::__construct($options);
-//
-//        if ($message !== null) {
-//            //$this->message = $message;
-//            $this->message = $translator->trans($message);
-//        }
-//    }
-//}
-
-namespace App\Structure\Validator\Constraints;
-
+use LogicException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -39,12 +15,12 @@ final class UniqueRoleName extends Constraint
 
 class UniqueRoleNameValidator extends ConstraintValidator
 {
-    public function __construct(private TranslatorInterface $translator) {}
+    public function __construct(private readonly TranslatorInterface $translator) {}
 
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof UniqueRoleName) {
-            throw new \LogicException('Expected a UniqueRoleName constraint.');
+            throw new LogicException($this->translator->trans('role.name.expectedUniqueRoleNameConstraint'));
         }
 
         if ($this->isRoleNameNotUnique($value)) {

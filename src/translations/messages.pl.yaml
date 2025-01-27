@@ -1,8 +1,21 @@
 role:
+  uuid:
+    differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
   name:
       roleAlreadyExists: "Rola istnieje"
       nameIsRequired: "Nazwa roli jest wymagana"
       minimum3Letters: "Minimalnie 3 litery"
+      expectedUniqueRoleNameConstraint: "Oczekiwano walidacji unkalnej nazwy roli"
   add:
       success: "Rola została pomyślnie dodana"
       error: "Wystąpił błąd - rola nie została dodana"
+  update:
+    success: "Rola została pomyślnie zaktualizowana"
+    error: "Wystąpił błąd - rola nie została zaktualizowana"
+  delete:
+    success: "Rola została pomyślnie usunięta"
+    error: "Wystąpił błąd - rola nie została usunięta"
+  view:
+    error: "Wystapił błąd przy pobieraniu wybranej roli"
+  list:
+    error: "Wystapił błąd przy pobieraniu listy ról"

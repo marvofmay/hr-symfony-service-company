@@ -18,7 +18,7 @@ use Exception;
 #[Route('/api/roles', name: 'api.roles.')]
 class CreateRoleController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator) { }
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator) {}
 
     #[Route('', name: 'create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
@@ -26,13 +26,19 @@ class CreateRoleController extends AbstractController
         try {
             $createRoleAction->execute($createDTO);
 
-            return new JsonResponse([
-                'message' => $this->translator->trans('role.add.success')
-            ], Response::HTTP_OK);
-        } catch (Exception $e) {
-            $this->logger->error('trying create new role: ' .  $e->getMessage());
+            return new JsonResponse(
+                ['message' => $this->translator->trans('role.add.success')],
+                Response::HTTP_OK
+            );
+        } catch (Exception $error) {
+            $this->logger->error(
+                sprintf('%s: %s', $this->translator->trans('role.add.error'), $error->getMessage())
+            );
 
-            return new JsonResponse(['message' => 'role.add.error'], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(
+                ['message' => 'role.add.error'],
+                Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 }
