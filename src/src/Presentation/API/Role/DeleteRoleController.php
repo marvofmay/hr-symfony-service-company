@@ -9,6 +9,7 @@ use App\Domain\Interface\Role\RoleReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -23,22 +24,22 @@ class DeleteRoleController extends AbstractController
     ) {}
 
     #[Route('/{uuid}', name: 'delete', methods: ['DELETE'])]
-    public function delete(string $uuid, DeleteRoleAction $deleteRoleAction): Response
+    public function delete(string $uuid, DeleteRoleAction $deleteRoleAction): JsonResponse
     {
         try {
             $deleteRoleAction->setRoleToDelete($this->roleReaderRepository->getRoleByUUID($uuid))
                 ->execute();
-
-            return $this->json(
+            return new JsonResponse(
                 ['message' => $this->translator->trans('role.deleted.success')],
                 Response::HTTP_OK
             );
+
         } catch (Exception $error) {
             $this->logger->error(
                 sprintf('%s: %s', $this->translator->trans('role.delete.error'), $error->getMessage())
             );
 
-            return $this->json(['message' => $this->translator->trans('role.delete.error')], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $this->translator->trans('role.delete.error')], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

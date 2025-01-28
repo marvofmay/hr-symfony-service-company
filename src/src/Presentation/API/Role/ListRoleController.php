@@ -30,7 +30,7 @@ class ListRoleController extends AbstractController
     public function list(Request $request, GetRolesQueryHandler $usersQueryHandler): Response
     {
         try {
-            return $this->json([
+            return new JsonResponse([
                 'data' =>
                     json_decode($this->serializer->serialize(
                         $usersQueryHandler->handle(new GetRolesQuery(new ListingRequest($request))),

@@ -9,6 +9,7 @@ use App\Domain\DTO\Role\UpdateDTO;
 use App\Domain\Interface\Role\RoleReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
@@ -38,7 +39,7 @@ class UpdateRoleController extends AbstractController
             $updateRoleAction->setRoleToUpdate($this->roleReaderRepository->getRoleByUUID($uuid))
                 ->execute($updateDTO);
 
-            return $this->json(
+            return new JsonResponse(
                 ['message' => $this->translator->trans('role.update.success')],
                 Response::HTTP_OK
             );
@@ -47,7 +48,7 @@ class UpdateRoleController extends AbstractController
                 sprintf('%s: %s', $this->translator->trans('role.update.error'), $error->getMessage())
             );
 
-            return $this->json(
+            return new JsonResponse(
                 ['message' => $this->translator->trans('role.update.error')],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
