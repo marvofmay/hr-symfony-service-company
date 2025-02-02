@@ -18,7 +18,7 @@ readonly class ImportRolesCommandHandler
         foreach ($command->data as $item) {
             $role = new Role();
             $role->setName($item[0]);
-            $role->setDescription($item[0]);
+            $role->setDescription($item[1]);
 
             $roles[] = $role;
         }
