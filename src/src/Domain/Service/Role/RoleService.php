@@ -9,7 +9,7 @@ use App\Domain\Interface\Role\RoleWriterInterface;
 
 readonly class RoleService
 {
-    public function __construct(private readonly RoleWriterInterface $roleWriterRepository)
+    public function __construct(private RoleWriterInterface $roleWriterRepository)
     {
     }
 
@@ -26,5 +26,10 @@ readonly class RoleService
     public function updateRoleInDB(Role $role): Role
     {
         return $this->roleWriterRepository->updateRoleInDB($role);
+    }
+
+    public function saveRolesInDB(array $roles): void
+    {
+        $this->roleWriterRepository->saveRolesInDB($roles);
     }
 }

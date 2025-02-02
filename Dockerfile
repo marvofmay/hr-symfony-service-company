@@ -1,4 +1,3 @@
-# Użyj oficjalnego obrazu PHP 8.1-FPM z Apache
 FROM php:8.4-apache
 
 # Aktualizacja i instalacja dodatkowych narzędzi
@@ -18,15 +17,20 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y \
       libzip-dev \
       wget \
       librabbitmq-dev \
+      libpng-dev \
+      libjpeg-dev \
+      libfreetype6-dev \
     && pecl install amqp \
     && docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd \
     && docker-php-ext-configure intl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install \
       pdo_mysql \
       sockets \
       intl \
       opcache \
       zip \
+      gd \
     && docker-php-ext-enable amqp \
     && rm -rf /tmp/* \
     && rm -rf /var/list/apt/* \
@@ -53,4 +57,5 @@ RUN a2enmod rewrite
 
 # Rozpocznij serwer Apache
 CMD ["apache2-foreground"]
+
 

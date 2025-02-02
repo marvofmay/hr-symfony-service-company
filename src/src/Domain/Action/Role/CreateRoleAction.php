@@ -10,7 +10,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class CreateRoleAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus) {}
+    public function __construct(private MessageBusInterface $commandBus) {}
 
     public function execute(CreateDTO $createDTO): void
     {

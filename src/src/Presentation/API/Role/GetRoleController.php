@@ -40,7 +40,7 @@ class GetRoleController extends AbstractController
             );
 
             return new JsonResponse(
-                ['message' => $this->translator->trans('role.view.error')],
+                ['message' => sprintf('%s. %s', $this->translator->trans('role.view.error'), $error->getMessage())],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

@@ -1,6 +1,12 @@
+name: "nazwa"
+expectedXLSXFile: "oczekiwano pliku XLSX"
+expectedPDFFile: "oczekiwano pliku PDF"
+notAllowedTypeFile: "niedozwolony typ pliku"
+unexpectedTypeFile: "oczekiwano inny typ pliku"
 role:
   uuid:
     differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
+    notFound: "Rola o podanym UUID nie istnieje"
   name:
       roleAlreadyExists: "Rola istnieje"
       nameIsRequired: "Nazwa roli jest wymagana"
@@ -15,6 +21,9 @@ role:
   delete:
     success: "Rola została pomyślnie usunięta"
     error: "Wystąpił błąd - rola nie została usunięta"
+  import:
+    success: "Role zostały pomyślnie zaimportowane"
+    error: "Wystąpił błąd - role nie zostały zaimportowane"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej roli"
   list:

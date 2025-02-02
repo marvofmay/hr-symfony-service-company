@@ -33,6 +33,9 @@ services:
     App\Application\CommandHandler\Role\DeleteRoleCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Application\CommandHandler\Role\ImportRolesCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 
     gedmo.listener.softdeleteable:
         class: Gedmo\SoftDeleteable\SoftDeleteableListener

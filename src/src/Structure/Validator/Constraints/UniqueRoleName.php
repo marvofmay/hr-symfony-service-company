@@ -2,6 +2,7 @@
 
 namespace App\Structure\Validator\Constraints;
 
+use App\Domain\Repository\Role\Reader\RoleReaderRepository;
 use LogicException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -15,7 +16,7 @@ final class UniqueRoleName extends Constraint
 
 class UniqueRoleNameValidator extends ConstraintValidator
 {
-    public function __construct(private readonly TranslatorInterface $translator) {}
+    public function __construct(private readonly TranslatorInterface $translator, private readonly RoleReaderRepository $roleReaderRepository) {}
 
     public function validate(mixed $value, Constraint $constraint): void
     {
@@ -31,7 +32,6 @@ class UniqueRoleNameValidator extends ConstraintValidator
 
     private function isRoleNameNotUnique(string $value): bool
     {
-        // Tutaj można zaimplementować logikę sprawdzania unikalności, np. zapytanie do bazy danych.
-        return false;
+        return $this->roleReaderRepository->isRoleExists($value);
     }
 }

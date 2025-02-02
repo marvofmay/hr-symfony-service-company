@@ -30,7 +30,7 @@ class DeleteRoleController extends AbstractController
             $deleteRoleAction->setRoleToDelete($this->roleReaderRepository->getRoleByUUID($uuid))
                 ->execute();
             return new JsonResponse(
-                ['message' => $this->translator->trans('role.deleted.success')],
+                ['message' => $this->translator->trans('role.delete.success')],
                 Response::HTTP_OK
             );
 

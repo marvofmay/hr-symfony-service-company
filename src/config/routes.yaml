@@ -1,6 +1,6 @@
 api_login_check:
     path: /api/login_check
-api_role_list:
+api_roles_list:
     path: api/roles
     controller: App\Presentation\API\Role\ListRoleController::list
     methods: [GET]
@@ -20,3 +20,7 @@ api_role_delete:
     path: api/roles/{uuid}
     controller: App\Presentation\API\Role\DeleteRoleController::delete
     methods: [DELETE]
+api_roles_import:
+    path: api/roles/import
+    controller: App\Presentation\API\Role\ImportRolesController::import
+    methods: [POST]

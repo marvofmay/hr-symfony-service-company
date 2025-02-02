@@ -9,10 +9,11 @@ use App\Domain\Exception\NotFindByUUIDException;
 use App\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RoleReaderRepository extends ServiceEntityRepository implements RoleReaderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
     {
         parent::__construct($registry, Role::class);
     }
@@ -24,8 +25,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
             ->getOneOrNullResult();
 
         if (!$role) {
-            // zamienić message na message z translation
-            throw new NotFindByUUIDException('Role not found by uuid: ' . $uuid);
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('role.uuid.notFound'), $uuid));
         }
 
         return $role;
@@ -39,5 +39,10 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
             ->getOneOrNullResult();
 
         return $role;
+    }
+
+    public function isRoleExists(string $name): bool
+    {
+        return !is_null($this->getRoleByName($name));
     }
 }

@@ -10,4 +10,5 @@ interface RoleWriterInterface
 {
     public function saveRoleInDB (Role $role): Role;
     public function updateRoleInDB (Role $role): Role;
+    public function saveRolesInDB (array $roles): void;
 }
