@@ -2,6 +2,7 @@
 
 namespace App\Structure\Validator\Constraints;
 
+use App\Domain\Interface\Role\RoleReaderInterface;
 use App\Domain\Repository\Role\Reader\RoleReaderRepository;
 use LogicException;
 use Symfony\Component\Validator\Constraint;
@@ -16,7 +17,7 @@ final class UniqueRoleName extends Constraint
 
 class UniqueRoleNameValidator extends ConstraintValidator
 {
-    public function __construct(private readonly TranslatorInterface $translator, private readonly RoleReaderRepository $roleReaderRepository) {}
+    public function __construct(private readonly TranslatorInterface $translator, private readonly RoleReaderInterface $roleReaderRepository) {}
 
     public function validate(mixed $value, Constraint $constraint): void
     {

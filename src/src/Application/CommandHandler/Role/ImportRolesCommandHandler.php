@@ -10,7 +10,7 @@ use App\Domain\Service\Role\RoleService;
 
 readonly class ImportRolesCommandHandler
 {
-    public function __construct(private RoleService $roleService) { }
+    public function __construct(private RoleService $roleService) {}
 
     public function __invoke(ImportRolesCommand $command): void
     {
