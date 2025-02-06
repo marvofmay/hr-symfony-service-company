@@ -24,16 +24,16 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
-    App\Application\CommandHandler\Role\CreateRoleCommandHandler:
+    App\Module\Company\Application\CommandHandler\Role\CreateRoleCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-    App\Application\CommandHandler\Role\UpdateRoleCommandHandler:
+    App\Module\Company\Application\CommandHandler\Role\UpdateRoleCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-    App\Application\CommandHandler\Role\DeleteRoleCommandHandler:
+    App\Module\Company\Application\CommandHandler\Role\DeleteRoleCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-    App\Application\CommandHandler\Role\ImportRolesCommandHandler:
+    App\Module\Company\Application\CommandHandler\Role\ImportRolesCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 
