@@ -20,15 +20,15 @@ doctrine:
       company:
         is_bundle: false
         type: attribute
-        dir: '%kernel.project_dir%/src/module/company/Domain/Entity'
-        prefix: 'App\module\company\Domain\Entity'
-        alias: company
-#      notice:
-#        is_bundle: false
-#        type: attribute
-#        dir: '%kernel.project_dir%/src/module/notice/Domain/Entity'
-#        prefix: 'App\module\notice\Domain\Entity'
-#        alias: company
+        dir: '%kernel.project_dir%/src/Module/Company/Domain/Entity'
+        prefix: 'App\Module\Company\Domain\Entity'
+        alias: Company
+      notice:
+        is_bundle: false
+        type: attribute
+        dir: '%kernel.project_dir%/src/Module/Notice/Domain/Entity'
+        prefix: 'App\Module\Notice\Domain\Entity'
+        alias: Notice
 when@test:
   doctrine:
     dbal:
