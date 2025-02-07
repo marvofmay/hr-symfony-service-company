@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Application\Query\Role;
+namespace App\Module\Company\Application\Query\Role;
 
-use App\module\company\Domain\Entity\Role;
-use App\module\company\Presentation\Request\Role\ListingRequest;
+use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Presentation\Request\Role\ListingRequest;
 
 class GetRolesQuery
 {

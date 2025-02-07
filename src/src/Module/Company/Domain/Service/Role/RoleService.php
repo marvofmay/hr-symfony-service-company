@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Domain\Service\Role;
+namespace App\Module\Company\Domain\Service\Role;
 
-use App\module\company\Domain\Entity\Role;
-use App\module\company\Domain\Interface\Role\RoleWriterInterface;
+use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 
 readonly class RoleService
 {

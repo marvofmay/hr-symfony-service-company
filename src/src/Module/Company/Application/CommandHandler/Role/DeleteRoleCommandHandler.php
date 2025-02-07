@@ -1,10 +1,10 @@
 <?php
 
-namespace App\module\company\Application\CommandHandler\Role;
+namespace App\Module\Company\Application\CommandHandler\Role;
 
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
-use App\module\company\Application\Command\Role\DeleteRoleCommand;
+use App\Module\Company\Application\Command\Role\DeleteRoleCommand;
 
 readonly class DeleteRoleCommandHandler
 {

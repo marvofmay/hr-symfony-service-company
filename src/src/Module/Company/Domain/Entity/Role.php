@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Domain\Entity;
+namespace App\Module\Company\Domain\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -34,7 +34,7 @@ class Role
     #[Groups("role_info")]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: Types::STRING, length: 100)]
+    #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
     #[Assert\NotBlank()]
     #[Groups("role_info")]
     private string $name;

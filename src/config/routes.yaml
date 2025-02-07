@@ -24,3 +24,7 @@ api_roles_import:
     path: api/roles/import
     controller: App\Module\Company\Presentation\API\Role\ImportRolesController::import
     methods: [POST]
+api_notice_get:
+    path: api/notes/{uuid}
+    controller: App\Module\Note\Presentation\API\GetNoteController::get
+    methods: [ GET ]

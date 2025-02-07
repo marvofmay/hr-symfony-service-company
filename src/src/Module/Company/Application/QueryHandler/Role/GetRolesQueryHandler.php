@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Application\QueryHandler\Role;
+namespace App\Module\Company\Application\QueryHandler\Role;
 
-use App\module\company\Application\Query\Role\GetRolesQuery;
-use App\module\company\Domain\Entity\Role;
+use App\Module\Company\Application\Query\Role\GetRolesQuery;
+use App\Module\Company\Domain\Entity\Role;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 

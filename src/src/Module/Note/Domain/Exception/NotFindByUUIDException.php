@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Module\Company\Domain\Exception;
+namespace App\Module\Note\Domain\Exception;
 
 use Exception;
 

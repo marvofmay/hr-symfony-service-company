@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\module\company\Domain\Service;
+namespace App\Module\Company\Domain\Service;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\module\company\Domain\Interface\UploadFileInterface;
+use App\Module\Company\Domain\Interface\UploadFileInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Exception;
 

@@ -31,11 +31,11 @@
 //    }
 //}
 
-namespace App\module\company\Structure\Validator\Constraints;
+namespace App\Module\Company\Structure\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use App\module\company\Domain\Repository\Role\Reader\RoleReaderRepository;
+use App\Module\Company\Domain\Repository\Role\Reader\RoleReaderRepository;
 
 class UniqueRoleNameValidator extends ConstraintValidator
 {

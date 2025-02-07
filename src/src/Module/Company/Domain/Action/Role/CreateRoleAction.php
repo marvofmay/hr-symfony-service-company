@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Domain\Action\Role;
+namespace App\Module\Company\Domain\Action\Role;
 
-use App\module\company\Application\Command\Role\CreateRoleCommand;
-use App\module\company\Domain\DTO\Role\CreateDTO;
+use App\Module\Company\Application\Command\Role\CreateRoleCommand;
+use App\Module\Company\Domain\DTO\Role\CreateDTO;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class CreateRoleAction

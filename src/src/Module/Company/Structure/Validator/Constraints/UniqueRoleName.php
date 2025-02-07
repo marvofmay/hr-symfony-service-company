@@ -1,9 +1,9 @@
 <?php
 
-namespace App\module\company\Structure\Validator\Constraints;
+namespace App\Module\Company\Structure\Validator\Constraints;
 
-use App\module\company\Domain\Interface\Role\RoleReaderInterface;
-use App\module\company\Domain\Repository\Role\Reader\RoleReaderRepository;
+use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
+use App\Module\Company\Domain\Repository\Role\Reader\RoleReaderRepository;
 use LogicException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

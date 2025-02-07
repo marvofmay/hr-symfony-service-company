@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Presentation\API\Role;
+namespace App\Module\Company\Presentation\API\Role;
 
-use App\module\company\Domain\Action\Role\CreateRoleAction;
-use App\module\company\Domain\DTO\Role\CreateDTO;
+use App\Module\Company\Domain\Action\Role\CreateRoleAction;
+use App\Module\Company\Domain\DTO\Role\CreateDTO;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;

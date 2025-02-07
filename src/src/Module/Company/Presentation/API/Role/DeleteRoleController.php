@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Presentation\API\Role;
+namespace App\Module\Company\Presentation\API\Role;
 
-use App\module\company\Domain\Action\Role\DeleteRoleAction;
-use App\module\company\Domain\Interface\Role\RoleReaderInterface;
+use App\Module\Company\Domain\Action\Role\DeleteRoleAction;
+use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;

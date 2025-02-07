@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\module\company\Domain\Interface\Role;
+namespace App\Module\Company\Domain\Interface\Role;
 
-use App\module\company\Domain\Entity\Role;
+use App\Module\Company\Domain\Entity\Role;
 
 interface RoleWriterInterface
 {

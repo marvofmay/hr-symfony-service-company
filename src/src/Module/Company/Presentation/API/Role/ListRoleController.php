@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Presentation\API\Role;
+namespace App\Module\Company\Presentation\API\Role;
 
-use App\module\company\Application\Query\Role\GetRolesQuery;
-use App\module\company\Application\QueryHandler\Role\GetRolesQueryHandler;
-use App\module\company\Presentation\Request\Role\ListingRequest;
+use App\Module\Company\Application\Query\Role\GetRolesQuery;
+use App\Module\Company\Application\QueryHandler\Role\GetRolesQueryHandler;
+use App\Module\Company\Presentation\Request\Role\ListingRequest;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

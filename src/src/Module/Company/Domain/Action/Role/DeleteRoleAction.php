@@ -2,10 +2,10 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Domain\Action\Role;
+namespace App\Module\Company\Domain\Action\Role;
 
-use App\module\company\Application\Command\Role\DeleteRoleCommand;
-use App\module\company\Domain\Entity\Role;
+use App\Module\Company\Application\Command\Role\DeleteRoleCommand;
+use App\Module\Company\Domain\Entity\Role;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 class DeleteRoleAction

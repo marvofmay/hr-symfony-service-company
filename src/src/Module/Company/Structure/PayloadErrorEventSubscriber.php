@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\module\company\Structure;
+namespace App\Module\Company\Structure;
 
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

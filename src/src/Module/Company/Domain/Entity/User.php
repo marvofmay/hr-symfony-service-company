@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Domain\Entity;
+namespace App\Module\Company\Domain\Entity;
 
-use App\module\company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Entity\Employee;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Gedmo\Mapping\Annotation as Gedmo;

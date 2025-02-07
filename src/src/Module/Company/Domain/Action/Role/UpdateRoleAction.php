@@ -2,12 +2,12 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Domain\Action\Role;
+namespace App\Module\Company\Domain\Action\Role;
 
-use App\module\company\Application\Command\Role\UpdateRoleCommand;
-use App\module\company\Domain\Entity\Role;
+use App\Module\Company\Application\Command\Role\UpdateRoleCommand;
+use App\Module\Company\Domain\Entity\Role;
 use Symfony\Component\Messenger\MessageBusInterface;
-use App\module\company\Domain\DTO\Role\UpdateDTO;
+use App\Module\Company\Domain\DTO\Role\UpdateDTO;
 
 class UpdateRoleAction
 {

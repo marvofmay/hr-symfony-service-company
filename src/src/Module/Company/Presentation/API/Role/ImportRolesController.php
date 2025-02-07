@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Presentation\API\Role;
+namespace App\Module\Company\Presentation\API\Role;
 
-use App\module\company\Domain\Action\Role\ImportRolesAction;
-use App\module\company\Domain\DTO\Role\ImportDTO;
-use App\module\company\Domain\Service\UploadFile;
+use App\Module\Company\Domain\Action\Role\ImportRolesAction;
+use App\Module\Company\Domain\DTO\Role\ImportDTO;
+use App\Module\Company\Domain\Service\UploadFile;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use InvalidArgumentException;
 use RuntimeException;
 use Symfony\Component\HttpFoundation\Request;
-use App\module\company\Domain\Service\Role\ImportRolesFromXLSX;
+use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
 
 use Exception;
 

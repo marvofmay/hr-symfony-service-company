@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\module\company\Domain\Service;
+namespace App\Module\Company\Domain\Service;
 
-use App\module\company\Domain\Interface\XLSXIteratorInterface;
+use App\Module\Company\Domain\Interface\XLSXIteratorInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use RuntimeException;

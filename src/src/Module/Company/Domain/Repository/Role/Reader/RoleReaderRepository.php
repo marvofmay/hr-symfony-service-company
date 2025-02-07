@@ -2,11 +2,11 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Domain\Repository\Role\Reader;
+namespace App\Module\Company\Domain\Repository\Role\Reader;
 
-use App\module\company\Domain\Entity\Role;
-use App\module\company\Domain\Exception\NotFindByUUIDException;
-use App\module\company\Domain\Interface\Role\RoleReaderInterface;
+use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Exception\NotFindByUUIDException;
+use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;

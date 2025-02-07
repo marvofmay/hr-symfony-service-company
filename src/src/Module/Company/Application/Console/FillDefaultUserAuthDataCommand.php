@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Application\Console;
+namespace App\Module\Company\Application\Console;
 
-use App\module\company\Domain\Entity\User;
+use App\Module\Company\Domain\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

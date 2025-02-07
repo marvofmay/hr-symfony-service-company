@@ -2,9 +2,9 @@
 
 declare(strict_types = 1);
 
-namespace App\module\company\Domain\DTO\Role;
+namespace App\Module\Company\Domain\DTO\Role;
 
-use App\module\company\Domain\DTO\Role\CreateDTO;
+use App\Module\Company\Domain\DTO\Role\CreateDTO;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class UpdateDTO extends CreateDTO

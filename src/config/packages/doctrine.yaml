@@ -23,11 +23,11 @@ doctrine:
         dir: '%kernel.project_dir%/src/Module/Company/Domain/Entity'
         prefix: 'App\Module\Company\Domain\Entity'
         alias: Company
-      notice:
+      note:
         is_bundle: false
         type: attribute
-        dir: '%kernel.project_dir%/src/Module/Notice/Domain/Entity'
-        prefix: 'App\Module\Notice\Domain\Entity'
+        dir: '%kernel.project_dir%/src/Module/Note/Domain/Entity'
+        prefix: 'App\Module\Note\Domain\Entity'
         alias: Notice
 when@test:
   doctrine:

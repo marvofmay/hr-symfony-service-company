@@ -1,8 +1,8 @@
 <?php
 
-namespace App\module\company\Presentation\Request\Role;
+namespace App\Module\Company\Presentation\Request\Role;
 
-use App\module\company\Domain\Entity\Role;
+use App\Module\Company\Domain\Entity\Role;
 use Symfony\Component\HttpFoundation\Request;
 
 class ListingRequest

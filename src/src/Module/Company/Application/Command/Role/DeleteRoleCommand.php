@@ -1,8 +1,8 @@
 <?php
 
-namespace App\module\company\Application\Command\Role;
+namespace App\Module\Company\Application\Command\Role;
 
-use App\module\company\Domain\Entity\Role;
+use App\Module\Company\Domain\Entity\Role;
 
 readonly class DeleteRoleCommand
 {
