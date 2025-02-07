@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Module\Note\Infrastructure\Persistance\Repository\Doctrine\Reader;
 
 use App\Module\Note\Domain\Entity\Note;
-use App\Module\Note\Domain\Exception\NotFindByUUIDException;
+use App\Common\Exception\NotFindByUUIDException;
 use App\Module\Note\Domain\Interface\NoteReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

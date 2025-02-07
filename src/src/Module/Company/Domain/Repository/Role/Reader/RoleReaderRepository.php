@@ -5,7 +5,7 @@ declare(strict_types = 1);
 namespace App\Module\Company\Domain\Repository\Role\Reader;
 
 use App\Module\Company\Domain\Entity\Role;
-use App\Module\Company\Domain\Exception\NotFindByUUIDException;
+use App\Common\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

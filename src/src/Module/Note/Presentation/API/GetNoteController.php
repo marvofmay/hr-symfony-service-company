@@ -40,7 +40,7 @@ class GetNoteController extends AbstractController
             );
 
             return new JsonResponse(
-                ['message' => sprintf('%s. %s', $this->translator->trans('note.view.error'), $error->getMessage())],
+                ['message' => sprintf('%s - %s', $this->translator->trans('note.view.error'), $error->getMessage())],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

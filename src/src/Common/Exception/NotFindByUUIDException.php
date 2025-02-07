@@ -2,14 +2,14 @@
 
 declare(strict_types = 1);
 
-namespace App\Module\Company\Domain\Exception;
+namespace App\Common\Exception;
 
 use Exception;
 
 class NotFindByUUIDException extends Exception
 {
     public function __construct(
-        string $message = 'Record not found by uuid',
+        string $message = 'recordNotFoundByUUID',
         int $code = 0,
         ?Exception $previous = null
     ) {
