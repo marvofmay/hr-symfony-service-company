@@ -17,12 +17,18 @@ doctrine:
     naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
     auto_mapping: true
     mappings:
-      AppCompany:
+      company:
         is_bundle: false
         type: attribute
-        dir: '%kernel.project_dir%/src/Module/Company/Domain/Entity'
-        prefix: 'App\Module\Company\Domain\Entity'
-        alias: App
+        dir: '%kernel.project_dir%/src/module/company/Domain/Entity'
+        prefix: 'App\module\company\Domain\Entity'
+        alias: company
+#      notice:
+#        is_bundle: false
+#        type: attribute
+#        dir: '%kernel.project_dir%/src/module/notice/Domain/Entity'
+#        prefix: 'App\module\notice\Domain\Entity'
+#        alias: company
 when@test:
   doctrine:
     dbal:
