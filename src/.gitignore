@@ -1,6 +1,6 @@
 /var/
 /vendor/
-/src/storage/
+/src/Storage/
 .env
 .env.dev
 
