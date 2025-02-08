@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Module\Company\Domain\Repository\Role\Reader;
+namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role\Reader;
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Common\Exception\NotFindByUUIDException;
@@ -20,7 +20,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
     public function getRoleByUUID(string $uuid): ?Role
     {
         $role = $this->getEntityManager()
-            ->createQuery('SELECT r FROM App\Domain\Entity\Role r WHERE r.uuid = :uuid')
+            ->createQuery('SELECT r FROM App\Module\Company\Domain\Entity\Role r WHERE r.uuid = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -34,7 +34,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
     public function getRoleByName(string $name): ?Role
     {
         $role = $this->getEntityManager()
-            ->createQuery('SELECT r FROM App\Domain\Entity\Role r WHERE r.name = :name')
+            ->createQuery('SELECT r FROM App\Module\Company\Domain\Entity\Role r WHERE r.name = :name')
             ->setParameter('name', $name)
             ->getOneOrNullResult();
 

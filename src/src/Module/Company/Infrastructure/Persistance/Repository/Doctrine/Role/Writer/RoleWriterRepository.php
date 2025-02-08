@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Module\Company\Domain\Repository\Role\Writer;
+namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role\Writer;
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
