@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Common\UploadFile;
 
+use App\Common\Enum\FileExtensionEnum;
 use App\Module\Company\Domain\Interface\UploadFileInterface;
 use Exception;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
@@ -11,7 +12,16 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFile implements UploadFileInterface
 {
-    private array $allowedExtensions = ['pdf', 'csv', 'png', 'xlsx', 'doc', 'jpeg', 'jpg'];
+    private array $allowedExtensions = [
+        FileExtensionEnum::PDF->value,
+        FileExtensionEnum::CSV->value,
+        FileExtensionEnum::PNG->value,
+        FileExtensionEnum::XLSX->value,
+        FileExtensionEnum::DOC->value,
+        FileExtensionEnum::JPEG->value,
+        FileExtensionEnum::JPG->value,
+    ];
+
     private ?UploadedFile $uploadedFile = null;
 
     public function __construct(private readonly string $uploadDir, private readonly string $expectedUploadedFileExtension) {}

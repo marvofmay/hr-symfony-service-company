@@ -1,10 +1,12 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Note\Domain\Enum;
 
-enum NotePriorityEnum: string
+use App\Common\Interface\EnumInterface;
+
+enum NotePriorityEnum: string implements EnumInterface
 {
     case LOW = 'low';
     case MEDIUM = 'medium';
@@ -17,5 +19,10 @@ enum NotePriorityEnum: string
             self::MEDIUM => 'notice.mediumPriority',
             self::HIGH => 'notice.highPriority',
         };
+    }
+
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
     }
 }
