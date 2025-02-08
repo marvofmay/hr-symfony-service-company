@@ -28,3 +28,7 @@ api_notice_get:
     path: api/notes/{uuid}
     controller: App\Module\Note\Presentation\API\GetNoteController::get
     methods: [ GET ]
+api_note_create:
+    path: api/notes
+    controller: App\Module\Note\Presentation\API\CreateNoteController::create
+    methods: [POST]

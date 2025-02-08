@@ -37,6 +37,10 @@ services:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 
+    App\Module\Note\Application\CommandHandler\CreateNoteCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+
     gedmo.listener.softdeleteable:
         class: Gedmo\SoftDeleteable\SoftDeleteableListener
         tags:

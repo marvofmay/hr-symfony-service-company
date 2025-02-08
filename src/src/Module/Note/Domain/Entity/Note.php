@@ -12,6 +12,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
+use DateTimeInterface;
+use DateTime;
 
 #[ORM\Entity]
 #[ORM\Table(name: "note")]
@@ -46,17 +48,17 @@ class Note
     #[ORM\Column(type: Types::STRING, length: 20, enumType: NotePriorityEnum::class)]
     private NotePriorityEnum $priority;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    #[Groups("note_info")]
-    private \DateTimeImmutable $createdAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
+    #[Groups("role_info")]
+    private DateTimeInterface $createdAt;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    #[Groups("note_info")]
-    private ?\DateTimeImmutable $updatedAt = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups("role_info")]
+    private ?DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
-    #[Groups("note_info")]
-    private ?\DateTimeImmutable $deletedAt = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups("role_info")]
+    private ?DateTimeInterface $deletedAt = null;
 
     public function getUuid(): UuidInterface
     {
@@ -78,19 +80,19 @@ class Note
         return $this->priority;
     }
 
-    public function getCreatedAt(): \DateTimeImmutable
+    public function getCreatedAt(): DateTimeInterface
     {
-        return $this->createdAt;
+        return $this->{self::COLUMN_CREATED_AT};
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): DateTimeInterface
     {
-        return $this->updatedAt;
+        return $this->{self::COLUMN_UPDATED_AT};
     }
 
-    public function getDeletedAt(): ?\DateTimeImmutable
+    public function getDeletedAt(): ?DateTimeInterface
     {
-        return $this->deletedAt;
+        return $this->{self::COLUMN_DELETED_AT};
     }
 
     public function setTitle(string $title): void
@@ -108,12 +110,17 @@ class Note
         $this->priority = $priority;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updatedAt): void
+    public function setCreatedAt(DateTimeInterface $createdAt): void
+    {
+        $this->createdAt = $createdAt;
+    }
+
+    public function setUpdatedAt(DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function setDeletedAt(?\DateTimeImmutable $deletedAt): void
+    public function setDeletedAt(?DateTimeInterface $deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
@@ -121,9 +128,7 @@ class Note
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        if (!$this->createdAt) {
-            $this->createdAt = new \DateTimeImmutable();
-        }
+        $this->{self::COLUMN_CREATED_AT} = new DateTime();
     }
 
     public static function getAttributes(): array

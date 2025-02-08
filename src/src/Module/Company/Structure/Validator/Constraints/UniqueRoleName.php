@@ -3,7 +3,6 @@
 namespace App\Module\Company\Structure\Validator\Constraints;
 
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
-use App\Module\Company\Domain\Repository\Role\Reader\RoleReaderRepository;
 use LogicException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

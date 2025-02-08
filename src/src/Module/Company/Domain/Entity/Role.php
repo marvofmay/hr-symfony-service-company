@@ -13,6 +13,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use ReflectionClass;
 use ReflectionProperty;
+use DateTimeInterface;
+use DateTime;
 
 #[ORM\Entity]
 #[ORM\Table(name: "role")]
@@ -45,15 +47,15 @@ class Role
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
     #[Groups("role_info")]
-    private \DateTimeInterface $createdAt;
+    private DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups("role_info")]
-    private ?\DateTimeInterface $updatedAt = null;
+    private ?DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups("role_info")]
-    private ?\DateTimeInterface $deletedAt = null;
+    private ?DateTimeInterface $deletedAt = null;
 
     public function getUuid(): UuidInterface
     {
@@ -70,17 +72,17 @@ class Role
         return $this->{self::COLUMN_DESCRIPTION};
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function getCreatedAt(): DateTimeInterface
     {
         return $this->{self::COLUMN_CREATED_AT};
     }
 
-    public function getUpdatedAt(): \DateTimeInterface
+    public function getUpdatedAt(): DateTimeInterface
     {
         return $this->{self::COLUMN_UPDATED_AT};
     }
 
-    public function getDeletedAt(): ?\DateTimeInterface
+    public function getDeletedAt(): ?DateTimeInterface
     {
         return $this->{self::COLUMN_DELETED_AT};
     }
@@ -100,17 +102,17 @@ class Role
         $this->{self::COLUMN_DESCRIPTION} = $description;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): void
+    public function setCreatedAt(DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
+    public function setUpdatedAt(DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
+    public function setDeletedAt(?DateTimeInterface $deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
@@ -118,7 +120,7 @@ class Role
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->{self::COLUMN_CREATED_AT} = new \DateTime();
+        $this->{self::COLUMN_CREATED_AT} = new DateTime();
     }
 
     public static function getAttributes(): array

@@ -33,13 +33,13 @@
 
 namespace App\Module\Company\Structure\Validator\Constraints;
 
+use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use App\Module\Company\Domain\Repository\Role\Reader\RoleReaderRepository;
 
 class UniqueRoleNameValidator extends ConstraintValidator
 {
-    public function __construct(private readonly RoleReaderRepository $roleRepository) {}
+    public function __construct(private readonly RoleReaderInterface $roleRepository) {}
 
     public function validate($value, Constraint $constraint): void
     {

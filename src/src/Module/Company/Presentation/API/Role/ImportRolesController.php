@@ -29,7 +29,7 @@ class ImportRolesController extends AbstractController
     public function import(Request $request, ImportRolesAction $importRolesAction): JsonResponse
     {
         try {
-            $uploadFilePath = '../src/Structure/Storage/Upload/Import/Roles';
+            $uploadFilePath = '../src/Storage/Upload/Import/Roles';
             $uploadedFile = $request->files->get('file');
 
             if (!$uploadedFile) {
