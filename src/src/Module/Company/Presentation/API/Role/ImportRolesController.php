@@ -4,21 +4,18 @@ declare(strict_types = 1);
 
 namespace App\Module\Company\Presentation\API\Role;
 
+use App\Common\UploadFile\UploadFile;
 use App\Module\Company\Domain\Action\Role\ImportRolesAction;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
-use App\Module\Company\Domain\Service\UploadFile;
+use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
+use Exception;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use InvalidArgumentException;
-use RuntimeException;
-use Symfony\Component\HttpFoundation\Request;
-use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
-
-use Exception;
 
 #[Route('/api/roles/import', name: 'api.roles.')]
 class ImportRolesController extends AbstractController

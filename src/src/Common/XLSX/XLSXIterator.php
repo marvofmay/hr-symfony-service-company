@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Domain\Service;
+namespace App\Common\XLSX;
 
 use App\Module\Company\Domain\Interface\XLSXIteratorInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;

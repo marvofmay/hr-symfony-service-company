@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Domain\Service;
+namespace App\Common\UploadFile;
 
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 use App\Module\Company\Domain\Interface\UploadFileInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Exception;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFile implements UploadFileInterface
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Role;
 
-use App\Module\Company\Domain\Service\XLSXIterator;
+use App\Common\XLSX\XLSXIterator;
 
 class ImportRolesFromXLSX extends XLSXIterator
 {
