@@ -1,0 +1,20 @@
+note:
+  uuid:
+    differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
+    notFound: "Notatka o podanym UUID nie istnieje"
+  name:
+    priorityIsRequired: "Ważność notatki jest wymagana"
+    minimum3Letters: "Minimalnie 3 litery"
+  add:
+    success: "Notatka została pomyślnie dodana"
+    error: "Wystąpił błąd - notatka nie została dodana"
+  update:
+    success: "Notatka została pomyślnie zaktualizowana"
+    error: "Wystąpił błąd - notatka nie została zaktualizowana"
+  delete:
+    success: "Notatka została pomyślnie usunięta"
+    error: "Wystąpił błąd - notatka nie została usunięta"
+  view:
+    error: "Wystapił błąd przy pobieraniu wybranej notatki"
+  list:
+    error: "Wystapił błąd przy pobieraniu listy notatek"

@@ -1,50 +1,6 @@
 name: "nazwa"
+row: "wiersz"
 expectedXLSXFile: "oczekiwano pliku XLSX"
 expectedPDFFile: "oczekiwano pliku PDF"
 notAllowedTypeFile: "niedozwolony typ pliku"
 unexpectedTypeFile: "oczekiwano inny typ pliku"
-role:
-  uuid:
-    differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
-    notFound: "Rola o podanym UUID nie istnieje"
-  name:
-      roleAlreadyExists: "Rola istnieje"
-      nameIsRequired: "Nazwa roli jest wymagana"
-      minimum3Letters: "Minimalnie 3 litery"
-      expectedUniqueRoleNameConstraint: "Oczekiwano walidacji unkalnej nazwy roli"
-  add:
-      success: "Rola została pomyślnie dodana"
-      error: "Wystąpił błąd - rola nie została dodana"
-  update:
-    success: "Rola została pomyślnie zaktualizowana"
-    error: "Wystąpił błąd - rola nie została zaktualizowana"
-  delete:
-    success: "Rola została pomyślnie usunięta"
-    error: "Wystąpił błąd - rola nie została usunięta"
-  import:
-    success: "Role zostały pomyślnie zaimportowane"
-    error: "Wystąpił błąd - role nie zostały zaimportowane"
-  view:
-    error: "Wystapił błąd przy pobieraniu wybranej roli"
-  list:
-    error: "Wystapił błąd przy pobieraniu listy ról"
-note:
-  uuid:
-    differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
-    notFound: "Notatka o podanym UUID nie istnieje"
-  name:
-    priorityIsRequired: "Ważność notatki jest wymagana"
-    minimum3Letters: "Minimalnie 3 litery"
-  add:
-    success: "Notatka została pomyślnie dodana"
-    error: "Wystąpił błąd - notatka nie została dodana"
-  update:
-    success: "Notatka została pomyślnie zaktualizowana"
-    error: "Wystąpił błąd - notatka nie została zaktualizowana"
-  delete:
-    success: "Notatka została pomyślnie usunięta"
-    error: "Wystąpił błąd - notatka nie została usunięta"
-  view:
-    error: "Wystapił błąd przy pobieraniu wybranej notatki"
-  list:
-    error: "Wystapił błąd przy pobieraniu listy notatek"

@@ -1,0 +1,29 @@
+role:
+  uuid:
+    differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
+    notFound: "Rola o podanym UUID nie istnieje"
+  name:
+    roleAlreadyExists: "Rola istnieje"
+    nameIsRequired: "Nazwa roli jest wymagana"
+    minimumLetters: "Minimalnie :qty litery"
+    maximumLetters: "Maksymalnie :qty litery"
+    expectedUniqueRoleNameConstraint: "Oczekiwano walidacji unkalnej nazwy roli"
+  add:
+    success: "Rola została pomyślnie dodana"
+    error: "Wystąpił błąd - rola nie została dodana"
+  update:
+    success: "Rola została pomyślnie zaktualizowana"
+    error: "Wystąpił błąd - rola nie została zaktualizowana"
+  delete:
+    success: "Rola została pomyślnie usunięta"
+    error: "Wystąpił błąd - rola nie została usunięta"
+  import:
+    success: "Role zostały pomyślnie zaimportowane"
+    error: "Wystąpił błąd - role nie zostały zaimportowane"
+  view:
+    error: "Wystapił błąd przy pobieraniu wybranej roli"
+  list:
+    error: "Wystapił błąd przy pobieraniu listy ról"
+  file:
+    fileNotExists: "Plik nie istnieje"
+    chooseFile: "Wskaż plik"

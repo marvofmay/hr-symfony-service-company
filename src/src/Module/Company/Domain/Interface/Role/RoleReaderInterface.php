@@ -9,6 +9,5 @@ use App\Module\Company\Domain\Entity\Role;
 interface RoleReaderInterface
 {
     public function getRoleByUUID(string $uuid): ?Role;
-    //public function getNotDeletedRoleByUUID(string $uuid): ?Role;
-    //public function getRoles(): mixed;
+    public function getRoleByName(string $name): ?Role;
 }

@@ -1,3 +1,6 @@
-app_api:
-    resource: './routes/api/'
+app_api_company:
+    resource: './routes/api/company'
+    type: directory
+app_api_note:
+    resource: './routes/api/note'
     type: directory
