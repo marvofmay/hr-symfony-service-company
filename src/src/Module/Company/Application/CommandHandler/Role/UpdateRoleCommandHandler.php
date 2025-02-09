@@ -5,21 +5,20 @@ declare(strict_types = 1);
 namespace App\Module\Company\Application\CommandHandler\Role;
 
 use App\Module\Company\Application\Command\Role\UpdateRoleCommand;
-use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Service\Role\RoleService;
 use DateTime;
 
-class UpdateRoleCommandHandler
+readonly class UpdateRoleCommandHandler
 {
-    public function __construct(private readonly RoleService $roleWriterService, private Role $role) {}
+    public function __construct(private RoleService $roleWriterService) {}
 
-    public function __invoke(UpdateroleCommand $command): void
+    public function __invoke(UpdateRoleCommand $command): void
     {
-        $this->role = $command->getRole();
-        $this->role->setName($command->getName());
-        $this->role->setDescription($command->getDescription());
-        $this->role->setUpdatedAt(new DateTime());
+        $role = $command->getRole();
+        $role->setName($command->getName());
+        $role->setDescription($command->getDescription());
+        $role->setUpdatedAt(new DateTime());
 
-        $this->roleWriterService->updateroleInDB($this->role);
+        $this->roleWriterService->updateRoleInDB($role);
     }
 }

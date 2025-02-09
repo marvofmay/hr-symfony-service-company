@@ -8,7 +8,7 @@ use App\Module\Company\Domain\Entity\Role;
 
 interface RoleWriterInterface
 {
-    public function saveRoleInDB (Role $role): Role;
-    public function updateRoleInDB (Role $role): Role;
+    public function saveRoleInDB (Role $role): void;
+    public function updateRoleInDB (Role $role): void;
     public function saveRolesInDB (array $roles): void;
 }

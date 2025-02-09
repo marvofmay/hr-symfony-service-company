@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Module\Company\Domain\DTO\Role;
+namespace App\Module\Note\Domain\DTO;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

@@ -11,20 +11,18 @@ use App\Module\Company\Domain\DTO\Role\UpdateDTO;
 
 class UpdateRoleAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private Role $selectOption)
+    public function __construct(private readonly MessageBusInterface $commandBus, private Role $role)
     {
     }
 
-    public function setRoleToUpdate(Role $selectOption): self
+    public function setRoleToUpdate(Role $role): void
     {
-        $this->selectOption = $selectOption;
-
-        return $this;
+        $this->role = $role;
     }
 
     public function getRole(): Role
     {
-        return $this->selectOption;
+        return $this->role;
     }
 
     public function execute(UpdateDTO $updateDTO): void

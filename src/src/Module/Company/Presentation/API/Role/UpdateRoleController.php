@@ -36,22 +36,15 @@ class UpdateRoleController extends AbstractController
                 );
             }
 
-            $updateRoleAction->setRoleToUpdate($this->roleReaderRepository->getRoleByUUID($uuid))
-                ->execute($updateDTO);
+            $updateRoleAction->setRoleToUpdate($this->roleReaderRepository->getRoleByUUID($uuid));
+            $updateRoleAction->execute($updateDTO);
 
-            return new JsonResponse(
-                ['message' => $this->translator->trans('role.update.success')],
-                Response::HTTP_OK
-            );
+            return new JsonResponse(['message' => $this->translator->trans('role.update.success')], Response::HTTP_OK);
         } catch (Exception $error) {
-            $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('role.update.error'), $error->getMessage())
-            );
+            $message = sprintf('%s: %s', $this->translator->trans('role.update.error'), $error->getMessage());
+            $this->logger->error($message);
 
-            return new JsonResponse(
-                ['message' => $this->translator->trans('role.update.error')],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

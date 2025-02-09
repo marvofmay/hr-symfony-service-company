@@ -24,6 +24,7 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    #Role handlers
     App\Module\Company\Application\CommandHandler\Role\CreateRoleCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
@@ -37,7 +38,14 @@ services:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 
+    #Note handlers
     App\Module\Note\Application\CommandHandler\CreateNoteCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Note\Application\CommandHandler\UpdateNoteCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Note\Application\CommandHandler\DeleteNoteCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 

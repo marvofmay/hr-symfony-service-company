@@ -16,19 +16,15 @@ class RoleWriterRepository extends ServiceEntityRepository implements RoleWriter
         parent::__construct($registry, Role::class);
     }
 
-    public function saveRoleInDB(Role $role): Role
+    public function saveRoleInDB(Role $role): void
     {
         $this->getEntityManager()->persist($role);
         $this->getEntityManager()->flush();
-
-        return $role;
     }
 
-    public function updateRoleInDB(Role $role): Role
+    public function updateRoleInDB(Role $role): void
     {
         $this->getEntityManager()->flush();
-
-        return $role;
     }
 
     public function saveRolesInDB(array $roles): void

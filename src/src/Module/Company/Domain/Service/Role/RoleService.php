@@ -18,14 +18,14 @@ readonly class RoleService
         return 'RoleService';
     }
 
-    public function saveRoleInDB(Role $role): Role
+    public function saveRoleInDB(Role $role): void
     {
-        return $this->roleWriterRepository->saveRoleInDB($role);
+        $this->roleWriterRepository->saveRoleInDB($role);
     }
 
-    public function updateRoleInDB(Role $role): Role
+    public function updateRoleInDB(Role $role): void
     {
-        return $this->roleWriterRepository->updateRoleInDB($role);
+        $this->roleWriterRepository->updateRoleInDB($role);
     }
 
     public function saveRolesInDB(array $roles): void
