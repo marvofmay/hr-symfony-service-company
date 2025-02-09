@@ -1,0 +1,21 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\Module\Company\Domain\Entity\User:
+    arguments:
+      $userPasswordHasher: '@security.user_password_hasher'
+
+  App\:
+    resource: '../../src/'
+    exclude:
+      - '../../src/DependencyInjection/'
+      - '../../src/Kernel.php'
+
+  gedmo.listener.softdeleteable:
+    class: Gedmo\SoftDeleteable\SoftDeleteableListener
+    tags:
+      - { name: doctrine.event_subscriber, connection: default }
+    calls:
+      - [ setAnnotationReader, [ '@annotation_reader' ] ]

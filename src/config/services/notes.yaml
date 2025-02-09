@@ -1,0 +1,14 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+    #Note handlers
+    App\Module\Note\Application\CommandHandler\CreateNoteCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Note\Application\CommandHandler\UpdateNoteCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Note\Application\CommandHandler\DeleteNoteCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
