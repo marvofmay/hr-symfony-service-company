@@ -21,11 +21,11 @@ class UniqueRoleNameValidator extends ConstraintValidator
     public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof UniqueRoleName) {
-            throw new LogicException($this->translator->trans('role.name.expectedUniqueRoleNameConstraint'));
+            throw new LogicException($this->translator->trans('role.name.expectedUniqueRoleNameConstraint', [], 'roles'));
         }
 
         if ($this->isRoleNameNotUnique($value)) {
-            $this->context->buildViolation($this->translator->trans($constraint->message))
+            $this->context->buildViolation($this->translator->trans($constraint->message, [], 'roles'))
                 ->addViolation();
         }
     }

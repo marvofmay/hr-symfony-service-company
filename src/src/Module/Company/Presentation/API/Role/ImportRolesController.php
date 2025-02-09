@@ -36,7 +36,7 @@ class ImportRolesController extends AbstractController
 
             if (!$uploadedFile) {
                 return new JsonResponse(
-                    ['errors' => [$this->translator->trans('role.import.fileRequired')]],
+                    ['errors' => [$this->translator->trans('role.import.fileRequired', [], 'roles')]],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }
@@ -58,7 +58,7 @@ class ImportRolesController extends AbstractController
 
                 return new JsonResponse([
                     'success' => empty($importer->getErrors()),
-                    'message' => $this->translator->trans('role.import.success'),
+                    'message' => $this->translator->trans('role.import.success', [], 'roles'),
                     'errors' => $importer->getErrors(),
                 ],
                     Response::HTTP_OK
@@ -71,7 +71,7 @@ class ImportRolesController extends AbstractController
                 );
             }
         } catch (Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('role.import.error'), $this->translator->trans($error->getMessage()));
+            $message = sprintf('%s: %s', $this->translator->trans('role.import.error', [], 'roles'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);

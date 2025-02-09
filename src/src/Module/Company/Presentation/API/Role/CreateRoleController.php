@@ -27,18 +27,14 @@ class CreateRoleController extends AbstractController
             $createRoleAction->execute($createDTO);
 
             return new JsonResponse(
-                ['message' => $this->translator->trans('role.add.success')],
+                ['message' => $this->translator->trans('role.add.success', [], 'roles')],
                 Response::HTTP_OK
             );
         } catch (Exception $error) {
-            $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('role.add.error'), $error->getMessage())
-            );
+            $message = sprintf('%s: %s', $this->translator->trans('role.add.error', [], 'roles'), $error->getMessage());
+            $this->logger->error($message);
 
-            return new JsonResponse(
-                ['message' => 'role.add.error'],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

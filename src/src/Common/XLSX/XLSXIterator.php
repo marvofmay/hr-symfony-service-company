@@ -21,7 +21,7 @@ abstract class XLSXIterator implements XLSXIteratorInterface
     {
         if (!file_exists($this->filePath)) {
             throw new RuntimeException(
-                sprintf('%s: %s', $this->translator->trans('role.import.fileNotExists'), $this->filePath));
+                sprintf('%s: %s', $this->translator->trans('role.import.fileNotExists', [], 'roles'), $this->filePath));
         }
 
         $spreadsheet = IOFactory::load($this->filePath);
@@ -31,7 +31,7 @@ abstract class XLSXIterator implements XLSXIteratorInterface
     public function iterateRows(): array
     {
         if (!$this->worksheet) {
-            throw new RuntimeException($this->translator->trans('role.import.chooseFile'));
+            throw new RuntimeException($this->translator->trans('role.import.chooseFile', [], 'roles'));
         }
 
         $data = [];

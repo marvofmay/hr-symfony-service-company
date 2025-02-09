@@ -30,16 +30,15 @@ class DeleteRoleController extends AbstractController
             $deleteRoleAction->setRoleToDelete($this->roleReaderRepository->getRoleByUUID($uuid))
                 ->execute();
             return new JsonResponse(
-                ['message' => $this->translator->trans('role.delete.success')],
+                ['message' => $this->translator->trans('role.delete.success', [], 'roles')],
                 Response::HTTP_OK
             );
 
         } catch (Exception $error) {
-            $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('role.delete.error'), $error->getMessage())
-            );
+            $message = sprintf('%s: %s', $this->translator->trans('role.delete.error', [], 'roles'), $error->getMessage());
+            $this->logger->error($message);
 
-            return new JsonResponse(['message' => $this->translator->trans('role.delete.error')], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

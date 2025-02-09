@@ -31,7 +31,7 @@ class UpdateRoleController extends AbstractController
         try {
             if ($uuid !== $updateDTO->getUUID()) {
                 return $this->json(
-                    ['message' => $this->translator->trans('role.uuid.differentUUIDInBodyRawAndUrl')],
+                    ['message' => $this->translator->trans('role.uuid.differentUUIDInBodyRawAndUrl', [], 'roles')],
                     Response::HTTP_BAD_REQUEST
                 );
             }
@@ -39,9 +39,9 @@ class UpdateRoleController extends AbstractController
             $updateRoleAction->setRoleToUpdate($this->roleReaderRepository->getRoleByUUID($uuid));
             $updateRoleAction->execute($updateDTO);
 
-            return new JsonResponse(['message' => $this->translator->trans('role.update.success')], Response::HTTP_OK);
+            return new JsonResponse(['message' => $this->translator->trans('role.update.success', [], 'roles')], Response::HTTP_OK);
         } catch (Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('role.update.error'), $error->getMessage());
+            $message = sprintf('%s: %s', $this->translator->trans('role.update.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);

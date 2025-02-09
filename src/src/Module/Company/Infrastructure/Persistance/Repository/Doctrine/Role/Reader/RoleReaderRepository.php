@@ -25,7 +25,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
             ->getOneOrNullResult();
 
         if (!$role) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('role.uuid.notFound'), $uuid));
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('role.uuid.notFound', [], 'roles'), $uuid));
         }
 
         return $role;

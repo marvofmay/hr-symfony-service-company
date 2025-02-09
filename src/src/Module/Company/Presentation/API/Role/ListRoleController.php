@@ -41,13 +41,13 @@ class ListRoleController extends AbstractController
             );
         } catch (Exception $error) {
             $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('role.list.error'), $error->getMessage())
+                sprintf('%s: %s', $this->translator->trans('role.list.error', [], 'roles'), $error->getMessage())
             );
 
             return new JsonResponse(
                 [
                     'data' => [],
-                    'message' => $this->translator->trans('role.list.error'),
+                    'message' => $this->translator->trans('role.list.error', [], 'roles'),
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );

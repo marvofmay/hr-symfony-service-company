@@ -35,14 +35,10 @@ class GetRoleController extends AbstractController
                 ))
             ], Response::HTTP_OK);
         } catch (Exception $error) {
-            $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('role.view.error'),  $error->getMessage())
-            );
+            $message = sprintf('%s: %s', $this->translator->trans('role.view.error', [], 'roles'),  $error->getMessage());
+            $this->logger->error($message);
 
-            return new JsonResponse(
-                ['message' => sprintf('%s. %s', $this->translator->trans('role.view.error'), $error->getMessage())],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
