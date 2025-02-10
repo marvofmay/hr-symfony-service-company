@@ -4,14 +4,16 @@ declare(strict_types = 1);
 
 namespace App\Module\Company\Domain\DTO\Role;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use App\Common\Validator\Constraints\MinMaxLength;
+use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Company\Structure\Validator\Constraints\UniqueRoleName;
-use App\Module\Company\Structure\Validator\Constraints\MinMaxLength;
 
 class CreateDTO
 {
-    #[Assert\NotBlank(message: "role.name.required")]
-    //#[Assert\Length(min: 3, max: 50, minMessage: 'role.name.minimum3Letters', maxMessage: 'role.name.maximum50Letters')]
+    #[NotBlank(message: [
+        'text' => 'role.name.required',
+        'domain' => 'roles'
+    ])]
     #[MinMaxLength(min: 3, max: 50, message: [
         'tooShort' => 'role.name.minimumLetters',
         'tooLong' => 'role.name.maximumLetters',

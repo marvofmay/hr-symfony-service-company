@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Structure\Validator\Constraints;
+namespace App\Common\Validator\Constraints;
 
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

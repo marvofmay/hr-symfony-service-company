@@ -36,7 +36,7 @@ class ImportRolesFromXLSX extends XLSXIterator
     private function validateRoleName(?string $roleName): ?string
     {
         if (empty($roleName)) {
-            return $this->formatErrorMessage('role.name.nameIsRequired');
+            return $this->formatErrorMessage('role.name.required');
         }
 
         if (strlen($roleName) < 3) {
