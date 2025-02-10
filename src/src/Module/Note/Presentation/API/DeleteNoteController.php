@@ -30,12 +30,12 @@ class DeleteNoteController extends AbstractController
             $deleteNoteAction->setNoteToDelete($this->noteReaderRepository->getNoteByUUID($uuid))
                 ->execute();
             return new JsonResponse(
-                ['message' => $this->translator->trans('note.delete.success')],
+                ['message' => $this->translator->trans('note.delete.success', [], 'notes')],
                 Response::HTTP_OK
             );
 
         } catch (Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('note.delete.error'), $error->getMessage());
+            $message = sprintf('%s: %s', $this->translator->trans('note.delete.error', [], 'notes'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);

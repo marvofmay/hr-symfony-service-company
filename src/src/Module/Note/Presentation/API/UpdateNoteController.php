@@ -31,7 +31,7 @@ class UpdateNoteController extends AbstractController
         try {
             if ($uuid !== $updateDTO->getUUID()) {
                 return $this->json(
-                    ['message' => $this->translator->trans('note.uuid.differentUUIDInBodyRawAndUrl')],
+                    ['message' => $this->translator->trans('note.uuid.differentUUIDInBodyRawAndUrl', [], 'notes')],
                     Response::HTTP_BAD_REQUEST
                 );
             }
@@ -40,11 +40,11 @@ class UpdateNoteController extends AbstractController
             $updateNoteAction->execute($updateDTO);
 
             return new JsonResponse(
-                ['message' => $this->translator->trans('note.update.success')],
+                ['message' => $this->translator->trans('note.update.success', [], 'notes')],
                 Response::HTTP_OK
             );
         } catch (Exception $error) {
-            $message = sprintf('%s. %s', $this->translator->trans('note.update.error'), $error->getMessage());
+            $message = sprintf('%s. %s', $this->translator->trans('note.update.error', [], 'notes'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(

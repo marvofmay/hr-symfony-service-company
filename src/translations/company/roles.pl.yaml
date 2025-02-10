@@ -5,8 +5,8 @@ role:
   name:
     alreadyExists: "Rola istnieje"
     required: "Nazwa roli jest wymagana"
-    minimumLetters: "Minimalnie :qty litery"
-    maximumLetters: "Maksymalnie :qty litery"
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
     expectedUniqueRoleNameConstraint: "Oczekiwano walidacji unkalnej nazwy roli"
   add:
     success: "Rola została pomyślnie dodana"

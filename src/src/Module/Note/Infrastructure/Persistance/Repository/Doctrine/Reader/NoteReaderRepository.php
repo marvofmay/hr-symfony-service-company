@@ -25,7 +25,7 @@ class NoteReaderRepository extends ServiceEntityRepository implements NoteReader
             ->getOneOrNullResult();
 
         if (!$role) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('note.uuid.notFound'), $uuid));
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('note.uuid.notFound', [], 'notes'), $uuid));
         }
 
         return $role;

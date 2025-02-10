@@ -4,13 +4,21 @@ declare(strict_types = 1);
 
 namespace App\Module\Note\Domain\DTO;
 
+use App\Common\Validator\Constraints\MinMaxLength;
+use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
-use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateDTO
 {
-    #[Assert\NotBlank(message: "note.title.required")]
-    #[Assert\Length(min: 3, max: 150, minMessage: 'note.title.minimum150Letters', maxMessage: 'note.title.maximum150Letters')]
+    #[NotBlank(message: [
+        'text' => 'note.title.required',
+        'domain' => 'notes'
+    ])]
+    #[MinMaxLength(min: 3, max: 100, message: [
+        'tooShort' => 'note.title.minimumLength',
+        'tooLong' => 'note.title.maximumLength',
+        'domain' => 'notes'
+    ])]
     public string $title = '';
 
     public ?string $content = null;

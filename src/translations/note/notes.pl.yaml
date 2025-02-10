@@ -2,9 +2,10 @@ note:
   uuid:
     differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
     notFound: "Notatka o podanym UUID nie istnieje"
-  name:
+  title:
     priorityIsRequired: "Ważność notatki jest wymagana"
-    minimum3Letters: "Minimalnie 3 litery"
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
   add:
     success: "Notatka została pomyślnie dodana"
     error: "Wystąpił błąd - notatka nie została dodana"

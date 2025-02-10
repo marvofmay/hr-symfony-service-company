@@ -36,11 +36,11 @@ class GetNoteController extends AbstractController
             ], Response::HTTP_OK);
         } catch (Exception $error) {
             $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('note.view.error'),  $error->getMessage())
+                sprintf('%s: %s', $this->translator->trans('note.view.error', [], 'notes'),  $error->getMessage())
             );
 
             return new JsonResponse(
-                ['message' => sprintf('%s - %s', $this->translator->trans('note.view.error'), $error->getMessage())],
+                ['message' => sprintf('%s - %s', $this->translator->trans('note.view.error', [], 'notes'), $error->getMessage())],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }

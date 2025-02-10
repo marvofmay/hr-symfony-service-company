@@ -15,8 +15,8 @@ class CreateDTO
         'domain' => 'roles'
     ])]
     #[MinMaxLength(min: 3, max: 50, message: [
-        'tooShort' => 'role.name.minimumLetters',
-        'tooLong' => 'role.name.maximumLetters',
+        'tooShort' => 'role.name.minimumLength',
+        'tooLong' => 'role.name.maximumLength',
         'domain' => 'roles'
     ])]
     #[UniqueRoleName]
