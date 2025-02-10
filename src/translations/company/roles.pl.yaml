@@ -3,7 +3,7 @@ role:
     differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
     notFound: "Rola o podanym UUID nie istnieje"
   name:
-    roleAlreadyExists: "Rola istnieje"
+    alreadyExists: "Rola istnieje"
     nameIsRequired: "Nazwa roli jest wymagana"
     minimumLetters: "Minimalnie :qty litery"
     maximumLetters: "Maksymalnie :qty litery"

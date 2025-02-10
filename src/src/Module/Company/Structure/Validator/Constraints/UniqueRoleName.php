@@ -2,36 +2,11 @@
 
 namespace App\Module\Company\Structure\Validator\Constraints;
 
-use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
-use LogicException;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\ConstraintValidator;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Attribute;
 
-#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD)]
-final class UniqueRoleName extends Constraint
+#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)]
+class UniqueRoleName extends Constraint
 {
-    public string $message = 'role.name.roleAlreadyExists';
-}
-
-class UniqueRoleNameValidator extends ConstraintValidator
-{
-    public function __construct(private readonly TranslatorInterface $translator, private readonly RoleReaderInterface $roleReaderRepository) {}
-
-    public function validate(mixed $value, Constraint $constraint): void
-    {
-        if (!$constraint instanceof UniqueRoleName) {
-            throw new LogicException($this->translator->trans('role.name.expectedUniqueRoleNameConstraint', [], 'roles'));
-        }
-
-        if ($this->isRoleNameNotUnique($value)) {
-            $this->context->buildViolation($this->translator->trans($constraint->message, [], 'roles'))
-                ->addViolation();
-        }
-    }
-
-    private function isRoleNameNotUnique(string $value): bool
-    {
-        return $this->roleReaderRepository->isRoleExists($value);
-    }
+    public string $message = 'role.name.alreadyExists';
 }

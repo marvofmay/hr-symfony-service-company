@@ -31,18 +31,25 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
         return $role;
     }
 
-    public function getRoleByName(string $name): ?Role
+    public function getRoleByName(string $name, ?string $uuid = null): ?Role
     {
-        $role = $this->getEntityManager()
-            ->createQuery('SELECT r FROM App\Module\Company\Domain\Entity\Role r WHERE r.name = :name')
-            ->setParameter('name', $name)
-            ->getOneOrNullResult();
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
-        return $role;
+        $qb->select('r')
+            ->from('App\Module\Company\Domain\Entity\Role', 'r')
+            ->where('r.name = :name')
+            ->setParameter('name', $name);
+
+        if ($uuid !== null) {
+            $qb->andWhere('r.uuid != :uuid')
+                ->setParameter('uuid', $uuid);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function isRoleExists(string $name): bool
+    public function isRoleExists(string $name, ?string $uuid = null): bool
     {
-        return !is_null($this->getRoleByName($name));
+        return !is_null($this->getRoleByName($name, $uuid));
     }
 }

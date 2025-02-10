@@ -27,7 +27,7 @@ class ImportRolesFromXLSX extends XLSXIterator
         }
 
         if ($this->roleExists($roleName)) {
-            return $this->formatErrorMessage('role.name.roleAlreadyExists');
+            return $this->formatErrorMessage('role.name.alreadyExists');
         }
 
         return null;

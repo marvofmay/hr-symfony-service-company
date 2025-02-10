@@ -1,29 +1,36 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Structure\Validator\Constraints;
 
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use InvalidArgumentException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UniqueRoleNameValidator extends ConstraintValidator
 {
-    public function __construct(private readonly RoleReaderInterface $roleRepository) {}
+    public function __construct(private readonly RoleReaderInterface $roleReaderRepository, private readonly TranslatorInterface $translator) {}
 
-    public function validate($value, Constraint $constraint): void
+    public function validate(mixed $value, Constraint $constraint)
     {
-        if (null === $value || '' === $value) {
+        if (!$constraint instanceof UniqueRoleName) {
+            throw new InvalidArgumentException(sprintf('%s can only be used with UniqueRoleName constraint.', __CLASS__));
+        }
+
+        if (!is_string($value) || empty($value)) {
             return;
         }
 
-        $dto = $this->context->getObject();
-        $uuid = method_exists($dto, 'getUuid') ? $dto->getUuid() : null;
-        $existingRole = $this->roleRepository->getRoleByName($value);
-        if ($existingRole && ($uuid === null || $existingRole->getUuid()->toString() !== $uuid)) {
-            $this->context->buildViolation($constraint->message)
-                ->setParameter('{{ name }}', $value)
+        $object = $this->context->getObject();
+        $uuid = property_exists($object, 'uuid') ? $object->uuid : null;
+
+
+        if ($this->roleReaderRepository->isRoleExists($value, $uuid)) {
+            $this->context->buildViolation($this->translator->trans($constraint->message, [], 'roles'))
+                ->setParameter('{{ value }}', $value)
                 ->addViolation();
         }
     }

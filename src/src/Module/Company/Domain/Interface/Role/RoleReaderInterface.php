@@ -9,5 +9,5 @@ use App\Module\Company\Domain\Entity\Role;
 interface RoleReaderInterface
 {
     public function getRoleByUUID(string $uuid): ?Role;
-    public function getRoleByName(string $name): ?Role;
+    public function getRoleByName(string $name, ?string $uuid): ?Role;
 }
