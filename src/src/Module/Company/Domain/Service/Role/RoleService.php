@@ -32,4 +32,9 @@ readonly class RoleService
     {
         $this->roleWriterRepository->saveRolesInDB($roles);
     }
+
+    public function deleteMultipleRolesInDB(array $selectedUUID): void
+    {
+        $this->roleWriterRepository->deleteMultipleRolesInDB($selectedUUID);
+    }
 }

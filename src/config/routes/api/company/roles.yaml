@@ -18,6 +18,10 @@ api_role_delete:
   path: api/roles/{uuid}
   controller: App\Module\Company\Presentation\API\Role\DeleteRoleController::delete
   methods: [DELETE]
+api_role_delete_multiple:
+  path: api/roles
+  controller: App\Module\Company\Presentation\API\Role\DeleteMultipleRoleController::delete
+  methods: [DELETE]
 api_roles_import:
   path: api/roles/import
   controller: App\Module\Company\Presentation\API\Role\ImportRolesController::import
