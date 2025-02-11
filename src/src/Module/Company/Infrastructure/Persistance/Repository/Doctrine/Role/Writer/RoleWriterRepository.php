@@ -42,11 +42,9 @@ class RoleWriterRepository extends ServiceEntityRepository implements RoleWriter
         }
 
         $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\Role r SET r.deletedAt = :deletedAt WHERE r.uuid IN (:uuids)');
-
         $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
         $query->setParameter('uuids', $selectedUUID);
 
         $query->execute();
     }
-
 }
