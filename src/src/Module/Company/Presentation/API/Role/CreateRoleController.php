@@ -14,13 +14,23 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Exception;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use Nelmio\ApiDocBundle\Attribute\Security;
+use OpenApi\Attributes as OA;
 
-#[Route('/api/roles', name: 'api.roles.')]
 class CreateRoleController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator) {}
 
-    #[Route('', name: 'create', methods: ['POST'])]
+    #[Route('/api/roles', name: 'create', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/roles',
+        summary: 'Create a new role',
+        requestBody: new OA\RequestBody(
+            content: new OA\JsonContent(ref: new Model(type: CreateDTO::class))
+        ),
+    )]
+    #[OA\Tag(name: 'roles')]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
     {
         try {
