@@ -15,7 +15,6 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Exception;
 use Nelmio\ApiDocBundle\Attribute\Model;
-use Nelmio\ApiDocBundle\Attribute\Security;
 use OpenApi\Attributes as OA;
 
 class CreateRoleController extends AbstractController
@@ -27,8 +26,33 @@ class CreateRoleController extends AbstractController
         path: '/api/roles',
         summary: 'Create a new role',
         requestBody: new OA\RequestBody(
-            content: new OA\JsonContent(ref: new Model(type: CreateDTO::class))
+            required: true,
+            content: new OA\JsonContent(
+                ref: new Model(type: CreateDTO::class),
+            ),
         ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Rola została utworzona",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: ""),
+                    ],
+                    type: "object"
+                )
+            ),
+            new OA\Response(
+                response: 400,
+                description: "Błąd walidacji",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "error", type: "string", example: "Nazwa roli jest wymagana")
+                    ],
+                    type: "object"
+                )
+            )
+        ]
     )]
     #[OA\Tag(name: 'roles')]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse

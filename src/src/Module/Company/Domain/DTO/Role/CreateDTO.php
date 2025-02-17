@@ -7,9 +7,17 @@ namespace App\Module\Company\Domain\DTO\Role;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Company\Structure\Validator\Constraints\UniqueRoleName;
+use OpenApi\Attributes as OA;
 
 class CreateDTO
 {
+    #[OA\Property(
+        description: "Nazwa tworzonej roli",
+        type: "string",
+        maxLength: 50,
+        minLength: 3,
+        example: "Admin",
+    )]
     #[NotBlank(message: [
         'text' => 'role.name.required',
         'domain' => 'roles'
@@ -22,6 +30,12 @@ class CreateDTO
     #[UniqueRoleName]
     public string $name = '';
 
+    #[OA\Property(
+        description: "Opcjonalny opis tworzonej roli",
+        type: "string",
+        example: "Rola administratora",
+        nullable: true
+    )]
     public ?string $description = null;
 
     public function getName(): string
