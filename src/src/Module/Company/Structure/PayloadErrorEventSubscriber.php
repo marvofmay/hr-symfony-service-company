@@ -39,6 +39,6 @@ class PayloadErrorEventSubscriber implements EventSubscriberInterface
             $errorMessages[$this->translator->trans($violation->getPropertyPath())] = $this->translator->trans($violation->getMessage());
         }
 
-        $event->setResponse(new JsonResponse(['errors' => $errorMessages], Response::HTTP_UNPROCESSABLE_ENTITY));
+        $event->setResponse(new JsonResponse(['errors' => $errorMessages]));
     }
 }

@@ -24,7 +24,7 @@ class CreateRoleController extends AbstractController
     #[Route('/api/roles', name: 'create', methods: ['POST'])]
     #[OA\Post(
         path: '/api/roles',
-        summary: 'Create a new role',
+        summary: 'Tworzy nową rolę',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -37,21 +37,21 @@ class CreateRoleController extends AbstractController
                 description: "Rola została utworzona",
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "message", type: "string", example: ""),
+                        new OA\Property(property: "message", type: "string", example: "Rola została pomyślnie dodana"),
                     ],
                     type: "object"
                 )
             ),
             new OA\Response(
-                response: 400,
+                response: 422,
                 description: "Błąd walidacji",
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "error", type: "string", example: "Nazwa roli jest wymagana")
+                        new OA\Property(property: "error", type: "string", example: "Rola istnieje"),
                     ],
                     type: "object"
                 )
-            )
+            ),
         ]
     )]
     #[OA\Tag(name: 'roles')]
