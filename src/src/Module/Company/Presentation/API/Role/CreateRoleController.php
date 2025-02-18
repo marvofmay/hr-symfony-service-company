@@ -21,7 +21,7 @@ class CreateRoleController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator) {}
 
-    #[Route('/api/roles', name: 'create', methods: ['POST'])]
+    #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
     #[OA\Post(
         path: '/api/roles',
         summary: 'Tworzy nową rolę',

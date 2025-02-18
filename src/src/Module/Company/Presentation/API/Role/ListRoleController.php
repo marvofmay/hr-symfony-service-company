@@ -17,7 +17,6 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[Route('/api/roles', name: 'api.roles.')]
 class ListRoleController extends AbstractController
 {
     public function __construct(
@@ -26,7 +25,7 @@ class ListRoleController extends AbstractController
         private readonly TranslatorInterface $translator
     ) {}
 
-    #[Route('', name: 'list', methods: ['GET'])]
+    #[Route('/api/roles', name: 'api.roles.list', methods: ['GET'])]
     public function list(Request $request, GetRolesQueryHandler $usersQueryHandler): Response
     {
         try {

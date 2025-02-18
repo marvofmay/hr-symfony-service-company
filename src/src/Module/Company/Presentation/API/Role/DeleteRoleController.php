@@ -13,8 +13,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use OpenApi\Attributes as OA;
 
-#[Route('/api/roles', name: 'api.roles.')]
 class DeleteRoleController extends AbstractController
 {
     public function __construct(
@@ -23,7 +23,47 @@ class DeleteRoleController extends AbstractController
         private readonly TranslatorInterface $translator
     ) {}
 
-    #[Route('/{uuid}', name: 'delete', methods: ['DELETE'])]
+    #[Route('/{uuid}', name: 'api.roles.delete', methods: ['DELETE'])]
+    #[OA\Delete(
+        path: '/api/roles/{uuid}',
+        summary: 'Usuwa rolę - soft delete',
+        parameters: [
+            new OA\Parameter(
+                name: "uuid",
+                description: "UUID roli",
+                in: "path",
+                required: true,
+                schema: new OA\Schema(type: "string")
+            )
+        ],
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Rola została usunięta",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "Rola została pomyślnie usunięta"),
+                    ],
+                    type: "object"
+                )
+            ),
+            new OA\Response(
+                response: 500,
+                description: "Błąd niepoprawnego UUID",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(
+                            property: "error",
+                            type: "string",
+                            example: "Wystąpił błąd - rola nie została usunięta: Rola o podanym UUID nie istnieje : e8933421-84a2-4846-b3e4-b3a4ffbda1a"
+                        ),
+                    ],
+                    type: "object"
+                )
+            ),
+        ]
+    )]
+    #[OA\Tag(name: 'roles')]
     public function delete(string $uuid, DeleteRoleAction $deleteRoleAction): JsonResponse
     {
         try {
