@@ -7,7 +7,7 @@ role:
     required: "Nazwa roli jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    expectedUniqueRoleNameConstraint: "Oczekiwano walidacji unkalnej nazwy roli"
+    expectedUniqueRoleNameConstraint: "Oczekiwano unikalnej nazwy roli"
   add:
     success: "Rola została pomyślnie dodana"
     error: "Wystąpił błąd - rola nie została dodana"

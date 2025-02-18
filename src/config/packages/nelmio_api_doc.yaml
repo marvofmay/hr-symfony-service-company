@@ -16,3 +16,10 @@ nelmio_api_doc:
           bearerFormat: JWT
     security:
       - Bearer: []
+  areas:
+    default:
+      path_patterns: [ ^/api ]
+    roles:
+      path_patterns: [ ^/api/roles ]
+    notes:
+      path_patterns: [ ^/api/notes ]

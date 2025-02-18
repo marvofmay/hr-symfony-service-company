@@ -9,6 +9,9 @@ use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Company\Structure\Validator\Constraints\UniqueRoleName;
 use OpenApi\Attributes as OA;
 
+#[OA\Schema(
+    required: ["name"]
+)]
 class CreateDTO
 {
     #[OA\Property(
