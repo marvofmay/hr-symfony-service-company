@@ -10,6 +10,7 @@ use App\Module\Company\Domain\DTO\Role\ImportDTO;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
 use Exception;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,8 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use OpenApi\Attributes as OA;
 
-#[Route('/api/roles/import', name: 'api.roles.')]
 class ImportRolesController extends AbstractController
 {
     public function __construct(
@@ -27,7 +28,51 @@ class ImportRolesController extends AbstractController
         private readonly RoleReaderInterface $roleReaderRepository
     ) {}
 
-    #[Route('', name: 'import', methods: ['POST'])]
+    #[Route('/api/roles/import', name: 'import', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/roles/import',
+        summary: 'Importuje nowe role',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\MediaType(
+                mediaType: "multipart/form-data",
+                schema: new OA\Schema(
+                    required: ["file"],
+                    properties: [
+                        new OA\Property(
+                            property: "file",
+                            description: "Plik XLSX do importu",
+                            type: "string",
+                            format: "binary"
+                        )
+                    ]
+                )
+            )
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Role zostały utworzone",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "Role zostały pomyślnie zaimportowane"),
+                    ],
+                    type: "object"
+                )
+            ),
+            new OA\Response(
+                response: 500,
+                description: "Błąd importu",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "error", type: "string", example: "Wystąpił błąd - role nie zostały zaimportowane"),
+                    ],
+                    type: "object"
+                )
+            ),
+        ]
+    )]
+    #[OA\Tag(name: 'roles')]
     public function import(Request $request, ImportRolesAction $importRolesAction): JsonResponse
     {
         try {
