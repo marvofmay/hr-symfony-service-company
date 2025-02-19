@@ -36,7 +36,7 @@ class RolesQueryDTO
     public ?string $sortDirection = "desc";
 
     #[OA\Property(description: "Flaga pobierania usuniętych ról", type: "integer", default: 0, enum: [0, 1])]
-    public ?int $delete = 0;
+    public ?int $deleted = null;
 
     #[OA\Property(description: "Fraza do wyszukania", type: "string", nullable: true)]
     public ?string $phrase = null;
