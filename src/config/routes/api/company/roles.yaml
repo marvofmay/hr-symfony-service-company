@@ -1,28 +1,40 @@
-api_roles_list:
-  path: api/roles
-  controller: App\Module\Company\Presentation\API\Role\ListRoleController::list
-  methods: [GET]
-api_role_get:
-  path: api/roles/{uuid}
-  controller: App\Module\Company\Presentation\API\Role\GetRoleController::get
-  methods: [GET]
-api_role_create:
-  path: api/roles
-  controller: App\Module\Company\Presentation\API\Role\CreateRoleController::create
-  methods: [POST]
-api_role_update:
-  path: api/roles/{uuid}
-  controller: App\Module\Company\Presentation\API\Role\UpdateRoleController::update
-  methods: [PUT]
 api_role_delete:
   path: api/roles/{uuid}
   controller: App\Module\Company\Presentation\API\Role\DeleteRoleController::delete
   methods: [DELETE]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
+api_role_get:
+  path: api/roles/{uuid}
+  controller: App\Module\Company\Presentation\API\Role\GetRoleController::get
+  methods: [GET]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
+api_role_update:
+  path: api/roles/{uuid}
+  controller: App\Module\Company\Presentation\API\Role\UpdateRoleController::update
+  methods: [PUT]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
 api_role_delete_multiple:
-  path: api/roles
+  path: api/roles/multiple
   controller: App\Module\Company\Presentation\API\Role\DeleteMultipleRoleController::delete
   methods: [DELETE]
+
+api_role_create:
+  path: api/roles
+  controller: App\Module\Company\Presentation\API\Role\CreateRoleController::create
+  methods: [POST]
+
 api_roles_import:
   path: api/roles/import
   controller: App\Module\Company\Presentation\API\Role\ImportRolesController::import
   methods: [POST]
+
+api_roles_list:
+  path: api/roles
+  controller: App\Module\Company\Presentation\API\Role\ListRoleController::list
+  methods: [GET]

@@ -45,7 +45,7 @@ class GetRolesQueryHandler
     {
         if (! empty($filters)) {
             foreach ($filters as $fieldName => $fieldValue) {
-                if (in_array($fieldName, ['deleted', 'phrase'])) {
+                if (is_null($fieldValue) || in_array($fieldName, ['deleted', 'phrase'])) {
                     continue;
                 }
                 $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->like('r.' . $fieldName, ':fieldValue'))

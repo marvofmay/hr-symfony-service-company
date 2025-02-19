@@ -15,18 +15,34 @@ use ReflectionClass;
 use ReflectionProperty;
 use DateTimeInterface;
 use DateTime;
+use OpenApi\Attributes as OA;
 
 #[ORM\Entity]
 #[ORM\Table(name: "role")]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: true)]
+#[OA\Schema(
+    schema: "RoleListResponse",
+    title: "Role List Response",
+    description: "Lista ról"
+)]
 class Role
 {
     public const COLUMN_UUID = 'uuid';
+
+    #[OA\Property(description: "Nazwa roli", type: "string")]
     public const COLUMN_NAME = 'name';
+
+    #[OA\Property(description: "Opis roli", type: "string")]
     public const COLUMN_DESCRIPTION = 'description';
+
+    #[OA\Property(description: "Data utworzenia", type: "string", format: "date-time")]
     public const COLUMN_CREATED_AT = 'createdAt';
+
+    #[OA\Property(description: "Data aktualizacji", type: "string", format: "date-time", nullable: true)]
     public const COLUMN_UPDATED_AT = 'updatedAt';
+
+    #[OA\Property(description: "Data usunięcia", type: "string", format: "date-time", nullable: true)]
     public const COLUMN_DELETED_AT = 'deletedAt';
 
     #[ORM\Id]

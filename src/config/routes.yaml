@@ -1,3 +1,6 @@
+app_api_doc:
+    resource: './routes/api/nelmio'
+    type: directory
 app_api_auth:
     resource: './routes/api/auth'
     type: directory

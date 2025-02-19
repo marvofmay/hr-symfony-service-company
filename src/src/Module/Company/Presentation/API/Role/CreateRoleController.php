@@ -14,13 +14,47 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Exception;
+use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 
-#[Route('/api/roles', name: 'api.roles.')]
 class CreateRoleController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator) {}
 
-    #[Route('', name: 'create', methods: ['POST'])]
+    #[OA\Post(
+        path: '/api/roles',
+        summary: 'Tworzy nową rolę',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                ref: new Model(type: CreateDTO::class),
+            ),
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Rola została utworzona",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "Rola została pomyślnie dodana"),
+                    ],
+                    type: "object"
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Błąd walidacji",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "error", type: "string", example: "Rola istnieje"),
+                    ],
+                    type: "object"
+                )
+            ),
+        ]
+    )]
+    #[OA\Tag(name: 'roles')]
+    #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
     {
         try {
