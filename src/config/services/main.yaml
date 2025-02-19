@@ -19,3 +19,7 @@ services:
       - { name: doctrine.event_subscriber, connection: default }
     calls:
       - [ setAnnotationReader, [ '@annotation_reader' ] ]
+
+  App\Common\Exception\ExceptionListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.exception }

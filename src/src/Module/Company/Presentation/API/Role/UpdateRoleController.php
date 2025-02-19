@@ -7,6 +7,7 @@ namespace App\Module\Company\Presentation\API\Role;
 use App\Module\Company\Domain\Action\Role\UpdateRoleAction;
 use App\Module\Company\Domain\DTO\Role\UpdateDTO;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
+use Nelmio\ApiDocBundle\Attribute\Model;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,8 +16,8 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use OpenApi\Attributes as OA;
 
-#[Route('/api/roles', name: 'api.roles.')]
 class UpdateRoleController extends AbstractController
 {
     public function __construct(
@@ -25,7 +26,40 @@ class UpdateRoleController extends AbstractController
         private readonly TranslatorInterface $translator
     ) {}
 
-    #[Route('/{uuid}', name: 'update', methods: ['PUT'])]
+    #[OA\Put(
+        path: '/api/roles/{uuid}',
+        summary: 'Aktualizuje rolę',
+        requestBody: new OA\RequestBody(
+            required: true,
+            content: new OA\JsonContent(
+                ref: new Model(type: UpdateDTO::class),
+            ),
+        ),
+        responses: [
+            new OA\Response(
+                response: 200,
+                description: "Rola została zaktualizowana",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "message", type: "string", example: "Rola została pomyślnie zaktualizowana"),
+                    ],
+                    type: "object"
+                )
+            ),
+            new OA\Response(
+                response: 422,
+                description: "Błąd walidacji",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "error", type: "string", example: "Oczekiwano unikalnej nazwy roli"),
+                    ],
+                    type: "object"
+                )
+            ),
+        ]
+    )]
+    #[OA\Tag(name: 'roles')]
+    #[Route('/api/roles/{uuid}', name: 'api.roles.update', methods: ['PUT'])]
     public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO, UpdateRoleAction $updateRoleAction): Response
     {
         try {
