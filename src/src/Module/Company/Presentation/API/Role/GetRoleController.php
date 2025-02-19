@@ -24,7 +24,6 @@ class GetRoleController extends AbstractController
         private readonly TranslatorInterface $translator
     ) {}
 
-    #[Route('/api/roles/{uuid}', name: 'api.roles.get', methods: ['GET'])]
     #[OA\Get(
         path: '/api/roles/{uuid}',
         summary: 'Pobiera rolę',
@@ -75,6 +74,7 @@ class GetRoleController extends AbstractController
         ]
     )]
     #[OA\Tag(name: 'roles')]
+    #[Route('/api/roles/{uuid}', name: 'api.roles.get', methods: ['GET'])]
     public function get(string $uuid): JsonResponse
     {
         try {

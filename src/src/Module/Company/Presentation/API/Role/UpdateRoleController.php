@@ -26,7 +26,6 @@ class UpdateRoleController extends AbstractController
         private readonly TranslatorInterface $translator
     ) {}
 
-    #[Route('/api/roles/{uuid}', name: 'api.roles.update', methods: ['PUT'])]
     #[OA\Put(
         path: '/api/roles/{uuid}',
         summary: 'Aktualizuje rolę',
@@ -60,6 +59,7 @@ class UpdateRoleController extends AbstractController
         ]
     )]
     #[OA\Tag(name: 'roles')]
+    #[Route('/api/roles/{uuid}', name: 'api.roles.update', methods: ['PUT'])]
     public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO, UpdateRoleAction $updateRoleAction): Response
     {
         try {

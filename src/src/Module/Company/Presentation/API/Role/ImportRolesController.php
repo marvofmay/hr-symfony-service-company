@@ -28,7 +28,6 @@ class ImportRolesController extends AbstractController
         private readonly RoleReaderInterface $roleReaderRepository
     ) {}
 
-    #[Route('/api/roles/import', name: 'import', methods: ['POST'])]
     #[OA\Post(
         path: '/api/roles/import',
         summary: 'Importuje nowe role',
@@ -73,6 +72,7 @@ class ImportRolesController extends AbstractController
         ]
     )]
     #[OA\Tag(name: 'roles')]
+    #[Route('/api/roles/import', name: 'import', methods: ['POST'])]
     public function import(Request $request, ImportRolesAction $importRolesAction): JsonResponse
     {
         try {

@@ -23,7 +23,6 @@ class DeleteRoleController extends AbstractController
         private readonly TranslatorInterface $translator
     ) {}
 
-    #[Route('/{uuid}', name: 'api.roles.delete', methods: ['DELETE'])]
     #[OA\Delete(
         path: '/api/roles/{uuid}',
         summary: 'Usuwa rolę - soft delete',
@@ -64,6 +63,7 @@ class DeleteRoleController extends AbstractController
         ]
     )]
     #[OA\Tag(name: 'roles')]
+    #[Route('/api/roles/{uuid}', name: 'api.roles.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
     public function delete(string $uuid, DeleteRoleAction $deleteRoleAction): JsonResponse
     {
         try {

@@ -21,7 +21,6 @@ class CreateRoleController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator) {}
 
-    #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
     #[OA\Post(
         path: '/api/roles',
         summary: 'Tworzy nową rolę',
@@ -55,6 +54,7 @@ class CreateRoleController extends AbstractController
         ]
     )]
     #[OA\Tag(name: 'roles')]
+    #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
     {
         try {

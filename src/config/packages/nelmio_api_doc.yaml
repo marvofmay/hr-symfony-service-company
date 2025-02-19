@@ -18,7 +18,7 @@ nelmio_api_doc:
       - Bearer: []
   areas:
     default:
-      path_patterns: [ ^/api ]
+      path_patterns: [ ^/api/ ]
     roles:
       path_patterns: [ ^/api/roles ]
     notes:
