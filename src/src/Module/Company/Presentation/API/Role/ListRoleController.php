@@ -6,10 +6,8 @@ namespace App\Module\Company\Presentation\API\Role;
 
 use App\Module\Company\Application\Query\Role\GetRolesQuery;
 use App\Module\Company\Application\QueryHandler\Role\GetRolesQueryHandler;
-use App\Module\Company\Presentation\Request\Role\ListingRequest;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -17,6 +15,8 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use OpenApi\Attributes as OA;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use App\Module\Company\Domain\DTO\Role\RolesQueryDTO;
 
 class ListRoleController extends AbstractController
 {
@@ -29,86 +29,29 @@ class ListRoleController extends AbstractController
     #[OA\Get(
         path: '/api/roles',
         summary: 'Pobiera listę ról',
-        parameters: [
-            new OA\Parameter(
-                name: "phrase",
-                description: "Fraza do wyszukania",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "string")
-            ),
-            new OA\Parameter(
-                name: "name",
-                description: "Nazwa roli",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "string")
-            ),
-            new OA\Parameter(
-                name: "description",
-                description: "Opis roli",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "string")
-            ),
-            new OA\Parameter(
-                name: "createdAt",
-                description: "Data utworzenia",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "string", format: "date-time")
-            ),
-            new OA\Parameter(
-                name: "updatedAt",
-                description: "Data aktualizacji",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "string", format: "date-time")
-            ),
-            new OA\Parameter(
-                name: "deletedAt",
-                description: "Data usunięcia",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "string", format: "date-time")
-            ),
-            new OA\Parameter(
-                name: "page",
-                description: "Numer strony wyników",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "integer", default: 1)
-            ),
-            new OA\Parameter(
-                name: "pageSize",
-                description: "Liczba wyników na stronę",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "integer", default: 10)
-            ),
-            new OA\Parameter(
-                name: "sortBy",
-                description: "Pole do sortowania (name, description, createdAt, updatedAt, deletedAt)",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "string",default: "createdAt", enum: ["name", "description", "createdAt", "updatedAt", "deletedAt"])
-            ),
-            new OA\Parameter(
-                name: "sortDirection",
-                description: "Kierunek sortowania (asc lub desc)",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "string", default: "desc", enum: ["asc", "desc"])
-            ),
-            new OA\Parameter(
-                name: "deleted",
-                description: "Flaga pobierania usuniętych ról (1 - pobiera usunięte, 0 - pobiera aktywne)",
-                in: "query",
-                required: false,
-                schema: new OA\Schema(type: "integer", enum: [0, 1])
-            ),
-        ],
         responses: [
+            new OA\Response(
+                response: 200,
+                description: "Lista ról",
+                content: new OA\JsonContent(
+                    properties: [
+                        new OA\Property(property: "data", properties: [
+                            new OA\Property(property: "totalRoles", type: "integer", example: 13),
+                            new OA\Property(property: "page", type: "integer", example: 1),
+                            new OA\Property(property: "limit", type: "integer", example: 10),
+                            new OA\Property(property: "roles", type: "array", items: new OA\Items(properties: [
+                                new OA\Property(property: "uuid", type: "string", format: "uuid", example: "9c1963a3-cb27-4e6a-b474-3509ed4b3457"),
+                                new OA\Property(property: "name", type: "string", example: "rola 8"),
+                                new OA\Property(property: "description", type: "string", example: "Lorem ipsum dolor sit amet..."),
+                                new OA\Property(property: "createdAt", type: "string", format: "date-time", example: "2025-02-09T18:56:07+00:00"),
+                                new OA\Property(property: "updatedAt", type: "string", format: "date-time", example: "2025-02-10T10:42:55+00:00"),
+                                new OA\Property(property: "deletedAt", type: "string", format: "date-time", example: null, nullable: true),
+                            ])),
+                        ], type: "object"),
+                    ],
+                    type: "object"
+                )
+            ),
             new OA\Response(
                 response: 500,
                 description: "Błąd przy pobieraniu listy ról",
@@ -127,15 +70,13 @@ class ListRoleController extends AbstractController
     )]
     #[OA\Tag(name: 'roles')]
     #[Route('/api/roles', name: 'api.roles.list', methods: ['GET'])]
-    public function list(Request $request, GetRolesQueryHandler $usersQueryHandler): Response
+    public function list(#[MapQueryString] RolesQueryDTO $queryDTO, GetRolesQueryHandler $usersQueryHandler): Response
     {
-        $x = 1;
-
         try {
             return new JsonResponse([
                 'data' =>
                     json_decode($this->serializer->serialize(
-                        $usersQueryHandler->handle(new GetRolesQuery(new ListingRequest($request))),
+                        $usersQueryHandler->handle(new GetRolesQuery($queryDTO)),
                         'json', ['groups' => ['role_info']],
                     ))
                 ],
