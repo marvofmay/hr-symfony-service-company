@@ -31,7 +31,7 @@ class ListRoleController extends AbstractController
         summary: 'Pobiera listę ról',
         responses: [
             new OA\Response(
-                response: 200,
+                response: Response::HTTP_OK,
                 description: "Lista ról",
                 content: new OA\JsonContent(
                     properties: [
@@ -53,7 +53,7 @@ class ListRoleController extends AbstractController
                 )
             ),
             new OA\Response(
-                response: 500,
+                response: Response::HTTP_INTERNAL_SERVER_ERROR,
                 description: "Błąd przy pobieraniu listy ról",
                 content: new OA\JsonContent(
                     properties: [

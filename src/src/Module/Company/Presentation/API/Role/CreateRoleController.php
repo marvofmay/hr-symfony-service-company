@@ -32,7 +32,7 @@ class CreateRoleController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: 200,
+                response: Response::HTTP_OK,
                 description: "Rola została utworzona",
                 content: new OA\JsonContent(
                     properties: [
@@ -42,7 +42,7 @@ class CreateRoleController extends AbstractController
                 )
             ),
             new OA\Response(
-                response: 422,
+                response: Response::HTTP_UNPROCESSABLE_ENTITY,
                 description: "Błąd walidacji",
                 content: new OA\JsonContent(
                     properties: [

@@ -38,7 +38,7 @@ class GetRoleController extends AbstractController
         ],
         responses: [
             new OA\Response(
-                response: 200,
+                response: Response::HTTP_OK,
                 description: "Rola została pobrana",
                 content: new OA\JsonContent(
                     properties: [
@@ -58,7 +58,7 @@ class GetRoleController extends AbstractController
                 )
             ),
             new OA\Response(
-                response: 500,
+                response: Response::HTTP_INTERNAL_SERVER_ERROR,
                 description: "Błąd niepoprawnego UUID",
                 content: new OA\JsonContent(
                     properties: [

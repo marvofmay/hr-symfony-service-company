@@ -2,6 +2,7 @@
 
 namespace App\Module\Company\Structure\Validator\Constraints;
 
+use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
@@ -11,14 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExistingUUIDValidator extends ConstraintValidator
 {
-    private EntityManagerInterface $entityManager;
-    private TranslatorInterface $translator;
-
-    public function __construct(EntityManagerInterface $entityManager, TranslatorInterface $translator)
-    {
-        $this->entityManager = $entityManager;
-        $this->translator = $translator;
-    }
+    public function __construct(private readonly RoleReaderInterface $roleReaderRepository, private readonly TranslatorInterface $translator) {}
 
     public function validate($value, Constraint $constraint): void
     {
@@ -30,16 +24,7 @@ class ExistingUUIDValidator extends ConstraintValidator
             return;
         }
 
-        // @ToDo move to repository
-        $exists = $this->entityManager
-            ->getRepository(Role::class)
-            ->createQueryBuilder('r')
-            ->select('COUNT(r.uuid)')
-            ->where('r.uuid = :uuid')
-            ->setParameter('uuid', $value)
-            ->getQuery()
-            ->getSingleScalarResult();
-
+        $exists = $this->roleReaderRepository->isRoleWithUUIDExists($value);
         if (!$exists) {
             $message = $this->translator->trans(
                 $constraint->message['uuidNotExists'],
