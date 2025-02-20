@@ -50,7 +50,7 @@ class ImportRolesController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: 200,
+                response: Response::HTTP_OK,
                 description: "Role zostały utworzone",
                 content: new OA\JsonContent(
                     properties: [
@@ -60,7 +60,7 @@ class ImportRolesController extends AbstractController
                 )
             ),
             new OA\Response(
-                response: 500,
+                response: Response::HTTP_INTERNAL_SERVER_ERROR,
                 description: "Błąd importu",
                 content: new OA\JsonContent(
                     properties: [

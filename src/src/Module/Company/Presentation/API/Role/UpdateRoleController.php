@@ -37,7 +37,7 @@ class UpdateRoleController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: 200,
+                response: Response::HTTP_OK,
                 description: "Rola została zaktualizowana",
                 content: new OA\JsonContent(
                     properties: [
@@ -47,7 +47,7 @@ class UpdateRoleController extends AbstractController
                 )
             ),
             new OA\Response(
-                response: 422,
+                response: Response::HTTP_UNPROCESSABLE_ENTITY,
                 description: "Błąd walidacji",
                 content: new OA\JsonContent(
                     properties: [

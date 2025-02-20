@@ -2,6 +2,7 @@ role:
   uuid:
     differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
     notFound: "Rola o podanym UUID nie istnieje"
+    notExists: "Rola o podanym UUID nie istnieje :uuid"
   name:
     alreadyExists: "Rola istnieje"
     required: "Nazwa roli jest wymagana"
@@ -17,6 +18,8 @@ role:
   delete:
     success: "Rola została pomyślnie usunięta"
     error: "Wystąpił błąd - rola nie została usunięta"
+    multiple:
+      success: "Role zostały pomyślnie usunięte"
   import:
     success: "Role zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - role nie zostały zaimportowane"
