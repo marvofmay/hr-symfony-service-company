@@ -53,7 +53,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
         return !is_null($this->getRoleByName($name, $uuid));
     }
 
-    public function isRoleWithUUIDExists ($uuid): bool
+    public function isRoleWithUUIDExists (string $uuid): bool
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
