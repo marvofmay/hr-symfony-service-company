@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
+use App\Common\Trait\AttributesEntityTrait;
+use App\Common\Trait\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,6 +30,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
+    use TimestampableTrait;
+    use AttributesEntityTrait;
+
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_EMPLOYEE_UUID = 'employee_uuid';
     public const COLUMN_EMAIL = 'email';
@@ -109,21 +114,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->{self::COLUMN_PASSWORD};
     }
 
-    public function getCreatedAt(): \DateTimeInterface
-    {
-        return $this->{self::COLUMN_CREATED_AT};
-    }
-
-    public function getUpdatedAt(): \DateTimeInterface
-    {
-        return $this->{self::COLUMN_UPDATED_AT};
-    }
-
-    public function getDeletedAt(): ?\DateTimeInterface
-    {
-        return $this->{self::COLUMN_DELETED_AT};
-    }
-
     public function getRoles(): array
     {
         return [];
@@ -132,11 +122,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function getRolesEntities(): Collection
     {
         return $this->{self::RELATION_ROLES};
-    }
-
-    public function setUUID(UuidInterface $uuid): void
-    {
-        $this->{self::COLUMN_UUID} = $uuid;
     }
 
     public function setEmployeeUuid(?string $employeeUuid): self
@@ -154,27 +139,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function setPassword(string $password): void
     {
         $this->{self::COLUMN_PASSWORD} = $this->hashPassword($password);
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): void
-    {
-        $this->{self::COLUMN_CREATED_AT} = $createdAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
-    {
-        $this->{self::COLUMN_UPDATED_AT} = $updatedAt;
-    }
-
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
-    {
-        $this->{self::COLUMN_DELETED_AT} = $deletedAt;
-    }
-
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
-    {
-        $this->{self::COLUMN_CREATED_AT} = new \DateTime();
     }
 
     public function getSalt(): ?string
@@ -204,18 +168,5 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         $this->{self::COLUMN_EMPLOYEE_UUID} = $employee->getUuid();
 
         return $this;
-    }
-
-    public static function getAttributes(): array
-    {
-        $reflectionClass = new \ReflectionClass(static::class);
-        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE);
-
-        $attributes = [];
-        foreach ($properties as $property) {
-            $attributes[] = $property->getName();
-        }
-
-        return $attributes;
     }
 }

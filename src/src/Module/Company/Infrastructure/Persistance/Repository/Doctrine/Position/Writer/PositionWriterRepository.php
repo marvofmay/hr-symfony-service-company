@@ -41,7 +41,7 @@ class PositionWriterRepository extends ServiceEntityRepository implements Positi
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\Position p SET p.deletedAt = :deletedAt WHERE p.uuid IN (:uuids)');
+        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\Position p SET p.' . Position::COLUMN_DELETED_AT . ' = :deletedAt WHERE p.' . Position::COLUMN_UUID . ' IN (:uuids)');
         $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
         $query->setParameter('uuids', $selectedUUID);
 

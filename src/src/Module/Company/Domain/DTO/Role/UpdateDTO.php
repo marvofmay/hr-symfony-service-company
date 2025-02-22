@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UpdateDTO extends CreateDTO
 {
     #[OA\Property(
-        description: 'UUID aktualizowanej roli roli',
+        description: 'UUID aktualizowanej roli',
         type: 'string',
         example: '1343b681-39ea-4917-ae2f-7a9296690116',
     )]

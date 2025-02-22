@@ -21,7 +21,7 @@ class ContractTypeReaderRepository extends ServiceEntityRepository implements Co
     public function getContractTypeByUUID(string $uuid): ?ContractType
     {
         $contractTypes = $this->getEntityManager()
-            ->createQuery('SELECT ct FROM App\Module\Company\Domain\Entity\ContractType ct WHERE ct.uuid = :uuid')
+            ->createQuery('SELECT ct FROM App\Module\Company\Domain\Entity\ContractType ct WHERE ct.' . ContractType::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -38,11 +38,11 @@ class ContractTypeReaderRepository extends ServiceEntityRepository implements Co
 
         $qb->select('ct')
             ->from('App\Module\Company\Domain\Entity\ContractType', 'ct')
-            ->where('ct.name = :name')
+            ->where('ct.' . ContractType::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
         if (null !== $uuid) {
-            $qb->andWhere('p.uuid != :uuid')
+            $qb->andWhere('ct.' . ContractType::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -60,9 +60,9 @@ class ContractTypeReaderRepository extends ServiceEntityRepository implements Co
 
         $qb->select('ct')
             ->from('App\Module\Company\Domain\Entity\ContractType', 'ct')
-            ->where('ct.uuid = :uuid')
+            ->where('ct.' . ContractType::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 
-        return null === $qb->getQuery()->getOneOrNullResult();
+        return null !== $qb->getQuery()->getOneOrNullResult();
     }
 }

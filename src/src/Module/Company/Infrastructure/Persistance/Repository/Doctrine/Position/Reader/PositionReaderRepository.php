@@ -21,7 +21,7 @@ class PositionReaderRepository extends ServiceEntityRepository implements Positi
     public function getPositionByUUID(string $uuid): ?Position
     {
         $position = $this->getEntityManager()
-            ->createQuery('SELECT p FROM App\Module\Company\Domain\Entity\Position p WHERE p.uuid = :uuid')
+            ->createQuery('SELECT p FROM App\Module\Company\Domain\Entity\Position p WHERE p.' . Position::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -38,11 +38,11 @@ class PositionReaderRepository extends ServiceEntityRepository implements Positi
 
         $qb->select('p')
             ->from('App\Module\Company\Domain\Entity\Position', 'p')
-            ->where('p.name = :name')
+            ->where('p.' . Position::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
         if (null !== $uuid) {
-            $qb->andWhere('p.uuid != :uuid')
+            $qb->andWhere('p.' . Position::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -60,7 +60,7 @@ class PositionReaderRepository extends ServiceEntityRepository implements Positi
 
         $qb->select('p')
             ->from('App\Module\Company\Domain\Entity\Position', 'p')
-            ->where('p.uuid = :uuid')
+            ->where('p.' . Position::COLUMN_UUID . '= :uuid')
             ->setParameter('uuid', $uuid);
 
         return null === $qb->getQuery()->getOneOrNullResult();

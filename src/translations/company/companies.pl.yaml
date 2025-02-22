@@ -1,0 +1,5 @@
+company:
+  fullName:
+    alreadyExists: "Firma o podanej nazwie już istnieje"
+  add:
+    success: "Firma została pomyślnie zapisana"

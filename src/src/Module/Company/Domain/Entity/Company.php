@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
+use App\Common\Trait\AttributesEntityTrait;
+use App\Common\Trait\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -18,11 +20,14 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Company
 {
-    public const COLUMN_UUID = 'uuid';
-    public const COLUMN_COMPANY_UUID = 'company_uuid';
-    public const COLUMN_FULL_NAME = 'full_name';
-    public const COLUMN_SHORT_NAME = 'short_name';
+    use TimestampableTrait;
+    use AttributesEntityTrait;
 
+    public const COLUMN_UUID = 'uuid';
+    public const COLUMN_COMPANY_UUID = 'companyUuid';
+    public const COLUMN_FULL_NAME = 'fullName';
+    public const COLUMN_SHORT_NAME = 'shortName';
+    public const COLUMN_ACTIVE = 'active';
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
@@ -44,10 +49,14 @@ class Company
     #[Groups('company_info')]
     private string $fullName;
 
-    #[ORM\Column(type: Types::STRING, length: 200)]
-    #[Assert\NotBlank]
+    #[ORM\Column(type: Types::STRING, length: 200, nullable: true)]
     #[Groups('company_info')]
-    private string $shortName;
+    private ?string $shortName;
+
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    #[Assert\NotBlank]
+    #[Groups('position_info')]
+    private bool $active;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
     #[Groups('company_info')]
@@ -61,14 +70,9 @@ class Company
     #[Groups('company_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime();
-    }
-
     public function getUuid(): UuidInterface
     {
-        return $this->uuid;
+        return $this->{self::COLUMN_UUID};
     }
 
     public function getCompany(): ?Company
@@ -83,65 +87,31 @@ class Company
 
     public function getFullName(): string
     {
-        return $this->fullName;
+        return $this->{self::COLUMN_FULL_NAME};
     }
 
     public function setFullName(string $fullName): void
     {
-        $this->fullName = $fullName;
+        $this->{self::COLUMN_FULL_NAME} = $fullName;
     }
 
-    public function getShortName(): string
+    public function getShortName(): ?string
     {
-        return $this->shortName;
+        return $this->{self::COLUMN_SHORT_NAME};
     }
 
-    public function setShortName(string $shortName): void
+    public function setShortName(?string $shortName): void
     {
-        $this->shortName = $shortName;
+        $this->{self::COLUMN_SHORT_NAME} = $shortName;
     }
 
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
+    public function getActive(): bool
     {
-        $this->{self::COLUMN_CREATED_AT} = new \DateTime();
+        return $this->{self::COLUMN_ACTIVE};
     }
 
-    public function getCreatedAt(): \DateTimeInterface
+    public function setActive(bool $active): void
     {
-        return $this->{self::COLUMN_CREATED_AT};
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->{self::COLUMN_UPDATED_AT};
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
-    {
-        $this->{self::COLUMN_UPDATED_AT} = $updatedAt;
-    }
-
-    public function getDeletedAt(): ?\DateTimeInterface
-    {
-        return $this->{self::COLUMN_DELETED_AT};
-    }
-
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
-    {
-        $this->{self::COLUMN_DELETED_AT} = $deletedAt;
-    }
-
-    public static function getAttributes(): array
-    {
-        $reflectionClass = new \ReflectionClass(static::class);
-        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE);
-
-        $attributes = [];
-        foreach ($properties as $property) {
-            $attributes[] = $property->getName();
-        }
-
-        return $attributes;
+        $this->{self::COLUMN_ACTIVE} = $active;
     }
 }

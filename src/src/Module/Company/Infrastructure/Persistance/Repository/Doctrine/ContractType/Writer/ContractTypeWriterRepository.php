@@ -41,7 +41,7 @@ class ContractTypeWriterRepository extends ServiceEntityRepository implements Co
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\ContractType ct SET ct.deletedAt = :deletedAt WHERE ct.uuid IN (:uuids)');
+        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\ContractType ct SET ct.' . ContractType::COLUMN_DELETED_AT . ' = :deletedAt WHERE ct.' . ContractType::COLUMN_UUID . ' IN (:uuids)');
         $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
         $query->setParameter('uuids', $selectedUUID);
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
+use App\Common\Trait\AttributesEntityTrait;
+use App\Common\Trait\TimestampableTrait;
 use App\Module\Note\Domain\Entity\Note;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +23,9 @@ use Doctrine\Common\Collections\Collection;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Employee
 {
+    use TimestampableTrait;
+    use AttributesEntityTrait;
+
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_EXTERNAL_UUID = 'external_uuid';
     public const COLUMN_COMPANY_UUID = 'company_uuid';
@@ -135,50 +140,9 @@ class Employee
         return $this->{self::COLUMN_UUID};
     }
 
-    public function getCreatedAt(): \DateTimeInterface
-    {
-        return $this->{self::COLUMN_CREATED_AT};
-    }
-
-    public function getUpdatedAt(): \DateTimeInterface
-    {
-        return $this->{self::COLUMN_UPDATED_AT};
-    }
-
-    public function getDeletedAt(): ?\DateTimeInterface
-    {
-        return $this->{self::COLUMN_DELETED_AT};
-    }
-
     public function setUuid(UuidInterface $uuid): void
     {
         $this->{self::COLUMN_UUID} = $uuid;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
-    {
-        $this->deletedAt = $deletedAt;
-    }
-
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
-    {
-        $this->{self::COLUMN_CREATED_AT} = new \DateTime();
-    }
-
-    public function setUpdatedAtValue(): void
-    {
-        $this->{self::COLUMN_UPDATED_AT} = new \DateTime();
     }
 
     public function getUser(): ?User
@@ -191,18 +155,5 @@ class Employee
         $this->user = $user;
 
         return $this;
-    }
-
-    public static function getAttributes(): array
-    {
-        $reflectionClass = new \ReflectionClass(static::class);
-        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE);
-
-        $attributes = [];
-        foreach ($properties as $property) {
-            $attributes[] = $property->getName();
-        }
-
-        return $attributes;
     }
 }

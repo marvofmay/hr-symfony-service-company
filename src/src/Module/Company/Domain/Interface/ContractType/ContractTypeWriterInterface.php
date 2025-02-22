@@ -13,4 +13,5 @@ interface ContractTypeWriterInterface
     public function updateContractTypeInDB(ContractType $position): void;
 
     public function saveContractTypesInDB(array $positions): void;
+    public function deleteMultipleContractTypesInDB(array $selectedUUID): void;
 }

@@ -21,7 +21,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
     public function getRoleByUUID(string $uuid): ?Role
     {
         $role = $this->getEntityManager()
-            ->createQuery('SELECT r FROM App\Module\Company\Domain\Entity\Role r WHERE r.uuid = :uuid')
+            ->createQuery('SELECT r FROM App\Module\Company\Domain\Entity\Role r WHERE r.' . Role::COLUMN_UUID. ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -38,11 +38,11 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
 
         $qb->select('r')
             ->from('App\Module\Company\Domain\Entity\Role', 'r')
-            ->where('r.name = :name')
+            ->where('r.' . Role::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
         if (null !== $uuid) {
-            $qb->andWhere('r.uuid != :uuid')
+            $qb->andWhere('r.' . Role::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -60,9 +60,9 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
 
         $qb->select('r')
             ->from('App\Module\Company\Domain\Entity\Role', 'r')
-            ->where('r.uuid = :uuid')
+            ->where('r.' . Role::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 
-        return null === $qb->getQuery()->getOneOrNullResult();
+        return null !== $qb->getQuery()->getOneOrNullResult();
     }
 }

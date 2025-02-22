@@ -13,4 +13,5 @@ interface PositionWriterInterface
     public function updatePositionInDB(Position $position): void;
 
     public function savePositionsInDB(array $positions): void;
+    public function deleteMultiplePositionsInDB(array $selectedUUID): void;
 }
