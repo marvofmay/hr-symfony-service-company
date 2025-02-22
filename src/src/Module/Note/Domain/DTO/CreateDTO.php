@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Note\Domain\DTO;
 
@@ -12,12 +12,12 @@ class CreateDTO
 {
     #[NotBlank(message: [
         'text' => 'note.title.required',
-        'domain' => 'notes'
+        'domain' => 'notes',
     ])]
     #[MinMaxLength(min: 3, max: 100, message: [
         'tooShort' => 'note.title.minimumLength',
         'tooLong' => 'note.title.maximumLength',
-        'domain' => 'notes'
+        'domain' => 'notes',
     ])]
     public string $title = '';
 

@@ -10,7 +10,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MinMaxLengthValidator extends ConstraintValidator
 {
-    public function __construct(private readonly TranslatorInterface $translator) {}
+    public function __construct(private readonly TranslatorInterface $translator)
+    {
+    }
 
     public function validate(mixed $value, Constraint $constraint): void
     {

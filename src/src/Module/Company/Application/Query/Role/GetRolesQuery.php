@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Application\Query\Role;
 
@@ -16,7 +16,7 @@ class GetRolesQuery
         private int $offset = 0,
         private string $orderBy = 'createdAt',
         private string $orderDirection = 'DESC',
-        private array $filters = []
+        private array $filters = [],
     ) {
         $this->limit = $this->queryDTO->pageSize;
         $this->page = $this->queryDTO->page;
@@ -26,10 +26,10 @@ class GetRolesQuery
         $this->offset = ($this->queryDTO->page - 1) * $this->limit;
 
         foreach ((array) $this->queryDTO as $key => $val) {
-            if ($key === 'deleted' && in_array($val, ["0", "1", "true", "false"])) {
+            if ('deleted' === $key && in_array($val, ['0', '1', 'true', 'false'])) {
                 $this->filters[$key] = $val;
             }
-            if ($key === 'phrase') {
+            if ('phrase' === $key) {
                 $this->filters[$key] = $val;
             }
         }

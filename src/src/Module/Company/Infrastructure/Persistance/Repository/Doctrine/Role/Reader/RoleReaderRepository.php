@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role\Reader;
 
-use App\Module\Company\Domain\Entity\Role;
 use App\Common\Exception\NotFindByUUIDException;
+use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -17,6 +17,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
     {
         parent::__construct($registry, Role::class);
     }
+
     public function getRoleByUUID(string $uuid): ?Role
     {
         $role = $this->getEntityManager()
@@ -40,7 +41,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
             ->where('r.name = :name')
             ->setParameter('name', $name);
 
-        if ($uuid !== null) {
+        if (null !== $uuid) {
             $qb->andWhere('r.uuid != :uuid')
                 ->setParameter('uuid', $uuid);
         }
@@ -53,7 +54,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
         return !is_null($this->getRoleByName($name, $uuid));
     }
 
-    public function isRoleWithUUIDExists (string $uuid): bool
+    public function isRoleWithUUIDExists(string $uuid): bool
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -62,6 +63,6 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
             ->where('r.uuid = :uuid')
             ->setParameter('uuid', $uuid);
 
-        return $qb->getQuery()->getOneOrNullResult() === null;
+        return null === $qb->getQuery()->getOneOrNullResult();
     }
 }

@@ -1,11 +1,10 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Note\Presentation\API;
 
 use App\Module\Note\Domain\Interface\NoteReaderInterface;
-use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,8 +20,9 @@ class GetNoteController extends AbstractController
         private readonly LoggerInterface $logger,
         private readonly NoteReaderInterface $noticeReaderRepository,
         private readonly SerializerInterface $serializer,
-        private readonly TranslatorInterface $translator
-    ) {}
+        private readonly TranslatorInterface $translator,
+    ) {
+    }
 
     #[Route('/{uuid}', name: 'get', methods: ['GET'])]
     public function get(string $uuid): JsonResponse
@@ -32,11 +32,11 @@ class GetNoteController extends AbstractController
                 'data' => json_decode($this->serializer->serialize(
                     $this->noticeReaderRepository->getNoteByUUID($uuid),
                     'json', ['groups' => ['note_info']],
-                ))
+                )),
             ], Response::HTTP_OK);
-        } catch (Exception $error) {
+        } catch (\Exception $error) {
             $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('note.view.error', [], 'notes'),  $error->getMessage())
+                sprintf('%s: %s', $this->translator->trans('note.view.error', [], 'notes'), $error->getMessage())
             );
 
             return new JsonResponse(

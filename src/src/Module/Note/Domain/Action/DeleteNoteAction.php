@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Note\Domain\Action;
 
@@ -10,7 +10,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class DeleteNoteAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private Note $note) {}
+    public function __construct(private readonly MessageBusInterface $commandBus, private Note $note)
+    {
+    }
 
     public function setNoteToDelete(Note $note): self
     {

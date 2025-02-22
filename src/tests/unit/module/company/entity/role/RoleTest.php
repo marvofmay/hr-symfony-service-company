@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\tests\unit\module\company\entity\role;
 
 use App\Module\Company\Domain\Entity\Role;
-use DateTime;
-use DateTimeInterface;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Guid\Guid;
 use Ramsey\Uuid\UuidInterface;
@@ -24,16 +22,16 @@ class RoleTest extends TestCase
     {
         $uuid = Guid::uuid4();
         $this->role->setUuid($uuid);
-        $this->role->setName("Administrator");
-        $this->role->setDescription("Admin role");
-        $createdAt = new DateTime();
+        $this->role->setName('Administrator');
+        $this->role->setDescription('Admin role');
+        $createdAt = new \DateTime();
         $this->role->setCreatedAt($createdAt);
         $this->role->setUpdatedAt($createdAt);
         $this->role->setDeletedAt($createdAt);
 
         $this->assertEquals($uuid, $this->role->getUuid());
-        $this->assertEquals("Administrator", $this->role->getName());
-        $this->assertEquals("Admin role", $this->role->getDescription());
+        $this->assertEquals('Administrator', $this->role->getName());
+        $this->assertEquals('Admin role', $this->role->getDescription());
         $this->assertEquals($createdAt, $this->role->getCreatedAt());
         $this->assertEquals($createdAt, $this->role->getUpdatedAt());
         $this->assertEquals($createdAt, $this->role->getDeletedAt());
@@ -43,7 +41,7 @@ class RoleTest extends TestCase
     {
         $this->role->setCreatedAtValue();
 
-        $this->assertInstanceOf(DateTimeInterface::class, $this->role->getCreatedAt());
+        $this->assertInstanceOf(\DateTimeInterface::class, $this->role->getCreatedAt());
     }
 
     public function testGetAttributes(): void

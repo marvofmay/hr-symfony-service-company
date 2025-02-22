@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Note\Domain\Action;
 
@@ -10,7 +10,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class CreateNoteAction
 {
-    public function __construct(private MessageBusInterface $commandBus) {}
+    public function __construct(private MessageBusInterface $commandBus)
+    {
+    }
 
     public function execute(CreateDTO $createDTO): void
     {

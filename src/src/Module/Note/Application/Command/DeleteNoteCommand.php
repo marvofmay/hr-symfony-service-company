@@ -6,7 +6,9 @@ use App\Module\Note\Domain\Entity\Note;
 
 readonly class DeleteNoteCommand
 {
-    public function __construct(private Note $note) {}
+    public function __construct(private Note $note)
+    {
+    }
 
     public function getNote(): Note
     {

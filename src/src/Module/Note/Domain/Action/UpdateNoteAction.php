@@ -1,17 +1,19 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Note\Domain\Action;
 
 use App\Module\Note\Application\Command\UpdateNoteCommand;
+use App\Module\Note\Domain\DTO\UpdateDTO;
 use App\Module\Note\Domain\Entity\Note;
 use Symfony\Component\Messenger\MessageBusInterface;
-use App\Module\Note\Domain\DTO\UpdateDTO;
 
 class UpdateNoteAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private Note $note) {}
+    public function __construct(private readonly MessageBusInterface $commandBus, private Note $note)
+    {
+    }
 
     public function setNoteToUpdate(Note $note): void
     {
