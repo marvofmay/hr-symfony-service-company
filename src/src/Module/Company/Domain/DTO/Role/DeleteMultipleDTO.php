@@ -1,11 +1,11 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Domain\DTO\Role;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Module\Company\Structure\Validator\Constraints\ExistingUUID;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class DeleteMultipleDTO
 {

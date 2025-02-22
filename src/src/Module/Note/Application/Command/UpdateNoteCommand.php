@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Note\Application\Command;
 
@@ -14,8 +14,9 @@ class UpdateNoteCommand
         private readonly string $title,
         private readonly ?string $content,
         private readonly NotePriorityEnum $priority,
-        private readonly Note $note
-    ) {}
+        private readonly Note $note,
+    ) {
+    }
 
     public function getUuid(): string
     {

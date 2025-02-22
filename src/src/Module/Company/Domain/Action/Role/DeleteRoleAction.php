@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Action\Role;
 
@@ -10,7 +10,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class DeleteRoleAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private Role $role) {}
+    public function __construct(private readonly MessageBusInterface $commandBus, private Role $role)
+    {
+    }
 
     public function setRoleToDelete(Role $role): self
     {

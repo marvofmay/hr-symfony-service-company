@@ -6,7 +6,6 @@ namespace App\Common\UploadFile;
 
 use App\Common\Enum\FileExtensionEnum;
 use App\Module\Company\Domain\Interface\UploadFileInterface;
-use Exception;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -24,7 +23,9 @@ class UploadFile implements UploadFileInterface
 
     private ?UploadedFile $uploadedFile = null;
 
-    public function __construct(private readonly string $uploadDir, private readonly string $expectedUploadedFileExtension) {}
+    public function __construct(private readonly string $uploadDir, private readonly string $expectedUploadedFileExtension)
+    {
+    }
 
     public function uploadFile(UploadedFile $file): bool
     {
@@ -35,19 +36,19 @@ class UploadFile implements UploadFileInterface
         $extension = $file->guessExtension() ?: $file->getClientOriginalExtension();
 
         if (!$this->isAllowedExtension($extension)) {
-            throw new Exception('notAllowedTypeFile');
+            throw new \Exception('notAllowedTypeFile');
         }
 
         if (!$this->isExpectedExtension($extension)) {
             switch ($this->expectedUploadedFileExtension) {
                 case 'xlsx':
-                    throw new Exception('expectedXLSXFile');
+                    throw new \Exception('expectedXLSXFile');
                 case 'pdf':
-                    throw new Exception('expectedPDFFile');
+                    throw new \Exception('expectedPDFFile');
             }
         }
 
-        $fileName = uniqid('upload_', true) . '-' . date('Y-m-d-H-i-s') . '.' . $extension;
+        $fileName = uniqid('upload_', true).'-'.date('Y-m-d-H-i-s').'.'.$extension;
 
         try {
             $movedFile = $file->move($this->uploadDir, $fileName);
@@ -58,6 +59,7 @@ class UploadFile implements UploadFileInterface
                 null,
                 true
             );
+
             return true;
         } catch (FileException) {
             return false;

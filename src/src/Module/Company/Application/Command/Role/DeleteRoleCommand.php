@@ -6,7 +6,9 @@ use App\Module\Company\Domain\Entity\Role;
 
 readonly class DeleteRoleCommand
 {
-    public function __construct(private Role $role) {}
+    public function __construct(private Role $role)
+    {
+    }
 
     public function getRole(): Role
     {

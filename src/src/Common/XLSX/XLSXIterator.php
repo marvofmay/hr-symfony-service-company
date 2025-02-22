@@ -7,7 +7,6 @@ namespace App\Common\XLSX;
 use App\Module\Company\Domain\Interface\XLSXIteratorInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
-use RuntimeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class XLSXIterator implements XLSXIteratorInterface
@@ -15,13 +14,14 @@ abstract class XLSXIterator implements XLSXIteratorInterface
     protected ?Worksheet $worksheet = null;
     protected array $errors = [];
 
-    public function __construct(private readonly string $filePath, private readonly TranslatorInterface $translator) {}
+    public function __construct(private readonly string $filePath, private readonly TranslatorInterface $translator)
+    {
+    }
 
     public function loadFile(): void
     {
         if (!file_exists($this->filePath)) {
-            throw new RuntimeException(
-                sprintf('%s: %s', $this->translator->trans('role.import.fileNotExists', [], 'roles'), $this->filePath));
+            throw new \RuntimeException(sprintf('%s: %s', $this->translator->trans('role.import.fileNotExists', [], 'roles'), $this->filePath));
         }
 
         $spreadsheet = IOFactory::load($this->filePath);
@@ -31,7 +31,7 @@ abstract class XLSXIterator implements XLSXIteratorInterface
     public function iterateRows(): array
     {
         if (!$this->worksheet) {
-            throw new RuntimeException($this->translator->trans('role.import.chooseFile', [], 'roles'));
+            throw new \RuntimeException($this->translator->trans('role.import.chooseFile', [], 'roles'));
         }
 
         $data = [];

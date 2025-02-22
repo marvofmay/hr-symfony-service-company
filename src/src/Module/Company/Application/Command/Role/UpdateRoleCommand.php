@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Role;
 
@@ -12,8 +12,9 @@ class UpdateRoleCommand
         private readonly string $uuid,
         private readonly string $name,
         private readonly ?string $description,
-        private readonly Role $role
-    ) {}
+        private readonly Role $role,
+    ) {
+    }
 
     public function getUuid(): string
     {

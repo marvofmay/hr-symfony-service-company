@@ -1,24 +1,25 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Role;
 
+use App\Module\Company\Domain\Action\Role\DeleteMultipleRolesAction;
+use App\Module\Company\Domain\DTO\Role\DeleteMultipleDTO;
+use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use App\Module\Company\Domain\DTO\Role\DeleteMultipleDTO;
-use App\Module\Company\Domain\Action\Role\DeleteMultipleRolesAction;
-use Exception;
-use OpenApi\Attributes as OA;
 
 class DeleteMultipleRoleController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator) {}
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
+    {
+    }
 
     #[OA\Delete(
         path: '/api/roles/multiple',
@@ -35,7 +36,7 @@ class DeleteMultipleRoleController extends AbstractController
                     type: 'array',
                     items: new OA\Items(type: 'string', format: 'uuid'),
                     example: ['1343b681-39ea-4917-ae2f-7a9296690111', '21e835a2-019c-4aae-a2a7-e20e3ed12871']
-                )
+                ),
             ]
         )
     )]
@@ -44,7 +45,7 @@ class DeleteMultipleRoleController extends AbstractController
         description: 'Usunięcie ról zakończone sukcesem',
         content: new OA\JsonContent(
             properties: [
-                new OA\Property(property: 'message', type: 'string', example: 'Role zostały pomyślnie usunięte')
+                new OA\Property(property: 'message', type: 'string', example: 'Role zostały pomyślnie usunięte'),
             ]
         )
     )]
@@ -57,12 +58,12 @@ class DeleteMultipleRoleController extends AbstractController
                     property: 'errors',
                     type: 'object',
                     example: [
-                        'selectedUUID[1]' => 'Rola o podanym UUID nie istnieje 41c77442-78aa-468e-85ca-6d40a78cd558'
+                        'selectedUUID[1]' => 'Rola o podanym UUID nie istnieje 41c77442-78aa-468e-85ca-6d40a78cd558',
                     ],
                     additionalProperties: new OA\AdditionalProperties(
                         type: 'string'
                     )
-                )
+                ),
             ]
         )
     )]
@@ -77,7 +78,7 @@ class DeleteMultipleRoleController extends AbstractController
                 ['message' => $this->translator->trans('role.delete.multiple.success', [], 'roles')],
                 Response::HTTP_OK
             );
-        } catch (Exception $error) {
+        } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('role.delete.multiple.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 

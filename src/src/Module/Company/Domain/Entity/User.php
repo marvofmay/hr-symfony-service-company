@@ -1,37 +1,31 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
-use App\Module\Company\Domain\Entity\Employee;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\UniqueConstraint;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Doctrine\ORM\Mapping\UniqueConstraint;
-use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
-use ReflectionClass;
-use ReflectionProperty;
-use DateTimeInterface;
-use LogicException;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(
-    name: "user",
+    name: 'user',
     uniqueConstraints: [
-        new UniqueConstraint(name: "unique_email", columns: ["email"])
+        new UniqueConstraint(name: 'unique_email', columns: ['email']),
     ]
 )]
 #[ORM\HasLifecycleCallbacks]
-#[Gedmo\SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: true)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
 {
     public const COLUMN_UUID = 'uuid';
@@ -44,51 +38,52 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public const RELATION_ROLES = 'roles';
 
     #[ORM\Id]
-    #[ORM\Column(type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups("user_info")]
+    #[Groups('user_info')]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: "uuid", nullable: true)]
+    #[ORM\Column(type: 'uuid', nullable: true)]
     #[Assert\NotBlank()]
-    #[Groups("user_info")]
+    #[Groups('user_info')]
     private ?UuidInterface $employee_uuid = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     #[Assert\NotBlank()]
     #[Assert\Email()]
-    #[Groups("user_info")]
+    #[Groups('user_info')]
     private string $email;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotBlank()]
-    #[Groups("user_info")]
+    #[Groups('user_info')]
     private string $password;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    #[Groups("user_info")]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Groups('user_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups("user_info")]
+    #[Groups('user_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups("user_info")]
+    #[Groups('user_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToOne(targetEntity: Employee::class)]
-    #[ORM\JoinColumn(name: "employee_uuid", referencedColumnName: "uuid", nullable: false)]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: false)]
     private Employee $employee;
 
     public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher)
-    {}
+    {
+    }
 
     public function hashPassword(string $password): string
     {
-        if ($this->userPasswordHasher === null) {
-            throw new LogicException('Password hasher is not set.');
+        if (null === $this->userPasswordHasher) {
+            throw new \LogicException('Password hasher is not set.');
         }
 
         return $this->userPasswordHasher->hashPassword($this, $password);
@@ -114,12 +109,12 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->{self::COLUMN_PASSWORD};
     }
 
-    public function getCreatedAt(): DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->{self::COLUMN_CREATED_AT};
     }
 
-    public function getUpdatedAt(): DateTimeInterface
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->{self::COLUMN_UPDATED_AT};
     }
@@ -138,6 +133,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     {
         return $this->{self::RELATION_ROLES};
     }
+
     public function setUUID(UuidInterface $uuid): void
     {
         $this->{self::COLUMN_UUID} = $uuid;
@@ -212,8 +208,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public static function getAttributes(): array
     {
-        $reflectionClass = new ReflectionClass(static::class);
-        $properties = $reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE);
+        $reflectionClass = new \ReflectionClass(static::class);
+        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE);
 
         $attributes = [];
         foreach ($properties as $property) {

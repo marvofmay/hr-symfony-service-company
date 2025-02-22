@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Role;
 
@@ -8,23 +8,23 @@ use App\Module\Company\Domain\Action\Role\UpdateRoleAction;
 use App\Module\Company\Domain\DTO\Role\UpdateDTO;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
-use Exception;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use OpenApi\Attributes as OA;
 
 class UpdateRoleController extends AbstractController
 {
     public function __construct(
         private readonly RoleReaderInterface $roleReaderRepository,
         private readonly LoggerInterface $logger,
-        private readonly TranslatorInterface $translator
-    ) {}
+        private readonly TranslatorInterface $translator,
+    ) {
+    }
 
     #[OA\Put(
         path: '/api/roles/{uuid}',
@@ -38,22 +38,22 @@ class UpdateRoleController extends AbstractController
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
-                description: "Rola została zaktualizowana",
+                description: 'Rola została zaktualizowana',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "message", type: "string", example: "Rola została pomyślnie zaktualizowana"),
+                        new OA\Property(property: 'message', type: 'string', example: 'Rola została pomyślnie zaktualizowana'),
                     ],
-                    type: "object"
+                    type: 'object'
                 )
             ),
             new OA\Response(
                 response: Response::HTTP_UNPROCESSABLE_ENTITY,
-                description: "Błąd walidacji",
+                description: 'Błąd walidacji',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "error", type: "string", example: "Oczekiwano unikalnej nazwy roli"),
+                        new OA\Property(property: 'error', type: 'string', example: 'Oczekiwano unikalnej nazwy roli'),
                     ],
-                    type: "object"
+                    type: 'object'
                 )
             ),
         ]
@@ -74,7 +74,7 @@ class UpdateRoleController extends AbstractController
             $updateRoleAction->execute($updateDTO);
 
             return new JsonResponse(['message' => $this->translator->trans('role.update.success', [], 'roles')], Response::HTTP_OK);
-        } catch (Exception $error) {
+        } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('role.update.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 

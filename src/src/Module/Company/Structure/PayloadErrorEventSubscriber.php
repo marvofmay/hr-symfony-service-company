@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Structure;
 
-use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PayloadErrorEventSubscriber implements EventSubscriberInterface
 {
-
-    public function __construct(private TranslatorInterface $translator) {}
+    public function __construct(private TranslatorInterface $translator)
+    {
+    }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            ExceptionEvent::class => 'onExceptionEvent'
+            ExceptionEvent::class => 'onExceptionEvent',
         ];
     }
 

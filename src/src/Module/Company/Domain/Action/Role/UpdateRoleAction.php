@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Action\Role;
 
 use App\Module\Company\Application\Command\Role\UpdateRoleCommand;
+use App\Module\Company\Domain\DTO\Role\UpdateDTO;
 use App\Module\Company\Domain\Entity\Role;
 use Symfony\Component\Messenger\MessageBusInterface;
-use App\Module\Company\Domain\DTO\Role\UpdateDTO;
 
 class UpdateRoleAction
 {

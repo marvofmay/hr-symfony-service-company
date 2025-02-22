@@ -10,7 +10,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExistingUUIDValidator extends ConstraintValidator
 {
-    public function __construct(private readonly RoleReaderInterface $roleReaderRepository, private readonly TranslatorInterface $translator) {}
+    public function __construct(private readonly RoleReaderInterface $roleReaderRepository, private readonly TranslatorInterface $translator)
+    {
+    }
 
     public function validate($value, Constraint $constraint): void
     {

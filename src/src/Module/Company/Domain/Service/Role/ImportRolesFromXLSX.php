@@ -13,7 +13,7 @@ class ImportRolesFromXLSX extends XLSXIterator
     public function __construct(
         private readonly string $filePath,
         private readonly TranslatorInterface $translator,
-        private readonly RoleReaderInterface $roleReaderRepository
+        private readonly RoleReaderInterface $roleReaderRepository,
     ) {
         parent::__construct($this->filePath, $this->translator);
     }
@@ -57,7 +57,7 @@ class ImportRolesFromXLSX extends XLSXIterator
             '%s - %s %d',
             $this->translator->trans($translationKey, $parameters, 'roles'),
             $this->translator->trans('row'),
-            (count($this->errors) + 2)
+            count($this->errors) + 2
         );
     }
 }

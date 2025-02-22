@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace App\Common\Validator\Constraints;
 
-use Attribute;
 use Symfony\Component\Validator\Constraint;
 
-#[Attribute(Attribute::TARGET_PROPERTY | Attribute::TARGET_METHOD)]
+#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD)]
 class MinMaxLength extends Constraint
 {
     public function __construct(
@@ -16,10 +15,10 @@ class MinMaxLength extends Constraint
         public array $message = [
             'tooShort' => 'validation.tooShort',
             'tooLong' => 'validation.tooLong',
-            'domain' => 'validators'
+            'domain' => 'validators',
         ],
         ?array $groups = null,
-        mixed $payload = null
+        mixed $payload = null,
     ) {
         parent::__construct(['message' => $message], $groups, $payload);
     }

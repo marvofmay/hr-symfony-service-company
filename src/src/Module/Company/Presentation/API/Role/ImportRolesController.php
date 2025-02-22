@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Role;
 
@@ -9,8 +9,7 @@ use App\Module\Company\Domain\Action\Role\ImportRolesAction;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
-use Exception;
-use Nelmio\ApiDocBundle\Attribute\Model;
+use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,15 +17,15 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use OpenApi\Attributes as OA;
 
 class ImportRolesController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-        private readonly RoleReaderInterface $roleReaderRepository
-    ) {}
+        private readonly RoleReaderInterface $roleReaderRepository,
+    ) {
+    }
 
     #[OA\Post(
         path: '/api/roles/import',
@@ -34,16 +33,16 @@ class ImportRolesController extends AbstractController
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\MediaType(
-                mediaType: "multipart/form-data",
+                mediaType: 'multipart/form-data',
                 schema: new OA\Schema(
-                    required: ["file"],
+                    required: ['file'],
                     properties: [
                         new OA\Property(
-                            property: "file",
-                            description: "Plik XLSX do importu",
-                            type: "string",
-                            format: "binary"
-                        )
+                            property: 'file',
+                            description: 'Plik XLSX do importu',
+                            type: 'string',
+                            format: 'binary'
+                        ),
                     ]
                 )
             )
@@ -51,22 +50,22 @@ class ImportRolesController extends AbstractController
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
-                description: "Role zostały utworzone",
+                description: 'Role zostały utworzone',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "message", type: "string", example: "Role zostały pomyślnie zaimportowane"),
+                        new OA\Property(property: 'message', type: 'string', example: 'Role zostały pomyślnie zaimportowane'),
                     ],
-                    type: "object"
+                    type: 'object'
                 )
             ),
             new OA\Response(
                 response: Response::HTTP_INTERNAL_SERVER_ERROR,
-                description: "Błąd importu",
+                description: 'Błąd importu',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: "error", type: "string", example: "Wystąpił błąd - role nie zostały zaimportowane"),
+                        new OA\Property(property: 'error', type: 'string', example: 'Wystąpił błąd - role nie zostały zaimportowane'),
                     ],
-                    type: "object"
+                    type: 'object'
                 )
             ),
         ]
@@ -115,7 +114,7 @@ class ImportRolesController extends AbstractController
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }
-        } catch (Exception $error) {
+        } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('role.import.error', [], 'roles'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);
 

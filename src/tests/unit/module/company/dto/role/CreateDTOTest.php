@@ -6,7 +6,6 @@ namespace App\tests\unit\module\company\dto\role;
 
 use App\Module\Company\Domain\DTO\Role\CreateDTO;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Validator\Validation;
 
 class CreateDTOTest extends TestCase
 {

@@ -1,77 +1,73 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use OpenApi\Attributes as OA;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use ReflectionClass;
-use ReflectionProperty;
-use DateTimeInterface;
-use DateTime;
-use OpenApi\Attributes as OA;
 
 #[ORM\Entity]
-#[ORM\Table(name: "role")]
+#[ORM\Table(name: 'role')]
 #[ORM\HasLifecycleCallbacks]
-#[Gedmo\SoftDeleteable(fieldName: "deletedAt", timeAware: false, hardDelete: true)]
+#[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 #[OA\Schema(
-    schema: "RoleListResponse",
-    title: "Role List Response",
-    description: "Lista ról"
+    schema: 'RoleListResponse',
+    title: 'Role List Response',
+    description: 'Lista ról'
 )]
 class Role
 {
     public const COLUMN_UUID = 'uuid';
 
-    #[OA\Property(description: "Nazwa roli", type: "string")]
+    #[OA\Property(description: 'Nazwa roli', type: 'string')]
     public const COLUMN_NAME = 'name';
 
-    #[OA\Property(description: "Opis roli", type: "string")]
+    #[OA\Property(description: 'Opis roli', type: 'string')]
     public const COLUMN_DESCRIPTION = 'description';
 
-    #[OA\Property(description: "Data utworzenia", type: "string", format: "date-time")]
+    #[OA\Property(description: 'Data utworzenia', type: 'string', format: 'date-time')]
     public const COLUMN_CREATED_AT = 'createdAt';
 
-    #[OA\Property(description: "Data aktualizacji", type: "string", format: "date-time", nullable: true)]
+    #[OA\Property(description: 'Data aktualizacji', type: 'string', format: 'date-time', nullable: true)]
     public const COLUMN_UPDATED_AT = 'updatedAt';
 
-    #[OA\Property(description: "Data usunięcia", type: "string", format: "date-time", nullable: true)]
+    #[OA\Property(description: 'Data usunięcia', type: 'string', format: 'date-time', nullable: true)]
     public const COLUMN_DELETED_AT = 'deletedAt';
 
     #[ORM\Id]
-    #[ORM\Column(type: "uuid", unique: true)]
-    #[ORM\GeneratedValue(strategy: "CUSTOM")]
+    #[ORM\Column(type: 'uuid', unique: true)]
+    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups("role_info")]
+    #[Groups('role_info')]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
     #[Assert\NotBlank()]
-    #[Groups("role_info")]
+    #[Groups('role_info')]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups("role_info")]
+    #[Groups('role_info')]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ["default" => "CURRENT_TIMESTAMP"])]
-    #[Groups("role_info")]
-    private DateTimeInterface $createdAt;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Groups('role_info')]
+    private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups("role_info")]
-    private ?DateTimeInterface $updatedAt = null;
+    #[Groups('role_info')]
+    private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups("role_info")]
-    private ?DateTimeInterface $deletedAt = null;
+    #[Groups('role_info')]
+    private ?\DateTimeInterface $deletedAt = null;
 
     public function getUuid(): UuidInterface
     {
@@ -88,17 +84,17 @@ class Role
         return $this->{self::COLUMN_DESCRIPTION};
     }
 
-    public function getCreatedAt(): DateTimeInterface
+    public function getCreatedAt(): \DateTimeInterface
     {
         return $this->{self::COLUMN_CREATED_AT};
     }
 
-    public function getUpdatedAt(): DateTimeInterface
+    public function getUpdatedAt(): \DateTimeInterface
     {
         return $this->{self::COLUMN_UPDATED_AT};
     }
 
-    public function getDeletedAt(): ?DateTimeInterface
+    public function getDeletedAt(): ?\DateTimeInterface
     {
         return $this->{self::COLUMN_DELETED_AT};
     }
@@ -118,17 +114,17 @@ class Role
         $this->{self::COLUMN_DESCRIPTION} = $description;
     }
 
-    public function setCreatedAt(DateTimeInterface $createdAt): void
+    public function setCreatedAt(\DateTimeInterface $createdAt): void
     {
         $this->createdAt = $createdAt;
     }
 
-    public function setUpdatedAt(DateTimeInterface $updatedAt): void
+    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
     }
 
-    public function setDeletedAt(?DateTimeInterface $deletedAt): void
+    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
     {
         $this->deletedAt = $deletedAt;
     }
@@ -136,13 +132,13 @@ class Role
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
-        $this->{self::COLUMN_CREATED_AT} = new DateTime();
+        $this->{self::COLUMN_CREATED_AT} = new \DateTime();
     }
 
     public static function getAttributes(): array
     {
-        $reflectionClass = new ReflectionClass(static::class);
-        $properties = $reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE);
+        $reflectionClass = new \ReflectionClass(static::class);
+        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE);
 
         $attributes = [];
         foreach ($properties as $property) {
