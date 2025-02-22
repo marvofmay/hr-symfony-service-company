@@ -57,6 +57,7 @@ class CreateDTO
         description: 'UUID firmy matki',
         type: 'string',
         example: '1343b681-39ea-4917-ae2f-7a9296690116',
+        nullable: true,
     )]
     #[Assert\Uuid(message: 'company.invalidUUID')]
     #[ExistingCompanyUUID(

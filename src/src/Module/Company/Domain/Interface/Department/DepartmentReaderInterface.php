@@ -1,0 +1,13 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Module\Company\Domain\Interface\Department;
+
+use App\Module\Company\Domain\Entity\Department;
+
+interface DepartmentReaderInterface
+{
+    public function getDepartmentByUUID(string $uuid): ?Department;
+    public function getDepartmentByName(string $name, ?string $uuid): ?Department;
+}

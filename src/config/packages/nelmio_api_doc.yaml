@@ -21,6 +21,8 @@ nelmio_api_doc:
       path_patterns: [ ^/api/ ]
     companies:
       path_patterns: [ ^/api/companies ]
+    departments:
+      path_patterns: [ ^/api/departments ]
     roles:
       path_patterns: [ ^/api/roles ]
     positions:

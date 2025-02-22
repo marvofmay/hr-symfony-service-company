@@ -1,4 +1,4 @@
 api_company_create:
-  path: api/positions
+  path: api/companies
   controller: App\Module\Company\Presentation\API\Company\CreateCompanyController::create
   methods: [POST]

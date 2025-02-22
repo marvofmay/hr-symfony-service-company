@@ -75,12 +75,12 @@ class Company
         return $this->{self::COLUMN_UUID};
     }
 
-    public function getCompany(): ?Company
+    public function getParentCompany(): ?Company
     {
         return $this->parentCompany;
     }
 
-    public function setCompany(?Company $company): void
+    public function setParentCompany(?Company $company): void
     {
         $this->parentCompany = $company;
     }

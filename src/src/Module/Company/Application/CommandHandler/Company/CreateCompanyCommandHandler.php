@@ -25,7 +25,7 @@ readonly class CreateCompanyCommandHandler
         if (null !== $command->parentCompanyUUID) {
             $parentCompany = $this->companyReaderRepository->getCompanyByUUID($command->parentCompanyUUID);
             if ($parentCompany instanceof Company) {
-                $company->setCompany($parentCompany);
+                $company->setParentCompany($parentCompany);
             }
         }
 
