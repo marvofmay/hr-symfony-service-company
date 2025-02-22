@@ -1,7 +1,7 @@
 <?php
 
 $finder = (new PhpCsFixer\Finder())
-    ->in( [__DIR__ . '/src'])
+    ->in( [__DIR__ . '/src/', __DIR__ . '/tests/'])
     ->name('*.php')
     ->ignoreDotFiles(true)
     ->ignoreVCS(true)
