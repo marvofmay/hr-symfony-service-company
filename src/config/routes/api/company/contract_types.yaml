@@ -1,0 +1,4 @@
+api_contract_type_create:
+  path: api/contract_types
+  controller: App\Module\Company\Presentation\API\ContractType\CreateContractTypeController::create
+  methods: [POST]

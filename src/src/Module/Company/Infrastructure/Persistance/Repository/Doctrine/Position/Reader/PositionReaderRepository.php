@@ -20,16 +20,16 @@ class PositionReaderRepository extends ServiceEntityRepository implements Positi
 
     public function getPositionByUUID(string $uuid): ?Position
     {
-        $positions = $this->getEntityManager()
+        $position = $this->getEntityManager()
             ->createQuery('SELECT p FROM App\Module\Company\Domain\Entity\Position p WHERE p.uuid = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
-        if (!$positions) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('role.uuid.notFound', [], 'roles'), $uuid));
+        if (!$position) {
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('position.uuid.notFound', [], 'positions'), $uuid));
         }
 
-        return $positions;
+        return $position;
     }
 
     public function getPositionByName(string $name, ?string $uuid = null): ?Position
