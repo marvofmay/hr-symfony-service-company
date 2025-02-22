@@ -18,6 +18,7 @@ readonly class CreateNoteAction
     {
         $this->commandBus->dispatch(
             new CreateNoteCommand(
+                $createDTO->getEmployeeUUID(),
                 $createDTO->getTitle(),
                 $createDTO->getContent(),
                 $createDTO->getPriority(),

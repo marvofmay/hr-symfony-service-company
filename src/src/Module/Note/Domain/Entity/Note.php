@@ -12,6 +12,7 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Module\Company\Domain\Entity\Employee;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'note')]
@@ -20,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Note
 {
     public const COLUMN_UUID = 'uuid';
+    public const COLUMN_EMPLOYEE_UUID = 'employee_uuid';
     public const COLUMN_TITLE = 'title';
     public const COLUMN_CONTENT = 'content';
     public const COLUMN_PRIORITY = 'priority';
@@ -34,6 +36,12 @@ class Note
     #[Groups('note_info')]
     private UuidInterface $uuid;
 
+    #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'notes')]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[Assert\NotNull]
+    #[Groups('note_info')]
+    private Employee $employee;
+
     #[ORM\Column(type: Types::STRING, length: 100)]
     #[Assert\NotBlank]
     #[Groups('note_info')]
@@ -47,20 +55,30 @@ class Note
     private NotePriorityEnum $priority;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('role_info')]
+    #[Groups('note_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('role_info')]
+    #[Groups('note_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('role_info')]
+    #[Groups('note_info')]
     private ?\DateTimeInterface $deletedAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getUuid(): UuidInterface
     {
         return $this->uuid;
+    }
+
+    public function getEmployee(): Employee
+    {
+        return $this->employee;
     }
 
     public function getTitle(): string
@@ -80,17 +98,22 @@ class Note
 
     public function getCreatedAt(): \DateTimeInterface
     {
-        return $this->{self::COLUMN_CREATED_AT};
+        return $this->createdAt;
     }
 
-    public function getUpdatedAt(): \DateTimeInterface
+    public function getUpdatedAt(): ?\DateTimeInterface
     {
-        return $this->{self::COLUMN_UPDATED_AT};
+        return $this->updatedAt;
     }
 
     public function getDeletedAt(): ?\DateTimeInterface
     {
-        return $this->{self::COLUMN_DELETED_AT};
+        return $this->deletedAt;
+    }
+
+    public function setEmployee(Employee $employee): void
+    {
+        $this->employee = $employee;
     }
 
     public function setTitle(string $title): void
@@ -108,11 +131,6 @@ class Note
         $this->priority = $priority;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
-
     public function setUpdatedAt(\DateTimeInterface $updatedAt): void
     {
         $this->updatedAt = $updatedAt;
@@ -123,14 +141,16 @@ class Note
         $this->deletedAt = $deletedAt;
     }
 
-    #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
-    {
-        $this->{self::COLUMN_CREATED_AT} = new \DateTime();
-    }
-
     public static function getAttributes(): array
     {
-        return array_keys(get_class_vars(self::class));
+        $reflectionClass = new \ReflectionClass(static::class);
+        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE);
+
+        $attributes = [];
+        foreach ($properties as $property) {
+            $attributes[] = $property->getName();
+        }
+
+        return $attributes;
     }
 }

@@ -7,96 +7,114 @@ namespace App\Module\Company\Domain\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use OpenApi\Attributes as OA;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ORM\Table(name: 'role')]
+#[ORM\Table(name: 'department')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
-#[OA\Schema(
-    schema: 'RoleListResponse',
-    title: 'Role List Response',
-    description: 'Lista ról'
-)]
-class Role
+class Department
 {
     public const COLUMN_UUID = 'uuid';
-
-    #[OA\Property(description: 'Nazwa roli', type: 'string')]
+    public const COLUMN_COMPANY_UUID = 'company_uuid';
+    public const COLUMN_DEPARTMENT_UUID = 'department_uuid';
     public const COLUMN_NAME = 'name';
+    public const COLUMN_ACTIVE = 'active';
 
-    #[OA\Property(description: 'Opis roli', type: 'string')]
-    public const COLUMN_DESCRIPTION = 'description';
-
-    #[OA\Property(description: 'Data utworzenia', type: 'string', format: 'date-time')]
     public const COLUMN_CREATED_AT = 'createdAt';
-
-    #[OA\Property(description: 'Data aktualizacji', type: 'string', format: 'date-time', nullable: true)]
     public const COLUMN_UPDATED_AT = 'updatedAt';
-
-    #[OA\Property(description: 'Data usunięcia', type: 'string', format: 'date-time', nullable: true)]
     public const COLUMN_DELETED_AT = 'deletedAt';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('role_info')]
+    #[Groups('department_info')]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
-    #[Assert\NotBlank()]
-    #[Groups('role_info')]
+    #[ORM\ManyToOne(targetEntity: Company::class)]
+    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
+    #[Groups('department_info')]
+    private ?Company $company = null;
+
+    #[ORM\ManyToOne(targetEntity: Department::class)]
+    #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    #[Groups('department_info')]
+    private ?Department $parentDepartment = null;
+
+    #[ORM\Column(type: Types::STRING, length: 1000)]
+    #[Assert\NotBlank]
+    #[Groups('department_info')]
     private string $name;
 
-    #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups('role_info')]
-    private ?string $description = null;
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    #[Assert\NotBlank]
+    #[Groups('department_info')]
+    private bool $active;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('role_info')]
+    #[Groups('department_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('role_info')]
+    #[Groups('department_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('role_info')]
+    #[Groups('department_info')]
     private ?\DateTimeInterface $deletedAt = null;
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
 
     public function getUuid(): UuidInterface
     {
-        return $this->{self::COLUMN_UUID};
+        return $this->uuid;
     }
 
-    public function setUuid(UuidInterface $uuid): void
+    public function getCompany(): ?Company
     {
-        $this->{self::COLUMN_UUID} = $uuid;
+        return $this->company;
+    }
+
+    public function setCompany(?Company $company): void
+    {
+        $this->company = $company;
+    }
+
+    public function getParentDepartment(): ?Department
+    {
+        return $this->parentDepartment;
+    }
+
+    public function setParentDepartment(?Department $parentDepartment): void
+    {
+        $this->parentDepartment = $parentDepartment;
     }
 
     public function getName(): string
     {
-        return $this->{self::COLUMN_NAME};
+        return $this->name;
     }
 
     public function setName(string $name): void
     {
-        $this->{self::COLUMN_NAME} = $name;
+        $this->name = $name;
     }
 
-    public function getDescription(): ?string
+    public function getActive(): bool
     {
-        return $this->{self::COLUMN_DESCRIPTION};
+        return $this->active;
     }
 
-    public function setDescription(?string $description): void
+    public function setActive(bool $active): void
     {
-        $this->{self::COLUMN_DESCRIPTION} = $description;
+        $this->active = $active;
     }
 
     #[ORM\PrePersist]

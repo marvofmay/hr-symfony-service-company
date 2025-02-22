@@ -11,6 +11,12 @@ use App\Module\Note\Domain\Enum\NotePriorityEnum;
 class CreateDTO
 {
     #[NotBlank(message: [
+        'text' => 'note.employee_uuid.required',
+        'domain' => 'notes',
+    ])]
+    public string $employee_uuid;
+
+    #[NotBlank(message: [
         'text' => 'note.title.required',
         'domain' => 'notes',
     ])]
@@ -24,6 +30,11 @@ class CreateDTO
     public ?string $content = null;
 
     public NotePriorityEnum $priority = NotePriorityEnum::LOW;
+
+    public function getEmployeeUUID(): string
+    {
+        return $this->employee_uuid;
+    }
 
     public function getTitle(): string
     {
