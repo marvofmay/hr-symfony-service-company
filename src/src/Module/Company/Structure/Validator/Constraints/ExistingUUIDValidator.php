@@ -3,11 +3,9 @@
 namespace App\Module\Company\Structure\Validator\Constraints;
 
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use App\Module\Company\Domain\Entity\Role;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExistingUUIDValidator extends ConstraintValidator
