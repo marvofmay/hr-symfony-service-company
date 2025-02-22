@@ -60,11 +60,6 @@ class Position
     #[Groups('position_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime();
-    }
-
     public function getUuid(): UuidInterface
     {
         return $this->uuid;
@@ -77,7 +72,7 @@ class Position
 
     public function setName(string $name): void
     {
-        $this->name = $this->{self::COLUMN_NAME};
+        $this->{self::COLUMN_NAME} = $name;
     }
 
     public function getDescription(): ?string

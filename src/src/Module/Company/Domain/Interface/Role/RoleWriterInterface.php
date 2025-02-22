@@ -13,4 +13,6 @@ interface RoleWriterInterface
     public function updateRoleInDB(Role $role): void;
 
     public function saveRolesInDB(array $roles): void;
+
+    public function deleteMultipleRolesInDB(array $selectedUUID): void;
 }

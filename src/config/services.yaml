@@ -1,4 +1,5 @@
 imports:
     - { resource: './services/main.yaml' }
-    - { resource: './services/roles.yaml' }
-    - { resource: './services/notes.yaml' }
+    - { resource: './services/module/company/roles.yaml' }
+    - { resource: './services/module/company/positions.yaml' }
+    - { resource: './services/module/note/notes.yaml' }

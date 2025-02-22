@@ -6,7 +6,7 @@ namespace App\Module\Company\Domain\DTO\Role;
 
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
-use App\Module\Company\Structure\Validator\Constraints\UniqueRoleName;
+use App\Module\Company\Structure\Validator\Constraints\Role\UniqueRoleName;
 use OpenApi\Attributes as OA;
 
 #[OA\Schema(

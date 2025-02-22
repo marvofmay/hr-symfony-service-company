@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Module\Company\Structure\Validator\Constraints;
+namespace App\Module\Company\Structure\Validator\Constraints\Role;
 
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Symfony\Component\Validator\Constraint;
