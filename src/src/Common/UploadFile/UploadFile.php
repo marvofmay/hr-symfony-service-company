@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Common\UploadFile;
 
 use App\Common\Enum\FileExtensionEnum;
-use App\Module\Company\Domain\Interface\UploadFileInterface;
+use App\Common\Interface\UploadFileInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

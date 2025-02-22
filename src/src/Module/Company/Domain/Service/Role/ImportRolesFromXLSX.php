@@ -40,7 +40,7 @@ class ImportRolesFromXLSX extends XLSXIterator
         }
 
         if (strlen($roleName) < 3) {
-            return $this->formatErrorMessage('role.name.minimumLetters', [':qty' => 3]);
+            return $this->formatErrorMessage('role.name.minimumLength', [':qty' => 3]);
         }
 
         return null;
