@@ -21,6 +21,8 @@ use App\Module\Company\Domain\Service\Employee\EmployeeService;
 
 readonly class CreateEmployeeCommandHandler
 {
+    private CreateEmployeeCommand $command;
+
     public function __construct(
         private EmployeeService $employeeService,
         private CompanyReaderInterface $companyReaderRepository,
@@ -35,49 +37,58 @@ readonly class CreateEmployeeCommandHandler
 
     public function __invoke(CreateEmployeeCommand $command): void
     {
+        $this->command = $command;
+
         $employee = new Employee();
+        $employee->setFirstName($this->command->firstName);
+        $employee->setLastName($this->command->lastName);
+        $employee->setPESEL($this->command->pesel);
+        $employee->setEmploymentFrom(\DateTime::createFromFormat('Y-m-d', $this->command->employmentFrom));
+        $employee->setActive($this->command->active);
+        $employee->setCompany($this->getCompany());
+        $employee->setDepartment($this->getDepartment());
+        $employee->setPosition($this->getPosition());
+        $employee->setContractType($this->getContractType());
+        $employee->setRole($this->getRole());
 
-        $employee->setFirstName($command->firstName);
-        $employee->setLastName($command->lastName);
-        $employee->setPESEL($command->pesel);
-        $employee->setEmploymentFrom(\DateTime::createFromFormat('Y-m-d', $command->employmentFrom));
-        if (null !== $command->employmentTo) {
-            $employee->setEmploymentTo(\DateTime::createFromFormat('Y-m-d', $command->employmentTo));
-        }
-        $employee->setActive($command->active);
-
-        $company = $this->companyReaderRepository->getCompanyByUUID($command->companyUUID);
-        if ($company instanceof Company) {
-            $employee->setCompany($company);
-        }
-
-        $department = $this->departmentReaderRepository->getDepartmentByUUID($command->departmentUUID);
-        if ($department instanceof Department) {
-            $employee->setDepartment($department);
+        if (null !== $this->command->employmentTo) {
+            $employee->setEmploymentTo(\DateTime::createFromFormat('Y-m-d', $this->command->employmentTo));
         }
 
-        $position = $this->positionReaderRepository->getPositionByUUID($command->positionUUID);
-        if ($position instanceof Position) {
-            $employee->setPosition($position);
-        }
-
-        $contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($command->contractTypeUUID);
-        if ($contractType instanceof ContractType) {
-            $employee->setContractType($contractType);
-        }
-
-        $role = $this->roleReaderRepository->getRoleByUUID($command->roleUUID);
-        if ($role instanceof Role) {
-            $employee->setRole($role);
-        }
-
-        if (!empty($command->parentEmployeeUUID)) {
-            $parentEmployee = $this->employeeReaderRepository->getEmployeeByUUID($command->parentEmployeeUUID);
-            if ($parentEmployee instanceof Employee) {
-                $employee->setParentEmployee($parentEmployee);
-            }
+        if (!empty($this->command->parentEmployeeUUID)) {
+            $employee->setParentEmployee($this->getEmployee());
         }
 
         $this->employeeService->saveEmployeeInDB($employee);
+    }
+
+    private function getCompany(): Company
+    {
+        return $this->companyReaderRepository->getCompanyByUUID($this->command->companyUUID);
+    }
+
+    private function getDepartment(): Department
+    {
+        return $this->departmentReaderRepository->getDepartmentByUUID($this->command->departmentUUID);
+    }
+
+    private function getEmployee(): Employee
+    {
+        return $this->employeeReaderRepository->getEmployeeByUUID($this->command->parentEmployeeUUID);
+    }
+
+    private function getPosition(): Position
+    {
+        return $this->positionReaderRepository->getPositionByUUID($this->command->positionUUID);
+    }
+
+    private function getContractType(): ContractTYpe
+    {
+        return $this->contractTypeReaderRepository->getContractTypeByUUID($this->command->contractTypeUUID);
+    }
+
+    private function getRole(): Role
+    {
+        return $this->roleReaderRepository->getRoleByUUID($this->command->roleUUID);
     }
 }

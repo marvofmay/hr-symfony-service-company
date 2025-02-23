@@ -9,7 +9,6 @@ use App\Module\Company\Domain\Entity\Company;
 interface CompanyReaderInterface
 {
     public function getCompanyByUUID(string $uuid): ?Company;
-
     public function getCompanyByFullName(string $fullName, ?string $uuid): ?Company;
     public function getCompanyByShortName(string $shortName, ?string $uuid): ?Company;
 }

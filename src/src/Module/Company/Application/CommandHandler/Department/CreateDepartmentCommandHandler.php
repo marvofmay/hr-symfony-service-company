@@ -13,32 +13,40 @@ use App\Module\Company\Domain\Service\Department\DepartmentService;
 
 readonly class CreateDepartmentCommandHandler
 {
+    private CreateDepartmentCommand $command;
+
     public function __construct(
         private DepartmentService $departmentService,
         private CompanyReaderInterface $companyReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository
     )
     {
+
     }
 
     public function __invoke(CreateDepartmentCommand $command): void
     {
-        $department = new Department();
-        $department->setName($command->name);
-        $department->setActive($command->active);
+        $this->command = $command;
 
-        $company = $this->companyReaderRepository->getCompanyByUUID($command->companyUUID);
-        if ($company instanceof Company) {
-            $department->setCompany($company);
-        }
+        $department = new Department();
+        $department->setName($this->command->name);
+        $department->setActive($this->command->active);
+        $department->setCompany($this->getCompany());
 
         if (null !== $command->parentDepartmentUUID) {
-            $parentDepartment = $this->departmentReaderRepository->getDepartmentByUUID($command->parentDepartmentUUID);
-            if ($parentDepartment instanceof Department) {
-                $department->setParentDepartment($parentDepartment);
-            }
+            $department->setParentDepartment($this->getDepartment());
         }
 
         $this->departmentService->saveDepartmentInDB($department);
+    }
+
+    private function getCompany(): Company
+    {
+        return $this->companyReaderRepository->getCompanyByUUID($this->command->companyUUID);
+    }
+
+    private function getDepartment(): Department
+    {
+       return $this->departmentReaderRepository->getDepartmentByUUID($this->command->parentDepartmentUUID);
     }
 }
