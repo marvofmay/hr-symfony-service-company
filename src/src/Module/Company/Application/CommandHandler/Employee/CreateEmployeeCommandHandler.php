@@ -6,11 +6,13 @@ namespace App\Module\Company\Application\CommandHandler\Employee;
 
 use App\Module\Company\Application\Command\Employee\CreateEmployeeCommand;
 use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
@@ -39,17 +41,24 @@ readonly class CreateEmployeeCommandHandler
     {
         $this->command = $command;
 
+        $company = $this->getCompany();
+        $department = $this->getDepartment();
+
         $employee = new Employee();
         $employee->setFirstName($this->command->firstName);
         $employee->setLastName($this->command->lastName);
         $employee->setPESEL($this->command->pesel);
         $employee->setEmploymentFrom(\DateTime::createFromFormat('Y-m-d', $this->command->employmentFrom));
         $employee->setActive($this->command->active);
-        $employee->setCompany($this->getCompany());
-        $employee->setDepartment($this->getDepartment());
+        $employee->setCompany($company);
+        $employee->setDepartment($department);
         $employee->setPosition($this->getPosition());
         $employee->setContractType($this->getContractType());
         $employee->setRole($this->getRole());
+
+        foreach ($this->command->phones as $phone) {
+            $employee->addContact($this->getContacts($company, $department, $phone));
+        }
 
         if (null !== $this->command->employmentTo) {
             $employee->setEmploymentTo(\DateTime::createFromFormat('Y-m-d', $this->command->employmentTo));
@@ -90,5 +99,16 @@ readonly class CreateEmployeeCommandHandler
     private function getRole(): Role
     {
         return $this->roleReaderRepository->getRoleByUUID($this->command->roleUUID);
+    }
+
+    private function getContacts(Company $company, Department $department, string $phone): Contact
+    {
+        $contact = new Contact();
+        $contact->setCompany($company);
+        $contact->setDepartment($department);
+        $contact->setType(ContactTypeEnum::PHONE->value);
+        $contact->setData($phone);
+
+        return $contact;
     }
 }

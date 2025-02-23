@@ -127,12 +127,16 @@ class Employee
     #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'employee')]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'employee', targetEntity: Note::class, cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
     private Collection $notes;
+
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    private Collection $contacts;
 
     public function __construct()
     {
         $this->notes = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     public function getUuid(): UuidInterface
@@ -285,5 +289,27 @@ class Employee
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
+    }
+
+    public function getContacts(): Collection
+    {
+        return $this->contacts;
+    }
+
+    public function addContact(Contact $contact): void
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts[] = $contact;
+            $contact->setEmployee($this);
+        }
+    }
+
+    public function removeContact(Contact $contact): void
+    {
+        if ($this->contacts->removeElement($contact)) {
+            if ($contact->getEmployee() === $this) {
+                $contact->setEmployee(null);
+            }
+        }
     }
 }

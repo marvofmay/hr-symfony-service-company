@@ -19,6 +19,7 @@ class CreateEmployeeCommand
         public string $pesel,
         public string $employmentFrom,
         public ?string $employmentTo,
-        public bool $active
+        public bool $active,
+        public ?array $phones
     ) {}
 }

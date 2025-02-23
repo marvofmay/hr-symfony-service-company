@@ -191,6 +191,8 @@ class CreateDTO
     )]
     public bool $active = true;
 
+    public array $phones = [];
+
     public function getCompanyUUID(): ?string
     {
         return $this->companyUUID;
@@ -254,5 +256,10 @@ class CreateDTO
     public function getActive(): ?bool
     {
         return $this->active;
+    }
+
+    public function getPhones(): array
+    {
+        return $this->phones;
     }
 }
