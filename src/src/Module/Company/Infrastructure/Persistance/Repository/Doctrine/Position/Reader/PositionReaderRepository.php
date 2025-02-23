@@ -63,6 +63,6 @@ class PositionReaderRepository extends ServiceEntityRepository implements Positi
             ->where('p.' . Position::COLUMN_UUID . '= :uuid')
             ->setParameter('uuid', $uuid);
 
-        return null === $qb->getQuery()->getOneOrNullResult();
+        return null !== $qb->getQuery()->getOneOrNullResult();
     }
 }

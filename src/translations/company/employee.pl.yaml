@@ -1,0 +1,5 @@
+employee:
+  email:
+    alreadyExists: "Pracownik o podanym emailu już istnieje"
+  add:
+    success: "Pracownik został pomyślnie zapisany"

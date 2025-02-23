@@ -27,18 +27,18 @@ class Employee
     use AttributesEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
-    public const COLUMN_EXTERNAL_UUID = 'external_uuid';
-    public const COLUMN_COMPANY_UUID = 'company_uuid';
-    public const COLUMN_DEPARTMENT_UUID = 'department_uuid';
-    public const COLUMN_SUPERIOR_UUID = 'superior_uuid';
-    public const COLUMN_POSITION_UUID = 'position_uuid';
-    public const COLUMN_CONTRACT_TYPE_UUID = 'contract_type_uuid';
-    public const COLUMN_ROLE_UUID = 'role_uuid';
-    public const COLUMN_FIRST_NAME = 'first_name';
-    public const COLUMN_LAST_NAME = 'last_name';
+    public const COLUMN_EXTERNAL_UUID = 'externalUUID';
+    public const COLUMN_COMPANY_UUID = 'companyUUID';
+    public const COLUMN_DEPARTMENT_UUID = 'departmentUUID';
+    public const COLUMN_SUPERIOR_UUID = 'superiorUUID';
+    public const COLUMN_POSITION_UUID = 'positionUUID';
+    public const COLUMN_CONTRACT_TYPE_UUID = 'contractTypeUUID';
+    public const COLUMN_ROLE_UUID = 'roleUUID';
+    public const COLUMN_FIRST_NAME = 'firstName';
+    public const COLUMN_LAST_NAME = 'lastName';
     public const COLUMN_PESEL = 'pesel';
-    public const COLUMN_EMPLOYMENT_FROM = 'employment_form';
-    public const COLUMN_EMPLOYMENT_TO = 'employment_to';
+    public const COLUMN_EMPLOYMENT_FROM = 'employmentFrom';
+    public const COLUMN_EMPLOYMENT_TO = 'employmentTo';
     public const COLUMN_ACTIVE = 'active';
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
@@ -53,60 +53,60 @@ class Employee
 
     #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
     #[Groups('employee_info')]
-    private ?string $external_uuid = null;
+    private ?string $externalUUID = null;
 
-    #[ORM\Column(type: 'uuid')]
-    #[Assert\NotBlank()]
+    #[ORM\ManyToOne(targetEntity: Company::class)]
+    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('employee_info')]
-    private UuidInterface $company_uuid;
+    private Company $company;
 
-    #[ORM\Column(type: 'uuid')]
-    #[Assert\NotBlank()]
+    #[ORM\ManyToOne(targetEntity: Department::class)]
+    #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('employee_info')]
-    private UuidInterface $department_uuid;
+    private Department $department;
 
-    #[ORM\Column(type: 'uuid')]
-    #[Assert\NotBlank()]
+    #[ORM\ManyToOne(targetEntity: Employee::class)]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     #[Groups('employee_info')]
-    private UuidInterface $superior_uuid;
+    private ?Employee $parentEmployee = null;
 
-    #[ORM\Column(type: 'uuid')]
-    #[Assert\NotBlank()]
+    #[ORM\ManyToOne(targetEntity: Position::class)]
+    #[ORM\JoinColumn(name: 'position_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('employee_info')]
-    private UuidInterface $position_uuid;
+    private Position $position;
 
-    #[ORM\Column(type: 'uuid')]
-    #[Assert\NotBlank()]
+    #[ORM\ManyToOne(targetEntity: ContractType::class)]
+    #[ORM\JoinColumn(name: 'contract_type_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('employee_info')]
-    private UuidInterface $contract_type_uuid;
+    private ContractType $contractType;
 
-    #[ORM\Column(type: 'uuid')]
-    #[Assert\NotBlank()]
+    #[ORM\ManyToOne(targetEntity: Role::class)]
+    #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('employee_info')]
-    private UuidInterface $role_uuid;
+    private Role $role;
 
-    #[ORM\Column(type: Types::STRING, length: 50)]
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
     #[Assert\NotBlank()]
     #[Groups('employee_info')]
     private string $firstName;
 
-    #[ORM\Column(type: Types::STRING, length: 50)]
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
     #[Assert\NotBlank()]
     #[Groups('employee_info')]
     private string $lastName;
 
-    #[ORM\Column(type: Types::STRING, length: 11)]
+    #[ORM\Column(type: Types::STRING, length: 11, nullable: false)]
     #[Assert\NotBlank()]
     #[Groups('employee_info')]
     private string $pesel;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
     #[Groups('employee_info')]
-    private ?\DateTimeInterface $employeeFrom;
+    private ?\DateTimeInterface $employmentFrom;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups('employee_info')]
-    private ?\DateTimeInterface $employeeTo = null;
+    private ?\DateTimeInterface $employmentTo = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
     #[Groups('employee_info')]
@@ -155,5 +155,135 @@ class Employee
         $this->user = $user;
 
         return $this;
+    }
+
+    public function getCompany(): Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(Company $company): void
+    {
+        $this->company = $company;
+    }
+
+    public function getDepartment(): Department
+    {
+        return $this->department;
+    }
+
+    public function setDepartment(Department $department): void
+    {
+        $this->department = $department;
+    }
+
+    public function getPosition(): Position
+    {
+        return $this->position;
+    }
+
+    public function setPosition(Position $position): void
+    {
+        $this->position = $position;
+    }
+
+    public function getContractType(): ContractType
+    {
+        return $this->contractType;
+    }
+
+    public function setContractType(ContractType $contractType): void
+    {
+        $this->contractType = $contractType;
+    }
+
+    public function getRole(): Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(Role $role): void
+    {
+        $this->role = $role;
+    }
+
+    public function getParentEmployee(): ?Employee
+    {
+        return $this->parentEmployee;
+    }
+
+    public function setParentEmployee(?Employee $parentEmployee): void
+    {
+        $this->parentEmployee = $parentEmployee;
+    }
+
+    public function getExternalUUID(): ?string
+    {
+        return $this->{self::COLUMN_EXTERNAL_UUID};
+    }
+
+    public function setExternalUUID(?string $externalUUID): void
+    {
+        $this->{self::COLUMN_EXTERNAL_UUID} = $externalUUID;
+    }
+
+    public function getFirstName(): string
+    {
+        return $this->{self::COLUMN_FIRST_NAME};
+    }
+
+    public function setFirstName(string $firstName): void
+    {
+        $this->{self::COLUMN_FIRST_NAME} = $firstName;
+    }
+
+    public function getLastName(): string
+    {
+        return $this->{self::COLUMN_LAST_NAME};
+    }
+
+    public function setLastName(string $lastName): void
+    {
+        $this->{self::COLUMN_LAST_NAME} = $lastName;
+    }
+
+    public function getPESEL(): string
+    {
+        return $this->{self::COLUMN_PESEL};
+    }
+
+    public function setPESEL(string $pesel): void
+    {
+        $this->{self::COLUMN_PESEL} = $pesel;
+    }
+
+    public function getEmploymentFrom(): \DateTimeInterface
+    {
+        return $this->{self::COLUMN_EMPLOYMENT_FROM};
+    }
+
+    public function setEmploymentFrom(\DateTimeInterface $employmentFrom): void
+    {
+        $this->{self::COLUMN_EMPLOYMENT_FROM} = $employmentFrom;
+    }
+
+    public function getEmploymentTo(): ?\DateTimeInterface
+    {
+        return $this->{self::COLUMN_EMPLOYMENT_TO};
+    }
+
+    public function setEmploymentTo(?\DateTimeInterface $employmentTo): void
+    {
+        $this->{self::COLUMN_EMPLOYMENT_TO} = $employmentTo;
+    }
+
+    public function getActive(): bool
+    {
+        return $this->{self::COLUMN_ACTIVE};
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->{self::COLUMN_ACTIVE} = $active;
     }
 }

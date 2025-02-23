@@ -1,5 +1,5 @@
 department:
-  fullName:
+  name:
     alreadyExists: "Departament o podanej nazwie już istnieje"
   add:
     success: "Dapartament został pomyślnie zapisany"

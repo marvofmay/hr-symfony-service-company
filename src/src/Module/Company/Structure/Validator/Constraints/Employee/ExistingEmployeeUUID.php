@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Module\Company\Structure\Validator\Constraints\Role;
+namespace App\Module\Company\Structure\Validator\Constraints\Employee;
 
 use Symfony\Component\Validator\Constraint;
 
 #[\Attribute]
-class ExistingUUID extends Constraint
+class ExistingEmployeeUUID extends Constraint
 {
     public array $message;
     public string $domain;

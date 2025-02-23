@@ -1,0 +1,4 @@
+api_company_create:
+  path: api/employees
+  controller: App\Module\Company\Presentation\API\Employee\CreateEmployeeController::create
+  methods: [POST]

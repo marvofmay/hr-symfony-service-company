@@ -41,9 +41,9 @@ class Department
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Company::class)]
-    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('department_info')]
-    private ?Company $company = null;
+    private Company $company;
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
@@ -77,12 +77,12 @@ class Department
         return $this->{self::COLUMN_UUID};
     }
 
-    public function getCompany(): ?Company
+    public function getCompany(): Company
     {
         return $this->company;
     }
 
-    public function setCompany(?Company $company): void
+    public function setCompany(Company $company): void
     {
         $this->company = $company;
     }

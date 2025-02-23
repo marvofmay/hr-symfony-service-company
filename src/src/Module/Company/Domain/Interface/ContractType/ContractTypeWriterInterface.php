@@ -8,10 +8,10 @@ use App\Module\Company\Domain\Entity\ContractType;
 
 interface ContractTypeWriterInterface
 {
-    public function saveContractTypeInDB(ContractType $position): void;
+    public function saveContractTypeInDB(ContractType $contractType): void;
 
-    public function updateContractTypeInDB(ContractType $position): void;
+    public function updateContractTypeInDB(ContractType $contractType): void;
 
-    public function saveContractTypesInDB(array $positions): void;
+    public function saveContractTypesInDB(array $contractTypes): void;
     public function deleteMultipleContractTypesInDB(array $selectedUUID): void;
 }
