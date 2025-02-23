@@ -133,6 +133,9 @@ class Employee
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
     private Collection $contacts;
 
+   #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
+       private Collection $address;
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();

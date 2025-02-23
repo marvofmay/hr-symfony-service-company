@@ -31,7 +31,8 @@ readonly class CreateEmployeeAction
                 $createDTO->getEmploymentFrom(),
                 $createDTO->getEmploymentTo(),
                 $createDTO->getActive(),
-                $createDTO->getPhones()
+                $createDTO->getPhones(),
+                $createDTO->getAddress()
             )
         );
     }

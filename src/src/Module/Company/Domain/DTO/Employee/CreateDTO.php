@@ -191,7 +191,22 @@ class CreateDTO
     )]
     public bool $active = true;
 
+    #[Assert\All([
+        new Assert\Type(type: 'string')
+    ])]
+    #[Assert\Type('array')]
     public array $phones = [];
+
+    #[Assert\All([
+        new Assert\Collection([
+            'street' => new Assert\Type('string'),
+            'postcode' => new Assert\Type('string'),
+            'city' => new Assert\Type('string'),
+            'country' => new Assert\Type('string'),
+        ])
+    ])]
+    #[Assert\Type('array')]
+    public array $address = [];
 
     public function getCompanyUUID(): ?string
     {
@@ -258,8 +273,13 @@ class CreateDTO
         return $this->active;
     }
 
-    public function getPhones(): array
+    public function getPhones(): ?array
     {
         return $this->phones;
+    }
+
+    public function getAddress(): ?array
+    {
+        return $this->address;
     }
 }
