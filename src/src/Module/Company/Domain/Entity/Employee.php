@@ -100,11 +100,11 @@ class Employee
     #[Groups('employee_info')]
     private string $pesel;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: false)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
     #[Groups('employee_info')]
     private ?\DateTimeInterface $employmentFrom;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     #[Groups('employee_info')]
     private ?\DateTimeInterface $employmentTo = null;
 
