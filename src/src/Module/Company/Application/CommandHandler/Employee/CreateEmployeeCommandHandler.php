@@ -22,11 +22,12 @@ use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use App\Module\Company\Domain\Service\Employee\EmployeeService;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 readonly class CreateEmployeeCommandHandler
 {
     private CreateEmployeeCommand $command;
+    private Company $company;
+    private Department $department;
 
     public function __construct(
         private EmployeeService $employeeService,
@@ -36,7 +37,8 @@ readonly class CreateEmployeeCommandHandler
         private ContractTypeReaderInterface $contractTypeReaderRepository,
         private RoleReaderInterface $roleReaderRepository,
         private EmployeeReaderInterface $employeeReaderRepository,
-        private UserPasswordHasherInterface $userPasswordHasher
+        private User $user,
+        private Employee $employee
     )
     {
     }
@@ -45,37 +47,50 @@ readonly class CreateEmployeeCommandHandler
     {
         $this->command = $command;
 
-        $company = $this->getCompany();
-        $department = $this->getDepartment();
+        $this->company = $this->getCompany();
+        $this->department = $this->getDepartment();
 
-        $employee = new Employee();
-        $employee->setFirstName($this->command->firstName);
-        $employee->setLastName($this->command->lastName);
-        $employee->setPESEL($this->command->pesel);
-        $employee->setEmploymentFrom(\DateTime::createFromFormat('Y-m-d', $this->command->employmentFrom));
-        $employee->setActive($this->command->active);
-        $employee->setCompany($company);
-        $employee->setDepartment($department);
-        $employee->setPosition($this->getPosition());
-        $employee->setContractType($this->getContractType());
-        $employee->setRole($this->getRole());
-        $employee->setAddress($this->getAddress($company, $department));
+        $this->setEmployeeMainData();
+        $this->setEmployeeCompanyData();
+        $this->setEmployeeRelations();
 
-        $employee->setUser($this->getUser());
+        $this->employeeService->saveEmployeeInDB($this->employee);
+    }
+
+    private function setEmployeeMainData(): void
+    {
+        $this->employee->setFirstName($this->command->firstName);
+        $this->employee->setLastName($this->command->lastName);
+        $this->employee->setPESEL($this->command->pesel);
+        $this->employee->setEmploymentFrom(\DateTime::createFromFormat('Y-m-d', $this->command->employmentFrom));
+        if (null !== $this->command->employmentTo) {
+            $this->employee->setEmploymentTo(\DateTime::createFromFormat('Y-m-d', $this->command->employmentTo));
+        }
+    }
+
+    private function setEmployeeCompanyData (): void
+    {
+        $this->employee->setCompany($this->company);
+        $this->employee->setDepartment($this->department);
+        $this->employee->setPosition($this->getPosition());
+        $this->employee->setContractType($this->getContractType());
+        $this->employee->setRole($this->getRole());
+        $this->employee->setActive($this->command->active);
+    }
+
+    private function setEmployeeRelations(): void
+    {
+        $this->employee->setUser($this->getUser());
 
         foreach ($this->command->phones as $phone) {
-            $employee->addContact($this->getContacts($company, $department, $phone));
-        }
-
-        if (null !== $this->command->employmentTo) {
-            $employee->setEmploymentTo(\DateTime::createFromFormat('Y-m-d', $this->command->employmentTo));
+            $this->employee->addContact($this->getContacts($this->company, $this->department, $phone));
         }
 
         if (!empty($this->command->parentEmployeeUUID)) {
-            $employee->setParentEmployee($this->getEmployee());
+            $this->employee->setParentEmployee($this->getEmployee());
         }
 
-        $this->employeeService->saveEmployeeInDB($employee);
+        $this->employee->setAddress($this->getAddress($this->company, $this->department));
     }
 
     private function getCompany(): Company
@@ -136,10 +151,9 @@ readonly class CreateEmployeeCommandHandler
 
     private function getUser(): User
     {
-        $user = new User($this->userPasswordHasher);
-        $user->setEmail($this->command->email);
-        $user->setPassword(sprintf('%s-%s', $this->command->email, $this->command->firstName));
+        $this->user->setEmail($this->command->email);
+        $this->user->setPassword(sprintf('%s-%s', $this->command->email, $this->command->firstName));
 
-        return $user;
+        return $this->user;
     }
 }
