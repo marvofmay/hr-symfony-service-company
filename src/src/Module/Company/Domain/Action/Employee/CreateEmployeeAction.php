@@ -25,6 +25,7 @@ readonly class CreateEmployeeAction
                 $createDTO->getRoleUUID(),
                 $createDTO->getParentEmployeeUUID(),
                 $createDTO->getExternalUUID(),
+                $createDTO->getEmail(),
                 $createDTO->getFirstName(),
                 $createDTO->getLastName(),
                 $createDTO->getPESEL(),

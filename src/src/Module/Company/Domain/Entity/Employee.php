@@ -124,7 +124,7 @@ class Employee
     #[Groups('employee_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
-    #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'employee')]
+    #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
     #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
@@ -152,16 +152,17 @@ class Employee
         $this->{self::COLUMN_UUID} = $uuid;
     }
 
-    public function getUser(): ?User
+    public function getUser(): User
     {
         return $this->user;
     }
 
-    public function setUser(?User $user): self
+    public function setUser(User $user): void
     {
         $this->user = $user;
-
-        return $this;
+        if ($user && $user->getEmployee() !== $this) {
+            $user->setEmployee($this);
+        }
     }
 
     public function getCompany(): Company

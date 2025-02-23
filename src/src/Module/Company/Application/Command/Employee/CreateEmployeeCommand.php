@@ -16,6 +16,7 @@ class CreateEmployeeCommand
         public string $roleUUID,
         public ?string $parentEmployeeUUID,
         public ?string $executorUUID,
+        public string $email,
         public string $firstName,
         public string $lastName,
         public string $pesel,

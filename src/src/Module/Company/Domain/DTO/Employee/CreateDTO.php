@@ -247,6 +247,11 @@ class CreateDTO
         return $this->externalUUID;
     }
 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
     public function getFirstName(): ?string
     {
         return $this->firstName;

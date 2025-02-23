@@ -77,10 +77,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[Groups('user_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
-    #[ORM\OneToOne(targetEntity: Employee::class)]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: false)]
-    private Employee $employee;
-
+    #[ORM\OneToOne(targetEntity: Employee::class, inversedBy: 'user')]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true)]
+    private ?Employee $employee = null;
     public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher)
     {
     }
@@ -124,11 +123,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->{self::RELATION_ROLES};
     }
 
-    public function setEmployeeUuid(?string $employeeUuid): self
+    public function setEmployeeUuid(?string $employeeUuid): void
     {
         $this->{self::COLUMN_EMPLOYEE_UUID} = $employeeUuid;
-
-        return $this;
     }
 
     public function setEmail(string $email): void
@@ -157,16 +154,16 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->email;
     }
 
-    public function getEmployee(): Employee
+    public function getEmployee(): ?Employee
     {
         return $this->employee;
     }
 
-    public function setEmployee(Employee $employee): self
+    public function setEmployee(Employee $employee): void
     {
         $this->employee = $employee;
-        $this->{self::COLUMN_EMPLOYEE_UUID} = $employee->getUuid();
-
-        return $this;
+        if ($employee->getUser() !== $this) {
+            $employee->setUser($this);
+        }
     }
 }

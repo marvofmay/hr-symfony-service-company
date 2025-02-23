@@ -13,6 +13,7 @@ use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Entity\User;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
@@ -21,6 +22,7 @@ use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use App\Module\Company\Domain\Service\Employee\EmployeeService;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 readonly class CreateEmployeeCommandHandler
 {
@@ -33,7 +35,8 @@ readonly class CreateEmployeeCommandHandler
         private PositionReaderInterface $positionReaderRepository,
         private ContractTypeReaderInterface $contractTypeReaderRepository,
         private RoleReaderInterface $roleReaderRepository,
-        private EmployeeReaderInterface $employeeReaderRepository
+        private EmployeeReaderInterface $employeeReaderRepository,
+        private UserPasswordHasherInterface $userPasswordHasher
     )
     {
     }
@@ -57,6 +60,8 @@ readonly class CreateEmployeeCommandHandler
         $employee->setContractType($this->getContractType());
         $employee->setRole($this->getRole());
         $employee->setAddress($this->getAddress($company, $department));
+
+        $employee->setUser($this->getUser());
 
         foreach ($this->command->phones as $phone) {
             $employee->addContact($this->getContacts($company, $department, $phone));
@@ -127,5 +132,14 @@ readonly class CreateEmployeeCommandHandler
         $address->setCountry($addressObject->country);
 
         return $address;
+    }
+
+    private function getUser(): User
+    {
+        $user = new User($this->userPasswordHasher);
+        $user->setEmail($this->command->email);
+        $user->setPassword(sprintf('%s-%s', $this->command->email, $this->command->firstName));
+
+        return $user;
     }
 }
