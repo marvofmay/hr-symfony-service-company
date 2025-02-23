@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\DTO\Employee;
 
+use App\Common\DTO\AddressDTO;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Company\Structure\Validator\Constraints\Company\ExistingCompanyUUID;
@@ -12,7 +13,7 @@ use App\Module\Company\Structure\Validator\Constraints\Employee\ExistingEmployee
 use App\Module\Company\Structure\Validator\Constraints\Position\ExistingPositionUUID;
 use App\Module\Company\Structure\Validator\Constraints\ContractType\ExistingContractTypeUUID;
 use App\Module\Company\Structure\Validator\Constraints\Role\ExistingRoleUUID;
-//use App\Module\Company\Structure\Validator\Constraints\Employee\UniqueEmployeeEmail;
+use App\Module\Company\Structure\Validator\Constraints\Employee\UniqueEmployeeEmail;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,10 +24,12 @@ use Symfony\Component\Validator\Constraints as Assert;
         'positionUUID',
         'contractTypeUUID',
         'roleUUID',
+        'email',
         'firstName',
         'lastName',
         'pesel',
-        'employmentFrom'
+        'employmentFrom',
+        'address',
     ],
 )]
 class CreateDTO
@@ -126,6 +129,14 @@ class CreateDTO
     )]
     public ?string $externalUUID;
 
+    #[NotBlank(message: [
+        'text' => 'employee.email.required',
+        'domain' => 'employees',
+    ])]
+    #[Assert\Email(message: 'email.invalid')]
+    #[UniqueEmployeeEmail]
+    public string $email;
+
     #[OA\Property(
         description: 'Imię tworzonego użytkownika',
         type: 'string',
@@ -195,18 +206,11 @@ class CreateDTO
         new Assert\Type(type: 'string')
     ])]
     #[Assert\Type('array')]
-    public array $phones = [];
+    public ?array $phones = [];
 
-    #[Assert\All([
-        new Assert\Collection([
-            'street' => new Assert\Type('string'),
-            'postcode' => new Assert\Type('string'),
-            'city' => new Assert\Type('string'),
-            'country' => new Assert\Type('string'),
-        ])
-    ])]
-    #[Assert\Type('array')]
-    public array $address = [];
+    #[Assert\NotBlank]
+    #[Assert\Valid]
+    public AddressDTO $address;
 
     public function getCompanyUUID(): ?string
     {
@@ -278,7 +282,7 @@ class CreateDTO
         return $this->phones;
     }
 
-    public function getAddress(): ?array
+    public function getAddress(): AddressDTO
     {
         return $this->address;
     }

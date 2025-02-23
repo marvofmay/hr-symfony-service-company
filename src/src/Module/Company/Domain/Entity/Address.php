@@ -54,7 +54,7 @@ class Address
     #[Groups('address_info')]
     private ?Department $department;
 
-    #[ORM\ManyToOne(targetEntity: Employee::class)]
+    #[ORM\OneToOne(targetEntity: Employee::class, inversedBy: 'address')]
     #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     #[Groups('address_info')]
     private ?Employee $employee = null;

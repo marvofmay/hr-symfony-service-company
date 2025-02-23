@@ -1,5 +1,6 @@
 employee:
   email:
     alreadyExists: "Pracownik o podanym emailu już istnieje"
+    required: "Email pracownika jest wymagany"
   add:
     success: "Pracownik został pomyślnie zapisany"

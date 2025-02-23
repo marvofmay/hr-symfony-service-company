@@ -133,8 +133,8 @@ class Employee
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
     private Collection $contacts;
 
-   #[ORM\OneToMany(targetEntity: Address::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-       private Collection $address;
+    #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    private Address $address;
 
     public function __construct()
     {
@@ -313,6 +313,19 @@ class Employee
             if ($contact->getEmployee() === $this) {
                 $contact->setEmployee(null);
             }
+        }
+    }
+
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): void
+    {
+        $this->address = $address;
+        if ($address !== null) {
+            $address->setEmployee($this);
         }
     }
 }

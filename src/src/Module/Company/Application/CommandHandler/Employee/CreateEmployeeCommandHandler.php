@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Employee;
 
 use App\Module\Company\Application\Command\Employee\CreateEmployeeCommand;
+use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\ContractType;
@@ -55,6 +56,7 @@ readonly class CreateEmployeeCommandHandler
         $employee->setPosition($this->getPosition());
         $employee->setContractType($this->getContractType());
         $employee->setRole($this->getRole());
+        $employee->setAddress($this->getAddress($company, $department));
 
         foreach ($this->command->phones as $phone) {
             $employee->addContact($this->getContacts($company, $department, $phone));
@@ -110,5 +112,20 @@ readonly class CreateEmployeeCommandHandler
         $contact->setData($phone);
 
         return $contact;
+    }
+
+    private function getAddress(Company $company, Department $department): Address
+    {
+        $addressObject = $this->command->address;
+
+        $address = new Address();
+        $address->setCompany($company);
+        $address->setDepartment($department);
+        $address->setStreet($addressObject->street);
+        $address->setPostcode($addressObject->postcode);
+        $address->setCity($addressObject->city);
+        $address->setCountry($addressObject->country);
+
+        return $address;
     }
 }

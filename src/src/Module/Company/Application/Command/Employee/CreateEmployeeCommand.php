@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Employee;
 
+use App\Common\DTO\AddressDTO;
+
 class CreateEmployeeCommand
 {
     public function __construct(
@@ -21,6 +23,6 @@ class CreateEmployeeCommand
         public ?string $employmentTo,
         public bool $active,
         public ?array $phones,
-        public ?array $address,
+        public AddressDTO $address
     ) {}
 }
