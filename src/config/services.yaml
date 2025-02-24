@@ -5,5 +5,6 @@ imports:
     - { resource: './services/module/company/employee.yaml' }
     - { resource: './services/module/company/role.yaml' }
     - { resource: './services/module/company/position.yaml' }
+    - { resource: './services/module/company/industry.yaml' }
     - { resource: './services/module/company/contract_type.yaml' }
     - { resource: './services/module/note/note.yaml' }
