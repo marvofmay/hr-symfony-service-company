@@ -14,7 +14,7 @@ readonly class DeleteRoleCommandHandler
     public function __invoke(DeleteRoleCommand $command): void
     {
         $role = $command->getRole();
-        $role->setDeletedAt(new \DateTime());
+        $this->entityManager->remove($role);
         $this->entityManager->flush();
     }
 }

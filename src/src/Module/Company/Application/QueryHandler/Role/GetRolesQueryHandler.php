@@ -60,6 +60,7 @@ class GetRolesQueryHandler
                         $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNull('r.'.Role::COLUMN_DELETED_AT));
                         break;
                     case 1:
+                        $this->entityManager->getFilters()->disable('soft_delete');
                         $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('r.'.Role::COLUMN_DELETED_AT));
                         break;
                 }
