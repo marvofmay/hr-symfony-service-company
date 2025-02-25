@@ -24,7 +24,7 @@ class CreateIndustryController extends AbstractController
 
     #[OA\Post(
         path: '/api/industries',
-        summary: 'Tworzy nową rolę',
+        summary: 'Tworzy nową branżę',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
