@@ -36,5 +36,5 @@ api_roles_import:
 
 api_roles_list:
   path: api/roles
-  controller: App\Module\Company\Presentation\API\Controller\Role\ListRoleController::list
+  controller: App\Module\Company\Presentation\API\Controller\Role\ListRolesController::list
   methods: [GET]

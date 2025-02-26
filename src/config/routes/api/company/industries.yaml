@@ -34,7 +34,7 @@ api_industries_import:
   controller: App\Module\Company\Presentation\API\Controller\Industry\ImportIndustriesController::import
   methods: [POST]
 
-#api_industries_list:
-#  path: api/industries
-#  controller: App\Module\Company\Presentation\API\Controller\ListIndustryController::list
-#  methods: [GET]
+api_industries_list:
+  path: api/industries
+  controller: App\Module\Company\Presentation\API\Controller\Industry\ListIndustriesController::list
+  methods: [GET]
