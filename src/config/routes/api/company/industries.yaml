@@ -18,11 +18,11 @@ api_industry_update:
   methods: [PUT]
   requirements:
     uuid: '[0-9a-fA-F-]{36}'
-#
-#api_industry_delete_multiple:
-#  path: api/industries/multiple
-#  controller: App\Module\Company\Presentation\API\Industry\DeleteMultipleIndustryController::delete
-#  methods: [DELETE]
+
+api_industry_delete_multiple:
+  path: api/industries/multiple
+  controller: App\Module\Company\Presentation\API\Controller\Industry\DeleteMultipleIndustriesController::delete
+  methods: [DELETE]
 
 api_industry_create:
   path: api/industries

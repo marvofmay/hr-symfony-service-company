@@ -21,7 +21,7 @@ api_role_update:
 
 api_role_delete_multiple:
   path: api/roles/multiple
-  controller: App\Module\Company\Presentation\API\Controller\Role\DeleteMultipleRoleController::delete
+  controller: App\Module\Company\Presentation\API\Controller\Role\DeleteMultipleRolesController::delete
   methods: [DELETE]
 
 api_role_create:
