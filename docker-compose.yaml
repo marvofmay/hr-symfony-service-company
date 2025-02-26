@@ -111,7 +111,7 @@ services:
 #    build:
 #      context: ./
 #      dockerfile: Dockerfile
-#    command: [ "php", "bin/console", "messenger:consume", "department_xlsx_import", "--limit=10", "--time-limit=60" ]
+#    command: [ "php", "bin/console", "messenger:consume", "department_xlsx_import", "--verbose", "--no-interaction" ]
 #    depends_on:
 #      - rabbitmq
 #      - service-company
@@ -123,7 +123,7 @@ services:
 #    build:
 #      context: ./
 #      dockerfile: Dockerfile
-#    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--limit=10", "--time-limit=60" ]
+#    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--verbose", "--no-interaction" ]
 #    depends_on:
 #      - rabbitmq
 #      - service-company

@@ -29,7 +29,7 @@ class ImportCompaniesController extends AbstractController
 
     #[OA\Post(
         path: '/api/companies/import',
-        summary: 'Importuje nowe firmy',
+        summary: 'Importuje nowe firmy - obsługa przez kolejkę RabbitMQ',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\MediaType(
