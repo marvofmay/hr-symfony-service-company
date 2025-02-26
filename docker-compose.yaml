@@ -18,11 +18,15 @@ services:
       - "81:80"
     volumes:
       - ./src:/var/www/html
+    environment:
+      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
     depends_on:
       service-company-db:
         condition: service_healthy
       service-company-db-test:
         condition: service_healthy
+      rabbitmq:
+        condition: service_started
 
   service-company-db:
     container_name: service-company-db
@@ -89,3 +93,39 @@ services:
     volumes:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+  worker-company-xlsx-import:
+    container_name: worker-company-xlsx-import
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: [ "php", "bin/console", "messenger:consume", "company_xlsx_import", "--verbose", "--no-interaction" ]
+    depends_on:
+      - rabbitmq
+      - service-company
+    environment:
+      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+#
+#  worker-department-xlsx-import:
+#    container_name: worker-department-xlsx-import
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    command: [ "php", "bin/console", "messenger:consume", "department_xlsx_import", "--limit=10", "--time-limit=60" ]
+#    depends_on:
+#      - rabbitmq
+#      - service-company
+#    environment:
+#      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+#
+#  worker-employee-xlsx-import:
+#    container_name: worker-employee-xlsx-import
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--limit=10", "--time-limit=60" ]
+#    depends_on:
+#      - rabbitmq
+#      - service-company
+#    environment:
+#      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f

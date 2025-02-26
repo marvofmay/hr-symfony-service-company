@@ -1,4 +1,4 @@
 api_position_create:
   path: api/positions
-  controller: App\Module\Company\Presentation\API\Position\CreatePositionController::create
+  controller: App\Module\Company\Presentation\API\Controller\Position\CreatePositionController::create
   methods: [POST]
