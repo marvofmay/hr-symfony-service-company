@@ -1,5 +1,32 @@
 industry:
-  fullName:
-    alreadyExists: "Branża o podanej nazwie już istnieje"
+  uuid:
+    differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
+    notFound: "Branża o podanym UUID nie istnieje"
+    notExists: "Branża o podanym UUID nie istnieje :uuid"
+  name:
+    alreadyExists: "Branża istnieje"
+    required: "Nazwa branży jest wymagana"
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
+    expectedUniqueIndustryNameConstraint: "Oczekiwano unikalnej nazwy branży"
   add:
-    success: "Branża została pomyślnie zapisana"
+    success: "Branża została pomyślnie dodana"
+    error: "Wystąpił błąd - branża nie została dodana"
+  update:
+    success: "Branża została pomyślnie zaktualizowana"
+    error: "Wystąpił błąd - branża nie została zaktualizowana"
+  delete:
+    success: "Branża została pomyślnie usunięta"
+    error: "Wystąpił błąd - branża nie została usunięta"
+    multiple:
+      success: "Branże zostały pomyślnie usunięte"
+  import:
+    success: "Branże zostały pomyślnie zaimportowane"
+    error: "Wystąpił błąd - branże nie zostały zaimportowane"
+  view:
+    error: "Wystapił błąd przy pobieraniu wybranej branży"
+  list:
+    error: "Wystapił błąd przy pobieraniu listy branż"
+  file:
+    fileNotExists: "Plik nie istnieje"
+    chooseFile: "Wskaż plik"

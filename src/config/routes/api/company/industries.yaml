@@ -1,23 +1,23 @@
 #api_industry_delete:
 #  path: api/industries/{uuid}
-#  controller: App\Module\Company\Presentation\API\Industry\DeleteIndustryController::delete
+#  controller:App\Module\Company\Presentation\API\Controller\Industry\DeleteIndustryController::delete
 #  methods: [DELETE]
 #  requirements:
 #    uuid: '[0-9a-fA-F-]{36}'
 #
 #api_industry_get:
 #  path: api/industries/{uuid}
-#  controller: App\Module\Company\Presentation\API\Industry\GetIndustryController::get
+#  controller: App\Module\Company\Presentation\API\Controller\Industry\GetIndustryController::get
 #  methods: [GET]
 #  requirements:
 #    uuid: '[0-9a-fA-F-]{36}'
 #
-#api_industry_update:
-#  path: api/industries/{uuid}
-#  controller: App\Module\Company\Presentation\API\Industry\UpdateIndustryController::update
-#  methods: [PUT]
-#  requirements:
-#    uuid: '[0-9a-fA-F-]{36}'
+api_industry_update:
+  path: api/industries/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Industry\UpdateIndustryController::update
+  methods: [PUT]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
 #
 #api_industry_delete_multiple:
 #  path: api/industries/multiple
@@ -31,10 +31,10 @@ api_industry_create:
 
 #api_industries_import:
 #  path: api/industries/import
-#  controller: App\Module\Company\Presentation\API\Industry\ImportIndustriesController::import
+#  controller: App\Module\Company\Presentation\API\Controller\ImportIndustriesController::import
 #  methods: [POST]
 #
 #api_industries_list:
 #  path: api/industries
-#  controller: App\Module\Company\Presentation\API\Industry\ListIndustryController::list
+#  controller: App\Module\Company\Presentation\API\Controller\ListIndustryController::list
 #  methods: [GET]
