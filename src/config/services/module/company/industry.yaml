@@ -9,9 +9,9 @@ services:
     App\Module\Company\Application\CommandHandler\Industry\UpdateIndustryCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\Module\Company\Application\CommandHandler\Industry\DeleteIndustryCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Company\Application\CommandHandler\Industry\DeleteIndustryCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 #    App\Module\Company\Application\CommandHandler\Industry\DeleteMultipleIndustriesCommandHandler:
 #        tags:
 #            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }

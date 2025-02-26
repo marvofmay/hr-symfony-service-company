@@ -1,9 +1,9 @@
-#api_industry_delete:
-#  path: api/industries/{uuid}
-#  controller:App\Module\Company\Presentation\API\Controller\Industry\DeleteIndustryController::delete
-#  methods: [DELETE]
-#  requirements:
-#    uuid: '[0-9a-fA-F-]{36}'
+api_industry_delete:
+  path: api/industries/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Industry\DeleteIndustryController::delete
+  methods: [DELETE]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
 #
 #api_industry_get:
 #  path: api/industries/{uuid}

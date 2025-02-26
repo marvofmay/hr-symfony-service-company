@@ -26,7 +26,7 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
             ->getOneOrNullResult();
 
         if (!$industry) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('industry.uuid.notFound', [], 'roles'), $uuid));
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('industry.uuid.notFound', [], 'industries'), $uuid));
         }
 
         return $industry;
