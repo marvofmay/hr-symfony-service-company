@@ -1,4 +1,9 @@
 api_company_create:
   path: api/companies
-  controller: App\Module\Company\Presentation\API\Company\CreateCompanyController::create
+  controller: App\Module\Company\Presentation\API\Controller\Company\CreateCompanyController::create
+  methods: [POST]
+
+api_companies_import:
+  path: api/companies/import
+  controller: App\Module\Company\Presentation\API\Controller\Company\ImportCompaniesController::import
   methods: [POST]

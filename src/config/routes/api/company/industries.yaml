@@ -26,7 +26,7 @@
 
 api_industry_create:
   path: api/industries
-  controller: App\Module\Company\Presentation\API\Industry\CreateIndustryController::create
+  controller: App\Module\Company\Presentation\API\Controller\Industry\CreateIndustryController::create
   methods: [POST]
 
 #api_industries_import:

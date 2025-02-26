@@ -4,14 +4,21 @@ framework:
         # failure_transport: failed
 
         transports:
-            # https://symfony.com/doc/current/messenger.html#transport-configuration
-            # async: '%env(MESSENGER_TRANSPORT_DSN)%'
-            # failed: 'doctrine://default?queue_name=failed'
-            # sync: 'sync://'
+#            https://symfony.com/doc/current/messenger.html#transport-configuration
+#            async: '%env(MESSENGER_TRANSPORT_DSN)%'
+#            failed: 'doctrine://default?queue_name=failed'
+#            sync: 'sync://'
 
+            async: '%env(MESSENGER_TRANSPORT_DSN)%'
+            company_xlsx_import:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%/company_xlsx_import'
+                options:
+                    exchange:
+                        name: 'company_xlsx_import' # Nazwa exchange (wymiana)
+                        type: direct # Typ exchange (direct, fanout, topic itp.)
         routing:
-            # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+            #'App\Module\Company\Application\Command\Company\ImportCompaniesCommand': async
+            'App\Module\Company\Application\Command\Company\ImportCompaniesCommand': company_xlsx_import
 
 # when@test:
 #    framework:

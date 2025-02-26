@@ -31,5 +31,7 @@ nelmio_api_doc:
       path_patterns: [ ^/api/positions ]
     contract_types:
       path_patterns: [ ^/api/contract_types ]
+    contract_industries:
+      path_patterns: [ ^/api/industries ]
     notes:
       path_patterns: [ ^/api/notes ]

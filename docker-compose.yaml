@@ -1,0 +1,131 @@
+version: '3.8'
+
+volumes:
+  mysql-data-service-company:
+    driver: local
+  mysql-data-service-company-test:
+    driver: local
+
+services:
+  service-company:
+    container_name: service-company
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    extra_hosts:
+      host.docker.internal: host-gateway
+    ports:
+      - "81:80"
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+    depends_on:
+      service-company-db:
+        condition: service_healthy
+      service-company-db-test:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
+
+  service-company-db:
+    container_name: service-company-db
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: service_company
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - mysql-data-service-company:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+  service-company-db-test:
+    container_name: service-company-db-test
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: service_company
+      MYSQL_USER: user_test
+      MYSQL_PASSWORD: password_test
+      MYSQL_ROOT_HOST: "%"
+    volumes:
+      - mysql-data-service-company-test:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 5s
+      retries: 10
+
+  phpmyadmin-company:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-company
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: service-company-db
+
+  phpmyadmin-company-test:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-company-test
+    restart: always
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: service-company-db-test
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    restart: always
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+      - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+
+  worker-company-xlsx-import:
+    container_name: worker-company-xlsx-import
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: [ "php", "bin/console", "messenger:consume", "company_xlsx_import", "--verbose", "--no-interaction" ]
+    depends_on:
+      - rabbitmq
+      - service-company
+    environment:
+      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+#
+#  worker-department-xlsx-import:
+#    container_name: worker-department-xlsx-import
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    command: [ "php", "bin/console", "messenger:consume", "department_xlsx_import", "--limit=10", "--time-limit=60" ]
+#    depends_on:
+#      - rabbitmq
+#      - service-company
+#    environment:
+#      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+#
+#  worker-employee-xlsx-import:
+#    container_name: worker-employee-xlsx-import
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--limit=10", "--time-limit=60" ]
+#    depends_on:
+#      - rabbitmq
+#      - service-company
+#    environment:
+#      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
