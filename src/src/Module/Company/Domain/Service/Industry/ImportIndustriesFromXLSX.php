@@ -1,0 +1,66 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Module\Company\Domain\Service\Industry;
+
+use App\Common\XLSX\XLSXIterator;
+use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+class ImportIndustriesFromXLSX extends XLSXIterator
+{
+    public const COLUMN_NAME = 0;
+    public const COLUMN_DESCRIPTION = 1;
+
+    public function __construct(
+        private readonly string $filePath,
+        private readonly TranslatorInterface $translator,
+        private readonly IndustryReaderInterface $industryReaderRepository,
+    ) {
+        parent::__construct($this->filePath, $this->translator);
+    }
+
+    public function validateRow(array $row): ?string
+    {
+        [$industryName] = $row + [null];
+
+        if ($errorMessage = $this->validateIndustryName($industryName)) {
+            return $errorMessage;
+        }
+
+        if ($this->industryExists($industryName)) {
+            return $this->formatErrorMessage('industry.name.alreadyExists');
+        }
+
+        return null;
+    }
+
+    private function validateIndustryName(?string $industryName): ?string
+    {
+        if (empty($industryName)) {
+            return $this->formatErrorMessage('Industry.name.required');
+        }
+
+        if (strlen($industryName) < 3) {
+            return $this->formatErrorMessage('Industry.name.minimumLength', [':qty' => 3]);
+        }
+
+        return null;
+    }
+
+    private function IndustryExists(string $industryName): bool
+    {
+        return $this->industryReaderRepository->isIndustryExists($industryName);
+    }
+
+    private function formatErrorMessage(string $translationKey, array $parameters = []): string
+    {
+        return sprintf(
+            '%s - %s %d',
+            $this->translator->trans($translationKey, $parameters, 'Industries'),
+            $this->translator->trans('row'),
+            count($this->errors) + 2
+        );
+    }
+}

@@ -6,6 +6,7 @@ namespace App\Module\Company\Application\CommandHandler\Role;
 
 use App\Module\Company\Application\Command\Role\ImportRolesCommand;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
 use App\Module\Company\Domain\Service\Role\RoleService;
 
 readonly class ImportRolesCommandHandler
@@ -19,8 +20,8 @@ readonly class ImportRolesCommandHandler
         $roles = [];
         foreach ($command->data as $item) {
             $role = new Role();
-            $role->setName($item[0]);
-            $role->setDescription($item[1]);
+            $role->setName($item[ImportRolesFromXLSX::COLUMN_NAME]);
+            $role->setDescription($item[ImportRolesFromXLSX::COLUMN_DESCRIPTION]);
 
             $roles[] = $role;
         }
