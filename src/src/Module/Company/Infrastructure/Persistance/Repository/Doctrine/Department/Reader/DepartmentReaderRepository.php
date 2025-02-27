@@ -21,7 +21,7 @@ class DepartmentReaderRepository extends ServiceEntityRepository implements Depa
     public function getDepartmentByUUID(string $uuid): ?Department
     {
         $position = $this->getEntityManager()
-            ->createQuery('SELECT d FROM App\Module\Company\Domain\Entity\Department d WHERE d.' . Department::COLUMN_UUID . ' = :uuid')
+            ->createQuery('SELECT d FROM ' . Department::class . ' d WHERE d.' . Department::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -37,7 +37,7 @@ class DepartmentReaderRepository extends ServiceEntityRepository implements Depa
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('d')
-            ->from('App\Module\Company\Domain\Entity\Department', 'd')
+            ->from(Department::class, 'd')
             ->where('d.' . Department::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
@@ -59,7 +59,7 @@ class DepartmentReaderRepository extends ServiceEntityRepository implements Depa
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('d')
-            ->from('App\Module\Company\Domain\Entity\Department', 'd')
+            ->from(Department::class, 'd')
             ->where('d.' . Department::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 

@@ -21,7 +21,7 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
     public function getIndustryByUUID(string $uuid): ?Industry
     {
         $industry = $this->getEntityManager()
-            ->createQuery('SELECT r FROM App\Module\Company\Domain\Entity\Industry r WHERE r.' . Industry::COLUMN_UUID. ' = :uuid')
+            ->createQuery('SELECT r FROM ' . Industry::class . ' r WHERE r.' . Industry::COLUMN_UUID. ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -37,7 +37,7 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('i')
-            ->from('App\Module\Company\Domain\Entity\Industry', 'i')
+            ->from(Industry::class, 'i')
             ->where('i.' . Industry::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
@@ -59,7 +59,7 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('i')
-            ->from('App\Module\Company\Domain\Entity\Industry', 'i')
+            ->from(Industry::class, 'i')
             ->where('i.' . Industry::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 
