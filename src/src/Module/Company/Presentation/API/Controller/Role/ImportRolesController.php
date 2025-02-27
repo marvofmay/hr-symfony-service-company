@@ -49,7 +49,7 @@ class ImportRolesController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: Response::HTTP_OK,
+                response: Response::HTTP_CREATED,
                 description: 'Role zostały utworzone',
                 content: new OA\JsonContent(
                     properties: [
@@ -105,7 +105,7 @@ class ImportRolesController extends AbstractController
                     'message' => $this->translator->trans('role.import.success', [], 'roles'),
                     'errors' => $importer->getErrors(),
                 ],
-                    Response::HTTP_OK
+                    Response::HTTP_CREATED
                 );
             } else {
                 return new JsonResponse([

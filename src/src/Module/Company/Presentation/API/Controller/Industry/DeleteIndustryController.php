@@ -25,7 +25,7 @@ class DeleteIndustryController extends AbstractController
 
     #[OA\Delete(
         path: '/api/industries/{uuid}',
-        summary: 'Usuwa rolę - soft delete',
+        summary: 'Usuwa branżę - soft delete',
         parameters: [
             new OA\Parameter(
                 name: 'uuid',

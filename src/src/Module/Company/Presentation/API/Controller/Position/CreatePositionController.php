@@ -33,7 +33,7 @@ class CreatePositionController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: Response::HTTP_OK,
+                response: Response::HTTP_CREATED,
                 description: 'Stanowisko zostało utworzone',
                 content: new OA\JsonContent(
                     properties: [
@@ -63,7 +63,7 @@ class CreatePositionController extends AbstractController
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('position.add.success', [], 'positions')],
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('position.add.error', [], 'positions'), $error->getMessage());

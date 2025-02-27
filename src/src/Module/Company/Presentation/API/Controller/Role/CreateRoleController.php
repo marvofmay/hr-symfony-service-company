@@ -33,7 +33,7 @@ class CreateRoleController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: Response::HTTP_OK,
+                response: Response::HTTP_CREATED,
                 description: 'Rola została utworzona',
                 content: new OA\JsonContent(
                     properties: [
@@ -63,7 +63,7 @@ class CreateRoleController extends AbstractController
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('role.add.success', [], 'roles')],
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('role.add.error', [], 'roles'), $error->getMessage());

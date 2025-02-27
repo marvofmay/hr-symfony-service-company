@@ -33,7 +33,7 @@ class CreateCompanyController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: Response::HTTP_OK,
+                response: Response::HTTP_CREATED,
                 description: 'Firma została utworzona',
                 content: new OA\JsonContent(
                     properties: [
@@ -63,7 +63,7 @@ class CreateCompanyController extends AbstractController
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('company.add.success', [], 'companies')],
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('company.add.error', [], 'companies'), $error->getMessage());

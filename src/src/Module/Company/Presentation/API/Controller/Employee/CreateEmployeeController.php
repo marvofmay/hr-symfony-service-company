@@ -63,7 +63,7 @@ class CreateEmployeeController extends AbstractController
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('employee.add.success', [], 'employees')],
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('employee.add.error', [], 'employees'), $error->getMessage());

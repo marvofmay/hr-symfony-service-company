@@ -63,7 +63,7 @@ class CreateDepartmentController extends AbstractController
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('department.add.success', [], 'departments')],
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('department.add.error', [], 'departments'), $error->getMessage());

@@ -33,7 +33,7 @@ class CreateIndustryController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: Response::HTTP_OK,
+                response: Response::HTTP_CREATED,
                 description: 'Branża została utworzona',
                 content: new OA\JsonContent(
                     properties: [
@@ -63,7 +63,7 @@ class CreateIndustryController extends AbstractController
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('industry.add.success', [], 'industries')],
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('industry.add.error', [], 'industries'), $error->getMessage());

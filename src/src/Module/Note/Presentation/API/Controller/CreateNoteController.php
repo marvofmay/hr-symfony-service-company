@@ -29,7 +29,7 @@ class CreateNoteController extends AbstractController
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('note.add.success', [], 'notes')],
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('note.add.error', [], 'notes'), $error->getMessage());

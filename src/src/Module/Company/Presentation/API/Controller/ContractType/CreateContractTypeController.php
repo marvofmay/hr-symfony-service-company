@@ -33,7 +33,7 @@ class CreateContractTypeController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: Response::HTTP_OK,
+                response: Response::HTTP_CREATED,
                 description: 'Forma zatrudnienia została utworzona',
                 content: new OA\JsonContent(
                     properties: [
@@ -63,7 +63,7 @@ class CreateContractTypeController extends AbstractController
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('contractTypes.add.success', [], 'contract_types')],
-                Response::HTTP_OK
+                Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('contractTypes.add.error', [], 'contract_types'), $error->getMessage());

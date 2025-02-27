@@ -49,7 +49,7 @@ class ImportIndustriesController extends AbstractController
         ),
         responses: [
             new OA\Response(
-                response: Response::HTTP_OK,
+                response: Response::HTTP_CREATED,
                 description: 'Branże zostały utworzone',
                 content: new OA\JsonContent(
                     properties: [
@@ -111,7 +111,7 @@ class ImportIndustriesController extends AbstractController
                     'message' => $this->translator->trans('industry.import.success', [], 'industries'),
                     'errors' => $importer->getErrors(),
                 ],
-                    Response::HTTP_OK
+                    Response::HTTP_CREATED
                 );
             } else {
                 return new JsonResponse([
