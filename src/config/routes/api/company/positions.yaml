@@ -32,4 +32,9 @@ api_position_update:
   controller: App\Module\Company\Presentation\API\Controller\Position\UpdatePositionController::update
   methods: [PUT]
   requirements:
-    uuid: '[0-9a-fA-F-]{36}'  
+    uuid: '[0-9a-fA-F-]{36}'
+
+api_positions_list:
+  path: api/positions
+  controller: App\Module\Company\Presentation\API\Controller\Position\ListPositionsController::list
+  methods: [GET]

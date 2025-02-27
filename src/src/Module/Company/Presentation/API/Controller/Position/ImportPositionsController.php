@@ -97,7 +97,6 @@ class ImportPositionsController extends AbstractController
                 $this->departmentReaderRepository
             );
 
-
             $importer->import();
             $errors = $importer->getErrors();
 

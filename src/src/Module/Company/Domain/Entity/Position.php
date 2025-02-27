@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Trait\AttributesEntityTrait;
+use App\Common\Trait\RelationsEntityTrait;
 use App\Common\Trait\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -24,6 +25,7 @@ class Position
 {
     use TimestampableTrait;
     use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_NAME = 'name';
@@ -71,14 +73,15 @@ class Position
     #[ORM\JoinTable(name: "position_department")]
     #[ORM\JoinColumn(name: "position_uuid", referencedColumnName: "uuid")]
     #[ORM\InverseJoinColumn(name: "department_uuid", referencedColumnName: "uuid")]
-    private Collection $departments;
+    #[Groups('position_info')]
+    public Collection $departments;
 
     public function __construct()
     {
         $this->departments = new ArrayCollection();
     }
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }
