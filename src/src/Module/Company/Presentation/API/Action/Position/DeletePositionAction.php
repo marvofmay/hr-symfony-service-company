@@ -18,13 +18,6 @@ class DeletePositionAction
     {
     }
 
-    public function setPositionToDelete(Position $position): self
-    {
-        $this->position = $position;
-
-        return $this;
-    }
-
     public function execute(string $uuid): void
     {
         $this->commandBus->dispatch(new DeletePositionCommand($this->positionReaderRepository->getPositionByUUID($uuid)));

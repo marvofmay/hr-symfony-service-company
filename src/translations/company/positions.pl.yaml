@@ -7,7 +7,7 @@ position:
     required: "Nazwa stanowiska jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    expectedUniqueStanowiskaNameConstraint: "Oczekiwano unikalnej nazwy stanowiska"
+    expectedUniquePositionNameConstraint: "Oczekiwano unikalnej nazwy stanowiska"
   add:
     success: "Stanowisko została pomyślnie dodana"
     error: "Wystąpił błąd - stanowisko nie została dodana"

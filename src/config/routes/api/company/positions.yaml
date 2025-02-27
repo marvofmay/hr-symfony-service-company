@@ -4,11 +4,28 @@ api_position_delete:
   methods: [DELETE]
   requirements:
     uuid: '[0-9a-fA-F-]{36}'
+    
+api_position_delete_multiple:
+  path: api/positions/multiple
+  controller: App\Module\Company\Presentation\API\Controller\Position\DeleteMultiplePositionsController::delete
+  methods: [DELETE]    
+    
+api_position_get:
+  path: api/positions/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Position\GetPositionController::get
+  methods: [GET]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'    
 
 api_position_create:
   path: api/positions
   controller: App\Module\Company\Presentation\API\Controller\Position\CreatePositionController::create
   methods: [POST]
+  
+api_positions_import:
+  path: api/positions/import
+  controller: App\Module\Company\Presentation\API\Controller\Position\ImportPositionsController::import
+  methods: [POST]  
   
 api_position_update:
   path: api/positions/{uuid}

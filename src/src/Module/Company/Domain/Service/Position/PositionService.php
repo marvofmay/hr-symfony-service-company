@@ -14,9 +14,9 @@ readonly class PositionService
     {
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return 'PositionService';
+        return self::class;
     }
 
     public function savePositionInDB(Position $position, Collection $departments): void
@@ -29,13 +29,13 @@ readonly class PositionService
         $this->positionWriterRepository->updatePositionInDB($position);
     }
 
-    public function savePositionsInDB(array $positions): void
+    public function savePositionsInDB(Collection $positions): void
     {
         $this->positionWriterRepository->savePositionsInDB($positions);
     }
 
-    public function deleteMultiplePositionsInDB(array $selectedUUID): void
+    public function deleteMultiplePositionsInDB(Collection $positions): void
     {
-        $this->positionWriterRepository->deleteMultiplePositionsInDB($selectedUUID);
+        $this->positionWriterRepository->deleteMultiplePositionsInDB($positions);
     }
 }

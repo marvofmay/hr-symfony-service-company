@@ -23,11 +23,11 @@ class DeletePositionController extends AbstractController
 
     #[OA\Delete(
         path: '/api/positions/{uuid}',
-        summary: 'Usuwa rolę - soft delete',
+        summary: 'Usuwa stanowisko - soft delete',
         parameters: [
             new OA\Parameter(
                 name: 'uuid',
-                description: 'UUID roli',
+                description: 'UUID stanowiska',
                 in: 'path',
                 required: true,
                 schema: new OA\Schema(type: 'string')
@@ -36,10 +36,10 @@ class DeletePositionController extends AbstractController
         responses: [
             new OA\Response(
                 response: Response::HTTP_OK,
-                description: 'Rola została usunięta',
+                description: 'Stanowisko zostało usunięte',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Rola została pomyślnie usunięta'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Stanowisko zostało pomyślnie usunięte'),
                     ],
                     type: 'object'
                 )
@@ -52,7 +52,7 @@ class DeletePositionController extends AbstractController
                         new OA\Property(
                             property: 'error',
                             type: 'string',
-                            example: 'Wystąpił błąd - rola nie została usunięta: Rola o podanym UUID nie istnieje : e8933421-84a2-4846-b3e4-b3a4ffbda1a'
+                            example: 'Wystąpił błąd - stanowisko nie została usunięta. Stanowisko o podanym UUID nie istnieje : e8933421-84a2-4846-b3e4-b3a4ffbda1a'
                         ),
                     ],
                     type: 'object'
