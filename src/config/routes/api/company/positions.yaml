@@ -1,4 +1,18 @@
+api_position_delete:
+  path: api/positions/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Position\DeletePositionController::delete
+  methods: [DELETE]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
 api_position_create:
   path: api/positions
   controller: App\Module\Company\Presentation\API\Controller\Position\CreatePositionController::create
   methods: [POST]
+  
+api_position_update:
+  path: api/positions/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Position\UpdatePositionController::update
+  methods: [PUT]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'  

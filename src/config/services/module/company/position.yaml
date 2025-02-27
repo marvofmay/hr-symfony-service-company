@@ -6,12 +6,12 @@ services:
     App\Module\Company\Application\CommandHandler\Position\CreatePositionCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\Module\Company\Application\CommandHandler\Position\UpdatePositionCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\Module\Company\Application\CommandHandler\Position\DeletePositionCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Company\Application\CommandHandler\Position\UpdatePositionCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Company\Application\CommandHandler\Position\DeletePositionCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 #    App\Module\Company\Application\CommandHandler\Position\DeleteMultiplePositionsCommandHandler:
 #        tags:
 #            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }

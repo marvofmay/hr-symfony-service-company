@@ -1,0 +1,28 @@
+position:
+  uuid:
+    notFound: "Stanowisko o podanym UUID nie istnieje"
+    notExists: "Stanowisko o podanym UUID nie istnieje :uuid"
+  name:
+    alreadyExists: "Stanowisko istnieje"
+    required: "Nazwa stanowiska jest wymagana"
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
+    expectedUniqueStanowiskaNameConstraint: "Oczekiwano unikalnej nazwy stanowiska"
+  add:
+    success: "Stanowisko została pomyślnie dodana"
+    error: "Wystąpił błąd - stanowisko nie została dodana"
+  update:
+    success: "Stanowisko została pomyślnie zaktualizowana"
+    error: "Wystąpił błąd - stanowisko nie zostało zaktualizowane"
+  delete:
+    success: "Stanowisko zostało pomyślnie usunięte"
+    error: "Wystąpił błąd - stanowisko nie zostało usunięte"
+    multiple:
+      success: "Stanowiska zostały pomyślnie usunięte"
+  import:
+    success: "Stanowiska zostały pomyślnie zaimportowane"
+    error: "Wystąpił błąd - stanowiska nie zostały zaimportowane"
+  view:
+    error: "Wystapił błąd przy pobieraniu wybranego stanowiska"
+  list:
+    error: "Wystapił błąd przy pobieraniu listy stanowisk"
