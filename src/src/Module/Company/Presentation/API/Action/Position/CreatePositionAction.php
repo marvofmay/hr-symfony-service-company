@@ -20,7 +20,8 @@ readonly class CreatePositionAction
             new CreatePositionCommand(
                 $createDTO->getName(),
                 $createDTO->getDescription(),
-                $createDTO->getActive()
+                $createDTO->getActive(),
+                $createDTO->getDepartmentsUUID()
             )
         );
     }

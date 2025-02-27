@@ -21,12 +21,18 @@ class PositionReaderRepository extends ServiceEntityRepository implements Positi
     public function getPositionByUUID(string $uuid): ?Position
     {
         $position = $this->getEntityManager()
-            ->createQuery('SELECT p FROM App\Module\Company\Domain\Entity\Position p WHERE p.' . Position::COLUMN_UUID . ' = :uuid')
+            ->createQuery(
+                'SELECT p FROM ' . Position::class . ' p WHERE p.' . Position::COLUMN_UUID . ' = :uuid'
+            )
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
         if (!$position) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('position.uuid.notFound', [], 'positions'), $uuid));
+            throw new NotFindByUUIDException(sprintf(
+                '%s : %s',
+                $this->translator->trans('position.uuid.notFound', [], 'positions'),
+                $uuid
+            ));
         }
 
         return $position;
@@ -37,7 +43,7 @@ class PositionReaderRepository extends ServiceEntityRepository implements Positi
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('p')
-            ->from('App\Module\Company\Domain\Entity\Position', 'p')
+            ->from(Position::class, 'p')
             ->where('p.' . Position::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
@@ -59,7 +65,7 @@ class PositionReaderRepository extends ServiceEntityRepository implements Positi
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('p')
-            ->from('App\Module\Company\Domain\Entity\Position', 'p')
+            ->from(Position::class, 'p')
             ->where('p.' . Position::COLUMN_UUID . '= :uuid')
             ->setParameter('uuid', $uuid);
 

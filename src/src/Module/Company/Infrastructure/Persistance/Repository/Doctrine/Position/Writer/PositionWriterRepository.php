@@ -7,6 +7,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Posi
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class PositionWriterRepository extends ServiceEntityRepository implements PositionWriterInterface
@@ -16,8 +17,12 @@ class PositionWriterRepository extends ServiceEntityRepository implements Positi
         parent::__construct($registry, Position::class);
     }
 
-    public function savePositionInDB(Position $position): void
+    public function savePositionInDB(Position $position, Collection $departments): void
     {
+        foreach ($departments as $department) {
+            $position->addDepartment($department);
+        }
+
         $this->getEntityManager()->persist($position);
         $this->getEntityManager()->flush();
     }

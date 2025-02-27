@@ -6,6 +6,8 @@ namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Trait\AttributesEntityTrait;
 use App\Common\Trait\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -65,6 +67,17 @@ class Position
     #[Groups('position_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
+    #[ORM\ManyToMany(targetEntity: Department::class, inversedBy: "positions")]
+    #[ORM\JoinTable(name: "position_department")]
+    #[ORM\JoinColumn(name: "position_uuid", referencedColumnName: "uuid")]
+    #[ORM\InverseJoinColumn(name: "department_uuid", referencedColumnName: "uuid")]
+    private Collection $departments;
+
+    public function __construct()
+    {
+        $this->departments = new ArrayCollection();
+    }
+
     public function getUuid(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
@@ -98,5 +111,25 @@ class Position
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
+    }
+
+    public function getDepartments(): Collection
+    {
+        return $this->departments;
+    }
+
+    public function addDepartment(Department $department): void
+    {
+        if (!$this->departments->contains($department)) {
+            $this->departments->add($department);
+            $department->addPosition($this);
+        }
+    }
+
+    public function removeDepartment(Department $department): void
+    {
+        if ($this->departments->removeElement($department)) {
+            $department->removePosition($this);
+        }
     }
 }

@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Position;
 
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
+use Doctrine\Common\Collections\Collection;
 
 readonly class PositionService
 {
@@ -18,9 +19,9 @@ readonly class PositionService
         return 'PositionService';
     }
 
-    public function savePositionInDB(Position $position): void
+    public function savePositionInDB(Position $position, Collection $departments): void
     {
-        $this->positionWriterRepository->savePositionInDB($position);
+        $this->positionWriterRepository->savePositionInDB($position, $departments);
     }
 
     public function updatePositionInDB(Position $position): void
