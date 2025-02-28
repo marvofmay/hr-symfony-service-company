@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Role;
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
+use Doctrine\Common\Collections\Collection;
 
 readonly class RoleService
 {
@@ -33,8 +34,8 @@ readonly class RoleService
         $this->roleWriterRepository->saveRolesInDB($roles);
     }
 
-    public function deleteMultipleRolesInDB(array $selectedUUID): void
+    public function deleteMultipleRolesInDB(Collection $roles): void
     {
-        $this->roleWriterRepository->deleteMultipleRolesInDB($selectedUUID);
+        $this->roleWriterRepository->deleteMultipleRolesInDB($roles);
     }
 }

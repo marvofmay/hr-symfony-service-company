@@ -8,6 +8,7 @@ use App\Common\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -30,6 +31,23 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
         }
 
         return $industry;
+    }
+
+    public function getIndustriesByUUID(array $uuids): Collection
+    {
+        $industries = $this->getEntityManager()
+            ->createQuery('SELECT r FROM ' . Industry::class . ' r WHERE r.' . Industry::COLUMN_UUID . ' IN (:uuids)')
+            ->setParameter('uuids', $uuids)
+            ->getResult();
+
+        if (empty($industries)) {
+            throw new NotFindByUUIDException(sprintf('%s : %s',
+                $this->translator->trans('industry.uuid.notFound', [], 'industries'),
+                implode(', ', $uuids)
+            ));
+        }
+
+        return $industries;
     }
 
     public function getIndustryByName(string $name, ?string $uuid = null): ?Industry

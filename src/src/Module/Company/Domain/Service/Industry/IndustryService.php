@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Industry;
 
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
+use Doctrine\Common\Collections\Collection;
 
 readonly class IndustryService
 {
@@ -28,13 +29,13 @@ readonly class IndustryService
         $this->industryWriterRepository->updateIndustryInDB($industry);
     }
 
-    public function saveIndustriesInDB(array $industries): void
+    public function saveIndustriesInDB(Collection $industries): void
     {
         $this->industryWriterRepository->saveIndustriesInDB($industries);
     }
 
-    public function deleteMultipleIndustriesInDB(array $selectedUUID): void
+    public function deleteMultipleIndustriesInDB(Collection $industries): void
     {
-        $this->industryWriterRepository->deleteMultipleIndustriesInDB($selectedUUID);
+        $this->industryWriterRepository->deleteMultipleIndustriesInDB($industries);
     }
 }

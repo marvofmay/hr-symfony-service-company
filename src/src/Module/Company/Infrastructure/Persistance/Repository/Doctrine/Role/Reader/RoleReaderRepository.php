@@ -8,6 +8,8 @@ use App\Common\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -30,6 +32,30 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
         }
 
         return $role;
+    }
+
+    public function getRolesByUUID(array $selectedUUID): Collection
+    {
+        if (empty($uuids)) {
+            return new ArrayCollection();
+        }
+
+        $roles = $this->getEntityManager()
+            ->createQuery('SELECT r FROM ' . Role::class . ' r WHERE r.' . Role::COLUMN_UUID . ' IN (:uuids)')
+            ->setParameter('uuids', $uuids)
+            ->getResult();
+
+
+        if (count($roles) !== count($uuids)) {
+            $missingUuids = array_diff($uuids, array_map(fn($role) => $role->getUuid(), $roles));
+            throw new NotFindByUUIDException(sprintf(
+                '%s : %s',
+                $this->translator->trans('role.uuid.notFound', [], 'roles'),
+                implode(', ', $missingUuids)
+            ));
+        }
+
+        return $roles;
     }
 
     public function getRoleByName(string $name, ?string $uuid = null): ?Role

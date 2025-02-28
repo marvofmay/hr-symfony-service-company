@@ -7,6 +7,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class RoleWriterRepository extends ServiceEntityRepository implements RoleWriterInterface
@@ -35,16 +36,15 @@ class RoleWriterRepository extends ServiceEntityRepository implements RoleWriter
         $this->getEntityManager()->flush();
     }
 
-    public function deleteMultipleRolesInDB(array $selectedUUID): void
+    public function deleteMultipleRolesInDB(Collection $roles): void
     {
-        if (empty($selectedUUID)) {
+        if (empty($roles)) {
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\Role r SET r.' . Role::COLUMN_DELETED_AT . ' = :deletedAt WHERE r.' . Role::COLUMN_UUID . ' IN (:uuids)');
-        $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
-        $query->setParameter('uuids', $selectedUUID);
-
-        $query->execute();
+        foreach ($roles as $role) {
+            $this->getEntityManager()->remove($role);
+        }
+        $this->getEntityManager()->flush();        
     }
 }

@@ -7,6 +7,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Indu
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class IndustryWriterRepository extends ServiceEntityRepository implements IndustryWriterInterface
@@ -27,7 +28,7 @@ class IndustryWriterRepository extends ServiceEntityRepository implements Indust
         $this->getEntityManager()->flush();
     }
 
-    public function saveIndustriesInDB(array $industries): void
+    public function saveIndustriesInDB(Collection $industries): void
     {
         foreach ($industries as $industry) {
             $this->getEntityManager()->persist($industry);
@@ -35,16 +36,15 @@ class IndustryWriterRepository extends ServiceEntityRepository implements Indust
         $this->getEntityManager()->flush();
     }
 
-    public function deleteMultipleIndustriesInDB(array $selectedUUID): void
+    public function deleteMultipleIndustriesInDB(Collection $industries): void
     {
-        if (empty($selectedUUID)) {
+        if (empty($industries)) {
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE ' . Industry::class . ' i SET i.' . Industry::COLUMN_DELETED_AT . ' = :deletedAt WHERE i.' . Industry::COLUMN_UUID . ' IN (:uuids)');
-        $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
-        $query->setParameter('uuids', $selectedUUID);
-
-        $query->execute();
+        foreach ($industries as $industry) {
+            $this->getEntityManager()->remove($industry);
+        }
+        $this->getEntityManager()->flush();
     }
 }

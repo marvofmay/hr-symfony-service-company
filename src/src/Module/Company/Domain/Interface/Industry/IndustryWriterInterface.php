@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Interface\Industry;
 
 use App\Module\Company\Domain\Entity\Industry;
+use Doctrine\Common\Collections\Collection;
 
 interface IndustryWriterInterface
 {
@@ -12,7 +13,7 @@ interface IndustryWriterInterface
 
     public function updateIndustryInDB(Industry $industry): void;
 
-    public function saveIndustriesInDB(array $industries): void;
+    public function saveIndustriesInDB(Collection $industries): void;
 
-    public function deleteMultipleIndustriesInDB(array $selectedUUID): void;
+    public function deleteMultipleIndustriesInDB(Collection $industries): void;
 }

@@ -6,11 +6,12 @@ namespace App\Module\Company\Presentation\API\Action\Industry;
 
 use App\Module\Company\Application\Command\Industry\DeleteMultipleIndustriesCommand;
 use App\Module\Company\Domain\DTO\Industry\DeleteMultipleDTO;
+use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class DeleteMultipleIndustriesAction
 {
-    public function __construct(private MessageBusInterface $commandBus)
+    public function __construct(private MessageBusInterface $commandBus, private IndustryReaderInterface $industryReaderRepository)
     {
     }
 
@@ -18,7 +19,7 @@ readonly class DeleteMultipleIndustriesAction
     {
         $this->commandBus->dispatch(
             new DeleteMultipleIndustriesCommand(
-                $deleteMultipleDTO->getSelectedUUID(),
+                $this->industryReaderRepository->getIndustriesByUUID($deleteMultipleDTO->getSelectedUUID())
             )
         );
     }

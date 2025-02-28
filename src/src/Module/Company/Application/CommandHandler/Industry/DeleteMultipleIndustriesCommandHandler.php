@@ -15,6 +15,6 @@ readonly class DeleteMultipleIndustriesCommandHandler
 
     public function __invoke(DeleteMultipleIndustriesCommand $command): void
     {
-        $this->industryService->deleteMultipleIndustriesInDB($command->selectedUUID);
+        $this->industryService->deleteMultipleIndustriesInDB($command->industries);
     }
 }

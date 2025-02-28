@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Module\Company\Domain\DTO\Role\UpdateDTO;
-use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Presentation\API\Action\Role\UpdateRoleAction;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
@@ -20,7 +19,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UpdateRoleController extends AbstractController
 {
     public function __construct(
-        private readonly RoleReaderInterface $roleReaderRepository,
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
     ) {
@@ -70,7 +68,6 @@ class UpdateRoleController extends AbstractController
                 );
             }
 
-            $updateRoleAction->setRoleToUpdate($this->roleReaderRepository->getRoleByUUID($uuid));
             $updateRoleAction->execute($updateDTO);
 
             return new JsonResponse(['message' => $this->translator->trans('role.update.success', [], 'roles')], Response::HTTP_OK);
