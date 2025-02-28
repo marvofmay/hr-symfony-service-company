@@ -36,7 +36,6 @@ class UpdateNoteController extends AbstractController
                 );
             }
 
-            $updateNoteAction->setNoteToUpdate($this->noteReaderRepository->getNoteByUUID($uuid));
             $updateNoteAction->execute($updateDTO);
 
             return new JsonResponse(

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Note\Application\CommandHandler;
 
 use App\Module\Note\Application\Command\UpdateNoteCommand;
-use App\Module\Note\Domain\Service\NoteService;
+use App\Module\Note\Domain\Interface\NoteWriterInterface;
 
 readonly class UpdateNoteCommandHandler
 {
-    public function __construct(private NoteService $noteWriterService)
+    public function __construct(private NoteWriterInterface $noteWriterRepository,)
     {
     }
 
@@ -21,6 +21,6 @@ readonly class UpdateNoteCommandHandler
         $note->setPriority($command->getPriority());
         $note->setUpdatedAt(new \DateTime());
 
-        $this->noteWriterService->updateNoteInDB($note);
+        $this->noteWriterRepository->updateNoteInDB($note);
     }
 }

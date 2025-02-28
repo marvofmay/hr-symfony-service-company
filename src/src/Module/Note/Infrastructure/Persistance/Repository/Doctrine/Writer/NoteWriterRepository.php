@@ -22,6 +22,12 @@ class NoteWriterRepository extends ServiceEntityRepository implements NoteWriter
         $this->getEntityManager()->flush();
     }
 
+    public function deleteNoteInDB(Note $note): void
+    {
+        $this->getEntityManager()->remove($note);
+        $this->getEntityManager()->flush();
+    }
+
     public function updateNoteInDB(Note $note): void
     {
         $this->getEntityManager()->flush();

@@ -27,8 +27,7 @@ class DeleteNoteController extends AbstractController
     public function delete(string $uuid, DeleteNoteAction $deleteNoteAction): JsonResponse
     {
         try {
-            $deleteNoteAction->setNoteToDelete($this->noteReaderRepository->getNoteByUUID($uuid))
-                ->execute();
+            $deleteNoteAction->execute($uuid);
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('note.delete.success', [], 'notes')],

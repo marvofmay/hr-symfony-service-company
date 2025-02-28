@@ -21,7 +21,7 @@ class NoteReaderRepository extends ServiceEntityRepository implements NoteReader
     public function getNoteByUUID(string $uuid): ?Note
     {
         $role = $this->getEntityManager()
-            ->createQuery('SELECT n FROM App\Module\Note\Domain\Entity\Note n WHERE n.uuid = :uuid')
+            ->createQuery('SELECT n FROM ' . Note::class . ' n WHERE n.uuid = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
