@@ -18,7 +18,6 @@ class DeleteIndustryController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly IndustryReaderInterface $roleReaderRepository,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -67,8 +66,7 @@ class DeleteIndustryController extends AbstractController
     public function delete(string $uuid, DeleteIndustryAction $deleteIndustryAction): JsonResponse
     {
         try {
-            $deleteIndustryAction->setIndustryToDelete($this->roleReaderRepository->getIndustryByUUID($uuid))
-                ->execute();
+            $deleteIndustryAction->execute($uuid);
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('industry.delete.success', [], 'industries')],

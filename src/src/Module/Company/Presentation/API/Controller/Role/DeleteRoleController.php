@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
-use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Presentation\API\Action\Role\DeleteRoleAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
@@ -18,7 +17,6 @@ class DeleteRoleController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly RoleReaderInterface $roleReaderRepository,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -67,8 +65,7 @@ class DeleteRoleController extends AbstractController
     public function delete(string $uuid, DeleteRoleAction $deleteRoleAction): JsonResponse
     {
         try {
-            $deleteRoleAction->setRoleToDelete($this->roleReaderRepository->getRoleByUUID($uuid))
-                ->execute();
+            $deleteRoleAction->execute($uuid);
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('role.delete.success', [], 'roles')],
