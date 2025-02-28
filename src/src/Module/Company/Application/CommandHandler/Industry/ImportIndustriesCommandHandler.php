@@ -6,13 +6,13 @@ namespace App\Module\Company\Application\CommandHandler\Industry;
 
 use App\Module\Company\Application\Command\Industry\ImportIndustriesCommand;
 use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
 use App\Module\Company\Domain\Service\Industry\ImportIndustriesFromXLSX;
-use App\Module\Company\Domain\Service\Industry\IndustryService;
 use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class ImportIndustriesCommandHandler
 {
-    public function __construct(private IndustryService $industryService)
+    public function __construct(private IndustryWriterInterface $industryWriterRepository)
     {
     }
 
@@ -26,6 +26,6 @@ readonly class ImportIndustriesCommandHandler
             $industries[] = $industry;
         }
 
-        $this->industryService->saveIndustriesInDB($industries);
+        $this->industryWriterRepository->saveIndustriesInDB($industries);
     }
 }

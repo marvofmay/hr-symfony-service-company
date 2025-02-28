@@ -36,12 +36,14 @@ class IndustryWriterRepository extends ServiceEntityRepository implements Indust
         $this->getEntityManager()->flush();
     }
 
+    public function deleteIndustryInDB(Industry $industry): void
+    {
+        $this->getEntityManager()->remove($industry);
+        $this->getEntityManager()->flush();
+    }
+
     public function deleteMultipleIndustriesInDB(Collection $industries): void
     {
-        if (empty($industries)) {
-            return;
-        }
-
         foreach ($industries as $industry) {
             $this->getEntityManager()->remove($industry);
         }

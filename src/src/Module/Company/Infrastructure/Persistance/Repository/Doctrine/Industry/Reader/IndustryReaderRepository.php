@@ -8,6 +8,7 @@ use App\Common\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -47,7 +48,7 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
             ));
         }
 
-        return $industries;
+        return new ArrayCollection($industries);
     }
 
     public function getIndustryByName(string $name, ?string $uuid = null): ?Industry

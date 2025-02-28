@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Industry;
 
 use App\Module\Company\Application\Command\Industry\UpdateIndustryCommand;
-use App\Module\Company\Domain\Service\Industry\IndustryService;
+use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Industry\Writer\IndustryWriterRepository;
 
 readonly class UpdateIndustryCommandHandler
 {
-    public function __construct(private IndustryService $industryWriterService)
+    public function __construct(private IndustryWriterRepository $industryWriterRepository)
     {
     }
 
@@ -20,6 +20,6 @@ readonly class UpdateIndustryCommandHandler
         $industry->setDescription($command->getDescription());
         $industry->setUpdatedAt(new \DateTime());
 
-        $this->industryWriterService->updateIndustryInDB($industry);
+        $this->industryWriterRepository->updateIndustryInDB($industry);
     }
 }

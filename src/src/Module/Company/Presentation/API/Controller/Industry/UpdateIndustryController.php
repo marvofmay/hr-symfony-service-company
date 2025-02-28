@@ -70,7 +70,6 @@ class UpdateIndustryController extends AbstractController
                 );
             }
 
-            $updateIndustryAction->setIndustryToUpdate($this->industryReaderRepository->getIndustryByUUID($uuid));
             $updateIndustryAction->execute($updateDTO);
 
             return new JsonResponse(['message' => $this->translator->trans('industry.update.success', [], 'industries')], Response::HTTP_OK);
