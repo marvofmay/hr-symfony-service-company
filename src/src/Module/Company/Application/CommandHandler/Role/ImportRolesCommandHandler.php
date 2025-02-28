@@ -6,12 +6,12 @@ namespace App\Module\Company\Application\CommandHandler\Role;
 
 use App\Module\Company\Application\Command\Role\ImportRolesCommand;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
-use App\Module\Company\Domain\Service\Role\RoleService;
 
 readonly class ImportRolesCommandHandler
 {
-    public function __construct(private RoleService $roleService)
+    public function __construct(private RoleWriterInterface $roleWriterRepository,)
     {
     }
 
@@ -26,6 +26,6 @@ readonly class ImportRolesCommandHandler
             $roles[] = $role;
         }
 
-        $this->roleService->saveRolesInDB($roles);
+        $this->roleWriterRepository->saveRolesInDB($roles);
     }
 }

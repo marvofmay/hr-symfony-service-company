@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Role;
 
 use App\Module\Company\Application\Command\Role\UpdateRoleCommand;
-use App\Module\Company\Domain\Service\Role\RoleService;
+use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 
 readonly class UpdateRoleCommandHandler
 {
-    public function __construct(private RoleService $roleWriterService)
+    public function __construct(private RoleWriterInterface $roleWriterRepository,)
     {
     }
 
@@ -20,6 +20,6 @@ readonly class UpdateRoleCommandHandler
         $role->setDescription($command->getDescription());
         $role->setUpdatedAt(new \DateTime());
 
-        $this->roleWriterService->updateRoleInDB($role);
+        $this->roleWriterRepository->updateRoleInDB($role);
     }
 }

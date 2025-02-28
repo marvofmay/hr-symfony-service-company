@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Position;
 
 use App\Module\Company\Application\Command\Position\DeleteMultiplePositionsCommand;
-use App\Module\Company\Domain\Service\Position\PositionService;
+use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 
 readonly class DeleteMultiplePositionsCommandHandler
 {
-    public function __construct(private PositionService $roleService)
+    public function __construct( private PositionWriterInterface $positionWriterRepository)
     {
     }
 
     public function __invoke(DeleteMultiplePositionsCommand $command): void
     {
-        $this->roleService->deleteMultiplePositionsInDB($command->getPositions());
+        $this->positionWriterRepository->deleteMultiplePositionsInDB($command->getPositions());
     }
 }

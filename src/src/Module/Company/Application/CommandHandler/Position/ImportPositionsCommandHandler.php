@@ -7,13 +7,14 @@ namespace App\Module\Company\Application\CommandHandler\Position;
 use App\Module\Company\Application\Command\Position\ImportPositionsCommand;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
+use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 use App\Module\Company\Domain\Service\Position\ImportPositionsFromXLSX;
 use App\Module\Company\Domain\Service\Position\PositionService;
 use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class ImportPositionsCommandHandler
 {
-    public function __construct(private PositionService $positionService, private DepartmentReaderInterface $departmentReaderRepository)
+    public function __construct(private PositionWriterInterface $positionWriterRepository, private DepartmentReaderInterface $departmentReaderRepository)
     {
     }
 
@@ -34,6 +35,6 @@ readonly class ImportPositionsCommandHandler
             $positions[] = $position;
         }
 
-        $this->positionService->savePositionsInDB($positions);
+        $this->positionWriterRepository->savePositionsInDB($positions);
     }
 }

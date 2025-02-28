@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Position;
 
 use App\Module\Company\Application\Command\Position\UpdatePositionCommand;
-use App\Module\Company\Domain\Service\Position\PositionService;
+use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 
 readonly class UpdatePositionCommandHandler
 {
-    public function __construct(private PositionService $positionWriterService)
+    public function __construct(private PositionWriterInterface $positionWriterRepository,)
     {
     }
 
@@ -20,6 +20,6 @@ readonly class UpdatePositionCommandHandler
         $position->setDescription($command->getDescription());
         $position->setUpdatedAt(new \DateTime());
 
-        $this->positionWriterService->updatePositionInDB($position);
+        $this->positionWriterRepository->updatePositionInDB($position);
     }
 }

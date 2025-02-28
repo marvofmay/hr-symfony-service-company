@@ -6,20 +6,19 @@ namespace App\Module\Company\Application\CommandHandler\Role;
 
 use App\Module\Company\Application\Command\Role\CreateRoleCommand;
 use App\Module\Company\Domain\Entity\Role;
-use App\Module\Company\Domain\Service\Role\RoleService;
+use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 
 readonly class CreateRoleCommandHandler
 {
-    public function __construct(private RoleService $roleService)
+    public function __construct(private Role $role, private RoleWriterInterface $roleWriterRepository,)
     {
     }
 
     public function __invoke(CreateRoleCommand $command): void
     {
-        $role = new Role();
-        $role->setName($command->name);
-        $role->setDescription($command->description);
+        $this->role->setName($command->name);
+        $this->role->setDescription($command->description);
 
-        $this->roleService->saveRoleInDB($role);
+        $this->roleWriterRepository->saveRoleInDB($this->role);
     }
 }
