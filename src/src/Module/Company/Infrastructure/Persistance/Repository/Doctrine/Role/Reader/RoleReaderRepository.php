@@ -36,18 +36,18 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
 
     public function getRolesByUUID(array $selectedUUID): Collection
     {
-        if (empty($uuids)) {
+        if (empty($selectedUUID)) {
             return new ArrayCollection();
         }
 
         $roles = $this->getEntityManager()
             ->createQuery('SELECT r FROM ' . Role::class . ' r WHERE r.' . Role::COLUMN_UUID . ' IN (:uuids)')
-            ->setParameter('uuids', $uuids)
+            ->setParameter('uuids', $selectedUUID)
             ->getResult();
 
 
-        if (count($roles) !== count($uuids)) {
-            $missingUuids = array_diff($uuids, array_map(fn($role) => $role->getUuid(), $roles));
+        if (count($roles) !== count($selectedUUID)) {
+            $missingUuids = array_diff($selectedUUID, array_map(fn($role) => $role->getUuid(), $roles));
             throw new NotFindByUUIDException(sprintf(
                 '%s : %s',
                 $this->translator->trans('role.uuid.notFound', [], 'roles'),
@@ -55,7 +55,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
             ));
         }
 
-        return $roles;
+        return new ArrayCollection($roles);
     }
 
     public function getRoleByName(string $name, ?string $uuid = null): ?Role

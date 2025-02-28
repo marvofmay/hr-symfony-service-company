@@ -3,18 +3,16 @@
 namespace App\Module\Company\Application\CommandHandler\Role;
 
 use App\Module\Company\Application\Command\Role\DeleteRoleCommand;
-use Doctrine\ORM\EntityManagerInterface;
+use App\Module\Company\Domain\Service\Role\RoleService;
 
 readonly class DeleteRoleCommandHandler
 {
-    public function __construct(private EntityManagerInterface $entityManager)
+    public function __construct(private RoleService $roleService)
     {
     }
 
     public function __invoke(DeleteRoleCommand $command): void
     {
-        $role = $command->getRole();
-        $this->entityManager->remove($role);
-        $this->entityManager->flush();
+        $this->roleService->deleteRoleInDB($command->getRole());
     }
 }

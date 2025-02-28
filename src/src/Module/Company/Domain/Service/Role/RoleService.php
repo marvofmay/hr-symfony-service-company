@@ -14,9 +14,9 @@ readonly class RoleService
     {
     }
 
-    public function __toString()
+    public function __toString(): string
     {
-        return 'RoleService';
+        return self::class;
     }
 
     public function saveRoleInDB(Role $role): void
@@ -32,6 +32,11 @@ readonly class RoleService
     public function saveRolesInDB(array $roles): void
     {
         $this->roleWriterRepository->saveRolesInDB($roles);
+    }
+
+    public function deleteRoleInDB(Role $role): void
+    {
+        $this->roleWriterRepository->deleteRoleInDB($role);
     }
 
     public function deleteMultipleRolesInDB(Collection $roles): void

@@ -36,6 +36,11 @@ class RoleWriterRepository extends ServiceEntityRepository implements RoleWriter
         $this->getEntityManager()->flush();
     }
 
+    public function deleteRoleInDB(Role $role): void {
+        $this->getEntityManager()->remove($role);
+        $this->getEntityManager()->flush();
+    }
+
     public function deleteMultipleRolesInDB(Collection $roles): void
     {
         if (empty($roles)) {
@@ -45,6 +50,7 @@ class RoleWriterRepository extends ServiceEntityRepository implements RoleWriter
         foreach ($roles as $role) {
             $this->getEntityManager()->remove($role);
         }
+
         $this->getEntityManager()->flush();        
     }
 }
