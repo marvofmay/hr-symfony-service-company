@@ -40,6 +40,16 @@ class PositionWriterRepository extends ServiceEntityRepository implements Positi
         $this->getEntityManager()->flush();
     }
 
+    public function deletePositionInDB(Position $position): void
+    {
+        if (empty($position)) {
+            return;
+        }
+
+        $this->getEntityManager()->remove($position);
+        $this->getEntityManager()->flush();
+    }
+
     public function deleteMultiplePositionsInDB(Collection $positions): void
     {
         if (empty($positions)) {

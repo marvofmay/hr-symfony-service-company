@@ -34,6 +34,11 @@ readonly class PositionService
         $this->positionWriterRepository->savePositionsInDB($positions);
     }
 
+    public function deletePositionInDB(Position $position): void
+    {
+        $this->positionWriterRepository->deletePositionInDB($position);
+    }
+
     public function deleteMultiplePositionsInDB(Collection $positions): void
     {
         $this->positionWriterRepository->deleteMultiplePositionsInDB($positions);

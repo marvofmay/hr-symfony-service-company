@@ -42,6 +42,10 @@ class PositionReaderRepository extends ServiceEntityRepository implements Positi
 
     public function getPositionsByUUID(array $selectedUUID): Collection
     {
+        if (empty($selectedUUID)) {
+            return new ArrayCollection();
+        }
+
         $positions = $this->getEntityManager()
             ->createQuery(
                 'SELECT p FROM ' . Position::class . ' p WHERE p.' . Position::COLUMN_UUID . ' IN (:uuid)'
