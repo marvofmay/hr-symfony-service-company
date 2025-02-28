@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Trait\AttributesEntityTrait;
+use App\Common\Trait\RelationsEntityTrait;
 use App\Common\Trait\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -22,6 +25,7 @@ class Position
 {
     use TimestampableTrait;
     use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_NAME = 'name';
@@ -65,7 +69,19 @@ class Position
     #[Groups('position_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
-    public function getUuid(): UuidInterface
+    #[ORM\ManyToMany(targetEntity: Department::class, inversedBy: "positions")]
+    #[ORM\JoinTable(name: "position_department")]
+    #[ORM\JoinColumn(name: "position_uuid", referencedColumnName: "uuid")]
+    #[ORM\InverseJoinColumn(name: "department_uuid", referencedColumnName: "uuid")]
+    #[Groups('position_info')]
+    private Collection $departments;
+
+    public function __construct()
+    {
+        $this->departments = new ArrayCollection();
+    }
+
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }
@@ -98,5 +114,41 @@ class Position
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
+    }
+
+    public function getDepartments(): Collection
+    {
+        return $this->departments;
+    }
+
+    public function addDepartment(Department $department): void
+    {
+        if (!$this->departments->contains($department)) {
+            $this->departments->add($department);
+            $department->addPosition($this);
+        }
+    }
+
+    public function removeDepartment(Department $department): void
+    {
+        if ($this->departments->removeElement($department)) {
+            $department->removePosition($this);
+        }
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'uuid' => $this->getUUID()->toString(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'active' => $this->getActive(),
+            'created_at' => $this->getCreatedAt(),
+            'updated_at' => $this->getUpdatedAt(),
+            'deleted_at' => $this->getDeletedAt(),
+            'departments' => array_map(function ($department) {
+                return $department->toArray();
+            }, $this->getDepartments()->toArray())
+        ];
     }
 }

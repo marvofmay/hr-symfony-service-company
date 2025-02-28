@@ -22,7 +22,7 @@ class EmployeeReaderRepository extends ServiceEntityRepository implements Employ
     public function getEmployeeByUUID(string $uuid): ?Employee
     {
         $position = $this->getEntityManager()
-            ->createQuery('SELECT e FROM App\Module\Company\Domain\Entity\Employee e WHERE e.' . Employee::COLUMN_UUID . ' = :uuid')
+            ->createQuery('SELECT e FROM ' . Employee::class . ' e WHERE e.' . Employee::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -38,7 +38,7 @@ class EmployeeReaderRepository extends ServiceEntityRepository implements Employ
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('e')
-            ->from('App\Module\Company\Domain\Entity\Employee', 'e')
+            ->from(Employee::class, 'e')
             ->where('e.' . Employee::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 
@@ -50,7 +50,7 @@ class EmployeeReaderRepository extends ServiceEntityRepository implements Employ
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('u')
-            ->from('App\Module\Company\Domain\Entity\User', 'u')
+            ->from(User::class, 'u')
             ->where('u.' . User::COLUMN_EMAIL . ' = :email')
             ->setParameter('email', $email);
 

@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Presentation\API\Controller\Role;
+namespace App\Module\Company\Presentation\API\Controller\Position;
 
 use App\Common\UploadFile\UploadFile;
-use App\Module\Company\Domain\DTO\Role\ImportDTO;
-use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
-use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
-use App\Module\Company\Presentation\API\Action\Role\ImportRolesAction;
+use App\Module\Company\Domain\DTO\Position\ImportDTO;
+use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
+use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
+use App\Module\Company\Domain\Service\Position\ImportPositionsFromXLSX;
+use App\Module\Company\Presentation\API\Action\Position\ImportPositionsAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,18 +19,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ImportRolesController extends AbstractController
+class ImportPositionsController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-        private readonly RoleReaderInterface $roleReaderRepository,
+        private readonly PositionReaderInterface $positionReaderRepository,
+        private readonly DepartmentReaderInterface $departmentReaderRepository,
     ) {
     }
 
     #[OA\Post(
-        path: '/api/roles/import',
-        summary: 'Importuje nowe role',
+        path: '/api/positions/import',
+        summary: 'Importuje nowe stanowiska',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\MediaType(
@@ -50,10 +52,10 @@ class ImportRolesController extends AbstractController
         responses: [
             new OA\Response(
                 response: Response::HTTP_CREATED,
-                description: 'Role zostały utworzone',
+                description: 'Stanowiska zostały utworzone',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Role zostały pomyślnie zaimportowane'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Stanowiska zostały pomyślnie zaimportowane'),
                     ],
                     type: 'object'
                 )
@@ -63,24 +65,24 @@ class ImportRolesController extends AbstractController
                 description: 'Błąd importu',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Wystąpił błąd - role nie zostały zaimportowane'),
+                        new OA\Property(property: 'error', type: 'string', example: 'Wystąpił błąd - stanowiska nie zostały zaimportowane'),
                     ],
                     type: 'object'
                 )
             ),
         ]
     )]
-    #[OA\Tag(name: 'roles')]
-    #[Route('/api/roles/import', name: 'import', methods: ['POST'])]
-    public function import(Request $request, ImportRolesAction $importRolesAction): JsonResponse
+    #[OA\Tag(name: 'positions')]
+    #[Route('/api/positions/import', name: 'import', methods: ['POST'])]
+    public function import(Request $request, ImportPositionsAction $importPositionsAction): JsonResponse
     {
         try {
-            $uploadFilePath = '../src/Storage/Upload/Import/Roles';
+            $uploadFilePath = '../src/Storage/Upload/Import/Positions';
             $uploadedFile = $request->files->get('file');
 
             if (!$uploadedFile) {
                 return new JsonResponse(
-                    ['errors' => [$this->translator->trans('role.import.fileRequired', [], 'roles')]],
+                    ['errors' => [$this->translator->trans('position.import.fileRequired', [], 'positions')]],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }
@@ -88,21 +90,23 @@ class ImportRolesController extends AbstractController
             $uploadFileService = new UploadFile($uploadFilePath, 'xlsx');
             $uploadFileService->uploadFile($uploadedFile);
 
-            $importer = new ImportRolesFromXLSX(
+            $importer = new ImportPositionsFromXLSX(
                 sprintf('%s/%s', $uploadFilePath, $uploadFileService->getFileName()),
                 $this->translator,
-                $this->roleReaderRepository
+                $this->positionReaderRepository,
+                $this->departmentReaderRepository
             );
 
-            $data = $importer->import();
+            $importer->import();
             $errors = $importer->getErrors();
 
             if (empty($errors)) {
-                $importRolesAction->execute(new ImportDTO($data));
+                $data = $importer->groupPositions();
+                $importPositionsAction->execute(new ImportDTO($data));
 
                 return new JsonResponse([
-                    'success' => empty($errors),
-                    'message' => $this->translator->trans('role.import.success', [], 'roles'),
+                    'success' => empty($importer->getErrors()),
+                    'message' => $this->translator->trans('position.import.success', [], 'positions'),
                     'errors' => $importer->getErrors(),
                 ],
                     Response::HTTP_CREATED
@@ -115,7 +119,7 @@ class ImportRolesController extends AbstractController
                 );
             }
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('role.import.error', [], 'roles'), $this->translator->trans($error->getMessage()));
+            $message = sprintf('%s: %s', $this->translator->trans('position.import.error', [], 'positions'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);

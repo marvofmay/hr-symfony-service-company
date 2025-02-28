@@ -21,7 +21,7 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
     public function getCompanyByUUID(string $uuid): ?Company
     {
         $position = $this->getEntityManager()
-            ->createQuery('SELECT c FROM App\Module\Company\Domain\Entity\Company c WHERE c.' . Company::COLUMN_UUID . ' = :uuid')
+            ->createQuery('SELECT c FROM ' . Company::class . ' c WHERE c.' . Company::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -37,7 +37,7 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('c')
-            ->from('App\Module\Company\Domain\Entity\Company', 'c')
+            ->from(Company::class, 'c')
             ->where('c.' . Company::COLUMN_FULL_NAME . ' = :name')
             ->setParameter('name', $fullName);
 
@@ -54,7 +54,7 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('c')
-            ->from('App\Module\Company\Domain\Entity\Company', 'c')
+            ->from(Company::class, 'c')
             ->where('c.' . Company::COLUMN_SHORT_NAME . ' = :name')
             ->setParameter('name', $shortName);
 
@@ -76,7 +76,7 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('c')
-            ->from('App\Module\Company\Domain\Entity\Company', 'c')
+            ->from(Company::class, 'c')
             ->where('c.' . Company::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 

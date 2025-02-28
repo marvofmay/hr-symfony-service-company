@@ -21,7 +21,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
     public function getRoleByUUID(string $uuid): ?Role
     {
         $role = $this->getEntityManager()
-            ->createQuery('SELECT r FROM App\Module\Company\Domain\Entity\Role r WHERE r.' . Role::COLUMN_UUID. ' = :uuid')
+            ->createQuery('SELECT r FROM ' . Role::class . ' r WHERE r.' . Role::COLUMN_UUID. ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -37,7 +37,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('r')
-            ->from('App\Module\Company\Domain\Entity\Role', 'r')
+            ->from(Role::class, 'r')
             ->where('r.' . Role::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
@@ -59,7 +59,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('r')
-            ->from('App\Module\Company\Domain\Entity\Role', 'r')
+            ->from(Role::class, 'r')
             ->where('r.' . Role::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 

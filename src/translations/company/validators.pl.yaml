@@ -1,2 +1,7 @@
 email:
   invalid: "Email jest niepoprawny"
+uuid:
+  differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
+file:
+  fileNotExists: "Plik nie istnieje"
+  chooseFile: "Wskaż plik"

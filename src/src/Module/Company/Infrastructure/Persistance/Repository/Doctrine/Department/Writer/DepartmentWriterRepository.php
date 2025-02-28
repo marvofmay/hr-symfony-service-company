@@ -41,7 +41,7 @@ class DepartmentWriterRepository extends ServiceEntityRepository implements Depa
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\Department d SET d. ' . Department::COLUMN_DELETED_AT . ' = :deletedAt WHERE d.' . Department::COLUMN_UUID . ' IN (:uuids)');
+        $query = $this->getEntityManager()->createQuery('UPDATE ' . Department::class . ' d SET d. ' . Department::COLUMN_DELETED_AT . ' = :deletedAt WHERE d.' . Department::COLUMN_UUID . ' IN (:uuids)');
         $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
         $query->setParameter('uuids', $selectedUUID);
 

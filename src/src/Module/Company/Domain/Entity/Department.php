@@ -6,6 +6,8 @@ namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Trait\AttributesEntityTrait;
 use App\Common\Trait\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -72,6 +74,14 @@ class Department
     #[Groups('department_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
+    #[ORM\ManyToMany(targetEntity: Position::class, mappedBy: 'departments')]
+    private Collection $positions;
+
+    public function __construct()
+    {
+        $this->positions = new ArrayCollection();
+    }
+
     public function getUuid(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
@@ -115,5 +125,38 @@ class Department
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
+    }
+
+    public function getPositions(): Collection
+    {
+        return $this->positions;
+    }
+
+    public function addPosition(Position $position): void
+    {
+        if (!$this->positions->contains($position)) {
+            $this->positions->add($position);
+            $position->addDepartment($this);
+        }
+    }
+
+    public function removePosition(Position $position): void
+    {
+        if ($this->positions->removeElement($position)) {
+            $position->removeDepartment($this);
+        }
+    }
+
+    public function toArray(): array {
+        return [
+            'uuid' => $this->getUuid()->toString(),
+            'name' => $this->getName(),
+            'active' => $this->getActive(),
+            'company' => $this->getCompany(),
+            'parentDepartment' => $this->getParentDepartment() ? $this->getParentDepartment()->toArray() : null,
+            'createdAt' => $this->getCreatedAt(),
+            'updatedAt' => $this->getUpdatedAt(),
+            'deletedAt' => $this->getDeletedAt(),
+        ];
     }
 }

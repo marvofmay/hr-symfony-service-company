@@ -21,7 +21,7 @@ class ContractTypeReaderRepository extends ServiceEntityRepository implements Co
     public function getContractTypeByUUID(string $uuid): ?ContractType
     {
         $contractTypes = $this->getEntityManager()
-            ->createQuery('SELECT ct FROM App\Module\Company\Domain\Entity\ContractType ct WHERE ct.' . ContractType::COLUMN_UUID . ' = :uuid')
+            ->createQuery('SELECT ct FROM ' . ContractType::class . ' ct WHERE ct.' . ContractType::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
@@ -37,7 +37,7 @@ class ContractTypeReaderRepository extends ServiceEntityRepository implements Co
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('ct')
-            ->from('App\Module\Company\Domain\Entity\ContractType', 'ct')
+            ->from(ContractType::class, 'ct')
             ->where('ct.' . ContractType::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
@@ -59,7 +59,7 @@ class ContractTypeReaderRepository extends ServiceEntityRepository implements Co
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('ct')
-            ->from('App\Module\Company\Domain\Entity\ContractType', 'ct')
+            ->from(ContractType::class, 'ct')
             ->where('ct.' . ContractType::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 

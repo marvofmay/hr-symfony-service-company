@@ -41,7 +41,7 @@ class CompanyWriterRepository extends ServiceEntityRepository implements Company
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\Company c SET c.deletedAt = :deletedAt WHERE c.uuid IN (:uuids)');
+        $query = $this->getEntityManager()->createQuery('UPDATE ' . Company::class . ' c SET c.deletedAt = :deletedAt WHERE c.uuid IN (:uuids)');
         $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
         $query->setParameter('uuids', $selectedUUID);
 

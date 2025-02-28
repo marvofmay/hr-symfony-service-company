@@ -1,4 +1,6 @@
 department:
+  uuid:
+    notExists: "Departament o podanym UUID nie istnieje :uuid"
   name:
     alreadyExists: "Departament o podanej nazwie już istnieje"
   add:

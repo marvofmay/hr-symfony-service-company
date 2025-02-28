@@ -41,7 +41,7 @@ class IndustryWriterRepository extends ServiceEntityRepository implements Indust
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\Industry i SET i.' . Industry::COLUMN_DELETED_AT . ' = :deletedAt WHERE i.' . Industry::COLUMN_UUID . ' IN (:uuids)');
+        $query = $this->getEntityManager()->createQuery('UPDATE ' . Industry::class . ' i SET i.' . Industry::COLUMN_DELETED_AT . ' = :deletedAt WHERE i.' . Industry::COLUMN_UUID . ' IN (:uuids)');
         $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
         $query->setParameter('uuids', $selectedUUID);
 

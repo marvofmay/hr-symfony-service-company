@@ -7,6 +7,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Posi
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class PositionWriterRepository extends ServiceEntityRepository implements PositionWriterInterface
@@ -16,8 +17,12 @@ class PositionWriterRepository extends ServiceEntityRepository implements Positi
         parent::__construct($registry, Position::class);
     }
 
-    public function savePositionInDB(Position $position): void
+    public function savePositionInDB(Position $position, Collection $departments): void
     {
+        foreach ($departments as $department) {
+            $position->addDepartment($department);
+        }
+
         $this->getEntityManager()->persist($position);
         $this->getEntityManager()->flush();
     }
@@ -27,7 +32,7 @@ class PositionWriterRepository extends ServiceEntityRepository implements Positi
         $this->getEntityManager()->flush();
     }
 
-    public function savePositionsInDB(array $positions): void
+    public function savePositionsInDB(Collection $positions): void
     {
         foreach ($positions as $position) {
             $this->getEntityManager()->persist($position);
@@ -35,16 +40,15 @@ class PositionWriterRepository extends ServiceEntityRepository implements Positi
         $this->getEntityManager()->flush();
     }
 
-    public function deleteMultiplePositionsInDB(array $selectedUUID): void
+    public function deleteMultiplePositionsInDB(Collection $positions): void
     {
-        if (empty($selectedUUID)) {
+        if (empty($positions)) {
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\Position p SET p.' . Position::COLUMN_DELETED_AT . ' = :deletedAt WHERE p.' . Position::COLUMN_UUID . ' IN (:uuids)');
-        $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
-        $query->setParameter('uuids', $selectedUUID);
-
-        $query->execute();
+        foreach ($positions as $position) {
+            $this->getEntityManager()->remove($position);
+        }
+        $this->getEntityManager()->flush();
     }
 }

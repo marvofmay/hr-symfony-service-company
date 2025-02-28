@@ -41,7 +41,7 @@ class EmployeeWriterRepository extends ServiceEntityRepository implements Employ
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE App\Module\Company\Domain\Entity\Employee e SET e. ' . Employee::COLUMN_DELETED_AT . ' = :deletedAt WHERE e.' . Employee::COLUMN_UUID . ' IN (:uuids)');
+        $query = $this->getEntityManager()->createQuery('UPDATE ' . Employee::class . ' e SET e. ' . Employee::COLUMN_DELETED_AT . ' = :deletedAt WHERE e.' . Employee::COLUMN_UUID . ' IN (:uuids)');
         $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
         $query->setParameter('uuids', $selectedUUID);
 
