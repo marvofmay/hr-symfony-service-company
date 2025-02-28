@@ -17,6 +17,7 @@ class GetPositionsQuery
         private string $orderBy = 'createdAt',
         private string $orderDirection = 'DESC',
         private array $filters = [],
+        private array $includes = [],
     ) {
         $this->limit = $this->queryDTO->pageSize;
         $this->page = $this->queryDTO->page;
@@ -26,6 +27,10 @@ class GetPositionsQuery
             (array) $this->queryDTO,
             fn ($key) => in_array($key, Position::getAttributes()),
             ARRAY_FILTER_USE_KEY
+        );
+        $this->includes = array_filter(
+            explode(',', $this->queryDTO->includes ?? ''),
+            fn ($relation) => in_array($relation, Position::getRelations())
         );
         $this->offset = ($this->queryDTO->page - 1) * $this->limit;
 
@@ -67,5 +72,10 @@ class GetPositionsQuery
     public function getFilters(): array
     {
         return $this->filters;
+    }
+
+    public function getIncludes(): array
+    {
+        return $this->includes;
     }
 }

@@ -8,14 +8,10 @@ use App\Module\Company\Application\Query\Position\GetPositionsQuery;
 use App\Module\Company\Domain\Entity\Position;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
-use Symfony\Component\Serializer\SerializerInterface;
 
 class GetPositionsQueryHandler
 {
-    public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly SerializerInterface $serializer,
-    ) {}
+    public function __construct(private readonly EntityManagerInterface $entityManager) {}
 
     public function handle(GetPositionsQuery $query): array
     {
@@ -24,6 +20,7 @@ class GetPositionsQueryHandler
         $orderDirection = $query->getOrderDirection();
         $offset = $query->getOffset();
         $filters = $query->getFilters();
+        $includes = $query->getIncludes();
 
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('p')
@@ -43,7 +40,7 @@ class GetPositionsQueryHandler
             'totalPositions' => $totalPositions,
             'page' => $query->getPage(),
             'limit' => $query->getLimit(),
-            'positions' => $positions,
+            'positions' => $this->transformIncludes($positions, $includes),
         ];
     }
 
@@ -54,6 +51,12 @@ class GetPositionsQueryHandler
                 if (is_null($fieldValue) || in_array($fieldName, ['deleted', 'phrase'])) {
                     continue;
                 }
+                if ($fieldName === 'active') {
+                    $queryBuilder = $queryBuilder->andWhere('p.' . $fieldName . ' = :fieldValue')
+                        ->setParameter('fieldValue', $fieldValue);
+                    continue;
+                }
+
                 $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->like('p.'.$fieldName, ':fieldValue'))
                     ->setParameter('fieldValue', '%'.$fieldValue.'%');
             }
@@ -86,5 +89,24 @@ class GetPositionsQueryHandler
         }
 
         return $queryBuilder;
+    }
+
+    private function transformIncludes(array $positions, array $includes): array
+    {
+        $data = [];
+
+        foreach ($positions as $position) {
+            $data[] = $position->toArray();
+        }
+
+        foreach (Position::getRelations() as $relation) {
+            foreach ($data as $key => $position) {
+                if (!in_array($relation, $includes) || empty($includes)) {
+                    unset($data[$key][$relation]);
+                }
+            }
+        }
+
+        return $data;
     }
 }

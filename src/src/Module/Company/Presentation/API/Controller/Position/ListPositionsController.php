@@ -76,7 +76,7 @@ class ListPositionsController extends AbstractController
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
                     $usersQueryHandler->handle(new GetPositionsQuery($queryDTO)),
-                    'json', ['groups' => ['position_info', 'department_info']],
+                    'json', ['groups' => ['position_info', 'department_info', 'company_info']],
                 )),
             ],
                 Response::HTTP_OK

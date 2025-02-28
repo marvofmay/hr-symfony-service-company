@@ -146,4 +146,17 @@ class Department
             $position->removeDepartment($this);
         }
     }
+
+    public function toArray(): array {
+        return [
+            'uuid' => $this->getUuid()->toString(),
+            'name' => $this->getName(),
+            'active' => $this->getActive(),
+            'company' => $this->getCompany(),
+            'parentDepartment' => $this->getParentDepartment() ? $this->getParentDepartment()->toArray() : null,
+            'createdAt' => $this->getCreatedAt(),
+            'updatedAt' => $this->getUpdatedAt(),
+            'deletedAt' => $this->getDeletedAt(),
+        ];
+    }
 }

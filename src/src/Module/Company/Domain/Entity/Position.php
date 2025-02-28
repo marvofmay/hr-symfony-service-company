@@ -74,7 +74,7 @@ class Position
     #[ORM\JoinColumn(name: "position_uuid", referencedColumnName: "uuid")]
     #[ORM\InverseJoinColumn(name: "department_uuid", referencedColumnName: "uuid")]
     #[Groups('position_info')]
-    public Collection $departments;
+    private Collection $departments;
 
     public function __construct()
     {
@@ -134,5 +134,21 @@ class Position
         if ($this->departments->removeElement($department)) {
             $department->removePosition($this);
         }
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'uuid' => $this->getUUID()->toString(),
+            'name' => $this->getName(),
+            'description' => $this->getDescription(),
+            'active' => $this->getActive(),
+            'created_at' => $this->getCreatedAt(),
+            'updated_at' => $this->getUpdatedAt(),
+            'deleted_at' => $this->getDeletedAt(),
+            'departments' => array_map(function ($department) {
+                return $department->toArray();
+            }, $this->getDepartments()->toArray())
+        ];
     }
 }

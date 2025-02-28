@@ -15,7 +15,7 @@ class PositionsQueryDTO
     public ?string $description = null;
 
     #[OA\Property(description: 'Aktywne', type: 'bool', nullable: true)]
-    public ?bool $active = true;
+    public ?bool $active = null;
 
     #[OA\Property(description: 'Pobierz wybrane relacje z stanowiskiem', type: 'string', nullable: true)]
     public ?string $includes = null;
