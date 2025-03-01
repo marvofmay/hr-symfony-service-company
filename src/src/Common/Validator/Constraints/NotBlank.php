@@ -14,8 +14,8 @@ class NotBlank extends Constraint
             'text' => 'validation.notBlank',
             'domain' => 'validators',
         ],
-        ?array $groups = null,
-        mixed $payload = null,
+        public ?array $groups = null,
+        public mixed $payload = null,
     ) {
         parent::__construct(['message' => $message], $groups, $payload);
     }

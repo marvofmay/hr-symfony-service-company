@@ -23,8 +23,11 @@ trait TitleContentPriorityTrait
     #[Assert\Type('string', message: 'validator.invalidType')]
     public ?string $content = null;
 
-    // ToDo add custom validator - value on of ENUM
-    public NotePriorityEnum $priority = NotePriorityEnum::LOW;
+    #[NotBlank(message: [
+        'text' => 'note.priority.required',
+        'domain' => 'notes',
+    ])]
+    public ?NotePriorityEnum $priority = null;
 
     public function getTitle(): string
     {

@@ -15,6 +15,10 @@ class NotBlankValidator extends ConstraintValidator
             throw new \InvalidArgumentException(sprintf('%s can only be used with %s', __CLASS__, NotBlank::class));
         }
 
+        if ($value instanceof \BackedEnum) {
+            $value = $value->value;
+        }
+
         if (null === $value || '' === trim((string) $value)) {
             $this->context->buildViolation($constraint->message['text'])
                 ->setTranslationDomain($constraint->message['domain'])
