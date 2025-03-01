@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[Route('/api/notices', name: 'api.notices.')]
@@ -19,7 +18,6 @@ class GetNoteController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly NoteReaderInterface $noticeReaderRepository,
-        private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -29,10 +27,7 @@ class GetNoteController extends AbstractController
     {
         try {
             return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $this->noticeReaderRepository->getNoteByUUID($uuid),
-                    'json', ['groups' => ['note_info']],
-                )),
+                'data' => $this->noticeReaderRepository->getNoteByUUID($uuid)->toArray(),
             ], Response::HTTP_OK);
         } catch (\Exception $error) {
             $this->logger->error(

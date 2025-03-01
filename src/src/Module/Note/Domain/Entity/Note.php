@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Domain\Entity;
 
+use App\Common\Trait\TimestampableTrait;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -20,6 +21,8 @@ use App\Module\Company\Domain\Entity\Employee;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Note
 {
+    use TimestampableTrait;
+
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_EMPLOYEE_UUID = 'employee_uuid';
     public const COLUMN_TITLE = 'title';
@@ -96,20 +99,6 @@ class Note
         return $this->priority;
     }
 
-    public function getCreatedAt(): \DateTimeInterface
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt(): ?\DateTimeInterface
-    {
-        return $this->updatedAt;
-    }
-
-    public function getDeletedAt(): ?\DateTimeInterface
-    {
-        return $this->deletedAt;
-    }
 
     public function setEmployee(Employee $employee): void
     {
@@ -131,16 +120,6 @@ class Note
         $this->priority = $priority;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
-    {
-        $this->updatedAt = $updatedAt;
-    }
-
-    public function setDeletedAt(?\DateTimeInterface $deletedAt): void
-    {
-        $this->deletedAt = $deletedAt;
-    }
-
     public static function getAttributes(): array
     {
         $reflectionClass = new \ReflectionClass(static::class);
@@ -152,5 +131,23 @@ class Note
         }
 
         return $attributes;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'uuid' => $this->getUuid()->toString(),
+            'title' => $this->getTitle(),
+            'content' => $this->getContent(),
+            'priority' => $this->getPriority(),
+            'createdAt' => $this->getCreatedAt()->format('Y-m-d H:i:s'),
+            'updatedAt' => $this->getUpdatedAt()?->format('Y-m-d H:i:s'),
+            'deletedAt' => $this->getDeletedAt()?->format('Y-m-d H:i:s'),
+            'employee' => [
+                'uuid' => $this->getEmployee()->getUuid()->toString(),
+                'firstname' => $this->getEmployee()->getFirstname(),
+                'lastname' => $this->getEmployee()->getLastname(),
+            ]
+        ];
     }
 }

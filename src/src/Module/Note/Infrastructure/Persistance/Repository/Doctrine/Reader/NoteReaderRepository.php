@@ -20,15 +20,15 @@ class NoteReaderRepository extends ServiceEntityRepository implements NoteReader
 
     public function getNoteByUUID(string $uuid): ?Note
     {
-        $role = $this->getEntityManager()
+        $note = $this->getEntityManager()
             ->createQuery('SELECT n FROM ' . Note::class . ' n WHERE n.uuid = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
 
-        if (!$role) {
+        if (!$note) {
             throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('note.uuid.notFound', [], 'notes'), $uuid));
         }
 
-        return $role;
+        return $note;
     }
 }

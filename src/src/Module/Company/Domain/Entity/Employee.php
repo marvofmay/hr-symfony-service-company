@@ -329,4 +329,11 @@ class Employee
             $address->setEmployee($this);
         }
     }
+
+    public function toArray(): array
+    {
+        return [
+
+        ];
+    }
 }
