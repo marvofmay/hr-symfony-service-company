@@ -51,7 +51,7 @@ class CreateDTO
     #[Assert\Type(
         type: 'bool',
     )]
-    public bool $active = true;
+    public ?bool $active = true;
 
     #[Assert\NotBlank(message: 'position.add.departmentUUIDRequired')]
     #[Assert\All([
@@ -60,7 +60,7 @@ class CreateDTO
             message: ['uuidNotExists' => 'department.uuid.notExists', 'domain' => 'departments'],
         ),
     ])]
-    public array $departmentsUUID;
+    public ?array $departmentsUUID;
 
     public function getName(): string
     {
@@ -72,12 +72,12 @@ class CreateDTO
         return $this->description;
     }
 
-    public function getActive(): bool
+    public function getActive(): ?bool
     {
         return $this->active;
     }
 
-    public function getDepartmentsUUID(): array
+    public function getDepartmentsUUID(): ?array
     {
         return $this->departmentsUUID;
     }

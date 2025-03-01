@@ -12,6 +12,8 @@ class UpdatePositionCommand
         private readonly string $uuid,
         private readonly string $name,
         private readonly ?string $description,
+        private readonly ?bool $active,
+        private ?array $departmentsUUID,
         private readonly Position $position,
     ) {
     }
@@ -29,6 +31,15 @@ class UpdatePositionCommand
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
+    }
+
+    public function getDepartmentsUUID(): ?array {
+        return $this->departmentsUUID;
     }
 
     public function getPosition(): Position

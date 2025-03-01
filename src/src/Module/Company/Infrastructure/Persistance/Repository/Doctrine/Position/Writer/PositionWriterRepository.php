@@ -27,7 +27,7 @@ class PositionWriterRepository extends ServiceEntityRepository implements Positi
         $this->getEntityManager()->flush();
     }
 
-    public function updatePositionInDB(Position $position): void
+    public function updatePositionInDB(Position $position, Collection $departments): void
     {
         $this->getEntityManager()->flush();
     }

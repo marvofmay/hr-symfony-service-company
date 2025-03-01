@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\DTO\Position;
 
-use App\Module\Company\Domain\DTO\Role\CreateDTO;
 use App\Module\Company\Structure\Validator\Constraints\Position\ExistingPositionUUID;
 use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;

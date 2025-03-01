@@ -11,7 +11,7 @@ interface PositionWriterInterface
 {
     public function savePositionInDB(Position $position, Collection $departments): void;
 
-    public function updatePositionInDB(Position $position): void;
+    public function updatePositionInDB(Position $position, Collection $departments): void;
 
     public function savePositionsInDB(Collection $positions): void;
     public function deletePositionInDB(Position $position): void;

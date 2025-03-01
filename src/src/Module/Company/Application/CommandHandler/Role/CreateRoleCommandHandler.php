@@ -16,8 +16,8 @@ readonly class CreateRoleCommandHandler
 
     public function __invoke(CreateRoleCommand $command): void
     {
-        $this->role->setName($command->name);
-        $this->role->setDescription($command->description);
+        $this->role->setName($command->getName());
+        $this->role->setDescription($command->getDescription());
 
         $this->roleWriterRepository->saveRoleInDB($this->role);
     }
