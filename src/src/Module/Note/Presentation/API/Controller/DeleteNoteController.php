@@ -18,7 +18,6 @@ class DeleteNoteController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly NoteReaderInterface $noteReaderRepository,
         private readonly TranslatorInterface $translator,
     ) {
     }

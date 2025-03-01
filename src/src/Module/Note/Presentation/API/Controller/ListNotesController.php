@@ -37,13 +37,13 @@ class ListNotesController extends AbstractController
                             new OA\Property(property: 'notes', type: 'array', items: new OA\Items(properties: [
                                 new OA\Property(property: 'uuid', type: 'string', format: 'uuid', example: '9c1963a3-cb27-4e6a-b474-3509ed4b3457'),
                                 new OA\Property(property: 'title', type: 'string', example: 'To jest tytuł notatki'),
+                                new OA\Property(property: 'content', type: 'string', example: 'To jest treść notatki ...'),
                                 new OA\Property(
                                     property: 'priority',
                                     type: 'string',
                                     enum: ['low', 'medium', 'high'],
                                     example: 'low'
                                 ),
-                                new OA\Property(property: 'priority', type: 'string', example: 'low'),
                                 new OA\Property(property: 'createdAt', type: 'string', format: 'date-time', example: '2025-02-09T18:56:07+00:00'),
                                 new OA\Property(property: 'updatedAt', type: 'string', format: 'date-time', example: '2025-02-10T10:42:55+00:00'),
                                 new OA\Property(property: 'deletedAt', type: 'string', format: 'date-time', example: null, nullable: true),

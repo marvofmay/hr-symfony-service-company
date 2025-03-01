@@ -9,4 +9,5 @@ use App\Module\Note\Domain\Entity\Note;
 interface NoteReaderInterface
 {
     public function getNoteByUUID(string $uuid): ?Note;
+    public function isNoteWithUUIDExists(string $uuid): bool;
 }

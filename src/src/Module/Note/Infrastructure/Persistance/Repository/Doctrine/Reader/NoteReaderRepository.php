@@ -31,4 +31,16 @@ class NoteReaderRepository extends ServiceEntityRepository implements NoteReader
 
         return $note;
     }
+
+    public function isNoteWithUUIDExists(string $uuid): bool
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('n')
+            ->from(Note::class, 'n')
+            ->where('n.' . Note::COLUMN_UUID . ' = :uuid')
+            ->setParameter('uuid', $uuid);
+
+        return null !== $qb->getQuery()->getOneOrNullResult();
+    }
 }

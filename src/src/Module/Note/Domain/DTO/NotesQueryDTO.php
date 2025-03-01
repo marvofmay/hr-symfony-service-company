@@ -15,8 +15,8 @@ class NotesQueryDTO
     #[OA\Property(description: 'Opis notatki', type: 'string', nullable: true)]
     public ?string $content = null;
 
-    #[OA\Property(description: 'Priorytet notatki', type: 'string', nullable: true)]
-    public NotePriorityEnum $priority;
+    #[OA\Property(description: 'Priorytet notatki', type: 'string', default: NotePriorityEnum::HIGH, enum: [NotePriorityEnum::LOW, NotePriorityEnum::MEDIUM, NotePriorityEnum::HIGH], nullable: true)]
+    public ?NotePriorityEnum $priority;
 
     #[OA\Property(description: 'Pobierz wybrane relacje z notatką', type: 'string', nullable: true)]
     public ?string $includes = null;
