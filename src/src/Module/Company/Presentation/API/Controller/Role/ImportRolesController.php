@@ -80,7 +80,7 @@ class ImportRolesController extends AbstractController
 
             if (!$uploadedFile) {
                 return new JsonResponse(
-                    ['errors' => [$this->translator->trans('role.import.fileRequired', [], 'roles')]],
+                    ['errors' => [$this->translator->trans('file.chooseFile', [], 'validators')]],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }

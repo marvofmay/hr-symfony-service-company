@@ -28,7 +28,7 @@ class RoleWriterRepository extends ServiceEntityRepository implements RoleWriter
         $this->getEntityManager()->flush();
     }
 
-    public function saveRolesInDB(array $roles): void
+    public function saveRolesInDB(Collection $roles): void
     {
         foreach ($roles as $role) {
             $this->getEntityManager()->persist($role);
