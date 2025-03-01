@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Domain\Entity;
 
+use App\Common\Trait\AttributesEntityTrait;
+use App\Common\Trait\RelationsEntityTrait;
 use App\Common\Trait\TimestampableTrait;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
 use Doctrine\DBAL\Types\Types;
@@ -22,6 +24,8 @@ use App\Module\Company\Domain\Entity\Employee;
 class Note
 {
     use TimestampableTrait;
+    use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_EMPLOYEE_UUID = 'employee_uuid';
