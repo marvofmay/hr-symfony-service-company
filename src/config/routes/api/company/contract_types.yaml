@@ -1,3 +1,10 @@
+api_contract_type_delete:
+  path: api/contract_types/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\ContractType\DeleteContractTypeController::delete
+  methods: [DELETE]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
 api_contract_type_create:
   path: api/contract_types
   controller: App\Module\Company\Presentation\API\Controller\ContractType\CreateContractTypeController::create

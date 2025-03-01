@@ -9,9 +9,9 @@ services:
     App\Module\Company\Application\CommandHandler\ContractType\UpdateContractTypeCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\Module\Company\Application\CommandHandler\ContractType\DeleteContractTypeCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Company\Application\CommandHandler\ContractType\DeleteContractTypeCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 #    App\Module\Company\Application\CommandHandler\ContractType\DeleteMultipleContractTypesCommandHandler:
 #        tags:
 #            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }

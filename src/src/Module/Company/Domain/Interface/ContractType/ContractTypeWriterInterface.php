@@ -9,9 +9,8 @@ use App\Module\Company\Domain\Entity\ContractType;
 interface ContractTypeWriterInterface
 {
     public function saveContractTypeInDB(ContractType $contractType): void;
-
     public function updateContractTypeInDB(ContractType $contractType): void;
-
     public function saveContractTypesInDB(array $contractTypes): void;
+    public function deleteContractTypeInDB(ContractType $contractType): void;
     public function deleteMultipleContractTypesInDB(array $selectedUUID): void;
 }

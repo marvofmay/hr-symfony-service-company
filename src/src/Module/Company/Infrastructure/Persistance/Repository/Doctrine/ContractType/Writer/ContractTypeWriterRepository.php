@@ -35,6 +35,11 @@ class ContractTypeWriterRepository extends ServiceEntityRepository implements Co
         $this->getEntityManager()->flush();
     }
 
+    public function deleteContractTypeInDB(ContractType $contractType): void {
+        $this->getEntityManager()->remove($contractType);
+        $this->getEntityManager()->flush();
+    }
+
     public function deleteMultipleContractTypesInDB(array $selectedUUID): void
     {
         if (empty($selectedUUID)) {
