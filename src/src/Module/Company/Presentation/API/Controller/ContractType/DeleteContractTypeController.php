@@ -68,11 +68,11 @@ class DeleteContractTypeController extends AbstractController
             $deleteContractTypeAction->execute($uuid);
 
             return new JsonResponse(
-                ['message' => $this->translator->trans('role.delete.success', [], 'contract_types')],
+                ['message' => $this->translator->trans('contract_type.delete.success', [], 'contract_types')],
                 Response::HTTP_OK
             );
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('role.delete.error', [], 'contract_types'), $error->getMessage());
+            $message = sprintf('%s: %s', $this->translator->trans('contract_type.delete.error', [], 'contract_types'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
