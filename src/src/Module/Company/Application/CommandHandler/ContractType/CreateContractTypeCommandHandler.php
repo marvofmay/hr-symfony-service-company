@@ -6,11 +6,11 @@ namespace App\Module\Company\Application\CommandHandler\ContractType;
 
 use App\Module\Company\Application\Command\ContractType\CreateContractTypeCommand;
 use App\Module\Company\Domain\Entity\ContractType;
-use App\Module\Company\Domain\Service\ContractType\ContractTypeService;
+use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
 
-readonly class CreateContractTYpeCommandHandler
+readonly class CreateContractTypeCommandHandler
 {
-    public function __construct(private ContractTypeService $positionService)
+    public function __construct(private ContractTypeWriterInterface $contractTypeWriterRepository)
     {
     }
 
@@ -21,6 +21,6 @@ readonly class CreateContractTYpeCommandHandler
         $position->setDescription($command->description);
         $position->setActive($command->active);
 
-        $this->positionService->saveContractTypeInDB($position);
+        $this->contractTypeWriterRepository->saveContractTypeInDB($position);
     }
 }

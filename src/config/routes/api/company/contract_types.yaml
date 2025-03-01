@@ -2,3 +2,10 @@ api_contract_type_create:
   path: api/contract_types
   controller: App\Module\Company\Presentation\API\Controller\ContractType\CreateContractTypeController::create
   methods: [POST]
+
+api_contract_type_update:
+  path: api/contract_types/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\ContractType\UpdateContractTypeController::update
+  methods: [ PUT ]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
