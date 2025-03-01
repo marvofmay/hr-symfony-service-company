@@ -18,6 +18,7 @@ readonly class UpdateContractTypeCommandHandler
         $contractType = $command->getContractType();
         $contractType->setName($command->getName());
         $contractType->setDescription($command->getDescription());
+        $contractType->setActive($command->getActive());
         $contractType->setUpdatedAt(new \DateTime());
 
         $this->contractTypeWriterRepository->updateContractTypeInDB($contractType);

@@ -23,6 +23,7 @@ class UpdateContractTypeAction
                 $updateDTO->getUUID(),
                 $updateDTO->getName(),
                 $updateDTO->getDescription(),
+                $updateDTO->getActive(),
                 $this->contractTypeReaderRepository->getContractTypeByUUID($updateDTO->getUUID())
             )
         );

@@ -12,6 +12,7 @@ class UpdateContractTypeCommand
         private readonly string $uuid,
         private readonly string $name,
         private readonly ?string $description,
+        private readonly ?bool $active,
         private readonly ContractType $contractType,
     ) {
     }
@@ -29,6 +30,11 @@ class UpdateContractTypeCommand
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function getActive(): ?bool
+    {
+        return $this->active;
     }
 
     public function getContractType(): ContractType
