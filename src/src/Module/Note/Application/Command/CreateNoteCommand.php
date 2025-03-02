@@ -8,7 +8,7 @@ use App\Module\Note\Domain\Enum\NotePriorityEnum;
 
 class CreateNoteCommand
 {
-    public function __construct(public string $employeeUUID, public string $title, public ?string $content, public NotePriorityEnum $priority,)
+    public function __construct(public string $employeeUUID, public ?string $title, public ?string $content, public NotePriorityEnum $priority,)
     {
     }
 }

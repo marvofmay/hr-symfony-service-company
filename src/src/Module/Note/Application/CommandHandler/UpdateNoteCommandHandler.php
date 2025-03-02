@@ -6,21 +6,17 @@ namespace App\Module\Note\Application\CommandHandler;
 
 use App\Module\Note\Application\Command\UpdateNoteCommand;
 use App\Module\Note\Domain\Interface\NoteWriterInterface;
+use App\Module\Note\Domain\Service\NoteCreator;
+use App\Module\Note\Domain\Service\NoteUpdater;
 
 readonly class UpdateNoteCommandHandler
 {
-    public function __construct(private NoteWriterInterface $noteWriterRepository,)
+    public function __construct(private NoteUpdater $noteUpdater,)
     {
     }
 
     public function __invoke(UpdateNoteCommand $command): void
     {
-        $note = $command->getNote();
-        $note->setTitle($command->getTitle());
-        $note->setContent($command->getContent());
-        $note->setPriority($command->getPriority());
-        $note->setUpdatedAt(new \DateTime());
-
-        $this->noteWriterRepository->updateNoteInDB($note);
+        $this->noteUpdater->update($command->getNote(), $command->getTitle(), $command->getContent(), $command->getPriority());
     }
 }
