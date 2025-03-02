@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Module\Note\Presentation\API\Controller;
 
 use App\Module\Note\Domain\DTO\UpdateDTO;
-use App\Module\Note\Domain\Interface\NoteReaderInterface;
 use App\Module\Note\Presentation\API\Action\UpdateNoteAction;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +18,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UpdateNoteController extends AbstractController
 {
     public function __construct(
-        private readonly NoteReaderInterface $noteReaderRepository,
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
     ) {

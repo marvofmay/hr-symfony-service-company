@@ -9,6 +9,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 use App\Module\Note\Domain\Trait\TitleContentPriorityTrait;
 use App\Module\Note\Structure\Validator\Constraints\ExistingNoteUUID;
 
+#[OA\Schema(
+    required: ['priority']
+)]
 class UpdateDTO
 {
     use TitleContentPriorityTrait;

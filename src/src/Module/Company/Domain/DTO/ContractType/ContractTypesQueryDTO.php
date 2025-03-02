@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\DTO\ContractType;
 
-use OpenApi\Attributes as OA;
-
 class ContractTypesQueryDTO
 {
     #[OA\Property(description: 'Nazwa formy zatrudnienia', type: 'string', nullable: true)]

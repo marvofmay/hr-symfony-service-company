@@ -6,9 +6,18 @@ use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
 use Symfony\Component\Validator\Constraints as Assert;
+use OpenApi\Attributes as OA;
 
 trait TitleContentPriorityTrait
 {
+    #[OA\Property(
+        description: 'Tytuł tworzonej notatki',
+        type: 'string',
+        maxLength: 100,
+        minLength: 3,
+        example: 'Zadzwoń!!!',
+        nullable: true
+    )]
     #[NotBlank(message: [
         'text' => 'note.title.required',
         'domain' => 'notes',
@@ -20,9 +29,22 @@ trait TitleContentPriorityTrait
     ])]
     public string $title = '';
 
+    #[OA\Property(
+        description: 'Treść tworzonej notatki',
+        type: 'string',
+        example: 'Koniecznie w piątek, zadzwoń do przełożonego.',
+        nullable: true
+    )]
     #[Assert\Type('string', message: 'validator.invalidType')]
     public ?string $content = null;
 
+    #[OA\Property(
+        description: 'Priorytet tworzonej notatki (możliwe wartości: low, medium, high)',
+        type: 'string',
+        enum: [NotePriorityEnum::LOW, NotePriorityEnum::MEDIUM, NotePriorityEnum::HIGH],
+        example: NotePriorityEnum::HIGH,
+        nullable: false
+    )]
     #[NotBlank(message: [
         'text' => 'note.priority.required',
         'domain' => 'notes',

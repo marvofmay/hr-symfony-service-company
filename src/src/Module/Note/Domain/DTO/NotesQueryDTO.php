@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Module\Note\Domain\DTO;
 
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
-use OpenApi\Attributes as OA;
 
 class NotesQueryDTO
 {
