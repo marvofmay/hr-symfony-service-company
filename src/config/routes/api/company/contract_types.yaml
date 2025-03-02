@@ -5,19 +5,36 @@ api_contract_type_delete:
   requirements:
     uuid: '[0-9a-fA-F-]{36}'
 
+api_contract_type_get:
+  path: api/contract_types/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\ContractType\GetContractTypeController::get
+  methods: [GET]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
+api_contract_type_update:
+  path: api/contract_types/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\ContractType\UpdateContractTypeController::update
+  methods: [PUT]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
+api_contract_type_delete_multiple:
+  path: api/contract_types/multiple
+  controller: App\Module\Company\Presentation\API\Controller\ContractType\DeleteMultipleContractTypesController::delete
+  methods: [DELETE]
+
 api_contract_type_create:
   path: api/contract_types
   controller: App\Module\Company\Presentation\API\Controller\ContractType\CreateContractTypeController::create
   methods: [POST]
 
-api_contract_type_update:
-  path: api/contract_types/{uuid}
-  controller: App\Module\Company\Presentation\API\Controller\ContractType\UpdateContractTypeController::update
-  methods: [ PUT ]
-  requirements:
-    uuid: '[0-9a-fA-F-]{36}'
-
 api_contract_types_import:
   path: api/contract_types/import
-  controller: App\Module\Company\Presentation\API\Controller\ContractType\ImportContractTypeController::import
+  controller: App\Module\Company\Presentation\API\Controller\ContractType\ImportContractTypesController::import
   methods: [POST]
+
+api_contract_types_list:
+  path: api/contract_types
+  controller: App\Module\Company\Presentation\API\Controller\ContractType\ListContractTypesController::list
+  methods: [GET]

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Presentation\API\Action\contractType;
+namespace App\Module\Company\Presentation\API\Action\ContractType;
 
 use App\Module\Company\Application\Command\contractType\ImportContractTypesCommand;
 use App\Module\Company\Domain\DTO\contractType\ImportDTO;

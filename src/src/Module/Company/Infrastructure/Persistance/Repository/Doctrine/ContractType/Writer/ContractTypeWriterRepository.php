@@ -7,6 +7,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Cont
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ContractTypeWriterRepository extends ServiceEntityRepository implements ContractTypeWriterInterface
@@ -27,7 +28,7 @@ class ContractTypeWriterRepository extends ServiceEntityRepository implements Co
         $this->getEntityManager()->flush();
     }
 
-    public function saveContractTypesInDB(array $contractTypes): void
+    public function saveContractTypesInDB(Collection $contractTypes): void
     {
         foreach ($contractTypes as $contractType) {
             $this->getEntityManager()->persist($contractType);
@@ -40,7 +41,7 @@ class ContractTypeWriterRepository extends ServiceEntityRepository implements Co
         $this->getEntityManager()->flush();
     }
 
-    public function deleteMultipleContractTypesInDB(array $selectedUUID): void
+    public function deleteMultipleContractTypesInDB(Collection $selectedUUID): void
     {
         if (empty($selectedUUID)) {
             return;

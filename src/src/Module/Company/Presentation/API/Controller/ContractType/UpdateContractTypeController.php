@@ -25,7 +25,7 @@ class UpdateContractTypeController extends AbstractController
     }
 
     #[OA\Put(
-        path: '/api/contractTypes/{uuid}',
+        path: '/api/contract_types/{uuid}',
         summary: 'Aktualizuje formę zatrudnienia',
         requestBody: new OA\RequestBody(
             required: true,
@@ -56,8 +56,8 @@ class UpdateContractTypeController extends AbstractController
             ),
         ]
     )]
-    #[OA\Tag(name: 'contractTypes')]
-    #[Route('/api/contract_types/{uuid}', name: 'api.contractTypes.update', methods: ['PUT'])]
+    #[OA\Tag(name: 'contract_types')]
+    #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.update', methods: ['PUT'])]
     public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO, UpdateContractTypeAction $updateContractTypeAction): Response
     {
         try {

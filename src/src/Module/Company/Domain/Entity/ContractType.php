@@ -36,33 +36,33 @@ class ContractType
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('position_info')]
+    #[Groups('contract_type_info')]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 200)]
     #[Assert\NotBlank]
-    #[Groups('department_info')]
+    #[Groups('contract_type_info')]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups('position_info')]
+    #[Groups('contract_type_info')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
-    #[Groups('department_info')]
+    #[Groups('contract_type_info')]
     private bool $active;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('department_info')]
+    #[Groups('contract_type_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('department_info')]
+    #[Groups('contract_type_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('department_info')]
+    #[Groups('contract_type_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     public function getUuid(): UuidInterface
