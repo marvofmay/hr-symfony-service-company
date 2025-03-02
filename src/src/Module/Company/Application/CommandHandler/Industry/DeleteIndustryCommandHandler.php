@@ -3,16 +3,16 @@
 namespace App\Module\Company\Application\CommandHandler\Industry;
 
 use App\Module\Company\Application\Command\Industry\DeleteIndustryCommand;
-use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
+use App\Module\Company\Domain\Service\Industry\IndustryDeleter;
 
 readonly class DeleteIndustryCommandHandler
 {
-    public function __construct(private IndustryWriterInterface $industryWriterRepository)
+    public function __construct(private IndustryDeleter $industryDeleter)
     {
     }
 
     public function __invoke(DeleteIndustryCommand $command): void
     {
-        $this->industryWriterRepository->deleteIndustryInDB($command->getIndustry());
+        $this->industryDeleter->delete($command->getIndustry());
     }
 }
