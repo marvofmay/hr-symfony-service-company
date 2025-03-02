@@ -9,10 +9,10 @@ position:
     maximumLength: "Maksymalnie znaków :qty"
     expectedUniquePositionNameConstraint: "Oczekiwano unikalnej nazwy stanowiska"
   add:
-    success: "Stanowisko została pomyślnie dodana"
+    success: "Stanowisko zostało pomyślnie dodane"
     error: "Wystąpił błąd - stanowisko nie została dodana"
   update:
-    success: "Stanowisko została pomyślnie zaktualizowana"
+    success: "Stanowisko zostało pomyślnie zaktualizowane"
     error: "Wystąpił błąd - stanowisko nie zostało zaktualizowane"
   delete:
     success: "Stanowisko zostało pomyślnie usunięte"

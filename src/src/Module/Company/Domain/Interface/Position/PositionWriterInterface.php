@@ -9,10 +9,9 @@ use Doctrine\Common\Collections\Collection;
 
 interface PositionWriterInterface
 {
-    public function savePositionInDB(Position $position, Collection $departments): void;
+    public function savePositionInDB(Position $position): void;
 
-    public function updatePositionInDB(Position $position, Collection $departments): void;
-
+    public function updatePositionInDB(Position $position): void;
     public function savePositionsInDB(Collection $positions): void;
     public function deletePositionInDB(Position $position): void;
     public function deleteMultiplePositionsInDB(Collection $positions): void;

@@ -25,6 +25,7 @@ class RoleWriterRepository extends ServiceEntityRepository implements RoleWriter
 
     public function updateRoleInDB(Role $role): void
     {
+        $this->getEntityManager()->persist($role);
         $this->getEntityManager()->flush();
     }
 

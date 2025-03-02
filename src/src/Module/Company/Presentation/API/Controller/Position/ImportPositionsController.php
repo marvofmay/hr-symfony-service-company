@@ -82,7 +82,7 @@ class ImportPositionsController extends AbstractController
 
             if (!$uploadedFile) {
                 return new JsonResponse(
-                    ['errors' => [$this->translator->trans('position.import.fileRequired', [], 'positions')]],
+                    ['errors' => [$this->translator->trans('file.chooseFile', [], 'validators')]],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }

@@ -17,18 +17,15 @@ class PositionWriterRepository extends ServiceEntityRepository implements Positi
         parent::__construct($registry, Position::class);
     }
 
-    public function savePositionInDB(Position $position, Collection $departments): void
+    public function savePositionInDB(Position $position): void
     {
-        foreach ($departments as $department) {
-            $position->addDepartment($department);
-        }
-
         $this->getEntityManager()->persist($position);
         $this->getEntityManager()->flush();
     }
 
-    public function updatePositionInDB(Position $position, Collection $departments): void
+    public function updatePositionInDB(Position $position): void
     {
+        $this->getEntityManager()->persist($position);
         $this->getEntityManager()->flush();
     }
 
