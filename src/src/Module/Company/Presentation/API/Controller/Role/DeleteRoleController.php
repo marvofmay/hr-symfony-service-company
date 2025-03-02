@@ -50,7 +50,7 @@ class DeleteRoleController extends AbstractController
                 content: new OA\JsonContent(
                     properties: [
                         new OA\Property(
-                            property: 'error',
+                            property: 'message',
                             type: 'string',
                             example: 'Wystąpił błąd - rola nie została usunięta: Rola o podanym UUID nie istnieje : e8933421-84a2-4846-b3e4-b3a4ffbda1a'
                         ),

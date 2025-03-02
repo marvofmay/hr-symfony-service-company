@@ -49,9 +49,24 @@ class UpdateRoleController extends AbstractController
                 description: 'Błąd walidacji',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Oczekiwano unikalnej nazwy roli'),
+                        new OA\Property(
+                            property: "errors",
+                            properties: [
+                                new OA\Property(
+                                    property: "uuid",
+                                    type: "string",
+                                    example: "Rola o podanym UUID nie istnieje 553de6c7-9b8f-46f6-a89e-37a9b3ee907c"
+                                ),
+                                new OA\Property(
+                                    property: "nazwa",
+                                    type: "string",
+                                    example: "Rola istnieje"
+                                )
+                            ],
+                            type: "object"
+                        )
                     ],
-                    type: 'object'
+                    type: "object"
                 )
             ),
         ]
