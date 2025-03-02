@@ -3,16 +3,16 @@
 namespace App\Module\Note\Application\CommandHandler;
 
 use App\Module\Note\Application\Command\DeleteNoteCommand;
-use App\Module\Note\Domain\Interface\NoteWriterInterface;
+use App\Module\Note\Domain\Service\NoteDeleter;
 
 readonly class DeleteNoteCommandHandler
 {
-    public function __construct(private NoteWriterInterface $noteWriterRepository,)
+    public function __construct(private NoteDeleter $noteDeleter,)
     {
     }
 
     public function __invoke(DeleteNoteCommand $command): void
     {
-        $this->noteWriterRepository->deleteNoteInDB($command->getNote());
+        $this->noteDeleter->delete($command->getNote());
     }
 }

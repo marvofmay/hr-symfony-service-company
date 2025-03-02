@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace App\Module\Note\Application\CommandHandler;
 
 use App\Module\Note\Application\Command\UpdateNoteCommand;
-use App\Module\Note\Domain\Interface\NoteWriterInterface;
-use App\Module\Note\Domain\Service\NoteCreator;
 use App\Module\Note\Domain\Service\NoteUpdater;
 
 readonly class UpdateNoteCommandHandler
