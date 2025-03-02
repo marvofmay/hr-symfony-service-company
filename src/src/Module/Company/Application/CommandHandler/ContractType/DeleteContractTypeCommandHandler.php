@@ -3,16 +3,16 @@
 namespace App\Module\Company\Application\CommandHandler\ContractType;
 
 use App\Module\Company\Application\Command\ContractType\DeleteContractTypeCommand;
-use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
+use App\Module\Company\Domain\Service\ContractType\ContractTypeDeleter;
 
 readonly class DeleteContractTypeCommandHandler
 {
-    public function __construct(private ContractTypeWriterInterface $contractTypeWriterRepository,)
+    public function __construct(private ContractTypeDeleter $contractTypeDeleter,)
     {
     }
 
     public function __invoke(DeleteContractTypeCommand $command): void
     {
-        $this->contractTypeWriterRepository->deleteContractTypeInDB($command->getContractType());
+        $this->contractTypeDeleter->delete($command->getContractType());
     }
 }

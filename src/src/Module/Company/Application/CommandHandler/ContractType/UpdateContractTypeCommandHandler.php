@@ -5,22 +5,16 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\ContractType;
 
 use App\Module\Company\Application\Command\ContractType\UpdateContractTypeCommand;
-use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
+use App\Module\Company\Domain\Service\ContractType\ContractTypeUpdater;
 
 readonly class UpdateContractTypeCommandHandler
 {
-    public function __construct(private ContractTypeWriterInterface $contractTypeWriterRepository,)
+    public function __construct(private ContractTypeUpdater $contractTypeUpdater,)
     {
     }
 
     public function __invoke(UpdateContractTypeCommand $command): void
     {
-        $contractType = $command->getContractType();
-        $contractType->setName($command->getName());
-        $contractType->setDescription($command->getDescription());
-        $contractType->setActive($command->getActive());
-        $contractType->setUpdatedAt(new \DateTime());
-
-        $this->contractTypeWriterRepository->updateContractTypeInDB($contractType);
+        $this->contractTypeUpdater->update($command->getContractType(), $command->getName(), $command->getDescription(), $command->getActive());
     }
 }

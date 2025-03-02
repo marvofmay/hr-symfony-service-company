@@ -17,7 +17,6 @@ readonly class DeleteMultipleRolesAction
 
     public function execute(DeleteMultipleDTO $deleteMultipleDTO): void
     {
-        $roles = count($this->roleReaderRepository->getRolesByUUID($deleteMultipleDTO->getSelectedUUID()));
         $this->commandBus->dispatch(
             new DeleteMultipleRolesCommand(
                 $this->roleReaderRepository->getRolesByUUID($deleteMultipleDTO->getSelectedUUID())
