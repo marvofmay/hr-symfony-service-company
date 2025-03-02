@@ -30,6 +30,8 @@ class ImportCompaniesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('company.fullName.alreadyExists');
         }
 
+        //ToDo: add validation is exist ParentCompanyByUUID
+
         return null;
     }
 

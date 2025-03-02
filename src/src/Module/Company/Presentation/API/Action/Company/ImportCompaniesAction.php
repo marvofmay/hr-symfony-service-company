@@ -16,6 +16,6 @@ readonly class ImportCompaniesAction
 
     public function execute(ImportDTO $importDTO): void
     {
-        $this->commandBus->dispatch(new ImportCompaniesCommand($importDTO->getData()));
+        $this->commandBus->dispatch(new ImportCompaniesCommand($importDTO->uploadFilePath, $importDTO->fileName));
     }
 }

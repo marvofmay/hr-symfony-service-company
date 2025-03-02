@@ -9,6 +9,7 @@ use App\Module\Company\Domain\DTO\Company\ImportDTO;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use App\Module\Company\Presentation\API\Action\Company\ImportCompaniesAction;
+use Matrix\Exception;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +24,7 @@ class ImportCompaniesController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-        private readonly CompanyReaderInterface $companyReaderRepository,
+//        private readonly CompanyReaderInterface $companyReaderRepository,
     ) {
     }
 
@@ -75,7 +76,7 @@ class ImportCompaniesController extends AbstractController
     public function import(Request $request, ImportCompaniesAction $importCompaniesAction): JsonResponse
     {
         try {
-            $uploadFilePath = '../src/Storage/Upload/Import/Companies';
+            $uploadFilePath = 'src/Storage/Upload/Import/Companies';
             $uploadedFile = $request->files->get('file');
 
             if (!$uploadedFile) {
@@ -85,37 +86,16 @@ class ImportCompaniesController extends AbstractController
                 );
             }
 
-            $uploadFileService = new UploadFile($uploadFilePath, 'xlsx');
+            $uploadFileService = new UploadFile('../'.$uploadFilePath, 'xlsx');
             $uploadFileService->uploadFile($uploadedFile);
+            $fileName = $uploadFileService->getFileName();
+            $importCompaniesAction->execute(new ImportDTO($uploadFilePath, $fileName));
 
-            $importer = new ImportCompaniesFromXLSX(
-                sprintf('%s/%s', $uploadFilePath, $uploadFileService->getFileName()),
-                $this->translator,
-                $this->companyReaderRepository
+            return new JsonResponse([
+                'message' => $this->translator->trans('company.import.queued', [], 'companies'),
+            ],
+                Response::HTTP_OK
             );
-
-            // ToDo Move check errors to CommandHandler
-            // ToDo pass param $uploadFilePath instead $data to execute()
-            $data = $importer->import();
-            $errors = $importer->getErrors();
-
-            if (empty($errors)) {
-                $importCompaniesAction->execute(new ImportDTO($data));
-
-                return new JsonResponse([
-                    'success' => empty($importer->getErrors()),
-                    'message' => $this->translator->trans('company.import.queued', [], 'companies'),
-                    'errors' => $importer->getErrors(),
-                ],
-                    Response::HTTP_OK
-                );
-            } else {
-                return new JsonResponse([
-                    'errors' => $importer->getErrors(),
-                ],
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
-            }
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('company.import.error', [], 'companies'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);

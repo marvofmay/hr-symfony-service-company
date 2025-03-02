@@ -6,15 +6,7 @@ namespace App\Module\Company\Domain\DTO\Company;
 
 class ImportDTO
 {
-    private array $data = [];
-
-    public function __construct(array $data)
+    public function __construct(public ?string $uploadFilePath, public ?string $fileName)
     {
-        $this->data = $data;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
     }
 }
