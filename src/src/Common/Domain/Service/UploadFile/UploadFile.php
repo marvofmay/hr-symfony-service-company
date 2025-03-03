@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Common\UploadFile;
+namespace App\Common\Domain\Service\UploadFile;
 
-use App\Common\Enum\FileExtensionEnum;
-use App\Common\Interface\UploadFileInterface;
+use App\Common\Domain\Enum\FileExtensionEnum;
+use App\Common\Domain\Interface\UploadFileInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -50,11 +50,10 @@ class UploadFile implements UploadFileInterface
                     throw new \Exception('expectedPDFFile');
             }
         }
-
-        $fileName = $fileName ?? self::generateUniqueFileName(FileExtensionEnum::XLSX);
+        $this->fileName = $this->fileName ?? self::generateUniqueFileName(FileExtensionEnum::XLSX);
 
         try {
-            $movedFile = $file->move($this->uploadDir, $fileName);
+            $movedFile = $file->move($this->uploadDir, $this->fileName);
             $this->uploadedFile = new UploadedFile(
                 $movedFile->getPathname(),
                 $movedFile->getFilename(),

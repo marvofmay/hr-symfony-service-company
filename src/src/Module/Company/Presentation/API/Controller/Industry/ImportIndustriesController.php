@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Industry;
 
-use App\Common\UploadFile\UploadFile;
+use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Module\Company\Domain\DTO\Industry\ImportDTO;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use App\Module\Company\Domain\Service\Industry\ImportIndustriesFromXLSX;

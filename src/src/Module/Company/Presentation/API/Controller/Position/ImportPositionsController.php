@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Position;
 
-use App\Common\UploadFile\UploadFile;
+use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Module\Company\Domain\DTO\Position\ImportDTO;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;

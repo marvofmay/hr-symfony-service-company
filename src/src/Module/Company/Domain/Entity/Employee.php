@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
-use App\Common\Trait\AttributesEntityTrait;
-use App\Common\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\Note\Domain\Entity\Note;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -14,8 +16,6 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'employee')]

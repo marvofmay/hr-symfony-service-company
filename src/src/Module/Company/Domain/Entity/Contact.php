@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
-use App\Common\Trait\AttributesEntityTrait;
-use App\Common\Trait\TimestampableTrait;
-
+use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

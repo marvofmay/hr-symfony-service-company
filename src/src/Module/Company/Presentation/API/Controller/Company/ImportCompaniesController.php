@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
-use App\Common\Enum\FileExtensionEnum;
-use App\Common\UploadFile\UploadFile;
+use App\Common\Domain\DTO\UploadFileDTO;
+use App\Common\Domain\Enum\FileExtensionEnum;
+use App\Common\Domain\Service\UploadFile\UploadFile;
+use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Company\ImportDTO;
-use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
-use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use App\Module\Company\Presentation\API\Action\Company\ImportCompaniesAction;
-use Matrix\Exception;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportCompaniesController extends AbstractController
@@ -25,7 +26,6 @@ class ImportCompaniesController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-//        private readonly CompanyReaderInterface $companyReaderRepository,
     ) {
     }
 
@@ -74,29 +74,31 @@ class ImportCompaniesController extends AbstractController
     )]
     #[OA\Tag(name: 'companies')]
     #[Route('/api/companies/import', name: 'import', methods: ['POST'])]
-    public function import(Request $request, ImportCompaniesAction $importCompaniesAction): JsonResponse
+    public function import(
+        #[MapUploadedFile] UploadedFile $file,
+        ValidatorInterface $validator,
+        UploadFileAction $uploadFileAction,
+        ImportCompaniesAction $importCompaniesAction): JsonResponse
     {
         try {
-            //Todo:: UploadFile::generateUniqueFileName
-            $uploadedFile = $request->files->get('file');
+            $uploadFilePath = 'src/Storage/Upload/Import/Companies';
+            $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
 
-            //ToDo:: make UploadFileDTO, actionUpload, UploadFileCommand, UploadFileCommandHandler
-            if (!$uploadedFile) {
+            $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
+            $errors = $validator->validate($uploadFileDTO);
+            if (count($errors) > 0) {
                 return new JsonResponse(
-                    ['errors' => [$this->translator->trans('company.import.fileRequired', [], 'companies')]],
+                    ['errors' => array_map(fn ($e) => [
+                        'field' => $e->getPropertyPath(),
+                        'message' => $e->getMessage()], iterator_to_array($errors))
+                    ],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }
 
-            $uploadFilePath = 'src/Storage/Upload/Import/Companies';
-            $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
-
-            $uploadFileService = new UploadFile('../'.$uploadFilePath, FileExtensionEnum::XLSX, $fileName);
-            $uploadFileService->uploadFile($uploadedFile);
-            $fileName = $uploadFileService->getFileName();
-
-            //ToDo:: save $uploadedFilePath, $fileName "import_log" table in feature
-            //ToDO:: pass uuid to ImportDTO($uuid)
+            $uploadFileAction->execute($uploadFileDTO);
+            //ToDo:: save $uploadedFilePath, $fileName in "import_log" table in feature
+            //ToDO:: pass uuid to ImportDTO($uuid) instead ImportDTO($uploadFilePath, $fileName)
             $importCompaniesAction->execute(new ImportDTO($uploadFilePath, $fileName));
 
             return new JsonResponse([

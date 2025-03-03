@@ -106,7 +106,7 @@ services:
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
     volumes:
-      - ./src:/var/www/html:rw
+      - ./src:/var/www/html
 #
 #  worker-department-xlsx-import:
 #    container_name: worker-department-xlsx-import

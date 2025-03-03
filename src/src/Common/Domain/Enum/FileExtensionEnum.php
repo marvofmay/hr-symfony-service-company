@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Enum;
+namespace App\Common\Domain\Enum;
 
-use App\Common\Interface\EnumInterface;
+use App\Common\Domain\Interface\EnumInterface;
 
 enum FileExtensionEnum: string implements EnumInterface
 {

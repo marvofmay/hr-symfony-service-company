@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\ContractType;
 
-use App\Common\UploadFile\UploadFile;
+use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Module\Company\Domain\DTO\ContractType\ImportDTO;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Service\ContractType\ImportContractTypesFromXLSX;

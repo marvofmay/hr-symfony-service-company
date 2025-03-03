@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Common\Trait;
+namespace App\Common\Domain\Trait;
 
 use Doctrine\ORM\Mapping as ORM;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Employee;
 
-use App\Common\DTO\AddressDTO;
+use App\Common\Domain\DTO\AddressDTO;
 
 class CreateEmployeeCommand
 {

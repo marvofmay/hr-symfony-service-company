@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
-use App\Common\Trait\AttributesEntityTrait;
-use App\Common\Trait\RelationsEntityTrait;
-use App\Common\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
+use App\Common\Domain\Trait\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

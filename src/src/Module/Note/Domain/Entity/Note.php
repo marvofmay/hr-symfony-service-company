@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Domain\Entity;
 
-use App\Common\Trait\AttributesEntityTrait;
-use App\Common\Trait\RelationsEntityTrait;
-use App\Common\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
+use App\Common\Domain\Trait\TimestampableTrait;
+use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -15,7 +16,6 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Module\Company\Domain\Entity\Employee;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'note')]

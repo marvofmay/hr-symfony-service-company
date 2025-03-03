@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Domain\Enum;
 
-use App\Common\Interface\EnumInterface;
+use App\Common\Domain\Interface\EnumInterface;
 
 enum NotePriorityEnum: string implements EnumInterface
 {

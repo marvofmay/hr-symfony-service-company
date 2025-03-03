@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Common\XLSX;
 
-use App\Common\Interface\XLSXIteratorInterface;
+use App\Common\Domain\Interface\XLSXIteratorInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Contracts\Translation\TranslatorInterface;
