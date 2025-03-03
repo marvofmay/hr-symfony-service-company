@@ -3,7 +3,14 @@ api_company_create:
   controller: App\Module\Company\Presentation\API\Controller\Company\CreateCompanyController::create
   methods: [POST]
 
-api_companies_import:
+api_company_import:
   path: api/companies/import
   controller: App\Module\Company\Presentation\API\Controller\Company\ImportCompaniesController::import
   methods: [POST]
+
+api_company_update:
+  path: api/companies/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Company\UpdateCompanyController::update
+  methods: [ PUT ]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'

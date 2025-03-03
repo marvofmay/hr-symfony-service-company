@@ -24,6 +24,7 @@ class CompanyWriterRepository extends ServiceEntityRepository implements Company
 
     public function updateCompanyInDB(Company $company): void
     {
+        $this->getEntityManager()->persist($company);
         $this->getEntityManager()->flush();
     }
 

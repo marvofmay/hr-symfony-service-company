@@ -85,6 +85,11 @@ class Company
         $this->parentCompany = $company;
     }
 
+    public function removeParentCompany(): void
+    {
+        $this->parentCompany = null;
+    }
+
     public function getFullName(): string
     {
         return $this->{self::COLUMN_FULL_NAME};

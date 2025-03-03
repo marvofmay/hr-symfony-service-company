@@ -1,0 +1,30 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Module\Company\Domain\Service\Company;
+
+use App\Module\Company\Application\Command\Company\UpdateCompanyCommand;
+use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
+
+readonly class CompanyUpdater
+{
+    public function __construct(private CompanyWriterInterface $companyWriterRepository)
+    {
+    }
+
+    public function update(UpdateCompanyCommand $command): void
+    {
+        $company = $command->company;
+        $company->setFullName($command->fullName);
+        $company->setShortName($command->shortName);
+        $company->setActive($command->active);
+
+        if (null !== $command->parentCompany) {
+            $company->removeParentCompany();
+            $company->setParentCompany($command->parentCompany);
+        }
+
+        $this->companyWriterRepository->updateCompanyInDB($company);
+    }
+}

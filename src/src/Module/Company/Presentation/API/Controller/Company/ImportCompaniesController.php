@@ -89,6 +89,7 @@ class ImportCompaniesController extends AbstractController
             $uploadFileService = new UploadFile('../'.$uploadFilePath, 'xlsx');
             $uploadFileService->uploadFile($uploadedFile);
             $fileName = $uploadFileService->getFileName();
+
             $importCompaniesAction->execute(new ImportDTO($uploadFilePath, $fileName));
 
             return new JsonResponse([
