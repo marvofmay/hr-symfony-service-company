@@ -1,5 +1,30 @@
 company:
+  uuid:
+    notFound: "Firma o podanym UUID nie istnieje"
+    notExists: "Firma o podanym UUID nie istnieje :uuid"
   fullName:
     alreadyExists: "Firma o podanej nazwie już istnieje"
+    required: "Nazwa firmy jest wymagana"
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
+    expectedUniqueRoleNameConstraint: "Oczekiwano unikalnej nazwy firmy"
   add:
-    success: "Firma została pomyślnie zapisana"
+    success: "Firms została pomyślnie zapisana"
+    error: "Wystąpił błąd - firma nie została dodana"
+  update:
+    success: "Firma została pomyślnie zaktualizowana"
+    error: "Wystąpił błąd - fkirma nie została zaktualizowana"
+  delete:
+    success: "Firma została pomyślnie usunięta"
+    error: "Wystąpił błąd - firma nie została usunięta"
+    multiple:
+      success: "Firmy zostały pomyślnie usunięte"
+  import:
+    queued: "Plik została dodany do kolejki impotrtu firm. Otrzymasz powiadmienie o statusie importu."
+    success: "Firmy zostały pomyślnie zaimportowane"
+    error: "Wystąpił błąd - firmy nie zostały zaimportowane"
+  view:
+    error: "Wystapił błąd przy pobieraniu wybranej firmy"
+  list:
+    error: "Wystapił błąd przy pobieraniu listy firm"
+

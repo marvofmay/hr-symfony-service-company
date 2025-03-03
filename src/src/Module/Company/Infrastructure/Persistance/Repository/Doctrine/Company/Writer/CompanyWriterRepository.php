@@ -7,6 +7,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Comp
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class CompanyWriterRepository extends ServiceEntityRepository implements CompanyWriterInterface
@@ -28,7 +29,7 @@ class CompanyWriterRepository extends ServiceEntityRepository implements Company
         $this->getEntityManager()->flush();
     }
 
-    public function saveCompaniesInDB(array $companies): void
+    public function saveCompaniesInDB(Collection $companies): void
     {
         foreach ($companies as $company) {
             $this->getEntityManager()->persist($company);
@@ -36,16 +37,8 @@ class CompanyWriterRepository extends ServiceEntityRepository implements Company
         $this->getEntityManager()->flush();
     }
 
-    public function deleteMultipleCompaniesInDB(array $selectedUUID): void
-    {
-        if (empty($selectedUUID)) {
-            return;
-        }
-
-        $query = $this->getEntityManager()->createQuery('UPDATE ' . Company::class . ' c SET c.deletedAt = :deletedAt WHERE c.uuid IN (:uuids)');
-        $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
-        $query->setParameter('uuids', $selectedUUID);
-
-        $query->execute();
+    public function deleteCompanyInDB(Company $company): void {
+        $this->getEntityManager()->remove($company);
+        $this->getEntityManager()->flush();
     }
 }

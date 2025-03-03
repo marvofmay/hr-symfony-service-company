@@ -1,3 +1,10 @@
+api_company_delete:
+  path: api/companies/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Company\DeleteCompanyController::delete
+  methods: [DELETE]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
 api_company_create:
   path: api/companies
   controller: App\Module\Company\Presentation\API\Controller\Company\CreateCompanyController::create

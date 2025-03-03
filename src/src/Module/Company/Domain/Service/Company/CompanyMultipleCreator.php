@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
-use App\Module\Company\Application\Command\Company\ImportCompaniesCommand;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class CompanyMultipleCreator
 {
@@ -17,7 +17,7 @@ readonly class CompanyMultipleCreator
 
     public function multipleCreate(array $data): void
     {
-        $companies = [];
+        $companies = new ArrayCollection();
         foreach ($data as $item) {
             $company = new Company();
             $company->setFullName($item[0]);

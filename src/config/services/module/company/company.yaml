@@ -9,9 +9,9 @@ services:
     App\Module\Company\Application\CommandHandler\Company\UpdateCompanyCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\Module\Company\Application\CommandHandler\Company\DeleteCompanyCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Company\Application\CommandHandler\Company\DeleteCompanyCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 #    App\Module\Company\Application\CommandHandler\Company\DeleteMultipleCompaniesCommandHandler:
 #        tags:
 #            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }

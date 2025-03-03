@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Interface\Company;
 
 use App\Module\Company\Domain\Entity\Company;
+use Doctrine\Common\Collections\Collection;
 
 interface CompanyWriterInterface
 {
     public function saveCompanyInDB(Company $company): void;
     public function updateCompanyInDB(Company $company): void;
-    public function saveCompaniesInDB(array $companies): void;
-    public function deleteMultipleCompaniesInDB(array $selectedUUID): void;
+    public function saveCompaniesInDB(Collection $companies): void;
+    public function deleteCompanyInDB(Company $company): void;
 }
