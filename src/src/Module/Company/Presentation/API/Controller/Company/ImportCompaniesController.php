@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
+use App\Common\Enum\FileExtensionEnum;
 use App\Common\UploadFile\UploadFile;
 use App\Module\Company\Domain\DTO\Company\ImportDTO;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
@@ -76,9 +77,10 @@ class ImportCompaniesController extends AbstractController
     public function import(Request $request, ImportCompaniesAction $importCompaniesAction): JsonResponse
     {
         try {
-            $uploadFilePath = 'src/Storage/Upload/Import/Companies';
+            //Todo:: UploadFile::generateUniqueFileName
             $uploadedFile = $request->files->get('file');
 
+            //ToDo:: make UploadFileDTO, actionUpload, UploadFileCommand, UploadFileCommandHandler
             if (!$uploadedFile) {
                 return new JsonResponse(
                     ['errors' => [$this->translator->trans('company.import.fileRequired', [], 'companies')]],
@@ -86,10 +88,15 @@ class ImportCompaniesController extends AbstractController
                 );
             }
 
-            $uploadFileService = new UploadFile('../'.$uploadFilePath, 'xlsx');
+            $uploadFilePath = 'src/Storage/Upload/Import/Companies';
+            $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
+
+            $uploadFileService = new UploadFile('../'.$uploadFilePath, FileExtensionEnum::XLSX, $fileName);
             $uploadFileService->uploadFile($uploadedFile);
             $fileName = $uploadFileService->getFileName();
 
+            //ToDo:: save $uploadedFilePath, $fileName "import_log" table in feature
+            //ToDO:: pass uuid to ImportDTO($uuid)
             $importCompaniesAction->execute(new ImportDTO($uploadFilePath, $fileName));
 
             return new JsonResponse([

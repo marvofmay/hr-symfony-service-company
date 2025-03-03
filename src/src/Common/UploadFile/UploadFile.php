@@ -23,7 +23,10 @@ class UploadFile implements UploadFileInterface
 
     private ?UploadedFile $uploadedFile = null;
 
-    public function __construct(private readonly string $uploadDir, private readonly string $expectedUploadedFileExtension)
+    public function __construct(
+        private readonly string $uploadDir,
+        private readonly FileExtensionEnum $expectedUploadedFileExtension,
+        private ?string $fileName = null,)
     {
     }
 
@@ -41,14 +44,14 @@ class UploadFile implements UploadFileInterface
 
         if (!$this->isExpectedExtension($extension)) {
             switch ($this->expectedUploadedFileExtension) {
-                case 'xlsx':
+                case FileExtensionEnum::XLSX:
                     throw new \Exception('expectedXLSXFile');
-                case 'pdf':
+                case FileExtensionEnum::PDF:
                     throw new \Exception('expectedPDFFile');
             }
         }
 
-        $fileName = uniqid('upload_', true).'-'.date('Y-m-d-H-i-s').'.'.$extension;
+        $fileName = $fileName ?? self::generateUniqueFileName(FileExtensionEnum::XLSX);
 
         try {
             $movedFile = $file->move($this->uploadDir, $fileName);
@@ -78,11 +81,16 @@ class UploadFile implements UploadFileInterface
 
     public function isExpectedExtension(string $extension): bool
     {
-        return $this->expectedUploadedFileExtension === $extension;
+        return $this->expectedUploadedFileExtension->value === $extension;
     }
 
     public function getFileName(): ?string
     {
         return $this->uploadedFile ? $this->uploadedFile->getFilename() : null;
+    }
+
+    public static function generateUniqueFileName(FileExtensionEnum $fileExtension): string
+    {
+        return uniqid('uploaded_', true).'-'.date('Y-m-d-H-i-s').'.'.$fileExtension->value;
     }
 }
