@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Employee;
 
 use App\Common\Domain\DTO\AddressDTO;
+use App\Common\Domain\Interface\CommandInterface;
 use App\Module\Company\Application\Command\Employee\CreateEmployeeCommand;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
@@ -62,7 +63,7 @@ class EmployeeCreator
         $this->employeeWriterRepository->saveEmployeeInDB($this->employee);
     }
 
-    protected function setEmployee($command): void
+    protected function setEmployee(CommandInterface $command): void
     {
         $this->setCompany($command->companyUUID);
         $this->setDepartment($command->departmentUUID);
@@ -79,7 +80,7 @@ class EmployeeCreator
         $this->setEmployeeRelations();
     }
 
-    protected function setEmployeeMainData($command): void
+    protected function setEmployeeMainData(CommandInterface $command): void
     {
         $this->employee->setFirstName($command->firstName);
         $this->employee->setLastName($command->lastName);
