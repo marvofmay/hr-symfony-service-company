@@ -18,14 +18,13 @@ readonly class UpdateCompanyAction
     public function execute(UpdateDTO $updateDTO): void
     {
         $company = $this->companyReaderRepository->getCompanyByUUID($updateDTO->getUUID());
-        $parentCompany = $this->companyReaderRepository->getCompanyByUUID($updateDTO->getParentCompanyUUID());
         $this->commandBus->dispatch(
             new UpdateCompanyCommand(
                 $company,
                 $updateDTO->getFullName(),
                 $updateDTO->getShortName(),
                 $updateDTO->getActive(),
-                $parentCompany
+                $updateDTO->getParentCompanyUUID()
             )
         );
     }

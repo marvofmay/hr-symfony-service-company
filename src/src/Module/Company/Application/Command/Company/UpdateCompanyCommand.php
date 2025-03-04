@@ -13,6 +13,6 @@ class UpdateCompanyCommand
         public string $fullName,
         public ?string $shortName,
         public bool $active,
-        public ?Company $parentCompany
+        public ?string $parentCompanyUUID
     ) {}
 }

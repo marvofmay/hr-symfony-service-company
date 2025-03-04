@@ -35,6 +35,12 @@ class DepartmentWriterRepository extends ServiceEntityRepository implements Depa
         $this->getEntityManager()->flush();
     }
 
+    public function deleteDepartmentInDB(Department $department): void
+    {
+        $this->getEntityManager()->remove($department);
+        $this->getEntityManager()->flush();
+    }
+
     public function deleteMultipleDepartmentsInDB(array $selectedUUID): void
     {
         if (empty($selectedUUID)) {

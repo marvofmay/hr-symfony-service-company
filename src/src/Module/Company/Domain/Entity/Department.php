@@ -107,6 +107,11 @@ class Department
         $this->parentDepartment = $parentDepartment;
     }
 
+    public function removeParentDepartment(): void
+    {
+        $this->parentDepartment = null;
+    }
+
     public function getName(): string
     {
         return $this->{self::COLUMN_NAME};

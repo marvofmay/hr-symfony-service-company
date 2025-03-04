@@ -1,4 +1,18 @@
+api_department_delete:
+  path: api/departments/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Department\DeleteDepartmentController::delete
+  methods: [DELETE]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
 api_department_create:
   path: api/departments
   controller: App\Module\Company\Presentation\API\Controller\Department\CreateDepartmentController::create
   methods: [POST]
+
+api_department_update:
+  path: api/departments/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Department\UpdateDepartmentController::update
+  methods: [ PUT ]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'

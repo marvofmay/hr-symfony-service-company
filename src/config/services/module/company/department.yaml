@@ -6,12 +6,12 @@ services:
     App\Module\Company\Application\CommandHandler\Department\CreateDepartmentCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\Module\Company\Application\CommandHandler\Department\UpdateDepartmentCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
-#    App\Module\Company\Application\CommandHandler\Department\DeleteDepartmentCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Company\Application\CommandHandler\Department\UpdateDepartmentCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+    App\Module\Company\Application\CommandHandler\Department\DeleteDepartmentCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
 #    App\Module\Company\Application\CommandHandler\Department\DeleteMultipleDepartmentsCommandHandler:
 #        tags:
 #            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
