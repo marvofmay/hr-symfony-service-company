@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Presentation\API\Controller\Company;
+namespace App\Module\Company\Presentation\API\Controller\Employee;
 
-use App\Module\Company\Domain\DTO\Company\UpdateDTO;
-use App\Module\Company\Presentation\API\Action\Company\UpdateCompanyAction;
+use App\Module\Company\Domain\DTO\Employee\UpdateDTO;
+use App\Module\Company\Presentation\API\Action\Employee\UpdateEmployeeAction;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
@@ -16,15 +16,15 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class UpdateCompanyController extends AbstractController
+class UpdateEmployeeController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
     }
 
     #[OA\Put(
-        path: '/api/companies/{uuid}',
-        summary: 'Aktualizuje firmę',
+        path: '/api/employees/{uuid}',
+        summary: 'Aktualizuje pracownika',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
@@ -34,10 +34,10 @@ class UpdateCompanyController extends AbstractController
         responses: [
             new OA\Response(
                 response: Response::HTTP_CREATED,
-                description: 'Firma została zaktualizowana',
+                description: 'Pracownik został zaktualizowany',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Firma została pomyślnie zaktualizowana'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Pracownik został pomyślnie zaktualizowany'),
                     ],
                     type: 'object'
                 )
@@ -47,16 +47,16 @@ class UpdateCompanyController extends AbstractController
                 description: 'Błąd walidacji',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Firma o podanej nazwie już istnieje'),
+                        new OA\Property(property: 'error', type: 'string', example: 'Pracownik o podanym emailu już istnieje'),
                     ],
                     type: 'object'
                 )
             ),
         ]
     )]
-    #[OA\Tag(name: 'companies')]
-    #[Route('/api/companies/{uuid}', name: 'api.company.update', methods: ['PUT'])]
-    public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO, UpdateCompanyAction $updateCompanyAction): JsonResponse
+    #[OA\Tag(name: 'employees')]
+    #[Route('/api/employees/{uuid}', name: 'api.employee.update', methods: ['PUT'])]
+    public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO, UpdateEmployeeAction $updateEmployeeAction): JsonResponse
     {
         try {
             if ($uuid !== $updateDTO->getUUID()) {
@@ -65,14 +65,14 @@ class UpdateCompanyController extends AbstractController
                     Response::HTTP_BAD_REQUEST
                 );
             }
-            $updateCompanyAction->execute($updateDTO);
+            $updateEmployeeAction->execute($updateDTO);
 
             return new JsonResponse(
-                ['message' => $this->translator->trans('company.update.success', [], 'companies')],
+                ['message' => $this->translator->trans('employee.update.success', [], 'employees')],
                 Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('company.update.error', [], 'companies'), $error->getMessage());
+            $message = sprintf('%s: %s', $this->translator->trans('employee.update.error', [], 'employees'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);

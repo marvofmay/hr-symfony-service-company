@@ -36,6 +36,8 @@ class Address
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
+    public const SOFT_DELETED_AT = 'soft';
+    public const HARD_DELETED_AT = 'hard';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]

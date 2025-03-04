@@ -16,41 +16,53 @@ use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Entity\User;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Interface\Address\AddressWriterInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
+use App\Module\Company\Domain\Interface\Contact\ContactWriterInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use App\Module\Company\Domain\Interface\Employee\EmployeeWriterInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
+use App\Module\Company\Domain\Interface\User\UserWriterInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class EmployeeCreator
 {
-    private ArrayCollection $contacts;
+    protected ArrayCollection $contacts;
 
     public function __construct(
-        private Company $company,
-        private Department $department,
-        private readonly Employee $employee,
-        private Employee $parentEmployee,
-        private Role $role,
-        private Position $position,
-        private ContractType $contractType,
-        private readonly User $user,
-        private readonly Address $address,
-        private readonly EmployeeWriterInterface $employeeWriterRepository,
-        private readonly CompanyReaderInterface $companyReaderRepository,
-        private readonly DepartmentReaderInterface $departmentReaderRepository,
-        private readonly EmployeeReaderInterface $employeeReaderRepository,
-        private readonly ContractTypeReaderInterface $contractTypeReaderRepository,
-        private readonly PositionReaderInterface $positionReaderRepository,
-        private readonly RoleReaderInterface $roleReaderRepository,
-    ){
+        protected Company $company,
+        protected Department $department,
+        protected Employee $employee,
+        protected Employee $parentEmployee,
+        protected Role $role,
+        protected Position $position,
+        protected ContractType $contractType,
+        protected readonly User $user,
+        protected readonly Address $address,
+        protected readonly EmployeeWriterInterface $employeeWriterRepository,
+        protected readonly CompanyReaderInterface $companyReaderRepository,
+        protected readonly DepartmentReaderInterface $departmentReaderRepository,
+        protected readonly EmployeeReaderInterface $employeeReaderRepository,
+        protected readonly ContractTypeReaderInterface $contractTypeReaderRepository,
+        protected readonly PositionReaderInterface $positionReaderRepository,
+        protected readonly RoleReaderInterface $roleReaderRepository,
+        protected readonly ContactWriterInterface $contactWriterRepository,
+        protected readonly AddressWriterInterface $addressWriterRepository,
+        protected readonly UserWriterInterface $userWriterRepository,
+    ) {
         $this->contacts = new ArrayCollection();
     }
 
     public function create(CreateEmployeeCommand $command): void
+    {
+        $this->setEmployee($command);
+        $this->employeeWriterRepository->saveEmployeeInDB($this->employee);
+    }
+
+    protected function setEmployee($command): void
     {
         $this->setCompany($command->companyUUID);
         $this->setDepartment($command->departmentUUID);
@@ -58,18 +70,16 @@ class EmployeeCreator
         $this->setPosition($command->positionUUID);
         $this->setContractType($command->contractTypeUUID);
         $this->setParentEmployee($command->parentEmployeeUUID);
-        $this->setUser($command->email, $command->firstName);
         $this->setAddress($command->address);
         $this->setContacts($command->phones);
+        $this->setUser($command->email, $command->firstName);
 
         $this->setEmployeeMainData($command);
         $this->setEmployeeCompanyData();
         $this->setEmployeeRelations();
-
-        $this->employeeWriterRepository->saveEmployeeInDB($this->employee);
     }
 
-    private function setEmployeeMainData(CreateEmployeeCommand $command): void
+    protected function setEmployeeMainData($command): void
     {
         $this->employee->setFirstName($command->firstName);
         $this->employee->setLastName($command->lastName);
@@ -82,7 +92,7 @@ class EmployeeCreator
         $this->employee->setActive($command->active);
     }
 
-    private function setEmployeeCompanyData (): void
+    protected function setEmployeeCompanyData (): void
     {
         $this->employee->setCompany($this->company);
         $this->employee->setDepartment($this->department);
@@ -91,7 +101,7 @@ class EmployeeCreator
         $this->employee->setRole($this->role);
     }
 
-    private function setEmployeeRelations(): void
+    protected function setEmployeeRelations(): void
     {
         $this->employee->setUser($this->user);
 
@@ -105,17 +115,17 @@ class EmployeeCreator
 
         $this->employee->setAddress($this->address);
     }
-    private function setCompany(string $companyUUID): void
+    protected function setCompany(string $companyUUID): void
     {
         $this->company = $this->companyReaderRepository->getCompanyByUUID($companyUUID);
     }
 
-    private function setDepartment(string $departmentUUID): void
+    protected function setDepartment(string $departmentUUID): void
     {
         $this->department = $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID);
     }
 
-    private function setParentEmployee(?string $parentEmployeeUUID): void
+    protected function setParentEmployee(?string $parentEmployeeUUID): void
     {
         if (null === $parentEmployeeUUID) {
             return;
@@ -124,22 +134,22 @@ class EmployeeCreator
         $this->parentEmployee = $this->employeeReaderRepository->getEmployeeByUUID($parentEmployeeUUID);
     }
 
-    private function setPosition(string $positionUUID): void
+    protected function setPosition(string $positionUUID): void
     {
         $this->position = $this->positionReaderRepository->getPositionByUUID($positionUUID);
     }
 
-    private function setContractType(string $contractTypeUUID): void
+    protected function setContractType(string $contractTypeUUID): void
     {
         $this->contractType =  $this->contractTypeReaderRepository->getContractTypeByUUID($contractTypeUUID);
     }
 
-    private function setRole(string $roleUUID): void
+    protected function setRole(string $roleUUID): void
     {
         $this->role = $this->roleReaderRepository->getRoleByUUID($roleUUID);
     }
 
-    private function setContacts(array $phones): void
+    protected function setContacts(array $phones): void
     {
         foreach ($phones as $phone) {
             $contact = new Contact();
@@ -152,7 +162,7 @@ class EmployeeCreator
         }
     }
 
-    private function setAddress(AddressDTO $addressDTO): void
+    protected function setAddress(AddressDTO $addressDTO): void
     {
         $this->address->setCompany($this->company);
         $this->address->setDepartment($this->department);
@@ -162,9 +172,12 @@ class EmployeeCreator
         $this->address->setCountry($addressDTO->country);
     }
 
-    private function setUser(string $email, string $firstName): void
+    protected function setUser(string $email, string $firstName): void
     {
-        $this->user->setEmail($email);
-        $this->user->setPassword(sprintf('%s-%s', $email, $firstName));
+        $password = sprintf('%s-%s', $email, $firstName);
+        if (null === $this->employee->getUser()) {
+           $this->user->setEmail($email);
+           $this->user->setPassword($password);
+        }
     }
 }

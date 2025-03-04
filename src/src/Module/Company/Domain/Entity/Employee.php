@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
+use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Note\Domain\Entity\Note;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -134,7 +135,7 @@ class Employee
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    private Address $address;
+    private ?Address $address = null;
 
     public function __construct()
     {
@@ -152,7 +153,7 @@ class Employee
         $this->{self::COLUMN_UUID} = $uuid;
     }
 
-    public function getUser(): User
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -295,10 +296,15 @@ class Employee
         $this->{self::COLUMN_ACTIVE} = $active;
     }
 
-    public function getContacts(): Collection
+    public function getContacts(?ContactTypeEnum $type = null): Collection
     {
-        return $this->contacts;
+        if ($type === null) {
+            return $this->contacts;
+        }
+
+        return $this->contacts->filter(fn(Contact $contact) => $contact->getType() === $type->value);
     }
+
 
     public function addContact(Contact $contact): void
     {
@@ -317,16 +323,33 @@ class Employee
         }
     }
 
+    public function removeContacts(?ContactTypeEnum $type = null): void
+    {
+        foreach ($this->contacts as $contact) {
+            if ($type === null || $contact->getType() === $type->value) {
+                $this->removeContact($contact);
+            }
+        }
+    }
+
     public function getAddress(): ?Address
     {
         return $this->address;
     }
 
-    public function setAddress(Address $address): void
+    public function setAddress(?Address $address): void
     {
         $this->address = $address;
         if ($address !== null) {
             $address->setEmployee($this);
+        }
+    }
+
+    public function removeAddress(): void
+    {
+        if ($this->address !== null) {
+            $this->address->setEmployee(null);
+            $this->address = null;
         }
     }
 
