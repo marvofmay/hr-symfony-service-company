@@ -69,7 +69,7 @@ class Contact
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Groups('contact_info')]
-    private bool $active;
+    private bool $active = true;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
     #[Groups('contact_info')]
