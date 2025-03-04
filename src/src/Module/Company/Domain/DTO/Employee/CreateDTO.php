@@ -119,7 +119,7 @@ class CreateDTO
     #[ExistingEmployeeUUID(
         message: ['uuidNotExists' => 'employee.uuid.notExists', 'domain' => 'employees']
     )]
-    public string $parentEmployeeUUID;
+    public ?string $parentEmployeeUUID = null;
 
     #[OA\Property(
         description: 'unikalny indentyfikator pracownika w firmie',

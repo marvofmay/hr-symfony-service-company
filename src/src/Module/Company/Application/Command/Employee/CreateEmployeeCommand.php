@@ -15,7 +15,7 @@ class CreateEmployeeCommand
         public string $contractTypeUUID,
         public string $roleUUID,
         public ?string $parentEmployeeUUID,
-        public ?string $executorUUID,
+        public ?string $externalUUID,
         public string $email,
         public string $firstName,
         public string $lastName,

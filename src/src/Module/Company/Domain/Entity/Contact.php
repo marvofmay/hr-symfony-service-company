@@ -57,7 +57,7 @@ class Contact
     #[Groups('contact_info')]
     private ?Employee $employee = null;
 
-    #[ORM\Column(type: Types::INTEGER, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
     #[Assert\NotBlank()]
     #[Groups('contact_info')]
     private string $type;
@@ -67,9 +67,9 @@ class Contact
     #[Groups('contact_info')]
     private string $data;
 
-    #[ORM\Column(type: Types::BOOLEAN)]
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Groups('contact_info')]
-    private bool $active = false;
+    private bool $active;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
     #[Groups('contact_info')]
