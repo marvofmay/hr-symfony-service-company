@@ -45,9 +45,8 @@ class Contact
     #[Groups('contact_info')]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: Company::class)]
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'contacts')]
     #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('contact_info')]
     private Company $company;
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
@@ -56,9 +55,9 @@ class Contact
     private ?Department $department;
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'contacts')]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     #[Groups('contact_info')]
-    private ?Employee $employee = null;
+    private ?Employee $employee;
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
     #[Assert\NotBlank()]

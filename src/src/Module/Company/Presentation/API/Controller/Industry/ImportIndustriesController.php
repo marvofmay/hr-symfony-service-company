@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Industry;
 
+use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Module\Company\Domain\DTO\Industry\ImportDTO;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
@@ -91,7 +92,7 @@ class ImportIndustriesController extends AbstractController
                 );
             }
 
-            $uploadFileService = new UploadFile($uploadFilePath, 'xlsx');
+            $uploadFileService = new UploadFile($uploadFilePath, FileExtensionEnum::XLSX);
             $uploadFileService->uploadFile($uploadedFile);
 
             $importer = new ImportIndustriesFromXLSX(

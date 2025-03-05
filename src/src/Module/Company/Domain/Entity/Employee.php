@@ -135,7 +135,7 @@ class Employee
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    private ?Address $address = null;
+    private Address $address;
 
     public function __construct()
     {
@@ -305,7 +305,6 @@ class Employee
         return $this->contacts->filter(fn(Contact $contact) => $contact->getType() === $type->value);
     }
 
-
     public function addContact(Contact $contact): void
     {
         if (!$this->contacts->contains($contact)) {
@@ -314,43 +313,15 @@ class Employee
         }
     }
 
-    public function removeContact(Contact $contact): void
-    {
-        if ($this->contacts->removeElement($contact)) {
-            if ($contact->getEmployee() === $this) {
-                $contact->setEmployee(null);
-            }
-        }
-    }
-
-    public function removeContacts(?ContactTypeEnum $type = null): void
-    {
-        foreach ($this->contacts as $contact) {
-            if ($type === null || $contact->getType() === $type->value) {
-                $this->removeContact($contact);
-            }
-        }
-    }
-
-    public function getAddress(): ?Address
+    public function getAddress(): Address
     {
         return $this->address;
     }
 
-    public function setAddress(?Address $address): void
+    public function setAddress(Address $address): void
     {
         $this->address = $address;
-        if ($address !== null) {
-            $address->setEmployee($this);
-        }
-    }
-
-    public function removeAddress(): void
-    {
-        if ($this->address !== null) {
-            $this->address->setEmployee(null);
-            $this->address = null;
-        }
+        $address->setEmployee($this);
     }
 
     public function toArray(): array

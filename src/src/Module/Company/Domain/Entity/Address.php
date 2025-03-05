@@ -46,9 +46,8 @@ class Address
     #[Groups('address_info')]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: Company::class)]
-    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('address_info')]
+    #[ORM\OneToOne(targetEntity: Company::class, inversedBy: 'address')]
+    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', unique: true, nullable: false, onDelete: 'CASCADE')]
     private Company $company;
 
     #[ORM\ManyToOne(targetEntity: Department::class)]

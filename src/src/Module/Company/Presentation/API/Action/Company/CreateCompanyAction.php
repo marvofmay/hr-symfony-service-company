@@ -21,7 +21,15 @@ readonly class CreateCompanyAction
                 $createDTO->getFullName(),
                 $createDTO->getShortName(),
                 $createDTO->getActive(),
-                $createDTO->getParentCompanyUUID()
+                $createDTO->getParentCompanyUUID(),
+                $createDTO->getNip(),
+                $createDTO->getREGON(),
+                $createDTO->getDescription(),
+                $createDTO->getIndustryUUID(),
+                $createDTO->getPhones(),
+                $createDTO->getEmails(),
+                $createDTO->getWebsites(),
+                $createDTO->getAddress()
             )
         );
     }

@@ -6,6 +6,8 @@ namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
+use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -13,6 +15,7 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'company')]
@@ -44,6 +47,17 @@ class Company
     #[Groups('company_info')]
     private ?Company $parentCompany = null;
 
+    #[ORM\ManyToOne(targetEntity: Industry::class, inversedBy: 'companies')]
+    #[ORM\JoinColumn(name: 'industry_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[Groups('company_info')]
+    private Industry $industry;
+
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private Collection $contacts;
+
+    #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private Address $address;
+
     #[ORM\Column(type: Types::STRING, length: 1000)]
     #[Assert\NotBlank]
     #[Groups('company_info')]
@@ -52,6 +66,18 @@ class Company
     #[ORM\Column(type: Types::STRING, length: 200, nullable: true)]
     #[Groups('company_info')]
     private ?string $shortName;
+
+    #[ORM\Column(type: Types::STRING, length: 20, nullable: false)]
+    #[Groups('company_info')]
+    private string $nip;
+
+    #[ORM\Column(type: Types::STRING, length: 20, nullable: false)]
+    #[Groups('company_info')]
+    private string $regon;
+
+    #[ORM\Column(type: Types::STRING, length: 500, nullable: true)]
+    #[Groups('company_info')]
+    private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
@@ -69,6 +95,11 @@ class Company
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups('company_info')]
     private ?\DateTimeInterface $deletedAt = null;
+
+    public function __construct()
+    {
+        $this->contacts = new ArrayCollection();
+    }
 
     public function getUUID(): UuidInterface
     {
@@ -90,6 +121,44 @@ class Company
         $this->parentCompany = null;
     }
 
+    public function getIndustry(): Industry
+    {
+        return $this->industry;
+    }
+
+    public function setIndustry(Industry $industry): void
+    {
+        $this->industry = $industry;
+    }
+
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): void
+    {
+        $this->address = $address;
+        $address->setCompany($this);
+    }
+
+    public function getContacts(?ContactTypeEnum $type = null): Collection
+    {
+        if ($type === null) {
+            return $this->contacts;
+        }
+
+        return $this->contacts->filter(fn(Contact $contact) => $contact->getType() === $type->value);
+    }
+
+    public function addContact(Contact $contact): void
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts[] = $contact;
+            $contact->setCompany($this);
+        }
+    }
+
     public function getFullName(): string
     {
         return $this->{self::COLUMN_FULL_NAME};
@@ -108,6 +177,36 @@ class Company
     public function setShortName(?string $shortName): void
     {
         $this->{self::COLUMN_SHORT_NAME} = $shortName;
+    }
+
+    public function getNip(): string
+    {
+        return $this->nip;
+    }
+
+    public function setNip(string $nip): void
+    {
+        $this->nip = $nip;
+    }
+
+    public function getRegon(): string
+    {
+        return $this->regon;
+    }
+
+    public function setRegon(string $regon): void
+    {
+        $this->regon = $regon;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
     }
 
     public function getActive(): bool

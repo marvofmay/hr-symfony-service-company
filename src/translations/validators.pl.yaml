@@ -5,3 +5,6 @@ uuid:
 file:
   fileNotExists: "Plik nie istnieje"
   chooseFile: "Wskaż plik"
+phones:
+  min: "Musisz podać minimalnie :min numery telefonów."
+  max: "Możesz podać maksymalnie :max numery telefonów."

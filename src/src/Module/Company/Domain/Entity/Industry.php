@@ -6,6 +6,8 @@ namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -74,6 +76,14 @@ class Industry
     #[Groups('industry_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
+    #[ORM\OneToMany(targetEntity: Company::class, mappedBy: 'industry')]
+    private Collection $companies;
+
+    public function __construct()
+    {
+        $this->companies = new ArrayCollection();
+    }
+
     public function getUuid(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
@@ -102,5 +112,10 @@ class Industry
     public function setDescription(?string $description): void
     {
         $this->{self::COLUMN_DESCRIPTION} = $description;
+    }
+
+    public function getCompanies(): Collection
+    {
+        return $this->companies;
     }
 }
