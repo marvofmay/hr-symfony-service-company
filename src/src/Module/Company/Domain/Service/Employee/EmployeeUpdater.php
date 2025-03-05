@@ -78,7 +78,7 @@ class EmployeeUpdater extends EmployeeCreator
         $this->employeeWriterRepository->updateEmployeeInDB($this->employee);
     }
 
-    protected function setContacts(array $phones): void
+    protected function setContacts(array $phones, array $emails = [], array $websites = []): void
     {
         $contacts = $this->employee->getContacts(ContactTypeEnum::PHONE);
         $this->contactWriterRepository->deleteContactsInDB($contacts, Contact::HARD_DELETED_AT);

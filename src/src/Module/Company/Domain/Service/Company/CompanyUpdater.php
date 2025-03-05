@@ -39,7 +39,7 @@ class CompanyUpdater extends CompanyCreator
         $this->companyWriterRepository->updateCompanyInDB($this->company);
     }
 
-    protected function setContacts(array $phones, array $emails, array $websites): void
+    protected function setContacts(array $phones, array $emails = [], array $websites = []): void
     {
         foreach ([ContactTypeEnum::PHONE, ContactTypeEnum::EMAIL, ContactTypeEnum::WEBSITE] as $enum) {
             $contacts = $this->company->getContacts($enum);

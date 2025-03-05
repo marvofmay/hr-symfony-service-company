@@ -17,9 +17,7 @@ use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Entity\User;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
-use App\Module\Company\Domain\Interface\Address\AddressWriterInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
-use App\Module\Company\Domain\Interface\Contact\ContactWriterInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
@@ -74,7 +72,6 @@ class EmployeeCreator
         $this->setUser($command->email, $command->firstName);
 
         $this->setEmployeeMainData($command);
-        $this->setEmployeeCompanyData();
         $this->setEmployeeRelations();
     }
 
@@ -91,17 +88,14 @@ class EmployeeCreator
         $this->employee->setActive($command->active);
     }
 
-    protected function setEmployeeCompanyData (): void
+    protected function setEmployeeRelations(): void
     {
         $this->employee->setCompany($this->company);
         $this->employee->setDepartment($this->department);
         $this->employee->setPosition($this->position);
         $this->employee->setContractType($this->contractType);
         $this->employee->setRole($this->role);
-    }
 
-    protected function setEmployeeRelations(): void
-    {
         $this->employee->setUser($this->user);
 
         foreach ($this->contacts as $contact) {
@@ -114,6 +108,7 @@ class EmployeeCreator
 
         $this->employee->setAddress($this->address);
     }
+
     protected function setCompany(string $companyUUID): void
     {
         $this->company = $this->companyReaderRepository->getCompanyByUUID($companyUUID);
@@ -148,16 +143,22 @@ class EmployeeCreator
         $this->role = $this->roleReaderRepository->getRoleByUUID($roleUUID);
     }
 
-    protected function setContacts(array $phones): void
+    protected function setContacts(array $phones, array $emails = [], array $websites = []): void
     {
-        foreach ($phones as $phone) {
-            $contact = new Contact();
-            $contact->setCompany($this->company);
-            $contact->setDepartment($this->department);
-            $contact->setType(ContactTypeEnum::PHONE->value);
-            $contact->setData($phone);
+        $dataSets = [
+            ContactTypeEnum::PHONE->value => $phones,
+            ContactTypeEnum::EMAIL->value => $emails,
+            ContactTypeEnum::WEBSITE->value => $websites,
+        ];
 
-            $this->contacts[] = $contact;
+        foreach ($dataSets as $type => $values) {
+            foreach ($values as $value) {
+                $contact = new Contact();
+                $contact->setType($type);
+                $contact->setData($value);
+
+                $this->contacts[] = $contact;
+            }
         }
     }
 
@@ -167,6 +168,7 @@ class EmployeeCreator
         $this->address->setPostcode($addressDTO->postcode);
         $this->address->setCity($addressDTO->city);
         $this->address->setCountry($addressDTO->country);
+        $this->address->setActive($addressDTO->active);
     }
 
     protected function setUser(string $email, string $firstName): void

@@ -46,10 +46,10 @@ class Contact
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'contacts')]
-    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    private Company $company;
+    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    private ?Company $company;
 
-    #[ORM\ManyToOne(targetEntity: Department::class)]
+    #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'contacts')]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     #[Groups('contact_info')]
     private ?Department $department;
@@ -95,12 +95,12 @@ class Contact
         $this->{self::COLUMN_UUID} = $uuid;
     }
 
-    public function getCompany(): Company
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompany(Company $company): void
+    public function setCompany(?Company $company): void
     {
         $this->company = $company;
     }

@@ -29,12 +29,19 @@ class CreateDTO
         'domain' => 'departments',
     ])]
     #[MinMaxLength(min: 3, max: 200, message: [
-        'tooShort' => 'company.name.minimumLength',
-        'tooLong' => 'company.name.maximumLength',
+        'tooShort' => 'department.name.minimumLength',
+        'tooLong' => 'department.name.maximumLength',
         'domain' => 'companies',
     ])]
     #[UniqueDepartmentName]
     public string $name = '';
+
+    #[MinMaxLength(min: 3, max: 500, message: [
+        'tooShort' => 'department.description.minimumLength',
+        'tooLong' => 'department.description.maximumLength',
+        'domain' => 'companies',
+    ])]
+    public ?string $description = null;
 
     #[OA\Property(
         description: 'Określa, czy departament jest aktywny. Domyślnie wartość to true.',
@@ -91,5 +98,10 @@ class CreateDTO
     public function getParentDepartmentUUID(): ?string
     {
         return $this->parentDepartmentUUID;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 }

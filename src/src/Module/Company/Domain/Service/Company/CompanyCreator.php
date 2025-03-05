@@ -81,30 +81,22 @@ class CompanyCreator
         $this->company->setAddress($this->address);
     }
 
-    protected function setContacts(array $phones, array $emails, array $websites): void
+    protected function setContacts(array $phones, array $emails = [], array $websites = []): void
     {
-        foreach ($phones as $phone) {
-            $contact = new Contact();
-            $contact->setType(ContactTypeEnum::PHONE->value);
-            $contact->setData($phone);
+        $dataSets = [
+            ContactTypeEnum::PHONE->value => $phones,
+            ContactTypeEnum::EMAIL->value => $emails,
+            ContactTypeEnum::WEBSITE->value => $websites,
+        ];
 
-            $this->contacts[] = $contact;
-        }
+        foreach ($dataSets as $type => $values) {
+            foreach ($values as $value) {
+                $contact = new Contact();
+                $contact->setType($type);
+                $contact->setData($value);
 
-        foreach ($emails as $email) {
-            $contact = new Contact();
-            $contact->setType(ContactTypeEnum::EMAIL->value);
-            $contact->setData($email);
-
-            $this->contacts[] = $contact;
-        }
-
-        foreach ($websites as $website) {
-            $contact = new Contact();
-            $contact->setType(ContactTypeEnum::WEBSITE->value);
-            $contact->setData($website);
-
-            $this->contacts[] = $contact;
+                $this->contacts[] = $contact;
+            }
         }
     }
 
