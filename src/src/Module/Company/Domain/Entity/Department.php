@@ -74,6 +74,9 @@ class Department
     #[Groups('department_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
+    #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private Address $address;
+
     #[ORM\ManyToMany(targetEntity: Position::class, mappedBy: 'departments')]
     private Collection $positions;
 
@@ -150,6 +153,17 @@ class Department
         if ($this->positions->removeElement($position)) {
             $position->removeDepartment($this);
         }
+    }
+
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): void
+    {
+        $this->address = $address;
+        $address->setDepartment($this);
     }
 
     public function toArray(): array {

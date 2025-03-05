@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Company;
 
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
+use App\Module\Company\Application\Command\Company\CreateCompanyCommand;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
@@ -21,16 +22,16 @@ class CompanyCreator
     protected ArrayCollection $contacts;
 
     public function __construct(
-        private Company $company,
-        protected readonly Address $address,
-        private readonly CompanyWriterInterface $companyWriterRepository,
-        private readonly CompanyReaderInterface $companyReaderRepository,
-        private readonly IndustryReaderInterface $industryReaderRepository,
+        protected Company $company,
+        protected Address $address,
+        protected CompanyWriterInterface $companyWriterRepository,
+        protected CompanyReaderInterface $companyReaderRepository,
+        protected IndustryReaderInterface $industryReaderRepository,
     ) {
         $this->contacts = new ArrayCollection();
     }
 
-    public function create(CommandInterface $command): void
+    public function create(CreateCompanyCommand $command): void
     {
         $this->company = new Company();
         $this->setCompany($command);

@@ -41,18 +41,16 @@ class EmployeeCreator
         protected Role $role,
         protected Position $position,
         protected ContractType $contractType,
-        protected readonly User $user,
-        protected readonly Address $address,
-        protected readonly EmployeeWriterInterface $employeeWriterRepository,
-        protected readonly CompanyReaderInterface $companyReaderRepository,
-        protected readonly DepartmentReaderInterface $departmentReaderRepository,
-        protected readonly EmployeeReaderInterface $employeeReaderRepository,
-        protected readonly ContractTypeReaderInterface $contractTypeReaderRepository,
-        protected readonly PositionReaderInterface $positionReaderRepository,
-        protected readonly RoleReaderInterface $roleReaderRepository,
-        protected readonly ContactWriterInterface $contactWriterRepository,
-        protected readonly AddressWriterInterface $addressWriterRepository,
-        protected readonly UserWriterInterface $userWriterRepository,
+        protected User $user,
+        protected Address $address,
+        protected EmployeeWriterInterface $employeeWriterRepository,
+        protected CompanyReaderInterface $companyReaderRepository,
+        protected DepartmentReaderInterface $departmentReaderRepository,
+        protected EmployeeReaderInterface $employeeReaderRepository,
+        protected ContractTypeReaderInterface $contractTypeReaderRepository,
+        protected PositionReaderInterface $positionReaderRepository,
+        protected RoleReaderInterface $roleReaderRepository,
+        protected UserWriterInterface $userWriterRepository,
     ) {
         $this->contacts = new ArrayCollection();
     }
@@ -165,8 +163,6 @@ class EmployeeCreator
 
     protected function setAddress(AddressDTO $addressDTO): void
     {
-        $this->address->setCompany($this->company);
-        $this->address->setDepartment($this->department);
         $this->address->setStreet($addressDTO->street);
         $this->address->setPostcode($addressDTO->postcode);
         $this->address->setCity($addressDTO->city);

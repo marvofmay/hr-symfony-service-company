@@ -135,7 +135,7 @@ class Employee
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    private Address $address;
+    private ?Address $address = null;
 
     public function __construct()
     {
@@ -313,12 +313,12 @@ class Employee
         }
     }
 
-    public function getAddress(): Address
+    public function getAddress(): ?Address
     {
         return $this->address;
     }
 
-    public function setAddress(Address $address): void
+    public function setAddress(?Address $address): void
     {
         $this->address = $address;
         $address->setEmployee($this);
