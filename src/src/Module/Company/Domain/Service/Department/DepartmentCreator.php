@@ -80,6 +80,8 @@ class DepartmentCreator
     protected function setParentDepartment(?string $parentDepartmentUUID): void
     {
         if (null === $parentDepartmentUUID) {
+            $this->parentDepartment = null;
+
             return;
         }
 

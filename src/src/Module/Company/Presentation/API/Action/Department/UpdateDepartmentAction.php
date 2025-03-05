@@ -23,9 +23,14 @@ readonly class UpdateDepartmentAction
             new UpdateDepartmentCommand(
                 $department,
                 $updateDTO->getName(),
+                $updateDTO->getDescription(),
                 $updateDTO->getActive(),
                 $updateDTO->getCompanyUUID(),
-                $updateDTO->getParentDepartmentUUID()
+                $updateDTO->getParentDepartmentUUID(),
+                $updateDTO->getPhones(),
+                $updateDTO->getEmails(),
+                $updateDTO->getWebsites(),
+                $updateDTO->getAddress()
             )
         );
     }

@@ -35,7 +35,7 @@ class EmployeeCreator
         protected Company $company,
         protected Department $department,
         protected Employee $employee,
-        protected Employee $parentEmployee,
+        protected ?Employee $parentEmployee,
         protected Role $role,
         protected Position $position,
         protected ContractType $contractType,
@@ -122,6 +122,8 @@ class EmployeeCreator
     protected function setParentEmployee(?string $parentEmployeeUUID): void
     {
         if (null === $parentEmployeeUUID) {
+            $this->parentEmployee = null;
+
             return;
         }
 

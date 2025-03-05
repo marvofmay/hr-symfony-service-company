@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\DTO\Department;
 
+use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Company\Structure\Validator\Constraints\Company\ExistingCompanyUUID;
@@ -80,6 +81,40 @@ class CreateDTO
     )]
     public ?string $parentDepartmentUUID = null;
 
+    #[Assert\All([
+        new Assert\Type(type: 'string')
+    ])]
+    #[Assert\Type('array')]
+    #[Assert\Count(
+        max: 3,
+        maxMessage: 'phones.max'
+    )]
+    public ?array $phones = [];
+
+    #[Assert\All([
+        new Assert\Type(type: 'string')
+    ])]
+    #[Assert\Type('array')]
+    #[Assert\Count(
+        max: 3,
+        maxMessage: 'emails.max'
+    )]
+    public ?array $emails = [];
+
+    #[Assert\All([
+        new Assert\Type(type: 'string')
+    ])]
+    #[Assert\Type('array')]
+    #[Assert\Count(
+        max: 3,
+        maxMessage: 'websites.max'
+    )]
+    public ?array $websites = [];
+
+    #[Assert\NotBlank]
+    #[Assert\Valid]
+    public AddressDTO $address;
+
     public function getName(): string
     {
         return $this->name;
@@ -103,5 +138,25 @@ class CreateDTO
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function getPhones(): ?array
+    {
+        return $this->phones;
+    }
+
+    public function getEmails(): ?array
+    {
+        return $this->emails;
+    }
+
+    public function getWebsites(): ?array
+    {
+        return $this->websites;
+    }
+
+    public function getAddress(): AddressDTO
+    {
+        return $this->address;
     }
 }

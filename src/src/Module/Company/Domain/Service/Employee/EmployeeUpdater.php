@@ -33,7 +33,7 @@ class EmployeeUpdater extends EmployeeCreator
         protected Company $company,
         protected Department $department,
         protected Employee $employee,
-        protected Employee $parentEmployee,
+        protected ?Employee $parentEmployee,
         protected Role $role,
         protected Position $position,
         protected ContractType $contractType,
