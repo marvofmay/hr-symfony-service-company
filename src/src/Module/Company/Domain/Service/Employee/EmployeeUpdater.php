@@ -26,6 +26,7 @@ use App\Module\Company\Domain\Interface\Employee\EmployeeWriterInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Interface\User\UserWriterInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class EmployeeUpdater extends EmployeeCreator
 {
@@ -49,6 +50,7 @@ class EmployeeUpdater extends EmployeeCreator
         protected UserWriterInterface $userWriterRepository,
         protected ContactWriterInterface $contactWriterRepository,
         protected AddressWriterInterface $addressWriterRepository,
+        protected UserPasswordHasherInterface $userPasswordHasher,
     ) {
         parent::__construct($company,
             $department,
@@ -100,6 +102,7 @@ class EmployeeUpdater extends EmployeeCreator
 
         if (null !== $this->employee->getUser() && $this->employee->getUser()->getEmail() !== $email) {
             $this->userWriterRepository->deleteUserInDB($this->employee->getUser(), User::HARD_DELETED_AT);
+            $this->user = new User($this->userPasswordHasher);
             $this->user->setEmail($email);
             $this->user->setPassword($password);
         }

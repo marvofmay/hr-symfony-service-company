@@ -51,12 +51,10 @@ class Contact
 
     #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'contacts')]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    #[Groups('contact_info')]
     private ?Department $department;
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'contacts')]
     #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    #[Groups('contact_info')]
     private ?Employee $employee;
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]

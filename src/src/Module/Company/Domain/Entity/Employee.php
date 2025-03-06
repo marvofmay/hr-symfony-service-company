@@ -132,9 +132,11 @@ class Employee
     private Collection $notes;
 
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    #[Groups('employee_info')]
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    #[Groups('employee_info')]
     private ?Address $address = null;
 
     public function __construct()

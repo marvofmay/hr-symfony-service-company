@@ -9,6 +9,8 @@ use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\User;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -31,6 +33,30 @@ class EmployeeReaderRepository extends ServiceEntityRepository implements Employ
         }
 
         return $position;
+    }
+
+    public function getEmployeesByUUID(array $selectedUUID): Collection
+    {
+        if (empty($selectedUUID)) {
+            return new ArrayCollection();
+        }
+
+        $employees = $this->getEntityManager()
+            ->createQuery('SELECT e FROM ' . Employee::class . ' e WHERE e.' . Employee::COLUMN_UUID . ' IN (:uuids)')
+            ->setParameter('uuids', $selectedUUID)
+            ->getResult();
+
+
+        if (count($employees) !== count($selectedUUID)) {
+            $missingUuids = array_diff($selectedUUID, array_map(fn($employee) => $employee->getUuid(), $employees));
+            throw new NotFindByUUIDException(sprintf(
+                '%s : %s',
+                $this->translator->trans('employee.uuid.notFound', [], 'employees'),
+                implode(', ', $missingUuids)
+            ));
+        }
+
+        return new ArrayCollection($employees);
     }
 
     public function isEmployeeWithUUIDExists(string $uuid): bool

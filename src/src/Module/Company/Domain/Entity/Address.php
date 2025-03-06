@@ -52,13 +52,11 @@ class Address
 
     #[ORM\OneToOne(targetEntity: Department::class, inversedBy: 'address')]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    #[Groups('address_info')]
     private ?Department $department;
 
     #[ORM\OneToOne(targetEntity: Employee::class, inversedBy: 'address')]
     #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    #[Groups('address_info')]
-    private ?Employee $employee = null;
+    private ?Employee $employee;
 
     #[ORM\Column(type: Types::STRING, length: 250, nullable: false)]
     #[Assert\NotBlank()]

@@ -1,7 +1,26 @@
+api_employee_delete:
+  path: api/employees/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Employee\DeleteEmployeeController::delete
+  methods: [DELETE]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+    
+api_employee_get:
+  path: api/employees/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Employee\GetEmployeeController::get
+  methods: [GET]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+    
 api_employee_create:
   path: api/employees
   controller: App\Module\Company\Presentation\API\Controller\Employee\CreateEmployeeController::create
   methods: [POST]
+  
+api_employee_delete_multiple:
+  path: api/employees/multiple
+  controller: App\Module\Company\Presentation\API\Controller\Employee\DeleteMultipleEmployeesController::delete
+  methods: [DELETE]  
 
 api_employee_update:
   path: api/employees/{uuid}

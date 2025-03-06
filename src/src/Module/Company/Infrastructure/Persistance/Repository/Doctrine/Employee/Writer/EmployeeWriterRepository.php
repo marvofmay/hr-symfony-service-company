@@ -7,6 +7,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Empl
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Interface\Employee\EmployeeWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class EmployeeWriterRepository extends ServiceEntityRepository implements EmployeeWriterInterface
@@ -22,14 +23,7 @@ class EmployeeWriterRepository extends ServiceEntityRepository implements Employ
         $this->getEntityManager()->flush();
     }
 
-    public function updateEmployeeInDB(Employee $employee): void
-    {
-        $x = $employee;
-        $this->getEntityManager()->persist($employee);
-        $this->getEntityManager()->flush();
-    }
-
-    public function saveEmployeesInDB(array $employees): void
+    public function saveEmployeesInDB(Collection $employees): void
     {
         foreach ($employees as $employee) {
             $this->getEntityManager()->persist($employee);
@@ -37,16 +31,28 @@ class EmployeeWriterRepository extends ServiceEntityRepository implements Employ
         $this->getEntityManager()->flush();
     }
 
-    public function deleteMultipleEmployeesInDB(array $selectedUUID): void
+    public function updateEmployeeInDB(Employee $employee): void
     {
-        if (empty($selectedUUID)) {
+        $this->getEntityManager()->persist($employee);
+        $this->getEntityManager()->flush();
+    }
+
+    public function deleteEmployeeInDB(Employee $employee): void
+    {
+        $this->getEntityManager()->remove($employee);
+        $this->getEntityManager()->flush();
+    }
+
+    public function deleteMultipleEmployeesInDB(Collection $employees): void
+    {
+        if (empty($employees)) {
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE ' . Employee::class . ' e SET e. ' . Employee::COLUMN_DELETED_AT . ' = :deletedAt WHERE e.' . Employee::COLUMN_UUID . ' IN (:uuids)');
-        $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
-        $query->setParameter('uuids', $selectedUUID);
+        foreach ($employees as $employee) {
+            $this->getEntityManager()->remove($employee);
+        }
 
-        $query->execute();
+        $this->getEntityManager()->flush();
     }
 }

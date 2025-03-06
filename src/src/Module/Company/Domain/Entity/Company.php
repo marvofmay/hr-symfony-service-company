@@ -53,9 +53,11 @@ class Company
     private Industry $industry;
 
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    #[Groups('company_info')]
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    #[Groups('company_info')]
     private Address $address;
 
     #[ORM\Column(type: Types::STRING, length: 1000)]
