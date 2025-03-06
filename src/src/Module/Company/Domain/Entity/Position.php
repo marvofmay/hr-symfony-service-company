@@ -73,7 +73,6 @@ class Position
     #[ORM\JoinTable(name: "position_department")]
     #[ORM\JoinColumn(name: "position_uuid", referencedColumnName: "uuid")]
     #[ORM\InverseJoinColumn(name: "department_uuid", referencedColumnName: "uuid")]
-    #[Groups('position_info')]
     private Collection $departments;
 
     public function __construct()

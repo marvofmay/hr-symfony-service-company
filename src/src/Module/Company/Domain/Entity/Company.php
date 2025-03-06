@@ -98,8 +98,16 @@ class Company
     #[Groups('company_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
+    #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private Collection $employees;
+
+    #[ORM\OneToMany(targetEntity: Department::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private Collection $departments;
+
     public function __construct()
     {
+        $this->departments = new ArrayCollection();
+        $this->employees = new ArrayCollection();
         $this->contacts = new ArrayCollection();
     }
 
@@ -219,5 +227,51 @@ class Company
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
+    }
+
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployee(Employee $employee): void
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->setCompany($this);
+        }
+    }
+
+    public function removeEmployee(Employee $employee): void
+    {
+        if ($this->employees->contains($employee)) {
+            $this->employees->removeElement($employee);
+            if ($employee->getCompany() === $this) {
+                $employee->setCompany(null);
+            }
+        }
+    }
+
+    public function getDepartments(): Collection
+    {
+        return $this->departments;
+    }
+
+    public function addDepartment(Department $department): void
+    {
+        if (!$this->departments->contains($department)) {
+            $this->departments->add($department);
+            $department->setCompany($this);
+        }
+    }
+
+    public function removeDepartment(Department $department): void
+    {
+        if ($this->departments->contains($department)) {
+            $this->departments->removeElement($department);
+            if ($department->getCompany() === $this) {
+                $department->setCompany(null);
+            }
+        }
     }
 }

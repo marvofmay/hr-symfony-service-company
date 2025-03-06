@@ -4,6 +4,13 @@ api_department_delete:
   methods: [DELETE]
   requirements:
     uuid: '[0-9a-fA-F-]{36}'
+    
+api_department_get:
+  path: api/departments/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Department\GetDepartmentController::get
+  methods: [GET]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'    
 
 api_department_create:
   path: api/departments

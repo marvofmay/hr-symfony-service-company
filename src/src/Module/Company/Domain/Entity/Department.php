@@ -46,7 +46,7 @@ class Department
     #[ORM\ManyToOne(targetEntity: Company::class)]
     #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('department_info')]
-    private Company $company;
+    private ?Company $company;
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
@@ -80,16 +80,24 @@ class Department
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
+    #[Groups('department_info')]
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
+    #[Groups('department_info')]
     private Address $address;
 
     #[ORM\ManyToMany(targetEntity: Position::class, mappedBy: 'departments')]
+    #[Groups('department_info')]
     private Collection $positions;
+
+    #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
+    #[Groups('department_info')]
+    private Collection $employees;
 
     public function __construct()
     {
+        $this->employees = new ArrayCollection();
         $this->positions = new ArrayCollection();
         $this->contacts = new ArrayCollection();
     }
@@ -104,7 +112,7 @@ class Department
         return $this->company;
     }
 
-    public function setCompany(Company $company): void
+    public function setCompany(?Company $company): void
     {
         $this->company = $company;
     }
@@ -199,6 +207,29 @@ class Department
         if (!$this->contacts->contains($contact)) {
             $this->contacts[] = $contact;
             $contact->setDepartment($this);
+        }
+    }
+
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function addEmployee(Employee $employee): void
+    {
+        if (!$this->employees->contains($employee)) {
+            $this->employees->add($employee);
+            $employee->setDepartment($this);
+        }
+    }
+
+    public function removeEmployee(Employee $employee): void
+    {
+        if ($this->employees->contains($employee)) {
+            $this->employees->removeElement($employee);
+            if ($employee->getDepartment() === $this) {
+                $employee->setDepartment(null);
+            }
         }
     }
 
