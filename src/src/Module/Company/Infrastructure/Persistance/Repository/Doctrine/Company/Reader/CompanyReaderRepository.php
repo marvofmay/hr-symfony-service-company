@@ -21,7 +21,6 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
     public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
     {
         parent::__construct($registry, Company::class);
-        $this->qb = $this->getEntityManager()->createQueryBuilder();
     }
 
     public function getCompanyByUUID(string $uuid): ?Company
@@ -64,32 +63,34 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
 
     public function getCompanyByFullName(string $fullName, ?string $uuid = null): ?Company
     {
-        $this->qb->select('c')
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('c')
             ->from(Company::class, 'c')
             ->where('c.' . Company::COLUMN_FULL_NAME . ' = :name')
             ->setParameter('name', $fullName);
 
         if (null !== $uuid) {
-            $this->qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
-        return $this->qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function getCompanyByShortName(string $shortName, ?string $uuid = null): ?Company
     {
-        $this->qb->select('c')
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('c')
             ->from(Company::class, 'c')
             ->where('c.' . Company::COLUMN_SHORT_NAME . ' = :name')
             ->setParameter('name', $shortName);
 
         if (null !== $uuid) {
-            $this->qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
-        return $this->qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
     }
 
     public function isCompanyExists(string $name, ?string $uuid = null): bool
@@ -99,11 +100,12 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
 
     public function isCompanyWithUUIDExists(string $uuid): bool
     {
-        $this->qb->select('c')
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('c')
             ->from(Company::class, 'c')
             ->where('c.' . Company::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 
-        return null !== $this->qb->getQuery()->getOneOrNullResult();
+        return null !== $qb->getQuery()->getOneOrNullResult();
     }
 }
