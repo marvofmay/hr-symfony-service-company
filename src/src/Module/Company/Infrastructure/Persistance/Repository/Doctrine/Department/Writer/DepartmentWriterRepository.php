@@ -7,6 +7,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Depa
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Interface\Department\DepartmentWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class DepartmentWriterRepository extends ServiceEntityRepository implements DepartmentWriterInterface
@@ -27,7 +28,7 @@ class DepartmentWriterRepository extends ServiceEntityRepository implements Depa
         $this->getEntityManager()->flush();
     }
 
-    public function saveDepartmentsInDB(array $departments): void
+    public function saveDepartmentsInDB(Collection $departments): void
     {
         foreach ($departments as $department) {
             $this->getEntityManager()->persist($department);
@@ -41,16 +42,16 @@ class DepartmentWriterRepository extends ServiceEntityRepository implements Depa
         $this->getEntityManager()->flush();
     }
 
-    public function deleteMultipleDepartmentsInDB(array $selectedUUID): void
+    public function deleteMultipleDepartmentsInDB(Collection $departments): void
     {
-        if (empty($selectedUUID)) {
+        if (empty($departments)) {
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE ' . Department::class . ' d SET d. ' . Department::COLUMN_DELETED_AT . ' = :deletedAt WHERE d.' . Department::COLUMN_UUID . ' IN (:uuids)');
-        $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
-        $query->setParameter('uuids', $selectedUUID);
+        foreach ($departments as $department) {
+            $this->getEntityManager()->remove($department);
+        }
 
-        $query->execute();
+        $this->getEntityManager()->flush();
     }
 }
