@@ -15,6 +15,11 @@ api_company_import:
   controller: App\Module\Company\Presentation\API\Controller\Company\ImportCompaniesController::import
   methods: [POST]
 
+api_company_delete_multiple:
+  path: api/companies/multiple
+  controller: App\Module\Company\Presentation\API\Controller\Company\DeleteMultipleCompaniesController::delete
+  methods: [DELETE]
+
 api_company_update:
   path: api/companies/{uuid}
   controller: App\Module\Company\Presentation\API\Controller\Company\UpdateCompanyController::update

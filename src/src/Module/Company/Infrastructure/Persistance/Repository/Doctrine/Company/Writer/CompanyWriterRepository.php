@@ -41,4 +41,17 @@ class CompanyWriterRepository extends ServiceEntityRepository implements Company
         $this->getEntityManager()->remove($company);
         $this->getEntityManager()->flush();
     }
+
+    public function deleteMultipleCompaniesInDB(Collection $companies): void
+    {
+        if (empty($companies)) {
+            return;
+        }
+
+        foreach ($companies as $company) {
+            $this->getEntityManager()->remove($company);
+        }
+
+        $this->getEntityManager()->flush();
+    }    
 }

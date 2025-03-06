@@ -13,4 +13,5 @@ interface CompanyWriterInterface
     public function updateCompanyInDB(Company $company): void;
     public function saveCompaniesInDB(Collection $companies): void;
     public function deleteCompanyInDB(Company $company): void;
+    public function deleteMultipleCompaniesInDB(Collection $companies): void;
 }
