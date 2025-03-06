@@ -37,7 +37,7 @@ class UpdateCompanyController extends AbstractController
                 description: 'Firma została zaktualizowana',
                 content: new OA\JsonContent(
                     properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Firma zostało pomyślnie zaktualizowana'),
+                        new OA\Property(property: 'message', type: 'string', example: 'Firma została pomyślnie zaktualizowana'),
                     ],
                     type: 'object'
                 )

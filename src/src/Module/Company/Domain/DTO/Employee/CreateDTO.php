@@ -119,7 +119,7 @@ class CreateDTO
     #[ExistingEmployeeUUID(
         message: ['uuidNotExists' => 'employee.uuid.notExists', 'domain' => 'employees']
     )]
-    public string $parentEmployeeUUID;
+    public ?string $parentEmployeeUUID = null;
 
     #[OA\Property(
         description: 'unikalny indentyfikator pracownika w firmie',
@@ -206,6 +206,12 @@ class CreateDTO
         new Assert\Type(type: 'string')
     ])]
     #[Assert\Type('array')]
+    #[Assert\Count(
+        min: 1,
+        max: 3,
+        minMessage: 'phones.min',
+        maxMessage: 'phones.max'
+    )]
     public ?array $phones = [];
 
     #[Assert\NotBlank]

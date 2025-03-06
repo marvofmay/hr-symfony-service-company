@@ -8,6 +8,17 @@ company:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
     expectedUniqueRoleNameConstraint: "Oczekiwano unikalnej nazwy firmy"
+  nip:
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
+  regon:
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
+  industryUUID:
+    required: "Wymagane uuid branży"
+  description:
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
   add:
     success: "Firms została pomyślnie zapisana"
     error: "Wystąpił błąd - firma nie została dodana"

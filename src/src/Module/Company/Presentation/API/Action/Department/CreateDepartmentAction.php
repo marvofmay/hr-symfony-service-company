@@ -19,9 +19,14 @@ readonly class CreateDepartmentAction
         $this->commandBus->dispatch(
             new CreateDepartmentCommand(
                 $createDTO->getName(),
+                $createDTO->getDescription(),
                 $createDTO->getActive(),
                 $createDTO->getCompanyUUID(),
                 $createDTO->getParentDepartmentUUID(),
+                $createDTO->getPhones(),
+                $createDTO->getEmails(),
+                $createDTO->getWebsites(),
+                $createDTO->getAddress()
             )
         );
     }

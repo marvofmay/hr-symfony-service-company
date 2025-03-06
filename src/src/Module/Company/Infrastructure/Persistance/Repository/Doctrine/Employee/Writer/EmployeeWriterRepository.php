@@ -24,6 +24,8 @@ class EmployeeWriterRepository extends ServiceEntityRepository implements Employ
 
     public function updateEmployeeInDB(Employee $employee): void
     {
+        $x = $employee;
+        $this->getEntityManager()->persist($employee);
         $this->getEntityManager()->flush();
     }
 

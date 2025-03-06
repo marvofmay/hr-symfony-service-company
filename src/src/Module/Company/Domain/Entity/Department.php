@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
+use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -57,6 +58,10 @@ class Department
     #[Groups('department_info')]
     private string $name;
 
+    #[ORM\Column(type: Types::STRING, length: 500, nullable: true)]
+    #[Groups('company_info')]
+    private ?string $description = null;
+
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
     #[Groups('department_info')]
@@ -74,12 +79,19 @@ class Department
     #[Groups('department_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
+    private Collection $contacts;
+
+    #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
+    private Address $address;
+
     #[ORM\ManyToMany(targetEntity: Position::class, mappedBy: 'departments')]
     private Collection $positions;
 
     public function __construct()
     {
         $this->positions = new ArrayCollection();
+        $this->contacts = new ArrayCollection();
     }
 
     public function getUuid(): UuidInterface
@@ -122,6 +134,16 @@ class Department
         $this->{self::COLUMN_NAME} = $name;
     }
 
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
     public function getActive(): bool
     {
         return $this->{self::COLUMN_ACTIVE};
@@ -149,6 +171,34 @@ class Department
     {
         if ($this->positions->removeElement($position)) {
             $position->removeDepartment($this);
+        }
+    }
+
+    public function getAddress(): Address
+    {
+        return $this->address;
+    }
+
+    public function setAddress(Address $address): void
+    {
+        $this->address = $address;
+        $address->setDepartment($this);
+    }
+
+    public function getContacts(?ContactTypeEnum $type = null): Collection
+    {
+        if ($type === null) {
+            return $this->contacts;
+        }
+
+        return $this->contacts->filter(fn(Contact $contact) => $contact->getType() === $type->value);
+    }
+
+    public function addContact(Contact $contact): void
+    {
+        if (!$this->contacts->contains($contact)) {
+            $this->contacts[] = $contact;
+            $contact->setDepartment($this);
         }
     }
 

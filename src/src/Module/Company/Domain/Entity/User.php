@@ -42,6 +42,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public const COLUMN_DELETED_AT = 'deletedAt';
     public const RELATION_ROLES = 'roles';
 
+    public const SOFT_DELETED_AT = 'soft';
+    public const HARD_DELETED_AT = 'hard';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -80,7 +83,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\OneToOne(targetEntity: Employee::class, inversedBy: 'user')]
     #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true)]
     private ?Employee $employee = null;
-    public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher)
+    public function __construct(private ?UserPasswordHasherInterface $userPasswordHasher)
     {
     }
 

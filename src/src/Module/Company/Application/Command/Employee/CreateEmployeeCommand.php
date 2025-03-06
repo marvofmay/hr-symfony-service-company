@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\Command\Employee;
 
 use App\Common\Domain\DTO\AddressDTO;
+use App\Common\Domain\Interface\CommandInterface;
 
-class CreateEmployeeCommand
+class CreateEmployeeCommand implements CommandInterface
 {
     public function __construct(
         public string $companyUUID,
@@ -15,7 +16,7 @@ class CreateEmployeeCommand
         public string $contractTypeUUID,
         public string $roleUUID,
         public ?string $parentEmployeeUUID,
-        public ?string $executorUUID,
+        public ?string $externalUUID,
         public string $email,
         public string $firstName,
         public string $lastName,
@@ -24,6 +25,6 @@ class CreateEmployeeCommand
         public ?string $employmentTo,
         public bool $active,
         public ?array $phones,
-        public AddressDTO $address
+        public AddressDTO $address,
     ) {}
 }

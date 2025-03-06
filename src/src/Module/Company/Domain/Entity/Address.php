@@ -36,6 +36,8 @@ class Address
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
+    public const SOFT_DELETED_AT = 'soft';
+    public const HARD_DELETED_AT = 'hard';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -44,12 +46,11 @@ class Address
     #[Groups('address_info')]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: Company::class)]
-    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('address_info')]
-    private Company $company;
+    #[ORM\OneToOne(targetEntity: Company::class, inversedBy: 'address')]
+    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    private ?Company $company;
 
-    #[ORM\ManyToOne(targetEntity: Department::class)]
+    #[ORM\OneToOne(targetEntity: Department::class, inversedBy: 'address')]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     #[Groups('address_info')]
     private ?Department $department;
@@ -104,12 +105,12 @@ class Address
         $this->{self::COLUMN_UUID} = $uuid;
     }
 
-    public function getCompany(): Company
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompany(Company $company): void
+    public function setCompany(?Company $company): void
     {
         $this->company = $company;
     }

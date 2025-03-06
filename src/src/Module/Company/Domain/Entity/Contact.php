@@ -35,6 +35,9 @@ class Contact
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
 
+    public const SOFT_DELETED_AT = 'soft';
+    public const HARD_DELETED_AT = 'hard';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -42,22 +45,21 @@ class Contact
     #[Groups('contact_info')]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: Company::class)]
-    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('contact_info')]
-    private Company $company;
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'contacts')]
+    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    private ?Company $company;
 
-    #[ORM\ManyToOne(targetEntity: Department::class)]
+    #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'contacts')]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     #[Groups('contact_info')]
     private ?Department $department;
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'contacts')]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     #[Groups('contact_info')]
-    private ?Employee $employee = null;
+    private ?Employee $employee;
 
-    #[ORM\Column(type: Types::INTEGER, nullable: false)]
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
     #[Assert\NotBlank()]
     #[Groups('contact_info')]
     private string $type;
@@ -67,9 +69,9 @@ class Contact
     #[Groups('contact_info')]
     private string $data;
 
-    #[ORM\Column(type: Types::BOOLEAN)]
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Groups('contact_info')]
-    private bool $active = false;
+    private bool $active = true;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
     #[Groups('contact_info')]
@@ -93,12 +95,12 @@ class Contact
         $this->{self::COLUMN_UUID} = $uuid;
     }
 
-    public function getCompany(): Company
+    public function getCompany(): ?Company
     {
         return $this->company;
     }
 
-    public function setCompany(Company $company): void
+    public function setCompany(?Company $company): void
     {
         $this->company = $company;
     }

@@ -15,6 +15,6 @@ readonly class UpdateCompanyCommandHandler
 
     public function __invoke(UpdateCompanyCommand $command): void
     {
-        $this->companyUpdater->update($command);
+        $this->companyUpdater->update($command->company, $command);
     }
 }

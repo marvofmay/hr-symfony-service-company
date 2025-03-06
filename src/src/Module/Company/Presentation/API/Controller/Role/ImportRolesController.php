@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
+use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
@@ -85,7 +86,7 @@ class ImportRolesController extends AbstractController
                 );
             }
 
-            $uploadFileService = new UploadFile($uploadFilePath, 'xlsx');
+            $uploadFileService = new UploadFile($uploadFilePath, FileExtensionEnum::XLSX);
             $uploadFileService->uploadFile($uploadedFile);
 
             $importer = new ImportRolesFromXLSX(

@@ -24,7 +24,15 @@ readonly class UpdateCompanyAction
                 $updateDTO->getFullName(),
                 $updateDTO->getShortName(),
                 $updateDTO->getActive(),
-                $updateDTO->getParentCompanyUUID()
+                $updateDTO->getParentCompanyUUID(),
+                $updateDTO->getNip(),
+                $updateDTO->getREGON(),
+                $updateDTO->getDescription(),
+                $updateDTO->getIndustryUUID(),
+                $updateDTO->getPhones(),
+                $updateDTO->getEmails(),
+                $updateDTO->getWebsites(),
+                $updateDTO->getAddress()
             )
         );
     }

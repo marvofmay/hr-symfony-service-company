@@ -24,7 +24,7 @@ class CreateEmployeeController extends AbstractController
 
     #[OA\Post(
         path: '/api/employees',
-        summary: 'Tworzy nowy departament',
+        summary: 'Tworzy nowego pracownika',
         requestBody: new OA\RequestBody(
             required: true,
             content: new OA\JsonContent(
