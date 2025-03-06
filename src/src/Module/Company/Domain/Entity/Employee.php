@@ -16,6 +16,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Attribute\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -56,14 +57,12 @@ class Employee
     #[Groups('employee_info')]
     private ?string $externalUUID = null;
 
-    #[ORM\ManyToOne(targetEntity: Company::class)]
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'employees')]
     #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('employee_info')]
     private ?Company $company;
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('employee_info')]
     private ?Department $department;
 
     #[ORM\ManyToOne(targetEntity: Employee::class)]

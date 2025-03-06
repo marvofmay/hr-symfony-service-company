@@ -99,6 +99,7 @@ class Company
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    #[Groups('company_info')]
     private Collection $employees;
 
     #[ORM\OneToMany(targetEntity: Department::class, mappedBy: 'company', cascade: ['persist', 'remove'])]

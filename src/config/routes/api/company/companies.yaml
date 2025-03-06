@@ -5,6 +5,13 @@ api_company_delete:
   requirements:
     uuid: '[0-9a-fA-F-]{36}'
 
+api_company_get:
+  path: api/companies/{uuid}
+  controller: App\Module\Company\Presentation\API\Controller\Company\GetCompanyController::get
+  methods: [GET]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
 api_company_create:
   path: api/companies
   controller: App\Module\Company\Presentation\API\Controller\Company\CreateCompanyController::create
