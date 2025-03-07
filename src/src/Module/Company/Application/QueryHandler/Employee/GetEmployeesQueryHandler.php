@@ -32,6 +32,7 @@ class GetEmployeesQueryHandler
 
         $totalEmployees = count($queryBuilder->getQuery()->getResult());
 
+        //ToDo:: Refactor query - use left join with companyUUID, departmentUUID, employeeUUID, roleUUID, positionUUID, contractTypeUUID
         $queryBuilder = $queryBuilder->orderBy('e.'.$orderBy, $orderDirection)
             ->setMaxResults($limit)
             ->setFirstResult($offset);

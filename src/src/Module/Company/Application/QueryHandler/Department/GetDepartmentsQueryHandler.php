@@ -32,6 +32,7 @@ class GetDepartmentsQueryHandler
 
         $totalDepartments = count($queryBuilder->getQuery()->getResult());
 
+        //ToDo:: Refactor query - use left join with companyUUID, departmentUUID
         $queryBuilder = $queryBuilder->orderBy('r.'.$orderBy, $orderDirection)
             ->setMaxResults($limit)
             ->setFirstResult($offset);

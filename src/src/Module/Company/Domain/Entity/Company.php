@@ -291,6 +291,8 @@ class Company
             self::COLUMN_NIP => $this->getNip(),
             self::COLUMN_REGON => $this->getRegon(),
             self::COLUMN_ACTIVE => $this->getActive(),
+            'quantityDepartments' => $this->getDepartments()->count(),
+            'quantityEmployees' => $this->getEmployees()->count(),
             //ToDo:: use const RELATION_PARENT_COMPANY
             'parentCompany' => $this->getParentCompany() ? $this->getParentCompany()->toArray() : null,
             self::COLUMN_CREATED_AT => $this->getCreatedAt(),
