@@ -9,6 +9,8 @@ use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Note\Domain\Entity\Note;
+use App\Module\System\Domain\Entity\File;
+use App\Module\System\Domain\Entity\Import;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -17,7 +19,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Serializer\Attribute\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -64,7 +65,7 @@ class Employee
     #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private ?Company $company;
 
-    #[ORM\ManyToOne(targetEntity: Department::class)]
+    #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'employees')]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private ?Department $department;
 
@@ -141,10 +142,18 @@ class Employee
     #[Groups('employee_info')]
     private ?Address $address = null;
 
+    #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    private Collection $files;
+
+    #[ORM\OneToMany(targetEntity: Import::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    private Collection $imports;
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->imports = new ArrayCollection();
+        $this->files = new ArrayCollection();
     }
 
     public function getUuid(): UuidInterface
@@ -326,6 +335,19 @@ class Employee
     {
         $this->address = $address;
         $address->setEmployee($this);
+    }
+
+    public function getFiles(): Collection
+    {
+        return $this->files;
+    }
+
+    public function addFile(File $file): void
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+            $file->setEmployee($this);
+        }
     }
 
     public function toArray(): array

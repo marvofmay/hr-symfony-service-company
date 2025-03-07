@@ -15,6 +15,7 @@ enum FileExtensionEnum: string implements EnumInterface
     case DOC = 'doc';
     case JPEG = 'jpeg';
     case JPG = 'jpg';
+    case WEBP = 'webp';
 
     public function label(): string
     {
