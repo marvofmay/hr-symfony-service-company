@@ -81,4 +81,14 @@ class Import
     {
         $this->file = $file;
     }
+
+    public function getEmployee(): ?Employee
+    {
+        return $this->employee;
+    }
+
+    public function setEmployee(?Employee $employee): void
+    {
+        $this->employee = $employee;
+    }
 }
