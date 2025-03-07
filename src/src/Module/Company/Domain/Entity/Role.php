@@ -103,4 +103,13 @@ class Role
     {
         $this->{self::COLUMN_DESCRIPTION} = $description;
     }
+
+    public function toArray(): array
+    {
+        return [
+            self::COLUMN_UUID => $this->{self::COLUMN_UUID},
+            self::COLUMN_NAME => $this->{self::COLUMN_NAME},
+            self::COLUMN_DESCRIPTION => $this->{self::COLUMN_DESCRIPTION},
+        ];
+    }
 }

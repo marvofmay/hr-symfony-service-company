@@ -28,3 +28,8 @@ api_employee_update:
   methods: [ PUT ]
   requirements:
     uuid: '[0-9a-fA-F-]{36}'
+
+api_employees_list:
+  path: api/employees
+  controller: App\Module\Company\Presentation\API\Controller\Employee\ListEmployeesController::list
+  methods: [GET]

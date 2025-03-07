@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Note\Domain\Entity\Note;
@@ -27,6 +28,7 @@ class Employee
 {
     use TimestampableTrait;
     use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_EXTERNAL_UUID = 'externalUUID';
@@ -328,7 +330,9 @@ class Employee
     public function toArray(): array
     {
         return [
-
+            self::COLUMN_FIRST_NAME => $this->firstName,
+            self::COLUMN_LAST_NAME => $this->lastName,
+            'role' => $this->getRole()->toArray(),
         ];
     }
 }
