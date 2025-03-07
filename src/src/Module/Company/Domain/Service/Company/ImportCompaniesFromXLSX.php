@@ -35,13 +35,13 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function validateCompanyFullName(?string $roleName): ?string
+    private function validateCompanyFullName(?string $fullName): ?string
     {
-        if (empty($roleName)) {
+        if (empty($fullName)) {
             return $this->formatErrorMessage('role.name.required');
         }
 
-        if (strlen($roleName) < 3) {
+        if (strlen($fullName) < 3) {
             return $this->formatErrorMessage('role.name.minimumLength', [':qty' => 3]);
         }
 
