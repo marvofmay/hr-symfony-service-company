@@ -68,12 +68,12 @@ class ListEmployeesController extends AbstractController
     )]
     #[OA\Tag(name: 'employees')]
     #[Route('/api/employees', name: 'api.employees.list', methods: ['GET'])]
-    public function list(#[MapQueryString] EmployeesQueryDTO $queryDTO, GetEmployeesQueryHandler $usersQueryHandler): Response
+    public function list(#[MapQueryString] EmployeesQueryDTO $queryDTO, GetEmployeesQueryHandler $employeesQueryHandler): Response
     {
         try {
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
-                    $usersQueryHandler->handle(new GetEmployeesQuery($queryDTO)),
+                    $employeesQueryHandler->handle(new GetEmployeesQuery($queryDTO)),
                     'json', ['groups' => ['employee_info']],
                 )),
             ],

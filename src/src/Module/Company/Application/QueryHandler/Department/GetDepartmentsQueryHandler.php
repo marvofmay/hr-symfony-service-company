@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\QueryHandler\Employee;
+namespace App\Module\Company\Application\QueryHandler\Department;
 
-use App\Module\Company\Application\Query\Employee\GetEmployeesQuery;
-use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Application\Query\Department\GetDepartmentsQuery;
+use App\Module\Company\Domain\Entity\Department;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
-class GetEmployeesQueryHandler
+class GetDepartmentsQueryHandler
 {
     public function __construct(private readonly EntityManagerInterface $entityManager)
     {
     }
 
-    public function handle(GetEmployeesQuery $query): array
+    public function handle(GetDepartmentsQuery $query): array
     {
         $limit = $query->getLimit();
         $orderBy = $query->getOrderBy();
@@ -25,24 +25,24 @@ class GetEmployeesQueryHandler
         $includes = $query->getIncludes();
 
         $queryBuilder = $this->entityManager->createQueryBuilder()
-            ->select('e')
-            ->from(Employee::class, 'e');
+            ->select('r')
+            ->from(Department::class, 'r');
 
         $queryBuilder = $this->setFilters($queryBuilder, $filters);
 
-        $totalEmployees = count($queryBuilder->getQuery()->getResult());
+        $totalDepartments = count($queryBuilder->getQuery()->getResult());
 
-        $queryBuilder = $queryBuilder->orderBy('e.'.$orderBy, $orderDirection)
+        $queryBuilder = $queryBuilder->orderBy('r.'.$orderBy, $orderDirection)
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 
-        $employees = $queryBuilder->getQuery()->getResult();
+        $departments = $queryBuilder->getQuery()->getResult();
 
         return [
-            'totalEmployees' => $totalEmployees,
+            'totalDepartments' => $totalDepartments,
             'page' => $query->getPage(),
             'limit' => $query->getLimit(),
-            'employees' => $this->transformIncludes($employees, $includes),
+            'departments' => $this->transformIncludes($departments, $includes),
         ];
     }
 
@@ -53,50 +53,50 @@ class GetEmployeesQueryHandler
                 if (is_null($fieldValue) || in_array($fieldName, ['deleted', 'phrase'])) {
                     continue;
                 }
-                $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->like('e.'.$fieldName, ':fieldValue'))
+                $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->like('r.'.$fieldName, ':fieldValue'))
                     ->setParameter('fieldValue', '%'.$fieldValue.'%');
             }
 
             if (array_key_exists('deleted', $filters)) {
                 switch ($filters['deleted']) {
                     case 0:
-                        $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNull('e.'.Employee::COLUMN_DELETED_AT));
+                        $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNull('r.'.Department::COLUMN_DELETED_AT));
                         break;
                     case 1:
                         $this->entityManager->getFilters()->disable('soft_delete');
-                        $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('e.'.Employee::COLUMN_DELETED_AT));
+                        $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNotNull('r.'.Department::COLUMN_DELETED_AT));
                         break;
                 }
             } else {
-                $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNull('e.'.Employee::COLUMN_DELETED_AT));
+                $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNull('r.'.Department::COLUMN_DELETED_AT));
             }
 
             if (array_key_exists('phrase', $filters) && !empty($filters['phrase'])) {
                 $queryBuilder = $queryBuilder->andWhere(
                     $queryBuilder->expr()->orX(
-                        $queryBuilder->expr()->like('LOWER(e. '.Employee::COLUMN_FIRST_NAME.')', ':searchPhrase'),
-                        $queryBuilder->expr()->like('LOWER(e.'.Employee::COLUMN_LAST_NAME.')', ':searchPhrase'),
+                        $queryBuilder->expr()->like('LOWER(r. '.Department::COLUMN_NAME.')', ':searchPhrase'),
+                        $queryBuilder->expr()->like('LOWER(r.'.Department::COLUMN_DESCRIPTION.')', ':searchPhrase'),
                     )
                 )
                 ->setParameter('searchPhrase', '%'.strtolower($filters['phrase']).'%');
             }
         } else {
-            $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNull('e.'.Employee::COLUMN_DELETED_AT));
+            $queryBuilder = $queryBuilder->andWhere($queryBuilder->expr()->isNull('r.'.Department::COLUMN_DELETED_AT));
         }
 
         return $queryBuilder;
     }
 
-    private function transformIncludes(array $employees, array $includes): array
+    private function transformIncludes(array $departments, array $includes): array
     {
         $data = [];
 
-        foreach ($employees as $employee) {
-            $data[] = $employee->toArray();
+        foreach ($departments as $department) {
+            $data[] = $department->toArray();
         }
 
-        foreach (Employee::getRelations() as $relation) {
-            foreach ($data as $key => $employee) {
+        foreach (Department::getRelations() as $relation) {
+            foreach ($data as $key => $department) {
                 if (!in_array($relation, $includes) || empty($includes)) {
                     unset($data[$key][$relation]);
                 }

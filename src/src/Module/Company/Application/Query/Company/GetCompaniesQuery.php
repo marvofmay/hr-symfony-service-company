@@ -2,16 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\Query\Employee;
+namespace App\Module\Company\Application\Query\Company;
 
-use App\Module\Company\Domain\DTO\Employee\EmployeesQueryDTO;
-use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\DTO\Company\CompaniesQueryDTO;
+use App\Module\Company\Domain\Entity\Company;
 
-class GetEmployeesQuery
+class GetCompaniesQuery
 {
-    //ToDo:: refactor in future - make abstract class which will be extended by GetEmployeeQuery and others
     public function __construct(
-        private readonly EmployeesQueryDTO $queryDTO,
+        private readonly CompaniesQueryDTO $queryDTO,
         private int $limit = 10,
         private int $page = 1,
         private int $offset = 0,
@@ -24,10 +23,10 @@ class GetEmployeesQuery
         $this->page = $this->queryDTO->page;
         $this->orderBy = $this->queryDTO->sortBy;
         $this->orderDirection = $this->queryDTO->sortDirection;
-        $this->filters = array_filter((array) $this->queryDTO, fn ($key) => in_array($key, Employee::getAttributes()), ARRAY_FILTER_USE_KEY);
+        $this->filters = array_filter((array) $this->queryDTO, fn ($key) => in_array($key, Company::getAttributes()), ARRAY_FILTER_USE_KEY);
         $this->includes = array_filter(
             explode(',', $this->queryDTO->includes ?? ''),
-            fn ($relation) => in_array($relation, Employee::getRelations())
+            fn ($relation) => in_array($relation, Company::getRelations())
         );
         $this->offset = ($this->queryDTO->page - 1) * $this->limit;
 

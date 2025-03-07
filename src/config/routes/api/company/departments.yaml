@@ -28,3 +28,8 @@ api_department_delete_multiple:
   path: api/departments/multiple
   controller: App\Module\Company\Presentation\API\Controller\Department\DeleteMultipleDepartmentsController::delete
   methods: [DELETE]    
+  
+api_departments_list:
+  path: api/departments
+  controller: App\Module\Company\Presentation\API\Controller\Department\ListDepartmentsController::list
+  methods: [GET]  

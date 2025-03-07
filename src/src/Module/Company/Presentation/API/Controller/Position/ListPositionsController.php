@@ -70,12 +70,12 @@ class ListPositionsController extends AbstractController
     )]
     #[OA\Tag(name: 'positions')]
     #[Route('/api/positions', name: 'api.positions.list', methods: ['GET'])]
-    public function list(#[MapQueryString] PositionsQueryDTO $queryDTO, GetPositionsQueryHandler $usersQueryHandler): Response
+    public function list(#[MapQueryString] PositionsQueryDTO $queryDTO, GetPositionsQueryHandler $positionsQueryHandler): Response
     {
         try {
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
-                    $usersQueryHandler->handle(new GetPositionsQuery($queryDTO)),
+                    $positionsQueryHandler->handle(new GetPositionsQuery($queryDTO)),
                     'json', ['groups' => ['position_info', 'department_info', 'company_info']],
                 )),
             ],

@@ -47,6 +47,7 @@ class Employee
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
+    public const RELATION_ROLE = 'role';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -332,7 +333,10 @@ class Employee
         return [
             self::COLUMN_FIRST_NAME => $this->firstName,
             self::COLUMN_LAST_NAME => $this->lastName,
-            'role' => $this->getRole()->toArray(),
+            self::COLUMN_CREATED_AT => $this->getCreatedAt(),
+            self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
+            self::COLUMN_DELETED_AT => $this->getDeletedAt(),
+            self::RELATION_ROLE => $this->getRole()->toArray(),
         ];
     }
 }

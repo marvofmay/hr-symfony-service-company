@@ -2,22 +2,22 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Domain\DTO\Employee;
+namespace App\Module\Company\Domain\DTO\Department;
 
 use OpenApi\Attributes as OA;
 
-class EmployeesQueryDTO
+class DepartmentsQueryDTO
 {
-    #[OA\Property(description: 'Imię pracownika', type: 'string', nullable: true)]
-    public ?string $firstName = null;
+    #[OA\Property(description: 'Nazwa departamentu', type: 'string', nullable: true)]
+    public ?string $name= null;
 
-    #[OA\Property(description: 'Nazwisko pracownika', type: 'string', nullable: true)]
-    public ?string $lastName = null;
+    #[OA\Property(description: 'Opis departamentu', type: 'string', nullable: true)]
+    public ?string $description = null;
 
     #[OA\Property(description: 'Aktywne', type: 'bool', nullable: true)]
     public ?bool $active = null;
 
-    #[OA\Property(description: 'Pobierz wybrane relacje z pracownikiem', type: 'string', nullable: true)]
+    #[OA\Property(description: 'Pobierz wybrane relacje z departamentem', type: 'string', nullable: true)]
     public ?string $includes = null;
 
     #[OA\Property(description: 'Data utworzenia', type: 'string', format: 'date-time', nullable: true)]
@@ -41,7 +41,7 @@ class EmployeesQueryDTO
     #[OA\Property(description: 'Kierunek sortowania', type: 'string', default: 'asc', enum: ['asc', 'desc'])]
     public ?string $sortDirection = 'desc';
 
-    #[OA\Property(description: 'Flaga pobierania usuniętych pracowników', type: 'integer', default: 0, enum: [0, 1])]
+    #[OA\Property(description: 'Flaga pobierania usuniętych departamentów', type: 'integer', default: 0, enum: [0, 1])]
     public ?int $deleted = null;
 
     #[OA\Property(description: 'Fraza do wyszukania', type: 'string', nullable: true)]

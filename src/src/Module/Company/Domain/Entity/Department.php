@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -25,11 +26,13 @@ class Department
 {
     use TimestampableTrait;
     use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_COMPANY_UUID = 'company_uuid';
     public const COLUMN_DEPARTMENT_UUID = 'department_uuid';
     public const COLUMN_NAME = 'name';
+    public CONST COLUMN_DESCRIPTION = 'description';
     public const COLUMN_ACTIVE = 'active';
 
     public const COLUMN_CREATED_AT = 'createdAt';
@@ -235,14 +238,17 @@ class Department
 
     public function toArray(): array {
         return [
-            'uuid' => $this->getUuid()->toString(),
-            'name' => $this->getName(),
-            'active' => $this->getActive(),
+            self::COLUMN_UUID => $this->getUuid()->toString(),
+            self::COLUMN_NAME => $this->getName(),
+            self::COLUMN_DESCRIPTION => $this->getDescription(),
+            self::COLUMN_ACTIVE => $this->getActive(),
+            //ToDo:: use const RELATION_COMPANY
             'company' => $this->getCompany(),
+            //ToDo:: use const RELATION_PARENT_DEPARTMENT
             'parentDepartment' => $this->getParentDepartment() ? $this->getParentDepartment()->toArray() : null,
-            'createdAt' => $this->getCreatedAt(),
-            'updatedAt' => $this->getUpdatedAt(),
-            'deletedAt' => $this->getDeletedAt(),
+            self::COLUMN_CREATED_AT => $this->getCreatedAt(),
+            self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
+            self::COLUMN_DELETED_AT => $this->getDeletedAt(),
         ];
     }
 }

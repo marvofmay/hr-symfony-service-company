@@ -71,12 +71,12 @@ class ListContractTypesController extends AbstractController
     )]
     #[OA\Tag(name: 'roles')]
     #[Route('/api/roles', name: 'api.roles.list', methods: ['GET'])]
-    public function list(#[MapQueryString] ContractTypesQueryDTO $queryDTO, GetContractTypesQueryHandler $usersQueryHandler): Response
+    public function list(#[MapQueryString] ContractTypesQueryDTO $queryDTO, GetContractTypesQueryHandler $contractTypesQueryHandler): Response
     {
         try {
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
-                    $usersQueryHandler->handle(new GetContractTypesQuery($queryDTO)),
+                    $contractTypesQueryHandler->handle(new GetContractTypesQuery($queryDTO)),
                     'json', ['groups' => ['contract_type_info']],
                 )),
             ],

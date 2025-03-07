@@ -70,12 +70,12 @@ class ListIndustriesController extends AbstractController
     )]
     #[OA\Tag(name: 'industries')]
     #[Route('/api/industries', name: 'api.industries.list', methods: ['GET'])]
-    public function list(#[MapQueryString] IndustriesQueryDTO $queryDTO, GetIndustriesQueryHandler $usersQueryHandler): Response
+    public function list(#[MapQueryString] IndustriesQueryDTO $queryDTO, GetIndustriesQueryHandler $industrysQueryHandler): Response
     {
         try {
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
-                    $usersQueryHandler->handle(new GetIndustriesQuery($queryDTO)),
+                    $industrysQueryHandler->handle(new GetIndustriesQuery($queryDTO)),
                     'json', ['groups' => ['industry_info']],
                 )),
             ],

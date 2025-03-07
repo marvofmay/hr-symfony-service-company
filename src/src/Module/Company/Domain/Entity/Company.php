@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use Doctrine\Common\Collections\Collection;
@@ -25,15 +26,20 @@ class Company
 {
     use TimestampableTrait;
     use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_COMPANY_UUID = 'companyUuid';
     public const COLUMN_FULL_NAME = 'fullName';
     public const COLUMN_SHORT_NAME = 'shortName';
+    public const COLUMN_DESCRIPTION = 'description';
+    public const COLUMN_NIP = 'nip';
+    public const COLUMN_REGON = 'regon';
     public const COLUMN_ACTIVE = 'active';
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
+    public const RELATION_INDUSTRY = 'industry';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -274,5 +280,22 @@ class Company
                 $department->setCompany(null);
             }
         }
+    }
+
+    public function toArray(): array {
+        return [
+            self::COLUMN_UUID => $this->getUuid()->toString(),
+            self::COLUMN_FULL_NAME => $this->getFullName(),
+            self::COLUMN_SHORT_NAME => $this->getShortName(),
+            self::COLUMN_DESCRIPTION => $this->getDescription(),
+            self::COLUMN_NIP => $this->getNip(),
+            self::COLUMN_REGON => $this->getRegon(),
+            self::COLUMN_ACTIVE => $this->getActive(),
+            //ToDo:: use const RELATION_PARENT_COMPANY
+            'parentCompany' => $this->getParentCompany() ? $this->getParentCompany()->toArray() : null,
+            self::COLUMN_CREATED_AT => $this->getCreatedAt(),
+            self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
+            self::COLUMN_DELETED_AT => $this->getDeletedAt(),
+        ];
     }
 }
