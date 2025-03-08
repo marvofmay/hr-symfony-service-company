@@ -51,6 +51,9 @@ class Import
     #[ORM\OneToMany(targetEntity: ImportLog::class, mappedBy: 'import', cascade: ['persist', 'remove'])]
     private Collection $logs;
 
+    #[ORM\OneToOne(targetEntity: ImportReport::class, mappedBy: 'import', cascade: ['persist', 'remove'])]
+    private ?ImportReport $report;
+
     #[ORM\OneToOne(targetEntity: File::class, inversedBy: 'import')]
     #[ORM\JoinColumn(name: 'file_uuid', referencedColumnName: 'uuid', unique: true, nullable: false, onDelete: 'CASCADE')]
     private File $file;
@@ -90,5 +93,39 @@ class Import
     public function setEmployee(?Employee $employee): void
     {
         $this->employee = $employee;
+    }
+
+    public function getReport(): ?ImportReport
+    {
+        return $this->report;
+    }
+
+    public function setReport(ImportReport $report): void
+    {
+        $this->report = $report;
+        $report->setImport($this);
+    }
+
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    public function addLog(ImportLog $log): void
+    {
+        if (!$this->logs->contains($log)) {
+            $this->logs->add($log);
+            $log->setImport($this);
+        }
+    }
+
+    public function removeLog(ImportLog $log): void
+    {
+        if ($this->logs->contains($log)) {
+            $this->logs->removeElement($log);
+            if ($log->getImport() === $this) {
+                $log->setImport(null);
+            }
+        }
     }
 }

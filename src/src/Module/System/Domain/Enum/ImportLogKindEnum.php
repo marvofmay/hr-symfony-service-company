@@ -8,14 +8,12 @@ enum ImportLogKindEnum: string implements EnumInterface
 {
     case IMPORT_INFO   = 'info';
     case IMPORT_ERROR  = 'error';
-    case IMPORT_REPORT = 'report';
 
     public function label(): string
     {
         return match ($this) {
             self::IMPORT_INFO   => 'info',
             self::IMPORT_ERROR  => 'error',
-            self::IMPORT_REPORT => 'report',
         };
     }
 
