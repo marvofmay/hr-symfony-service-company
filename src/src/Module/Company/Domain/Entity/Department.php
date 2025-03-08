@@ -46,7 +46,7 @@ class Department
     #[Groups('department_info')]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: Company::class)]
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'departments')]
     #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('department_info')]
     private ?Company $company;

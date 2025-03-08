@@ -32,7 +32,13 @@ doctrine:
         type: attribute
         dir: '%kernel.project_dir%/src/Module/Note/Domain/Entity'
         prefix: 'App\Module\Note\Domain\Entity'
-        alias: Notice
+        alias: Note
+      system:
+        is_bundle: false
+        type: attribute
+        dir: '%kernel.project_dir%/src/Module/System/Domain/Entity'
+        prefix: 'App\Module\System\Domain\Entity'
+        alias: System
 when@test:
   doctrine:
     dbal:
