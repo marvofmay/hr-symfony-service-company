@@ -24,6 +24,12 @@ class File
     use TimestampableTrait;
     use AttributesEntityTrait;
 
+    public const COLUMN_FILE_NAME   = 'fileName';
+    public const COLUMN_FILE_PATH   = 'filePath';
+    public const COLUMN_EXTENSION   = 'extension';
+    public const COLUMN_DESCRIPTION = 'description';
+    public const COLUMN_KIND        = 'kind';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -52,7 +58,7 @@ class File
     #[ORM\OneToOne(targetEntity: Import::class, mappedBy: 'file')]
     private ?Import $import = null;
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->uuid;
     }
@@ -106,10 +112,9 @@ class File
         return $this->kind;
     }
 
-    public function setKind(FileKindEnum $kind): self
+    public function setKind(FileKindEnum $kind): void
     {
         $this->kind = $kind;
-        return $this;
     }
 
     public function getEmployee(): ?Employee
@@ -117,10 +122,9 @@ class File
         return $this->employee;
     }
 
-    public function setEmployee(?Employee $employee): self
+    public function setEmployee(?Employee $employee): void
     {
         $this->employee = $employee;
-        return $this;
     }
 
     public function getImport(): ?Import

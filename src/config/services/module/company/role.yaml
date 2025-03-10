@@ -5,16 +5,16 @@ services:
     #Role handlers
     App\Module\Company\Application\CommandHandler\Role\CreateRoleCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\Role\UpdateRoleCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\Role\DeleteRoleCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\Role\DeleteMultipleRolesCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\Role\ImportRolesCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }

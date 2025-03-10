@@ -10,6 +10,25 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportEmployeesFromXLSX extends XLSXIterator
 {
+    public const COLUMN_UUID = 0;
+    public const COLUMN_PARENT_EMPLOYEE_UUID = 1;
+    public const COLUMN_COMPANY_UUID = 2;
+    public const COLUMN_DEPARTMENT_UUID = 3;
+    public const COLUMN_POSITION_UUID = 4;
+    public const COLUMN_CONTACT_TYPE_UUID = 5;
+    public const COLUMN_ROLE_UUID = 6;
+    public const COLUMN_EXTERNAL_UUID = 7;
+    public const COLUMN_FIRST_NAME = 8;
+    public const COLUMN_LAST_NAME = 9;
+    public const COLUMN_EMPLOYMENT_FROM = 10;
+    public const COLUMN_PESEL = 11;
+    public const COLUMN_ACTIVE = 12;
+    public const COLUMN_PHONES = 13;
+    public const COLUMN_STREET = 14;
+    public const COLUMN_POSTCODE = 15;
+    public const COLUMN_CITY = 16;
+    public const COLUMN_COUNTRY = 17;
+
     public function __construct(
         private readonly string $filePath,
         private readonly TranslatorInterface $translator,
@@ -20,7 +39,26 @@ class ImportEmployeesFromXLSX extends XLSXIterator
 
     public function validateRow(array $row): ?string
     {
-        [$uuid, $firstName, $lastName, $parentEmployeeUUID, $active] = $row + [null, null, null, null, true];
+        [
+            $uuid,
+            $parentEmployeeUUID,
+            $companyUUID,
+            $departmentUUID,
+            $positionUUID,
+            $contactTypeUUID,
+            $roleUUID,
+            $externalUUID,
+            $firstName,
+            $lastName,
+            $employmentFrom,
+            $pesel,
+            $active,
+            $phones,
+            $street,
+            $postcode,
+            $city,
+            $country,
+        ] = $row;
 
         if ($errorMessage = $this->validateEmployeeFirstAndLastName($firstName, 'firstName')) {
             return $errorMessage;
@@ -43,12 +81,17 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function validateEmployeeFirstAndLAstName(?string $firstName, $kind): ?string
+    private function validateRequiredField(string|bool|null $value): ?string
     {
-        if (empty($firstName)) {
-            return $this->formatErrorMessage('employee.firstName.required');
+        if (empty($value)) {
+            return $this->formatErrorMessage('company.uuid.required');
         }
 
+        return null;
+    }
+
+    private function validateEmployeeFirstAndLAstName(?string $firstName, $kind): ?string
+    {
         if (strlen($firstName) < 3) {
             return $this->formatErrorMessage('employee.firstName.minimumLength', [':qty' => 3]);
         }

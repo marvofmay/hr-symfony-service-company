@@ -83,6 +83,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\OneToOne(targetEntity: Employee::class, inversedBy: 'user')]
     #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true)]
     private ?Employee $employee = null;
+
     public function __construct(private ?UserPasswordHasherInterface $userPasswordHasher)
     {
     }

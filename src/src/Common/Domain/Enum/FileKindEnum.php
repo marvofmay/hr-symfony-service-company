@@ -11,6 +11,7 @@ enum FileKindEnum: string implements EnumInterface
     case USER_PHOTO_PROFILE = 'user_photo_profile';
     case COMPANY_LOGO       = 'company_logo';
     case EMPLOYEE_AGREEMENT = 'employee_agreement';
+    case IMPORT_XLSX        = 'import_xlsx';
 
     public function label(): string
     {
@@ -18,6 +19,7 @@ enum FileKindEnum: string implements EnumInterface
             self::USER_PHOTO_PROFILE => 'userPhotoProfile',
             self::COMPANY_LOGO       => 'companyLogo',
             self::EMPLOYEE_AGREEMENT => 'employeeAgreement',
+            self::IMPORT_XLSX        => 'importXlsx',
         };
     }
 

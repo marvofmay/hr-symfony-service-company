@@ -11,12 +11,17 @@ api_employee_get:
   methods: [GET]
   requirements:
     uuid: '[0-9a-fA-F-]{36}'
-    
+
+api_employee_import:
+  path: api/employees/import
+  controller: App\Module\Company\Presentation\API\Controller\Employee\ImportEmployeesController::import
+  methods: [POST]
+
 api_employee_create:
   path: api/employees
   controller: App\Module\Company\Presentation\API\Controller\Employee\CreateEmployeeController::create
   methods: [POST]
-  
+
 api_employee_delete_multiple:
   path: api/employees/multiple
   controller: App\Module\Company\Presentation\API\Controller\Employee\DeleteMultipleEmployeesController::delete

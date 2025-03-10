@@ -5,10 +5,10 @@ services:
     #Note handlers
     App\Module\Note\Application\CommandHandler\CreateNoteCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Note\Application\CommandHandler\UpdateNoteCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Note\Application\CommandHandler\DeleteNoteCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }

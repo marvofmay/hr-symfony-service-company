@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+  #File handlers
+  App\Module\System\Application\CommandHandler\File\CreateFileCommandHandler:
+    tags:
+      - { name: 'messenger.message_handler', bus: 'command.bus' }
+  App\Module\System\Application\QueryHandler\File\GetFileByNamePathAndKindQueryHandler:
+    tags:
+      - { name: 'messenger.message_handler', bus: 'query.bus' }

@@ -5,16 +5,16 @@ services:
     #ContractType handlers
     App\Module\Company\Application\CommandHandler\ContractType\CreateContractTypeCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\ContractType\UpdateContractTypeCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\ContractType\DeleteContractTypeCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
 #    App\Module\Company\Application\CommandHandler\ContractType\DeleteMultipleContractTypesCommandHandler:
 #        tags:
-#            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+#            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\ContractType\ImportContractTypesCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }

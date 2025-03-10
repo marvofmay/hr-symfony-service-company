@@ -4,16 +4,16 @@ services:
         autoconfigure: true
     App\Module\Company\Application\CommandHandler\Position\CreatePositionCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\Position\UpdatePositionCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\Position\DeletePositionCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\Position\DeleteMultiplePositionsCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\Position\ImportPositionsCommandHandler:
         tags:
-            - { name: 'messenger.message_handler', bus: 'messenger.bus.default' }
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
