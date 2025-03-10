@@ -14,7 +14,7 @@ class GetImportByFileQueryHandler
     {
     }
 
-    public function __invoke(GetImportByFileQuery $query): Import|null
+    public function __invoke(GetImportByFileQuery $query): ?Import
     {
         return $this->importReaderRepository->getImportByFile($query->file);
     }

@@ -18,7 +18,7 @@ class ImportReaderRepository extends ServiceEntityRepository implements ImportRe
         parent::__construct($registry, Import::class);
     }
 
-    public function getImportByFile(File $file): Import|null
+    public function getImportByFile(File $file): ?Import
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -30,7 +30,7 @@ class ImportReaderRepository extends ServiceEntityRepository implements ImportRe
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function getImportByUuid(string $uuid): Import|null
+    public function getImportByUuid(string $uuid): ?Import
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 

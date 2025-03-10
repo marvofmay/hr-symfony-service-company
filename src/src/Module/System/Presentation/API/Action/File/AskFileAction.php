@@ -16,7 +16,7 @@ final class AskFileAction
     {
     }
 
-    public function ask(string $fileName, string $uploadFilePath, FileKindEnum $fileKindEnum): File|null
+    public function ask(string $fileName, string $uploadFilePath, FileKindEnum $fileKindEnum): ?File
     {
         $handleStamp = $this->queryBus->dispatch(new GetFileByNamePathAndKindQuery($fileName, $uploadFilePath, $fileKindEnum));
 

@@ -16,7 +16,7 @@ final class AskImportAction
     {
     }
 
-    public function ask(File $file): Import|null
+    public function ask(File $file): ?Import
     {
         $handleStamp = $this->queryBus->dispatch(new GetImportByFileQuery($file));
 

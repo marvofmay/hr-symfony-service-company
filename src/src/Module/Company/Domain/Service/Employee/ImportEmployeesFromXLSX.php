@@ -81,7 +81,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function validateRequiredField(string|bool|null $value): string|null
+    private function validateRequiredField(string|bool|null $value): ?string
     {
         if (empty($value)) {
             return $this->formatErrorMessage('company.uuid.required');
@@ -90,7 +90,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function validateEmployeeFirstAndLAstName(?string $name, $kind): string|null
+    private function validateEmployeeFirstAndLAstName(?string $name, $kind): ?string
     {
         if (empty($name)) {
             return $this->formatErrorMessage(sprintf('employee.%s.required', $kind));
