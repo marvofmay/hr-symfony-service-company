@@ -9,11 +9,10 @@ use App\Module\System\Domain\Entity\File;
 use App\Module\System\Domain\Interface\File\FileReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class FileReaderRepository extends ServiceEntityRepository implements FileReaderInterface
 {
-    public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
+    public function __construct(ManagerRegistry $registry,)
     {
         parent::__construct($registry, File::class);
     }

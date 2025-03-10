@@ -60,20 +60,20 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             $country,
         ] = $row;
 
-        if ($errorMessage = $this->validateEmployeeFirstAndLastName($firstName, 'firstName')) {
-            return $errorMessage;
-        }
-
-        if ($errorMessage = $this->validateEmployeeFirstAndLastName($lastName, 'lastName')) {
-            return $errorMessage;
-        }
-
         if (!$this->isEmployeeWithUUIDExists($uuid, 'employeeUUID')) {
             return $this->formatErrorMessage('employee.uuid.notExists');
         }
 
         if (!$this->isEmployeeWithUUIDExists($parentEmployeeUUID, 'parentEmployeeUUID')) {
             return $this->formatErrorMessage('employee.uuid.notExists');
+        }
+
+        if ($errorMessage = $this->validateEmployeeFirstAndLastName($firstName, 'firstName')) {
+            return $errorMessage;
+        }
+
+        if ($errorMessage = $this->validateEmployeeFirstAndLastName($lastName, 'lastName')) {
+            return $errorMessage;
         }
 
         //ToDo: add validation is exist ParentEmployeeByUUID
