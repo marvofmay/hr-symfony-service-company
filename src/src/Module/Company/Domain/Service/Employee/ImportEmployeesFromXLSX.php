@@ -60,13 +60,13 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             $country,
         ] = $row;
 
-        if (!$this->isEmployeeWithUUIDExists($uuid, 'employeeUUID')) {
-            return $this->formatErrorMessage('employee.uuid.notExists');
-        }
-
-        if (!$this->isEmployeeWithUUIDExists($parentEmployeeUUID, 'parentEmployeeUUID')) {
-            return $this->formatErrorMessage('employee.uuid.notExists');
-        }
+//        if (!$this->isEmployeeWithUUIDExists($uuid, 'employeeUUID')) {
+//            return $this->formatErrorMessage('employee.uuid.notExists');
+//        }
+//
+//        if (!$this->isEmployeeWithUUIDExists($parentEmployeeUUID, 'parentEmployeeUUID')) {
+//            return $this->formatErrorMessage('employee.uuid.notExists');
+//        }
 
         if ($errorMessage = $this->validateEmployeeFirstAndLastName($firstName, 'firstName')) {
             return $errorMessage;
@@ -81,7 +81,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function validateRequiredField(string|bool|null $value): ?string
+    private function validateRequiredField(string|bool|null $value): string|null
     {
         if (empty($value)) {
             return $this->formatErrorMessage('company.uuid.required');
@@ -90,10 +90,14 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function validateEmployeeFirstAndLAstName(?string $firstName, $kind): ?string
+    private function validateEmployeeFirstAndLAstName(?string $name, $kind): string|null
     {
-        if (strlen($firstName) < 3) {
-            return $this->formatErrorMessage('employee.firstName.minimumLength', [':qty' => 3]);
+        if (empty($name)) {
+            return $this->formatErrorMessage(sprintf('employee.%s.required', $kind));
+        }
+
+        if (strlen($name) < 3) {
+            return $this->formatErrorMessage(sprintf('employee.%s.minimumLength', $kind), [':qty' => 3]);
         }
 
         return null;

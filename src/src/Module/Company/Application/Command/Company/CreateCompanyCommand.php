@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\Command\Company;
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
 
-class CreateCompanyCommand implements CommandInterface
+final class CreateCompanyCommand implements CommandInterface
 {
     public function __construct(
         public string $fullName,

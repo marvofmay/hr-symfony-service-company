@@ -74,6 +74,7 @@ class ListContractTypesController extends AbstractController
     public function list(#[MapQueryString] ContractTypesQueryDTO $queryDTO, GetContractTypesQueryHandler $contractTypesQueryHandler): Response
     {
         try {
+            //ToDo:: refactor - use query.bus
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
                     $contractTypesQueryHandler->handle(new GetContractTypesQuery($queryDTO)),

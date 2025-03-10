@@ -16,6 +16,6 @@ readonly class ImportEmployeesAction
 
     public function execute(ImportDTO $importDTO): void
     {
-        $this->commandBus->dispatch(new ImportEmployeesCommand($importDTO->uploadFilePath, $importDTO->fileName));
+        $this->commandBus->dispatch(new ImportEmployeesCommand($importDTO->importUUID));
     }
 }

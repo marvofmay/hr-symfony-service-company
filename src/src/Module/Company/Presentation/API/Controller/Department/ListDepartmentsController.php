@@ -71,6 +71,7 @@ class ListDepartmentsController extends AbstractController
     public function list(#[MapQueryString] DepartmentsQueryDTO $queryDTO, GetDepartmentsQueryHandler $departmentsQueryHandler): Response
     {
         try {
+            //ToDo:: refactor - use query.bus
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
                     $departmentsQueryHandler->handle(new GetDepartmentsQuery($queryDTO)),

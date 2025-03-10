@@ -73,6 +73,7 @@ class ListIndustriesController extends AbstractController
     public function list(#[MapQueryString] IndustriesQueryDTO $queryDTO, GetIndustriesQueryHandler $industrysQueryHandler): Response
     {
         try {
+            //ToDo:: refactor - use query.bus
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
                     $industrysQueryHandler->handle(new GetIndustriesQuery($queryDTO)),

@@ -71,6 +71,7 @@ class ListCompaniesController extends AbstractController
     public function list(#[MapQueryString] CompaniesQueryDTO $queryDTO, GetCompaniesQueryHandler $companiesQueryHandler): Response
     {
         try {
+            //ToDo:: refactor - use query.bus
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
                     $companiesQueryHandler->handle(new GetCompaniesQuery($queryDTO)),

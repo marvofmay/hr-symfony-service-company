@@ -71,6 +71,7 @@ class ListEmployeesController extends AbstractController
     public function list(#[MapQueryString] EmployeesQueryDTO $queryDTO, GetEmployeesQueryHandler $employeesQueryHandler): Response
     {
         try {
+            //ToDo:: refactor - use query.bus
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
                     $employeesQueryHandler->handle(new GetEmployeesQuery($queryDTO)),

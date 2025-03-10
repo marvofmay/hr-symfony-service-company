@@ -73,6 +73,7 @@ class ListRolesController extends AbstractController
     public function list(#[MapQueryString] RolesQueryDTO $queryDTO, GetRolesQueryHandler $rolesQueryHandler): Response
     {
         try {
+            //ToDo:: refactor - use query.bus
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
                     $rolesQueryHandler->handle(new GetRolesQuery($queryDTO)),

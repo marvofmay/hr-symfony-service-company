@@ -27,15 +27,16 @@ readonly class ImportCompaniesCommandHandler
             $this->translator,
             $this->companyReaderRepository
         );
+        $importer->import();
         $errors = $importer->getErrors();
 
         if (empty($errors)) {
             $this->companyMultipleCreator->multipleCreate($importer->import());
             //ToDo:: send notification (success) to user in feature
-            //ToDo:: save status (done) errors (mull) in "import_log" table in feature
+            //ToDo:: save status (done) in "import" table
         } else {
             //ToDo:: send notification (failed) to user in feature
-            //ToDo:: save status (failed) errors ($errors) in "import_log" table in feature
+            //ToDo:: save status (failed) in "import" table and add errors ($errors) in "import_log" table
             foreach ($errors as $error) {
                 $this->logger->error($this->translator->trans('company.import.error', [], 'companies') . ': ' . $error);
             }

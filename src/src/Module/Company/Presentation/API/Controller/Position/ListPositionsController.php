@@ -73,6 +73,7 @@ class ListPositionsController extends AbstractController
     public function list(#[MapQueryString] PositionsQueryDTO $queryDTO, GetPositionsQueryHandler $positionsQueryHandler): Response
     {
         try {
+            //ToDo:: refactor - use query.bus
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
                     $positionsQueryHandler->handle(new GetPositionsQuery($queryDTO)),

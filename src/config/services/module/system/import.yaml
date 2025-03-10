@@ -1,0 +1,11 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+  #Import handlers
+  App\Module\System\Application\CommandHandler\Import\CreateImportCommandHandler:
+    tags:
+      - { name: 'messenger.message_handler', bus: 'command.bus' }
+  App\Module\System\Application\QueryHandler\Import\GetImportByFileQueryHandler:
+    tags:
+      - { name: 'messenger.message_handler', bus: 'query.bus' }

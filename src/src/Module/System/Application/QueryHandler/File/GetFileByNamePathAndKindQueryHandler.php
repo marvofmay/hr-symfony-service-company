@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Module\System\Application\QueryHandler\File;
 
 use App\Module\System\Application\Query\File\GetFileByNamePathAndKindQuery;
+use App\Module\System\Domain\Entity\File;
 use App\Module\System\Domain\Interface\File\FileReaderInterface;
-use Ramsey\Uuid\UuidInterface;
 
 class GetFileByNamePathAndKindQueryHandler
 {
@@ -14,10 +14,8 @@ class GetFileByNamePathAndKindQueryHandler
     {
     }
 
-    public function __invoke(GetFileByNamePathAndKindQuery $query): ?UuidInterface
+    public function __invoke(GetFileByNamePathAndKindQuery $query): ?File
     {
-        $file = $this->fileReaderRepository->getFileByNamePathAndKind($query->fileName, $query->filePath, $query->fileKind);
-
-        return $file?->getUUID();
+        return $this->fileReaderRepository->getFileByNamePathAndKind($query->fileName, $query->filePath, $query->fileKind);
     }
 }

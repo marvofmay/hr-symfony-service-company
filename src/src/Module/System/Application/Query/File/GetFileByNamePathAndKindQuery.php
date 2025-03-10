@@ -6,7 +6,7 @@ namespace App\Module\System\Application\Query\File;
 
 use App\Common\Domain\Enum\FileKindEnum;
 
-readonly class GetFileByNamePathAndKindQuery
+final class GetFileByNamePathAndKindQuery
 {
     public function __construct(
         public string $fileName,

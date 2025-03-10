@@ -9,13 +9,7 @@ framework:
             query.bus:
                 middleware:
                     - validation
-
         transports:
-#            https://symfony.com/doc/current/messenger.html#transport-configuration
-#            async: '%env(MESSENGER_TRANSPORT_DSN)%'
-#            failed: 'doctrine://default?queue_name=failed'
-#            sync: 'sync://'
-
             async: '%env(MESSENGER_TRANSPORT_DSN)%'
             company_xlsx_import:
                 dsn: '%env(MESSENGER_TRANSPORT_DSN)%/company_xlsx_import'
@@ -23,9 +17,23 @@ framework:
                     exchange:
                         name: 'company_xlsx_import' # Nazwa exchange (wymiana)
                         type: direct # Typ exchange (direct, fanout, topic itp.)
+#            department_xlsx_import:
+#                dsn: '%env(MESSENGER_TRANSPORT_DSN)%/department_xlsx_import'
+#                options:
+#                    exchange:
+#                        name: 'department_xlsx_import'
+#                        type: direct
+            employee_xlsx_import:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%/employee_xlsx_import'
+                options:
+                    exchange:
+                        name: 'employee_xlsx_import'
+                        type: direct
         routing:
             #'App\Module\Company\Application\Command\Company\ImportCompaniesCommand': async
             'App\Module\Company\Application\Command\Company\ImportCompaniesCommand': company_xlsx_import
+            #'App\Module\Company\Application\Command\Department\ImportDepartmentsCommand': department_xlsx_import
+            'App\Module\Company\Application\Command\Employee\ImportEmployeesCommand': employee_xlsx_import
 
 # when@test:
 #    framework:

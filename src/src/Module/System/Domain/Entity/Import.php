@@ -26,6 +26,17 @@ class Import
     use TimestampableTrait;
     use AttributesEntityTrait;
 
+    public const COLUMN_UUID = 'uuid';
+    public const COLUMN_STARTED_AT = 'startedAt';
+    public const COLUMN_STOPPED_AT = 'stoppedAt';
+    public const COLUMN_STATUS = 'status';
+
+    public const COLUMN_CREATED_AT = 'createdAt';
+    public const COLUMN_UPDATED_AT = 'updatedAt';
+    public const COLUMN_DELETED_AT = 'deletedAt';
+    public const RELATION_EMPLOYEE = 'employe';
+    public const RELATION_FILE = 'file';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -63,15 +74,36 @@ class Import
         $this->logs = new ArrayCollection();
     }
 
-    public function markAsCompleted(): void
+    public function getUUID(): UuidInterface
     {
-        $this->stoppedAt = new \DateTimeImmutable();
+        return $this->uuid;
+    }
+
+    public function getKind(): ImportKindEnum
+    {
+        return $this->kind;
+    }
+
+    public function setKind(ImportKindEnum $kind): void
+    {
+        $this->kind = $kind;
+    }
+
+    public function markAsPending(): void
+    {
+        $this->startedAt = new \DateTime();
+        $this->status = ImportStatusEnum::PENDING;
+    }
+
+    public function markAsDone(): void
+    {
+        $this->stoppedAt = new \DateTime();
         $this->status = ImportStatusEnum::DONE;
     }
 
     public function markAsFailed(): void
     {
-        $this->stoppedAt = new \DateTimeImmutable();
+        $this->stoppedAt = new \DateTime();
         $this->status = ImportStatusEnum::FAILED;
     }
 
