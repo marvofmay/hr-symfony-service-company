@@ -36,13 +36,13 @@ class GetCompaniesQueryHandler
             ->setMaxResults($limit)
             ->setFirstResult($offset);
 
-        $employees = $queryBuilder->getQuery()->getResult();
+        $companies = $queryBuilder->getQuery()->getResult();
 
         return [
             'totalCompanies' => $totalCompanies,
             'page' => $query->getPage(),
             'limit' => $query->getLimit(),
-            'employees' => $this->transformIncludes($employees, $includes),
+            'companies' => $this->transformIncludes($companies, $includes),
         ];
     }
 
@@ -88,16 +88,16 @@ class GetCompaniesQueryHandler
         return $queryBuilder;
     }
 
-    private function transformIncludes(array $employees, array $includes): array
+    private function transformIncludes(array $companies, array $includes): array
     {
         $data = [];
 
-        foreach ($employees as $employee) {
-            $data[] = $employee->toArray();
+        foreach ($companies as $company) {
+            $data[] = $company->toArray();
         }
 
         foreach (Company::getRelations() as $relation) {
-            foreach ($data as $key => $employee) {
+            foreach ($data as $key => $company) {
                 if (!in_array($relation, $includes) || empty($includes)) {
                     unset($data[$key][$relation]);
                 }

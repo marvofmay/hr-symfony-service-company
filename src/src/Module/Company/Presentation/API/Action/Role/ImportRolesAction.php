@@ -16,6 +16,6 @@ readonly class ImportRolesAction
 
     public function execute(ImportDTO $importDTO): void
     {
-        $this->commandBus->dispatch(new ImportRolesCommand($importDTO->getData()));
+        $this->commandBus->dispatch(new ImportRolesCommand($importDTO->importUUID));
     }
 }

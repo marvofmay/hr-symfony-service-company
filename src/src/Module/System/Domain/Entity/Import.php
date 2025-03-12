@@ -89,6 +89,16 @@ class Import
         $this->kind = $kind;
     }
 
+    public function getStatus(): ImportStatusEnum
+    {
+        return $this->status;
+    }
+
+    public function setStatus(ImportStatusEnum $status): void
+    {
+        $this->status = $status;
+    }
+
     public function markAsPending(): void
     {
         $this->startedAt = new \DateTime();

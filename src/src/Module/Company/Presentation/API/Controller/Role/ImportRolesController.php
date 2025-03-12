@@ -4,19 +4,31 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
+use App\Common\Domain\DTO\UploadFileDTO;
 use App\Common\Domain\Enum\FileExtensionEnum;
+use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
+use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
-use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
 use App\Module\Company\Presentation\API\Action\Role\ImportRolesAction;
+use App\Module\System\Domain\Enum\ImportKindEnum;
+use App\Module\System\Domain\Enum\ImportStatusEnum;
+use App\Module\System\Presentation\API\Action\File\AskFileAction;
+use App\Module\System\Presentation\API\Action\File\CreateFileAction;
+use App\Module\System\Presentation\API\Action\Import\AskImportAction;
+use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportRolesController extends AbstractController
@@ -73,44 +85,55 @@ class ImportRolesController extends AbstractController
     )]
     #[OA\Tag(name: 'roles')]
     #[Route('/api/roles/import', name: 'import', methods: ['POST'])]
-    public function import(Request $request, ImportRolesAction $importRolesAction): JsonResponse
-    {
+    public function import(
+        #[MapUploadedFile] UploadedFile $file,
+        UploadFileAction $uploadFileAction,
+        ImportRolesAction $importRolesAction,
+        CreateFileAction $createFileAction,
+        AskFileAction $askFileAction,
+        CreateImportAction $createImportAction,
+        AskImportAction $askImportAction,
+        ValidatorInterface $validator,
+        Security $security,
+    ): JsonResponse {
         try {
-            $uploadFilePath = '../src/Storage/Upload/Import/Roles';
-            $uploadedFile = $request->files->get('file');
+            $uploadFilePath = 'src/Storage/Upload/Import/Roles';
+            $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
+            $employee = $security->getUser()->getEmployee();
 
-            if (!$uploadedFile) {
+            $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
+            $errors = $validator->validate($uploadFileDTO);
+            if (count($errors) > 0) {
                 return new JsonResponse(
-                    ['errors' => [$this->translator->trans('file.chooseFile', [], 'validators')]],
+                    ['errors' => array_map(fn ($e) => [
+                        'field' => $e->getPropertyPath(),
+                        'message' => $e->getMessage()], iterator_to_array($errors))
+                    ],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }
 
-            $uploadFileService = new UploadFile($uploadFilePath, FileExtensionEnum::XLSX);
-            $uploadFileService->uploadFile($uploadedFile);
+            $uploadFileAction->execute($uploadFileDTO);
+            $createFileAction->execute($fileName, $uploadFilePath, $employee);
+            $file = $askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
+            $createImportAction->execute(ImportKindEnum::IMPORT_ROLES, ImportStatusEnum::PENDING, $file, $employee);
+            $import = $askImportAction->ask($file);
+            $importRolesAction->execute(new ImportDTO($import->getUUID()->toString()));
+            $import = $askImportAction->ask($file);
+            $importLogs = $import->getUUID()->toString();
 
-            $importer = new ImportRolesFromXLSX(
-                sprintf('%s/%s', $uploadFilePath, $uploadFileService->getFileName()),
-                $this->translator,
-                $this->roleReaderRepository
-            );
-
-            $data = $importer->import();
-            $errors = $importer->getErrors();
-
-            if (empty($errors)) {
-                $importRolesAction->execute(new ImportDTO($data));
-
+            if ($import->getStatus() === ImportStatusEnum::DONE) {
                 return new JsonResponse([
                     'success' => empty($errors),
                     'message' => $this->translator->trans('role.import.success', [], 'roles'),
-                    'errors' => $importer->getErrors(),
+                    'errors' => [],
                 ],
                     Response::HTTP_CREATED
                 );
             } else {
+                $importLogs = count($import->getLogs());
                 return new JsonResponse([
-                    'errors' => $importer->getErrors(),
+                    'errors' => 'dddddd',
                 ],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );

@@ -61,12 +61,15 @@ abstract class XLSXIterator implements XLSXIteratorInterface
 
         $data = [];
         foreach ($this->worksheet->getRowIterator(2) as $row) {
+            $rowData = [];
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
 
             foreach ($cellIterator as $cell) {
-                $data[] = $cell->getValue();
+                $rowData[] = $cell->getValue();
             }
+
+            $data[] = $rowData;
         }
 
         return $data;
