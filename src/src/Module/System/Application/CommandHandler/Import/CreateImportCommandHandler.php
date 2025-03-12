@@ -12,9 +12,8 @@ readonly class CreateImportCommandHandler
     public function __construct(private ImportCreator $importCreator,)
     {
     }
-
     public function __invoke(CreateImportCommand $command): void
     {
-        $this->importCreator->create($command->import);
+        $this->importCreator->create($command->kindEnum, $command->statusEnum, $command->file, $command->employee);
     }
 }

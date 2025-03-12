@@ -21,19 +21,20 @@ class ImportIndustriesFromXLSX extends XLSXIterator
         parent::__construct($this->filePath, $this->translator);
     }
 
-    public function validateRow(array $row): ?string
+    public function validateRow(array $row): array
     {
+        $errorMessages = [];
         [$industryName] = $row + [null];
 
         if ($errorMessage = $this->validateIndustryName($industryName)) {
-            return $errorMessage;
+            $errorMessages[] = $errorMessage;
         }
 
         if ($this->industryExists($industryName)) {
-            return $this->formatErrorMessage('industry.name.alreadyExists');
+            $errorMessages[] = $this->formatErrorMessage('industry.name.alreadyExists');
         }
 
-        return null;
+        return $errorMessages;
     }
 
     private function validateIndustryName(?string $industryName): ?string

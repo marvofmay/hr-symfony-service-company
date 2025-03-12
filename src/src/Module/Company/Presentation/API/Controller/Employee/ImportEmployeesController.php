@@ -10,13 +10,13 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Employee\ImportDTO;
-use App\Module\Company\Presentation\API\Action\Employee\CreateImportAction;
 use App\Module\Company\Presentation\API\Action\Employee\ImportEmployeesAction;
 use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Presentation\API\Action\File\AskFileAction;
 use App\Module\System\Presentation\API\Action\File\CreateFileAction;
 use App\Module\System\Presentation\API\Action\Import\AskImportAction;
+use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -113,7 +113,7 @@ class ImportEmployeesController extends AbstractController
             $uploadFileAction->execute($uploadFileDTO);
             $createFileAction->execute($fileName, $uploadFilePath, $employee);
             $file = $askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
-            $createImportAction->execute(ImportKindEnum::IMPORT_EMPLOYEES, ImportStatusEnum::PENDING, $employee, $file);
+            $createImportAction->execute(ImportKindEnum::IMPORT_EMPLOYEES, ImportStatusEnum::PENDING, $file, $employee);
             $import = $askImportAction->ask($file);
             $importEmployeesAction->execute(new ImportDTO($import->getUUID()->toString()));
 

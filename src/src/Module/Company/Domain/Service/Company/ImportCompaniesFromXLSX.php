@@ -18,21 +18,22 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         parent::__construct($this->filePath, $this->translator);
     }
 
-    public function validateRow(array $row): ?string
+    public function validateRow(array $row): array
     {
+        $errorMessages = [];
         [$fullName, $shortName, $parentUUID, $active] = $row + [null, null, null, true];
 
         if ($errorMessage = $this->validateCompanyFullName($fullName)) {
-            return $errorMessage;
+            $errorMessages[] = $errorMessage;
         }
 
         if ($this->companyExists($fullName)) {
-            return $this->formatErrorMessage('company.fullName.alreadyExists');
+            $errorMessages[] = $this->formatErrorMessage('company.fullName.alreadyExists');
         }
 
         //ToDo: add validation is exist ParentCompanyByUUID
 
-        return null;
+        return $errorMessages;
     }
 
     private function validateCompanyFullName(?string $fullName): ?string

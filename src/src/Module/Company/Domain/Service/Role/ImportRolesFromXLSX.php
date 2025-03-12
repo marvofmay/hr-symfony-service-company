@@ -21,19 +21,20 @@ class ImportRolesFromXLSX extends XLSXIterator
         parent::__construct($this->filePath, $this->translator);
     }
 
-    public function validateRow(array $row): ?string
+    public function validateRow(array $row): array
     {
+        $errorMessages = [];
         [$roleName] = $row + [null];
 
         if ($errorMessage = $this->validateRoleName($roleName)) {
-            return $errorMessage;
+            $errorMessages[] = $errorMessage;
         }
 
         if ($this->roleExists($roleName)) {
-            return $this->formatErrorMessage('role.name.alreadyExists');
+            $errorMessages[] = $this->formatErrorMessage('role.name.alreadyExists');
         }
 
-        return null;
+        return $errorMessages;
     }
 
     private function validateRoleName(?string $roleName): ?string

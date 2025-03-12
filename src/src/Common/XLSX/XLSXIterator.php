@@ -28,6 +28,31 @@ abstract class XLSXIterator implements XLSXIteratorInterface
         $this->worksheet = $spreadsheet->getActiveSheet();
     }
 
+    public function validateBeforeImport(): array
+    {
+        $this->loadFile();
+
+        if (!$this->worksheet) {
+            throw new \RuntimeException($this->translator->trans('import.chooseFile', [], 'validators'));
+        }
+
+        foreach ($this->worksheet->getRowIterator(2) as $row) {
+            $cellIterator = $row->getCellIterator();
+            $cellIterator->setIterateOnlyExistingCells(false);
+
+            $rowData = [];
+            foreach ($cellIterator as $cell) {
+                $rowData[] = $cell->getValue();
+            }
+
+            if ($error = $this->validateRow($rowData)) {
+                $this->errors = array_merge($this->errors, $error);
+            }
+        }
+
+        return $this->errors;
+    }
+
     public function iterateRows(): array
     {
         if (!$this->worksheet) {
@@ -39,15 +64,8 @@ abstract class XLSXIterator implements XLSXIteratorInterface
             $cellIterator = $row->getCellIterator();
             $cellIterator->setIterateOnlyExistingCells(false);
 
-            $rowData = [];
             foreach ($cellIterator as $cell) {
-                $rowData[] = $cell->getValue();
-            }
-
-            if ($error = $this->validateRow($rowData)) {
-                $this->errors[] = $error;
-            } else {
-                $data[] = $rowData;
+                $data[] = $cell->getValue();
             }
         }
 
@@ -61,7 +79,7 @@ abstract class XLSXIterator implements XLSXIteratorInterface
         return $this->iterateRows();
     }
 
-    abstract public function validateRow(array $row): ?string;
+    abstract public function validateRow(array $row): array;
 
     public function getErrors(): array
     {

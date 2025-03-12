@@ -22,19 +22,20 @@ class ImportContractTypesFromXLSX extends XLSXIterator
         parent::__construct($this->filePath, $this->translator);
     }
 
-    public function validateRow(array $row): ?string
+    public function validateRow(array $row): array
     {
+        $errorMessages = [];
         [$contractTypeName] = $row + [null];
 
         if ($errorMessage = $this->validateContractTypeName($contractTypeName)) {
-            return $errorMessage;
+            $errorMessages[] = $errorMessage;
         }
 
         if ($this->contractTypeExists($contractTypeName)) {
-            return $this->formatErrorMessage('contractType.name.alreadyExists');
+            $errorMessages[] = $this->formatErrorMessage('contractType.name.alreadyExists');
         }
 
-        return null;
+        return $errorMessages;
     }
 
     private function validateContractTypeName(?string $contractTypeName): ?string

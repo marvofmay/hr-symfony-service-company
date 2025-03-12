@@ -16,7 +16,7 @@ class ImportWriterRepository extends ServiceEntityRepository implements ImportWr
         parent::__construct($registry, Import::class);
     }
 
-    public function saveImportInDB(Import $import): void
+    public function saveOrUpdateImportInDB(Import $import): void
     {
         $this->getEntityManager()->persist($import);
         $this->getEntityManager()->flush();

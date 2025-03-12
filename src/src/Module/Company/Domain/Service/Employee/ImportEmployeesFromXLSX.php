@@ -37,8 +37,9 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         parent::__construct($this->filePath, $this->translator);
     }
 
-    public function validateRow(array $row): ?string
+    public function validateRow(array $row): array
     {
+        $errorMessages = [];
         [
             $uuid,
             $parentEmployeeUUID,
@@ -69,16 +70,16 @@ class ImportEmployeesFromXLSX extends XLSXIterator
 //        }
 
         if ($errorMessage = $this->validateEmployeeFirstAndLastName($firstName, 'firstName')) {
-            return $errorMessage;
+            $errorMessages[] = $errorMessage;
         }
 
         if ($errorMessage = $this->validateEmployeeFirstAndLastName($lastName, 'lastName')) {
-            return $errorMessage;
+            $errorMessages[] = $errorMessage;
         }
 
         //ToDo: add validation is exist ParentEmployeeByUUID
 
-        return null;
+        return $errorMessages;
     }
 
     private function validateRequiredField(string|bool|null $value): ?string

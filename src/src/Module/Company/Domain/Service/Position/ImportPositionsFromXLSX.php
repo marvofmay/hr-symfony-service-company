@@ -25,23 +25,24 @@ class ImportPositionsFromXLSX extends XLSXIterator
         parent::__construct($this->filePath, $this->translator);
     }
 
-    public function validateRow(array $row): ?string
+    public function validateRow(array $row): array
     {
+        $errorMessages = [];
         [$positionName, $positionDescription, $positionActive, $departmentUUID] = $row + [null, null, null, null];
 
         if ($errorMessage = $this->validatePositionName($positionName)) {
-            return $errorMessage;
+            $errorMessages[] = $errorMessage;
         }
 
         if ($this->positionExists($positionName)) {
-            return $this->formatErrorMessage('position.name.alreadyExists');
+            $errorMessages[] = $this->formatErrorMessage('position.name.alreadyExists');
         }
 
         if (!$this->isDepartmentWithUUIDExists($departmentUUID)) {
-            return $this->formatErrorMessage('department.uuid.notExists');
+            $errorMessages[] = $this->formatErrorMessage('department.uuid.notExists');
         }
 
-        return null;
+        return $errorMessages;
     }
 
     private function validatePositionName(?string $positionName): ?string
