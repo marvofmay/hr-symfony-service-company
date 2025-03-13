@@ -41,6 +41,14 @@ class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
+    protected function getPhraseSearchColumns(): array
+    {
+        return [
+            Industry::COLUMN_NAME,
+            Industry::COLUMN_DESCRIPTION,
+        ];
+    }
+
     protected function transformIncludes(array $items, array $includes): array
     {
         $data = array_map(fn($industry) => $industry->toArray(), $items);

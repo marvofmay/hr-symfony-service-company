@@ -53,6 +53,8 @@ abstract class ListQueryHandlerAbstract
             ->from($this->getEntityClass(), $this->getAlias());
     }
 
+    abstract protected function getPhraseSearchColumns(): array;
+
     private function setFilters(QueryBuilder $queryBuilder, array $filters): QueryBuilder
     {
         $alias = $this->getAlias();
@@ -82,12 +84,18 @@ abstract class ListQueryHandlerAbstract
         }
 
         if (!empty($filters['phrase'])) {
-            $queryBuilder->andWhere(
-                $queryBuilder->expr()->orX(
-                    $queryBuilder->expr()->like("LOWER($alias.name)", ':searchPhrase'),
-                    $queryBuilder->expr()->like("LOWER($alias.description)", ':searchPhrase')
-                )
-            )->setParameter('searchPhrase', '%'.strtolower($filters['phrase']).'%');
+            $phraseColumns = $this->getPhraseSearchColumns();
+            $expr = $queryBuilder->expr();
+            $orConditions = [];
+
+            foreach ($phraseColumns as $column) {
+                $orConditions[] = $expr->like("LOWER($alias.$column)", ':searchPhrase');
+            }
+
+            if (!empty($orConditions)) {
+                $queryBuilder->andWhere(call_user_func_array([$expr, 'orX'], $orConditions))
+                    ->setParameter('searchPhrase', '%'.strtolower($filters['phrase']).'%');
+            }
         }
 
         return $queryBuilder;

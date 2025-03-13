@@ -41,6 +41,14 @@ class ListRolesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
+    protected function getPhraseSearchColumns(): array
+    {
+        return [
+            Role::COLUMN_NAME,
+            Role::COLUMN_DESCRIPTION,
+        ];
+    }
+
     protected function transformIncludes(array $items, array $includes): array
     {
         $data = array_map(fn($role) => $role->toArray(), $items);
