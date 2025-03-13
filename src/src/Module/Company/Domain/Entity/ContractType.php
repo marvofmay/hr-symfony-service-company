@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -22,12 +25,12 @@ class ContractType
 {
     use TimestampableTrait;
     use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
     public const COLUMN_NAME = 'name';
     public const COLUMN_DESCRIPTION = 'description';
     public const COLUMN_ACTIVE = 'active';
-
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
@@ -53,6 +56,9 @@ class ContractType
     #[Groups('contract_type_info')]
     private bool $active;
 
+    #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'contractType', cascade: ['persist', 'remove'])]
+    private Collection $employees;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
     #[Groups('contract_type_info')]
     private \DateTimeInterface $createdAt;
@@ -64,6 +70,10 @@ class ContractType
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     #[Groups('contract_type_info')]
     private ?\DateTimeInterface $deletedAt = null;
+
+    public function __construct() {
+        $this->employees = new ArrayCollection();
+    }
 
     public function getUuid(): UuidInterface
     {
@@ -97,5 +107,23 @@ class ContractType
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
+    }
+
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            self::COLUMN_UUID => $this->{self::COLUMN_UUID},
+            self::COLUMN_NAME => $this->{self::COLUMN_NAME},
+            self::COLUMN_DESCRIPTION => $this->{self::COLUMN_DESCRIPTION},
+            self::COLUMN_ACTIVE => $this->{self::COLUMN_ACTIVE},
+            self::COLUMN_CREATED_AT => $this->{self::COLUMN_CREATED_AT}->format('Y-m-d H:i:s'),
+            self::COLUMN_UPDATED_AT => $this->{self::COLUMN_UPDATED_AT}?->format('Y-m-d H:i:s'),
+            self::COLUMN_DELETED_AT => $this->{self::COLUMN_DELETED_AT}?->format('Y-m-d H:i:s'),
+        ];
     }
 }

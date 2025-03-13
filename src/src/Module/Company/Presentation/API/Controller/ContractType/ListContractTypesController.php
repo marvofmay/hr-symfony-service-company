@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\ContractType;
 
-use App\Module\Company\Application\Query\ContractType\GetContractTypesQuery;
-use App\Module\Company\Application\QueryHandler\ContractType\GetContractTypesQueryHandler;
 use App\Module\Company\Domain\DTO\ContractType\ContractTypesQueryDTO;
+use App\Module\Company\Presentation\API\Action\ContractType\AskContractTypesAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,20 +13,18 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListContractTypesController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
     ) {
     }
 
     #[OA\Get(
-        path: '/api/roles',
+        path: '/api/contract_types',
         summary: 'Pobiera listę form zatrudnienia',
         responses: [
             new OA\Response(
@@ -39,7 +36,7 @@ class ListContractTypesController extends AbstractController
                             new OA\Property(property: 'totalContractTypes', type: 'integer', example: 13),
                             new OA\Property(property: 'page', type: 'integer', example: 1),
                             new OA\Property(property: 'limit', type: 'integer', example: 10),
-                            new OA\Property(property: 'roles', type: 'array', items: new OA\Items(properties: [
+                            new OA\Property(property: 'contract_types', type: 'array', items: new OA\Items(properties: [
                                 new OA\Property(property: 'uuid', type: 'string', format: 'uuid', example: '9c1963a3-cb27-4e6a-b474-3509ed4b3457'),
                                 new OA\Property(property: 'name', type: 'string', example: 'b2b'),
                                 new OA\Property(property: 'description', type: 'string', example: 'b2b ...'),
@@ -69,29 +66,21 @@ class ListContractTypesController extends AbstractController
             ),
         ]
     )]
-    #[OA\Tag(name: 'roles')]
-    #[Route('/api/roles', name: 'api.roles.list', methods: ['GET'])]
-    public function list(#[MapQueryString] ContractTypesQueryDTO $queryDTO, GetContractTypesQueryHandler $contractTypesQueryHandler): Response
+    #[OA\Tag(name: 'contract_types')]
+    #[Route('/api/contact_types', name: 'api.contractType.list', methods: ['GET'])]
+    public function list(#[MapQueryString] ContractTypesQueryDTO $queryDTO, AskContractTypesAction $askContractTypesAction): Response
     {
         try {
-            //ToDo:: refactor - use query.bus
-            return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $contractTypesQueryHandler->handle(new GetContractTypesQuery($queryDTO)),
-                    'json', ['groups' => ['contract_type_info']],
-                )),
-            ],
-                Response::HTTP_OK
-            );
+            return new JsonResponse(['data' => $askContractTypesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
             $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('role.list.error', [], 'roles'), $error->getMessage())
+                sprintf('%s: %s', $this->translator->trans('contractType.list.error', [], 'contract_types'), $error->getMessage())
             );
 
             return new JsonResponse(
                 [
                     'data' => [],
-                    'message' => $this->translator->trans('role.list.error', [], 'roles'),
+                    'message' => $this->translator->trans('contractType.list.error', [], 'contract_types'),
                 ],
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );

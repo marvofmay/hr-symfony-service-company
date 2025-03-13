@@ -121,9 +121,9 @@ class Industry
             Industry::COLUMN_UUID => $this->{self::COLUMN_UUID},
             Industry::COLUMN_NAME => $this->{self::COLUMN_NAME},
             Industry::COLUMN_DESCRIPTION => $this->{self::COLUMN_DESCRIPTION},
-            Industry::COLUMN_CREATED_AT => $this->{self::COLUMN_CREATED_AT},
-            Industry::COLUMN_UPDATED_AT => $this->{self::COLUMN_UPDATED_AT},
-            Industry::COLUMN_DELETED_AT => $this->{self::COLUMN_DELETED_AT},
+            Industry::COLUMN_CREATED_AT => $this->{self::COLUMN_CREATED_AT}->format('Y-m-d H:i:s'),
+            Industry::COLUMN_UPDATED_AT => $this->{self::COLUMN_UPDATED_AT}?->format('Y-m-d H:i:s'),
+            Industry::COLUMN_DELETED_AT => $this->{self::COLUMN_DELETED_AT}?->format('Y-m-d H:i:s'),
         ];
     }
 }

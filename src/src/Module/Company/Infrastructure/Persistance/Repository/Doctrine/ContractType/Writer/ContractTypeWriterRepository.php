@@ -17,14 +17,9 @@ class ContractTypeWriterRepository extends ServiceEntityRepository implements Co
         parent::__construct($registry, ContractType::class);
     }
 
-    public function saveContractTypeInDB(ContractType $contractType): void
+    public function saveOrUpdateContractTypeInDB(ContractType $contractType): void
     {
         $this->getEntityManager()->persist($contractType);
-        $this->getEntityManager()->flush();
-    }
-
-    public function updateContractTypeInDB(ContractType $contractType): void
-    {
         $this->getEntityManager()->flush();
     }
 
@@ -41,16 +36,16 @@ class ContractTypeWriterRepository extends ServiceEntityRepository implements Co
         $this->getEntityManager()->flush();
     }
 
-    public function deleteMultipleContractTypesInDB(Collection $selectedUUID): void
+    public function deleteMultipleContractTypesInDB(Collection $contractTypes): void
     {
-        if (empty($selectedUUID)) {
+        if (empty($contractTypes)) {
             return;
         }
 
-        $query = $this->getEntityManager()->createQuery('UPDATE ' . ContractType::class . ' ct SET ct.' . ContractType::COLUMN_DELETED_AT . ' = :deletedAt WHERE ct.' . ContractType::COLUMN_UUID . ' IN (:uuids)');
-        $query->setParameter('deletedAt', (new \DateTime())->format('Y-m-d H:i:s'));
-        $query->setParameter('uuids', $selectedUUID);
+        foreach ($contractTypes as $contractType) {
+            $this->getEntityManager()->remove($contractType);
+        }
 
-        $query->execute();
+        $this->getEntityManager()->flush();
     }
 }

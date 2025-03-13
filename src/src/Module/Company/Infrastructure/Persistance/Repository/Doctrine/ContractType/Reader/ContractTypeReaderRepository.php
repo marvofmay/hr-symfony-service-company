@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\ContractType\Reader;
 
-use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -20,28 +19,18 @@ class ContractTypeReaderRepository extends ServiceEntityRepository implements Co
 
     public function getContractTypeByUUID(string $uuid): ?ContractType
     {
-        $contractTypes = $this->getEntityManager()
-            ->createQuery('SELECT ct FROM ' . ContractType::class . ' ct WHERE ct.' . ContractType::COLUMN_UUID . ' = :uuid')
-            ->setParameter('uuid', $uuid)
-            ->getOneOrNullResult();
-
-        if (!$contractTypes) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('contractType.uuid.notFound', [], 'contract_types'), $uuid));
-        }
-
-        return $contractTypes;
+        return $this->findOneBy(['uuid' => $uuid]);
     }
 
     public function getContractTypeByName(string $name, ?string $uuid = null): ?ContractType
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('ct')
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('ct')
             ->from(ContractType::class, 'ct')
             ->where('ct.' . ContractType::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
-        if (null !== $uuid) {
+        if ($uuid) {
             $qb->andWhere('ct.' . ContractType::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
@@ -56,13 +45,6 @@ class ContractTypeReaderRepository extends ServiceEntityRepository implements Co
 
     public function isContractTypeWithUUIDExists(string $uuid): bool
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('ct')
-            ->from(ContractType::class, 'ct')
-            ->where('ct.' . ContractType::COLUMN_UUID . ' = :uuid')
-            ->setParameter('uuid', $uuid);
-
-        return null !== $qb->getQuery()->getOneOrNullResult();
+        return null !== $this->findOneBy(['uuid' => $uuid]);
     }
 }
