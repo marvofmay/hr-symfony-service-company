@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Industry;
 
-use App\Module\Company\Application\Query\Industry\GetIndustriesQuery;
-use App\Module\Company\Application\QueryHandler\Industry\GetIndustriesQueryHandler;
 use App\Module\Company\Domain\DTO\Industry\IndustriesQueryDTO;
 use App\Module\Company\Presentation\API\Action\Industry\AskIndustriesAction;
 use OpenApi\Attributes as OA;
@@ -15,14 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListIndustriesController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
     ) {
     }

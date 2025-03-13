@@ -9,9 +9,9 @@ use App\Module\Company\Domain\Entity\Employee;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
-class GetEmployeesQueryHandler
+readonly class GetEmployeesQueryHandler
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
+    public function __construct(private EntityManagerInterface $entityManager)
     {
     }
 
