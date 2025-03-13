@@ -19,6 +19,6 @@ readonly class IndustryUpdater
         $industry->setDescription($description);
         $industry->setUpdatedAt(new \DateTime());
 
-        $this->industryWriterRepository->updateIndustryInDB($industry);
+        $this->industryWriterRepository->saveOrUpdateIndustryInDB($industry);
     }
 }

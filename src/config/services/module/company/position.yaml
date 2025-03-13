@@ -17,3 +17,6 @@ services:
     App\Module\Company\Application\CommandHandler\Position\ImportPositionsCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'command.bus' }
+    App\Module\Company\Application\QueryHandler\Position\ListPositionsQueryHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'query.bus' }

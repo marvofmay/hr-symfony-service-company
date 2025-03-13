@@ -19,6 +19,6 @@ readonly class IndustryCreator
         $industry->setName($name);
         $industry->setDescription($description);
 
-        $this->industryWriterRepository->saveIndustryInDB($industry);
+        $this->industryWriterRepository->saveOrUpdateIndustryInDB($industry);
     }
 }

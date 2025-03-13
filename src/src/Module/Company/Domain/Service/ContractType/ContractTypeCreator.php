@@ -20,6 +20,6 @@ readonly class ContractTypeCreator
         $contractType->setDescription($description);
         $contractType->setActive($active);
 
-        $this->contractTypeWriterRepository->saveContractTypeInDB($contractType);
+        $this->contractTypeWriterRepository->saveOrUpdateContractTypeInDB($contractType);
     }
 }

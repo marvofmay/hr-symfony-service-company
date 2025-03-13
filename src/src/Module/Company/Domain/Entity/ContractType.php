@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -39,36 +38,29 @@ class ContractType
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('contract_type_info')]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 200)]
     #[Assert\NotBlank]
-    #[Groups('contract_type_info')]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups('contract_type_info')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
-    #[Groups('contract_type_info')]
     private bool $active;
 
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'contractType', cascade: ['persist', 'remove'])]
     private Collection $employees;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('contract_type_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('contract_type_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('contract_type_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     public function __construct() {

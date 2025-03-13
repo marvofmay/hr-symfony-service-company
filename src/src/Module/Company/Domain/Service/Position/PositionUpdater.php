@@ -27,13 +27,12 @@ readonly class PositionUpdater
             $position->removeDepartment($department);
         }
 
-        $departments = new ArrayCollection();
         foreach ($command->getDepartmentsUUID() as $departmentUUID) {
             $position->addDepartment($this->departmentReaderRepository->getDepartmentByUUID($departmentUUID));
         }
 
         $position->setUpdatedAt(new \DateTime());
 
-        $this->positionWriterRepository->updatePositionInDB($position);
+        $this->positionWriterRepository->saveOrUpdatePositionInDB($position);
     }
 }

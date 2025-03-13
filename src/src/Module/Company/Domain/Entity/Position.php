@@ -14,7 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -31,7 +30,6 @@ class Position
     public const COLUMN_NAME = 'name';
     public const COLUMN_DESCRIPTION = 'description';
     public const COLUMN_ACTIVE = 'active';
-
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
@@ -40,33 +38,26 @@ class Position
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('position_info')]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 200)]
     #[Assert\NotBlank]
-    #[Groups('position_info')]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups('position_info')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
-    #[Groups('position_info')]
     private bool $active;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('position_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('position_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('position_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\ManyToMany(targetEntity: Department::class, inversedBy: "positions")]
@@ -138,16 +129,13 @@ class Position
     public function toArray(): array
     {
         return [
-            'uuid' => $this->getUUID()->toString(),
-            'name' => $this->getName(),
-            'description' => $this->getDescription(),
-            'active' => $this->getActive(),
-            'created_at' => $this->getCreatedAt(),
-            'updated_at' => $this->getUpdatedAt(),
-            'deleted_at' => $this->getDeletedAt(),
-            'departments' => array_map(function ($department) {
-                return $department->toArray();
-            }, $this->getDepartments()->toArray())
+            self::COLUMN_UUID => $this->uuid->toString(),
+            self::COLUMN_NAME => $this->name,
+            self::COLUMN_DESCRIPTION => $this->description,
+            self::COLUMN_ACTIVE => $this->active,
+            self::COLUMN_CREATED_AT => $this->createdAt->format('Y-m-d H:i:s'),
+            self::COLUMN_UPDATED_AT => $this->updatedAt?->format('Y-m-d H:i:s'),
+            self::COLUMN_DELETED_AT => $this->deletedAt?->format('Y-m-d H:i:s'),
         ];
     }
 }

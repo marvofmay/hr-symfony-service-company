@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Position;
 
-use App\Module\Company\Application\Query\Position\GetPositionsQuery;
-use App\Module\Company\Application\QueryHandler\Position\GetPositionsQueryHandler;
 use App\Module\Company\Domain\DTO\Position\PositionsQueryDTO;
+use App\Module\Company\Presentation\API\Action\Position\AskPositionsAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,14 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListPositionsController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -70,18 +67,10 @@ class ListPositionsController extends AbstractController
     )]
     #[OA\Tag(name: 'positions')]
     #[Route('/api/positions', name: 'api.positions.list', methods: ['GET'])]
-    public function list(#[MapQueryString] PositionsQueryDTO $queryDTO, GetPositionsQueryHandler $positionsQueryHandler): Response
+    public function list(#[MapQueryString] PositionsQueryDTO $queryDTO, AskPositionsAction $askPositionsAction): Response
     {
         try {
-            //ToDo:: refactor - use query.bus
-            return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $positionsQueryHandler->handle(new GetPositionsQuery($queryDTO)),
-                    'json', ['groups' => ['position_info', 'department_info', 'company_info']],
-                )),
-            ],
-                Response::HTTP_OK
-            );
+            return new JsonResponse(['data' => $askPositionsAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
             $this->logger->error(
                 sprintf('%s: %s', $this->translator->trans('position.list.error', [], 'positions'), $error->getMessage())

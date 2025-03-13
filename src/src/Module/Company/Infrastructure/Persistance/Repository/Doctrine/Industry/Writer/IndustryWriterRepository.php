@@ -17,14 +17,9 @@ class IndustryWriterRepository extends ServiceEntityRepository implements Indust
         parent::__construct($registry, Industry::class);
     }
 
-    public function saveIndustryInDB(Industry $industry): void
+    public function saveOrUpdateIndustryInDB(Industry $industry): void
     {
         $this->getEntityManager()->persist($industry);
-        $this->getEntityManager()->flush();
-    }
-
-    public function updateIndustryInDB(Industry $industry): void
-    {
         $this->getEntityManager()->flush();
     }
 

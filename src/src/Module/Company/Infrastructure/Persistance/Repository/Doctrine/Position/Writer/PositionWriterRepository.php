@@ -17,13 +17,7 @@ class PositionWriterRepository extends ServiceEntityRepository implements Positi
         parent::__construct($registry, Position::class);
     }
 
-    public function savePositionInDB(Position $position): void
-    {
-        $this->getEntityManager()->persist($position);
-        $this->getEntityManager()->flush();
-    }
-
-    public function updatePositionInDB(Position $position): void
+    public function saveOrUpdatePositionInDB(Position $position): void
     {
         $this->getEntityManager()->persist($position);
         $this->getEntityManager()->flush();
