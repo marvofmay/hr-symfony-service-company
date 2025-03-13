@@ -24,11 +24,15 @@ class File
     use TimestampableTrait;
     use AttributesEntityTrait;
 
+    public const COLUMN_UUID        = 'uuid';
     public const COLUMN_FILE_NAME   = 'fileName';
     public const COLUMN_FILE_PATH   = 'filePath';
     public const COLUMN_EXTENSION   = 'extension';
     public const COLUMN_DESCRIPTION = 'description';
     public const COLUMN_KIND        = 'kind';
+    public const COLUMN_CREATED_AT  = 'createdAt';
+    public const COLUMN_UPDATED_AT  = 'updatedAt';
+    public const COLUMN_DELETED_AT  = 'deletedAt';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -135,5 +139,18 @@ class File
     public function setImport(?Import $import): void
     {
         $this->import = $import;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            self::COLUMN_UUID        => $this->uuid->toString(),
+            self::COLUMN_FILE_NAME   => $this->fileName,
+            self::COLUMN_FILE_PATH   => $this->filePath,
+            self::COLUMN_DESCRIPTION => $this->description,
+            self::COLUMN_CREATED_AT  => $this->createdAt->format('Y-m-d H:i:s'),
+            self::COLUMN_UPDATED_AT  => $this->updatedAt->format('Y-m-d H:i:s'),
+            self::COLUMN_DELETED_AT  => $this->deletedAt->format('Y-m-d H:i:s'),
+        ];
     }
 }

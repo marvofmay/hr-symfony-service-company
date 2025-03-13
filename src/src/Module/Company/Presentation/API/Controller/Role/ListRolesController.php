@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
-use App\Module\Company\Application\Query\Role\GetRolesQuery;
-use App\Module\Company\Application\QueryHandler\Role\GetRolesQueryHandler;
 use App\Module\Company\Domain\DTO\Role\RolesQueryDTO;
+use App\Module\Company\Presentation\API\Action\Role\AskRolesAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,14 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListRolesController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -70,18 +67,10 @@ class ListRolesController extends AbstractController
     )]
     #[OA\Tag(name: 'roles')]
     #[Route('/api/roles', name: 'api.roles.list', methods: ['GET'])]
-    public function list(#[MapQueryString] RolesQueryDTO $queryDTO, GetRolesQueryHandler $rolesQueryHandler): Response
+    public function list(#[MapQueryString] RolesQueryDTO $queryDTO, AskRolesAction $askRolesAction): Response
     {
         try {
-            //ToDo:: refactor - use query.bus
-            return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $rolesQueryHandler->handle(new GetRolesQuery($queryDTO)),
-                    'json', ['groups' => ['role_info']],
-                )),
-            ],
-                Response::HTTP_OK
-            );
+            return new JsonResponse(['data' => $askRolesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
             $this->logger->error(
                 sprintf('%s: %s', $this->translator->trans('role.list.error', [], 'roles'), $error->getMessage())

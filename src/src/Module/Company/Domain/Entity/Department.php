@@ -62,7 +62,7 @@ class Department
     private string $name;
 
     #[ORM\Column(type: Types::STRING, length: 500, nullable: true)]
-    #[Groups('company_info')]
+    #[Groups('department_info')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
@@ -249,6 +249,7 @@ class Department
             self::COLUMN_CREATED_AT => $this->getCreatedAt(),
             self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
             self::COLUMN_DELETED_AT => $this->getDeletedAt(),
+            'employees' => $this->getEmployees()->toArray(),
         ];
     }
 }

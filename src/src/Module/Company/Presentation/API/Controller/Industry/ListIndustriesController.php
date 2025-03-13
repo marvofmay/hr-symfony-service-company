@@ -7,6 +7,7 @@ namespace App\Module\Company\Presentation\API\Controller\Industry;
 use App\Module\Company\Application\Query\Industry\GetIndustriesQuery;
 use App\Module\Company\Application\QueryHandler\Industry\GetIndustriesQueryHandler;
 use App\Module\Company\Domain\DTO\Industry\IndustriesQueryDTO;
+use App\Module\Company\Presentation\API\Action\Industry\AskIndustriesAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -70,18 +71,10 @@ class ListIndustriesController extends AbstractController
     )]
     #[OA\Tag(name: 'industries')]
     #[Route('/api/industries', name: 'api.industries.list', methods: ['GET'])]
-    public function list(#[MapQueryString] IndustriesQueryDTO $queryDTO, GetIndustriesQueryHandler $industrysQueryHandler): Response
+    public function list(#[MapQueryString] IndustriesQueryDTO $queryDTO, AskIndustriesAction $askIndustriesAction): Response
     {
         try {
-            //ToDo:: refactor - use query.bus
-            return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $industrysQueryHandler->handle(new GetIndustriesQuery($queryDTO)),
-                    'json', ['groups' => ['industry_info']],
-                )),
-            ],
-                Response::HTTP_OK
-            );
+            return new JsonResponse(['data' => $askIndustriesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
             $this->logger->error(
                 sprintf('%s: %s', $this->translator->trans('industry.list.error', [], 'industries'), $error->getMessage())

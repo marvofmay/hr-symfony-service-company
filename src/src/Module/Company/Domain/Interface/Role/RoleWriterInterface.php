@@ -9,13 +9,8 @@ use Doctrine\Common\Collections\Collection;
 
 interface RoleWriterInterface
 {
-    public function saveRoleInDB(Role $role): void;
-
-    public function updateRoleInDB(Role $role): void;
-
+    public function saveOrUpdateRoleInDB(Role $role): void;
     public function saveRolesInDB(Collection $roles): void;
-
     public function deleteMultipleRolesInDB(Collection $roles): void;
-
     public function deleteRoleInDB(Role $role): void;
 }

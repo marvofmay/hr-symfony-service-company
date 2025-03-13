@@ -296,6 +296,7 @@ class Company
             self::COLUMN_CREATED_AT => $this->getCreatedAt(),
             self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
             self::COLUMN_DELETED_AT => $this->getDeletedAt(),
+            'departments' => $this->getDepartments()->toArray(),
         ];
     }
 }

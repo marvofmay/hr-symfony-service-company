@@ -19,6 +19,6 @@ readonly class RoleUpdater
         $role->setDescription($description);
         $role->setUpdatedAt(new \DateTime());
 
-        $this->roleWriterRepository->updateRoleInDB($role);
+        $this->roleWriterRepository->saveOrUpdateRoleInDB($role);
     }
 }

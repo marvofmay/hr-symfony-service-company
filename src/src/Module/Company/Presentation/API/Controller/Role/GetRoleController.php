@@ -78,12 +78,7 @@ class GetRoleController extends AbstractController
     public function get(string $uuid): JsonResponse
     {
         try {
-            return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $this->roleReaderRepository->getRoleByUUID($uuid),
-                    'json', ['groups' => ['role_info']],
-                )),
-            ], Response::HTTP_OK);
+            return new JsonResponse(['data' => $this->roleReaderRepository->getRoleByUUID($uuid),], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('role.view.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);

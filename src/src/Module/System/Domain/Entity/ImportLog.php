@@ -22,13 +22,20 @@ class ImportLog
     use TimestampableTrait;
     use AttributesEntityTrait;
 
+    public const COLUMN_UUID       = 'uuid';
+    public const COLUMN_KIND       = 'kind';
+    public const COLUMN_DATA       = 'data';
+    public const COLUMN_CREATED_AT = 'createdAt';
+    public const COLUMN_UPDATED_AT = 'updatedAt';
+    public const COLUMN_DELETED_AT = 'deletedAt';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: Import::class, inversedBy: 'logs')]
+    #[ORM\ManyToOne(targetEntity: Import::class, inversedBy: 'importLogs')]
     #[ORM\JoinColumn(name: 'import_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private Import $import;
 
@@ -43,7 +50,7 @@ class ImportLog
         return $this->import;
     }
 
-    public function setImport(?Import $import): void
+    public function setImport(Import $import): void
     {
         $this->import = $import;
     }
@@ -66,5 +73,14 @@ class ImportLog
     public function setData(?array $data): void
     {
         $this->data = $data;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            self::COLUMN_UUID => $this->uuid->toString(),
+            self::COLUMN_KIND => $this->kind,
+            self::COLUMN_DATA => $this->data,
+        ];
     }
 }

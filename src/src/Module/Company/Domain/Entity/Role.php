@@ -5,14 +5,17 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
+use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role\Reader\RoleReaderRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use OpenApi\Attributes as OA;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -28,51 +31,44 @@ class Role
 {
     use TimestampableTrait;
     use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
-
-    #[OA\Property(description: 'Nazwa roli', type: 'string')]
     public const COLUMN_NAME = 'name';
-
-    #[OA\Property(description: 'Opis roli', type: 'string')]
     public const COLUMN_DESCRIPTION = 'description';
-
-    #[OA\Property(description: 'Data utworzenia', type: 'string', format: 'date-time')]
     public const COLUMN_CREATED_AT = 'createdAt';
-
-    #[OA\Property(description: 'Data aktualizacji', type: 'string', format: 'date-time', nullable: true)]
     public const COLUMN_UPDATED_AT = 'updatedAt';
-
-    #[OA\Property(description: 'Data usunięcia', type: 'string', format: 'date-time', nullable: true)]
     public const COLUMN_DELETED_AT = 'deletedAt';
+    public const RELATION_EMPLOYEES = 'employees';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('role_info')]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
     #[Assert\NotBlank()]
-    #[Groups('role_info')]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups('role_info')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('role_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('role_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('role_info')]
     private ?\DateTimeInterface $deletedAt = null;
+
+    #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
+    private Collection $employees;
+
+    public function __construct() {
+        $this->employees = new ArrayCollection();
+    }
 
     public function getUuid(): UuidInterface
     {
@@ -104,12 +100,21 @@ class Role
         $this->{self::COLUMN_DESCRIPTION} = $description;
     }
 
+    public function gerEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
     public function toArray(): array
     {
         return [
-            self::COLUMN_UUID => $this->{self::COLUMN_UUID},
-            self::COLUMN_NAME => $this->{self::COLUMN_NAME},
+            self::COLUMN_UUID        => $this->{self::COLUMN_UUID},
+            self::COLUMN_NAME        => $this->{self::COLUMN_NAME},
             self::COLUMN_DESCRIPTION => $this->{self::COLUMN_DESCRIPTION},
+            self::RELATION_EMPLOYEES => $this->{self::RELATION_EMPLOYEES}->toArray(),
+            self::COLUMN_CREATED_AT  => $this->{self::COLUMN_CREATED_AT}->format('Y-m-d H:i:s'),
+            self::COLUMN_UPDATED_AT  => $this->{self::COLUMN_UPDATED_AT}?->format('Y-m-d H:i:s'),
+            self::COLUMN_DELETED_AT  => $this->{self::COLUMN_DELETED_AT}?->format('Y-m-d H:i:s'),
         ];
     }
 }

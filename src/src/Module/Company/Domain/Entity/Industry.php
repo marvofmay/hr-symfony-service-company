@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -30,6 +31,7 @@ class Industry
 {
     use TimestampableTrait;
     use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
 
@@ -52,28 +54,22 @@ class Industry
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('industry_info')]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
     #[Assert\NotBlank()]
-    #[Groups('industry_info')]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    #[Groups('industry_info')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('industry_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('industry_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('industry_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToMany(targetEntity: Company::class, mappedBy: 'industry')]
@@ -117,5 +113,17 @@ class Industry
     public function getCompanies(): Collection
     {
         return $this->companies;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            Industry::COLUMN_UUID => $this->{self::COLUMN_UUID},
+            Industry::COLUMN_NAME => $this->{self::COLUMN_NAME},
+            Industry::COLUMN_DESCRIPTION => $this->{self::COLUMN_DESCRIPTION},
+            Industry::COLUMN_CREATED_AT => $this->{self::COLUMN_CREATED_AT},
+            Industry::COLUMN_UPDATED_AT => $this->{self::COLUMN_UPDATED_AT},
+            Industry::COLUMN_DELETED_AT => $this->{self::COLUMN_DELETED_AT},
+        ];
     }
 }

@@ -75,7 +75,7 @@ class ListCompaniesController extends AbstractController
             return new JsonResponse([
                 'data' => json_decode($this->serializer->serialize(
                     $companiesQueryHandler->handle(new GetCompaniesQuery($queryDTO)),
-                    'json', ['groups' => ['company_info']],
+                    'json', ['groups' => ['company_info', 'department_info']],
                 )),
             ],
                 Response::HTTP_OK

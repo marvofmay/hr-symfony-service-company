@@ -42,7 +42,7 @@ class GetEmployeesQueryHandler
             'totalEmployees' => $totalEmployees,
             'page' => $query->getPage(),
             'limit' => $query->getLimit(),
-            'employees' => $this->transformIncludes($employees, $includes),
+            'employees' => $employees
         ];
     }
 

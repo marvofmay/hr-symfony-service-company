@@ -9,7 +9,6 @@ use App\Module\System\Domain\Entity\Import;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
-use Ramsey\Uuid\UuidInterface;
 
 class ImportReaderRepository extends ServiceEntityRepository implements ImportReaderInterface
 {
@@ -20,25 +19,11 @@ class ImportReaderRepository extends ServiceEntityRepository implements ImportRe
 
     public function getImportByFile(File $file): ?Import
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('i')
-            ->from(Import::class, 'i')
-            ->where('i.' . Import::RELATION_FILE . ' = :file')
-            ->setParameter('file', $file);
-
-        return $qb->getQuery()->getOneOrNullResult();
+        return $this->findOneBy([Import::RELATION_FILE => $file]);
     }
 
     public function getImportByUuid(string $uuid): ?Import
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('i')
-            ->from(Import::class, 'i')
-            ->where('i.' . Import::COLUMN_UUID . ' = :uuid')
-            ->setParameter('uuid', $uuid);
-
-        return $qb->getQuery()->getOneOrNullResult();
+        return $this->findOneBy([Import::COLUMN_UUID => $uuid]);
     }
 }

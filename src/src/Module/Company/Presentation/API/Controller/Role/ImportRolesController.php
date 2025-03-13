@@ -10,21 +10,21 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
-use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Presentation\API\Action\Role\ImportRolesAction;
 use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
+use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use App\Module\System\Presentation\API\Action\File\AskFileAction;
 use App\Module\System\Presentation\API\Action\File\CreateFileAction;
 use App\Module\System\Presentation\API\Action\Import\AskImportAction;
 use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
+use Doctrine\ORM\EntityManagerInterface;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,7 +36,8 @@ class ImportRolesController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-        private readonly RoleReaderInterface $roleReaderRepository,
+        private readonly ImportReaderInterface $importReaderRepository,
+        private readonly EntityManagerInterface $entityManager,
     ) {
     }
 
@@ -96,6 +97,8 @@ class ImportRolesController extends AbstractController
         ValidatorInterface $validator,
         Security $security,
     ): JsonResponse {
+
+        $this->entityManager->beginTransaction();
         try {
             $uploadFilePath = 'src/Storage/Upload/Import/Roles';
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
@@ -119,8 +122,8 @@ class ImportRolesController extends AbstractController
             $createImportAction->execute(ImportKindEnum::IMPORT_ROLES, ImportStatusEnum::PENDING, $file, $employee);
             $import = $askImportAction->ask($file);
             $importRolesAction->execute(new ImportDTO($import->getUUID()->toString()));
-            $import = $askImportAction->ask($file);
-            $importLogs = $import->getUUID()->toString();
+
+            $this->entityManager->commit();
 
             if ($import->getStatus() === ImportStatusEnum::DONE) {
                 return new JsonResponse([
@@ -131,14 +134,17 @@ class ImportRolesController extends AbstractController
                     Response::HTTP_CREATED
                 );
             } else {
-                $importLogs = count($import->getLogs());
+                //ToDo:: $askImportLogAction
+                //$import = $askImportLogAction->ask($import->getUUID()->toString());
+                //$importLogs = $import->getImportLogs();
                 return new JsonResponse([
-                    'errors' => 'dddddd',
+                    'errors' => 'errorsArray',
                 ],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }
         } catch (\Exception $error) {
+            $this->entityManager->rollback();
             $message = sprintf('%s: %s', $this->translator->trans('role.import.error', [], 'roles'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);
 

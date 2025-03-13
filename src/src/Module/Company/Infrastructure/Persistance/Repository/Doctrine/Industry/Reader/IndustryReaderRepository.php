@@ -22,27 +22,18 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
 
     public function getIndustryByUUID(string $uuid): ?Industry
     {
-        $industry = $this->getEntityManager()
-            ->createQuery('SELECT r FROM ' . Industry::class . ' r WHERE r.' . Industry::COLUMN_UUID. ' = :uuid')
-            ->setParameter('uuid', $uuid)
-            ->getOneOrNullResult();
-
-        if (!$industry) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('industry.uuid.notFound', [], 'industries'), $uuid));
-        }
-
-        return $industry;
+        return $this->findOneBy(['uuid' => $uuid]);
     }
 
     public function getIndustriesByUUID(array $uuids): Collection
     {
-        $industries = $this->getEntityManager()
-            ->createQuery('SELECT r FROM ' . Industry::class . ' r WHERE r.' . Industry::COLUMN_UUID . ' IN (:uuids)')
-            ->setParameter('uuids', $uuids)
-            ->getResult();
+        $industries = $this->findBy([
+            Industry::COLUMN_UUID => $uuids
+        ]);
 
         if (empty($industries)) {
-            throw new NotFindByUUIDException(sprintf('%s : %s',
+            throw new NotFindByUUIDException(sprintf(
+                '%s : %s',
                 $this->translator->trans('industry.uuid.notFound', [], 'industries'),
                 implode(', ', $uuids)
             ));
@@ -53,15 +44,14 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
 
     public function getIndustryByName(string $name, ?string $uuid = null): ?Industry
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('i')
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select('i')
             ->from(Industry::class, 'i')
-            ->where('i.' . Industry::COLUMN_NAME . ' = :name')
+            ->where('i.'.Industry::COLUMN_NAME.' = :name')
             ->setParameter('name', $name);
 
-        if (null !== $uuid) {
-            $qb->andWhere('i.' . Industry::COLUMN_UUID . ' != :uuid')
+        if ($uuid !== null) {
+            $qb->andWhere('i.'.Industry::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -75,13 +65,6 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
 
     public function isIndustryWithUUIDExists(string $uuid): bool
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('i')
-            ->from(Industry::class, 'i')
-            ->where('i.' . Industry::COLUMN_UUID . ' = :uuid')
-            ->setParameter('uuid', $uuid);
-
-        return null !== $qb->getQuery()->getOneOrNullResult();
+        return null !== $this->findOneBy(['uuid' => $uuid]);
     }
 }
