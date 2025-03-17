@@ -36,7 +36,6 @@ class ImportRolesController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-        private readonly ImportReaderInterface $importReaderRepository,
         private readonly EntityManagerInterface $entityManager,
     ) {
     }
