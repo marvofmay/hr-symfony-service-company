@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -38,65 +39,73 @@ class Company
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
-    public const RELATION_PARENT_COMPANY = 'parentCompany';
-    public const RELATION_DEPARTMENTS = 'departments';
-    public const RELATION_EMPLOYEES = 'employees';
-    public const RELATION_ADDRESS = 'address';
-    public const RELATION_CONTACTS = 'contacts';
-
     public const RELATION_INDUSTRY = 'industry';
-    public const ALIAS = 'company';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    #[Groups('company_info')]
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Company::class)]
     #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    #[Groups('company_info')]
     private ?Company $parentCompany = null;
 
     #[ORM\ManyToOne(targetEntity: Industry::class, inversedBy: 'companies')]
     #[ORM\JoinColumn(name: 'industry_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[Groups('company_info')]
     private Industry $industry;
 
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    #[Groups('company_info')]
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    #[Groups('company_info')]
     private Address $address;
 
     #[ORM\Column(type: Types::STRING, length: 1000)]
     #[Assert\NotBlank]
+    #[Groups('company_info')]
     private string $fullName;
 
     #[ORM\Column(type: Types::STRING, length: 200, nullable: true)]
+    #[Groups('company_info')]
     private ?string $shortName;
 
     #[ORM\Column(type: Types::STRING, length: 20, nullable: false)]
+    #[Groups('company_info')]
     private string $nip;
 
     #[ORM\Column(type: Types::STRING, length: 20, nullable: false)]
+    #[Groups('company_info')]
     private string $regon;
 
     #[ORM\Column(type: Types::STRING, length: 500, nullable: true)]
+    #[Groups('company_info')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
+    #[Groups('company_info')]
     private bool $active;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[Groups('company_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups('company_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
+    #[Groups('company_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    #[Groups('company_info')]
     private Collection $employees;
 
     #[ORM\OneToMany(targetEntity: Department::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
@@ -187,22 +196,22 @@ class Company
         $this->{self::COLUMN_SHORT_NAME} = $shortName;
     }
 
-    public function getNIP(): string
+    public function getNip(): string
     {
         return $this->nip;
     }
 
-    public function setNIP(string $nip): void
+    public function setNip(string $nip): void
     {
         $this->nip = $nip;
     }
 
-    public function getREGON(): string
+    public function getRegon(): string
     {
         return $this->regon;
     }
 
-    public function setREGON(string $regon): void
+    public function setRegon(string $regon): void
     {
         $this->regon = $regon;
     }
@@ -271,5 +280,24 @@ class Company
                 $department->setCompany(null);
             }
         }
+    }
+
+    public function toArray(): array {
+        return [
+            self::COLUMN_UUID => $this->getUuid()->toString(),
+            self::COLUMN_FULL_NAME => $this->getFullName(),
+            self::COLUMN_SHORT_NAME => $this->getShortName(),
+            self::COLUMN_DESCRIPTION => $this->getDescription(),
+            self::COLUMN_NIP => $this->getNip(),
+            self::COLUMN_REGON => $this->getRegon(),
+            self::COLUMN_ACTIVE => $this->getActive(),
+            'quantityDepartments' => $this->getDepartments()->count(),
+            'quantityEmployees' => $this->getEmployees()->count(),
+            //ToDo:: use const RELATION_PARENT_COMPANY
+            'parentCompany' => $this->getParentCompany() ? $this->getParentCompany()->toArray() : null,
+            self::COLUMN_CREATED_AT => $this->getCreatedAt(),
+            self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
+            self::COLUMN_DELETED_AT => $this->getDeletedAt(),
+        ];
     }
 }
