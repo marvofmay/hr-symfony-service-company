@@ -83,7 +83,7 @@ class Contact
     #[Groups('contact_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }

@@ -31,24 +31,30 @@ class Employee
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const COLUMN_UUID = 'uuid';
-    public const COLUMN_EXTERNAL_UUID = 'externalUUID';
-    public const COLUMN_COMPANY_UUID = 'companyUUID';
-    public const COLUMN_DEPARTMENT_UUID = 'departmentUUID';
-    public const COLUMN_SUPERIOR_UUID = 'superiorUUID';
-    public const COLUMN_POSITION_UUID = 'positionUUID';
-    public const COLUMN_CONTRACT_TYPE_UUID = 'contractTypeUUID';
-    public const COLUMN_ROLE_UUID = 'roleUUID';
-    public const COLUMN_FIRST_NAME = 'firstName';
-    public const COLUMN_LAST_NAME = 'lastName';
-    public const COLUMN_PESEL = 'pesel';
-    public const COLUMN_EMPLOYMENT_FROM = 'employmentFrom';
-    public const COLUMN_EMPLOYMENT_TO = 'employmentTo';
-    public const COLUMN_ACTIVE = 'active';
-    public const COLUMN_CREATED_AT = 'createdAt';
-    public const COLUMN_UPDATED_AT = 'updatedAt';
-    public const COLUMN_DELETED_AT = 'deletedAt';
-    public const RELATION_ROLE = 'role';
+    public const string COLUMN_UUID = 'uuid';
+    public const string COLUMN_EXTERNAL_UUID = 'externalUUID';
+    public const string COLUMN_COMPANY_UUID = 'companyUUID';
+    public const string COLUMN_DEPARTMENT_UUID = 'departmentUUID';
+    public const string COLUMN_SUPERIOR_UUID = 'superiorUUID';
+    public const string COLUMN_POSITION_UUID = 'positionUUID';
+    public const string COLUMN_CONTRACT_TYPE_UUID = 'contractTypeUUID';
+    public const string COLUMN_ROLE_UUID = 'roleUUID';
+    public const string COLUMN_FIRST_NAME = 'firstName';
+    public const string COLUMN_LAST_NAME = 'lastName';
+    public const string COLUMN_PESEL = 'pesel';
+    public const string COLUMN_EMPLOYMENT_FROM = 'employmentFrom';
+    public const string COLUMN_EMPLOYMENT_TO = 'employmentTo';
+    public const string COLUMN_ACTIVE = 'active';
+    public const string COLUMN_CREATED_AT = 'createdAt';
+    public const string COLUMN_UPDATED_AT = 'updatedAt';
+    public const string COLUMN_DELETED_AT = 'deletedAt';
+    public const string RELATION_COMPANY = 'company';
+    public const string RELATION_DEPARTMENT = 'department';
+    public const string RELATION_ROLE = 'role';
+    public const string RELATION_POSITION = 'position';
+    public const string RELATION_CONTRACT_TYPE = 'contractType';
+    public const string RELATION_PARENT_EMPLOYEE = 'parentEmployee';
+    public const string ALIAS = 'employee';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -79,12 +85,12 @@ class Employee
     #[Groups('employee_info')]
     private Position $position;
 
-    #[ORM\ManyToOne(targetEntity: ContractType::class)]
+    #[ORM\ManyToOne(targetEntity: ContractType::class, inversedBy: 'employees')]
     #[ORM\JoinColumn(name: 'contract_type_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('employee_info')]
     private ContractType $contractType;
 
-    #[ORM\ManyToOne(targetEntity: Role::class)]
+    #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'employees')]
     #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('employee_info')]
     private Role $role;
@@ -156,7 +162,7 @@ class Employee
         $this->files = new ArrayCollection();
     }
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }
@@ -348,17 +354,5 @@ class Employee
             $this->files[] = $file;
             $file->setEmployee($this);
         }
-    }
-
-    public function toArray(): array
-    {
-        return [
-            self::COLUMN_FIRST_NAME => $this->firstName,
-            self::COLUMN_LAST_NAME => $this->lastName,
-            self::COLUMN_CREATED_AT => $this->getCreatedAt(),
-            self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
-            self::COLUMN_DELETED_AT => $this->getDeletedAt(),
-            self::RELATION_ROLE => $this->getRole()->toArray(),
-        ];
     }
 }

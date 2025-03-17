@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
-use App\Module\Company\Application\Query\Company\GetCompaniesQuery;
-use App\Module\Company\Application\QueryHandler\Company\GetCompaniesQueryHandler;
 use App\Module\Company\Domain\DTO\Company\CompaniesQueryDTO;
+use App\Module\Company\Presentation\API\Action\Company\AskCompaniesAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,14 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListCompaniesController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -68,30 +65,14 @@ class ListCompaniesController extends AbstractController
     )]
     #[OA\Tag(name: 'companies')]
     #[Route('/api/companies', name: 'api.companies.list', methods: ['GET'])]
-    public function list(#[MapQueryString] CompaniesQueryDTO $queryDTO, GetCompaniesQueryHandler $companiesQueryHandler): Response
+    public function list(#[MapQueryString] CompaniesQueryDTO $queryDTO, AskCompaniesAction $askCompaniesAction): Response
     {
         try {
-            //ToDo:: refactor - use query.bus
-            return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $companiesQueryHandler->handle(new GetCompaniesQuery($queryDTO)),
-                    'json', ['groups' => ['company_info', 'department_info']],
-                )),
-            ],
-                Response::HTTP_OK
-            );
+            return new JsonResponse(['data' => $askCompaniesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
-            $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('company.list.error', [], 'companies'), $error->getMessage())
-            );
+            $this->logger->error(sprintf('%s: %s', $this->translator->trans('company.list.error', [], 'companies'), $error->getMessage()));
 
-            return new JsonResponse(
-                [
-                    'data' => [],
-                    'message' => $this->translator->trans('company.list.error', [], 'companies'),
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('company.list.error', [], 'companies'),], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

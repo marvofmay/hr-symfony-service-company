@@ -97,7 +97,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->userPasswordHasher->hashPassword($this, $password);
     }
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }

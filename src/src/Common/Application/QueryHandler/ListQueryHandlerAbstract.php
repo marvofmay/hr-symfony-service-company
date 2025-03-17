@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Common\Application\QueryHandler;
 
+use App\Common\Application\Factory\TransformerFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
@@ -21,18 +22,27 @@ abstract class ListQueryHandlerAbstract
 
     abstract protected function getAllowedFilters(): array;
 
-    abstract protected function transformIncludes(array $items, array $includes): array;
+    abstract protected function getRelations(): array;
 
     public function handle($query): array
     {
         $queryBuilder = $this->createBaseQueryBuilder();
-
         $queryBuilder = $this->setFilters($queryBuilder, $query->getFilters());
+        $totalItems = (clone $queryBuilder)->select("COUNT({$this->getAlias()}.uuid)")->getQuery()->getSingleScalarResult();
+        foreach ($query->getIncludes() as $relation) {
+            if (in_array($relation, $this->getRelations(), true)) {
+                $queryBuilder->leftJoin("{$this->getAlias()}.$relation", $relation)
+                    ->addSelect($relation);
+            }
+        }
 
-        $totalItems = count($queryBuilder->getQuery()->getResult());
+        $orderByField = $query->getOrderBy() ?? $this->getDefaultOrderBy();
+        if (strpos($orderByField, '.') === false) {
+            $orderByField = "{$this->getAlias()}.$orderByField";
+        }
 
-        $queryBuilder = $queryBuilder
-            ->orderBy($this->getAlias().'.'.$query->getOrderBy() ?? $this->getDefaultOrderBy(), $query->getOrderDirection())
+        $queryBuilder->orderBy($orderByField, $query->getOrderDirection());
+        $queryBuilder
             ->setMaxResults($query->getLimit())
             ->setFirstResult($query->getOffset());
 
@@ -48,9 +58,7 @@ abstract class ListQueryHandlerAbstract
 
     private function createBaseQueryBuilder(): QueryBuilder
     {
-        return $this->entityManager->createQueryBuilder()
-            ->select($this->getAlias())
-            ->from($this->getEntityClass(), $this->getAlias());
+        return $this->entityManager->getRepository($this->getEntityClass())->createQueryBuilder($this->getAlias());
     }
 
     abstract protected function getPhraseSearchColumns(): array;
@@ -99,5 +107,24 @@ abstract class ListQueryHandlerAbstract
         }
 
         return $queryBuilder;
+    }
+
+    protected function getTransformer(): object
+    {
+        return TransformerFactory::createForHandler(static::class);
+    }
+
+    protected function transformIncludes(array $items, array $includes): array
+    {
+        $transformer = $this->getTransformer();
+
+        return array_map(fn($item) => $this->transformItem($transformer, $item, $includes), $items);
+    }
+
+    private function transformItem($transformer, $item, array $includes): array
+    {
+        return method_exists($transformer, 'transformToArray')
+            ? $transformer->transformToArray($item, $includes)
+            : throw new \RuntimeException('Transformer does not implement transformToArray method.');
     }
 }

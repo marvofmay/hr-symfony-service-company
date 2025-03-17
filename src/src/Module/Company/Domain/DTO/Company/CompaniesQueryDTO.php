@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\DTO\Company;
 
+use App\Common\Domain\Abstract\QueryDTOAbstract;
 use OpenApi\Attributes as OA;
 
-class CompaniesQueryDTO
+class CompaniesQueryDTO extends QueryDTOAbstract
 {
     #[OA\Property(description: 'Pełna nazwa firmy', type: 'string', nullable: true)]
     public ?string $fullName = null;
@@ -23,36 +24,6 @@ class CompaniesQueryDTO
     #[OA\Property(description: 'REGON firmy', type: 'string', nullable: true)]
     public ?string $regon = null;
 
-    #[OA\Property(description: 'Aktywne', type: 'bool', nullable: true)]
+    #[OA\Property(description: 'Aktywna', type: 'bool', nullable: true)]
     public ?bool $active = null;
-
-    #[OA\Property(description: 'Pobierz wybrane relacje z departamentem', type: 'string', nullable: true)]
-    public ?string $includes = null;
-
-    #[OA\Property(description: 'Data utworzenia', type: 'string', format: 'date-time', nullable: true)]
-    public ?string $createdAt = null;
-
-    #[OA\Property(description: 'Data aktualizacji', type: 'string', format: 'date-time', nullable: true)]
-    public ?string $updatedAt = null;
-
-    #[OA\Property(description: 'Data usunięcia', type: 'string', format: 'date-time', nullable: true)]
-    public ?string $deletedAt = null;
-
-    #[OA\Property(description: 'Numer strony wyników', type: 'integer', default: 1, nullable: true)]
-    public ?int $page = 1;
-
-    #[OA\Property(description: 'Liczba wyników na stronę', type: 'integer', default: 10, nullable: true)]
-    public ?int $pageSize = 10;
-
-    #[OA\Property(description: 'Pole do sortowania', type: 'string', enum: ['name', 'description', 'createdAt', 'updatedAt', 'deletedAt'])]
-    public ?string $sortBy = 'createdAt';
-
-    #[OA\Property(description: 'Kierunek sortowania', type: 'string', default: 'asc', enum: ['asc', 'desc'])]
-    public ?string $sortDirection = 'desc';
-
-    #[OA\Property(description: 'Flaga pobierania usuniętych departamentów', type: 'integer', default: 0, enum: [0, 1])]
-    public ?int $deleted = null;
-
-    #[OA\Property(description: 'Fraza do wyszukania', type: 'string', nullable: true)]
-    public ?string $phrase = null;
 }

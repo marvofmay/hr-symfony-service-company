@@ -33,6 +33,9 @@ class Position
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
+    public const string RELATION_EMPLOYEES = 'employees';
+    public const string RELATION_DEPARTMENTS = 'departments';
+    public const string ALIAS = 'position';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -66,9 +69,13 @@ class Position
     #[ORM\InverseJoinColumn(name: "department_uuid", referencedColumnName: "uuid")]
     private Collection $departments;
 
+    #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'position', cascade: ['persist', 'remove'])]
+    private Collection $employees;
+
     public function __construct()
     {
         $this->departments = new ArrayCollection();
+        $this->employees = new ArrayCollection();
     }
 
     public function getUUID(): UuidInterface
@@ -126,16 +133,8 @@ class Position
         }
     }
 
-    public function toArray(): array
+    public function getEmployees(): Collection
     {
-        return [
-            self::COLUMN_UUID => $this->uuid->toString(),
-            self::COLUMN_NAME => $this->name,
-            self::COLUMN_DESCRIPTION => $this->description,
-            self::COLUMN_ACTIVE => $this->active,
-            self::COLUMN_CREATED_AT => $this->createdAt->format('Y-m-d H:i:s'),
-            self::COLUMN_UPDATED_AT => $this->updatedAt?->format('Y-m-d H:i:s'),
-            self::COLUMN_DELETED_AT => $this->deletedAt?->format('Y-m-d H:i:s'),
-        ];
+        return $this->employees;
     }
 }

@@ -22,7 +22,7 @@ class ListRolesQueryHandler extends ListQueryHandlerAbstract
 
     protected function getAlias(): string
     {
-        return 'role';
+        return Role::ALIAS;
     }
 
     protected function getDefaultOrderBy(): string
@@ -49,17 +49,8 @@ class ListRolesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function transformIncludes(array $items, array $includes): array
+    protected function getRelations(): array
     {
-        $data = array_map(fn($role) => $role->toArray(), $items);
-        foreach (Role::getRelations() as $relation) {
-            foreach ($data as $key => $role) {
-                if (!in_array($relation, $includes) || empty($includes)) {
-                    unset($data[$key][$relation]);
-                }
-            }
-        }
-
-        return $data;
+        return Role::getRelations();
     }
 }

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Employee;
 
-use App\Module\Company\Application\Query\Employee\GetEmployeesQuery;
-use App\Module\Company\Application\QueryHandler\Employee\GetEmployeesQueryHandler;
 use App\Module\Company\Domain\DTO\Employee\EmployeesQueryDTO;
+use App\Module\Company\Presentation\API\Action\Employee\AskEmployeesAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,14 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListEmployeesController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -68,30 +65,14 @@ class ListEmployeesController extends AbstractController
     )]
     #[OA\Tag(name: 'employees')]
     #[Route('/api/employees', name: 'api.employees.list', methods: ['GET'])]
-    public function list(#[MapQueryString] EmployeesQueryDTO $queryDTO, GetEmployeesQueryHandler $employeesQueryHandler): Response
+    public function list(#[MapQueryString] EmployeesQueryDTO $queryDTO, AskEmployeesAction $askEmployeesAction): Response
     {
         try {
-            //ToDo:: refactor - use query.bus
-            return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $employeesQueryHandler->handle(new GetEmployeesQuery($queryDTO)),
-                    'json', ['groups' => ['employee_info']],
-                )),
-            ],
-                Response::HTTP_OK
-            );
+            return new JsonResponse(['data' => $askEmployeesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
-            $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('employee.list.error', [], 'employees'), $error->getMessage())
-            );
+            $this->logger->error(sprintf('%s: %s', $this->translator->trans('employee.list.error', [], 'employees'), $error->getMessage()));
 
-            return new JsonResponse(
-                [
-                    'data' => [],
-                    'message' => $this->translator->trans('employee.list.error', [], 'employees'),
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('employee.list.error', [], 'employees'),], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

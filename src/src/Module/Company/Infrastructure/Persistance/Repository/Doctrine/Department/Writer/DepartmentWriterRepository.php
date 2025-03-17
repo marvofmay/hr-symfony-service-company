@@ -17,14 +17,9 @@ class DepartmentWriterRepository extends ServiceEntityRepository implements Depa
         parent::__construct($registry, Department::class);
     }
 
-    public function saveDepartmentInDB(Department $department): void
+    public function saveOrUpdateDepartmentInDB(Department $department): void
     {
         $this->getEntityManager()->persist($department);
-        $this->getEntityManager()->flush();
-    }
-
-    public function updateDepartmentInDB(Department $department): void
-    {
         $this->getEntityManager()->flush();
     }
 

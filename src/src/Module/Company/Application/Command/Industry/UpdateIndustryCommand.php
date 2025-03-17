@@ -16,7 +16,7 @@ class UpdateIndustryCommand
     ) {
     }
 
-    public function getUuid(): string
+    public function getUUID(): string
     {
         return $this->uuid;
     }

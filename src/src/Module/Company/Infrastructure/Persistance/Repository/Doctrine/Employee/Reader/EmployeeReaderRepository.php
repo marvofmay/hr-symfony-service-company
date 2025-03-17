@@ -48,7 +48,7 @@ class EmployeeReaderRepository extends ServiceEntityRepository implements Employ
 
 
         if (count($employees) !== count($selectedUUID)) {
-            $missingUuids = array_diff($selectedUUID, array_map(fn($employee) => $employee->getUuid(), $employees));
+            $missingUuids = array_diff($selectedUUID, array_map(fn($employee) => $employee->getUUID(), $employees));
             throw new NotFindByUUIDException(sprintf(
                 '%s : %s',
                 $this->translator->trans('employee.uuid.notFound', [], 'employees'),

@@ -25,16 +25,7 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
 
     public function getCompanyByUUID(string $uuid): ?Company
     {
-        $position = $this->getEntityManager()
-            ->createQuery('SELECT c FROM ' . Company::class . ' c WHERE c.' . Company::COLUMN_UUID . ' = :uuid')
-            ->setParameter('uuid', $uuid)
-            ->getOneOrNullResult();
-
-        if (!$position) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('company.uuid.notFound', [], 'companies'), $uuid));
-        }
-
-        return $position;
+        return $this->findOneBy(['uuid' => $uuid]);
     }
 
     public function getCompaniesByUUID(array $selectedUUID): Collection
@@ -50,7 +41,7 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
 
 
         if (count($companies) !== count($selectedUUID)) {
-            $missingUuids = array_diff($selectedUUID, array_map(fn($company) => $company->getUuid(), $companies));
+            $missingUuids = array_diff($selectedUUID, array_map(fn($company) => $company->getUUID(), $companies));
             throw new NotFindByUUIDException(sprintf(
                 '%s : %s',
                 $this->translator->trans('company.uuid.notFound', [], 'companies'),

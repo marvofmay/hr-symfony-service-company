@@ -7,7 +7,6 @@ namespace App\Module\Company\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
-use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role\Reader\RoleReaderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -40,6 +39,7 @@ class Role
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
     public const RELATION_EMPLOYEES = 'employees';
+    public const ALIAS = 'role';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -70,7 +70,7 @@ class Role
         $this->employees = new ArrayCollection();
     }
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }
@@ -100,21 +100,8 @@ class Role
         $this->{self::COLUMN_DESCRIPTION} = $description;
     }
 
-    public function gerEmployees(): Collection
+    public function getEmployees(): Collection
     {
         return $this->employees;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            self::COLUMN_UUID        => $this->{self::COLUMN_UUID},
-            self::COLUMN_NAME        => $this->{self::COLUMN_NAME},
-            self::COLUMN_DESCRIPTION => $this->{self::COLUMN_DESCRIPTION},
-            self::RELATION_EMPLOYEES => $this->{self::RELATION_EMPLOYEES}->toArray(),
-            self::COLUMN_CREATED_AT  => $this->{self::COLUMN_CREATED_AT}->format('Y-m-d H:i:s'),
-            self::COLUMN_UPDATED_AT  => $this->{self::COLUMN_UPDATED_AT}?->format('Y-m-d H:i:s'),
-            self::COLUMN_DELETED_AT  => $this->{self::COLUMN_DELETED_AT}?->format('Y-m-d H:i:s'),
-        ];
     }
 }

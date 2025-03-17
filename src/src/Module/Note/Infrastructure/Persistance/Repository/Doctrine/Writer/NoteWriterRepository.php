@@ -16,7 +16,7 @@ class NoteWriterRepository extends ServiceEntityRepository implements NoteWriter
         parent::__construct($registry, Note::class);
     }
 
-    public function saveNoteInDB(Note $note): void
+    public function saveOrUpdateNoteInDB(Note $note): void
     {
         $this->getEntityManager()->persist($note);
         $this->getEntityManager()->flush();
@@ -25,11 +25,6 @@ class NoteWriterRepository extends ServiceEntityRepository implements NoteWriter
     public function deleteNoteInDB(Note $note): void
     {
         $this->getEntityManager()->remove($note);
-        $this->getEntityManager()->flush();
-    }
-
-    public function updateNoteInDB(Note $note): void
-    {
         $this->getEntityManager()->flush();
     }
 }

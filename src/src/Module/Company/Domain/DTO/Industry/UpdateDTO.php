@@ -24,7 +24,7 @@ class UpdateDTO extends CreateDTO
     )]
     public string $uuid = '';
 
-    public function getUuid(): string
+    public function getUUID(): string
     {
         return $this->uuid;
     }

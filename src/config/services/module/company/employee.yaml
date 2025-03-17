@@ -18,3 +18,6 @@ services:
     App\Module\Company\Application\CommandHandler\Employee\ImportEmployeesCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'command.bus' }
+    App\Module\Company\Application\QueryHandler\Employee\ListEmployeesQueryHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'query.bus' }

@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Department;
 
-use App\Module\Company\Application\Query\Department\GetDepartmentsQuery;
-use App\Module\Company\Application\QueryHandler\Department\GetDepartmentsQueryHandler;
 use App\Module\Company\Domain\DTO\Department\DepartmentsQueryDTO;
+use App\Module\Company\Presentation\API\Action\Department\AskDepartmentsAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,14 +13,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListDepartmentsController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -68,30 +65,13 @@ class ListDepartmentsController extends AbstractController
     )]
     #[OA\Tag(name: 'departments')]
     #[Route('/api/departments', name: 'api.departments.list', methods: ['GET'])]
-    public function list(#[MapQueryString] DepartmentsQueryDTO $queryDTO, GetDepartmentsQueryHandler $departmentsQueryHandler): Response
+    public function list(#[MapQueryString] DepartmentsQueryDTO $queryDTO, AskDepartmentsAction $askDepartmentsAction): Response
     {
         try {
-            //ToDo:: refactor - use query.bus
-            return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $departmentsQueryHandler->handle(new GetDepartmentsQuery($queryDTO)),
-                    'json', ['groups' => ['department_info']],
-                )),
-            ],
-                Response::HTTP_OK
-            );
+            return new JsonResponse(['data' => $askDepartmentsAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
-            $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('department.list.error', [], 'departments'), $error->getMessage())
-            );
+            $this->logger->error(sprintf('%s: %s', $this->translator->trans('department.list.error', [], 'departments'), $error->getMessage()));
 
-            return new JsonResponse(
-                [
-                    'data' => [],
-                    'message' => $this->translator->trans('department.list.error', [], 'departments'),
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
+            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('department.list.error', [], 'departments'),], Response::HTTP_INTERNAL_SERVER_ERROR);}
     }
 }

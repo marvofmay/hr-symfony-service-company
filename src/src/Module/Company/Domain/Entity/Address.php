@@ -11,7 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -43,7 +42,6 @@ class Address
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('address_info')]
     private UuidInterface $uuid;
 
     #[ORM\OneToOne(targetEntity: Company::class, inversedBy: 'address')]
@@ -60,40 +58,32 @@ class Address
 
     #[ORM\Column(type: Types::STRING, length: 250, nullable: false)]
     #[Assert\NotBlank()]
-    #[Groups('address_info')]
     private string $street;
 
     #[ORM\Column(type: Types::STRING, length: 10, nullable: false)]
     #[Assert\NotBlank()]
-    #[Groups('address_info')]
     private string $postcode;
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
     #[Assert\NotBlank()]
-    #[Groups('address_info')]
     private string $city;
 
     #[ORM\Column(type: Types::STRING, nullable: false)]
-    #[Groups('address_info')]
     private string $country;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    #[Groups('address_info')]
     private bool $active = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('address_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('address_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('address_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }
@@ -181,5 +171,16 @@ class Address
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            self::COLUMN_UUID => $this->{self::COLUMN_UUID}->toString(),
+            self::COLUMN_STREET => $this->street,
+            self::COLUMN_POSTCODE => $this->postcode,
+            self::COLUMN_CITY => $this->city,
+            self::COLUMN_COUNTRY => $this->country,
+        ];
     }
 }

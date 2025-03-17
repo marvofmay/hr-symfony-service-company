@@ -63,4 +63,9 @@ class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
 
         return $data;
     }
+
+    protected function getRelations(): array
+    {
+        return ContractType::getRelations();
+    }
 }

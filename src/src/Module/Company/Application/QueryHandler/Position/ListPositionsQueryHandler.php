@@ -62,4 +62,9 @@ class ListPositionsQueryHandler extends ListQueryHandlerAbstract
 
         return $data;
     }
+
+    protected function getRelations(): array
+    {
+        return Position::getRelations();
+    }
 }

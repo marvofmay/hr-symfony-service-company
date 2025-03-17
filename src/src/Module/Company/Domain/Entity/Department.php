@@ -15,7 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -28,74 +27,64 @@ class Department
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const COLUMN_UUID = 'uuid';
-    public const COLUMN_COMPANY_UUID = 'company_uuid';
-    public const COLUMN_DEPARTMENT_UUID = 'department_uuid';
-    public const COLUMN_NAME = 'name';
-    public CONST COLUMN_DESCRIPTION = 'description';
-    public const COLUMN_ACTIVE = 'active';
-
-    public const COLUMN_CREATED_AT = 'createdAt';
-    public const COLUMN_UPDATED_AT = 'updatedAt';
-    public const COLUMN_DELETED_AT = 'deletedAt';
+    public const string COLUMN_UUID = 'uuid';
+    public const string COLUMN_COMPANY_UUID = 'company_uuid';
+    public const string COLUMN_DEPARTMENT_UUID = 'department_uuid';
+    public const string COLUMN_NAME = 'name';
+    public const string COLUMN_DESCRIPTION = 'description';
+    public const string COLUMN_ACTIVE = 'active';
+    public const string COLUMN_CREATED_AT = 'createdAt';
+    public const string COLUMN_UPDATED_AT = 'updatedAt';
+    public const string COLUMN_DELETED_AT = 'deletedAt';
+    public const string RELATION_EMPLOYEES = 'employees';
+    public const string RELATION_PARENT_DEPARTMENT = 'parentDepartment';
+    public const string RELATION_COMPANY = 'company';
+    public const string ALIAS = 'department';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('department_info')]
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'departments')]
     #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('department_info')]
     private ?Company $company;
 
     #[ORM\ManyToOne(targetEntity: Department::class)]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    #[Groups('department_info')]
     private ?Department $parentDepartment = null;
 
     #[ORM\Column(type: Types::STRING, length: 1000)]
     #[Assert\NotBlank]
-    #[Groups('department_info')]
     private string $name;
 
     #[ORM\Column(type: Types::STRING, length: 500, nullable: true)]
-    #[Groups('department_info')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
-    #[Groups('department_info')]
     private bool $active;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('department_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('department_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('department_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
-    #[Groups('department_info')]
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
-    #[Groups('department_info')]
     private Address $address;
 
     #[ORM\ManyToMany(targetEntity: Position::class, mappedBy: 'departments')]
-    #[Groups('department_info')]
     private Collection $positions;
 
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
-    #[Groups('department_info')]
     private Collection $employees;
 
     public function __construct()
@@ -105,7 +94,7 @@ class Department
         $this->contacts = new ArrayCollection();
     }
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }
@@ -234,22 +223,5 @@ class Department
                 $employee->setDepartment(null);
             }
         }
-    }
-
-    public function toArray(): array {
-        return [
-            self::COLUMN_UUID => $this->getUuid()->toString(),
-            self::COLUMN_NAME => $this->getName(),
-            self::COLUMN_DESCRIPTION => $this->getDescription(),
-            self::COLUMN_ACTIVE => $this->getActive(),
-            //ToDo:: use const RELATION_COMPANY
-            'company' => $this->getCompany(),
-            //ToDo:: use const RELATION_PARENT_DEPARTMENT
-            'parentDepartment' => $this->getParentDepartment() ? $this->getParentDepartment()->toArray() : null,
-            self::COLUMN_CREATED_AT => $this->getCreatedAt(),
-            self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
-            self::COLUMN_DELETED_AT => $this->getDeletedAt(),
-            'employees' => $this->getEmployees()->toArray(),
-        ];
     }
 }

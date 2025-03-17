@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Presentation\API\Controller;
 
-use App\Module\Note\Application\Query\GetNotesQuery;
-use App\Module\Note\Application\QueryHandler\GetNotesQueryHandler;
 use App\Module\Note\Domain\DTO\NotesQueryDTO;
+use App\Module\Note\Presentation\API\Action\AskNotesAction;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -71,10 +70,10 @@ class ListNotesController extends AbstractController
     )]
     #[OA\Tag(name: 'notes')]
     #[Route('/api/notes', name: 'api.notes.list', methods: ['GET'])]
-    public function list(#[MapQueryString] NotesQueryDTO $queryDTO, GetNotesQueryHandler $notesQueryHandler): Response
+    public function list(#[MapQueryString] NotesQueryDTO $queryDTO, AskNotesAction $askNotesAction): Response
     {
         try {
-            return new JsonResponse(['data' => $notesQueryHandler->handle(new GetNotesQuery($queryDTO)),], Response::HTTP_OK);
+            return new JsonResponse(['data' => $askNotesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
             $this->logger->error(
                 sprintf('%s: %s', $this->translator->trans('note.list.error', [], 'notes'), $error->getMessage())

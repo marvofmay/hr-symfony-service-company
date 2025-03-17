@@ -33,6 +33,7 @@ class Industry
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
+    #[OA\Property(description: 'Identyfikator branży', type: 'string')]
     public const COLUMN_UUID = 'uuid';
 
     #[OA\Property(description: 'Nazwa branży', type: 'string')]
@@ -49,6 +50,9 @@ class Industry
 
     #[OA\Property(description: 'Data usunięcia', type: 'string', format: 'date-time', nullable: true)]
     public const COLUMN_DELETED_AT = 'deletedAt';
+
+    public const string RELATION_COMPANIES = 'companies';
+    public const string ALIAS = 'industry';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -80,7 +84,7 @@ class Industry
         $this->companies = new ArrayCollection();
     }
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }
@@ -113,17 +117,5 @@ class Industry
     public function getCompanies(): Collection
     {
         return $this->companies;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            Industry::COLUMN_UUID => $this->{self::COLUMN_UUID},
-            Industry::COLUMN_NAME => $this->{self::COLUMN_NAME},
-            Industry::COLUMN_DESCRIPTION => $this->{self::COLUMN_DESCRIPTION},
-            Industry::COLUMN_CREATED_AT => $this->{self::COLUMN_CREATED_AT}->format('Y-m-d H:i:s'),
-            Industry::COLUMN_UPDATED_AT => $this->{self::COLUMN_UPDATED_AT}?->format('Y-m-d H:i:s'),
-            Industry::COLUMN_DELETED_AT => $this->{self::COLUMN_DELETED_AT}?->format('Y-m-d H:i:s'),
-        ];
     }
 }

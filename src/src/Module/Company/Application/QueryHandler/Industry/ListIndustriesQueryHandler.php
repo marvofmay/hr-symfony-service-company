@@ -62,4 +62,9 @@ class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
 
         return $data;
     }
+
+    protected function getRelations(): array
+    {
+        return Industry::getRelations();
+    }
 }

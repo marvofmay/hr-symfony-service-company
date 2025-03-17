@@ -33,6 +33,8 @@ class ContractType
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
+    public const string RELATION_EMPLOYEES = 'employees';
+    public const string ALIAS = 'contractType';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -67,7 +69,7 @@ class ContractType
         $this->employees = new ArrayCollection();
     }
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }
@@ -104,18 +106,5 @@ class ContractType
     public function getEmployees(): Collection
     {
         return $this->employees;
-    }
-
-    public function toArray(): array
-    {
-        return [
-            self::COLUMN_UUID => $this->{self::COLUMN_UUID},
-            self::COLUMN_NAME => $this->{self::COLUMN_NAME},
-            self::COLUMN_DESCRIPTION => $this->{self::COLUMN_DESCRIPTION},
-            self::COLUMN_ACTIVE => $this->{self::COLUMN_ACTIVE},
-            self::COLUMN_CREATED_AT => $this->{self::COLUMN_CREATED_AT}->format('Y-m-d H:i:s'),
-            self::COLUMN_UPDATED_AT => $this->{self::COLUMN_UPDATED_AT}?->format('Y-m-d H:i:s'),
-            self::COLUMN_DELETED_AT => $this->{self::COLUMN_DELETED_AT}?->format('Y-m-d H:i:s'),
-        ];
     }
 }

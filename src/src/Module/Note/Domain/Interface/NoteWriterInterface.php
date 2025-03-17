@@ -8,7 +8,6 @@ use App\Module\Note\Domain\Entity\Note;
 
 interface NoteWriterInterface
 {
-    public function saveNoteInDB(Note $note): void;
-    public function updateNoteInDB(Note $note): void;
+    public function saveOrUpdateNoteInDB(Note $note): void;
     public function deleteNoteInDB(Note $note): void;
 }

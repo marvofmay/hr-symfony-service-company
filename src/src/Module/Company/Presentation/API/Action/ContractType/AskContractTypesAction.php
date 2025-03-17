@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Presentation\API\Action\ContractType;
 
 use App\Common\Domain\Interface\QueryDTOInterface;
-use App\Module\Company\Application\Query\ContractType\ListContractTypesQuery;;
+use App\Module\Company\Application\Query\ContractType\ListContractTypesQuery;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 

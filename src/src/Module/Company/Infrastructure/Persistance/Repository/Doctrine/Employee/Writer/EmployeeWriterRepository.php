@@ -17,7 +17,7 @@ class EmployeeWriterRepository extends ServiceEntityRepository implements Employ
         parent::__construct($registry, Employee::class);
     }
 
-    public function saveEmployeeInDB(Employee $employee): void
+    public function saveOrUpdateEmployeeInDB(Employee $employee): void
     {
         $this->getEntityManager()->persist($employee);
         $this->getEntityManager()->flush();
@@ -28,12 +28,6 @@ class EmployeeWriterRepository extends ServiceEntityRepository implements Employ
         foreach ($employees as $employee) {
             $this->getEntityManager()->persist($employee);
         }
-        $this->getEntityManager()->flush();
-    }
-
-    public function updateEmployeeInDB(Employee $employee): void
-    {
-        $this->getEntityManager()->persist($employee);
         $this->getEntityManager()->flush();
     }
 

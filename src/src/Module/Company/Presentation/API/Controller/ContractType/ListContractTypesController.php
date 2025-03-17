@@ -73,17 +73,9 @@ class ListContractTypesController extends AbstractController
         try {
             return new JsonResponse(['data' => $askContractTypesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
-            $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('contractType.list.error', [], 'contract_types'), $error->getMessage())
-            );
+            $this->logger->error(sprintf('%s: %s', $this->translator->trans('contractType.list.error', [], 'contract_types'), $error->getMessage()));
 
-            return new JsonResponse(
-                [
-                    'data' => [],
-                    'message' => $this->translator->trans('contractType.list.error', [], 'contract_types'),
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('contractType.list.error', [], 'contract_types'),], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

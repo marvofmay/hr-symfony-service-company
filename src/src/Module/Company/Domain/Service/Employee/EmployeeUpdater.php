@@ -77,7 +77,7 @@ class EmployeeUpdater extends EmployeeCreator
         $this->employee = $employee;
         $this->user = $employee->getUser();
         $this->setEmployee($command);
-        $this->employeeWriterRepository->updateEmployeeInDB($this->employee);
+        $this->employeeWriterRepository->saveOrUpdateEmployeeInDB($this->employee);
     }
 
     protected function setContacts(array $phones, array $emails = [], array $websites = []): void

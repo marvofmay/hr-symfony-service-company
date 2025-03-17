@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Infrastructure\Persistance\Repository\Doctrine\Reader;
 
-use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Note\Domain\Entity\Note;
 use App\Module\Note\Domain\Interface\NoteReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -20,27 +19,11 @@ class NoteReaderRepository extends ServiceEntityRepository implements NoteReader
 
     public function getNoteByUUID(string $uuid): ?Note
     {
-        $note = $this->getEntityManager()
-            ->createQuery('SELECT n FROM ' . Note::class . ' n WHERE n.uuid = :uuid')
-            ->setParameter('uuid', $uuid)
-            ->getOneOrNullResult();
-
-        if (!$note) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('note.uuid.notFound', [], 'notes'), $uuid));
-        }
-
-        return $note;
+        return $this->findOneBy([Note::COLUMN_UUID => $uuid]);
     }
 
     public function isNoteWithUUIDExists(string $uuid): bool
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('n')
-            ->from(Note::class, 'n')
-            ->where('n.' . Note::COLUMN_UUID . ' = :uuid')
-            ->setParameter('uuid', $uuid);
-
-        return null !== $qb->getQuery()->getOneOrNullResult();
+        return null !== $this->findOneBy([Note::COLUMN_UUID => $uuid]);
     }
 }

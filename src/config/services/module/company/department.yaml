@@ -17,4 +17,7 @@ services:
             - { name: 'messenger.message_handler', bus: 'command.bus' }
 #    App\Module\Company\Application\CommandHandler\Department\ImportDepartmentsCommandHandler:
 #        tags:
-#            - { name: 'messenger.message_handler', bus: 'command.bust' }
+#            - { name: 'messenger.message_handler', bus: 'command.bus' }
+    App\Module\Company\Application\QueryHandler\Department\ListDepartmentsQueryHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'query.bus' }
