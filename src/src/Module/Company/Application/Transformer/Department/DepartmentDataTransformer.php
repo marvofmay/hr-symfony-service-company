@@ -7,6 +7,7 @@ namespace App\Module\Company\Application\Transformer\Department;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
+use Doctrine\Common\Collections\Collection;
 
 class DepartmentDataTransformer
 {
@@ -42,7 +43,7 @@ class DepartmentDataTransformer
     }
 
 
-    private function transformEmployees($employees): ?array
+    private function transformEmployees(?Collection $employees): ?array
     {
         if ($employees === null || $employees->isEmpty()) {
             return null;
@@ -73,10 +74,6 @@ class DepartmentDataTransformer
 
     private function transformCompany(Company $company): ?array
     {
-        if (!$company) {
-            return null;
-        }
-
         return [
             Company::COLUMN_UUID => $company->getUUID()->toString(),
             Company::COLUMN_FULL_NAME => $company->getFullName(),

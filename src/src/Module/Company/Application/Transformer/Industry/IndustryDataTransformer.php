@@ -38,7 +38,7 @@ class IndustryDataTransformer
         };
     }
 
-    private function transformCompanies(Collection $companies): ?array
+    private function transformCompanies(?Collection $companies): ?array
     {
         if ($companies === null || $companies->isEmpty()) {
             return null;

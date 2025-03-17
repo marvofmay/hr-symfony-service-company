@@ -41,7 +41,7 @@ class PositionDataTransformer
         };
     }
 
-    private function transformEmployees(Collection $employees): ?array
+    private function transformEmployees(?Collection $employees): ?array
     {
         if ($employees === null || $employees->isEmpty()) {
             return null;
@@ -57,7 +57,7 @@ class PositionDataTransformer
         );
     }
 
-    private function transformDepartments(Collection $departments): ?array
+    private function transformDepartments(?Collection $departments): ?array
     {
         if ($departments === null || $departments->isEmpty()) {
             return null;

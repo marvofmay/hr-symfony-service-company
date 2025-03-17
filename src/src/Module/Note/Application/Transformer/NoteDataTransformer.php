@@ -40,10 +40,6 @@ class NoteDataTransformer
 
     private function transformEmployee(Employee $employee): ?array
     {
-        if (!$employee) {
-            return null;
-        }
-
         return [
             Employee::COLUMN_UUID => $employee->getUUID()->toString(),
             Employee::COLUMN_FIRST_NAME => $employee->getFirstName(),

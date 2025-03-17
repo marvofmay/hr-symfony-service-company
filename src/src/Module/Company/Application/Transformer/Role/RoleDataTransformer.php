@@ -38,7 +38,7 @@ class RoleDataTransformer
         };
     }
 
-    private function transformEmployees(Collection $employees): ?array
+    private function transformEmployees(?Collection $employees): ?array
     {
         if ($employees === null || $employees->isEmpty()) {
             return null;

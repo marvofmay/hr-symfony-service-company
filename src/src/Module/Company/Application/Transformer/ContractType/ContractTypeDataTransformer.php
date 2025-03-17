@@ -49,6 +49,7 @@ class ContractTypeDataTransformer
                 Employee::COLUMN_UUID => $employee->getUUID()->toString(),
                 Employee::COLUMN_FIRST_NAME => $employee->getFirstName(),
                 Employee::COLUMN_LAST_NAME => $employee->getLastName(),
+                Employee::COLUMN_PESEL => $employee->getPESEL(),
             ],
             $employees->toArray()
         );
