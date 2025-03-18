@@ -119,6 +119,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function getRoles(): array
     {
+        //ToDo:: get Roles from relation employee, if employee not null
+        //$this->employee->role
         return [];
     }
 
