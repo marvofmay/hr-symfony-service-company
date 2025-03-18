@@ -80,7 +80,7 @@ class Employee
     #[Groups('employee_info')]
     private ?Employee $parentEmployee = null;
 
-    #[ORM\ManyToOne(targetEntity: Position::class)]
+    #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'employees')]
     #[ORM\JoinColumn(name: 'position_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     #[Groups('employee_info')]
     private Position $position;
