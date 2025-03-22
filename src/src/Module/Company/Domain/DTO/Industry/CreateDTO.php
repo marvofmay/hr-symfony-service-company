@@ -23,13 +23,13 @@ class CreateDTO
     )]
     #[NotBlank(message: [
         'text' => 'industry.name.required',
-        'domain' => 'roles',
+        'domain' => 'industries',
     ])]
-    #[MinMaxLength(min: 3, max: 50, message: [
-        'tooShort' => 'industry.name.minimumLength',
-        'tooLong' => 'industry.name.maximumLength',
-        'domain' => 'roles',
-    ])]
+//    #[MinMaxLength(min: 3, max: 50, message: [
+//        'tooShort' => 'industry.name.minimumLength',
+//        'tooLong' => 'industry.name.maximumLength',
+//        'domain' => 'industries',
+//    ])]
     #[UniqueIndustryName]
     public string $name = '';
 

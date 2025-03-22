@@ -46,7 +46,7 @@ class Access
     #[ORM\JoinColumn(name: 'module_uuid', referencedColumnName: 'uuid', nullable: false)]
     private Module $module;
 
-    #[ORM\ManyToMany(targetEntity: Role::class, mappedBy: 'accesses')]
+    #[ORM\ManyToMany(targetEntity: Role::class, mappedBy: 'accesses', cascade: ['persist', 'remove'])]
     private Collection $roles;
 
     #[ORM\Id]

@@ -21,3 +21,6 @@ services:
     App\Module\Company\Application\QueryHandler\Role\ListRolesQueryHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'query.bus' }
+    App\Module\Company\Application\CommandHandler\Role\CreateRoleAccessCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'command.bus' }

@@ -3,6 +3,7 @@ role:
     differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
     notFound: "Rola o podanym UUID nie istnieje"
     notExists: "Rola o podanym UUID nie istnieje :uuid"
+    required: "Wymagane UUID roli"
   name:
     alreadyExists: "Rola istnieje"
     required: "Nazwa roli jest wymagana"
@@ -12,6 +13,9 @@ role:
   add:
     success: "Rola została pomyślnie dodana"
     error: "Wystąpił błąd - rola nie została dodana"
+    access:
+      success: "Dostepy dla roli zostały pomyślnie dodane"
+      error: "Wystąpił błąd - dostępy dla roli nie zostały dodane"
   update:
     success: "Rola została pomyślnie zaktualizowana"
     error: "Wystąpił błąd - rola nie została zaktualizowana"

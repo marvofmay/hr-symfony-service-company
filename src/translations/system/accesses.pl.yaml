@@ -22,3 +22,6 @@ access:
   note:
     note:
       description: ""
+  notExists: "Dostęp o podanym UUID nie istnieje :uuid"
+  uuid:
+    required: "Wymagane UUID dostępu"

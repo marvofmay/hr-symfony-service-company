@@ -69,8 +69,8 @@ class Role
 
     #[ORM\ManyToMany(targetEntity: Access::class, inversedBy: "roles")]
     #[ORM\JoinTable(name: "roles_access")]
-    #[ORM\JoinColumn(name: "role_uuid", referencedColumnName: "uuid")]
-    #[ORM\InverseJoinColumn(name: "access_uuid", referencedColumnName: "uuid")]
+    #[ORM\JoinColumn(name: "role_uuid", referencedColumnName: "uuid", onDelete: 'CASCADE')]
+    #[ORM\InverseJoinColumn(name: "access_uuid", referencedColumnName: "uuid", onDelete: 'CASCADE')]
     private Collection $accesses;
 
     public function __construct() {
