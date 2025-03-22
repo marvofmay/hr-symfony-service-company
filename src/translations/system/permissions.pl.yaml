@@ -9,3 +9,6 @@ permission:
     description: ""
   import:
     description: ""
+  notExists: "Uprawnienie o podanym UUID nie istnieje :uuid"
+  uuid:
+    required: "Wymagane UUID uprawnienia"
