@@ -1,0 +1,11 @@
+permission:
+  create:
+    description: ""
+  update:
+    description: ""
+  delete:
+    description: ""
+  view:
+    description: ""
+  import:
+    description: ""

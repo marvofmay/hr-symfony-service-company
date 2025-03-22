@@ -1,0 +1,24 @@
+access:
+  company:
+    company:
+      description: ""
+    department:
+      description: ""
+    employee:
+      description: ""
+    role:
+      description: ""
+    position:
+      description: ""
+    contractType:
+      description: ""
+    industry:
+      description: ""
+    import:
+      description: ""
+  system:
+    setting:
+      description: ""
+  note:
+    note:
+      description: ""
