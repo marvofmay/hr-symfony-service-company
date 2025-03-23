@@ -8,6 +8,8 @@ use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\System\Domain\Entity\Access;
+use App\Module\System\Domain\Entity\Permission;
+use App\Module\System\Domain\Entity\RoleAccessPermission;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -73,9 +75,13 @@ class Role
     #[ORM\InverseJoinColumn(name: "access_uuid", referencedColumnName: "uuid", onDelete: 'CASCADE')]
     private Collection $accesses;
 
+    #[ORM\OneToMany(targetEntity: RoleAccessPermission::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
+    private Collection $accessPermissions;
+
     public function __construct() {
         $this->employees = new ArrayCollection();
         $this->accesses = new ArrayCollection();
+        $this->accessPermissions = new ArrayCollection();
     }
 
     public function getUUID(): UuidInterface
@@ -131,5 +137,11 @@ class Role
         if ($this->accesses->removeElement($access)) {
             $access->removeRole($this);
         }
+    }
+
+    public function addAccessPermission(Access $access, Permission $permission): void
+    {
+        $relation = new RoleAccessPermission($this, $access, $permission);
+        $this->accessPermissions->add($relation);
     }
 }

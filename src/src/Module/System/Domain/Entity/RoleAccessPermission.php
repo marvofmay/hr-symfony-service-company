@@ -22,7 +22,7 @@ class RoleAccessPermission
     use RelationsEntityTrait;
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Role::class)]
+    #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'accessPermissions')]
     #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private Role $role;
 

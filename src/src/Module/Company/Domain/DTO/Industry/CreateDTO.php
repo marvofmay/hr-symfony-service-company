@@ -25,11 +25,11 @@ class CreateDTO
         'text' => 'industry.name.required',
         'domain' => 'industries',
     ])]
-//    #[MinMaxLength(min: 3, max: 50, message: [
-//        'tooShort' => 'industry.name.minimumLength',
-//        'tooLong' => 'industry.name.maximumLength',
-//        'domain' => 'industries',
-//    ])]
+    #[MinMaxLength(min: 3, max: 50, message: [
+        'tooShort' => 'industry.name.minimumLength',
+        'tooLong' => 'industry.name.maximumLength',
+        'domain' => 'industries',
+    ])]
     #[UniqueIndustryName]
     public string $name = '';
 

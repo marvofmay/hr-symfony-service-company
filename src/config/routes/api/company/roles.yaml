@@ -19,8 +19,15 @@ api_role_update:
   requirements:
     uuid: '[0-9a-fA-F-]{36}'
 
+api_role_access_permission_create:
+  path: api/roles/{uuid}/accesses/permissions
+  controller: App\Module\Company\Presentation\API\Controller\Role\CreateRoleAccessPermissionController::create
+  methods: [POST]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'
+
 api_role_access_create:
-  path: api/roles/{uuid}/access
+  path: api/roles/{uuid}/accesses
   controller: App\Module\Company\Presentation\API\Controller\Role\CreateRoleAccessController::create
   methods: [POST]
   requirements:

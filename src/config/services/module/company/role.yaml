@@ -24,3 +24,6 @@ services:
     App\Module\Company\Application\CommandHandler\Role\CreateRoleAccessCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'command.bus' }
+    App\Module\Company\Application\CommandHandler\Role\CreateRoleAccessPermissionCommandHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'command.bus' }
