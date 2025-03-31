@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Module\Company\Domain\DTO\Role\CreateDTO;
+use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Presentation\API\Action\Role\CreateRoleAction;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Nelmio\ApiDocBundle\Attribute\Model;
 use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
@@ -59,6 +61,7 @@ class CreateRoleController extends AbstractController
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
     {
         try {
+            $this->denyAccessUnlessGranted(PermissionEnum::CREATE->value, Role::class);
             $createRoleAction->execute($createDTO);
 
             return new JsonResponse(
