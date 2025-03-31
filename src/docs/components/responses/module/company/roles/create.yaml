@@ -1,0 +1,20 @@
+createSuccess:
+  description: "Rola została utworzona"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Rola została pomyślnie dodana"
+createError:
+  description: "Rola nie została utworzona"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystąpił błąd - rola nie została dodana"

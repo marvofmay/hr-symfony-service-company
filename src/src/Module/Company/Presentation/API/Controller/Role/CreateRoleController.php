@@ -8,8 +8,6 @@ use App\Module\Company\Domain\DTO\Role\CreateDTO;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Presentation\API\Action\Role\CreateRoleAction;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use Nelmio\ApiDocBundle\Attribute\Model;
-use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,39 +22,6 @@ class CreateRoleController extends AbstractController
     {
     }
 
-    #[OA\Post(
-        path: '/api/roles',
-        summary: 'Tworzy nową rolę',
-        requestBody: new OA\RequestBody(
-            required: true,
-            content: new OA\JsonContent(
-                ref: new Model(type: CreateDTO::class),
-            ),
-        ),
-        responses: [
-            new OA\Response(
-                response: Response::HTTP_CREATED,
-                description: 'Rola została utworzona',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Rola została pomyślnie dodana'),
-                    ],
-                    type: 'object'
-                )
-            ),
-            new OA\Response(
-                response: Response::HTTP_UNPROCESSABLE_ENTITY,
-                description: 'Błąd walidacji',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Rola istnieje'),
-                    ],
-                    type: 'object'
-                )
-            ),
-        ]
-    )]
-    #[OA\Tag(name: 'roles')]
     #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
     {

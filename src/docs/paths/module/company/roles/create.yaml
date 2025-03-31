@@ -1,0 +1,17 @@
+createRole:
+  post:
+    summary: "Dodaje rolę"
+    description: "Pozwala na dodanie roli"
+    tags:
+      - Roles
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../../../components/schemas/module/company/roles/create_dto.yaml#/createDTO"
+    responses:
+      "201":
+        $ref: "../../../../components/responses/module/company/roles/create.yaml#/createSuccess"
+      "500":
+        $ref: "../../../../components/responses/module/company/roles/create.yaml#/createError"

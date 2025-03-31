@@ -40,50 +40,6 @@ class ImportRolesController extends AbstractController
     ) {
     }
 
-    #[OA\Post(
-        path: '/api/roles/import',
-        summary: 'Importuje nowe role',
-        requestBody: new OA\RequestBody(
-            required: true,
-            content: new OA\MediaType(
-                mediaType: 'multipart/form-data',
-                schema: new OA\Schema(
-                    required: ['file'],
-                    properties: [
-                        new OA\Property(
-                            property: 'file',
-                            description: 'Plik XLSX do importu',
-                            type: 'string',
-                            format: 'binary'
-                        ),
-                    ]
-                )
-            )
-        ),
-        responses: [
-            new OA\Response(
-                response: Response::HTTP_CREATED,
-                description: 'Role zostały utworzone',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Role zostały pomyślnie zaimportowane'),
-                    ],
-                    type: 'object'
-                )
-            ),
-            new OA\Response(
-                response: Response::HTTP_INTERNAL_SERVER_ERROR,
-                description: 'Błąd importu',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Wystąpił błąd - role nie zostały zaimportowane'),
-                    ],
-                    type: 'object'
-                )
-            ),
-        ]
-    )]
-    #[OA\Tag(name: 'roles')]
     #[Route('/api/roles/import', name: 'import', methods: ['POST'])]
     public function import(
         #[MapUploadedFile] UploadedFile $file,
