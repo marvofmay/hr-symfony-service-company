@@ -12,5 +12,5 @@ createDTO:
     description:
       type: string
       nullable: true
-      example: "Opis roli administratora"
+      example: "Opis dla roli administratora"
       description: "Opcjonalny opis roli"

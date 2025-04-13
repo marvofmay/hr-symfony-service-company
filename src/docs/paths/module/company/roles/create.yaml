@@ -13,5 +13,7 @@ createRole:
     responses:
       "201":
         $ref: "../../../../components/responses/module/company/roles/create.yaml#/createSuccess"
+      "422":
+        $ref: "../../../../components/responses/module/company/roles/create.yaml#/nameError"
       "500":
         $ref: "../../../../components/responses/module/company/roles/create.yaml#/createError"

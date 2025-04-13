@@ -18,3 +18,16 @@ createError:
           message:
             type: string
             example: "Wystąpił błąd - rola nie została dodana"
+nameError:
+  description: "Rola nie została utworzona"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          errors:
+            type: object
+            additionalProperties:
+              type: string
+            example:
+              nazwa: "Minimalnie znaków 3"
