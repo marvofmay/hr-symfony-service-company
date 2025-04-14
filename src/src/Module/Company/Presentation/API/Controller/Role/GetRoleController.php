@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
+use App\Module\Company\Application\Transformer\Role\RoleDataTransformer;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -25,12 +26,16 @@ class GetRoleController extends AbstractController
     public function get(string $uuid): JsonResponse
     {
         try {
-            return new JsonResponse(['data' => $this->roleReaderRepository->getRoleByUUID($uuid),], Response::HTTP_OK);
+            $transformer = new RoleDataTransformer();
+            $role =  $this->roleReaderRepository->getRoleByUUID($uuid);
+            $data = $transformer->transformToArray($role);
+
+            return new JsonResponse(['data' => $data,], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s: %s', $this->translator->trans('role.view.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }

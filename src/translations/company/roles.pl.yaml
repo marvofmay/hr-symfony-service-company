@@ -27,6 +27,7 @@ role:
     error: "Wystąpił błąd - rola nie została usunięta"
     multiple:
       success: "Role zostały pomyślnie usunięte"
+      error: "Wystąpił błąd - role nie zostały usunięte"
   import:
     success: "Role zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - role nie zostały zaimportowane"

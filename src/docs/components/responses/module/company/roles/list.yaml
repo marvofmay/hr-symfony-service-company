@@ -1,0 +1,46 @@
+listSuccess:
+  description: "Lista ról"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          data:
+            type: object
+            properties:
+              total:
+                type: integer
+                example: 10
+              page:
+                type: integer
+                example: 1
+              limit:
+                type: integer
+                example: 10
+              items:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    uuid:
+                      type: string
+                      format: uuid
+                      example: "06a65579-39f6-430f-9e54-d2f933614ce2"
+                    name:
+                      type: string
+                      example: "developer"
+                    description:
+                      type: string
+                      example: "Dostęp do funkcji technicznych i programistycznych"
+                    createdAt:
+                      type: string
+                      format: date-time
+                      example: "2025-03-22 15:24:20"
+                    updatedAt:
+                      type: string
+                      nullable: true
+                      example: null
+                    deletedAt:
+                      type: string
+                      nullable: true
+                      example: null

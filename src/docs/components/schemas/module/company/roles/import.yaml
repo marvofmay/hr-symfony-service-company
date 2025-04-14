@@ -1,0 +1,7 @@
+importRoles:
+  type: object
+  properties:
+    file:
+      type: string
+      format: binary
+      description: "Plik Excel (.xlsx) z kolumnami: name (wymagane), description (opcjonalne)"

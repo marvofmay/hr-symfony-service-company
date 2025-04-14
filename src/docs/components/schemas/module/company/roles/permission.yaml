@@ -1,0 +1,36 @@
+createRoleAccessesPermissions:
+  type: object
+  required:
+    - roleUUID
+    - accesses
+  properties:
+    roleUUID:
+      type: string
+      format: uuid
+      description: "UUID roli, do której przypisujemy dostęp i uprawnienia"
+      example: "e07c84bc-c73d-4715-8db2-5a95f1164bab"
+    accesses:
+      type: array
+      description: "Lista dostępów z przypisanymi uprawnieniami"
+      items:
+        type: object
+        required:
+          - uuid
+          - permissions
+        properties:
+          uuid:
+            type: string
+            format: uuid
+            description: "UUID dostępu"
+            example: "26abad1b-6461-44bb-922e-93cc87bf0147"
+          permissions:
+            type: array
+            description: "Lista uprawnień przypisanych do danego dostępu"
+            items:
+              type: string
+              format: uuid
+              example: "863ed7f5-bb99-44ca-93cd-7d73632aba3a"
+            example:
+              - "863ed7f5-bb99-44ca-93cd-7d73632aba3a"
+              - "e292005b-a97a-4ee9-a17b-fb34e011a693"
+              - "3d948da5-bb7a-4d44-ad03-4863f83475ea"

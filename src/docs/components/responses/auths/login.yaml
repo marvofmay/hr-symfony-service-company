@@ -1,0 +1,20 @@
+LoginSuccess:
+  description: "Zalogowano pomyślnie"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          token:
+            type: string
+            example: "eyJhbGciOiJIUzI1NiIsInR..."
+LoginFailed:
+  description: "Błąd logowania"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Nieprawidłowe dane logowania"

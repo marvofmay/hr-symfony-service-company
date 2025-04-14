@@ -1,4 +1,4 @@
-createDTO:
+createRole:
   type: object
   required:
     - name

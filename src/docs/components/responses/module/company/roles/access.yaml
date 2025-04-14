@@ -1,0 +1,20 @@
+createAccessSuccess:
+  description: "Dostępy zostały dodane"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Dostępy dla roli zostały pomyślnie dodane"
+createAccessError:
+  description: "Dostępy nie zostały doddane"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystąpił błąd - dostępy dla roli nie zostały dodane"
