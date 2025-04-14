@@ -1,4 +1,4 @@
-createAccessSuccess:
+createPermissionSuccess:
   description: "Uprawnienia zostały dodane"
   content:
     application/json:
@@ -8,7 +8,7 @@ createAccessSuccess:
           message:
             type: string
             example: "Uprawnienia dla roli zostały pomyślnie dodane"
-createAccessError:
+createPermissionError:
   description: "Uprawnienia nie zostały dodane"
   content:
     application/json:
