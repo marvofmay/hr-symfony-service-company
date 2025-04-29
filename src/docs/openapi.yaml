@@ -272,3 +272,24 @@ paths:
           $ref: "./components/responses/module/company/roles/permission.yaml#/createPermissionSuccess"
         "500":
           $ref: "./components/responses/module/company/roles/permission.yaml#/createPermissionError"
+  /api/notes:
+    post:
+      summary: "Dodaje notatkę"
+      description: "Pozwala na dodanie notatki"
+      tags:
+        - Notes
+      security:
+        - BearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./components/schemas/module/note/create.yaml#/createRole"
+      responses:
+        "201":
+          $ref: "./components/responses/module/note/create.yaml#/createSuccess"
+        "422":
+          $ref: "./components/responses/module/note/create.yaml#/nameError"
+        "500":
+          $ref: "./components/responses/module/note/create.yaml#/createError"
