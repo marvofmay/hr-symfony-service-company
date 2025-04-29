@@ -25,7 +25,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "./components/schemas/module/auth/login.yaml#/loginPayload"
+              $ref: "./components/schemas/auth/login.yaml#/loginPayload"
       responses:
         200:
           $ref: "./components/responses/auths/login.yaml#/LoginSuccess"
@@ -285,11 +285,11 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "./components/schemas/module/note/create.yaml#/createRole"
+              $ref: "./components/schemas/module/note/create.yaml#/createNote"
       responses:
         "201":
           $ref: "./components/responses/module/note/create.yaml#/createSuccess"
         "422":
-          $ref: "./components/responses/module/note/create.yaml#/nameError"
+          $ref: "./components/responses/module/note/create.yaml#/titleError"
         "500":
           $ref: "./components/responses/module/note/create.yaml#/createError"

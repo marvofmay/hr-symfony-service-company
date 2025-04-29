@@ -1,0 +1,11 @@
+createNote:
+  type: object
+  required:
+    - name
+  properties:
+    title:
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: "Lorem ipsum"
+      description: "Tytuł notatki"
