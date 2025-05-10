@@ -1,0 +1,32 @@
+deleteSuccess:
+  description: "Notatka została usunięta"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Notatka została pomyślnie usunięta"
+notFoundNote:
+  description: "Nie znaleziono notatki o podanym UUID"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystapił błąd przy pobieraniu wybranej notatki: Notatka o podanym UUID nie istnieje : 45df2733-666f-42dc-90d2-a76a177bab1e"
+        required:
+          - message
+deleteError:
+  description: "Notatka nie została usunięta"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystąpił błąd - notatka nie została usunięta"

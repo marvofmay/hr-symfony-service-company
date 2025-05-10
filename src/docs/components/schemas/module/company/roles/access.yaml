@@ -1,0 +1,22 @@
+createRoleAccesses:
+  type: object
+  required:
+    - roleUUID
+    - accessUUID
+  properties:
+    roleUUID:
+      type: string
+      format: uuid
+      description: "UUID roli, do której przypisujemy dostępy"
+      example: "e07c84bc-c73d-4715-8db2-5a95f1164bab"
+    accessUUID:
+      type: array
+      description: "Lista UUID-ów dostępów przypisywanych do roli"
+      items:
+        type: string
+        format: uuid
+        example: "cf0255e2-05f9-48af-8dad-3a5439102e44"
+      example:
+        - "cf0255e2-05f9-48af-8dad-3a5439102e44"
+        - "6be063aa-a81e-4366-9b1f-9d9eecb2196d"
+        - "c3fa7fd9-71f5-43c1-94df-5d813f9bc757"

@@ -1,0 +1,20 @@
+createPermissionSuccess:
+  description: "Uprawnienia zostały dodane"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Uprawnienia dla roli zostały pomyślnie dodane"
+createPermissionError:
+  description: "Uprawnienia nie zostały dodane"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystąpił błąd - uprawnienia dla roli nie zostały dodane"

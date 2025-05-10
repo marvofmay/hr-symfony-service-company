@@ -1,0 +1,34 @@
+roles:
+  delete:
+    summary: "Usuwa wskazane role"
+    description: "Pozwala na usunięcie wskazanych ról"
+    tags:
+      - Roles
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              selectedUUID:
+                type: array
+                description: "Lista UUID ról do usunięcia"
+                items:
+                  type: string
+                  format: uuid
+                example:
+                  - "35b3c753-63e9-4a2f-96f3-30b63dbc927a"
+                  - "815c4384-0c71-4a43-9c14-fa3ceb7a4f40"
+                  - "b7a52f19-40b2-447a-bf0e-079c5405cbf2"
+            required:
+              - selectedUUID
+    responses:
+      "200":
+        $ref: "../../../../components/responses/module/company/roles/delete_multiple.yaml#/deleteSuccess"
+      "422":
+        $ref: "../../../../components/responses/module/company/roles/delete_multiple.yaml#/notFoundRole"
+      "500":
+        $ref: "../../../../components/responses/module/company/roles/delete_multiple.yaml#/deleteError"

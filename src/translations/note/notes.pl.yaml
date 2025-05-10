@@ -6,6 +6,9 @@ note:
     priorityIsRequired: "Ważność notatki jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
+  priority:
+    required: 'Wybierz priorytet'
+    invalid_Type: 'Nieprawidłowy priorytet'
   add:
     success: "Notatka została pomyślnie dodana"
     error: "Wystąpił błąd - notatka nie została dodana"
@@ -19,3 +22,5 @@ note:
     error: "Wystapił błąd przy pobieraniu wybranej notatki"
   list:
     error: "Wystapił błąd przy pobieraniu listy notatek"
+  employeeUUID:
+    required: "Wymagny UUID pracownika"

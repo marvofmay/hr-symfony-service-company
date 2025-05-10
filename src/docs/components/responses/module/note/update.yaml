@@ -1,0 +1,33 @@
+updateSuccess:
+  description: "Notatka została zaktualizowana"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Notatka została pomyślnie zaktualizowana"
+updateError:
+  description: "Notatka nie została zaktualizowana"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystąpił błąd - notatka nie została zaktualizowana"
+nameError:
+  description: "Notatka nie została zaktualizowana"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          errors:
+            type: object
+            additionalProperties:
+              type: string
+            example:
+              nazwa: "Minimalnie znaków 3"

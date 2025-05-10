@@ -1,0 +1,22 @@
+updateRole:
+  type: object
+  required:
+    - uuid
+    - name
+  properties:
+    uuid:
+      type: string
+      format: uuid
+      example: "90c1dffa-4c24-4ee6-a688-c0e3d7a962ef"
+      description: "UUID roli do zaktualizowania"
+    name:
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: "Administrator"
+      description: "Nazwa roli (musi być unikalna)"
+    description:
+      type: string
+      nullable: true
+      example: "Opis dla roli administratora"
+      description: "Opcjonalny opis roli"

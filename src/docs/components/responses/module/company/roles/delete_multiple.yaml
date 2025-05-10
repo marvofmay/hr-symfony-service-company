@@ -1,0 +1,36 @@
+deleteSuccess:
+  description: "Role zostały usunięte"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Role zostały pomyślnie usunięte"
+notFoundRole:
+  description: "Nie znaleziono roli/ról o podanym UUID"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          errors:
+            type: object
+            additionalProperties:
+              type: string
+              example: "Rola o podanym UUID nie istnieje 35b3c753-63e9-4a2f-96f3-30b63dbc927a"
+      example:
+        errors:
+          "selectedUUID[0]": "Rola o podanym UUID nie istnieje 35b3c753-63e9-4a2f-96f3-30b63dbc927a"
+          "selectedUUID[1]": "Rola o podanym UUID nie istnieje 815c4384-0c71-4a43-9c14-fa3ceb7a4f40"
+deleteError:
+  description: "Role nie zostały usunięte"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystąpił błąd - rola nie zostały usunięte"

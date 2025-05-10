@@ -9,8 +9,6 @@ use App\Module\Note\Domain\Service\NoteCreator;
 
 readonly class CreateNoteCommandHandler
 {
-    private CreateNoteCommand $command;
-
     public function __construct(private NoteCreator $noteCreator,)
     {}
 

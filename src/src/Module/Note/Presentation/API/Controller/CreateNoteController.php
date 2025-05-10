@@ -13,8 +13,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
-use OpenApi\Attributes as OA;
-use Nelmio\ApiDocBundle\Attribute\Model;
 
 #[Route('/api/notes', name: 'api.notes.')]
 class CreateNoteController extends AbstractController
@@ -23,39 +21,6 @@ class CreateNoteController extends AbstractController
     {
     }
 
-    #[OA\Post(
-        path: '/api/notes',
-        summary: 'Tworzy nową notatke',
-        requestBody: new OA\RequestBody(
-            required: true,
-            content: new OA\JsonContent(
-                ref: new Model(type: CreateDTO::class),
-            ),
-        ),
-        responses: [
-            new OA\Response(
-                response: Response::HTTP_CREATED,
-                description: 'Notatka została utworzona',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Notatka została pomyślnie dodana'),
-                    ],
-                    type: 'object'
-                )
-            ),
-            new OA\Response(
-                response: Response::HTTP_UNPROCESSABLE_ENTITY,
-                description: 'Błąd walidacji',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Notatka istnieje'),
-                    ],
-                    type: 'object'
-                )
-            ),
-        ]
-    )]
-    #[OA\Tag(name: 'notes')]
     #[Route('', name: 'create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateNoteAction $createRoleAction): JsonResponse
     {

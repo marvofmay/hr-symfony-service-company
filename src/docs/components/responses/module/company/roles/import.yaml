@@ -1,0 +1,20 @@
+importSuccess:
+  description: "Role zostały zaimporotowane"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Role zostały pomyślnie zaimportowane"
+importError:
+  description: "Role nie zostały zaimportowane"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystąpił błąd - role nie zostały zaimportowane"

@@ -6,20 +6,11 @@ namespace App\Module\Company\Domain\DTO\Role;
 
 use App\Common\Validator\Constraints\NotBlank;
 use App\Module\System\Structure\Validator\Constraints\Access\ExistingAccessUUID;
-use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Module\Company\Structure\Validator\Constraints\Role\ExistingRoleUUID;;
 
-#[OA\Schema(
-    required: ['uuid']
-)]
 class CreateAccessDTO
 {
-    #[OA\Property(
-        description: 'UUID roli',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-    )]
     #[ExistingRoleUUID(
         message: ['uuidNotExists' => 'role.uuid.notExists', 'domain' => 'roles']
     )]

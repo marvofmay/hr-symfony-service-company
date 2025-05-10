@@ -1,0 +1,33 @@
+createSuccess:
+  description: "Notatka została utworzona"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Notatka została pomyślnie dodana"
+createError:
+  description: "Notatka nie została utworzona"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystąpił błąd - notatka nie została dodana"
+titleError:
+  description: "Notatka nie została utworzona"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          errors:
+            type: object
+            additionalProperties:
+              type: string
+            example:
+              tytuł: "Minimalnie znaków 3"

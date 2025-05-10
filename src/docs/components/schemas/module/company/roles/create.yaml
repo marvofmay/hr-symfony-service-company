@@ -1,0 +1,16 @@
+createRole:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: "Administrator"
+      description: "Nazwa roli (musi być unikalna)"
+    description:
+      type: string
+      nullable: true
+      example: "Opis dla roli administratora"
+      description: "Opcjonalny opis roli"

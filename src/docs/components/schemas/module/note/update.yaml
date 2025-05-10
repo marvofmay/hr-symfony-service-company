@@ -1,0 +1,21 @@
+updateNote:
+  type: object
+  required:
+    - title
+    - priority
+  properties:
+    title:
+      type: string
+      minLength: 3
+      maxLength: 50
+      example: "Lorem ipsum"
+      description: "Tytuł notatki"
+    content:
+      type: string
+      example: ""
+      description: "Treść notatki (może być pusta)"
+    priority:
+      type: string
+      enum: [low, medium, high]
+      example: "low"
+      description: "Priorytet notatki – możliwe wartości: low, medium, high"
