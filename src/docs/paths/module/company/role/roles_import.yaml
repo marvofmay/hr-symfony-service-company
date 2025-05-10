@@ -1,0 +1,19 @@
+roles:
+  post:
+    summary: "Importuje role z pliku"
+    description: "Pozwala na import ról z pliku Excel (.xlsx). Wymagana kolumna 'name' (min 3, max 50 znaków). Opcjonalnie 'description'."
+    tags:
+      - Roles
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        multipart/form-data:
+          schema:
+            $ref: "../../../../components/schemas/module/company/roles/import.yaml#/importRoles"
+    responses:
+      "201":
+        $ref: "../../../../components/responses/module/company/roles/import.yaml#/importSuccess"
+      "500":
+        $ref: "../../../../components/responses/module/company/roles/import.yaml#/importError"

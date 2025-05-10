@@ -6,6 +6,8 @@ namespace App\Module\Note\Presentation\API\Action;
 
 use App\Module\Note\Application\Command\CreateNoteCommand;
 use App\Module\Note\Domain\DTO\CreateDTO;
+use Symfony\Component\Messenger\Exception\ExceptionInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class CreateNoteAction
@@ -16,13 +18,17 @@ readonly class CreateNoteAction
 
     public function execute(CreateDTO $createDTO): void
     {
-        $this->commandBus->dispatch(
-            new CreateNoteCommand(
-                $createDTO->getEmployeeUUID(),
-                $createDTO->getTitle(),
-                $createDTO->getContent(),
-                $createDTO->getPriority(),
-            )
-        );
+        try {
+            $this->commandBus->dispatch(
+                new CreateNoteCommand(
+                    $createDTO->getEmployeeUUID(),
+                    $createDTO->getTitle(),
+                    $createDTO->getContent(),
+                    $createDTO->getPriority(),
+                )
+            );
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
     }
 }

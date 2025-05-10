@@ -1,0 +1,17 @@
+login:
+  post:
+    summary: Logowanie
+    description: Umożliwia autentykację.
+    tags:
+      - Login
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../components/schemas/auth/login.yaml#/loginPayload"
+    responses:
+      200:
+        $ref: "../../components/responses/auths/login.yaml#/LoginSuccess"
+      401:
+        $ref: "../../components/responses/auths/login.yaml#/LoginFailed"

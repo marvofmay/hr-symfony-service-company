@@ -1,0 +1,83 @@
+roles:
+  post:
+    summary: "Dodaje rolę"
+    description: "Pozwala na dodanie roli"
+    tags:
+      - Roles
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../../../components/schemas/module/company/roles/create.yaml#/createRole"
+    responses:
+      "201":
+        $ref: "../../../../components/responses/module/company/roles/create.yaml#/createSuccess"
+      "422":
+        $ref: "../../../../components/responses/module/company/roles/create.yaml#/nameError"
+      "500":
+        $ref: "../../../../components/responses/module/company/roles/create.yaml#/createError"
+  get:
+    summary: "Pobiera listę ról"
+    description: "Pozwala na pobranie listy ról"
+    tags:
+      - Roles
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: page
+        in: query
+        description: "Numer strony (paginacja)"
+        required: false
+        schema:
+          type: integer
+          default: 1
+      - name: pageSize
+        in: query
+        description: "Liczba elementów na stronę"
+        required: false
+        schema:
+          type: integer
+          default: 10
+      - name: sortBy
+        in: query
+        description: "Pole do sortowania (np. name)"
+        required: false
+        schema:
+          type: string
+          example: "name"
+      - name: sortDirection
+        in: query
+        description: "Kierunek sortowania"
+        required: false
+        schema:
+          type: string
+          enum: [ asc, desc ]
+          example: "desc"
+      - name: deleted
+        in: query
+        description: "Filtr usuniętych rekordów (0 - aktywne, 1 - usunięte)"
+        required: false
+        schema:
+          type: integer
+          enum: [ 0, 1 ]
+          example: 0
+      - name: phrase
+        in: query
+        description: "Wyszukiwana fraza"
+        required: false
+        schema:
+          type: string
+          example: "user"
+      - name: includes
+        in: query
+        description: "Relacje do załadowania (np. employees)"
+        required: false
+        schema:
+          type: string
+          example: "employees"
+    responses:
+      '200':
+        $ref: "../../../../components/responses/module/company/roles/list.yaml#/listSuccess"

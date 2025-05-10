@@ -1,0 +1,61 @@
+getSuccess:
+  description: "Notatka została pobrana"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          data:
+            type: object
+            properties:
+              uuid:
+                type: string
+                format: uuid
+                example: "45df2733-666f-42dc-90d2-a76a177bab1d"
+              name:
+                type: string
+                example: "user"
+                description: "Nazwa notatki"
+              description:
+                type: string
+                nullable: true
+                example: "Zwykły użytkownik z ograniczonymi uprawnieniami"
+                description: "Opis notatki"
+              createdAt:
+                type: string
+                format: date-time
+                example: "2025-03-22 15:24:20"
+              updatedAt:
+                type: string
+                format: date-time
+                nullable: true
+                example: null
+              deletedAt:
+                type: string
+                format: date-time
+                nullable: true
+                example: null
+        required:
+          - data
+notFoundNote:
+  description: "Nie znaleziono notatki o podanym UUID"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystapił błąd przy pobieraniu wybranej notatki: Notatka o podanym UUID nie istnieje : 45df2733-666f-42dc-90d2-a76a177bab1e"
+        required:
+          - message
+getError:
+  description: "Notatka nie została pobrana"
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          message:
+            type: string
+            example: "Wystapił błąd przy pobieraniu wybranej notatki"

@@ -23,6 +23,10 @@ trait TitleContentPriorityTrait
     #[Assert\Type('string', message: 'validator.invalidType')]
     public ?string $content = null;
 
+    #[Assert\Type(
+        type: NotePriorityEnum::class,
+        message: 'note.priority.invalidType',
+    )]
     #[NotBlank(message: [
         'text' => 'note.priority.required',
         'domain' => 'notes',

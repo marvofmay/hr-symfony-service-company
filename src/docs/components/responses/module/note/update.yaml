@@ -1,5 +1,5 @@
-createSuccess:
-  description: "Notatka została utworzona"
+updateSuccess:
+  description: "Notatka została zaktualizowana"
   content:
     application/json:
       schema:
@@ -7,9 +7,9 @@ createSuccess:
         properties:
           message:
             type: string
-            example: "Notatka została pomyślnie dodana"
-createError:
-  description: "Notatka nie została utworzona"
+            example: "Notatka została pomyślnie zaktualizowana"
+updateError:
+  description: "Notatka nie została zaktualizowana"
   content:
     application/json:
       schema:
@@ -17,9 +17,9 @@ createError:
         properties:
           message:
             type: string
-            example: "Wystąpił błąd - notatka nie została dodana"
-titleError:
-  description: "Notatka nie została utworzona"
+            example: "Wystąpił błąd - notatka nie została zaktualizowana"
+nameError:
+  description: "Notatka nie została zaktualizowana"
   content:
     application/json:
       schema:
@@ -30,4 +30,4 @@ titleError:
             additionalProperties:
               type: string
             example:
-              tytuł: "Minimalnie znaków 3"
+              nazwa: "Minimalnie znaków 3"

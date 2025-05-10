@@ -1,0 +1,19 @@
+roles:
+  post:
+    summary: "Dodaje pozwolenia dostępu dla roli"
+    description: "Pozwala dodać wybrane pozwolenia dostepu dla danej roli"
+    tags:
+      - Roles
+    security:
+      - BearerAuth: []
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../../../components/schemas/module/company/roles/permission.yaml#/createRoleAccessesPermissions"
+    responses:
+      "201":
+        $ref: "../../../../components/responses/module/company/roles/permission.yaml#/createPermissionSuccess"
+      "500":
+        $ref: "../../../../components/responses/module/company/roles/permission.yaml#/createPermissionError"

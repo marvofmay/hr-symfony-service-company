@@ -1,4 +1,4 @@
-createNote:
+updateNote:
   type: object
   required:
     - title

@@ -1,0 +1,67 @@
+notes:
+  get:
+    summary: "Pobiera wskazaną notatkę"
+    description: "Pozwala na pobranie wskazanej notatki"
+    tags:
+      - Notes
+    security:
+      - BearerAuth: [ ]
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: "UUID notatki"
+        schema:
+          type: string
+          format: uuid
+          example: "45df2733-666f-42dc-90d2-a76a177bab1d"
+    responses:
+      "200":
+        $ref: "../../../components/responses/module/note/get.yaml#/getSuccess"
+      "404":
+        $ref: "../../../components/responses/module/note/get.yaml#/notFoundNote"
+      "500":
+        $ref: "../../../components/responses/module/note/get.yaml#/getError"
+  put:
+    summary: "Aktualizuje wskazaną notatkę"
+    description: "Pozwala na aktualizację wskazanej notatki"
+    tags:
+      - Notes
+    security:
+      - BearerAuth: [ ]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../../components/schemas/module/note/update.yaml#/updateNote"
+    responses:
+      "201":
+        $ref: "../../../components/responses/module/note/update.yaml#/updateSuccess"
+      "422":
+        $ref: "../../../components/responses/module/note/update.yaml#/nameError"
+      "500":
+        $ref: "../../../components/responses/module/note/update.yaml#/updateError"
+  delete:
+    summary: "Usuwa wskazana rolę"
+    description: "Pozwala na usunięcie wskazanej roli"
+    tags:
+      - Notes
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: "UUID roli"
+        schema:
+          type: string
+          format: uuid
+          example: "45df2733-666f-42dc-90d2-a76a177bab1d"
+    responses:
+      "200":
+        $ref: "../../../components/responses/module/note/delete.yaml#/deleteSuccess"
+      "404":
+        $ref: "../../../components/responses/module/note/delete.yaml#/notFoundNote"
+      "500":
+        $ref: "../../../components/responses/module/note/delete.yaml#/deleteError"

@@ -1,0 +1,67 @@
+roles:
+  get:
+    summary: "Pobiera wskazaną rolę"
+    description: "Pozwala na pobranie wskazanej roli"
+    tags:
+      - Roles
+    security:
+      - BearerAuth: [ ]
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: "UUID roli"
+        schema:
+          type: string
+          format: uuid
+          example: "45df2733-666f-42dc-90d2-a76a177bab1d"
+    responses:
+      "200":
+        $ref: "../../../../components/responses/module/company/roles/get.yaml#/getSuccess"
+      "404":
+        $ref: "../../../../components/responses/module/company/roles/get.yaml#/notFoundRole"
+      "500":
+        $ref: "../../../../components/responses/module/company/roles/get.yaml#/getError"
+  put:
+    summary: "Aktualizuje wskazaną rolę"
+    description: "Pozwala na aktualizację wskazanej roli"
+    tags:
+      - Roles
+    security:
+      - BearerAuth: [ ]
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: "../../../../components/schemas/module/company/roles/update.yaml#/updateRole"
+    responses:
+      "201":
+        $ref: "../../../../components/responses/module/company/roles/update.yaml#/updateSuccess"
+      "422":
+        $ref: "../../../../components/responses/module/company/roles/update.yaml#/nameError"
+      "500":
+        $ref: "../../../../components/responses/module/company/roles/update.yaml#/updateError"
+  delete:
+    summary: "Usuwa wskazana rolę"
+    description: "Pozwala na usunięcie wskazanej roli"
+    tags:
+      - Roles
+    security:
+      - BearerAuth: []
+    parameters:
+      - name: uuid
+        in: path
+        required: true
+        description: "UUID roli"
+        schema:
+          type: string
+          format: uuid
+          example: "45df2733-666f-42dc-90d2-a76a177bab1d"
+    responses:
+      "200":
+        $ref: "../../../../components/responses/module/company/roles/delete.yaml#/deleteSuccess"
+      "404":
+        $ref: "../../../../components/responses/module/company/roles/delete.yaml#/notFoundRole"
+      "500":
+        $ref: "../../../../components/responses/module/company/roles/delete.yaml#/deleteError"
