@@ -8,21 +8,24 @@ use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use App\Module\Note\Application\Command\CreateNoteCommand;
 use App\Module\Note\Domain\Entity\Note;
 use App\Module\Note\Domain\Interface\NoteWriterInterface;
+use Symfony\Bundle\SecurityBundle\Security;
 
 readonly class NoteCreator
 {
-    public function __construct(private NoteWriterInterface $noteWriterRepository, private EmployeeReaderInterface $employeeReaderRepository,)
+    public function __construct(private NoteWriterInterface $noteWriterRepository, private Security $security,)
     {
     }
 
     public function create(CreateNoteCommand $command): void
     {
+        $employee = $this->security->getUser()->getEmployee();
+
         $note = new Note();
-        $note->setEmployee($this->employeeReaderRepository->getEmployeeByUUID($command->employeeUUID));
+        $note->setEmployee($employee);
         $note->setTitle($command->title);
         $note->setContent($command->content);
         $note->setPriority($command->priority);
 
-        $this->noteWriterRepository->saveNoteInDB($note);
+        $this->noteWriterRepository->saveOrUpdateNoteInDB($note);
     }
 }
