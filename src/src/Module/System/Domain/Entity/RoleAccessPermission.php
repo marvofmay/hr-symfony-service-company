@@ -21,6 +21,10 @@ class RoleAccessPermission
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
+    public const RELATION_ROLE = 'role';
+    public const RELATION_ACCESS = 'access';
+    public const RELATION_PERMISSION = 'permission';
+
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'accessPermissions')]
     #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]

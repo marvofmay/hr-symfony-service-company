@@ -26,7 +26,7 @@ paths:
     $ref: "./paths/module/company/role/roles_import.yaml#/roles"
   /api/roles/{uuid}/accesses:
     $ref: "./paths/module/company/role/roles_accesses.yaml#/roles"
-  /api/roles/{uuid}/permissions:
+  /api/roles/{uuid}/acesses/permissions:
     $ref: "./paths/module/company/role/roles_permissions.yaml#/roles"
   /api/notes:
     $ref: "./paths/module/note/notes.yaml#/notes"

@@ -6,6 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Module\Company\Domain\DTO\Role\UpdateDTO;
 use App\Module\Company\Presentation\API\Action\Role\UpdateRoleAction;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -17,22 +19,23 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class UpdateRoleController extends AbstractController
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
+        private readonly LoggerInterface     $logger,
         private readonly TranslatorInterface $translator,
-    ) {
+    )
+    {
     }
 
     #[Route('/api/roles/{uuid}', name: 'api.roles.update', methods: ['PUT'])]
     public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO, UpdateRoleAction $updateRoleAction): Response
     {
         try {
+            $this->denyAccessUnlessGranted(PermissionEnum::UPDATE->value, AccessEnum::ROLE);
             if ($uuid !== $updateDTO->getUUID()) {
                 return $this->json(
                     ['message' => $this->translator->trans('role.uuid.differentUUIDInBodyRawAndUrl', [], 'roles')],
                     Response::HTTP_BAD_REQUEST
                 );
             }
-
             $updateRoleAction->execute($updateDTO);
 
             return new JsonResponse(['message' => $this->translator->trans('role.update.success', [], 'roles')], Response::HTTP_OK);

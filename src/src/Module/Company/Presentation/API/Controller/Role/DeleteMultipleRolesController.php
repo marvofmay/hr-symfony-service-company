@@ -6,6 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Module\Company\Domain\DTO\Role\DeleteMultipleDTO;
 use App\Module\Company\Presentation\API\Action\Role\DeleteMultipleRolesAction;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,6 +26,7 @@ class DeleteMultipleRolesController extends AbstractController
     public function delete(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO, DeleteMultipleRolesAction $deleteMultipleRolesAction): JsonResponse
     {
         try {
+            $this->denyAccessUnlessGranted(PermissionEnum::DELETE->value, AccessEnum::ROLE);
             $deleteMultipleRolesAction->execute($deleteMultipleDTO);
 
             return new JsonResponse(

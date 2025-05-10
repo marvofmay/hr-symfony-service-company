@@ -41,6 +41,7 @@ class Access
     public const string COLUMN_UPDATED_AT = 'updatedAt';
     public const string COLUMN_DELETED_AT = 'deletedAt';
     public const string ALIAS = 'access';
+    public const string RELATION_MODULE = 'module';
 
     #[ORM\ManyToOne(targetEntity: Module::class, inversedBy: 'accesses')]
     #[ORM\JoinColumn(name: 'module_uuid', referencedColumnName: 'uuid', nullable: false)]

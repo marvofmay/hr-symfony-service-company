@@ -10,6 +10,7 @@ enum PermissionEnum: string implements EnumInterface
     case UPDATE  = 'update';
     case DELETE  = 'delete';
     case VIEW    = 'view';
+    case LIST    = 'list';
     case IMPORT  = 'import';
 
     public function label(): string

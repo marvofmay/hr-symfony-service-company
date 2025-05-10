@@ -7,6 +7,8 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 use App\Module\Company\Domain\DTO\Role\CreateDTO;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Presentation\API\Action\Role\CreateRoleAction;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\ModuleEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,7 +28,7 @@ class CreateRoleController extends AbstractController
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
     {
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::CREATE->value, Role::class);
+            $this->denyAccessUnlessGranted(PermissionEnum::CREATE->value, AccessEnum::ROLE);
             $createRoleAction->execute($createDTO);
 
             return new JsonResponse(

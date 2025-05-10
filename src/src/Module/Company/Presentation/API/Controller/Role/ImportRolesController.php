@@ -11,15 +11,15 @@ use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
 use App\Module\Company\Presentation\API\Action\Role\ImportRolesAction;
+use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
-use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use App\Module\System\Presentation\API\Action\File\AskFileAction;
 use App\Module\System\Presentation\API\Action\File\CreateFileAction;
 use App\Module\System\Presentation\API\Action\Import\AskImportAction;
 use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
 use Doctrine\ORM\EntityManagerInterface;
-use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -52,9 +52,9 @@ class ImportRolesController extends AbstractController
         ValidatorInterface $validator,
         Security $security,
     ): JsonResponse {
-
         $this->entityManager->beginTransaction();
         try {
+            $this->denyAccessUnlessGranted(PermissionEnum::IMPORT->value, AccessEnum::ROLE);
             $uploadFilePath = 'src/Storage/Upload/Import/Roles';
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
             $employee = $security->getUser()->getEmployee();

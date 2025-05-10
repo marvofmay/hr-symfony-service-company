@@ -20,8 +20,23 @@ class PermissionReaderRepository extends ServiceEntityRepository implements Perm
         return $this->findOneBy([Permission::COLUMN_UUID => $uuid]);
     }
 
+    public function getPermissionByName(string $name): ?Permission
+    {
+        return $this->findOneBy([Permission::COLUMN_NAME => $name, Permission::COLUMN_ACTIVE => true]);
+    }
+
     public function isPermissionWithUUIDExists(string $uuid): bool
     {
         return null !== $this->findOneBy([Permission::COLUMN_UUID => $uuid]);
+    }
+
+    public function isPermissionWithNameExists(string $name): bool
+    {
+        return null !== $this->findOneBy([Permission::COLUMN_NAME => $name]);
+    }
+
+    public function isPermissionActive(string $uuid): bool
+    {
+        return null !== $this->findOneBy([Permission::COLUMN_UUID => $uuid, Permission::COLUMN_ACTIVE => true]);
     }
 }

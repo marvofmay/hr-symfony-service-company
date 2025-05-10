@@ -9,6 +9,7 @@ enum ModuleEnum: string implements EnumInterface
     case SYSTEM  = 'system';
     case COMPANY = 'company';
     case NOTE    = 'note';
+    case TASK    = 'task';
 
     public function label(): string
     {

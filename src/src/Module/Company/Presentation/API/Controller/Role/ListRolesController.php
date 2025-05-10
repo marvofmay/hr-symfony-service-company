@@ -6,6 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Module\Company\Domain\DTO\Role\RolesQueryDTO;
 use App\Module\Company\Presentation\API\Action\Role\AskRolesAction;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,6 +28,8 @@ class ListRolesController extends AbstractController
     public function list(#[MapQueryString] RolesQueryDTO $queryDTO, AskRolesAction $askRolesAction): Response
     {
         try {
+            $this->denyAccessUnlessGranted(PermissionEnum::LIST->value, AccessEnum::ROLE);
+
             return new JsonResponse(['data' => $askRolesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
             $this->logger->error(sprintf('%s: %s', $this->translator->trans('role.list.error', [], 'roles'), $error->getMessage()));

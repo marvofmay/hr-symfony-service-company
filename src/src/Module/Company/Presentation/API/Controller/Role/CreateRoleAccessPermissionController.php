@@ -6,6 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Module\Company\Domain\DTO\Role\CreateAccessPermissionDTO;
 use App\Module\Company\Presentation\API\Action\Role\CreateRoleAccessPermissionAction;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,6 +26,7 @@ class CreateRoleAccessPermissionController extends AbstractController
     public function create(string $uuid, #[MapRequestPayload] CreateAccessPermissionDTO $createAccessPermissionDTO, CreateRoleAccessPermissionAction $createRoleAccessPermissionAction): JsonResponse
     {
         try {
+            $this->denyAccessUnlessGranted(PermissionEnum::CREATE->value, AccessEnum::PERMISSION);
             if ($uuid !== $createAccessPermissionDTO->getRoleUUID()) {
                 return $this->json(
                     ['message' => $this->translator->trans('role.uuid.differentUUIDInBodyRawAndUrl', [], 'roles')],

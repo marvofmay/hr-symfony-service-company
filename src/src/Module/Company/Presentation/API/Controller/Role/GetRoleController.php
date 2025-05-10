@@ -6,6 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Module\Company\Application\Transformer\Role\RoleDataTransformer;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -26,8 +28,9 @@ class GetRoleController extends AbstractController
     public function get(string $uuid): JsonResponse
     {
         try {
-            $transformer = new RoleDataTransformer();
+            $this->denyAccessUnlessGranted(PermissionEnum::VIEW->value, AccessEnum::ROLE);
             $role =  $this->roleReaderRepository->getRoleByUUID($uuid);
+            $transformer = new RoleDataTransformer();
             $data = $transformer->transformToArray($role);
 
             return new JsonResponse(['data' => $data,], Response::HTTP_OK);

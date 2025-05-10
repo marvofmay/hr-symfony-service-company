@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Module\Company\Presentation\API\Action\Role\DeleteRoleAction;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -24,6 +26,7 @@ class DeleteRoleController extends AbstractController
     public function delete(string $uuid, DeleteRoleAction $deleteRoleAction): JsonResponse
     {
         try {
+            $this->denyAccessUnlessGranted(PermissionEnum::DELETE->value, AccessEnum::ROLE);
             $deleteRoleAction->execute($uuid);
 
             return new JsonResponse(
