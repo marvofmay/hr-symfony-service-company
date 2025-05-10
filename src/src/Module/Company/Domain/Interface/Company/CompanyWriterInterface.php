@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface CompanyWriterInterface
 {
-    public function saveOrUpdateCompanyInDB(Company $company): void;
+    public function saveCompanyInDB(Company $company): void;
     public function saveCompaniesInDB(Collection $companies): void;
     public function deleteCompanyInDB(Company $company): void;
     public function deleteMultipleCompaniesInDB(Collection $companies): void;

@@ -26,6 +26,6 @@ readonly class NoteCreator
         $note->setContent($command->content);
         $note->setPriority($command->priority);
 
-        $this->noteWriterRepository->saveOrUpdateNoteInDB($note);
+        $this->noteWriterRepository->saveNoteInDB($note);
     }
 }

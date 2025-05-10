@@ -37,7 +37,7 @@ class CompanyCreator
         $this->setCompany($command);
         $this->setCompanyRelations($command);
 
-        $this->companyWriterRepository->saveOrUpdateCompanyInDB($this->company);
+        $this->companyWriterRepository->saveCompanyInDB($this->company);
     }
 
     protected function setCompany(CommandInterface $command): void

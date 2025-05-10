@@ -56,7 +56,7 @@ class EmployeeCreator
     public function create(CreateEmployeeCommand $command): void
     {
         $this->setEmployee($command);
-        $this->employeeWriterRepository->saveOrUpdateEmployeeInDB($this->employee);
+        $this->employeeWriterRepository->saveEmployeeInDB($this->employee);
     }
 
     protected function setEmployee(CommandInterface $command): void

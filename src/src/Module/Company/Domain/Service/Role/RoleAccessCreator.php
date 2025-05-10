@@ -24,6 +24,6 @@ readonly class RoleAccessCreator
             $role->addAccess($access);
         }
 
-        $this->roleWriterRepository->saveOrUpdateRoleInDB($role);
+        $this->roleWriterRepository->saveRoleInDB($role);
     }
 }

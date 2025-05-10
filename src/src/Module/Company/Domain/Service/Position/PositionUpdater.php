@@ -33,6 +33,6 @@ readonly class PositionUpdater
 
         $position->setUpdatedAt(new \DateTime());
 
-        $this->positionWriterRepository->saveOrUpdatePositionInDB($position);
+        $this->positionWriterRepository->savePositionInDB($position);
     }
 }

@@ -8,5 +8,5 @@ use App\Module\System\Domain\Entity\Import;
 
 interface ImportWriterInterface
 {
-    public function saveOrUpdateImportInDB(Import $import): void;
+    public function saveImportInDB(Import $import): void;
 }

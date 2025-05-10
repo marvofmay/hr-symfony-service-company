@@ -36,7 +36,7 @@ class DepartmentCreator
     public function create(CreateDepartmentCommand $command): void
     {
         $this->setDepartment($command);
-        $this->departmentWriterRepository->saveOrUpdateDepartmentInDB($this->department);
+        $this->departmentWriterRepository->saveDepartmentInDB($this->department);
     }
 
     protected function setDepartment(CommandInterface $command): void

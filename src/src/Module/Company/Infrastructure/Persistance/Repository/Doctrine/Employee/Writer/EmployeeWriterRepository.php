@@ -17,7 +17,7 @@ class EmployeeWriterRepository extends ServiceEntityRepository implements Employ
         parent::__construct($registry, Employee::class);
     }
 
-    public function saveOrUpdateEmployeeInDB(Employee $employee): void
+    public function saveEmployeeInDB(Employee $employee): void
     {
         $this->getEntityManager()->persist($employee);
         $this->getEntityManager()->flush();

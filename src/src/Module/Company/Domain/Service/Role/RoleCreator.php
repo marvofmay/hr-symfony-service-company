@@ -19,6 +19,6 @@ readonly class RoleCreator
         $role->setName($name);
         $role->setDescription($description);
 
-        $this->roleWriterRepository->saveOrUpdateRoleInDB($role);
+        $this->roleWriterRepository->saveRoleInDB($role);
     }
 }

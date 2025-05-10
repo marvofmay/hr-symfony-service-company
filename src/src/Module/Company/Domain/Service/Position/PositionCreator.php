@@ -26,6 +26,6 @@ readonly class PositionCreator
             $position->addDepartment($this->departmentReaderRepository->getDepartmentByUUID($departmentUUID));
         }
 
-        $this->positionWriterRepository->saveOrUpdatePositionInDB($position);
+        $this->positionWriterRepository->savePositionInDB($position);
     }
 }

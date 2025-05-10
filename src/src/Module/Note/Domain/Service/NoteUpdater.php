@@ -21,6 +21,6 @@ readonly class NoteUpdater
         $note->setPriority($priority);
         $note->setUpdatedAt(new \DateTime());
 
-        $this->noteWriterRepository->updateNoteInDB($note);
+        $this->noteWriterRepository->saveNoteInDB($note);
     }
 }

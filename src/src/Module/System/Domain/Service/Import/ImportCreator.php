@@ -31,6 +31,6 @@ readonly class ImportCreator
         $import->setEmployee($employee);
         $import->setFile($file);
 
-        $this->importWriterRepository->saveOrUpdateImportInDB($import);
+        $this->importWriterRepository->saveImportInDB($import);
     }
 }

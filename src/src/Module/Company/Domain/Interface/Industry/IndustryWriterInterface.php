@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface IndustryWriterInterface
 {
-    public function saveOrUpdateIndustryInDB(Industry $industry): void;
+    public function saveIndustryInDB(Industry $industry): void;
     public function saveIndustriesInDB(Collection $industries): void;
     public function deleteIndustryInDB(Industry $industry): void;
     public function deleteMultipleIndustriesInDB(Collection $industries): void;

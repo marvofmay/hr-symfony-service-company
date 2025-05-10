@@ -22,6 +22,6 @@ readonly class ImportUpdater
             ImportStatusEnum::DONE => $import->markAsDone(),
         };
 
-        $this->importWriterRepository->saveOrUpdateImportInDB($import);
+        $this->importWriterRepository->saveImportInDB($import);
     }
 }

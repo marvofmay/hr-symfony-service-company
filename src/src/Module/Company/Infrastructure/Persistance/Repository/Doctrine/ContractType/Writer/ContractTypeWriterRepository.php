@@ -17,7 +17,7 @@ class ContractTypeWriterRepository extends ServiceEntityRepository implements Co
         parent::__construct($registry, ContractType::class);
     }
 
-    public function saveOrUpdateContractTypeInDB(ContractType $contractType): void
+    public function saveContractTypeInDB(ContractType $contractType): void
     {
         $this->getEntityManager()->persist($contractType);
         $this->getEntityManager()->flush();

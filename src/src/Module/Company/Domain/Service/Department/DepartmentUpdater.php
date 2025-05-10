@@ -37,7 +37,7 @@ class DepartmentUpdater extends DepartmentCreator
     {
         $this->department = $command->department;
         $this->setDepartment($command);
-        $this->departmentWriterRepository->saveOrUpdateDepartmentInDB($this->department);
+        $this->departmentWriterRepository->saveDepartmentInDB($this->department);
     }
 
     protected function setContacts(array $phones, array $emails = [], array $websites = []): void

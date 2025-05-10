@@ -17,7 +17,7 @@ class CompanyWriterRepository extends ServiceEntityRepository implements Company
         parent::__construct($registry, Company::class);
     }
 
-    public function saveOrUpdateCompanyInDB(Company $company): void
+    public function saveCompanyInDB(Company $company): void
     {
         $this->getEntityManager()->persist($company);
         $this->getEntityManager()->flush();

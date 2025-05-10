@@ -36,7 +36,7 @@ class CompanyUpdater extends CompanyCreator
         $this->setCompany($command);
         $this->setCompanyRelations($command);
 
-        $this->companyWriterRepository->saveOrUpdateCompanyInDB($this->company);
+        $this->companyWriterRepository->saveCompanyInDB($this->company);
     }
 
     protected function setContacts(array $phones, array $emails = [], array $websites = []): void
