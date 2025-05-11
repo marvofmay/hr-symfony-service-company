@@ -22,7 +22,18 @@ enum AccessEnum: string implements EnumInterface
     public function label(): string
     {
         return match ($this) {
-            self::COMPANY => self::COMPANY->value,
+            self::COMPANY       => 'Company',
+            self::DEPARTMENT    => 'Department',
+            self::EMPLOYEE      => 'Employee',
+            self::INDUSTRY      => 'Industry',
+            self::ROLE          => 'Role',
+            self::POSITION      => 'Position',
+            self::CONTRACT_TYPE => 'Contract Type',
+            self::IMPORT        => 'Import',
+            self::SETTING       => 'Setting',
+            self::ACCESS        => 'Access',
+            self::PERMISSION    => 'Permission',
+            self::NOTE          => 'Note',
         };
     }
 

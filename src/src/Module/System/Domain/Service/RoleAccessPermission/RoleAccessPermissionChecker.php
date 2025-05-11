@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Domain\Service\Employee;
+namespace App\Module\System\Domain\Service\RoleAccessPermission;
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\Permission;
 use App\Module\System\Domain\Interface\RoleAccessPermission\RoleAccessPermissionInterface;
 
-readonly class EmployeeAccessPermissionChecker
+readonly class RoleAccessPermissionChecker
 {
     public function __construct(private RoleAccessPermissionInterface $roleAccessPermissionRepository)
     {

@@ -3,7 +3,7 @@
 namespace App\Module\System\Domain\Security\Voter;
 
 use App\Module\Company\Domain\Entity\Employee;
-use App\Module\Company\Domain\Service\Employee\EmployeeAccessPermissionChecker;
+use App\Module\System\Domain\Service\RoleAccessPermission\RoleAccessPermissionChecker;
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\Module;
 use App\Module\System\Domain\Entity\Permission;
@@ -20,7 +20,7 @@ abstract class AccessPermissionVoter extends Voter
         protected ModuleReaderInterface $moduleReaderRepository,
         protected AccessReaderInterface $accessReaderRepository,
         protected PermissionReaderInterface $permissionReaderRepository,
-        protected EmployeeAccessPermissionChecker $employeeAccessPermissionChecker,
+        protected RoleAccessPermissionChecker $roleAccessPermissionChecker,
         protected ?Module $module = null,
         protected ?Access $access = null,
         protected ?Permission $permission = null,
@@ -73,6 +73,6 @@ abstract class AccessPermissionVoter extends Voter
             return true;
         }
 
-        return $this->employeeAccessPermissionChecker->check($this->permission, $this->access, $role);
+        return $this->roleAccessPermissionChecker->check($this->permission, $this->access, $role);
     }
 }

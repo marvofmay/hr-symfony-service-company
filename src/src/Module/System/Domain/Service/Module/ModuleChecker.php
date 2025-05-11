@@ -7,7 +7,7 @@ namespace App\Module\System\Domain\Service\Module;
 use App\Module\System\Domain\Enum\ModuleEnum;
 use App\Module\System\Domain\Interface\Module\ModuleReaderInterface;
 
-class ModuleChecker
+readonly class ModuleChecker
 {
     public function __construct(private ModuleReaderInterface $moduleReaderRepository)
     {
