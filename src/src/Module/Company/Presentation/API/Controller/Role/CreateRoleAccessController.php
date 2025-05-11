@@ -26,7 +26,7 @@ class CreateRoleAccessController extends AbstractController
     public function create(string $uuid, #[MapRequestPayload] CreateAccessDTO $createAccessDTO, CreateRoleAccessAction $createRoleAccessAction): JsonResponse
     {
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::CREATE->value, AccessEnum::ACCESS);
+            $this->denyAccessUnlessGranted(PermissionEnum::ASSIGN_ACCESS_TO_ROLE->value, AccessEnum::ACCESS);
             if ($uuid !== $createAccessDTO->getRoleUUID()) {
                 return $this->json(
                     ['message' => $this->translator->trans('role.uuid.differentUUIDInBodyRawAndUrl', [], 'roles')],
