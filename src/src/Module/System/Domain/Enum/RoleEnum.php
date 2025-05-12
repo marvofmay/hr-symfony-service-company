@@ -6,6 +6,7 @@ use App\Common\Domain\Interface\EnumInterface;
 
 enum RoleEnum: string implements EnumInterface
 {
+    case SUPER_ADMIN       = 'super_admin';
     case ADMIN             = 'admin';
     case EMPLOYEE          = 'employee';
 

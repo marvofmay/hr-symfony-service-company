@@ -22,13 +22,13 @@ class CreateRoleController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE->value, AccessEnum::ROLE);
     }
 
     #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
     {
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::CREATE->value, AccessEnum::ROLE);
             $createRoleAction->execute($createDTO);
 
             return new JsonResponse(

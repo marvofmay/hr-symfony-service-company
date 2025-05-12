@@ -21,7 +21,6 @@ class AddRecordToRoleTableCommand extends Command
     private const string DESCRIPTION = 'Add missing records to Role table';
     private const string HELP = 'This command ensures that all RoleEnum values exist in the Role table';
     private const string SUCCESS_MESSAGE = 'Role table has been updated successfully!';
-    private const string MODULE_NOT_FOUND_MESSAGE = 'Module "%s" does not exist. Aborting.';
     private const string INFO_ADDED_MESSAGE = 'Added missing roles';
     private const string INFO_NO_ADDED_MESSAGE = 'No new roles to add';
 
@@ -42,18 +41,8 @@ class AddRecordToRoleTableCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('Checking and updating Roles table...');
-
-        $moduleRepository = $this->entityManager->getRepository(Module::class);
         $roleRepository = $this->entityManager->getRepository(Role::class);
-
-        $existingModules = $moduleRepository->createQueryBuilder(Module::ALIAS)
-            ->select(Module::ALIAS. '.'. Module::COLUMN_UUID, Module::ALIAS. '.'. Module::COLUMN_NAME)
-            ->getQuery()
-            ->getArrayResult();
-
-        $moduleMap = array_column($existingModules, Module::COLUMN_UUID, Module::COLUMN_NAME);
-
-        $existingRoles = $roleRepository->createQueryBuilder(Access::ALIAS)
+        $existingRoles = $roleRepository->createQueryBuilder(Role::ALIAS)
             ->select(Role::ALIAS . '.' . Role::COLUMN_NAME)
             ->getQuery()
             ->getArrayResult();
@@ -62,24 +51,15 @@ class AddRecordToRoleTableCommand extends Command
         $rolesToPersist = [];
 
         foreach (RoleEnum::cases() as $roleEnum) {
-            [$moduleName, $roleName] = explode('.', $roleEnum->value, 2);
-
-            if (!isset($moduleMap[$moduleName])) {
-                $output->writeln(sprintf('<error>' . self::MODULE_NOT_FOUND_MESSAGE . '</error>', $moduleName));
-
-                return Command::FAILURE;
-            }
-
+            $roleName = $roleEnum->value;
             if (!in_array($roleName, $existingRolesNames, true)) {
-                $role = new Access();
+                $role = new Role();
                 $role->setName($roleName);
-                $role->setModule($this->entityManager->getRepository(Module::class)->findOneBy([Module::COLUMN_UUID => $moduleMap[$moduleName]]));
                 $role->setDescription($this->translator->trans(
                     sprintf('role.%s.description', $roleEnum->value),
                     [],
                     'role'
                 ));
-                $role->setActive(true);
                 $this->entityManager->persist($role);
                 $rolesToPersist[] = $roleEnum->value;
             }
