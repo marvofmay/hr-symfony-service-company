@@ -43,7 +43,7 @@ class UpdateIndustryController extends AbstractController
 
             return new JsonResponse(['message' => $this->translator->trans('industry.update.success', [], 'industries')], Response::HTTP_OK);
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('industry.update.error', [], 'industries'), $error->getMessage());
+            $message = sprintf('%s. %s', $this->translator->trans('industry.update.error', [], 'industries'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);

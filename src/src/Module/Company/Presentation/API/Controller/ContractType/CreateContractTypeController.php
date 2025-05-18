@@ -6,8 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\ContractType;
 
 use App\Module\Company\Domain\DTO\ContractType\CreateDTO;
 use App\Module\Company\Presentation\API\Action\ContractType\CreateContractTypeAction;
-use Nelmio\ApiDocBundle\Attribute\Model;
-use OpenApi\Attributes as OA;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,43 +22,14 @@ class CreateContractTypeController extends AbstractController
     {
     }
 
-    #[OA\Post(
-        path: '/api/contract_types',
-        summary: 'Tworzy nowy rodzaj formy zatrudnienia',
-        requestBody: new OA\RequestBody(
-            required: true,
-            content: new OA\JsonContent(
-                ref: new Model(type: CreateDTO::class),
-            ),
-        ),
-        responses: [
-            new OA\Response(
-                response: Response::HTTP_CREATED,
-                description: 'Forma zatrudnienia została utworzona',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Forma zatrudnienia została pomyślnie dodana'),
-                    ],
-                    type: 'object'
-                )
-            ),
-            new OA\Response(
-                response: Response::HTTP_UNPROCESSABLE_ENTITY,
-                description: 'Błąd walidacji',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Forma zatrudnienia istnieje'),
-                    ],
-                    type: 'object'
-                )
-            ),
-        ]
-    )]
-    #[OA\Tag(name: 'contract_types')]
     #[Route('/api/contract_types', name: 'api.contract_types.create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateContractTypeAction $createContractTypeAction): JsonResponse
     {
         try {
+            if (!$this->isGranted(PermissionEnum::CREATE, AccessEnum::CONTRACT_TYPE)) {
+                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
+
             $createContractTypeAction->execute($createDTO);
 
             return new JsonResponse(
@@ -66,10 +37,10 @@ class CreateContractTypeController extends AbstractController
                 Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('contractTypes.add.error', [], 'contract_types'), $error->getMessage());
+            $message = sprintf('%s. %s', $this->translator->trans('contractTypes.add.error', [], 'contract_types'), $error->getMessage());
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }

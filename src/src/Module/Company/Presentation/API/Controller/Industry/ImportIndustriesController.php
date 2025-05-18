@@ -78,7 +78,7 @@ class ImportIndustriesController extends AbstractController
             }
         } catch (\Exception $error) {
             $message = sprintf(
-                '%s: %s',
+                '%s. %s',
                 $this->translator->trans('industry.import.error', [], 'industries'),
                 $this->translator->trans($error->getMessage())
             );

@@ -34,7 +34,7 @@ class ListIndustriesController extends AbstractController
 
             return new JsonResponse(['data' => $askIndustriesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
-            $this->logger->error(sprintf('%s: %s', $this->translator->trans('industry.list.error', [], 'industries'), $error->getMessage()));
+            $this->logger->error(sprintf('%s. %s', $this->translator->trans('industry.list.error', [], 'industries'), $error->getMessage()));
 
             return new JsonResponse(['data' => [], 'message' => $this->translator->trans('industry.list.error', [], 'industries'),], $error->getCode());
         }

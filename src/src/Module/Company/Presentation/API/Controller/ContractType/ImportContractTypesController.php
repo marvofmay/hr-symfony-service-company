@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\ContractType;
 
+use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Module\Company\Domain\DTO\ContractType\ImportDTO;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Service\ContractType\ImportContractTypesFromXLSX;
 use App\Module\Company\Presentation\API\Action\ContractType\ImportContractTypesAction;
-use OpenApi\Attributes as OA;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -27,54 +29,14 @@ class ImportContractTypesController extends AbstractController
     ) {
     }
 
-    #[OA\Post(
-        path: '/api/contract_types/import',
-        summary: 'Importuje nowe formy zatrudnienia',
-        requestBody: new OA\RequestBody(
-            required: true,
-            content: new OA\MediaType(
-                mediaType: 'multipart/form-data',
-                schema: new OA\Schema(
-                    required: ['file'],
-                    properties: [
-                        new OA\Property(
-                            property: 'file',
-                            description: 'Plik XLSX do importu',
-                            type: 'string',
-                            format: 'binary'
-                        ),
-                    ]
-                )
-            )
-        ),
-        responses: [
-            new OA\Response(
-                response: Response::HTTP_CREATED,
-                description: 'Formy zatrudnienia zostały utworzone',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Formy zatrudnienia zostały pomyślnie zaimportowane'),
-                    ],
-                    type: 'object'
-                )
-            ),
-            new OA\Response(
-                response: Response::HTTP_INTERNAL_SERVER_ERROR,
-                description: 'Błąd importu',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Wystąpił błąd - formy zatrudnienia nie zostały zaimportowane'),
-                    ],
-                    type: 'object'
-                )
-            ),
-        ]
-    )]
-    #[OA\Tag(name: 'contract_types')]
     #[Route('/api/contract_types/import', name: 'import', methods: ['POST'])]
     public function import(Request $request, ImportContractTypesAction $importContractTypesAction): JsonResponse
     {
         try {
+            if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::CONTRACT_TYPE)) {
+                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
+
             $uploadFilePath = '../src/Storage/Upload/Import/ContractTypes';
             $uploadedFile = $request->files->get('file');
 
@@ -85,7 +47,7 @@ class ImportContractTypesController extends AbstractController
                 );
             }
 
-            $uploadFileService = new UploadFile($uploadFilePath, 'xlsx');
+            $uploadFileService = new UploadFile($uploadFilePath, FileExtensionEnum::XLSX);
             $uploadFileService->uploadFile($uploadedFile);
 
             $importer = new ImportContractTypesFromXLSX(
@@ -115,10 +77,10 @@ class ImportContractTypesController extends AbstractController
                 );
             }
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('contractType.import.error', [], 'contract_types'), $this->translator->trans($error->getMessage()));
+            $message = sprintf('%s. %s', $this->translator->trans('contractType.import.error', [], 'contract_types'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }
