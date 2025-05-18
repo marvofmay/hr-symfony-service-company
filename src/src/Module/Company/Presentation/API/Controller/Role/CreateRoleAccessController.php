@@ -27,7 +27,7 @@ class CreateRoleAccessController extends AbstractController
     {
         try {
             if (!$this->isGranted(PermissionEnum::ASSIGN_ACCESS_TO_ROLE, AccessEnum::ACCESS)) {
-                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
             if ($uuid !== $createAccessDTO->getRoleUUID()) {

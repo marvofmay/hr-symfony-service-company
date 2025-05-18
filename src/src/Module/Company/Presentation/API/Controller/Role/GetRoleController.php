@@ -29,7 +29,7 @@ class GetRoleController extends AbstractController
     {
         try {
             if (!$this->isGranted(PermissionEnum::VIEW, AccessEnum::ROLE)) {
-                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
             $role =  $this->roleReaderRepository->getRoleByUUID($uuid);

@@ -27,7 +27,7 @@ class DeleteRoleController extends AbstractController
     {
         try {
             if (!$this->isGranted(PermissionEnum::DELETE, AccessEnum::ROLE)) {
-                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
             $deleteRoleAction->execute($uuid);

@@ -29,7 +29,7 @@ class ListRolesController extends AbstractController
     {
         try {
             if (!$this->isGranted(PermissionEnum::LIST, AccessEnum::ROLE)) {
-                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
             return new JsonResponse(['data' => $askRolesAction->ask($queryDTO)], Response::HTTP_OK);

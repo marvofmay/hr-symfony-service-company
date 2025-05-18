@@ -55,7 +55,7 @@ class ImportRolesController extends AbstractController
         $this->entityManager->beginTransaction();
         try {
             if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::ROLE)) {
-                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
             $uploadFilePath = 'src/Storage/Upload/Import/Roles';
