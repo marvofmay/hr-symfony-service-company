@@ -6,6 +6,7 @@ namespace App\Module\System\Infrastructure\Persistance\Repository\Doctrine\RoleA
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\System\Domain\Entity\Access;
+use App\Module\System\Domain\Entity\RoleAccess;
 use App\Module\System\Domain\Entity\RoleAccessPermission;
 use App\Module\System\Domain\Interface\RoleAccess\RoleAccessInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -15,14 +16,14 @@ class RoleAccessRepository extends ServiceEntityRepository implements RoleAccess
 {
     public function __construct(ManagerRegistry $registry,)
     {
-        parent::__construct($registry, RoleAccessPermission::class);
+        parent::__construct($registry, RoleAccess::class);
     }
 
     public function isRoleHasAccess(Access $access, Role $role): bool
     {
         return null !== $this->findOneBy([
-           RoleAccessPermission::RELATION_ACCESS => $access,
-           RoleAccessPermission::RELATION_ROLE => $role,
+           RoleAccess::RELATION_ACCESS => $access,
+           RoleAccess::RELATION_ROLE => $role,
         ]);
     }
 }

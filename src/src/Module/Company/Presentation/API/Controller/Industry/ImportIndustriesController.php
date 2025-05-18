@@ -10,7 +10,8 @@ use App\Module\Company\Domain\DTO\Industry\ImportDTO;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use App\Module\Company\Domain\Service\Industry\ImportIndustriesFromXLSX;
 use App\Module\Company\Presentation\API\Action\Industry\ImportIndustriesAction;
-use OpenApi\Attributes as OA;
+use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -28,60 +29,14 @@ class ImportIndustriesController extends AbstractController
     ) {
     }
 
-    #[OA\Post(
-        path: '/api/industries/import',
-        summary: 'Importuje nowe branże',
-        requestBody: new OA\RequestBody(
-            required: true,
-            content: new OA\MediaType(
-                mediaType: 'multipart/form-data',
-                schema: new OA\Schema(
-                    required: ['file'],
-                    properties: [
-                        new OA\Property(
-                            property: 'file',
-                            description: 'Plik XLSX do importu',
-                            type: 'string',
-                            format: 'binary'
-                        ),
-                    ]
-                )
-            )
-        ),
-        responses: [
-            new OA\Response(
-                response: Response::HTTP_CREATED,
-                description: 'Branże zostały utworzone',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'message', type: 'string', example: 'Branże zostały pomyślnie zaimportowane'),
-                        new OA\Property(
-                            property: 'errors',
-                            type: 'array',
-                            items: new OA\Items(type: 'string'),
-                            example: []
-                        ),
-                    ],
-                    type: 'object'
-                )
-            ),
-            new OA\Response(
-                response: Response::HTTP_INTERNAL_SERVER_ERROR,
-                description: 'Błąd importu',
-                content: new OA\JsonContent(
-                    properties: [
-                        new OA\Property(property: 'error', type: 'string', example: 'Wystąpił błąd - branże nie zostały zaimportowane'),
-                    ],
-                    type: 'object'
-                )
-            ),
-        ]
-    )]
-    #[OA\Tag(name: 'industries')]
     #[Route('/api/industries/import', name: 'import', methods: ['POST'])]
     public function import(Request $request, ImportIndustriesAction $importIndustriesAction): JsonResponse
     {
         try {
+            if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::INDUSTRY)) {
+                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
+
             $uploadFilePath = '../src/Storage/Upload/Import/Industries';
             $uploadedFile = $request->files->get('file');
 
