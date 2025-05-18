@@ -1,6 +1,5 @@
 role:
   uuid:
-    differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
     notFound: "Rola o podanym UUID nie istnieje"
     notExists: "Rola o podanym UUID nie istnieje :uuid"
     required: "Wymagane UUID roli"

@@ -32,7 +32,7 @@ class CreateRoleAccessController extends AbstractController
 
             if ($uuid !== $createAccessDTO->getRoleUUID()) {
                 return $this->json(
-                    ['message' => $this->translator->trans('role.uuid.differentUUIDInBodyRawAndUrl', [], 'roles')],
+                    ['message' => $this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators')],
                     Response::HTTP_BAD_REQUEST
                 );
             }

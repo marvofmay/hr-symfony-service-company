@@ -33,10 +33,7 @@ class UpdateContractTypeController extends AbstractController
             }
 
             if ($uuid !== $updateDTO->getUUID()) {
-                return $this->json(
-                    ['message' => $this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators')],
-                    Response::HTTP_BAD_REQUEST
-                );
+                throw new \Exception($this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators'), Response::HTTP_CONFLICT);
             }
 
             $updateContractTypeAction->execute($updateDTO);

@@ -1,6 +1,5 @@
 note:
   uuid:
-    differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
     notFound: "Notatka o podanym UUID nie istnieje"
   title:
     priorityIsRequired: "Ważność notatki jest wymagana"

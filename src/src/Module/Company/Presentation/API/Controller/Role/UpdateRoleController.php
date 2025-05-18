@@ -31,10 +31,7 @@ class UpdateRoleController extends AbstractController
             }
 
             if ($uuid !== $updateDTO->getUUID()) {
-                return $this->json(
-                    ['message' => $this->translator->trans('role.uuid.differentUUIDInBodyRawAndUrl', [], 'roles')],
-                    Response::HTTP_BAD_REQUEST
-                );
+                throw new \Exception($this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators'), Response::HTTP_CONFLICT);
             }
 
             $updateRoleAction->execute($updateDTO);

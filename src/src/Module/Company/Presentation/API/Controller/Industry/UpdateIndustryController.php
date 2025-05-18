@@ -33,10 +33,7 @@ class UpdateIndustryController extends AbstractController
             }
 
             if ($uuid !== $updateDTO->getUUID()) {
-                return $this->json(
-                    ['message' => $this->translator->trans('industry.uuid.differentUUIDInBodyRawAndUrl', [], 'industries')],
-                    Response::HTTP_BAD_REQUEST
-                );
+                throw new \Exception($this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators'), Response::HTTP_CONFLICT);
             }
 
             $updateIndustryAction->execute($updateDTO);
