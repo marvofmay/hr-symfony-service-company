@@ -26,7 +26,10 @@ class DeleteMultipleRolesController extends AbstractController
     public function delete(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO, DeleteMultipleRolesAction $deleteMultipleRolesAction): JsonResponse
     {
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::DELETE->value, AccessEnum::ROLE);
+            if (!$this->isGranted(PermissionEnum::DELETE, AccessEnum::ROLE)) {
+                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
+
             $deleteMultipleRolesAction->execute($deleteMultipleDTO);
 
             return new JsonResponse(
@@ -37,7 +40,7 @@ class DeleteMultipleRolesController extends AbstractController
             $message = sprintf('%s: %s', $this->translator->trans('role.delete.multiple.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }

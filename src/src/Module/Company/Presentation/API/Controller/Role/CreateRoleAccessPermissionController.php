@@ -26,7 +26,10 @@ class CreateRoleAccessPermissionController extends AbstractController
     public function create(string $uuid, #[MapRequestPayload] CreateAccessPermissionDTO $createAccessPermissionDTO, CreateRoleAccessPermissionAction $createRoleAccessPermissionAction): JsonResponse
     {
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::ASSIGN_PERMISSION_TO_ACCESS_ROLE->value, AccessEnum::PERMISSION);
+            if (!$this->isGranted(PermissionEnum::ASSIGN_PERMISSION_TO_ACCESS_ROLE, AccessEnum::PERMISSION)) {
+                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
+
             if ($uuid !== $createAccessPermissionDTO->getRoleUUID()) {
                 return $this->json(
                     ['message' => $this->translator->trans('role.uuid.differentUUIDInBodyRawAndUrl', [], 'roles')],
@@ -44,7 +47,7 @@ class CreateRoleAccessPermissionController extends AbstractController
             $message = sprintf('%s: %s', $this->translator->trans('role.add.permission.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }

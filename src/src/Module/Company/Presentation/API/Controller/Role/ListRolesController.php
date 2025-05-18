@@ -28,13 +28,15 @@ class ListRolesController extends AbstractController
     public function list(#[MapQueryString] RolesQueryDTO $queryDTO, AskRolesAction $askRolesAction): Response
     {
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::LIST->value, AccessEnum::ROLE);
+            if (!$this->isGranted(PermissionEnum::LIST, AccessEnum::ROLE)) {
+                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
 
             return new JsonResponse(['data' => $askRolesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
             $this->logger->error(sprintf('%s: %s', $this->translator->trans('role.list.error', [], 'roles'), $error->getMessage()));
 
-            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('role.list.error', [], 'roles'),], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('role.list.error', [], 'roles'),], $error->getCode());
         }
     }
 }

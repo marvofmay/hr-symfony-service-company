@@ -54,7 +54,10 @@ class ImportRolesController extends AbstractController
     ): JsonResponse {
         $this->entityManager->beginTransaction();
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::IMPORT->value, AccessEnum::ROLE);
+            if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::ROLE)) {
+                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
+
             $uploadFilePath = 'src/Storage/Upload/Import/Roles';
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
             $employee = $security->getUser()->getEmployee();
@@ -103,7 +106,7 @@ class ImportRolesController extends AbstractController
             $message = sprintf('%s: %s', $this->translator->trans('role.import.error', [], 'roles'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }

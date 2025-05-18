@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Module\Company\Domain\DTO\Role\CreateDTO;
-use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Presentation\API\Action\Role\CreateRoleAction;
 use App\Module\System\Domain\Enum\AccessEnum;
-use App\Module\System\Domain\Enum\ModuleEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,13 +20,15 @@ class CreateRoleController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE->value, AccessEnum::ROLE);
     }
 
     #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateRoleAction $createRoleAction): JsonResponse
     {
         try {
+            if (!$this->isGranted(PermissionEnum::CREATE, AccessEnum::ROLE)) {
+                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
             $createRoleAction->execute($createDTO);
 
             return new JsonResponse(
@@ -36,10 +36,10 @@ class CreateRoleController extends AbstractController
                 Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('role.add.error', [], 'roles'), $error->getMessage());
+            $message = sprintf('%s. %s', $this->translator->trans('role.add.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }

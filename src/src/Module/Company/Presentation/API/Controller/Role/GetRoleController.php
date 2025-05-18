@@ -28,7 +28,10 @@ class GetRoleController extends AbstractController
     public function get(string $uuid): JsonResponse
     {
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::VIEW->value, AccessEnum::ROLE);
+            if (!$this->isGranted(PermissionEnum::VIEW, AccessEnum::ROLE)) {
+                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
+
             $role =  $this->roleReaderRepository->getRoleByUUID($uuid);
             $transformer = new RoleDataTransformer();
             $data = $transformer->transformToArray($role);

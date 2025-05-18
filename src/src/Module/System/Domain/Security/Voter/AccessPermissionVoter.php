@@ -28,9 +28,9 @@ abstract class AccessPermissionVoter extends Voter
 
     abstract protected function getAttributeName(): string;
 
-    protected function supports(string $attribute, mixed $subject): bool
+    protected function supports(mixed $attribute, mixed $subject): bool
     {
-        if ($attribute !== $this->getAttributeName()) {
+        if ($attribute->value !== $this->getAttributeName()) {
             return false;
         }
 
@@ -56,7 +56,7 @@ abstract class AccessPermissionVoter extends Voter
         return true;
     }
 
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(mixed $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
         if (!$user instanceof UserInterface) {
@@ -73,6 +73,7 @@ abstract class AccessPermissionVoter extends Voter
         }
 
         $role = $employee->getRole();
+        // ToDo:: change in class User, return getRoles() : super_admin to ROLE_SUPER_ADMIN
         if ($role->getName() === 'super_admin') {
             return true;
         }

@@ -26,7 +26,10 @@ class DeleteRoleController extends AbstractController
     public function delete(string $uuid, DeleteRoleAction $deleteRoleAction): JsonResponse
     {
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::DELETE->value, AccessEnum::ROLE);
+            if (!$this->isGranted(PermissionEnum::DELETE, AccessEnum::ROLE)) {
+                throw new \Exception($this->translator->trans('permissionDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+            }
+
             $deleteRoleAction->execute($uuid);
 
             return new JsonResponse(
@@ -37,7 +40,7 @@ class DeleteRoleController extends AbstractController
             $message = sprintf('%s: %s', $this->translator->trans('role.delete.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }
