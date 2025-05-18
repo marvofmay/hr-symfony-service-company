@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\ContractType;
 
+use App\Module\Company\Application\Transformer\ContractType\ContractTypeDataTransformer;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
@@ -12,7 +13,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class GetContractTypeController extends AbstractController
@@ -20,7 +20,6 @@ class GetContractTypeController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly ContractTypeReaderInterface $contractTypeReaderRepository,
-        private readonly SerializerInterface $serializer,
         private readonly TranslatorInterface $translator,
     ) {
     }
@@ -33,12 +32,11 @@ class GetContractTypeController extends AbstractController
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
-            return new JsonResponse([
-                'data' => json_decode($this->serializer->serialize(
-                    $this->contractTypeReaderRepository->getContractTypeByUUID($uuid),
-                    'json', ['groups' => ['contract_type_info']],
-                )),
-            ], Response::HTTP_OK);
+            $contractType =  $this->contractTypeReaderRepository->getContractTypeByUUID($uuid);
+            $transformer = new ContractTypeDataTransformer();
+            $data = $transformer->transformToArray($contractType);
+
+            return new JsonResponse(['data' => $data,], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('contractType.view.error', [], 'contract_types'), $error->getMessage());
             $this->logger->error($message);

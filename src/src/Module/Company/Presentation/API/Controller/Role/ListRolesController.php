@@ -34,7 +34,7 @@ class ListRolesController extends AbstractController
 
             return new JsonResponse(['data' => $askRolesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
-            $this->logger->error(sprintf('%s: %s', $this->translator->trans('role.list.error', [], 'roles'), $error->getMessage()));
+            $this->logger->error(sprintf('%s. %s', $this->translator->trans('role.list.error', [], 'roles'), $error->getMessage()));
 
             return new JsonResponse(['data' => [], 'message' => $this->translator->trans('role.list.error', [], 'roles'),], $error->getCode());
         }

@@ -37,7 +37,7 @@ class DeleteMultipleRolesController extends AbstractController
                 Response::HTTP_OK
             );
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('role.delete.multiple.error', [], 'roles'), $error->getMessage());
+            $message = sprintf('%s. %s', $this->translator->trans('role.delete.multiple.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], $error->getCode());

@@ -44,7 +44,7 @@ class CreateRoleAccessPermissionController extends AbstractController
                 Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('role.add.permission.error', [], 'roles'), $error->getMessage());
+            $message = sprintf('%s. %s', $this->translator->trans('role.add.permission.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], $error->getCode());

@@ -103,7 +103,7 @@ class ImportRolesController extends AbstractController
             }
         } catch (\Exception $error) {
             $this->entityManager->rollback();
-            $message = sprintf('%s: %s', $this->translator->trans('role.import.error', [], 'roles'), $this->translator->trans($error->getMessage()));
+            $message = sprintf('%s. %s', $this->translator->trans('role.import.error', [], 'roles'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], $error->getCode());

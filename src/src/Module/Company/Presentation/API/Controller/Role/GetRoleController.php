@@ -38,7 +38,7 @@ class GetRoleController extends AbstractController
 
             return new JsonResponse(['data' => $data,], Response::HTTP_OK);
         } catch (\Exception $error) {
-            $message = sprintf('%s: %s', $this->translator->trans('role.view.error', [], 'roles'), $error->getMessage());
+            $message = sprintf('%s. %s', $this->translator->trans('role.view.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], $error->getCode());
