@@ -11,7 +11,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PayloadErrorEventSubscriber implements EventSubscriberInterface
+readonly class PayloadErrorEventSubscriber implements EventSubscriberInterface
 {
     public function __construct(private TranslatorInterface $translator)
     {
