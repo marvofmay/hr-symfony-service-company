@@ -27,15 +27,12 @@ class CreateNoteController extends AbstractController
         try {
             $createRoleAction->execute($createDTO);
 
-            return new JsonResponse(
-                ['message' => $this->translator->trans('note.add.success', [], 'notes')],
-                Response::HTTP_CREATED
-            );
+            return new JsonResponse(['message' => $this->translator->trans('note.add.success', [], 'notes')], Response::HTTP_CREATED);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('note.add.error', [], 'notes'), $error->getMessage());
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }
