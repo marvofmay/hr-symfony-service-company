@@ -19,6 +19,7 @@ use App\Module\System\Presentation\API\Action\File\AskFileAction;
 use App\Module\System\Presentation\API\Action\File\CreateFileAction;
 use App\Module\System\Presentation\API\Action\Import\AskImportAction;
 use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
+use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -49,6 +50,7 @@ class ImportRolesController extends AbstractController
         AskFileAction $askFileAction,
         CreateImportAction $createImportAction,
         AskImportAction $askImportAction,
+        AskImportLogsAction $askImportLogsAction,
         ValidatorInterface $validator,
         Security $security,
     ): JsonResponse {
@@ -66,10 +68,12 @@ class ImportRolesController extends AbstractController
             $errors = $validator->validate($uploadFileDTO);
             if (count($errors) > 0) {
                 return new JsonResponse(
-                    ['errors' => array_map(fn ($e) => [
-                        'field' => $e->getPropertyPath(),
-                        'message' => $e->getMessage()], iterator_to_array($errors))
-                    ],
+                    ['errors' => array_map(
+                        fn ($e) => [
+                            'field' => $e->getPropertyPath(),
+                            'message' => $e->getMessage()
+                        ], iterator_to_array($errors)
+                    )],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );
             }
@@ -92,11 +96,16 @@ class ImportRolesController extends AbstractController
                     Response::HTTP_CREATED
                 );
             } else {
-                // ToDo::$askImportLogAction
-                //$import = $askImportLogAction->ask($import->getUUID()->toString());
-                //$importLogs = $import->getImportLogs();
+                $importLogs = $askImportLogsAction->ask($import);
+                $errors = array_map(fn ($importLog) => [
+                   'field' => '',
+                   'error' => $importLog->getData(),
+                ], iterator_to_array($importLogs->toArray()));
+
                 return new JsonResponse([
-                    'errors' => 'errorsArray',
+                    'success' => empty($errors),
+                    'message' => $this->translator->trans('role.import.error', [], 'roles'),
+                    'errors' => $errors,
                 ],
                     Response::HTTP_UNPROCESSABLE_ENTITY
                 );

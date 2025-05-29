@@ -1,0 +1,8 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+  #ImportLog handlers
+  App\Module\System\Application\QueryHandler\ImportLog\GetImportLogsByImportQueryHandler:
+    tags:
+      - { name: 'messenger.message_handler', bus: 'query.bus' }
