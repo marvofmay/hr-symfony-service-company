@@ -26,6 +26,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -55,6 +56,7 @@ class ImportRolesController extends AbstractController
         AskImportLogsAction $askImportLogsAction,
         ValidatorInterface $validator,
         Security $security,
+        ParameterBagInterface $params,
     ): JsonResponse {
         $this->entityManager->beginTransaction();
         try {
@@ -63,7 +65,7 @@ class ImportRolesController extends AbstractController
             }
             $employee = $security->getUser()->getEmployee();
 
-            $uploadFilePath = 'src/Storage/Upload/Import/Roles';
+            $uploadFilePath = sprintf('%s/Roles', $params->get('upload_file_path'));
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
 
             $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
