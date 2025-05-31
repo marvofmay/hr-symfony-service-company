@@ -16,6 +16,6 @@ readonly class ImportIndustriesAction
 
     public function execute(ImportDTO $importDTO): void
     {
-        $this->commandBus->dispatch(new ImportIndustriesCommand($importDTO->getData()));
+        $this->commandBus->dispatch(new ImportIndustriesCommand($importDTO->importUUID));
     }
 }

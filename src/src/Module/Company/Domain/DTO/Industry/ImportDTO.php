@@ -6,15 +6,7 @@ namespace App\Module\Company\Domain\DTO\Industry;
 
 class ImportDTO
 {
-    private array $data = [];
-
-    public function __construct(array $data)
+    public function __construct(public ?string $importUUID)
     {
-        $this->data = $data;
-    }
-
-    public function getData(): array
-    {
-        return $this->data;
     }
 }

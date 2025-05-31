@@ -40,11 +40,11 @@ class ImportIndustriesFromXLSX extends XLSXIterator
     private function validateIndustryName(?string $industryName): ?string
     {
         if (empty($industryName)) {
-            return $this->formatErrorMessage('Industry.name.required');
+            return $this->formatErrorMessage('industry.name.required');
         }
 
         if (strlen($industryName) < 3) {
-            return $this->formatErrorMessage('Industry.name.minimumLength', [':qty' => 3]);
+            return $this->formatErrorMessage('industry.name.minimumLength', [':qty' => 3]);
         }
 
         return null;
@@ -59,7 +59,7 @@ class ImportIndustriesFromXLSX extends XLSXIterator
     {
         return sprintf(
             '%s - %s %d',
-            $this->translator->trans($translationKey, $parameters, 'Industries'),
+            $this->translator->trans($translationKey, $parameters, 'industries'),
             $this->translator->trans('row'),
             count($this->errors) + 2
         );
