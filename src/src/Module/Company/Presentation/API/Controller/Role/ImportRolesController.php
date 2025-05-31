@@ -11,6 +11,8 @@ use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
 use App\Module\Company\Presentation\API\Action\Role\ImportRolesAction;
+use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
+use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
@@ -59,23 +61,15 @@ class ImportRolesController extends AbstractController
             if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::ROLE)) {
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
+            $employee = $security->getUser()->getEmployee();
 
             $uploadFilePath = 'src/Storage/Upload/Import/Roles';
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
-            $employee = $security->getUser()->getEmployee();
 
             $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
             $errors = $validator->validate($uploadFileDTO);
             if (count($errors) > 0) {
-                return new JsonResponse(
-                    ['errors' => array_map(
-                        fn ($e) => [
-                            'field' => $e->getPropertyPath(),
-                            'message' => $e->getMessage()
-                        ], iterator_to_array($errors)
-                    )],
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
+                return new JsonResponse(['message' => $this->translator->trans('role.import.error', [], 'roles'), 'errors' => UploadFileErrorTransformer::map($errors)], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
 
             $uploadFileAction->execute($uploadFileDTO);
@@ -88,34 +82,19 @@ class ImportRolesController extends AbstractController
             $this->entityManager->commit();
 
             if ($import->getStatus() === ImportStatusEnum::DONE) {
-                return new JsonResponse([
-                    'success' => empty($errors),
-                    'message' => $this->translator->trans('role.import.success', [], 'roles'),
-                    'errors' => [],
-                ],
-                    Response::HTTP_CREATED
-                );
+                return new JsonResponse(['message' => $this->translator->trans('role.import.success', [], 'roles'), 'errors' => [],], Response::HTTP_CREATED);
             } else {
                 $importLogs = $askImportLogsAction->ask($import);
-                $errors = array_map(fn ($importLog) => [
-                   'field' => '',
-                   'error' => $importLog->getData(),
-                ], iterator_to_array($importLogs->toArray()));
+                $errors = ImportLogErrorTransformer::map($importLogs);
 
-                return new JsonResponse([
-                    'success' => empty($errors),
-                    'message' => $this->translator->trans('role.import.error', [], 'roles'),
-                    'errors' => $errors,
-                ],
-                    Response::HTTP_UNPROCESSABLE_ENTITY
-                );
+                return new JsonResponse(['message' => $this->translator->trans('role.import.error', [], 'roles'), 'errors' => $errors,], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
         } catch (\Exception $error) {
             $this->entityManager->rollback();
             $message = sprintf('%s. %s', $this->translator->trans('role.import.error', [], 'roles'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $message], $error->getCode());
+            return new JsonResponse(['message' => $message, 'errors' => []], $error->getCode());
         }
     }
 }
