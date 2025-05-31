@@ -33,7 +33,7 @@ readonly class ImportRolesCommandHandler
     {
         $import = $this->importReaderRepository->getImportByUUID($command->getImportUUID());
         $importer = new ImportRolesFromXLSX(
-            sprintf('%s/%s/%s', '/var/www/html', $import->getFile()->getFilePath(), $import->getFile()->getFileName()),
+            sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()),
             $this->translator,
             $this->roleReaderRepository
         );
