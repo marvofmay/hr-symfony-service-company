@@ -21,7 +21,7 @@ readonly class ContractTypeMultipleCreator
             $contractType = new ContractType();
             $contractType->setName($item[ImportContractTypesFromXLSX::COLUMN_NAME]);
             $contractType->setDescription($item[ImportContractTypesFromXLSX::COLUMN_DESCRIPTION]);
-            $contractType->setActive($item[ImportContractTypesFromXLSX::COLUMN_ACTIVE]);
+            $contractType->setActive((bool)$item[ImportContractTypesFromXLSX::COLUMN_ACTIVE]);
 
             $contractTypes[] = $contractType;
         }

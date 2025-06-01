@@ -65,7 +65,7 @@ class ImportRolesController extends AbstractController
             }
             $employee = $security->getUser()->getEmployee();
 
-            $uploadFilePath = sprintf('%s/Roles', $params->get('upload_file_path'));
+            $uploadFilePath = sprintf('%s/roles', $params->get('upload_file_path'));
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
 
             $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);

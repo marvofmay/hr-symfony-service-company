@@ -66,7 +66,7 @@ final class ImportIndustriesController extends AbstractController
             }
             $employee = $security->getUser()->getEmployee();
 
-            $uploadFilePath = sprintf('%s/Industries', $params->get('upload_file_path'));
+            $uploadFilePath = sprintf('%s/industries', $params->get('upload_file_path'));
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
 
             $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
@@ -78,7 +78,7 @@ final class ImportIndustriesController extends AbstractController
             $uploadFileAction->execute($uploadFileDTO);
             $createFileAction->execute($fileName, $uploadFilePath, $employee);
             $file = $askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
-            $createImportAction->execute(ImportKindEnum::IMPORT_ROLES, ImportStatusEnum::PENDING, $file, $employee);
+            $createImportAction->execute(ImportKindEnum::IMPORT_INDUSTRIES, ImportStatusEnum::PENDING, $file, $employee);
             $import = $askImportAction->ask($file);
             $importIndustriesAction->execute(new ImportDTO($import->getUUID()->toString()));
 

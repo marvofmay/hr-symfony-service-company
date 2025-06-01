@@ -16,18 +16,18 @@ use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 readonly class ImportIndustriesCommandHandler
 {
     public function __construct(
-        private IndustryReaderInterface $industryReaderRepository,
-        private IndustryMultipleCreator $industryMultipleCreator,
-        private ImportReaderInterface $importReaderRepository,
-        private TranslatorInterface $translator,
-        private LoggerInterface $logger,
+        private IndustryReaderInterface  $industryReaderRepository,
+        private IndustryMultipleCreator  $industryMultipleCreator,
+        private ImportReaderInterface    $importReaderRepository,
+        private TranslatorInterface      $translator,
+        private LoggerInterface          $logger,
         private ImportLogMultipleCreator $importLogMultipleCreator,
-        private UpdateImportAction $updateImportAction,
-    ) {
+        private UpdateImportAction       $updateImportAction,
+    )
+    {
     }
 
     public function __invoke(ImportIndustriesCommand $command): void

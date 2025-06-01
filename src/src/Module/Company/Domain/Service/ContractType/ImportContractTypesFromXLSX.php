@@ -60,7 +60,7 @@ class ImportContractTypesFromXLSX extends XLSXIterator
     {
         return sprintf(
             '%s - %s %d',
-            $this->translator->trans($translationKey, $parameters, 'contractTypes'),
+            $this->translator->trans($translationKey, $parameters, 'contract_types'),
             $this->translator->trans('row'),
             count($this->errors) + 2
         );
