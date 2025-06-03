@@ -6,17 +6,12 @@ namespace App\Module\Company\Application\Command\Company;
 
 readonly class ImportCompaniesCommand
 {
-    public function __construct(private ?string $uploadFilePath, private ?string $fileName,)
+    public function __construct(private string $importUUID,)
     {
     }
 
-    public function getUploadFilePath(): ?string
+    public function getImportUUID(): string
     {
-        return $this->uploadFilePath;
-    }
-
-    public function getFileName(): ?string
-    {
-        return $this->fileName;
+        return $this->importUUID;
     }
 }

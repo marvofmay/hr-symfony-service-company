@@ -6,7 +6,7 @@ namespace App\Module\Company\Domain\DTO\Company;
 
 class ImportDTO
 {
-    public function __construct(public ?string $uploadFilePath, public ?string $fileName)
+    public function __construct(public ?string $importUUID)
     {
     }
 }
