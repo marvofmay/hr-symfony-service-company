@@ -16,6 +16,6 @@ readonly class ImportPositionsAction
 
     public function execute(ImportDTO $importDTO): void
     {
-        $this->commandBus->dispatch(new ImportPositionsCommand($importDTO->getData()));
+        $this->commandBus->dispatch(new ImportPositionsCommand($importDTO->importUUID));
     }
 }

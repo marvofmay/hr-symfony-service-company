@@ -40,23 +40,24 @@ final class ImportIndustriesController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-        private readonly EntityManagerInterface $entityManager,
-    ) {
+        private readonly EntityManagerInterface $entityManager
+    )
+    {
     }
 
     #[Route('/api/industries/import', name: 'import', methods: ['POST'])]
     public function import(
         #[MapUploadedFile] UploadedFile $file,
-        UploadFileAction $uploadFileAction,
-        ImportIndustriesAction $importIndustriesAction,
-        CreateFileAction $createFileAction,
-        AskFileAction $askFileAction,
-        CreateImportAction $createImportAction,
-        AskImportAction $askImportAction,
-        AskImportLogsAction $askImportLogsAction,
-        ValidatorInterface $validator,
-        Security $security,
-        ParameterBagInterface $params,
+        UploadFileAction                $uploadFileAction,
+        ImportIndustriesAction          $importIndustriesAction,
+        CreateFileAction                $createFileAction,
+        AskFileAction                   $askFileAction,
+        CreateImportAction              $createImportAction,
+        AskImportAction                 $askImportAction,
+        AskImportLogsAction             $askImportLogsAction,
+        ValidatorInterface              $validator,
+        Security                        $security,
+        ParameterBagInterface           $params,
     ): JsonResponse
     {
         $this->entityManager->beginTransaction();

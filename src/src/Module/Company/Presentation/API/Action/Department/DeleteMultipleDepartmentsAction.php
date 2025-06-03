@@ -11,7 +11,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class DeleteMultipleDepartmentsAction
 {
-    public function __construct(private MessageBusInterface $commandBus, private DepartmentReaderInterface $roleReaderRepository)
+    public function __construct(private MessageBusInterface $commandBus, private DepartmentReaderInterface $departmentReaderRepository)
     {
     }
 
@@ -19,7 +19,7 @@ readonly class DeleteMultipleDepartmentsAction
     {
         $this->commandBus->dispatch(
             new DeleteMultipleDepartmentsCommand(
-                $this->roleReaderRepository->getDepartmentsByUUID($deleteMultipleDTO->getSelectedUUID())
+                $this->departmentReaderRepository->getDepartmentsByUUID($deleteMultipleDTO->getSelectedUUID())
             )
         );
     }

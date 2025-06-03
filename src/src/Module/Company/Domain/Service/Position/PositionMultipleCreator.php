@@ -24,7 +24,7 @@ readonly class PositionMultipleCreator
             $position->setDescription($item[ImportPositionsFromXLSX::COLUMN_DESCRIPTION]);
             $position->setActive((bool)$item[ImportPositionsFromXLSX::COLUMN_ACTIVE]);
 
-            $departments = $this->departmentReaderRepository->getDepartmentsByUUID($item[ImportPositionsFromXLSX::COLUMN_DEPARTMENT_UUID]);
+            $departments = $this->departmentReaderRepository->getDepartmentsByUUID([$item[ImportPositionsFromXLSX::COLUMN_DEPARTMENT_UUID]]);
             foreach ($departments as $department) {
                 $position->addDepartment($department);
             }
