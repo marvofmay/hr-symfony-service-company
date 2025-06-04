@@ -40,6 +40,10 @@ class Company
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
     public const RELATION_INDUSTRY = 'industry';
+    public const RELATION_DEPARTMENTS = 'departments';
+    public const RELATION_EMPLOYEES = 'employees';
+    public const RELATION_PARENT_COMPANY = 'parentCompany';
+    public const ALIAS = 'company';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]

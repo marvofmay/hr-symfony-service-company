@@ -20,15 +20,17 @@ readonly class CompanyMultipleCreator
         $companies = new ArrayCollection();
         foreach ($data as $item) {
             $company = new Company();
-            $company->setFullName($item[0]);
-            $company->setShortName($item[1]);
+            $company->setFullName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME]);
+            $company->setShortName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_SHORT_NAME]);
             if (null !== $item[2]) {
-                $parentCompany = $this->companyReaderRepository->getCompanyByUUID($item[2]);
+                $parentCompany = $this->companyReaderRepository->getCompanyByUUID($item[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_UUID]);
                 if ($parentCompany instanceof Company) {
                     $company->setParentCompany($parentCompany);
                 }
             }
-            $company->setActive((bool)$item[3]);
+            $company->setNip((string)$item[ImportCompaniesFromXLSX::COLUMN_NIP]);
+            $company->setRegon((string)$item[ImportCompaniesFromXLSX::COLUMN_REGON]);
+            $company->setActive((bool)$item[ImportCompaniesFromXLSX::COLUMN_ACTIVE]);
 
             $companies[] = $company;
         }

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\System\Application\Console;
+namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\System\Domain\Entity\Permission;
 use App\Module\System\Domain\Enum\PermissionEnum;

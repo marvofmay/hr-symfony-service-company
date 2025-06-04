@@ -2,11 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Module\System\Application\Console;
+namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\System\Domain\Entity\Access;
-use App\Module\System\Domain\Entity\Module;
 use App\Module\System\Domain\Enum\RoleEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;

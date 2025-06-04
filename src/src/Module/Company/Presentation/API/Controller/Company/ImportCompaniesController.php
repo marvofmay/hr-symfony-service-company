@@ -10,18 +10,23 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Company\ImportDTO;
+use App\Module\Company\Domain\Service\Company\ImportCompaniesValidator;
 use App\Module\Company\Presentation\API\Action\Company\ImportCompaniesAction;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\ImportKindEnum;
+use App\Module\System\Domain\Enum\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
+use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\File\AskFileAction;
 use App\Module\System\Presentation\API\Action\File\CreateFileAction;
 use App\Module\System\Presentation\API\Action\Import\AskImportAction;
 use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
+use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -50,9 +55,12 @@ class ImportCompaniesController extends AbstractController
         #[MapUploadedFile] UploadedFile $file,
         UploadFileAction                $uploadFileAction,
         ImportCompaniesAction           $importCompaniesAction,
+        ImportCompaniesValidator        $importCompaniesValidator,
         CreateFileAction                $createFileAction,
         AskFileAction                   $askFileAction,
         CreateImportAction              $createImportAction,
+        UpdateImportAction              $updateImportAction,
+        ImportLogMultipleCreator        $importLogMultipleCreator,
         AskImportAction                 $askImportAction,
         AskImportLogsAction             $askImportLogsAction,
         ValidatorInterface              $validator,
@@ -81,9 +89,28 @@ class ImportCompaniesController extends AbstractController
             $file = $askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
             $createImportAction->execute(ImportKindEnum::IMPORT_COMPANIES, ImportStatusEnum::PENDING, $file, $employee);
             $import = $askImportAction->ask($file);
-            $importCompaniesAction->execute(new ImportDTO($import->getUUID()->toString()));
 
             $this->entityManager->commit();
+
+            $errors = $importCompaniesValidator->validate($import);
+            if (!empty($errors)) {
+                $updateImportAction->execute($import, ImportStatusEnum::FAILED);
+                $importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
+
+                foreach ($errors as $error) {
+                    $this->logger->error($this->translator->trans('company.import.error', [], 'companies') . ': ' . $error);
+                }
+
+                $importLogs = $askImportLogsAction->ask($import);
+                $mappedErrors = ImportLogErrorTransformer::map($importLogs);
+
+                return new JsonResponse([
+                    'message' => $this->translator->trans('company.import.error', [], 'companies'),
+                    'errors' => $mappedErrors,
+                ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            $importCompaniesAction->execute(new ImportDTO($import->getUUID()->toString()));
 
             if ($import->getStatus() === ImportStatusEnum::DONE) {
                 return new JsonResponse(['message' => $this->translator->trans('company.import.success', [], 'companies'), 'errors' => [],], Response::HTTP_CREATED);
