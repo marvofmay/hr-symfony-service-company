@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\System\Application\Console\DefaultData\Data\RoleEnum;
 use App\Module\System\Domain\Entity\Access;
-use App\Module\System\Domain\Enum\RoleEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -51,14 +51,11 @@ class AddRecordToRoleTableCommand extends Command
 
         foreach (RoleEnum::cases() as $roleEnum) {
             $roleName = $roleEnum->value;
-            if (!in_array($roleName, $existingRolesNames, true)) {
+            $translatedName = $this->translator->trans(sprintf('role.defaultData.name.%s', $roleName), [], 'roles');
+            if (!in_array($translatedName, $existingRolesNames, true)) {
                 $role = new Role();
-                $role->setName($roleName);
-                $role->setDescription($this->translator->trans(
-                    sprintf('role.%s.description', $roleEnum->value),
-                    [],
-                    'role'
-                ));
+                $role->setName($translatedName);
+                $role->setDescription($this->translator->trans(sprintf('role.defaultData.description.%s', $roleName), [], 'roles'));
                 $this->entityManager->persist($role);
                 $rolesToPersist[] = $roleEnum->value;
             }

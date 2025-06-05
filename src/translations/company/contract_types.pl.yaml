@@ -28,4 +28,26 @@ contractType:
     error: "Wystapił błąd przy pobieraniu listy form zatrudnienia"
   file:
     fileNotExists: "Plik nie istnieje"
-    chooseFile: "Wskaż plik"
+  defaultData:
+    name:
+      employment: "Umowa o pracę"
+      b2b: "Kontrakt B2B"
+      internship: "Staż"
+      contractor: "Umowa z wykonawcą"
+      temporary: "Umowa tymczasowa"
+      part_time: "Część etatu"
+      full_time: "Pełen etat"
+      commission: "Umowa prowizyjna"
+      consulting: "Umowa doradcza"
+      freelance: "Umowa freelancerska"
+    description:
+      employment: "Standardowa umowa o pracę"
+      b2b: "Kontrakt zawierany między firmami (B2B)"
+      internship: "Program stażowy lub praktyki studenckie"
+      contractor: "Umowa z niezależnym wykonawcą"
+      temporary: "Zatrudnienie na czas określony lub sezonowy"
+      part_time: "Zatrudnienie w niepełnym wymiarze godzin"
+      full_time: "Zatrudnienie w pełnym wymiarze godzin"
+      commission: "Umowa oparta na prowizji od wyników"
+      consulting: "Umowa na usługi doradcze lub eksperckie"
+      freelance: "Zlecenie realizowane przez freelancera"

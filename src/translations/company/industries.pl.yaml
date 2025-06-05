@@ -30,3 +30,26 @@ industry:
   file:
     fileNotExists: "Plik nie istnieje"
     chooseFile: "Wskaż plik"
+  defaultData:
+    name:
+      technology: "Technologia"
+      healthcare: "Opieka zdrowotna"
+      finance: "Finanse"
+      education: "Edukacja"
+      manufacturing: "Produkcja"
+      retail: "Handel detaliczny"
+      energy: "Energetyka"
+      transportation: "Transport"
+      construction: "Budownictwo"
+      hospitality: "Hotelarstwo i gastronomia"
+    description:
+      technology: "Branża technologiczna i rozwój oprogramowania"
+      healthcare: "Usługi medyczne i sektor opieki zdrowotnej"
+      finance: "Bankowość, inwestycje i usługi finansowe"
+      education: "Instytucje edukacyjne i usługi szkoleniowe"
+      manufacturing: "Produkcja przemysłowa i wytwórcza"
+      retail: "Handel detaliczny i sprzedaż konsumencka"
+      energy: "Produkcja energii, w tym źródła odnawialne"
+      transportation: "Logistyka, spedycja i usługi transportowe"
+      construction: "Budownictwo i rozwój infrastruktury"
+      hospitality: "Hotele, restauracje i branża rekreacyjna"

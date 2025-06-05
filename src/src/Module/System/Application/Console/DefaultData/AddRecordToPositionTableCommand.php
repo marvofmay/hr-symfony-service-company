@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\Company\Domain\Entity\Position;
-use App\Module\System\Domain\Enum\PositionEnum;
+use App\Module\System\Application\Console\DefaultData\Data\PositionEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -50,15 +50,12 @@ class AddRecordToPositionTableCommand extends Command
         $positionsToPersist = [];
 
         foreach (PositionEnum::cases() as $enum) {
-            if (!in_array($enum->value, $existingNames, true)) {
+            $translatedName = $this->translator->trans(sprintf('position.defaultData.name.%s', $enum->value), [], 'positions');
+            if (!in_array($translatedName, $existingNames, true)) {
                 $position = new Position();
-                $position->setName($enum->value);
+                $position->setName($translatedName);
                 $position->setActive(true);
-                $position->setDescription($this->translator->trans(
-                    sprintf('position.%s.description', $enum->value),
-                    [],
-                    'position'
-                ));
+                $position->setDescription($this->translator->trans(sprintf('position.defaultData.description.%s', $enum->value), [], 'positions'));
                 $this->entityManager->persist($position);
                 $positionsToPersist[] = $enum->value;
             }

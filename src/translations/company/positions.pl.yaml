@@ -26,3 +26,28 @@ position:
     error: "Wystapił błąd przy pobieraniu wybranego stanowiska"
   list:
     error: "Wystapił błąd przy pobieraniu listy stanowisk"
+  defaultData:
+    name:
+      web_apps_director: "Dyrektor ds. aplikacji webowych"
+      php_developer: "Programista PHP"
+      java_developer: "Programista Java"
+      python_developer: "Programista Python"
+      js_developer: "Programista JavaScript"
+      react_developer: "Programista React"
+      vue_developer: "Programista Vue.js"
+      project_manager: "Kierownik projektu"
+      qa_tester: "Tester jakości (QA)"
+      graphic_designer: "Grafik"
+      customer_support_agent: "Specjalista ds. obsługi klienta"
+    description:
+      web_apps_director: "Odpowiada za rozwój i strategię działu aplikacji internetowych."
+      php_developer: "Tworzy i utrzymuje aplikacje oparte na języku PHP."
+      java_developer: "Zajmuje się rozwojem aplikacji w technologii Java."
+      python_developer: "Odpowiedzialny za tworzenie oprogramowania w Pythonie."
+      js_developer: "Programuje interaktywne funkcje w JavaScript."
+      react_developer: "Tworzy komponenty i aplikacje w oparciu o React."
+      vue_developer: "Zajmuje się frontendem opartym o framework Vue.js."
+      project_manager: "Zarządza projektami, zespołem i terminami."
+      qa_tester: "Testuje oprogramowanie i zgłasza błędy."
+      graphic_designer: "Projektuje materiały graficzne i interfejsy."
+      customer_support_agent: "Pomaga klientom, odpowiada na pytania i rozwiązuje problemy."

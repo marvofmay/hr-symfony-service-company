@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\System\Domain\Enum;
+namespace App\Module\System\Application\Console\DefaultData\Data;
 
 use App\Common\Domain\Interface\EnumInterface;
 
@@ -21,4 +21,5 @@ enum RoleEnum: string implements EnumInterface
     {
         return array_column(self::cases(), 'value');
     }
+
 }

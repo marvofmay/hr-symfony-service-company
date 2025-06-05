@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Application\Console\FakeData;
 
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
-use App\Module\System\Application\Console\FakeData\Data\Company as CompanyData;
+use App\Module\System\Application\Console\FakeData\Data\Company as CompanyFakeData;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
@@ -28,7 +28,8 @@ class AddRecordToCompanyTableCommand extends Command
     private const string INFO_ALREADY_EXISTS = 'Company already exists. No action taken.';
 
     public function __construct(
-        private readonly EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
+        private readonly CompanyFakeData $companyFakeData,
     ) {
         parent::__construct();
     }
@@ -42,7 +43,7 @@ class AddRecordToCompanyTableCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $data = CompanyData::getDefaultData();
+        $data = $this->companyFakeData->getDefaultData();
 
         $companyRepository = $this->entityManager->getRepository(Company::class);
         $existingCompany = $companyRepository->createQueryBuilder('c')

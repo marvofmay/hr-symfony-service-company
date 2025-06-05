@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\Company\Domain\Entity\Industry;
-use App\Module\System\Domain\Enum\IndustryEnum;
+use App\Module\System\Application\Console\DefaultData\Data\IndustryEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -41,8 +41,8 @@ class AddRecordToIndustryTableCommand extends Command
         $output->writeln('Checking and updating Industry table...');
         $industryRepository = $this->entityManager->getRepository(Industry::class);
 
-        $existingIndustries = $industryRepository->createQueryBuilder('i')
-            ->select('i.name')
+        $existingIndustries = $industryRepository->createQueryBuilder(Industry::ALIAS)
+            ->select(Industry::ALIAS . '.name')
             ->getQuery()
             ->getArrayResult();
 
@@ -50,14 +50,11 @@ class AddRecordToIndustryTableCommand extends Command
         $industriesToPersist = [];
 
         foreach (IndustryEnum::cases() as $enum) {
-            if (!in_array($enum->value, $existingNames, true)) {
+            $translatedName = $this->translator->trans(sprintf('industry.defaultData.name.%s', $enum->value), [], 'industries');
+            if (!in_array($translatedName, $existingNames, true)) {
                 $industry = new Industry();
-                $industry->setName($enum->value);
-                $industry->setDescription($this->translator->trans(
-                    sprintf('industry.%s.description', $enum->value),
-                    [],
-                    'industry'
-                ));
+                $industry->setName($translatedName);
+                $industry->setDescription($this->translator->trans(sprintf('industry.defaultData.description.%s', $enum->value), [], 'industries'));
                 $this->entityManager->persist($industry);
                 $industriesToPersist[] = $enum->value;
             }

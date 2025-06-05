@@ -31,7 +31,7 @@ class InitializeSystemFakeDataCommand extends Command
             'app:add-record-to-company-table',
         ];
 
-        $output->writeln("***********************************************************");
+        $output->writeln("**************************************************************");
         foreach ($commands as $commandName) {
             $output->writeln("--------------------------------------------------------------");
             $output->writeln("<info>Command execution: $commandName</info>");
@@ -50,7 +50,7 @@ class InitializeSystemFakeDataCommand extends Command
         $output->writeln("");
         $output->writeln('<info>All commands were executed successfully :)</info>');
         $output->writeln("");
-        $output->writeln("***********************************************************");
+        $output->writeln("**************************************************************");
 
         return Command::SUCCESS;
     }

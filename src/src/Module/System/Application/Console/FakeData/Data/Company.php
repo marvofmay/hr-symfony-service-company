@@ -4,17 +4,29 @@ declare(strict_types=1);
 
 namespace App\Module\System\Application\Console\FakeData\Data;
 
-final class Company
+use App\Module\Company\Domain\Entity\Industry;
+use App\Module\System\Application\Console\DefaultData\Data\IndustryEnum;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+final readonly class Company
 {
-    public static function getDefaultData(): array
+    public function __construct(private EntityManagerInterface $entityManager, private TranslatorInterface $translator)
     {
+    }
+
+    public function getDefaultData(): array
+    {
+        $translatedTechnologyName = $this->translator->trans(sprintf('industry.defaultData.name.%s', IndustryEnum::TECHNOLOGY->value), [], 'industries');
+        $technologyUUID = $this->entityManager->getRepository(Industry::class)->findOneBy(['name' => $translatedTechnologyName])->getUuid();
+
         return [
             'fullName' => 'Feture Technology',
             'shortName' => 'FT',
             'nip' => '9316831327',
             'regon' => '9316831327',
             'description' => '',
-            'industryUUID' => '5c2c8ba0-856c-440b-ac09-edeb53a95373',
+            'industryUUID' =>  $technologyUUID,
             'active' => true,
             'phones' => [
                 '155-555-555',

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\Company\Domain\Entity\ContractType;
-use App\Module\System\Domain\Enum\ContractTypeEnum;
+use App\Module\System\Application\Console\DefaultData\Data\ContractTypeEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -50,12 +50,13 @@ class AddRecordToContractTypeTableCommand extends Command
         $contractTypesToPersist = [];
 
         foreach (ContractTypeEnum::cases() as $enum) {
-            if (!in_array($enum->value, $existingNames, true)) {
+            $translatedName = $this->translator->trans(sprintf('contractType.defaultData.name.%s', $enum->value), [], 'contract_types');
+            if (!in_array($translatedName, $existingNames, true)) {
                 $contractType = new ContractType();
-                $contractType->setName($enum->value);
+                $contractType->setName($translatedName);
                 $contractType->setActive(true);
                 $contractType->setDescription($this->translator->trans(
-                    sprintf('contract_type.%s.description', $enum->value),
+                    sprintf('contractType.defaultData.description.%s', $enum->value),
                     [],
                     'contract_types'
                 ));

@@ -37,3 +37,13 @@ role:
   file:
     fileNotExists: "Plik nie istnieje"
     chooseFile: "Wskaż plik"
+  defaultData:
+    name:
+      super_admin: "Superadministrator"
+      admin: "Administrator"
+      employee: "Pracownik"
+    description:
+      super_admin: "Pełny dostęp do systemu, zarządzanie wszystkimi modułami i użytkownikami."
+      admin: "Zarządza systemem i użytkownikami, ale z ograniczeniami względem superadministratora."
+      employee: "Użytkownik z podstawowym dostępem do funkcjonalności systemu."
+
