@@ -61,7 +61,7 @@ class ImportCompaniesFromXLSX extends XLSXIterator
             $postcode,
             $city,
             $country,
-        ] = $row + [null, null, null, null, null, null, null, null, true, null, null, null, null, null, null, null];
+        ] = $row + [null, null, null, null, null, null, null, null, false, null, null, null, null, null, null, null];
 
         if ($errorMessage = $this->validateCompanyFullName($fullName)) {
             $errorMessages[] = $errorMessage;
@@ -166,7 +166,6 @@ class ImportCompaniesFromXLSX extends XLSXIterator
 
     private function validateActive(?int $active): ?string
     {
-
         if (null !== $active && !in_array($active, [0, 1])) {
             return $this->formatErrorMessage('company.active.invalid', [], 'companies');
         }
@@ -186,12 +185,12 @@ class ImportCompaniesFromXLSX extends XLSXIterator
 
     private function isParentCompanyExists(string $parentCompanyUUID): bool
     {
-        return $this->companyReaderRepository->isCompanyWithUUIDExists($parentCompanyUUID);
+        return $this->companyReaderRepository->isCompanyExistsWithUUID($parentCompanyUUID);
     }
 
     private function isIndustryExists(string $industryUUID): bool
     {
-        return $this->industryReaderRepository->isIndustryWithUUIDExists($industryUUID);
+        return $this->industryReaderRepository->isIndustryExistsWithUUID($industryUUID);
     }
 
     private function validateNIP(?string $nip): ?string

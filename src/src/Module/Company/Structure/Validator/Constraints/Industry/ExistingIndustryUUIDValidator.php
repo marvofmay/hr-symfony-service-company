@@ -3,7 +3,6 @@
 namespace App\Module\Company\Structure\Validator\Constraints\Industry;
 
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
-use App\Module\Company\Structure\Validator\Constraints\Industry\ExistingIndustryUUID;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
@@ -25,7 +24,7 @@ class ExistingIndustryUUIDValidator extends ConstraintValidator
             return;
         }
 
-        $exists = $this->industryReaderRepository->isIndustryWithUUIDExists($value);
+        $exists = $this->industryReaderRepository->isIndustryExistsWithUUID($value);
         if (!$exists) {
             $message = $this->translator->trans(
                 $constraint->message['uuidNotExists'],

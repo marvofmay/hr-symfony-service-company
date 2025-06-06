@@ -8,7 +8,7 @@ company:
     required: "Nazwa firmy jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    expectedUniqueRoleNameConstraint: "Oczekiwano unikalnej nazwy firmy"
+    expectedUniqueCompanyNameConstraint: "Oczekiwano unikalnej nazwy firmy"
   nip:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
@@ -22,12 +22,14 @@ company:
   description:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
+  active:
+    invalid: "Nieprawidłowa wartość pola active"
   add:
-    success: "Firms została pomyślnie zapisana"
+    success: "Firma została pomyślnie zapisana"
     error: "Wystąpił błąd - firma nie została dodana"
   update:
     success: "Firma została pomyślnie zaktualizowana"
-    error: "Wystąpił błąd - fkirma nie została zaktualizowana"
+    error: "Wystąpił błąd - firma nie została zaktualizowana"
   delete:
     success: "Firma została pomyślnie usunięta"
     error: "Wystąpił błąd - firma nie została usunięta"

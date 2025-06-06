@@ -63,7 +63,7 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
         return !is_null($this->getIndustryByName($name, $uuid));
     }
 
-    public function isIndustryWithUUIDExists(string $uuid): bool
+    public function isIndustryExistsWithUUID(string $uuid): bool
     {
         return null !== $this->findOneBy(['uuid' => $uuid]);
     }

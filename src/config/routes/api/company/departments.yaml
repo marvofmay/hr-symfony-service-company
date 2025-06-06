@@ -17,6 +17,11 @@ api_department_create:
   controller: App\Module\Company\Presentation\API\Controller\Department\CreateDepartmentController::create
   methods: [POST]
 
+api_department_import:
+  path: api/departments/import
+  controller: App\Module\Company\Presentation\API\Controller\Department\ImportDepartmentsController::import
+  methods: [POST]
+
 api_department_update:
   path: api/departments/{uuid}
   controller: App\Module\Company\Presentation\API\Controller\Department\UpdateDepartmentController::update

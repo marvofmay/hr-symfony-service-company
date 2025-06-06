@@ -63,19 +63,19 @@ class DepartmentReaderRepository extends ServiceEntityRepository implements Depa
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function isDepartmentExists(string $name, ?string $uuid = null): bool
+    public function isDepartmentExistsWithName(string $name, ?string $departmentUUID = null): bool
     {
-        return !is_null($this->getDepartmentByName($name, $uuid));
+        return !is_null($this->getDepartmentByName($name, $departmentUUID));
     }
 
-    public function isDepartmentWithUUIDExists(string $uuid): bool
+    public function isDepartmentExistsWithUUID(string $departmentUUID): bool
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('d')
             ->from(Department::class, 'd')
             ->where('d.' . Department::COLUMN_UUID . ' = :uuid')
-            ->setParameter('uuid', $uuid);
+            ->setParameter('uuid', $departmentUUID);
 
         return null !== $qb->getQuery()->getOneOrNullResult();
     }

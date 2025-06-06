@@ -131,7 +131,7 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
         return !is_null($this->getCompanyByREGON($regon, $uuid));
     }
 
-    public function isCompanyWithUUIDExists(string $uuid): bool
+    public function isCompanyExistsWithUUID(string $uuid): bool
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select('c')

@@ -28,7 +28,7 @@ class UniqueDepartmentNameValidator extends ConstraintValidator
         $object = $this->context->getObject();
         $uuid = property_exists($object, 'uuid') ? $object->uuid : null;
 
-        if ($this->departmentReaderRepository->isDepartmentExists($value, $uuid)) {
+        if ($this->departmentReaderRepository->isDepartmentExistsWithName($value, $uuid)) {
             $this->context->buildViolation($this->translator->trans($constraint->message, [], 'departments'))
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();

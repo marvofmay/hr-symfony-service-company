@@ -24,7 +24,7 @@ class ExistingCompanyUUIDValidator extends ConstraintValidator
             return;
         }
 
-        $exists = $this->companyReaderRepository->isCompanyWithUUIDExists($value);
+        $exists = $this->companyReaderRepository->isCompanyExistsWithUUID($value);
         if (!$exists) {
             $message = $this->translator->trans(
                 $constraint->message['uuidNotExists'],

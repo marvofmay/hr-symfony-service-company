@@ -16,4 +16,5 @@ interface CompanyReaderInterface
     public function isCompanyExistsWithFullName(string $name, ?string $uuid = null): bool;
     public function isCompanyExistsWithNIP(string $nip, ?string $uuid = null): bool;
     public function isCompanyExistsWithREGON(string $regon, ?string $uuid = null): bool;
+    public function isCompanyExistsWithUUID(string $uuid): bool;
 }

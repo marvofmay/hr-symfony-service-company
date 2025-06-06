@@ -1,7 +1,46 @@
 department:
   uuid:
     notExists: "Departament o podanym UUID nie istnieje :uuid"
+    notFound: "Departament o podanym UUID nie istnieje"
+    required: "UUID departamentu jest wymagane"
   name:
     alreadyExists: "Departament o podanej nazwie już istnieje"
+    required: "Nazwa departamentu jest wymagana"
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
+    expectedUniqueDepartmentNameConstraint: "Oczekiwano unikalnej nazwy firmy"
+  description:
+    minimumLength: "Minimalnie znaków :qty"
+    maximumLength: "Maksymalnie znaków :qty"
+  active:
+    invalid: "Nieprawidłowa wartość pola active"
   add:
-    success: "Dapartament został pomyślnie zapisany"
+    success: "Departament został pomyślnie zapisany"
+    error: "Wystąpił błąd - departament nie został dodany"
+  update:
+    success: "Departament został pomyślnie zaktualizowany"
+    error: "Wystąpił błąd - departament nie został zaktualizowany"
+  delete:
+    success: "Departament został pomyślnie usunięty"
+    error: "Wystąpił błąd - departament nie został usunięty"
+    multiple:
+      success: "Departamenty zostały pomyślnie usunięte"
+  import:
+    queued: "Plik został dodany do kolejki importu departamentów. Otrzymasz powiadmienie o statusie importu."
+    success: "Departamenty zostały pomyślnie zaimportowane"
+    error: "Wystąpił błąd - departamenty nie zostały zaimportowane"
+  view:
+    error: "Wystapił błąd przy pobieraniu wybranego departamentu"
+  list:
+    error: "Wystapił błąd przy pobieraniu listy departamentów"
+  address:
+    street:
+      required: "Ulica wymagana"
+    postcode:
+      required: "Kod pcztowy wymagany"
+    city:
+      required: "Miasto wymagane"
+    country:
+      required: "Kraj wymagany"
+  companyUUID:
+    required: "UUID firmy wymagane"
