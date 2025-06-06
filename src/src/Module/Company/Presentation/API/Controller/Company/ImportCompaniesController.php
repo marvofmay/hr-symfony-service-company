@@ -26,7 +26,6 @@ use App\Module\System\Presentation\API\Action\Import\AskImportAction;
 use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -68,7 +67,6 @@ class ImportCompaniesController extends AbstractController
         ParameterBagInterface           $params,
     ): JsonResponse
     {
-        $this->entityManager->beginTransaction();
         try {
             if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::COMPANY)) {
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
@@ -90,8 +88,6 @@ class ImportCompaniesController extends AbstractController
             $createImportAction->execute(ImportKindEnum::IMPORT_COMPANIES, ImportStatusEnum::PENDING, $file, $employee);
             $import = $askImportAction->ask($file);
 
-            $this->entityManager->commit();
-
             $errors = $importCompaniesValidator->validate($import);
             if (!empty($errors)) {
                 $updateImportAction->execute($import, ImportStatusEnum::FAILED);
@@ -112,16 +108,9 @@ class ImportCompaniesController extends AbstractController
 
             $importCompaniesAction->execute(new ImportDTO($import->getUUID()->toString()));
 
-            if ($import->getStatus() === ImportStatusEnum::DONE) {
-                return new JsonResponse(['message' => $this->translator->trans('company.import.success', [], 'companies'), 'errors' => [],], Response::HTTP_CREATED);
-            } else {
-                $importLogs = $askImportLogsAction->ask($import);
-                $errors = ImportLogErrorTransformer::map($importLogs);
+            return new JsonResponse(['message' => $this->translator->trans('company.import.queued', [], 'companies'), 'errors' => [],], Response::HTTP_CREATED);
 
-                return new JsonResponse(['message' => $this->translator->trans('company.import.error', [], 'companies'), 'errors' => $errors,], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
         } catch (\Exception $error) {
-            $this->entityManager->rollback();
             $message = sprintf('%s. %s', $this->translator->trans('company.import.error', [], 'companies'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);
 

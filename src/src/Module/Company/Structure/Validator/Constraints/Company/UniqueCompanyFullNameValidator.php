@@ -28,7 +28,7 @@ class UniqueCompanyFullNameValidator extends ConstraintValidator
         $object = $this->context->getObject();
         $uuid = property_exists($object, 'uuid') ? $object->uuid : null;
 
-        if ($this->companyReaderRepository->isCompanyExists($value, $uuid)) {
+        if ($this->companyReaderRepository->isCompanyExistsWithFullName($value, $uuid)) {
             $this->context->buildViolation($this->translator->trans($constraint->message, [], 'companies'))
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();

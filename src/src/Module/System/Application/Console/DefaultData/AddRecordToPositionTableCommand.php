@@ -41,8 +41,8 @@ class AddRecordToPositionTableCommand extends Command
         $output->writeln('Checking and updating Position table...');
         $positionRepository = $this->entityManager->getRepository(Position::class);
 
-        $existingPositions = $positionRepository->createQueryBuilder('p')
-            ->select('p.name')
+        $existingPositions = $positionRepository->createQueryBuilder(Position::ALIAS)
+            ->select(Position::ALIAS . '.name')
             ->getQuery()
             ->getArrayResult();
 

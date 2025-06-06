@@ -4,37 +4,138 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
+use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Entity\Contact;
+use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Interface\Address\AddressWriterInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
+use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Contact\Writer\ContactWriterRepository;
+use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Industry\Reader\IndustryReaderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
-readonly class CompanyMultipleCreator
+final class CompanyMultipleCreator
 {
-    public function __construct(private CompanyWriterInterface $companyWriterRepository, private CompanyReaderInterface $companyReaderRepository,)
+    private Company $company;
+
+    public function __construct(
+        private readonly CompanyWriterInterface $companyWriterRepository,
+        private readonly CompanyReaderInterface $companyReaderRepository,
+        private readonly IndustryReaderRepository $industryReaderRepository,
+        private readonly ContactWriterRepository $contactWriterRepository,
+        private readonly AddressWriterInterface $addressWriterRepository,
+    )
     {
     }
 
     public function multipleCreate(array $data): void
     {
+        $this->setCompanies($data);
+    }
+
+    private function setCompanies(array $data): void
+    {
         $companies = new ArrayCollection();
         foreach ($data as $item) {
-            $company = new Company();
-            $company->setFullName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME]);
-            $company->setShortName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_SHORT_NAME]);
-            if (null !== $item[2]) {
-                $parentCompany = $this->companyReaderRepository->getCompanyByUUID($item[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_UUID]);
-                if ($parentCompany instanceof Company) {
-                    $company->setParentCompany($parentCompany);
-                }
-            }
-            $company->setNip((string)$item[ImportCompaniesFromXLSX::COLUMN_NIP]);
-            $company->setRegon((string)$item[ImportCompaniesFromXLSX::COLUMN_REGON]);
-            $company->setActive((bool)$item[ImportCompaniesFromXLSX::COLUMN_ACTIVE]);
+            $this->setCompany($item);
+            $this->setMainCompanyData($item);
+            $this->setAddress($item);
+            $this->setContacts($item);
+            $this->setRelations($item);
 
-            $companies[] = $company;
+            $companies[] = $this->company;
         }
 
         $this->companyWriterRepository->saveCompaniesInDB($companies);
+    }
+
+    private function setCompany(array $item): void
+    {
+        if (null === $item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID]) {
+            $this->company = new Company();
+        } else {
+            $company = $this->companyReaderRepository->getCompanyByUUID($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID]);
+            if ($company === null) {
+                $this->company = new Company();
+            } else {
+                $this->company = $company;
+            }
+        }
+    }
+
+    private function setMainCompanyData(array $item): void
+    {
+        $this->company->setFullName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME]);
+        $this->company->setShortName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_SHORT_NAME]);
+        $this->company->setNip((string)$item[ImportCompaniesFromXLSX::COLUMN_NIP]);
+        $this->company->setRegon((string)$item[ImportCompaniesFromXLSX::COLUMN_REGON]);
+        $this->company->setActive((bool)$item[ImportCompaniesFromXLSX::COLUMN_ACTIVE]);
+    }
+
+    private function setAddress(array $item): void
+    {
+        if (null !== $item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID]) {
+            $address = $this->company->getAddress();
+            $this->addressWriterRepository->deleteAddressInDB($address, Address::HARD_DELETED_AT);
+        }
+
+        $address = new Address();
+        $address->setStreet($item[ImportCompaniesFromXLSX::COLUMN_STREET]);
+        $address->setPostcode($item[ImportCompaniesFromXLSX::COLUMN_POSTCODE]);
+        $address->setCity($item[ImportCompaniesFromXLSX::COLUMN_CITY]);
+        $address->setCountry($item[ImportCompaniesFromXLSX::COLUMN_COUNTRY]);
+
+        $this->company->setAddress($address);
+    }
+
+    private function setContacts(array $item): void
+    {
+        if (null !== $item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID]) {
+            foreach ([ContactTypeEnum::PHONE, ContactTypeEnum::EMAIL, ContactTypeEnum::WEBSITE] as $enum) {
+                $contacts = $this->company->getContacts($enum);
+                $this->contactWriterRepository->deleteContactsInDB($contacts, Contact::HARD_DELETED_AT);
+            }
+        }
+
+        if (null !== $item[ImportCompaniesFromXLSX::COLUMN_PHONE]) {
+            $contact = new Contact();
+            $contact->setType(ContactTypeEnum::PHONE->value);
+            $contact->setData($item[ImportCompaniesFromXLSX::COLUMN_PHONE]);
+            $contact->setActive(true);
+            $this->company->addContact($contact);
+        }
+
+        if (null !== $item[ImportCompaniesFromXLSX::COLUMN_EMAIL]) {
+            $contact = new Contact();
+            $contact->setType(ContactTypeEnum::EMAIL->value);
+            $contact->setData($item[ImportCompaniesFromXLSX::COLUMN_EMAIL]);
+            $contact->setActive(true);
+            $this->company->addContact($contact);
+        }
+
+        if (null !== $item[ImportCompaniesFromXLSX::COLUMN_WEBSITE]) {
+            $contact = new Contact();
+            $contact->setType(ContactTypeEnum::WEBSITE->value);
+            $contact->setData($item[ImportCompaniesFromXLSX::COLUMN_WEBSITE]);
+            $contact->setActive(true);
+            $this->company->addContact($contact);
+        }
+    }
+
+    private function setRelations(array $item): void
+    {
+        $industry = $this->industryReaderRepository->getIndustryByUUID($item[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID]);
+        if ($industry instanceof Industry) {
+            $this->company->setIndustry($industry);
+        }
+
+        if (null !== $item[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_UUID]) {
+            $parentCompany = $this->companyReaderRepository->getCompanyByUUID($item[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_UUID]);
+            if ($parentCompany instanceof Company) {
+                $this->company->setParentCompany($parentCompany);
+            }
+        }
     }
 }

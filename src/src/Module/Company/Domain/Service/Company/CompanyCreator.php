@@ -35,7 +35,6 @@ class CompanyCreator
     {
         $this->company = new Company();
         $this->setCompany($command);
-        $this->setCompanyRelations($command);
 
         $this->companyWriterRepository->saveCompanyInDB($this->company);
     }

@@ -68,6 +68,38 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    public function getCompanyByNIP(string $nip, ?string $uuid = null): ?Company
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('c')
+            ->from(Company::class, 'c')
+            ->where('c.' . Company::COLUMN_NIP . ' = :nip')
+            ->setParameter('nip', $nip);
+
+        if (null !== $uuid) {
+            $qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
+                ->setParameter('uuid', $uuid);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function getCompanyByREGON(string $regon, ?string $uuid = null): ?Company
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select('c')
+            ->from(Company::class, 'c')
+            ->where('c.' . Company::COLUMN_REGON . ' = :regon')
+            ->setParameter('regon', $regon);
+
+        if (null !== $uuid) {
+            $qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
+                ->setParameter('uuid', $uuid);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     public function getCompanyByShortName(string $shortName, ?string $uuid = null): ?Company
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -84,9 +116,19 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function isCompanyExists(string $name, ?string $uuid = null): bool
+    public function isCompanyExistsWithFullName(string $name, ?string $uuid = null): bool
     {
         return !is_null($this->getCompanyByFullName($name, $uuid));
+    }
+
+    public function isCompanyExistsWithNIP(string $nip, ?string $uuid = null): bool
+    {
+        return !is_null($this->getCompanyByNIP($nip, $uuid));
+    }
+
+    public function isCompanyExistsWithREGON(string $regon, ?string $uuid = null): bool
+    {
+        return !is_null($this->getCompanyByREGON($regon, $uuid));
     }
 
     public function isCompanyWithUUIDExists(string $uuid): bool

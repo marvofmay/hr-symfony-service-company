@@ -46,10 +46,10 @@ class AddRecordToCompanyTableCommand extends Command
         $data = $this->companyFakeData->getDefaultData();
 
         $companyRepository = $this->entityManager->getRepository(Company::class);
-        $existingCompany = $companyRepository->createQueryBuilder('c')
-            ->where('c.fullName = :fullName')
-            ->andWhere('c.nip = :nip')
-            ->andWhere('c.regon = :regon')
+        $existingCompany = $companyRepository->createQueryBuilder(Company::ALIAS)
+            ->where(Company::ALIAS . '.fullName = :fullName')
+            ->andWhere(Company::ALIAS . '.nip = :nip')
+            ->andWhere(Company::ALIAS . '.regon = :regon')
             ->setParameters(new ArrayCollection([
                 new Parameter('fullName', $data['fullName']),
                 new Parameter('nip', $data['nip']),

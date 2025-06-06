@@ -12,9 +12,11 @@ company:
   nip:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
+    alreadyExists: "Firma o podanym NIP już istnieje"
   regon:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
+    alreadyExists: "Firma o podanym REGON już istnieje"
   industryUUID:
     required: "Wymagane uuid branży"
   description:
@@ -32,11 +34,20 @@ company:
     multiple:
       success: "Firmy zostały pomyślnie usunięte"
   import:
-    queued: "Plik została dodany do kolejki impotrtu firm. Otrzymasz powiadmienie o statusie importu."
+    queued: "Plik został dodany do kolejki importu firm. Otrzymasz powiadmienie o statusie importu."
     success: "Firmy zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - firmy nie zostały zaimportowane"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej firmy"
   list:
     error: "Wystapił błąd przy pobieraniu listy firm"
+  address:
+    street:
+      required: "Ulica wymagana"
+    postcode:
+      required: "Kod pcztowy wymagany"
+    city:
+      required: "Miasto wymagane"
+    country:
+      required: "Kraj wymagany"
 
