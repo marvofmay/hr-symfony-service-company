@@ -67,11 +67,19 @@ class ImportCompaniesFromXLSX extends XLSXIterator
             $errorMessages[] = $errorMessage;
         }
 
-        if ($this->isCompanyExistsWithFullName($fullName, $companyUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('company.fullName.alreadyExists', [], 'companies');
+        if (is_string($companyUUID)) {
+            if ($this->isCompanyExistsWithFullName($fullName, $companyUUID)) {
+                $errorMessages[] = $this->formatErrorMessage('company.fullName.alreadyExists', [], 'companies');
+            }
         }
 
-        if (!$this->isParentCompanyExists($parentUUID)) {
+        if (is_int($companyUUID)) {
+            if ($this->isCompanyExistsWithFullName($fullName)) {
+                $errorMessages[] = $this->formatErrorMessage('company.fullName.alreadyExists', [], 'companies');
+            }
+        }
+
+        if (is_string($parentUUID) && !$this->isParentCompanyExists($parentUUID)) {
             $errorMessages[] = $this->formatErrorMessage('company.parent.notExists', [], 'companies');
         }
 
@@ -87,16 +95,32 @@ class ImportCompaniesFromXLSX extends XLSXIterator
             $errorMessages[] = $this->formatErrorMessage($errorMessage, [], 'companies');
         }
 
-        if ($this->isCompanyExistsWithNIP((string)$nip, $companyUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('company.nip.alreadyExists', [], 'companies');
+        if (is_string($companyUUID) || null === $companyUUID) {
+            if ($this->isCompanyExistsWithNIP((string)$nip, $companyUUID)) {
+                $errorMessages[] = $this->formatErrorMessage('company.nip.alreadyExists', [], 'companies');
+            }
+        }
+
+        if (is_int($companyUUID)) {
+            if ($this->isCompanyExistsWithNIP((string)$nip)) {
+                $errorMessages[] = $this->formatErrorMessage('company.nip.alreadyExists', [], 'companies');
+            }
         }
 
         if ($errorMessage = $this->validateREGON((string)$regon)) {
             $errorMessages[] = $this->formatErrorMessage($errorMessage, [], 'companies');
         }
 
-        if ($this->isCompanyExistsWithREGON((string)$regon, $companyUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('company.regon.alreadyExists', [], 'companies');
+        if (is_string($companyUUID) || null === $companyUUID) {
+            if ($this->isCompanyExistsWithREGON((string)$regon, $companyUUID)) {
+                $errorMessages[] = $this->formatErrorMessage('company.regon.alreadyExists', [], 'companies');
+            }
+        }
+
+        if (is_int($companyUUID)) {
+            if ($this->isCompanyExistsWithREGON((string)$regon)) {
+                $errorMessages[] = $this->formatErrorMessage('company.regon.alreadyExists', [], 'companies');
+            }
         }
 
         if ($errorMessage = $this->validateActive($active)) {
@@ -135,7 +159,7 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function isCompanyExistsWithFullName(string $fullName, ?string $companyUUID): bool
+    private function isCompanyExistsWithFullName(string $fullName, ?string $companyUUID = null): bool
     {
         return $this->companyReaderRepository->isCompanyExistsWithFullName($fullName, $companyUUID);
     }
@@ -150,12 +174,12 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function isCompanyExistsWithNIP(string $nip, ?string $companyUUID): bool
+    private function isCompanyExistsWithNIP(string $nip, ?string $companyUUID = null): bool
     {
         return $this->companyReaderRepository->isCompanyExistsWithNIP($nip, $companyUUID);
     }
 
-    private function isCompanyExistsWithREGON(string $regon, ?string $companyUUID): bool
+    private function isCompanyExistsWithREGON(string $regon, ?string $companyUUID = null): bool
     {
         return $this->companyReaderRepository->isCompanyExistsWithREGON($regon, $companyUUID);
     }

@@ -26,7 +26,6 @@ use App\Module\System\Presentation\API\Action\Import\AskImportAction;
 use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
-use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -44,7 +43,6 @@ class ImportCompaniesController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-        private readonly EntityManagerInterface $entityManager,
     )
     {
     }

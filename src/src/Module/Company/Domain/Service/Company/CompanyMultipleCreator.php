@@ -38,14 +38,26 @@ final class CompanyMultipleCreator
     private function setCompanies(array $data): void
     {
         $companies = new ArrayCollection();
+        $temporaryCompanyMap = [];
+
         foreach ($data as $item) {
             $this->setCompany($item);
             $this->setMainCompanyData($item);
             $this->setAddress($item);
             $this->setContacts($item);
-            $this->setRelations($item);
+
+            if (is_int($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID])) {
+                $temporaryCompanyMap[$item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID]] = $this->company;
+            }
 
             $companies[] = $this->company;
+        }
+
+        foreach ($data as $index => $item) {
+            $company = $companies[$index];
+            $this->company = $company;
+
+            $this->setRelations($item, $temporaryCompanyMap);
         }
 
         $this->companyWriterRepository->saveCompaniesInDB($companies);
@@ -53,9 +65,9 @@ final class CompanyMultipleCreator
 
     private function setCompany(array $item): void
     {
-        if (null === $item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID]) {
+        if (null === $item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID] || is_int($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID])) {
             $this->company = new Company();
-        } else {
+        } else if (is_string($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID])) {
             $company = $this->companyReaderRepository->getCompanyByUUID($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID]);
             if ($company === null) {
                 $this->company = new Company();
@@ -76,7 +88,7 @@ final class CompanyMultipleCreator
 
     private function setAddress(array $item): void
     {
-        if (null !== $item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID]) {
+        if (null !== $item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID] && is_string($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID])) {
             $address = $this->company->getAddress();
             $this->addressWriterRepository->deleteAddressInDB($address, Address::HARD_DELETED_AT);
         }
@@ -124,18 +136,25 @@ final class CompanyMultipleCreator
         }
     }
 
-    private function setRelations(array $item): void
+    private function setRelations(array $item, array $temporaryCompanyMap): void
     {
         $industry = $this->industryReaderRepository->getIndustryByUUID($item[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID]);
         if ($industry instanceof Industry) {
             $this->company->setIndustry($industry);
         }
 
-        if (null !== $item[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_UUID]) {
-            $parentCompany = $this->companyReaderRepository->getCompanyByUUID($item[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_UUID]);
-            if ($parentCompany instanceof Company) {
-                $this->company->setParentCompany($parentCompany);
+        $parentCompanyUUID = $item[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_UUID] ?? null;
+
+        if ($parentCompanyUUID !== null) {
+            if (is_int($parentCompanyUUID) && isset($temporaryCompanyMap[$parentCompanyUUID])) {
+                $this->company->setParentCompany($temporaryCompanyMap[$parentCompanyUUID]);
+            } elseif (is_string($parentCompanyUUID)) {
+                $parentCompany = $this->companyReaderRepository->getCompanyByUUID($parentCompanyUUID);
+                if ($parentCompany instanceof Company) {
+                    $this->company->setParentCompany($parentCompany);
+                }
             }
         }
     }
+
 }
