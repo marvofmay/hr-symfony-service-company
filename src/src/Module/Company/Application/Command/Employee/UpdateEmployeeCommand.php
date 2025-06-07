@@ -12,7 +12,6 @@ class UpdateEmployeeCommand implements CommandInterface
 {
     public function __construct(
         public Employee $employee,
-        public string $companyUUID,
         public string $departmentUUID,
         public string $positionUUID,
         public string $contractTypeUUID,

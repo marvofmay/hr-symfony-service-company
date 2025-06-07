@@ -41,7 +41,6 @@ class Company
     public const COLUMN_DELETED_AT = 'deletedAt';
     public const RELATION_INDUSTRY = 'industry';
     public const RELATION_DEPARTMENTS = 'departments';
-    public const RELATION_EMPLOYEES = 'employees';
     public const RELATION_PARENT_COMPANY = 'parentCompany';
     public const ALIAS = 'company';
 
@@ -108,17 +107,12 @@ class Company
     #[Groups('company_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
-    #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
-    #[Groups('company_info')]
-    private Collection $employees;
-
     #[ORM\OneToMany(targetEntity: Department::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
     private Collection $departments;
 
     public function __construct()
     {
         $this->departments = new ArrayCollection();
-        $this->employees = new ArrayCollection();
         $this->contacts = new ArrayCollection();
     }
 
@@ -238,29 +232,6 @@ class Company
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
-    }
-
-    public function getEmployees(): Collection
-    {
-        return $this->employees;
-    }
-
-    public function addEmployee(Employee $employee): void
-    {
-        if (!$this->employees->contains($employee)) {
-            $this->employees->add($employee);
-            $employee->setCompany($this);
-        }
-    }
-
-    public function removeEmployee(Employee $employee): void
-    {
-        if ($this->employees->contains($employee)) {
-            $this->employees->removeElement($employee);
-            if ($employee->getCompany() === $this) {
-                $employee->setCompany(null);
-            }
-        }
     }
 
     public function getDepartments(): Collection

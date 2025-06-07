@@ -7,53 +7,16 @@ namespace App\Module\Company\Domain\DTO\Employee;
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
-use App\Module\Company\Structure\Validator\Constraints\Company\ExistingCompanyUUID;
 use App\Module\Company\Structure\Validator\Constraints\ContractType\ExistingContractTypeUUID;
 use App\Module\Company\Structure\Validator\Constraints\Department\ExistingDepartmentUUID;
 use App\Module\Company\Structure\Validator\Constraints\Employee\ExistingEmployeeUUID;
 use App\Module\Company\Structure\Validator\Constraints\Employee\UniqueEmployeeEmail;
 use App\Module\Company\Structure\Validator\Constraints\Position\ExistingPositionUUID;
 use App\Module\Company\Structure\Validator\Constraints\Role\ExistingRoleUUID;
-use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[OA\Schema(
-    required: [
-        'companyUUID',
-        'departmentUUID',
-        'positionUUID',
-        'contractTypeUUID',
-        'roleUUID',
-        'email',
-        'firstName',
-        'lastName',
-        'pesel',
-        'employmentFrom',
-        'address',
-    ],
-)]
 class CreateDTO
 {
-    #[OA\Property(
-        description: 'UUID firmy pracownika',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-    )]
-    #[NotBlank(message: [
-        'text' => 'company.uuid.required',
-        'domain' => 'companies',
-    ])]
-    #[Assert\Uuid(message: 'company.invalidUUID')]
-    #[ExistingCompanyUUID(
-        message: ['uuidNotExists' => 'company.uuid.notExists', 'domain' => 'companies']
-    )]
-    public string $companyUUID;
-
-    #[OA\Property(
-        description: 'UUID departamentu pracownika',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-    )]
     #[NotBlank(message: [
         'text' => 'department.uuid.required',
         'domain' => 'departments',
@@ -64,11 +27,6 @@ class CreateDTO
     )]
     public string $departmentUUID;
 
-    #[OA\Property(
-        description: 'UUID stanowiska pracownika',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-    )]
     #[Assert\Uuid(message: 'position.invalidUUID')]
     #[NotBlank(message: [
         'text' => 'position.uuid.required',
@@ -79,11 +37,6 @@ class CreateDTO
     )]
     public string $positionUUID;
 
-    #[OA\Property(
-        description: 'UUID formy zatrudnienia pracownika',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-    )]
     #[Assert\Uuid(message: 'contractType.invalidUUID')]
     #[NotBlank(message: [
         'text' => 'contractType.uuid.required',
@@ -94,11 +47,6 @@ class CreateDTO
     )]
     public string $contractTypeUUID;
 
-    #[OA\Property(
-        description: 'UUID roli w serwisie internetowym pracownika',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-    )]
     #[Assert\Uuid(message: 'role.invalidUUID')]
     #[NotBlank(message: [
         'text' => 'role.uuid.required',
@@ -109,24 +57,12 @@ class CreateDTO
     )]
     public string $roleUUID;
 
-    #[OA\Property(
-        description: 'UUID bezpośredniego przełożonego pracownika',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-        nullable: true
-    )]
     #[Assert\Uuid(message: 'department.invalidUUID')]
     #[ExistingEmployeeUUID(
         message: ['uuidNotExists' => 'employee.uuid.notExists', 'domain' => 'employees']
     )]
     public ?string $parentEmployeeUUID = null;
 
-    #[OA\Property(
-        description: 'unikalny indentyfikator pracownika w firmie',
-        type: 'string',
-        example: 'QET-1234-JK#',
-        nullable: true
-    )]
     public ?string $externalUUID;
 
     #[NotBlank(message: [
@@ -137,13 +73,6 @@ class CreateDTO
     #[UniqueEmployeeEmail]
     public string $email;
 
-    #[OA\Property(
-        description: 'Imię tworzonego użytkownika',
-        type: 'string',
-        maxLength: 50,
-        minLength: 3,
-        example: 'Jan',
-    )]
     #[NotBlank(message: [
         'text' => 'Employee.firstName.required',
         'domain' => 'employees',
@@ -155,13 +84,6 @@ class CreateDTO
     ])]
     public string $firstName;
 
-    #[OA\Property(
-        description: 'Nazwisko tworzonego użytkownika',
-        type: 'string',
-        maxLength: 50,
-        minLength: 3,
-        example: 'Jan',
-    )]
     #[NotBlank(message: [
         'text' => 'Employee.lastName.required',
         'domain' => 'employees',
@@ -192,11 +114,6 @@ class CreateDTO
     #[Assert\Date]
     public ?string $employmentTo = null;
 
-    #[OA\Property(
-        description: 'Określa, czy pracownik jest aktywny. Domyślnie wartość to true.',
-        type: 'boolean',
-        example: true
-    )]
     #[Assert\Type(
         type: 'bool',
     )]
@@ -217,11 +134,6 @@ class CreateDTO
     #[Assert\NotBlank]
     #[Assert\Valid]
     public AddressDTO $address;
-
-    public function getCompanyUUID(): ?string
-    {
-        return $this->companyUUID;
-    }
 
     public function getDepartmentUUID(): ?string
     {

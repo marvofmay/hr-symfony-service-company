@@ -8,7 +8,6 @@ use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
 use App\Module\Company\Application\Command\Employee\CreateEmployeeCommand;
 use App\Module\Company\Domain\Entity\Address;
-use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Entity\Department;
@@ -17,7 +16,6 @@ use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Entity\User;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
-use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
@@ -32,7 +30,6 @@ class EmployeeCreator
     protected ArrayCollection $contacts;
 
     public function __construct(
-        protected Company $company,
         protected Department $department,
         protected Employee $employee,
         protected ?Employee $parentEmployee,
@@ -42,7 +39,6 @@ class EmployeeCreator
         protected User $user,
         protected Address $address,
         protected EmployeeWriterInterface $employeeWriterRepository,
-        protected CompanyReaderInterface $companyReaderRepository,
         protected DepartmentReaderInterface $departmentReaderRepository,
         protected EmployeeReaderInterface $employeeReaderRepository,
         protected ContractTypeReaderInterface $contractTypeReaderRepository,
@@ -61,7 +57,6 @@ class EmployeeCreator
 
     protected function setEmployee(CommandInterface $command): void
     {
-        $this->setCompany($command->companyUUID);
         $this->setDepartment($command->departmentUUID);
         $this->setRole($command->roleUUID);
         $this->setPosition($command->positionUUID);
@@ -90,7 +85,6 @@ class EmployeeCreator
 
     protected function setEmployeeRelations(): void
     {
-        $this->employee->setCompany($this->company);
         $this->employee->setDepartment($this->department);
         $this->employee->setPosition($this->position);
         $this->employee->setContractType($this->contractType);
@@ -107,11 +101,6 @@ class EmployeeCreator
         }
 
         $this->employee->setAddress($this->address);
-    }
-
-    protected function setCompany(string $companyUUID): void
-    {
-        $this->company = $this->companyReaderRepository->getCompanyByUUID($companyUUID);
     }
 
     protected function setDepartment(string $departmentUUID): void

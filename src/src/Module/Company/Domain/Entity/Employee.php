@@ -67,10 +67,6 @@ class Employee
     #[Groups('employee_info')]
     private ?string $externalUUID = null;
 
-    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'employees')]
-    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    private ?Company $company;
-
     #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'employees')]
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private ?Department $department;
@@ -183,16 +179,6 @@ class Employee
         if ($user && $user->getEmployee() !== $this) {
             $user->setEmployee($this);
         }
-    }
-
-    public function getCompany(): Company
-    {
-        return $this->company;
-    }
-
-    public function setCompany(?Company $company): void
-    {
-        $this->company = $company;
     }
 
     public function getDepartment(): ?Department

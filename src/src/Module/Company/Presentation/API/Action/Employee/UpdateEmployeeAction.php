@@ -20,8 +20,7 @@ readonly class UpdateEmployeeAction
         $employee = $this->employeeReaderRepository->getEmployeeByUUID($updateDTO->getUUID());
         $this->commandBus->dispatch(
             new UpdateEmployeeCommand(
-                $employee, 
-                $updateDTO->getCompanyUUID(),
+                $employee,
                 $updateDTO->getDepartmentUUID(),
                 $updateDTO->getPositionUUID(),
                 $updateDTO->getContractTypeUUID(),

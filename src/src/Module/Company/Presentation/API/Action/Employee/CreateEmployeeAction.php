@@ -18,7 +18,6 @@ readonly class CreateEmployeeAction
     {
         $this->commandBus->dispatch(
             new CreateEmployeeCommand(
-                $createDTO->getCompanyUUID(),
                 $createDTO->getDepartmentUUID(),
                 $createDTO->getPositionUUID(),
                 $createDTO->getContractTypeUUID(),

@@ -40,7 +40,7 @@ class EmployeeDataTransformer
     private function transformRelation(Employee $employee, string $relation): ?array
     {
         return match ($relation) {
-            Employee::RELATION_COMPANY => $this->transformCompany($employee->getCompany()),
+            Employee::RELATION_COMPANY => $this->transformCompany($employee->getDepartment()->getCompany()),
             Employee::RELATION_DEPARTMENT => $this->transformDepartment($employee->getDepartment()),
             Employee::RELATION_PARENT_EMPLOYEE => $this->transformParentEmployee($employee->getParentEmployee()),
             Employee::RELATION_POSITION => $this->transformPosition($employee->getPosition()),
