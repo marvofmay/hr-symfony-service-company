@@ -1,4 +1,8 @@
 employee:
+  uuid:
+    notFound: "Pracownik o podanym UUID nie istnieje"
+    notExists: "Pracownik o podanym UUID nie istnieje :uuid"
+    required: "UUID pracownika jest wymagane"
   email:
     alreadyExists: "Pracownik o podanym emailu już istnieje"
     required: "Email pracownika jest wymagany"

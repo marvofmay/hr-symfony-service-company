@@ -85,7 +85,7 @@ class ImportDepartmentsController extends AbstractController
             $uploadFileAction->execute($uploadFileDTO);
             $createFileAction->execute($fileName, $uploadFilePath, $employee);
             $file = $askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
-            $createImportAction->execute(ImportKindEnum::IMPORT_COMPANIES, ImportStatusEnum::PENDING, $file, $employee);
+            $createImportAction->execute(ImportKindEnum::IMPORT_DEPARTMENTS, ImportStatusEnum::PENDING, $file, $employee);
             $import = $askImportAction->ask($file);
 
             $errors = $importDepartmentsValidator->validate($import);

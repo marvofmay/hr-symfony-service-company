@@ -23,16 +23,10 @@ class EmployeeReaderRepository extends ServiceEntityRepository implements Employ
 
     public function getEmployeeByUUID(string $uuid): ?Employee
     {
-        $position = $this->getEntityManager()
+        return $this->getEntityManager()
             ->createQuery('SELECT e FROM ' . Employee::class . ' e WHERE e.' . Employee::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
-
-        if (!$position) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('employee.uuid.notFound', [], 'employees'), $uuid));
-        }
-
-        return $position;
     }
 
     public function getEmployeesByUUID(array $selectedUUID): Collection
@@ -45,7 +39,6 @@ class EmployeeReaderRepository extends ServiceEntityRepository implements Employ
             ->createQuery('SELECT e FROM ' . Employee::class . ' e WHERE e.' . Employee::COLUMN_UUID . ' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID)
             ->getResult();
-
 
         if (count($employees) !== count($selectedUUID)) {
             $missingUuids = array_diff($selectedUUID, array_map(fn($employee) => $employee->getUUID(), $employees));
