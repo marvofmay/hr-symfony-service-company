@@ -19,23 +19,25 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportEmployeesFromXLSX extends XLSXIterator
 {
-    public const COLUMN_UUID                 = 0;
-    public const COLUMN_PARENT_EMPLOYEE_UUID = 1;
-    public const COLUMN_DEPARTMENT_UUID      = 2;
-    public const COLUMN_POSITION_UUID        = 3;
-    public const COLUMN_CONTACT_TYPE_UUID    = 4;
-    public const COLUMN_ROLE_UUID            = 5;
+    public const COLUMN_EMPLOYEE_UUID        = 0;
+    public const COLUMN_DEPARTMENT_UUID      = 1;
+    public const COLUMN_POSITION_UUID        = 2;
+    public const COLUMN_CONTACT_TYPE_UUID    = 3;
+    public const COLUMN_ROLE_UUID            = 4;
+    public const COLUMN_PARENT_EMPLOYEE_UUID = 5;
     public const COLUMN_EXTERNAL_UUID        = 6;
     public const COLUMN_FIRST_NAME           = 7;
     public const COLUMN_LAST_NAME            = 8;
     public const COLUMN_EMPLOYMENT_FROM      = 9;
-    public const COLUMN_PESEL                = 10;
-    public const COLUMN_ACTIVE               = 11;
-    public const COLUMN_PHONE                = 12;
-    public const COLUMN_STREET               = 13;
-    public const COLUMN_POSTCODE             = 14;
-    public const COLUMN_CITY                 = 15;
-    public const COLUMN_COUNTRY              = 16;
+    public const COLUMN_EMPLOYMENT_TO        = 10;
+    public const COLUMN_PESEL                = 11;
+    public const COLUMN_ACTIVE               = 12;
+    public const COLUMN_EMAIL                = 13;
+    public const COLUMN_PHONE                = 14;
+    public const COLUMN_STREET               = 15;
+    public const COLUMN_POSTCODE             = 16;
+    public const COLUMN_CITY                 = 17;
+    public const COLUMN_COUNTRY              = 18;
 
     private array $errorMessages = [];
 
@@ -90,7 +92,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             $this->validateEmploymentTo((string)$employmentTo),
             $this->validatePESEL((string)$pesel),
             $this->validateActive($active),
-            $this->validateEmail($email),
+            $this->validateEmail((string)$email),
             $this->validatePhone($phone),
             $this->validateStreet($street),
             $this->validatePostcode($postcode),
@@ -270,6 +272,8 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         if (null !== $errorMessage) {
             return $this->formatErrorMessage($errorMessage, [], 'validators');
         }
+
+        return null;
     }
 
     private function validatePhone(?string $phone): ?string

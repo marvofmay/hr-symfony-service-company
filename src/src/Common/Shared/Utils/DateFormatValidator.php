@@ -19,6 +19,10 @@ final readonly class DateFormatValidator
         $dt = DateTime::createFromFormat($phpFormat, $date);
         $errors = DateTime::getLastErrors();
 
+        if (false === $errors) {
+            return null;
+        }
+
         if ($dt === false || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
             return 'date.invalidFormat';
         }

@@ -21,11 +21,11 @@ final class CompanyMultipleCreator
     private Company $company;
 
     public function __construct(
-        private readonly CompanyWriterInterface $companyWriterRepository,
-        private readonly CompanyReaderInterface $companyReaderRepository,
+        private readonly CompanyWriterInterface   $companyWriterRepository,
+        private readonly CompanyReaderInterface   $companyReaderRepository,
         private readonly IndustryReaderRepository $industryReaderRepository,
-        private readonly ContactWriterRepository $contactWriterRepository,
-        private readonly AddressWriterInterface $addressWriterRepository,
+        private readonly ContactWriterRepository  $contactWriterRepository,
+        private readonly AddressWriterInterface   $addressWriterRepository,
     )
     {
     }
@@ -148,7 +148,7 @@ final class CompanyMultipleCreator
         if ($parentCompanyUUID !== null) {
             if (is_int($parentCompanyUUID) && isset($temporaryCompanyMap[$parentCompanyUUID])) {
                 $this->company->setParentCompany($temporaryCompanyMap[$parentCompanyUUID]);
-            } elseif (is_string($parentCompanyUUID)) {
+            } else if (is_string($parentCompanyUUID)) {
                 $parentCompany = $this->companyReaderRepository->getCompanyByUUID($parentCompanyUUID);
                 if ($parentCompany instanceof Company) {
                     $this->company->setParentCompany($parentCompany);
@@ -156,5 +156,4 @@ final class CompanyMultipleCreator
             }
         }
     }
-
 }
