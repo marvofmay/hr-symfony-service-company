@@ -200,11 +200,31 @@ class ImportEmployeesFromXLSX extends XLSXIterator
 
     private function validateEmploymentFrom(?string $employmentFrom): ?string
     {
+        if (empty($employmentFrom)) {
+            return $this->formatErrorMessage('employee.employmentFrom.required', [], 'employments');
+        }
+
+        $date = \DateTime::createFromFormat('d-m-Y', $employmentFrom);
+        $errors = \DateTime::getLastErrors();
+
+        if ($date === false || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
+            return $this->formatErrorMessage('invalidDateFormat', [':requiredFormat' => 'dd-mm-yyyy'], 'validators');
+        }
+
         return null;
     }
 
     private function validateEmploymentTo(?string $employmentTo): ?string
     {
+        if (!empty($employmentTo)) {
+            $date = \DateTime::createFromFormat('d-m-Y', $employmentTo);
+            $errors = \DateTime::getLastErrors();
+
+            if ($date === false || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
+                return $this->formatErrorMessage('invalidDateFormat', [':requiredFormat' => 'dd-mm-yyyy'], 'validators');
+            }
+        }
+
         return null;
     }
 
