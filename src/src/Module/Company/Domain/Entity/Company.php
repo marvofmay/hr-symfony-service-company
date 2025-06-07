@@ -48,63 +48,49 @@ class Company
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('company_info')]
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Company::class)]
     #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    #[Groups('company_info')]
     private ?Company $parentCompany = null;
 
     #[ORM\ManyToOne(targetEntity: Industry::class, inversedBy: 'companies')]
     #[ORM\JoinColumn(name: 'industry_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('company_info')]
     private Industry $industry;
 
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
-    #[Groups('company_info')]
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
-    #[Groups('company_info')]
     private Address $address;
 
     #[ORM\Column(type: Types::STRING, length: 1000)]
     #[Assert\NotBlank]
-    #[Groups('company_info')]
     private string $fullName;
 
     #[ORM\Column(type: Types::STRING, length: 200, nullable: true)]
-    #[Groups('company_info')]
     private ?string $shortName;
 
     #[ORM\Column(type: Types::STRING, length: 20, nullable: false)]
-    #[Groups('company_info')]
     private string $nip;
 
     #[ORM\Column(type: Types::STRING, length: 20, nullable: false)]
-    #[Groups('company_info')]
     private string $regon;
 
     #[ORM\Column(type: Types::STRING, length: 500, nullable: true)]
-    #[Groups('company_info')]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
-    #[Groups('company_info')]
     private bool $active;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('company_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('company_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('company_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToMany(targetEntity: Department::class, mappedBy: 'company', cascade: ['persist', 'remove'])]

@@ -23,3 +23,5 @@ email:
 date:
   required: "Data wymagana"
   invalidFormat: "Nieprawidłowy format daty - wymagany format :dateFormat"
+import:
+  noData: "Brak danych do importu"

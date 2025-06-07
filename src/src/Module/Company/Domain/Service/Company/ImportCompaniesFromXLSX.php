@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
+use App\Common\Shared\Utils\BoolValidator;
+use App\Common\Shared\Utils\EmailValidator;
 use App\Common\Shared\Utils\NIPValidator;
 use App\Common\Shared\Utils\REGONValidator;
 use App\Common\XLSX\XLSXIterator;
@@ -30,6 +32,7 @@ class ImportCompaniesFromXLSX extends XLSXIterator
     public const int COLUMN_CITY                = 14;
     public const int COLUMN_COUNTRY             = 15;
 
+    private array $errorMessages = [];
 
     public function __construct(
         private readonly string                  $filePath,
@@ -43,13 +46,14 @@ class ImportCompaniesFromXLSX extends XLSXIterator
 
     public function validateRow(array $row): array
     {
-        $errorMessages = [];
+        $this->errorMessages = [];
+
         [
             $companyUUID,
             $fullName,
             $shortName,
             $description,
-            $parentUUID,
+            $parentCompanyUUID,
             $industryUUID,
             $nip,
             $regon,
@@ -63,157 +67,226 @@ class ImportCompaniesFromXLSX extends XLSXIterator
             $country,
         ] = $row + [null, null, null, null, null, null, null, null, false, null, null, null, null, null, null, null];
 
-        if ($errorMessage = $this->validateCompanyFullName($fullName)) {
-            $errorMessages[] = $errorMessage;
+        $validations = [
+            $this->isCompanyExists((string)$nip, (string)$regon, is_string($companyUUID) ? $companyUUID : null),
+            $this->validateCompanyUUID($companyUUID),
+            $this->validateCompanyFullName($fullName),
+            $this->validateCompanyShortName($shortName),
+            $this->validateCompanyDescription($description),
+            $this->validateParentCompanyUUID($parentCompanyUUID),
+            $this->validateIndustryUUID($industryUUID),
+            $this->validateNIP((string)$nip),
+            $this->validateREGON((string)$regon),
+            $this->validateActive($active),
+            $this->validatePhone($phone),
+            $this->validateEmail((string)$email),
+            $this->validateWebsite($website),
+            $this->validateStreet($street),
+            $this->validatePostcode($postcode),
+            $this->validateCity($city),
+            $this->validateCountry($country),
+        ];
+
+        foreach ($validations as $errorMessage) {
+            if ($errorMessage !== null) {
+                $this->errorMessages[] = $errorMessage;
+            }
+        }
+
+        return $this->errorMessages;
+    }
+
+    private function isCompanyExists($nip, $regon, $companyUUID): ?string
+    {
+        $isCompanyExists = $this->companyReaderRepository->isCompanyExists($nip, $regon, $companyUUID);
+        if ($isCompanyExists) {
+            return $this->formatErrorMessage('company.alreadyExists', [':nip' => $nip, ':regon' => $regon]);
+        }
+
+        return null;
+    }
+
+    private function validateCompanyUUID(string|int|null $companyUUID): ?string
+    {
+        if (empty($companyUUID)) {
+            return null;
         }
 
         if (is_string($companyUUID)) {
-            if ($this->isCompanyExistsWithFullName($fullName, $companyUUID)) {
-                $errorMessages[] = $this->formatErrorMessage('company.fullName.alreadyExists', [], 'companies');
+            $company = $this->companyReaderRepository->getCompanyByUUID($companyUUID);
+            if (null === $company) {
+                return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $companyUUID]);
             }
         }
 
-        if (is_int($companyUUID)) {
-            if ($this->isCompanyExistsWithFullName($fullName)) {
-                $errorMessages[] = $this->formatErrorMessage('company.fullName.alreadyExists', [], 'companies');
-            }
-        }
-
-        if (is_string($parentUUID) && !$this->isParentCompanyExists($parentUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('company.parent.notExists', [], 'companies');
-        }
-
-        if (empty($industryUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('company.industryUUID.required', [], 'companies');
-        }
-
-        if (is_string($industryUUID) && !$this->isIndustryExists($industryUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('industry.notExists', [], 'industries');
-        }
-
-        if ($errorMessage = $this->validateNIP((string)$nip)) {
-            $errorMessages[] = $this->formatErrorMessage($errorMessage, [], 'companies');
-        }
-
-        if (is_string($companyUUID) || null === $companyUUID) {
-            if ($this->isCompanyExistsWithNIP((string)$nip, $companyUUID)) {
-                $errorMessages[] = $this->formatErrorMessage('company.nip.alreadyExists', [], 'companies');
-            }
-        }
-
-        if (is_int($companyUUID)) {
-            if ($this->isCompanyExistsWithNIP((string)$nip)) {
-                $errorMessages[] = $this->formatErrorMessage('company.nip.alreadyExists', [], 'companies');
-            }
-        }
-
-        if ($errorMessage = $this->validateREGON((string)$regon)) {
-            $errorMessages[] = $this->formatErrorMessage($errorMessage, [], 'companies');
-        }
-
-        if (is_string($companyUUID) || null === $companyUUID) {
-            if ($this->isCompanyExistsWithREGON((string)$regon, $companyUUID)) {
-                $errorMessages[] = $this->formatErrorMessage('company.regon.alreadyExists', [], 'companies');
-            }
-        }
-
-        if (is_int($companyUUID)) {
-            if ($this->isCompanyExistsWithREGON((string)$regon)) {
-                $errorMessages[] = $this->formatErrorMessage('company.regon.alreadyExists', [], 'companies');
-            }
-        }
-
-        if ($errorMessage = $this->validateActive($active)) {
-            $errorMessages[] = $this->formatErrorMessage($errorMessage, [], 'companies');
-        }
-
-        if (empty($street)) {
-            $errorMessages[] = $this->formatErrorMessage('company.address.street.required', [], 'companies');
-        }
-
-        if (empty($postcode)) {
-            $errorMessages[] = $this->formatErrorMessage('company.address.postcode.required', [], 'companies');
-        }
-
-        if (empty($city)) {
-            $errorMessages[] = $this->formatErrorMessage('company.address.city.required', [], 'companies');
-        }
-
-        if (empty($country)) {
-            $errorMessages[] = $this->formatErrorMessage('company.address.country.required', [], 'companies');
-        }
-
-        return $errorMessages;
+        return null;
     }
 
     private function validateCompanyFullName(?string $fullName): ?string
     {
         if (empty($fullName)) {
-            return $this->formatErrorMessage('company.fullName.required', [], 'companies');
+            return $this->formatErrorMessage('company.fullName.required');
         }
 
         if (strlen($fullName) < 3) {
-            return $this->formatErrorMessage('company.name.minimumLength', [':qty' => 3], 'companies');
+            return $this->formatErrorMessage('company.name.minimumLength', [':qty' => 3]);
         }
 
         return null;
     }
 
-    private function isCompanyExistsWithFullName(string $fullName, ?string $companyUUID = null): bool
+    private function validateCompanyShortName(?string $shortName): ?string
     {
-        return $this->companyReaderRepository->isCompanyExistsWithFullName($fullName, $companyUUID);
+        return null;
     }
 
-    private function validateActive(?int $active): ?string
+    private function validateCompanyDescription(?string $description): ?string
     {
-        if (null !== $active && !in_array($active, [0, 1])) {
-            return $this->formatErrorMessage('active.invalid', [], 'validators');
+        return null;
+    }
+
+    private function validateParentCompanyUUID(string|int|null $parentCompanyUUID): ?string
+    {
+        if (empty($parentCompanyUUID)) {
+            return null;
+        }
+
+        if (is_string($parentCompanyUUID)) {
+            $parentCompany = $this->companyReaderRepository->getCompanyByUUID($parentCompanyUUID);
+            if (null === $parentCompany) {
+                return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $parentCompanyUUID]);
+            }
         }
 
         return null;
     }
 
-    private function isCompanyExistsWithNIP(string $nip, ?string $companyUUID = null): bool
+    private function validateIndustryUUID(?string $industryUUID): ?string
     {
-        return $this->companyReaderRepository->isCompanyExistsWithNIP($nip, $companyUUID);
-    }
+        if (empty($industryUUID)) {
+            return $this->formatErrorMessage('company.industryUUID.required');
+        }
 
-    private function isCompanyExistsWithREGON(string $regon, ?string $companyUUID = null): bool
-    {
-        return $this->companyReaderRepository->isCompanyExistsWithREGON($regon, $companyUUID);
-    }
+        $industry = $this->industryReaderRepository->getIndustryByUUID($industryUUID);
+        if (null === $industry) {
+            return $this->formatErrorMessage('industry.uuid.notExists', [':uuid' => $industryUUID], 'industries');
+        }
 
-    private function isParentCompanyExists(string $parentCompanyUUID): bool
-    {
-        return $this->companyReaderRepository->isCompanyExistsWithUUID($parentCompanyUUID);
-    }
-
-    private function isIndustryExists(string $industryUUID): bool
-    {
-        return $this->industryReaderRepository->isIndustryExistsWithUUID($industryUUID);
+        return null;
     }
 
     private function validateNIP(?string $nip): ?string
     {
-        $nip = preg_replace('/\D/', '', $nip ?? '');
-        if ($nip === '') {
-            return 'company.nip.required';
+        if (null === $nip) {
+            return $this->formatErrorMessage('company.nip.required');
         }
 
-        return NIPValidator::validate($nip);
+        $nip = preg_replace('/\D/', '', $nip ?? '');
+
+        $errorMessage = NIPValidator::validate($nip);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
+        }
+
+        return null;
     }
 
     private function validateREGON(?string $regon): ?string
     {
-        $regon = preg_replace('/\D/', '', $regon ?? '');
-        if ($regon === '') {
-            return 'company.regon.required';
+        if (null === $regon) {
+            return $this->formatErrorMessage('company.regon.required');
         }
 
-        return REGONValidator::validate($regon);
+        $regon = preg_replace('/\D/', '', $regon ?? '');
+
+        $errorMessage = REGONValidator::validate($regon);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
+        }
+
+        return null;
     }
 
-    private function formatErrorMessage(string $translationKey, array $parameters = [], ?string $domain = null): string
+    private function validateActive(?int $active): ?string
+    {
+        $errorMessage = BoolValidator::validate($active);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
+        }
+
+        return null;
+    }
+
+    private function validatePhone(?string $phone): ?string
+    {
+        if (null === $phone) {
+            return $this->formatErrorMessage('company.contact.phone.required');
+        }
+
+        return null;
+    }
+
+    private function validateEmail(?string $email): ?string
+    {
+        if (null === $email) {
+            return $this->formatErrorMessage('company.contact.email.required');
+        }
+
+        $errorMessage = EmailValidator::validate($email);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
+        }
+
+        return null;
+    }
+
+    private function validateWebsite(?string $website): ?string
+    {
+        //$errorMessage = WebsiteValidator::validate($website);
+        //if (null !== $errorMessage) {
+        //    return $this->formatErrorMessage($errorMessage, [], 'validators');
+        //}
+
+        return null;
+    }
+
+    private function validateStreet(?string $street): ?string
+    {
+        if (null === $street) {
+            return $this->formatErrorMessage('company.address.street.required');
+        }
+
+        return null;
+    }
+
+    private function validatePostcode(?string $postcode): ?string
+    {
+        if (null === $postcode) {
+            return $this->formatErrorMessage('company.address.postcode.required');
+        }
+
+        return null;
+    }
+
+    private function validateCity(?string $city): ?string
+    {
+        if (null === $city) {
+            return $this->formatErrorMessage('company.address.city.required');
+        }
+
+        return null;
+    }
+
+    private function validateCountry(?string $country): ?string
+    {
+        if (null === $country) {
+            return $this->formatErrorMessage('company.address.country.required');
+        }
+
+        return null;
+    }
+
+    private function formatErrorMessage(string $translationKey, array $parameters = [], ?string $domain = 'companies'): string
     {
         return sprintf(
             '%s - %s %d',

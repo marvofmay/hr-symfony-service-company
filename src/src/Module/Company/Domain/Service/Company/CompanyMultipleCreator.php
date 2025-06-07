@@ -81,6 +81,7 @@ final class CompanyMultipleCreator
     {
         $this->company->setFullName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME]);
         $this->company->setShortName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_SHORT_NAME]);
+        $this->company->setDescription($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_DESCRIPTION]);
         $this->company->setNip((string)$item[ImportCompaniesFromXLSX::COLUMN_NIP]);
         $this->company->setRegon((string)$item[ImportCompaniesFromXLSX::COLUMN_REGON]);
         $this->company->setActive((bool)$item[ImportCompaniesFromXLSX::COLUMN_ACTIVE]);

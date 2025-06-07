@@ -141,4 +141,22 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
 
         return null !== $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function isCompanyExists(string $nip, string $regon, ?string $companyUUID = null): bool
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('c')
+            ->from(Company::class, 'c')
+            ->where('c.nip = :nip OR c.regon = :regon')
+            ->setParameter('nip', $nip)
+            ->setParameter('regon', $regon);
+
+        if ($companyUUID !== null) {
+            $qb->andWhere('c.uuid != :uuid')
+                ->setParameter('uuid', $companyUUID);
+        }
+
+        return null !== $qb->getQuery()->getOneOrNullResult();
+    }
 }

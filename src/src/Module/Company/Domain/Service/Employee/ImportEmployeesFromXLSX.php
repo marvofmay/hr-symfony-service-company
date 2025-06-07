@@ -56,6 +56,8 @@ class ImportEmployeesFromXLSX extends XLSXIterator
 
     public function validateRow(array $row): array
     {
+        $this->errorMessages = [];
+
         [
             $employeeUUID,
             $departmentUUID,

@@ -42,7 +42,6 @@ class Contact
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('contact_info')]
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'contacts')]
@@ -59,28 +58,22 @@ class Contact
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
     #[Assert\NotBlank()]
-    #[Groups('contact_info')]
     private string $type;
 
     #[ORM\Column(type: Types::STRING, length: 100, nullable: false)]
     #[Assert\NotBlank()]
-    #[Groups('contact_info')]
     private string $data;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
-    #[Groups('contact_info')]
     private bool $active = true;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('contact_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('contact_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('contact_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     public function getUUID(): UuidInterface

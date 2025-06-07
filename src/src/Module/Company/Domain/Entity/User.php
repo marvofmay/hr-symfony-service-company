@@ -49,35 +49,28 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('user_info')]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: 'uuid', nullable: true)]
     #[Assert\NotBlank()]
-    #[Groups('user_info')]
     private ?UuidInterface $employee_uuid = null;
 
     #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
     #[Assert\NotBlank()]
     #[Assert\Email()]
-    #[Groups('user_info')]
     private string $email;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotBlank()]
-    #[Groups('user_info')]
     private string $password;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('user_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('user_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('user_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToOne(targetEntity: Employee::class, inversedBy: 'user')]

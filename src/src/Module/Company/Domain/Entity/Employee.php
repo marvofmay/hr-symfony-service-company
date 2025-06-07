@@ -60,11 +60,9 @@ class Employee
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    #[Groups('employee_info')]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-    #[Groups('employee_info')]
     private ?string $externalUUID = null;
 
     #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'employees')]
@@ -73,61 +71,48 @@ class Employee
 
     #[ORM\ManyToOne(targetEntity: Employee::class)]
     #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    #[Groups('employee_info')]
     private ?Employee $parentEmployee = null;
 
     #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'employees')]
     #[ORM\JoinColumn(name: 'position_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('employee_info')]
     private Position $position;
 
     #[ORM\ManyToOne(targetEntity: ContractType::class, inversedBy: 'employees')]
     #[ORM\JoinColumn(name: 'contract_type_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('employee_info')]
     private ContractType $contractType;
 
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'employees')]
     #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
-    #[Groups('employee_info')]
     private Role $role;
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
     #[Assert\NotBlank()]
-    #[Groups('employee_info')]
     private string $firstName;
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
     #[Assert\NotBlank()]
-    #[Groups('employee_info')]
     private string $lastName;
 
     #[ORM\Column(type: Types::STRING, length: 11, nullable: false)]
     #[Assert\NotBlank()]
-    #[Groups('employee_info')]
     private string $pesel;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
-    #[Groups('employee_info')]
     private ?\DateTimeInterface $employmentFrom;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    #[Groups('employee_info')]
     private ?\DateTimeInterface $employmentTo = null;
 
     #[ORM\Column(type: Types::BOOLEAN)]
-    #[Groups('employee_info')]
     private bool $active = false;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    #[Groups('employee_info')]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('employee_info')]
     private ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    #[Groups('employee_info')]
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
@@ -137,11 +122,9 @@ class Employee
     private Collection $notes;
 
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    #[Groups('employee_info')]
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    #[Groups('employee_info')]
     private ?Address $address = null;
 
     #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]

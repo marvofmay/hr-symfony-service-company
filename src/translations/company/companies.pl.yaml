@@ -1,4 +1,5 @@
 company:
+  alreadyExists: "Firma o padanym NIP :nip lub REGON :regon już istnieje"
   uuid:
     notFound: "Firma o podanym UUID nie istnieje"
     notExists: "Firma o podanym UUID nie istnieje :uuid"
@@ -13,10 +14,12 @@ company:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
     alreadyExists: "Firma o podanym NIP już istnieje"
+    required: "NIP firmy jest wymagany"
   regon:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
     alreadyExists: "Firma o podanym REGON już istnieje"
+    required: "REGON firmy jest wymagany"
   industryUUID:
     required: "Wymagane uuid branży"
   description:
@@ -50,4 +53,9 @@ company:
       required: "Miasto wymagane"
     country:
       required: "Kraj wymagany"
+  contact:
+    phone:
+      required: "Telefon jest wymagany"
+    email:
+      required: "Email jest wymagany"
 

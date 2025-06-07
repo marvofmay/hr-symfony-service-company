@@ -7,6 +7,7 @@ namespace App\Common\XLSX;
 use App\Common\Domain\Interface\XLSXIteratorInterface;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 abstract class XLSXIterator implements XLSXIteratorInterface
@@ -22,11 +23,15 @@ abstract class XLSXIterator implements XLSXIteratorInterface
     public function loadFile(): void
     {
         if (!file_exists($this->filePath)) {
-            throw new \RuntimeException(sprintf('%s: %s', $this->translator->trans('import.fileNotExists', [], 'validators'), $this->filePath));
+            throw new \Exception(sprintf('%s: %s', $this->translator->trans('import.fileNotExists', [], 'validators'), $this->filePath));
         }
 
         $spreadsheet = IOFactory::load($this->filePath);
         $this->worksheet = $spreadsheet->getActiveSheet();
+
+        if ($this->worksheet->getHighestRow() < 2) {
+            throw new \Exception($this->translator->trans('import.noData', [], 'validators'), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
     }
 
     public function validateBeforeImport(): array
