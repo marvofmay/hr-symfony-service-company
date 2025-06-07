@@ -22,8 +22,6 @@ company:
   description:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-  active:
-    invalid: "Nieprawidłowa wartość pola active"
   add:
     success: "Firma została pomyślnie zapisana"
     error: "Wystąpił błąd - firma nie została dodana"

@@ -7,8 +7,33 @@ employee:
     alreadyExists: "Pracownik o podanym emailu już istnieje"
     required: "Email pracownika jest wymagany"
   firstName:
-    required: "Imię jest wymagane"
+    required: "Imię pracownika jest wymagane"
   lastName:
-    required: "Nazwisko jest wymagane"
+    required: "Nazwisko pracownika jest wymagane"
+  departmentUUID:
+    required: "UUID departamentu pracownika jest wymagane"
+  positionUUID:
+    required: "UUID stanowsika pracownika jest wymagane"
+  contractTypeUUID:
+    required: "UUID formy zatrudnienia pracownika jest wymagane"
+  roleUUID:
+    required: "UUID roli w systemie jest wymagane"
+  employmentFrom:
+    required: "Data zatrudnienia pracownika jest wymagana"
+    date:
+      invalidFormat: "Nieprawidłowy format daty zatrudnienia pracownika - wymagany format :dateFormat"
+  employmentTo:
+    date:
+      invalidFormat: "Nieprawidłowy format daty zwolnienia pracownika - wymagany format :dateFormat"
+  phone:
+    required: "Telefon prcownika jest wymagany"
+  street:
+    required: "Ulica jest wymagana"
+  postcode:
+    required: "Kod pocztowy jest wymagany"
+  city:
+    required: "Miasto jest wymagane"
+  country:
+    required: "Kraj jest wymagany"
   add:
     success: "Pracownik został pomyślnie zapisany"

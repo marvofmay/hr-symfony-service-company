@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Employee;
 
+use App\Common\Domain\Enum\DateFormatEnum;
+use App\Common\Shared\Utils\BoolValidator;
+use App\Common\Shared\Utils\DateFormatValidator;
+use App\Common\Shared\Utils\EmailValidator;
 use App\Common\Shared\Utils\PESELValidator;
 use App\Common\XLSX\XLSXIterator;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
@@ -72,25 +76,33 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             $country,
         ] = $row + [null, null, null, null, null, null, null, null, null, null, null, null, false, null, null, null, null, null, null];
 
-        $this->errorMessages[] = $this->validateEmployeeUUID($employeeUUID);
-        $this->errorMessages[] = $this->validateDepartmentUUID($departmentUUID);
-        $this->errorMessages[] = $this->validatePositionUUID($positionUUID);
-        $this->errorMessages[] = $this->validateContractTypeUUID($contactTypeUUID);
-        $this->errorMessages[] = $this->validateRoleUUID($roleUUID);
-        $this->errorMessages[] = $this->validateParentEmployeeUUID($parentEmployeeUUID);
-        $this->errorMessages[] = $this->validateExternalUUID($externalUUID);
-        $this->errorMessages[] = $this->validateFirstName($firstName);
-        $this->errorMessages[] = $this->validateLastName($lastName);
-        $this->errorMessages[] = $this->validateEmploymentFrom($employmentFrom);
-        $this->errorMessages[] = $this->validateEmploymentTo($employmentTo);
-        $this->errorMessages[] = $this->validatePESEL((string)$pesel);
-        $this->errorMessages[] = $this->validateActive($active);
-        $this->errorMessages[] = $this->validateEmail($email);
-        $this->errorMessages[] = $this->validatePhone($phone);
-        $this->errorMessages[] = $this->validateStreet($street);
-        $this->errorMessages[] = $this->validatePostcode($postcode);
-        $this->errorMessages[] = $this->validateCity($city);
-        $this->errorMessages[] = $this->validateCountry($country);
+        $validations = [
+            $this->validateEmployeeUUID($employeeUUID),
+            $this->validateDepartmentUUID($departmentUUID),
+            $this->validatePositionUUID($positionUUID),
+            $this->validateContractTypeUUID($contactTypeUUID),
+            $this->validateRoleUUID($roleUUID),
+            $this->validateParentEmployeeUUID($parentEmployeeUUID),
+            $this->validateExternalUUID($externalUUID),
+            $this->validateFirstName($firstName),
+            $this->validateLastName($lastName),
+            $this->validateEmploymentFrom((string)$employmentFrom),
+            $this->validateEmploymentTo((string)$employmentTo),
+            $this->validatePESEL((string)$pesel),
+            $this->validateActive($active),
+            $this->validateEmail($email),
+            $this->validatePhone($phone),
+            $this->validateStreet($street),
+            $this->validatePostcode($postcode),
+            $this->validateCity($city),
+            $this->validateCountry($country),
+        ];
+
+        foreach ($validations as $errorMessage) {
+            if ($errorMessage !== null) {
+                $this->errorMessages[] = $errorMessage;
+            }
+        }
 
         return $this->errorMessages;
     }
@@ -98,13 +110,13 @@ class ImportEmployeesFromXLSX extends XLSXIterator
     private function validateEmployeeUUID(string|int|null $employeeUUID): ?string
     {
         if (empty($employeeUUID)) {
-            return $this->formatErrorMessage('employee.uuid.required', [], 'employees');
+            return null;
         }
 
         if (is_string($employeeUUID)) {
             $employee = $this->employeeReaderRepository->getEmployeeByUUID($employeeUUID);
             if (null === $employee) {
-                return $this->formatErrorMessage('employee.uuid.notExists', [':uuid' => $employeeUUID], 'employees');
+                return $this->formatErrorMessage('employee.uuid.notExists', [':uuid' => $employeeUUID]);
             }
         }
 
@@ -114,7 +126,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
     private function validateDepartmentUUID(?string $departmentUUID): ?string
     {
         if (empty($departmentUUID)) {
-            return $this->formatErrorMessage('department.uuid.required', [], 'departments');
+            return $this->formatErrorMessage('employee.departmentUUID.required');
         }
 
         $department = $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID);
@@ -128,7 +140,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
     private function validatePositionUUID(?string $positionUUID): ?string
     {
         if (empty($positionUUID)) {
-            return $this->formatErrorMessage('position.uuid.required', [], 'positions');
+            return $this->formatErrorMessage('employee.positionUUID.required');
         }
 
         $position = $this->positionReaderRepository->getPositionByUUID($positionUUID);
@@ -142,7 +154,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
     private function validateContractTypeUUID(?string $contractTypeUUID): ?string
     {
         if (empty($contractTypeUUID)) {
-            return $this->formatErrorMessage('contractType.uuid.required', [], 'contract_types');
+            return $this->formatErrorMessage('employee.contractTypeUUID.required');
         }
 
         $contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($contractTypeUUID);
@@ -156,7 +168,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
     private function validateRoleUUID(?string $roleUUID): ?string
     {
         if (empty($roleUUID)) {
-            return $this->formatErrorMessage('role.uuid.required', [], 'roles');
+            return $this->formatErrorMessage('employee.roleUUID.required');
         }
 
         $role = $this->roleReaderRepository->getRoleByUUID($roleUUID);
@@ -176,7 +188,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         if (is_string($parentEmployeeUUID)) {
             $employee = $this->employeeReaderRepository->getEmployeeByUUID($parentEmployeeUUID);
             if (null === $employee) {
-                return $this->formatErrorMessage('employee.uuid.notExists', [':uuid' => $parentEmployeeUUID], 'employees');
+                return $this->formatErrorMessage('employee.uuid.notExists', [':uuid' => $parentEmployeeUUID]);
             }
         }
 
@@ -201,14 +213,12 @@ class ImportEmployeesFromXLSX extends XLSXIterator
     private function validateEmploymentFrom(?string $employmentFrom): ?string
     {
         if (empty($employmentFrom)) {
-            return $this->formatErrorMessage('employee.employmentFrom.required', [], 'employments');
+            return $this->formatErrorMessage('employee.employmentFrom.required');
         }
 
-        $date = \DateTime::createFromFormat('d-m-Y', $employmentFrom);
-        $errors = \DateTime::getLastErrors();
-
-        if ($date === false || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
-            return $this->formatErrorMessage('invalidDateFormat', [':requiredFormat' => 'dd-mm-yyyy'], 'validators');
+        $errorMessage = DateFormatValidator::validate($employmentFrom, DateFormatEnum::DD_MM_YYYY->value);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage('employee.employmentFrom.' . $errorMessage, [':dateFormat' => DateFormatEnum::DD_MM_YYYY->value]);
         }
 
         return null;
@@ -217,11 +227,9 @@ class ImportEmployeesFromXLSX extends XLSXIterator
     private function validateEmploymentTo(?string $employmentTo): ?string
     {
         if (!empty($employmentTo)) {
-            $date = \DateTime::createFromFormat('d-m-Y', $employmentTo);
-            $errors = \DateTime::getLastErrors();
-
-            if ($date === false || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
-                return $this->formatErrorMessage('invalidDateFormat', [':requiredFormat' => 'dd-mm-yyyy'], 'validators');
+            $errorMessage = DateFormatValidator::validate($employmentTo, DateFormatEnum::DD_MM_YYYY->value);
+            if (null !== $errorMessage) {
+                return $this->formatErrorMessage('employee.employmentTo.' . $errorMessage, [':dateFormat' => DateFormatEnum::DD_MM_YYYY->value]);
             }
         }
 
@@ -236,7 +244,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
 
         $errorMessage = PESELValidator::validate($pesel);
         if (null !== $errorMessage) {
-            return $this->formatErrorMessage($errorMessage, [], 'employees');
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
         }
 
         return null;
@@ -244,36 +252,68 @@ class ImportEmployeesFromXLSX extends XLSXIterator
 
     private function validateActive(?int $active): ?string
     {
+        $errorMessage = BoolValidator::validate($active);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
+        }
+
         return null;
     }
 
     private function validateEmail(?string $email): ?string
     {
-        return null;
+        if (null === $email) {
+            return $this->formatErrorMessage('employee.email.required', [], 'employees');
+        }
+
+        $errorMessage = EmailValidator::validate($email);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
+        }
     }
 
     private function validatePhone(?string $phone): ?string
     {
+        if (null === $phone) {
+            return $this->formatErrorMessage('employee.phone.required', [], 'employees');
+        }
+
         return null;
     }
 
     private function validateStreet(?string $street): ?string
     {
+        if (null === $street) {
+            return $this->formatErrorMessage('employee.street.required', [], 'employees');
+        }
+
         return null;
     }
 
     private function validatePostcode(?string $postcode): ?string
     {
+        if (null === $postcode) {
+            return $this->formatErrorMessage('employee.postcode.required', [], 'employees');
+        }
+
         return null;
     }
 
     private function validateCity(?string $city): ?string
     {
+        if (null === $city) {
+            return $this->formatErrorMessage('employee.city.required', [], 'employees');
+        }
+
         return null;
     }
 
     private function validateCountry(?string $country): ?string
     {
+        if (null === $country) {
+            return $this->formatErrorMessage('employee.country.required', [], 'employees');
+        }
+
         return null;
     }
 
@@ -290,7 +330,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function formatErrorMessage(string $translationKey, array $parameters = [], ?string $domain = null): string
+    private function formatErrorMessage(string $translationKey, array $parameters = [], ?string $domain = 'employees'): string
     {
         return sprintf(
             '%s - %s %d',

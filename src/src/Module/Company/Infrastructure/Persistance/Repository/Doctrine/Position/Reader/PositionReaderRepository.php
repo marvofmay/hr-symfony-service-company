@@ -4,40 +4,28 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Position\Reader;
 
-use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PositionReaderRepository extends ServiceEntityRepository implements PositionReaderInterface
 {
-    public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
+    public function __construct(ManagerRegistry $registry,)
     {
         parent::__construct($registry, Position::class);
     }
 
     public function getPositionByUUID(string $uuid): ?Position
     {
-        $position = $this->getEntityManager()
+        return $this->getEntityManager()
             ->createQuery(
                 'SELECT p FROM ' . Position::class . ' p WHERE p.' . Position::COLUMN_UUID . ' = :uuid'
             )
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
-
-        if (!$position) {
-            throw new NotFindByUUIDException(sprintf(
-                '%s : %s',
-                $this->translator->trans('position.uuid.notFound', [], 'positions'),
-                $uuid
-            ));
-        }
-
-        return $position;
     }
 
     public function getPositionsByUUID(array $selectedUUID): Collection

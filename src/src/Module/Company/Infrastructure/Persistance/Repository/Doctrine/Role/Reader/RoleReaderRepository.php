@@ -22,13 +22,7 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
 
     public function getRoleByUUID(string $uuid): ?Role
     {
-        $role = $this->findOneBy([Role::COLUMN_UUID => $uuid]);
-
-        if (!$role) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('role.uuid.notFound', [], 'roles'), $uuid));
-        }
-
-        return $role;
+        return $this->findOneBy([Role::COLUMN_UUID => $uuid]);
     }
 
     public function getRolesByUUID(array $selectedUUID): Collection

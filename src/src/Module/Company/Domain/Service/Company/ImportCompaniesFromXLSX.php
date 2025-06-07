@@ -167,7 +167,7 @@ class ImportCompaniesFromXLSX extends XLSXIterator
     private function validateActive(?int $active): ?string
     {
         if (null !== $active && !in_array($active, [0, 1])) {
-            return $this->formatErrorMessage('company.active.invalid', [], 'companies');
+            return $this->formatErrorMessage('active.invalid', [], 'validators');
         }
 
         return null;

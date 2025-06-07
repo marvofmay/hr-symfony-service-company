@@ -1,5 +1,3 @@
-email:
-  invalid: "Email jest niepoprawny"
 uuid:
   differentUUIDInBodyRawAndUrl: "Różne UUID w ładunku POST i parametrze URL"
   invalid: "Nieprawidłowy format UUID"
@@ -9,3 +7,19 @@ file:
 phones:
   min: "Musisz podać minimalnie :min numery telefonów."
   max: "Możesz podać maksymalnie :max numery telefonów."
+boolean:
+  invalid: "Nieprawidłowa wartość boolean"
+nip:
+  invalidLength: "Nieprawidłowa długość NIP"
+  invalid: "Nieprawidłowy NIP"
+regon:
+  invalidLength: "Nieprawidłowa długość REGON"
+  invalid: "Nieprawidłowy REGON"
+pesel:
+  invalidLength: "Nieprawidłowa długość PESEL"
+  invalid: "Nieprawidłowy PESEL"
+email:
+  invalid: "Nieprawidłowy email"
+date:
+  required: "Data wymagana"
+  invalidFormat: "Nieprawidłowy format daty - wymagany format :dateFormat"

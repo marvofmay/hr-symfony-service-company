@@ -4,34 +4,26 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Department\Reader;
 
-use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DepartmentReaderRepository extends ServiceEntityRepository implements DepartmentReaderInterface
 {
-    public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Department::class);
     }
 
     public function getDepartmentByUUID(string $uuid): ?Department
     {
-        $department = $this->getEntityManager()
+        return $this->getEntityManager()
             ->createQuery('SELECT d FROM ' . Department::class . ' d WHERE d.' . Department::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
-
-        if (!$department) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('department.uuid.notFound', [], 'departments'), $uuid));
-        }
-
-        return $department;
     }
 
     public function getDepartmentsByUUID(array $selectedUUID): Collection
