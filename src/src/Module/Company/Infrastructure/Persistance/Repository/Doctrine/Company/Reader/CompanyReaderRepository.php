@@ -25,7 +25,7 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
 
     public function getCompanyByUUID(string $uuid): ?Company
     {
-        return $this->findOneBy(['uuid' => $uuid]);
+        return $this->findOneBy([Company::COLUMN_UUID => $uuid]);
     }
 
     public function getCompaniesByUUID(array $selectedUUID): Collection
@@ -55,13 +55,13 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
     public function getCompanyByFullName(string $fullName, ?string $uuid = null): ?Company
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('c')
-            ->from(Company::class, 'c')
-            ->where('c.' . Company::COLUMN_FULL_NAME . ' = :name')
+        $qb->select(Company::ALIAS)
+            ->from(Company::class, Company::ALIAS)
+            ->where(Company::ALIAS . '.' . Company::COLUMN_FULL_NAME . ' = :name')
             ->setParameter('name', $fullName);
 
         if (null !== $uuid) {
-            $qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere(Company::ALIAS . '.' . Company::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -71,13 +71,13 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
     public function getCompanyByNIP(string $nip, ?string $uuid = null): ?Company
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('c')
-            ->from(Company::class, 'c')
-            ->where('c.' . Company::COLUMN_NIP . ' = :nip')
+        $qb->select(Company::ALIAS)
+            ->from(Company::class, Company::ALIAS)
+            ->where(Company::ALIAS . '.' . Company::COLUMN_NIP . ' = :nip')
             ->setParameter('nip', $nip);
 
         if (null !== $uuid) {
-            $qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere(Company::ALIAS . '.' . Company::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -87,13 +87,13 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
     public function getCompanyByREGON(string $regon, ?string $uuid = null): ?Company
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('c')
-            ->from(Company::class, 'c')
-            ->where('c.' . Company::COLUMN_REGON . ' = :regon')
+        $qb->select(Company::ALIAS)
+            ->from(Company::class, Company::ALIAS)
+            ->where(Company::ALIAS . '.' . Company::COLUMN_REGON . ' = :regon')
             ->setParameter('regon', $regon);
 
         if (null !== $uuid) {
-            $qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere(Company::ALIAS . '.' . Company::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -103,13 +103,13 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
     public function getCompanyByShortName(string $shortName, ?string $uuid = null): ?Company
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('c')
-            ->from(Company::class, 'c')
-            ->where('c.' . Company::COLUMN_SHORT_NAME . ' = :name')
+        $qb->select(Company::ALIAS)
+            ->from(Company::class, Company::ALIAS)
+            ->where(Company::ALIAS . '.' . Company::COLUMN_SHORT_NAME . ' = :name')
             ->setParameter('name', $shortName);
 
         if (null !== $uuid) {
-            $qb->andWhere('c.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere(Company::ALIAS . '.' . Company::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -134,9 +134,9 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
     public function isCompanyExistsWithUUID(string $uuid): bool
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
-        $qb->select('c')
-            ->from(Company::class, 'c')
-            ->where('c.' . Company::COLUMN_UUID . ' = :uuid')
+        $qb->select(Company::ALIAS)
+            ->from(Company::class, Company::ALIAS)
+            ->where(Company::ALIAS . '.' . Company::COLUMN_UUID . ' = :uuid')
             ->setParameter('uuid', $uuid);
 
         return null !== $qb->getQuery()->getOneOrNullResult();
@@ -146,14 +146,14 @@ class CompanyReaderRepository extends ServiceEntityRepository implements Company
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $qb->select('c')
-            ->from(Company::class, 'c')
-            ->where('c.nip = :nip OR c.regon = :regon')
+        $qb->select(Company::ALIAS)
+            ->from(Company::class, Company::ALIAS)
+            ->where(sprintf('%s.%s = :nip OR %s.%s = :regon', Company::ALIAS, Company::COLUMN_NIP, Company::ALIAS, Company::COLUMN_REGON))
             ->setParameter('nip', $nip)
             ->setParameter('regon', $regon);
 
         if ($companyUUID !== null) {
-            $qb->andWhere('c.uuid != :uuid')
+            $qb->andWhere(sprintf('%s.uuid != :uuid', Company::ALIAS))
                 ->setParameter('uuid', $companyUUID);
         }
 
