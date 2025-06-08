@@ -123,7 +123,7 @@ final class CompanyMultipleCreator
         if (null !== $item[ImportCompaniesFromXLSX::COLUMN_EMAIL]) {
             $contact = new Contact();
             $contact->setType(ContactTypeEnum::EMAIL->value);
-            $contact->setData($item[ImportCompaniesFromXLSX::COLUMN_EMAIL]);
+            $contact->setData((string)$item[ImportCompaniesFromXLSX::COLUMN_EMAIL]);
             $contact->setActive(true);
             $this->company->addContact($contact);
         }

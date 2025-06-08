@@ -228,7 +228,7 @@ class ImportCompaniesFromXLSX extends XLSXIterator
 
     private function validateEmail(?string $email): ?string
     {
-        if (null === $email) {
+        if (empty($email)) {
             return $this->formatErrorMessage('company.contact.email.required');
         }
 

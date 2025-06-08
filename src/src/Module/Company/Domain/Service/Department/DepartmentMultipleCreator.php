@@ -79,8 +79,8 @@ final class DepartmentMultipleCreator
 
     private function setMainDepartmentData(array $item): void
     {
-        $this->department->setName($item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_NAME]);
-        $this->department->setDescription($item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_DESCRIPTION]);
+        $this->department->setName((string)$item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_NAME]);
+        $this->department->setDescription((string)$item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_DESCRIPTION]);
         $this->department->setActive((bool)$item[ImportDepartmentsFromXLSX::COLUMN_ACTIVE]);
     }
 
@@ -120,7 +120,7 @@ final class DepartmentMultipleCreator
         if (null !== $item[ImportDepartmentsFromXLSX::COLUMN_EMAIL]) {
             $contact = new Contact();
             $contact->setType(ContactTypeEnum::EMAIL->value);
-            $contact->setData($item[ImportDepartmentsFromXLSX::COLUMN_EMAIL]);
+            $contact->setData((string)$item[ImportDepartmentsFromXLSX::COLUMN_EMAIL]);
             $contact->setActive(true);
             $this->department->addContact($contact);
         }

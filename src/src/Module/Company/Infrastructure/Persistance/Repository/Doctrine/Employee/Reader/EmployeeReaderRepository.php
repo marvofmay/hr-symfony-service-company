@@ -85,4 +85,21 @@ class EmployeeReaderRepository extends ServiceEntityRepository implements Employ
     {
         return !is_null($this->getEmployeeByEmail($email, $uuid));
     }
+
+    public function isEmployeeExists(string $pesel, ?string $employeeUUID = null): bool
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select(Employee::ALIAS)
+            ->from(Employee::class, Employee::ALIAS)
+            ->where(sprintf('%s.%s = :pesel', Employee::ALIAS, Employee::COLUMN_PESEL))
+            ->setParameter('pesel', $pesel);
+
+        if ($employeeUUID !== null) {
+            $qb->andWhere(sprintf('%s.uuid != :uuid', Employee::ALIAS))
+                ->setParameter('uuid', $employeeUUID);
+        }
+
+        return null !== $qb->getQuery()->getOneOrNullResult();
+    }
 }

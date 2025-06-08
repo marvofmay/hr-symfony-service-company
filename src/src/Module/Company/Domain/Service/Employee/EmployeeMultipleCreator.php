@@ -135,7 +135,7 @@ final class EmployeeMultipleCreator
         if (null !== $item[ImportEmployeesFromXLSX::COLUMN_EMAIL]) {
             $contact = new Contact();
             $contact->setType(ContactTypeEnum::EMAIL->value);
-            $contact->setData($item[ImportEmployeesFromXLSX::COLUMN_EMAIL]);
+            $contact->setData((string)$item[ImportEmployeesFromXLSX::COLUMN_EMAIL]);
             $contact->setActive(true);
             $this->employee->addContact($contact);
         }

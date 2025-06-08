@@ -60,10 +60,10 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
         ] = $row + [null, null, null, null, null, false, null, null, null, null, null, null, null];
 
         $validations = [
-            $this->isDepartmentExists($name, is_string($departmentUUID) ? $departmentUUID : null),
+            $this->isDepartmentExists((string)$name, is_string($departmentUUID) ? $departmentUUID : null),
             $this->validateDepartmentUUID($departmentUUID),
-            $this->validateDepartmentName($name),
-            $this->validateDepartmentDescription($description),
+            $this->validateDepartmentName((string)$name),
+            $this->validateDepartmentDescription((string)$description),
             $this->validateParentDepartmentUUID($parentDepartmentUUID),
             $this->validateCompanyUUID($companyUUID),
             $this->validateActive($active),
@@ -83,6 +83,16 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
         }
 
         return $this->errorMessages;
+    }
+
+    private function isDepartmentExists(string $name, ?string $departmentUUID = null): ?string
+    {
+        $isDepartmentExists = $this->departmentReaderRepository->isDepartmentExistsWithName($name, $departmentUUID);
+        if ($isDepartmentExists) {
+            return $this->formatErrorMessage('department.alreadyExists', [':name' => $name]);
+        }
+
+        return null;
     }
 
     private function validateDepartmentUUID(string|int|null $departmentUUID): ?string
@@ -231,16 +241,6 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
     {
         if (null === $country) {
             return $this->formatErrorMessage('department.address.country.required');
-        }
-
-        return null;
-    }
-
-    private function isDepartmentExists(string $name, ?string $departmentUUID = null): ?string
-    {
-        $isDepartmentExists = $this->departmentReaderRepository->isDepartmentExistsWithName($name, $departmentUUID);
-        if ($isDepartmentExists) {
-            return $this->formatErrorMessage('department.alreadyExists', [':name' => $name]);
         }
 
         return null;

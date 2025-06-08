@@ -81,6 +81,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         ] = $row + [null, null, null, null, null, null, null, null, null, null, null, null, false, null, null, null, null, null, null];
 
         $validations = [
+            $this->validateEmployeeExists((string)$pesel, (string)$email, is_string($employeeUUID) ? $employeeUUID : null),
             $this->validateEmployeeUUID($employeeUUID),
             $this->validateDepartmentUUID($departmentUUID),
             $this->validatePositionUUID($positionUUID),
@@ -109,6 +110,16 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         }
 
         return $this->errorMessages;
+    }
+
+    private function validateEmployeeExists(string $pesel, string $email, ?string $employeeUUID): ?string
+    {
+        $isEmployeeExists = $this->employeeReaderRepository->isEmployeeExists($pesel, $email, $employeeUUID);
+        if ($isEmployeeExists) {
+            return $this->formatErrorMessage('employee.alreadyExists', [':pesel' => $pesel, ':email' => $email]);
+        }
+
+        return null;
     }
 
     private function validateEmployeeUUID(string|int|null $employeeUUID): ?string
@@ -149,7 +160,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
 
         $position = $this->positionReaderRepository->getPositionByUUID($positionUUID);
         if (null === $position) {
-            return $this->formatErrorMessage('positions.uuid.notExists', [':uuid' => $positionUUID], 'positions');
+            return $this->formatErrorMessage('position.uuid.notExists', [':uuid' => $positionUUID], 'positions');
         }
 
         return null;
