@@ -18,7 +18,6 @@ abstract class XLSXIterator implements XLSXIteratorInterface
 
     public function __construct(private readonly string $filePath, private readonly TranslatorInterface $translator)
     {
-        ini_set('memory_limit', '2G');
     }
 
     public function loadFile(): void
