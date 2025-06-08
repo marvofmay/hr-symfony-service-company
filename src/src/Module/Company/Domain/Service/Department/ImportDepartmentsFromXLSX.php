@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Department;
 
+use App\Common\Shared\Utils\BoolValidator;
+use App\Common\Shared\Utils\EmailValidator;
 use App\Common\XLSX\XLSXIterator;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
@@ -25,6 +27,7 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
     public const int COLUMN_CITY                   = 11;
     public const int COLUMN_COUNTRY                = 12;
 
+    private array $errorMessages = [];
 
     public function __construct(
         private readonly string                  $filePath,
@@ -38,7 +41,8 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
 
     public function validateRow(array $row): array
     {
-        $errorMessages = [];
+        $this->errorMessages = [];
+
         [
             $departmentUUID,
             $name,
@@ -55,96 +59,194 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
             $country,
         ] = $row + [null, null, null, null, null, false, null, null, null, null, null, null, null];
 
-        if ($errorMessage = $this->validateDepartmentName($name)) {
-            $errorMessages[] = $errorMessage;
+        $validations = [
+            $this->isDepartmentExists($name, is_string($departmentUUID) ? $departmentUUID : null),
+            $this->validateDepartmentUUID($departmentUUID),
+            $this->validateDepartmentName($name),
+            $this->validateDepartmentDescription($description),
+            $this->validateParentDepartmentUUID($parentDepartmentUUID),
+            $this->validateCompanyUUID($companyUUID),
+            $this->validateActive($active),
+            $this->validatePhone($phone),
+            $this->validateEmail((string)$email),
+            $this->validateWebsite($website),
+            $this->validateStreet($street),
+            $this->validatePostcode($postcode),
+            $this->validateCity($city),
+            $this->validateCountry($country),
+        ];
+
+        foreach ($validations as $errorMessage) {
+            if ($errorMessage !== null) {
+                $this->errorMessages[] = $errorMessage;
+            }
+        }
+
+        return $this->errorMessages;
+    }
+
+    private function validateDepartmentUUID(string|int|null $departmentUUID): ?string
+    {
+        if (empty($departmentUUID)) {
+            return null;
         }
 
         if (is_string($departmentUUID)) {
-            if ($this->isDepartmentExistsWithName($name, $departmentUUID)) {
-                $errorMessages[] = $this->formatErrorMessage('department.name.alreadyExists', [], 'departments');
+            $department = $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID);
+            if (null === $department) {
+                return $this->formatErrorMessage('department.uuid.notExists', [':uuid' => $departmentUUID]);
             }
         }
 
-        if (is_int($departmentUUID)) {
-            if ($this->isDepartmentExistsWithName($name)) {
-                $errorMessages[] = $this->formatErrorMessage('department.name.alreadyExists', [], 'departments');
-            }
-        }
-
-        if (is_string($parentDepartmentUUID) && !$this->isParentDepartmentExists($parentDepartmentUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('department.parent.notExists', [], 'departments');
-        }
-
-        if (empty($companyUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('department.companyUUID.required', [], 'departments');
-        }
-
-        if (is_string($companyUUID) && !$this->isCompanyExists($companyUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('industry.notExists', [], 'industries');
-        }
-
-        if ($errorMessage = $this->validateActive($active)) {
-            $errorMessages[] = $this->formatErrorMessage($errorMessage, [], 'companies');
-        }
-
-        if (empty($street)) {
-            $errorMessages[] = $this->formatErrorMessage('company.address.street.required', [], 'companies');
-        }
-
-        if (empty($postcode)) {
-            $errorMessages[] = $this->formatErrorMessage('company.address.postcode.required', [], 'companies');
-        }
-
-        if (empty($city)) {
-            $errorMessages[] = $this->formatErrorMessage('company.address.city.required', [], 'companies');
-        }
-
-        if (empty($country)) {
-            $errorMessages[] = $this->formatErrorMessage('company.address.country.required', [], 'companies');
-        }
-
-        return $errorMessages;
+        return null;
     }
 
     private function validateDepartmentName(?string $name): ?string
     {
         if (empty($name)) {
-            return $this->formatErrorMessage('department.name.required', [], 'departments');
+            return $this->formatErrorMessage('department.name.required');
         }
 
         if (strlen($name) < 3) {
-            return $this->formatErrorMessage('department.name.minimumLength', [':qty' => 3], 'departments');
+            return $this->formatErrorMessage('department.name.minimumLength', [':qty' => 3]);
         }
 
         return null;
     }
 
-    private function isDepartmentExistsWithName(string $name, ?string $departmentUUID = null): bool
+    private function validateDepartmentDescription(?string $description): ?string
     {
-        return $this->departmentReaderRepository->isDepartmentExistsWithName($name, $departmentUUID);
+        if (empty($description)) {
+            return null;
+        }
+
+        if (strlen($description) < 50) {
+            return $this->formatErrorMessage('department.description.minimumLength', [':qty' => 50]);
+        }
+
+        return null;
+    }
+
+    private function validateParentDepartmentUUID(string|int|null $parentDepartmentUUID): ?string
+    {
+        if (empty($parentDepartmentUUID)) {
+            return null;
+        }
+
+        if (is_string($parentDepartmentUUID)) {
+            $parentDepartment = $this->departmentReaderRepository->getDepartmentByUUID($parentDepartmentUUID);
+            if (null === $parentDepartment) {
+                return $this->formatErrorMessage('department.uuid.notExists', [':uuid' => $parentDepartmentUUID]);
+            }
+        }
+
+        return null;
+    }
+
+    private function validateCompanyUUID(?string $companyUUID): ?string
+    {
+        if (empty($companyUUID)) {
+            return $this->formatErrorMessage('department.companyUUID.required');
+        }
+
+        $company = $this->companyReaderRepository->getCompanyByUUID($companyUUID);
+        if (null === $company) {
+            return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $companyUUID], 'companies');
+        }
+
+        return null;
     }
 
     private function validateActive(?int $active): ?string
     {
-        if (null !== $active && !in_array($active, [0, 1])) {
-            return $this->formatErrorMessage('department.active.invalid', [], 'companies');
+        $errorMessage = BoolValidator::validate($active);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
         }
 
         return null;
     }
 
-    private function isCompanyExists(string $companyUUID): bool
+    private function validatePhone(?string $phone): ?string
     {
-        return $this->companyReaderRepository->isCompanyExistsWithUUID($companyUUID);
+        if (null === $phone) {
+            return $this->formatErrorMessage('department.contact.phone.required');
+        }
+
+        return null;
     }
 
-    private function isParentDepartmentExists(string $parentDepartmentUUID): bool
+    private function validateEmail(?string $email): ?string
     {
-        return $this->departmentReaderRepository->isDepartmentExistsWithUUID($parentDepartmentUUID);
+        if (empty($email)) {
+            return $this->formatErrorMessage('department.contact.email.required');
+        }
+
+        $errorMessage = EmailValidator::validate($email);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
+        }
+
+        return null;
     }
 
+    private function validateWebsite(?string $website): ?string
+    {
+        //$errorMessage = WebsiteValidator::validate($website);
+        //if (null !== $errorMessage) {
+        //    return $this->formatErrorMessage($errorMessage, [], 'validators');
+        //}
 
-    private function formatErrorMessage(string $translationKey, array $parameters = [], ?string $domain = null): string
+        return null;
+    }
+
+    private function validateStreet(?string $street): ?string
+    {
+        if (null === $street) {
+            return $this->formatErrorMessage('department.address.street.required');
+        }
+
+        return null;
+    }
+
+    private function validatePostcode(?string $postcode): ?string
+    {
+        if (null === $postcode) {
+            return $this->formatErrorMessage('department.address.postcode.required');
+        }
+
+        return null;
+    }
+
+    private function validateCity(?string $city): ?string
+    {
+        if (null === $city) {
+            return $this->formatErrorMessage('department.address.city.required');
+        }
+
+        return null;
+    }
+
+    private function validateCountry(?string $country): ?string
+    {
+        if (null === $country) {
+            return $this->formatErrorMessage('department.address.country.required');
+        }
+
+        return null;
+    }
+
+    private function isDepartmentExists(string $name, ?string $departmentUUID = null): ?string
+    {
+        $isDepartmentExists = $this->departmentReaderRepository->isDepartmentExistsWithName($name, $departmentUUID);
+        if ($isDepartmentExists) {
+            return $this->formatErrorMessage('department.alreadyExists', [':name' => $name]);
+        }
+
+        return null;
+    }
+
+    private function formatErrorMessage(string $translationKey, array $parameters = [], ?string $domain = 'departments'): string
     {
         return sprintf(
             '%s - %s %d',

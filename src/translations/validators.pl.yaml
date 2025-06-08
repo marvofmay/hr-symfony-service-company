@@ -20,8 +20,9 @@ pesel:
   invalid: "Nieprawidłowy PESEL"
 email:
   invalid: "Nieprawidłowy email"
+  required: "Email jest wymagany"
 date:
-  required: "Data wymagana"
+  required: "Data jest wymagana"
   invalidFormat: "Nieprawidłowy format daty - wymagany format :dateFormat"
 import:
   noData: "Brak danych do importu"

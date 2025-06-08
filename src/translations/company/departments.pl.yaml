@@ -1,4 +1,5 @@
 department:
+  alreadyExists: "Departament o podanej nazwie \":name\" już istnieje"
   uuid:
     notExists: "Departament o podanym UUID nie istnieje :uuid"
     notFound: "Departament o podanym UUID nie istnieje"
@@ -42,5 +43,10 @@ department:
       required: "Miasto wymagane"
     country:
       required: "Kraj wymagany"
+  contact:
+    phone:
+      required: "Telefon departamentu jest wymagany"
+    email:
+      required: "Email departementu jest wymagany"
   companyUUID:
-    required: "UUID firmy wymagane"
+    required: "UUID firmy jest wymagane"

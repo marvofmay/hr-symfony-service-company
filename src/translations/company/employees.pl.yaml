@@ -1,4 +1,5 @@
 employee:
+  alreadyExists: "Pracownik o podanym PESEL :pesel lub email :email już istnieje"
   uuid:
     notFound: "Pracownik o podanym UUID nie istnieje"
     notExists: "Pracownik o podanym UUID nie istnieje :uuid"
