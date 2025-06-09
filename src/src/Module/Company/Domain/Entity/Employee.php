@@ -22,7 +22,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'employee')]
+#[ORM\Index(name: 'index_external_uuid', columns: ['external_uuid'])]
+#[ORM\Index(name: 'index_first_name', columns: ['first_name'])]
+#[ORM\Index(name: 'index_last_name', columns: ['last_name'])]
 #[ORM\Index(name: 'index_pesel', columns: ['pesel'])]
+#[ORM\Index(name: 'index_employment_from', columns: ['employment_from'])]
+#[ORM\Index(name: 'index_employment_to', columns: ['employment_to'])]
+#[ORM\Index(name: 'index_active', columns: ['active'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Employee
