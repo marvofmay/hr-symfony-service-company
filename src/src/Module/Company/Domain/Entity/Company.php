@@ -20,6 +20,10 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'company')]
+#[ORM\Index(name: 'idx_short_name', columns: ['short_name'])]
+#[ORM\Index(name: 'idx_nip', columns: ['nip'])]
+#[ORM\Index(name: 'idx_regon', columns: ['regon'])]
+#[ORM\Index(name: 'idx_active', columns: ['active'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Company
