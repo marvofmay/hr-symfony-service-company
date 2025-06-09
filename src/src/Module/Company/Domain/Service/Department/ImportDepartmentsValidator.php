@@ -6,18 +6,20 @@ namespace App\Module\Company\Domain\Service\Department;
 
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
-use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
-use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use App\Module\System\Domain\Entity\Import;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class ImportDepartmentsValidator
 {
     public function __construct(
-        private TranslatorInterface $translator,
-        private CompanyReaderInterface $companyReaderRepository,
+        private TranslatorInterface       $translator,
+        private CompanyReaderInterface    $companyReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
-    ) {}
+        private CacheInterface   $cache,
+    )
+    {
+    }
 
     public function validate(Import $import): array
     {
@@ -26,6 +28,7 @@ readonly class ImportDepartmentsValidator
             $this->translator,
             $this->companyReaderRepository,
             $this->departmentReaderRepository,
+            $this->cache,
         );
 
         return $importer->validateBeforeImport();

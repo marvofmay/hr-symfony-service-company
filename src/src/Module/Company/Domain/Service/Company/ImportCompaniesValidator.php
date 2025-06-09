@@ -7,15 +7,19 @@ namespace App\Module\Company\Domain\Service\Company;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use App\Module\System\Domain\Entity\Import;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class ImportCompaniesValidator
 {
     public function __construct(
-        private TranslatorInterface $translator,
-        private CompanyReaderInterface $companyReaderRepository,
+        private TranslatorInterface     $translator,
+        private CompanyReaderInterface  $companyReaderRepository,
         private IndustryReaderInterface $industryReaderRepository,
-    ) {}
+        private CacheInterface          $cache,
+    )
+    {
+    }
 
     public function validate(Import $import): array
     {
@@ -24,6 +28,7 @@ readonly class ImportCompaniesValidator
             $this->translator,
             $this->companyReaderRepository,
             $this->industryReaderRepository,
+            $this->cache,
         );
 
         return $importer->validateBeforeImport();

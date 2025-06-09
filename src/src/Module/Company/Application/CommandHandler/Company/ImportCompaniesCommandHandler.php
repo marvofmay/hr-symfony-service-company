@@ -12,18 +12,22 @@ use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class ImportCompaniesCommandHandler
 {
     public function __construct(
-        private CompanyReaderInterface $companyReaderRepository,
-        private CompanyMultipleCreator $companyMultipleCreator,
-        private ImportReaderInterface $importReaderRepository,
-        private TranslatorInterface $translator,
-        private UpdateImportAction $updateImportAction,
+        private CompanyReaderInterface  $companyReaderRepository,
+        private CompanyMultipleCreator  $companyMultipleCreator,
+        private ImportReaderInterface   $importReaderRepository,
+        private TranslatorInterface     $translator,
+        private UpdateImportAction      $updateImportAction,
         private IndustryReaderInterface $industryReaderRepository,
-    ) {}
+        private CacheInterface          $cache,
+    )
+    {
+    }
 
     public function __invoke(ImportCompaniesCommand $command): void
     {
@@ -33,6 +37,7 @@ readonly class ImportCompaniesCommandHandler
             $this->translator,
             $this->companyReaderRepository,
             $this->industryReaderRepository,
+            $this->cache,
         );
 
         $this->companyMultipleCreator->multipleCreate($importer->import());

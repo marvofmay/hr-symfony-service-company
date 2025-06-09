@@ -131,8 +131,13 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         }
 
         if (is_string($employeeUUID)) {
-            $employee = $this->employeeReaderRepository->getEmployeeByUUID($employeeUUID);
-            if (null === $employee) {
+            $cacheKey = 'import_employee_uuid_' . $employeeUUID;
+
+            $employeeExists = $this->cache->get($cacheKey, function () use ($employeeUUID) {
+                return $this->employeeReaderRepository->getEmployeeByUUID($employeeUUID) !== null;
+            });
+
+            if (!$employeeExists) {
                 return $this->formatErrorMessage('employee.uuid.notExists', [':uuid' => $employeeUUID]);
             }
         }
@@ -146,8 +151,13 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('employee.departmentUUID.required');
         }
 
-        $department = $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID);
-        if (null === $department) {
+        $cacheKey = 'import_department_uuid_' . $departmentUUID;
+
+        $departmentExists = $this->cache->get($cacheKey, function () use ($departmentUUID) {
+            return $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID) !== null;
+        });
+
+        if (!$departmentExists) {
             return $this->formatErrorMessage('department.uuid.notExists', [':uuid' => $departmentUUID], 'departments');
         }
 
@@ -160,8 +170,13 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('employee.positionUUID.required');
         }
 
-        $position = $this->positionReaderRepository->getPositionByUUID($positionUUID);
-        if (null === $position) {
+        $cacheKey = 'import_position_uuid_' . $positionUUID;
+
+        $positionExists = $this->cache->get($cacheKey, function () use ($positionUUID) {
+            return $this->positionReaderRepository->getPositionByUUID($positionUUID) !== null;
+        });
+
+        if (!$positionExists) {
             return $this->formatErrorMessage('position.uuid.notExists', [':uuid' => $positionUUID], 'positions');
         }
 
@@ -174,8 +189,13 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('employee.contractTypeUUID.required');
         }
 
-        $contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($contractTypeUUID);
-        if (null === $contractType) {
+        $cacheKey = 'import_contract_type_uuid_' . $contractTypeUUID;
+
+        $contractTypeExists = $this->cache->get($cacheKey, function () use ($contractTypeUUID) {
+            return $this->contractTypeReaderRepository->getContractTypeByUUID($contractTypeUUID) !== null;
+        });
+
+        if (!$contractTypeExists) {
             return $this->formatErrorMessage('contractType.uuid.notExists', [':uuid' => $contractTypeUUID], 'contract_types');
         }
 
@@ -188,7 +208,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('employee.roleUUID.required');
         }
 
-        $cacheKey = 'import_employee_role_' . $roleUUID;
+        $cacheKey = 'import_role_uuid_' . $roleUUID;
 
         $roleExists = $this->cache->get($cacheKey, function () use ($roleUUID) {
             return $this->roleReaderRepository->getRoleByUUID($roleUUID) !== null;
@@ -208,8 +228,13 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         }
 
         if (is_string($parentEmployeeUUID)) {
-            $employee = $this->employeeReaderRepository->getEmployeeByUUID($parentEmployeeUUID);
-            if (null === $employee) {
+            $cacheKey = 'import_employee_uuid_' . $parentEmployeeUUID;
+
+            $parentExists = $this->cache->get($cacheKey, function () use ($parentEmployeeUUID) {
+                return $this->employeeReaderRepository->getEmployeeByUUID($parentEmployeeUUID) !== null;
+            });
+
+            if (!$parentExists) {
                 return $this->formatErrorMessage('employee.uuid.notExists', [':uuid' => $parentEmployeeUUID]);
             }
         }

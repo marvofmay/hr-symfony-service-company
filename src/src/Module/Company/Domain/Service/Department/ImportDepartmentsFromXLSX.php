@@ -9,6 +9,7 @@ use App\Common\Shared\Utils\EmailValidator;
 use App\Common\XLSX\XLSXIterator;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportDepartmentsFromXLSX extends XLSXIterator
@@ -34,6 +35,7 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
         private readonly TranslatorInterface     $translator,
         private readonly CompanyReaderInterface  $companyReaderRepository,
         private readonly DepartmentReaderInterface $departmentReaderRepository,
+        private readonly CacheInterface          $cache,
     )
     {
         parent::__construct($this->filePath, $this->translator);
@@ -97,15 +99,18 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
 
     private function validateDepartmentUUID(string|int|null $departmentUUID): ?string
     {
-        if (empty($departmentUUID)) {
+        if (empty($departmentUUID) || !is_string($departmentUUID)) {
             return null;
         }
 
-        if (is_string($departmentUUID)) {
-            $department = $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID);
-            if (null === $department) {
-                return $this->formatErrorMessage('department.uuid.notExists', [':uuid' => $departmentUUID]);
-            }
+        $cacheKey = 'import_department_uuid_' . $departmentUUID;
+
+        $exists = $this->cache->get($cacheKey, function () use ($departmentUUID) {
+            return $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID) !== null;
+        });
+
+        if (!$exists) {
+            return $this->formatErrorMessage('department.uuid.notExists', [':uuid' => $departmentUUID]);
         }
 
         return null;
@@ -139,15 +144,18 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
 
     private function validateParentDepartmentUUID(string|int|null $parentDepartmentUUID): ?string
     {
-        if (empty($parentDepartmentUUID)) {
+        if (empty($parentDepartmentUUID) || !is_string($parentDepartmentUUID)) {
             return null;
         }
 
-        if (is_string($parentDepartmentUUID)) {
-            $parentDepartment = $this->departmentReaderRepository->getDepartmentByUUID($parentDepartmentUUID);
-            if (null === $parentDepartment) {
-                return $this->formatErrorMessage('department.uuid.notExists', [':uuid' => $parentDepartmentUUID]);
-            }
+        $cacheKey = 'import_department_uuid_' . $parentDepartmentUUID;
+
+        $exists = $this->cache->get($cacheKey, function () use ($parentDepartmentUUID) {
+            return $this->departmentReaderRepository->getDepartmentByUUID($parentDepartmentUUID) !== null;
+        });
+
+        if (!$exists) {
+            return $this->formatErrorMessage('department.uuid.notExists', [':uuid' => $parentDepartmentUUID]);
         }
 
         return null;
@@ -159,8 +167,13 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('department.companyUUID.required');
         }
 
-        $company = $this->companyReaderRepository->getCompanyByUUID($companyUUID);
-        if (null === $company) {
+        $cacheKey = 'import_company_uuid_' . $companyUUID;
+
+        $exists = $this->cache->get($cacheKey, function () use ($companyUUID) {
+            return $this->companyReaderRepository->getCompanyByUUID($companyUUID) !== null;
+        });
+
+        if (!$exists) {
             return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $companyUUID], 'companies');
         }
 

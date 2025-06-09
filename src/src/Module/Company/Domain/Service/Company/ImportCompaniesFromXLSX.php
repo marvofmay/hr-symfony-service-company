@@ -11,6 +11,7 @@ use App\Common\Shared\Utils\REGONValidator;
 use App\Common\XLSX\XLSXIterator;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportCompaniesFromXLSX extends XLSXIterator
@@ -39,6 +40,7 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         private readonly TranslatorInterface     $translator,
         private readonly CompanyReaderInterface  $companyReaderRepository,
         private readonly IndustryReaderInterface $industryReaderRepository,
+        private readonly CacheInterface          $cache,
     )
     {
         parent::__construct($this->filePath, $this->translator);
@@ -113,8 +115,13 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         }
 
         if (is_string($companyUUID)) {
-            $company = $this->companyReaderRepository->getCompanyByUUID($companyUUID);
-            if (null === $company) {
+            $cacheKey = 'import_company_uuid_' . $companyUUID;
+
+            $companyExists = $this->cache->get($cacheKey, function () use ($companyUUID) {
+                return $this->companyReaderRepository->getCompanyByUUID($companyUUID) !== null;
+            });
+
+            if (!$companyExists) {
                 return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $companyUUID]);
             }
         }
@@ -152,8 +159,13 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         }
 
         if (is_string($parentCompanyUUID)) {
-            $parentCompany = $this->companyReaderRepository->getCompanyByUUID($parentCompanyUUID);
-            if (null === $parentCompany) {
+            $cacheKey = 'import_company_uuid_' . $parentCompanyUUID;
+
+            $parentExists = $this->cache->get($cacheKey, function () use ($parentCompanyUUID) {
+                return $this->companyReaderRepository->getCompanyByUUID($parentCompanyUUID) !== null;
+            });
+
+            if (!$parentExists) {
                 return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $parentCompanyUUID]);
             }
         }
@@ -167,8 +179,13 @@ class ImportCompaniesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('company.industryUUID.required');
         }
 
-        $industry = $this->industryReaderRepository->getIndustryByUUID($industryUUID);
-        if (null === $industry) {
+        $cacheKey = 'import_industry_uuid_' . $industryUUID;
+
+        $industryExists = $this->cache->get($cacheKey, function () use ($industryUUID) {
+            return $this->industryReaderRepository->getIndustryByUUID($industryUUID) !== null;
+        });
+
+        if (!$industryExists) {
             return $this->formatErrorMessage('industry.uuid.notExists', [':uuid' => $industryUUID], 'industries');
         }
 
