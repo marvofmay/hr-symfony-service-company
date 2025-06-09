@@ -19,6 +19,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'department')]
+#[ORM\Index(name: 'idx_active', columns: ['active'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Department
