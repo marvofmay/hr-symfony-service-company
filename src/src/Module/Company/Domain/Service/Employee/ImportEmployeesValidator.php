@@ -10,6 +10,7 @@ use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\ContractType\Reader\ContractTypeReaderRepository;
 use App\Module\System\Domain\Entity\Import;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class ImportEmployeesValidator
@@ -21,6 +22,7 @@ final readonly class ImportEmployeesValidator
         private PositionReaderInterface      $positionReaderRepository,
         private ContractTypeReaderRepository $contractTypeReaderRepository,
         private RoleReaderInterface          $roleReaderRepository,
+        private CacheInterface               $cache,
     )
     {
     }
@@ -35,6 +37,7 @@ final readonly class ImportEmployeesValidator
             $this->positionReaderRepository,
             $this->contractTypeReaderRepository,
             $this->roleReaderRepository,
+            $this->cache
         );
 
         return $importer->validateBeforeImport();

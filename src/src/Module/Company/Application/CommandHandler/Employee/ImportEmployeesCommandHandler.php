@@ -15,6 +15,7 @@ use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class ImportEmployeesCommandHandler
@@ -29,6 +30,7 @@ final readonly class ImportEmployeesCommandHandler
         private EmployeeMultipleCreator $employeeMultipleCreator,
         private TranslatorInterface $translator,
         private UpdateImportAction $updateImportAction,
+        private CacheInterface               $cache,
     ) {}
 
     public function __invoke(ImportEmployeesCommand $command): void
@@ -41,7 +43,8 @@ final readonly class ImportEmployeesCommandHandler
             $this->employeeReaderRepository,
             $this->positionReaderRepository,
             $this->contractTypeReaderRepository,
-            $this->roleReaderRepository
+            $this->roleReaderRepository,
+            $this->cache
         );
 
         $this->employeeMultipleCreator->multipleCreate($importer->import());

@@ -5,6 +5,7 @@ volumes:
     driver: local
   mysql-data-service-company-test:
     driver: local
+  redis-data:
 
 services:
   service-company:
@@ -139,3 +140,11 @@ services:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
     volumes:
       - ./src:/var/www/html
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    volumes:
+      - redis-data:/data

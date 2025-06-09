@@ -15,6 +15,7 @@ use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\ContractType\Reader\ContractTypeReaderRepository;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportEmployeesFromXLSX extends XLSXIterator
@@ -49,6 +50,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         private readonly PositionReaderInterface      $positionReaderRepository,
         private readonly ContractTypeReaderRepository $contractTypeReaderRepository,
         private readonly RoleReaderInterface          $roleReaderRepository,
+        private readonly CacheInterface               $cache,
     )
     {
         parent::__construct($this->filePath, $this->translator);
@@ -186,8 +188,13 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('employee.roleUUID.required');
         }
 
-        $role = $this->roleReaderRepository->getRoleByUUID($roleUUID);
-        if (null === $role) {
+        $cacheKey = 'import_employee_role_' . $roleUUID;
+
+        $roleExists = $this->cache->get($cacheKey, function () use ($roleUUID) {
+            return $this->roleReaderRepository->getRoleByUUID($roleUUID) !== null;
+        });
+
+        if (!$roleExists) {
             return $this->formatErrorMessage('role.uuid.notExists', [':uuid' => $roleUUID], 'roles');
         }
 

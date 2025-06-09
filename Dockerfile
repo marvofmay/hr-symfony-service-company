@@ -48,6 +48,10 @@ RUN pecl install xdebug \
     && echo "xdebug.discover_client_host=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && echo "xdebug.idekey=PHPSTORM" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+# Zainstaluj rozszerzenie redis
+RUN pecl install redis && docker-php-ext-enable redis
+
+
 # Skopiuj pliki aplikacji do katalogu Apache
 COPY ./src /var/www/html
 
