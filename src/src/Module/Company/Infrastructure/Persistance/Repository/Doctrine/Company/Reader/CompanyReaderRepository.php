@@ -10,13 +10,11 @@ use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class CompanyReaderRepository extends ServiceEntityRepository implements CompanyReaderInterface
 {
-    private QueryBuilder $qb;
 
     public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
     {
