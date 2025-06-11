@@ -39,6 +39,10 @@ employee:
   add:
     success: "Pracownik został pomyślnie zapisany"
     error: "Wystąpił błąd - pracownik nie został dodany"
+  view:
+    error: "Wystapił błąd przy pobieraniu wybranego pracownika"
+  list:
+    error: "Wystapił błąd przy pobieraniu listy pracowników"
   update:
     success: "Dane pracownika zostały pomyślnie zaktualizowane"
     error: "Wystąpił błąd - dane pracownika nie zostały zaktualizowane"
