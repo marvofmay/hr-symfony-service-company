@@ -1,14 +1,16 @@
 permission:
   create:
-    description: ""
+    description: "Uprawnienie tworzenia zasobu"
   update:
-    description: ""
+    description: "Uprawnienie aktualizacji zasobu"
   delete:
-    description: ""
+    description: "Uprawnienie usuwania zasobu"
   view:
-    description: ""
+    description: "Uprawnienie podglądu zasobu"
+  list:
+    description: "Uprawnienie listowania zasobu"
   import:
-    description: ""
+    description: "Uprawnienie do importu danych dp zasobu"
   notExists: "Uprawnienie o podanym UUID nie istnieje :uuid"
   uuid:
     required: "Wymagane UUID uprawnienia"

@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\CommandHandler\Employee;
 
-use App\Module\Company\Application\Command\Employee\CreateEmployeeCommand;
 use App\Module\Company\Application\Command\Employee\UpdateEmployeeCommand;
-use App\Module\Company\Domain\Service\Employee\EmployeeCreator;
 use App\Module\Company\Domain\Service\Employee\EmployeeUpdater;
 
 readonly class UpdateEmployeeCommandHandler
