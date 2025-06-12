@@ -12,43 +12,31 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use OpenApi\Attributes as OA;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'industry')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
-#[OA\Schema(
-    schema: 'IndustryListResponse',
-    title: 'Industry List Response',
-    description: 'Lista branż'
-)]
+
 class Industry
 {
     use TimestampableTrait;
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    #[OA\Property(description: 'Identyfikator branży', type: 'string')]
     public const COLUMN_UUID = 'uuid';
 
-    #[OA\Property(description: 'Nazwa branży', type: 'string')]
     public const COLUMN_NAME = 'name';
 
-    #[OA\Property(description: 'Opis branży', type: 'string')]
     public const COLUMN_DESCRIPTION = 'description';
 
-    #[OA\Property(description: 'Data utworzenia', type: 'string', format: 'date-time')]
     public const COLUMN_CREATED_AT = 'createdAt';
 
-    #[OA\Property(description: 'Data aktualizacji', type: 'string', format: 'date-time', nullable: true)]
     public const COLUMN_UPDATED_AT = 'updatedAt';
 
-    #[OA\Property(description: 'Data usunięcia', type: 'string', format: 'date-time', nullable: true)]
     public const COLUMN_DELETED_AT = 'deletedAt';
 
     public const string RELATION_COMPANIES = 'companies';

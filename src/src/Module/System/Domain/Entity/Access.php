@@ -10,7 +10,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use OpenApi\Attributes as OA;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -22,11 +21,6 @@ use App\Common\Domain\Trait\TimestampableTrait;
 #[ORM\Table(name: 'access')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
-#[OA\Schema(
-    schema: 'AccessListResponse',
-    title: 'Access List Response',
-    description: 'Lista dostępów'
-)]
 class Access
 {
     use TimestampableTrait;
@@ -57,7 +51,7 @@ class Access
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]

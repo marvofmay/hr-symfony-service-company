@@ -9,7 +9,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use OpenApi\Attributes as OA;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -21,11 +20,6 @@ use App\Common\Domain\Trait\TimestampableTrait;
 #[ORM\Table(name: 'module')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
-#[OA\Schema(
-    schema: 'ModuleListResponse',
-    title: 'Module List Response',
-    description: 'Lista modółów'
-)]
 class Module
 {
     use TimestampableTrait;

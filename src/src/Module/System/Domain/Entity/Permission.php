@@ -7,7 +7,6 @@ namespace App\Module\System\Domain\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use OpenApi\Attributes as OA;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -19,11 +18,7 @@ use App\Common\Domain\Trait\TimestampableTrait;
 #[ORM\Table(name: 'permission')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
-#[OA\Schema(
-    schema: 'PermissionListResponse',
-    title: 'Permission List Response',
-    description: 'Lista uprawnień'
-)]
+
 class Permission
 {
     use TimestampableTrait;

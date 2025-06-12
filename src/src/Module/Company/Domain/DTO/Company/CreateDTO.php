@@ -10,21 +10,10 @@ use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Company\Structure\Validator\Constraints\Company\ExistingCompanyUUID;
 use App\Module\Company\Structure\Validator\Constraints\Company\UniqueCompanyFullName;
 use App\Module\Company\Structure\Validator\Constraints\Industry\ExistingIndustryUUID;
-use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[OA\Schema(
-    required: ['fullName']
-)]
 class CreateDTO
 {
-    #[OA\Property(
-        description: 'Nazwa tworzonej firmy',
-        type: 'string',
-        maxLength: 500,
-        minLength: 3,
-        example: 'QuantumEdge Technologies',
-    )]
     #[NotBlank(message: [
         'text' => 'company.fullName.required',
         'domain' => 'companies',
@@ -37,30 +26,13 @@ class CreateDTO
     #[UniqueCompanyFullName]
     public string $fullName = '';
 
-    #[OA\Property(
-        description: 'Opcjonalna skrócona nazwa firmy.',
-        type: 'string',
-        example: 'QET',
-        nullable: true
-    )]
     public ?string $shortName = null;
 
-    #[OA\Property(
-        description: 'Określa, czy firma jest aktywna. Domyślnie wartość to true.',
-        type: 'boolean',
-        example: true
-    )]
     #[Assert\Type(
         type: 'bool',
     )]
     public bool $active = true;
 
-    #[OA\Property(
-        description: 'UUID firmy matki',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-        nullable: true,
-    )]
     #[Assert\Uuid(message: 'invalidUUID')]
     #[ExistingCompanyUUID(
         message: ['uuidNotExists' => 'company.uuid.notExists', 'domain' => 'companies']

@@ -10,21 +10,10 @@ use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Company\Structure\Validator\Constraints\Company\ExistingCompanyUUID;
 use App\Module\Company\Structure\Validator\Constraints\Department\ExistingDepartmentUUID;
 use App\Module\Company\Structure\Validator\Constraints\Department\UniqueDepartmentName;
-use OpenApi\Attributes as OA;
 use Symfony\Component\Validator\Constraints as Assert;
 
-#[OA\Schema(
-    required: ['name', 'companyUUID'],
-)]
 class CreateDTO
 {
-    #[OA\Property(
-        description: 'Nazwa tworzonego departamentu',
-        type: 'string',
-        maxLength: 200,
-        minLength: 3,
-        example: 'Some department of QuantumEdge Technologies',
-    )]
     #[NotBlank(message: [
         'text' => 'department.name.required',
         'domain' => 'departments',
@@ -44,21 +33,11 @@ class CreateDTO
     ])]
     public ?string $description = null;
 
-    #[OA\Property(
-        description: 'Określa, czy departament jest aktywny. Domyślnie wartość to true.',
-        type: 'boolean',
-        example: true
-    )]
     #[Assert\Type(
         type: 'bool',
     )]
     public bool $active = true;
 
-    #[OA\Property(
-        description: 'UUID firmy, do której przynależy departament',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-    )]
     #[NotBlank(message: [
         'text' => 'company.uuid.required',
         'domain' => 'companies',
@@ -69,12 +48,6 @@ class CreateDTO
     )]
     public ?string $companyUUID = null;
 
-    #[OA\Property(
-        description: 'UUID departamentu matki',
-        type: 'string',
-        example: '1343b681-39ea-4917-ae2f-7a9296690116',
-        nullable: true
-    )]
     #[Assert\Uuid(message: 'department.invalidUUID')]
     #[ExistingDepartmentUUID(
         message: ['uuidNotExists' => 'department.uuid.notExists', 'domain' => 'departments']

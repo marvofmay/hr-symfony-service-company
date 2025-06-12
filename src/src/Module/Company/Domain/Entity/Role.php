@@ -9,14 +9,12 @@ use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\Permission;
-use App\Module\System\Domain\Entity\RoleAccess;
 use App\Module\System\Domain\Entity\RoleAccessPermission;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use OpenApi\Attributes as OA;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -25,11 +23,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'role')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
-#[OA\Schema(
-    schema: 'RoleListResponse',
-    title: 'Role List Response',
-    description: 'Lista ról'
-)]
 class Role
 {
     use TimestampableTrait;
@@ -52,7 +45,7 @@ class Role
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank]
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
