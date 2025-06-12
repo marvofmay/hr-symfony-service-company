@@ -19,7 +19,6 @@ class CreateDTO
         'tooLong' => 'role.name.maximumLength',
         'domain' => 'roles',
     ])]
-    #[UniqueRoleName]
     public string $name = '';
 
     public ?string $description = null;
