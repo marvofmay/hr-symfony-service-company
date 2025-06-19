@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class IndustryReaderRepository extends ServiceEntityRepository implements IndustryReaderInterface
@@ -22,14 +23,16 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
 
     public function getIndustryByUUID(string $uuid): ?Industry
     {
-        return $this->findOneBy(['uuid' => $uuid]);
+        $industry = $this->findOneBy([Industry::COLUMN_UUID => $uuid]);
+        if (null === $industry) {
+            throw new \Exception($this->translator->trans('industry.uuid.notExists', [':uuid' => $uuid], 'industries'), Response::HTTP_NOT_FOUND);
+        }
+        return $industry;
     }
 
     public function getIndustriesByUUID(array $uuids): Collection
     {
-        $industries = $this->findBy([
-            Industry::COLUMN_UUID => $uuids
-        ]);
+        $industries = $this->findBy([Industry::COLUMN_UUID => $uuids]);
 
         if (empty($industries)) {
             throw new NotFindByUUIDException(sprintf(

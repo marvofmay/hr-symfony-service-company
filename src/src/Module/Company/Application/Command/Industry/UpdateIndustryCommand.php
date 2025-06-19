@@ -6,19 +6,13 @@ namespace App\Module\Company\Application\Command\Industry;
 
 use App\Module\Company\Domain\Entity\Industry;
 
-class UpdateIndustryCommand
+final readonly class UpdateIndustryCommand
 {
     public function __construct(
-        private readonly string $uuid,
-        private readonly string $name,
-        private readonly ?string $description,
-        private readonly Industry $industry,
+        private string   $name,
+        private ?string  $description,
+        private Industry $industry,
     ) {
-    }
-
-    public function getUUID(): string
-    {
-        return $this->uuid;
     }
 
     public function getName(): string

@@ -16,12 +16,10 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ListIndustriesController extends AbstractController
+final class ListIndustriesController extends AbstractController
 {
-    public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly TranslatorInterface $translator,
-    ) {
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
+    {
     }
 
     #[Route('/api/industries', name: 'api.industries.list', methods: ['GET'])]

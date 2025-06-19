@@ -16,12 +16,10 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class UpdateIndustryController extends AbstractController
+final class UpdateIndustryController extends AbstractController
 {
-    public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly TranslatorInterface $translator,
-    ) {
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
+    {
     }
 
     #[Route('/api/industries/{uuid}', name: 'api.industries.update', methods: ['PUT'])]
@@ -32,11 +30,7 @@ class UpdateIndustryController extends AbstractController
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
-            if ($uuid !== $updateDTO->getUUID()) {
-                throw new \Exception($this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators'), Response::HTTP_CONFLICT);
-            }
-
-            $updateIndustryAction->execute($updateDTO);
+            $updateIndustryAction->execute($uuid, $updateDTO);
 
             return new JsonResponse(['message' => $this->translator->trans('industry.update.success', [], 'industries')], Response::HTTP_OK);
         } catch (\Exception $error) {

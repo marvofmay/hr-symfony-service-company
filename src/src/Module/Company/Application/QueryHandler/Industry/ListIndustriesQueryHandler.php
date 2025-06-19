@@ -22,7 +22,7 @@ class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
 
     protected function getAlias(): string
     {
-        return 'industry';
+        return Industry::ALIAS;
     }
 
     protected function getDefaultOrderBy(): string
@@ -47,20 +47,6 @@ class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
             Industry::COLUMN_NAME,
             Industry::COLUMN_DESCRIPTION,
         ];
-    }
-
-    protected function transformIncludes(array $items, array $includes): array
-    {
-        $data = array_map(fn($industry) => $industry->toArray(), $items);
-        foreach (Industry::getRelations() as $relation) {
-            foreach ($data as $key => $industry) {
-                if (!in_array($relation, $includes) || empty($includes)) {
-                    unset($data[$key][$relation]);
-                }
-            }
-        }
-
-        return $data;
     }
 
     protected function getRelations(): array

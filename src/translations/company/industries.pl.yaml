@@ -3,7 +3,7 @@ industry:
     notFound: "Branża o podanym UUID nie istnieje"
     notExists: "Branża o podanym UUID nie istnieje :uuid"
   name:
-    alreadyExists: "Branża istnieje"
+    alreadyExists: "Branża o nazwie \":name\" już istnieje"
     required: "Nazwa branży jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"

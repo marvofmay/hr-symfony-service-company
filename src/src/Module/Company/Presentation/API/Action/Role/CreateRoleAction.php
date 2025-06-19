@@ -20,12 +20,8 @@ final readonly class CreateRoleAction
     {
         try {
             $this->roleValidator->isRoleNameAlreadyExists($createDTO->getName());
-            $this->commandBus->dispatch(
-                new CreateRoleCommand(
-                    $createDTO->getName(),
-                    $createDTO->getDescription()
-                )
-            );
+
+            $this->commandBus->dispatch(new CreateRoleCommand($createDTO->getName(), $createDTO->getDescription()));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }

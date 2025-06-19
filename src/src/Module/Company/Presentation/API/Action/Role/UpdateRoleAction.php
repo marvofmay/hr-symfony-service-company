@@ -18,7 +18,6 @@ final readonly class UpdateRoleAction
     public function __construct(
         private MessageBusInterface $commandBus,
         private RoleReaderInterface $roleReaderRepository,
-        private TranslatorInterface $translator,
         private RoleValidator       $roleValidator,
     )
     {
@@ -28,19 +27,9 @@ final readonly class UpdateRoleAction
     {
         try {
             $role = $this->roleReaderRepository->getRoleByUUID($uuid);
-            if (null === $role) {
-                throw new \Exception($this->translator->trans('role.uuid.notExists', [':uuid' => $uuid], 'roles'), Response::HTTP_NOT_FOUND);
-            }
-
             $this->roleValidator->isRoleNameAlreadyExists($updateDTO->getName(), $uuid);
 
-            $this->commandBus->dispatch(
-                new UpdateRoleCommand(
-                    $updateDTO->getName(),
-                    $updateDTO->getDescription(),
-                    $this->roleReaderRepository->getRoleByUUID($uuid)
-                )
-            );
+            $this->commandBus->dispatch(new UpdateRoleCommand($updateDTO->getName(), $updateDTO->getDescription(), $role));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
