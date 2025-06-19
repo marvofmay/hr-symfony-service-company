@@ -20,8 +20,8 @@ class UpdateIndustryAction
         $this->commandBus->dispatch(
             new UpdateIndustryCommand(
                 $updateDTO->getUUID(),
-                $updateDTO->getName(),
-                $updateDTO->getDescription(),
+                $updateDTO->name,
+                $updateDTO->description,
                 $this->industryReaderRepository->getIndustryByUUID($updateDTO->getUUID())
             )
         );

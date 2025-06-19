@@ -20,8 +20,8 @@ final readonly class CreateIndustryAction
     public function execute(CreateDTO $createDTO): void
     {
         try {
-            $this->industryValidator->isIndustryNameAlreadyExists($createDTO->getName());
-            $this->commandBus->dispatch(new CreateIndustryCommand($createDTO->getName(), $createDTO->getDescription()));
+            $this->industryValidator->isIndustryNameAlreadyExists($createDTO->name);
+            $this->commandBus->dispatch(new CreateIndustryCommand($createDTO->name, $createDTO->description));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }

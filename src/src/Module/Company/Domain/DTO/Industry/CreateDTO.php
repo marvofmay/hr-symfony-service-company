@@ -18,17 +18,16 @@ class CreateDTO
         'tooLong' => 'industry.name.maximumLength',
         'domain' => 'industries',
     ])]
-    public string $name = '';
-
-    public ?string $description = null;
-
-    public function getName(): string
-    {
-        return $this->name;
+    public string $name = '' {
+        get {
+            return $this->name;
+        }
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
+    public ?string $description = null {
+        get {
+            return $this->description;
+        }
     }
+
 }
