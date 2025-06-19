@@ -19,6 +19,7 @@ position:
     error: "Wystąpił błąd - stanowisko nie zostało usunięte"
     multiple:
       success: "Stanowiska zostały pomyślnie usunięte"
+      error: "Wystąpił błąd - stanowiska nie zostały usunięte"
   import:
     success: "Stanowiska zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - stanowiska nie zostały zaimportowane"

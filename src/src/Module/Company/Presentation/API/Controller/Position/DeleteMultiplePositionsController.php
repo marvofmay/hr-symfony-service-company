@@ -16,14 +16,17 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DeleteMultiplePositionsController extends AbstractController
+final class DeleteMultiplePositionsController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
     }
 
     #[Route('/api/positions/multiple', name: 'api.positions.delete_multiple', methods: ['DELETE'])]
-    public function delete(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO, DeleteMultiplePositionsAction $deleteMultiplePositionsAction): JsonResponse
+    public function delete(
+        #[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO,
+        DeleteMultiplePositionsAction $deleteMultiplePositionsAction
+    ): JsonResponse
     {
         try {
             if (!$this->isGranted(PermissionEnum::DELETE, AccessEnum::POSITION)) {

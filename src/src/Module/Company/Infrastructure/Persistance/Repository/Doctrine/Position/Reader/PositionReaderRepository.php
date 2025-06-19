@@ -83,13 +83,6 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
 
     public function isPositionWithUUIDExists(string $uuid): bool
     {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        $qb->select('p')
-            ->from(Position::class, 'p')
-            ->where('p.' . Position::COLUMN_UUID . '= :uuid')
-            ->setParameter('uuid', $uuid);
-
-        return null !== $qb->getQuery()->getOneOrNullResult();
+        return null !== $this->findOneBy([Position::COLUMN_UUID => $uuid]);
     }
 }
