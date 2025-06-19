@@ -29,6 +29,7 @@ class InitializeSystemFakeDataCommand extends Command
 
         $commands = [
             'app:add-record-to-company-table',
+            'app:add-record-to-department-table',
         ];
 
         $output->writeln("**************************************************************");

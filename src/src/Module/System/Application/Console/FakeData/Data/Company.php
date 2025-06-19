@@ -11,6 +11,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class Company
 {
+    public const string COMPANY_NAME_FUTURE_TECHNOLOGY = 'Feture Technology';
+
     public function __construct(private EntityManagerInterface $entityManager, private TranslatorInterface $translator)
     {
     }
@@ -21,7 +23,7 @@ final readonly class Company
         $technologyUUID = $this->entityManager->getRepository(Industry::class)->findOneBy(['name' => $translatedTechnologyName])->getUuid();
 
         return [
-            'fullName' => 'Feture Technology',
+            'fullName' => self::COMPANY_NAME_FUTURE_TECHNOLOGY,
             'shortName' => 'FT',
             'nip' => '9316831327',
             'regon' => '9316831327',

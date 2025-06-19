@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\System\Application\Console\FakeData;
 
-use App\Module\Company\Domain\Enum\ContactTypeEnum;
-use App\Module\System\Application\Console\FakeData\Data\Company as CompanyFakeData;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
-use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Entity\Department;
+use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\System\Application\Console\FakeData\Data\Company as CompanyFakeData;
+use App\Module\System\Application\Console\FakeData\Data\Department as DepartmentFakeData;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Parameter;
@@ -18,18 +19,16 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(name: 'app:add-record-to-company-table')]
-class AddRecordToCompanyTableCommand extends Command
+#[AsCommand(name: 'app:add-record-to-department-table')]
+class AddRecordToDepartmentTableCommand extends Command
 {
     private const string DESCRIPTION = 'Add default company if not exists';
     private const string HELP = 'This command adds a default company based on predefined data if it does not already exist';
     private const string SUCCESS_MESSAGE = 'Company added successfully!';
-    private const string INFO_ALREADY_EXISTS = 'Company already exists. No action taken.';
+    private const string COMPANY_NOT_EXISTS = 'Company not exists. No action taken.';
+    private const string DEPARTMENT_ALREADY_EXISTS = 'Department already exists. No action taken.';
 
-    public function __construct(
-        private readonly EntityManagerInterface $entityManager,
-        private readonly CompanyFakeData $companyFakeData,
-    ) {
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly DepartmentFakeData $departmentFakeData,) {
         parent::__construct();
     }
 
@@ -42,43 +41,56 @@ class AddRecordToCompanyTableCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $data = $this->companyFakeData->getDefaultData();
+        $data = $this->departmentFakeData->getDefaultData();
 
         $companyRepository = $this->entityManager->getRepository(Company::class);
         $existingCompany = $companyRepository->createQueryBuilder(Company::ALIAS)
             ->where(Company::ALIAS . '.fullName = :fullName')
-            ->andWhere(Company::ALIAS . '.nip = :nip')
-            ->andWhere(Company::ALIAS . '.regon = :regon')
             ->setParameters(new ArrayCollection([
-                new Parameter('fullName', $data['fullName']),
-                new Parameter('nip', $data['nip']),
-                new Parameter('regon', $data['regon']),
+                new Parameter('fullName', CompanyFakeData::COMPANY_NAME_FUTURE_TECHNOLOGY),
             ]))
             ->getQuery()
             ->getOneOrNullResult();
 
-        if ($existingCompany !== null) {
-            $output->writeln(sprintf('<comment>%s</comment>', self::INFO_ALREADY_EXISTS));
+        if ($existingCompany === null) {
+            $output->writeln(sprintf('<comment>%s</comment>', self::COMPANY_NOT_EXISTS));
+
             return Command::SUCCESS;
         }
 
-        $industry = $this->entityManager->getRepository(Industry::class)->find($data['industryUUID']);
+        $existingDepartment = null;
+        if (isset($data['departmentUUID']) && is_string($data['departmentUUID'])) {
+            $departmentRepository = $this->entityManager->getRepository(Department::class);
+            $existingDepartment = $departmentRepository->createQueryBuilder(Department::ALIAS)
+                ->where(Company::ALIAS . '.uuid = :uuid')
+                ->setParameters(new ArrayCollection([
+                    new Parameter('uuid', $data['departmentUUID']),
+                ]))
+                ->getQuery()
+                ->getOneOrNullResult();
 
-        $company = new Company();
-        $company->setFullName($data['fullName']);
-        $company->setShortName($data['shortName']);
-        $company->setNip($data['nip']);
-        $company->setRegon($data['regon']);
-        $company->setDescription($data['description']);
-        $company->setActive($data['active']);
-        $company->setIndustry($industry);
+            if ($existingDepartment !== null) {
+                $output->writeln(sprintf('<comment>%s</comment>', self::DEPARTMENT_ALREADY_EXISTS));
+
+                return Command::SUCCESS;
+            }
+        }
+
+        $department = new Department();
+        $department->setName($data['name']);
+        $department->setDescription($data['description']);
+        $department->setActive($data['active']);
+        $department->setCompany($existingCompany);
+        if ($existingDepartment instanceof Department) {
+            $department->setParentDepartment($existingDepartment);
+        }
 
         foreach ($data['phones'] as $phoneNumber) {
             $contact = new Contact();
             $contact->setType(ContactTypeEnum::PHONE->value);
             $contact->setData($phoneNumber);
             $contact->setActive(true);
-            $contact->setCompany($company);
+            $contact->setDepartment($department);
             $this->entityManager->persist($contact);
         }
 
@@ -87,7 +99,7 @@ class AddRecordToCompanyTableCommand extends Command
             $contact->setType(ContactTypeEnum::EMAIL->value);
             $contact->setData($emailAddress);
             $contact->setActive(true);
-            $contact->setCompany($company);
+            $contact->setDepartment($department);
             $this->entityManager->persist($contact);
         }
 
@@ -95,7 +107,7 @@ class AddRecordToCompanyTableCommand extends Command
             $contact = new Contact();
             $contact->setType(ContactTypeEnum::WEBSITE->value);
             $contact->setData($websiteUrl);
-            $contact->setCompany($company);
+            $contact->setDepartment($department);
             $this->entityManager->persist($contact);
         }
 
@@ -106,10 +118,10 @@ class AddRecordToCompanyTableCommand extends Command
         $address->setCity($addressData['city']);
         $address->setCountry($addressData['country']);
         $address->setActive($addressData['active']);
-        $address->setCompany($company);
+        $address->setDepartment($department);
 
         $this->entityManager->persist($address);
-        $this->entityManager->persist($company);
+        $this->entityManager->persist($department);
         $this->entityManager->flush();
 
         $output->writeln(sprintf('<info>%s</info>', self::SUCCESS_MESSAGE));
