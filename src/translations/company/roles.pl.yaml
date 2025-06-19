@@ -31,7 +31,7 @@ role:
     success: "Role zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - role nie zostały zaimportowane"
     file:
-      required: "Plik importu jest wymagany"
+      required: "Plik importu ról jest wymagany"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej roli"
   list:

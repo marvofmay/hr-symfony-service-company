@@ -31,7 +31,7 @@ class ImportIndustriesFromXLSX extends XLSXIterator
         }
 
         if ($this->industryExists($industryName)) {
-            $errorMessages[] = $this->formatErrorMessage('industry.name.alreadyExists');
+            $errorMessages[] = $this->formatErrorMessage('industry.name.alreadyExists', [':name' =>  $industryName]);
         }
 
         return $errorMessages;
@@ -50,7 +50,7 @@ class ImportIndustriesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function IndustryExists(string $industryName): bool
+    private function industryExists(string $industryName): bool
     {
         return $this->industryReaderRepository->isIndustryExists($industryName);
     }

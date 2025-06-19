@@ -23,7 +23,8 @@ industry:
   import:
     success: "Branże zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - branże nie zostały zaimportowane"
-    fileRequired: "Wymagany plik XLSX z branżami do importu"
+    file:
+      required: "Plik importu branż jest wymagany"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej branży"
   list:
