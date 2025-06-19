@@ -7,6 +7,7 @@ namespace App\Module\Company\Presentation\API\Action\Industry;
 use App\Module\Company\Application\Command\Industry\DeleteMultipleIndustriesCommand;
 use App\Module\Company\Domain\DTO\Industry\DeleteMultipleDTO;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class DeleteMultipleIndustriesAction
@@ -17,10 +18,14 @@ readonly class DeleteMultipleIndustriesAction
 
     public function execute(DeleteMultipleDTO $deleteMultipleDTO): void
     {
-        $this->commandBus->dispatch(
-            new DeleteMultipleIndustriesCommand(
-                $this->industryReaderRepository->getIndustriesByUUID($deleteMultipleDTO->selectedUUID)
-            )
-        );
+        try {
+            $this->commandBus->dispatch(
+                new DeleteMultipleIndustriesCommand(
+                    $this->industryReaderRepository->getIndustriesByUUID($deleteMultipleDTO->selectedUUID)
+                )
+            );
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
     }
 }
