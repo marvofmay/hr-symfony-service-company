@@ -21,3 +21,6 @@ services:
     App\Module\Company\Application\QueryHandler\Industry\ListIndustriesQueryHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'query.bus' }
+    App\Module\Company\Application\QueryHandler\Industry\GetIndustryByUUIDQueryHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'query.bus' }
