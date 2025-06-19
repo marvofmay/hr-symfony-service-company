@@ -6,7 +6,7 @@ namespace App\Module\Company\Domain\DTO\Role;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class DeleteMultipleDTO
+final class DeleteMultipleDTO
 {
     #[Assert\NotBlank(message: 'role.delete.multiple.selectedRequired')]
     #[Assert\All([

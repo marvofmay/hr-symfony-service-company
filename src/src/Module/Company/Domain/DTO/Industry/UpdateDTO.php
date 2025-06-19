@@ -4,6 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\DTO\Industry;
 
-class UpdateDTO extends CreateDTO
+final class UpdateDTO extends CreateDTO
 {
 }
