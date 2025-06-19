@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-readonly class RoleAccessValidator
+final readonly class RoleAccessValidator
 {
     public function __construct(private TranslatorInterface $translator)
     {

@@ -21,9 +21,9 @@ class UpdatePositionAction
         $this->commandBus->dispatch(
             new UpdatePositionCommand(
                 $updateDTO->getUUID(),
-                $updateDTO->getName(),
-                $updateDTO->getDescription(),
-                $updateDTO->getActive(),
+                $updateDTO->name,
+                $updateDTO->description,
+                $updateDTO->active,
                 $updateDTO->getDepartmentsUUID(),
                 $this->positionReaderRepository->getPositionByUUID($updateDTO->getUUID())
             )

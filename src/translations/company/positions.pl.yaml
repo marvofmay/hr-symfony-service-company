@@ -3,14 +3,14 @@ position:
     notFound: "Stanowisko o podanym UUID nie istnieje"
     notExists: "Stanowisko o podanym UUID nie istnieje :uuid"
   name:
-    alreadyExists: "Stanowisko istnieje"
+    alreadyExists: "Stanowisko o nazwie \":name\" już istnieje"
     required: "Nazwa stanowiska jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
     expectedUniquePositionNameConstraint: "Oczekiwano unikalnej nazwy stanowiska"
   add:
     success: "Stanowisko zostało pomyślnie dodane"
-    error: "Wystąpił błąd - stanowisko nie została dodana"
+    error: "Wystąpił błąd - stanowisko nie zostało dodana"
   update:
     success: "Stanowisko zostało pomyślnie zaktualizowane"
     error: "Wystąpił błąd - stanowisko nie zostało zaktualizowane"

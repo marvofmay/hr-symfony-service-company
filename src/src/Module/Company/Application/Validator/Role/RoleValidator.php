@@ -8,7 +8,7 @@ use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-readonly class RoleValidator
+final readonly class RoleValidator
 {
     public function __construct(private RoleReaderInterface  $roleReaderRepository, private TranslatorInterface $translator) {}
 

@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-readonly class RoleAccessPermissionValidator
+final readonly class RoleAccessPermissionValidator
 {
     public function __construct(private EntityManagerInterface $entityManager, private TranslatorInterface $translator,)
     {

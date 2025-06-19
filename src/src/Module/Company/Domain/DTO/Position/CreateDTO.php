@@ -21,39 +21,36 @@ class CreateDTO
         'tooLong' => 'position.name.maximumLength',
         'domain' => 'positions',
     ])]
-    #[UniquePositionName]
-    public string $name = '';
+    //#[UniquePositionName]
+    public string $name = '' {
+        get {
+            return $this->name;
+        }
+    }
 
-    public ?string $description = null;
+    public ?string $description = null {
+        get {
+            return $this->description;
+        }
+    }
 
     #[Assert\Type(
         type: 'bool',
     )]
-    public ?bool $active = true;
-
-    #[Assert\NotBlank(message: 'position.add.departmentUUIDRequired')]
-    #[Assert\All([
-        new Assert\Uuid(message: 'validate.invalidUUID'),
-        new ExistingDepartmentUUID(
-            message: ['uuidNotExists' => 'department.uuid.notExists', 'domain' => 'departments'],
-        ),
-    ])]
-    public ?array $departmentsUUID;
-
-    public function getName(): string
-    {
-        return $this->name;
+    public ?bool $active = true {
+        get {
+            return $this->active;
+        }
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getActive(): ?bool
-    {
-        return $this->active;
-    }
+    //#[Assert\NotBlank(message: 'position.add.departmentUUIDRequired')]
+    //#[Assert\All([
+    //    new Assert\Uuid(message: 'validate.invalidUUID'),
+    //    new ExistingDepartmentUUID(
+    //        message: ['uuidNotExists' => 'department.uuid.notExists', 'domain' => 'departments'],
+    //    ),
+    //])]
+    public ?array $departmentsUUID = [];
 
     public function getDepartmentsUUID(): ?array
     {
