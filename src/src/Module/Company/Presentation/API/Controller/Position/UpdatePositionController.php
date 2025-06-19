@@ -16,12 +16,10 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class UpdatePositionController extends AbstractController
+final class UpdatePositionController extends AbstractController
 {
-    public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly TranslatorInterface $translator,
-    ) {}
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
+    {}
 
     #[Route('/api/positions/{uuid}', name: 'api.positions.update', methods: ['PUT'])]
     public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO, UpdatePositionAction $updatePositionAction): Response
@@ -31,11 +29,7 @@ class UpdatePositionController extends AbstractController
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
-            if ($uuid !== $updateDTO->getUUID()) {
-                throw new \Exception($this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators'), Response::HTTP_CONFLICT);
-            }
-
-            $updatePositionAction->execute($updateDTO);
+            $updatePositionAction->execute($uuid, $updateDTO);
 
             return new JsonResponse(['message' => $this->translator->trans('position.update.success', [], 'positions')], Response::HTTP_OK);
         } catch (\Exception $error) {

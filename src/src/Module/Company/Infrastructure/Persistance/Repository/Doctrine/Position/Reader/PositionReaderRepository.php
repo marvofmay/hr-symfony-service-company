@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PositionReaderRepository extends ServiceEntityRepository implements PositionReaderInterface
@@ -22,12 +23,12 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
 
     public function getPositionByUUID(string $uuid): ?Position
     {
-        return $this->getEntityManager()
-            ->createQuery(
-                'SELECT p FROM ' . Position::class . ' p WHERE p.' . Position::COLUMN_UUID . ' = :uuid'
-            )
-            ->setParameter('uuid', $uuid)
-            ->getOneOrNullResult();
+        $position = $this->findOneBy([Position::COLUMN_UUID => $uuid]);
+        if (null === $position) {
+            throw new \Exception($this->translator->trans('position.uuid.notExists', [':uuid' => $uuid], 'positions'), Response::HTTP_NOT_FOUND);
+        }
+
+        return $position;
     }
 
     public function getPositionsByUUID(array $selectedUUID): Collection

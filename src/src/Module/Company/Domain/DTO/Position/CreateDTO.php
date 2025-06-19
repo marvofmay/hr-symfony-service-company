@@ -6,7 +6,6 @@ namespace App\Module\Company\Domain\DTO\Position;
 
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
-use App\Module\Company\Structure\Validator\Constraints\Department\ExistingDepartmentUUID;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateDTO
@@ -41,10 +40,13 @@ class CreateDTO
         }
     }
 
+    #[Assert\All([
+        new Assert\Uuid(),
+    ])]
+    #[Assert\Type('array')]
     public ?array $departmentsUUID = [] {
         get {
             return $this->departmentsUUID;
         }
     }
-
 }

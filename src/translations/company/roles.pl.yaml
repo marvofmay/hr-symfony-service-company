@@ -49,7 +49,7 @@ role:
       admin: "Zarządza systemem i użytkownikami, ale z ograniczeniami względem superadministratora"
       employee: "Użytkownik z podstawowym dostępem do funkcjonalności systemu"
   accesses:
-    alreadyExists: "Dostęp: \":accesses\", dla roli \":role\" już istnieje"
+    alreadyExists: "Dostęp: \":accesses\", dla roli \":name\" już istnieje"
     permissions:
       alreadyExists: "Uprawnienia dla dostępu i roli już istnieją :items"
 

@@ -17,7 +17,14 @@ final readonly class PositionValidator
     public function isPositionNameAlreadyExists(string $name, ?string $uuid = null): void
     {
         if ($this->positionReaderRepository->isPositionExists($name, $uuid)) {
-            throw new \Exception($this->translator->trans('position.name.alreadyExists', [':name' => $name], 'positions'), Response::HTTP_CONFLICT);
+            throw new \Exception(
+                $this->translator->trans(
+                    'position.name.alreadyExists',
+                    [':name' => $name],
+                    'positions'
+                ),
+                Response::HTTP_CONFLICT
+            );
         }
     }
 
@@ -33,7 +40,14 @@ final readonly class PositionValidator
         }
 
         if (count($existingDepartments) > 0) {
-            throw new \Exception($this->translator->trans('position.departments.alreadyExists', [':position' => $position->getName(), ':departments' => implode(',', $existingDepartments)], 'positions'), Response::HTTP_CONFLICT);
+            throw new \Exception(
+                $this->translator->trans(
+                    'position.departments.alreadyExists',
+                    [':name' => $position->getName(), ':departments' => implode(',', $existingDepartments)],
+                    'positions'
+                ),
+                Response::HTTP_CONFLICT
+            );
         }
     }
 }

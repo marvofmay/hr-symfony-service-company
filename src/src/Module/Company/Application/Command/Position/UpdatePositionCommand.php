@@ -6,21 +6,15 @@ namespace App\Module\Company\Application\Command\Position;
 
 use App\Module\Company\Domain\Entity\Position;
 
-class UpdatePositionCommand
+final readonly class UpdatePositionCommand
 {
     public function __construct(
-        private readonly string $uuid,
-        private readonly string $name,
-        private readonly ?string $description,
-        private readonly ?bool $active,
+        private string $name,
+        private ?string $description,
+        private ?bool $active,
         private ?array $departmentsUUID,
-        private readonly Position $position,
+        private Position $position,
     ) {
-    }
-
-    public function getUUID(): string
-    {
-        return $this->uuid;
     }
 
     public function getName(): string
