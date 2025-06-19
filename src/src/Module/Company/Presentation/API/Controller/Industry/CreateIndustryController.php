@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CreateIndustryController extends AbstractController
+final class CreateIndustryController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
@@ -32,10 +32,7 @@ class CreateIndustryController extends AbstractController
 
             $createIndustryAction->execute($createDTO);
 
-            return new JsonResponse(
-                ['message' => $this->translator->trans('industry.add.success', [], 'industries')],
-                Response::HTTP_CREATED
-            );
+            return new JsonResponse(['message' => $this->translator->trans('industry.add.success', [], 'industries')], Response::HTTP_CREATED);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('industry.add.error', [], 'industries'), $error->getMessage());
             $this->logger->error($message);

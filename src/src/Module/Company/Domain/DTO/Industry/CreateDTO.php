@@ -6,7 +6,6 @@ namespace App\Module\Company\Domain\DTO\Industry;
 
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
-use App\Module\Company\Structure\Validator\Constraints\Industry\UniqueIndustryName;
 
 class CreateDTO
 {
@@ -19,7 +18,6 @@ class CreateDTO
         'tooLong' => 'industry.name.maximumLength',
         'domain' => 'industries',
     ])]
-    #[UniqueIndustryName]
     public string $name = '';
 
     public ?string $description = null;

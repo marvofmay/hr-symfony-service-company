@@ -1,0 +1,21 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Module\Company\Application\Validator\Industry;
+
+use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+readonly class IndustryValidator
+{
+    public function __construct(private IndustryReaderInterface $industryReaderRepository, private TranslatorInterface $translator) {}
+
+    public function isIndustryNameAlreadyExists(string $name, ?string $uuid = null): void
+    {
+        if ($this->industryReaderRepository->isIndustryExists($name, $uuid)) {
+            throw new \Exception($this->translator->trans('industry.name.alreadyExists', [':name' => $name], 'industries'), Response::HTTP_CONFLICT);
+        }
+    }
+}
