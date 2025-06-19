@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DeletePositionController extends AbstractController
+final class DeletePositionController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,
