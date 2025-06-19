@@ -18,7 +18,7 @@ trait TimestampableTrait
     private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
+    public function setCreatedAt(): void
     {
         $this->createdAt = new \DateTime();
     }

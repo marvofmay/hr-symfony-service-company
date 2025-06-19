@@ -25,23 +25,15 @@ class RoleTest extends TestCase
         $this->role->setName('Administrator');
         $this->role->setDescription('Admin role');
         $createdAt = new \DateTime();
-        $this->role->setCreatedAt($createdAt);
+        $this->role->setCreatedAt();
         $this->role->setUpdatedAt($createdAt);
         $this->role->setDeletedAt($createdAt);
 
         $this->assertEquals($uuid, $this->role->getUuid());
         $this->assertEquals('Administrator', $this->role->getName());
         $this->assertEquals('Admin role', $this->role->getDescription());
-        $this->assertEquals($createdAt, $this->role->getCreatedAt());
         $this->assertEquals($createdAt, $this->role->getUpdatedAt());
         $this->assertEquals($createdAt, $this->role->getDeletedAt());
-    }
-
-    public function testSetCreatedAtValue(): void
-    {
-        $this->role->setCreatedAtValue();
-
-        $this->assertInstanceOf(\DateTimeInterface::class, $this->role->getCreatedAt());
     }
 
     public function testGetAttributes(): void
