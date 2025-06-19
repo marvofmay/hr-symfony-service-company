@@ -6,9 +6,10 @@ namespace App\Module\Company\Presentation\API\Action\Role;
 
 use App\Module\Company\Application\Command\Role\ImportRolesCommand;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class ImportRolesAction
+final readonly class ImportRolesAction
 {
     public function __construct(private MessageBusInterface $commandBus)
     {
@@ -16,6 +17,10 @@ readonly class ImportRolesAction
 
     public function execute(ImportDTO $importDTO): void
     {
-        $this->commandBus->dispatch(new ImportRolesCommand($importDTO->importUUID));
+        try {
+            $this->commandBus->dispatch(new ImportRolesCommand($importDTO->importUUID));
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
     }
 }

@@ -25,12 +25,12 @@ class RoleAccess
     public const RELATION_ACCESS = 'access';
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Role::class)]
+    #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'roleAccesses')]
     #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private Role $role;
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Access::class)]
+    #[ORM\ManyToOne(targetEntity: Access::class, inversedBy: 'roleAccesses')]
     #[ORM\JoinColumn(name: 'access_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private Access $access;
 

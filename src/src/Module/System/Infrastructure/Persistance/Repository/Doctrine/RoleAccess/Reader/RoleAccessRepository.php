@@ -7,7 +7,6 @@ namespace App\Module\System\Infrastructure\Persistance\Repository\Doctrine\RoleA
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\RoleAccess;
-use App\Module\System\Domain\Entity\RoleAccessPermission;
 use App\Module\System\Domain\Interface\RoleAccess\RoleAccessInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

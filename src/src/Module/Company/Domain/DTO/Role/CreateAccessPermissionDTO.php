@@ -8,20 +8,9 @@ use App\Common\Validator\Constraints\NotBlank;
 use App\Module\System\Structure\Validator\Constraints\Access\ExistingAccessUUID;
 use App\Module\System\Structure\Validator\Constraints\Permission\ExistingPermissionUUID;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Module\Company\Structure\Validator\Constraints\Role\ExistingRoleUUID;
 
 class CreateAccessPermissionDTO
 {
-    #[Assert\Uuid(message: 'uuid.invalid')]
-    #[ExistingRoleUUID(
-        message: ['uuidNotExists' => 'role.uuid.notExists', 'domain' => 'roles']
-    )]
-    #[NotBlank(message: [
-        'text' => 'role.uuid.required',
-        'domain' => 'roles',
-    ])]
-    public string $roleUUID = '';
-
     #[NotBlank(message: [
         'text' => 'role.accesses.required',
         'domain' => 'roles',
@@ -46,11 +35,6 @@ class CreateAccessPermissionDTO
         ])
     ])]
     public array $accesses = [];
-
-    public function getRoleUUID(): string
-    {
-        return $this->roleUUID;
-    }
 
     public function getAccesses(): array
     {

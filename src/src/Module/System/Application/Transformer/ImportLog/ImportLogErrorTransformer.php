@@ -11,11 +11,8 @@ class ImportLogErrorTransformer
     public static function map(Collection $importLogs): array
     {
         $result = [];
-        foreach (array_values($importLogs->toArray()) as $index => $importLog) {
-            $result[] = [
-                'field' => $index,
-                'error' => $importLog->getData(),
-            ];
+        foreach (array_values($importLogs->toArray()) as $importLog) {
+            $result[] = $importLog->getData();
         }
 
         return $result;

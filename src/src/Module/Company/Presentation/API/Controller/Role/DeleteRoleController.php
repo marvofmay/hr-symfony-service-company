@@ -14,12 +14,10 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DeleteRoleController extends AbstractController
+final class DeleteRoleController extends AbstractController
 {
-    public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly TranslatorInterface $translator,
-    ) {
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
+    {
     }
 
     #[Route('/api/roles/{uuid}', name: 'api.roles.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
@@ -32,10 +30,7 @@ class DeleteRoleController extends AbstractController
 
             $deleteRoleAction->execute($uuid);
 
-            return new JsonResponse(
-                ['message' => $this->translator->trans('role.delete.success', [], 'roles')],
-                Response::HTTP_OK
-            );
+            return new JsonResponse(['message' => $this->translator->trans('role.delete.success', [], 'roles')], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('role.delete.error', [], 'roles'), $error->getMessage());
             $this->logger->error($message);

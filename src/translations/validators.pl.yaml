@@ -4,6 +4,7 @@ uuid:
 file:
   fileNotExists: "Plik nie istnieje"
   chooseFile: "Wskaż plik"
+  required: "Plik jest wymagany"
 phones:
   min: "Musisz podać minimalnie :min numery telefonów."
   max: "Możesz podać maksymalnie :max numery telefonów."
@@ -26,3 +27,5 @@ date:
   invalidFormat: "Nieprawidłowy format daty - wymagany format :dateFormat"
 import:
   noData: "Brak danych do importu"
+errors:
+  occurred: "Wystąpiły błędy"

@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Role;
 
-use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
+use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
-use App\Module\System\Domain\Interface\Access\AccessReaderInterface;
+use Doctrine\Common\Collections\Collection;
 
-readonly class RoleAccessCreator
+final readonly class RoleAccessCreator
 {
-    public function __construct(
-        private RoleWriterInterface $roleWriterRepository,
-        private RoleReaderInterface $roleReaderRepository,
-        private AccessReaderInterface $accessReaderRepository,
-    ) {}
+    public function __construct(private RoleWriterInterface $roleWriterRepository,)
+    {}
 
-    public function create(string $roleUUID, array $accessUUID): void
+    public function create(Role $role, Collection $accesses): void
     {
-        $role = $this->roleReaderRepository->getRoleByUUID($roleUUID);
-        foreach ($accessUUID as $uuid) {
-            $access = $this->accessReaderRepository->getAccessByUUID($uuid);
+        foreach ($accesses as $access) {
             $role->addAccess($access);
         }
 

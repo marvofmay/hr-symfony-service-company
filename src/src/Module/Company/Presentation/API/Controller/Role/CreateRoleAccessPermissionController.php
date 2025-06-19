@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CreateRoleAccessPermissionController extends AbstractController
+final class CreateRoleAccessPermissionController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
@@ -30,14 +30,7 @@ class CreateRoleAccessPermissionController extends AbstractController
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
-            if ($uuid !== $createAccessPermissionDTO->getRoleUUID()) {
-                return $this->json(
-                    ['message' => $this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators')],
-                    Response::HTTP_BAD_REQUEST
-                );
-            }
-
-            $createRoleAccessPermissionAction->execute($createAccessPermissionDTO);
+            $createRoleAccessPermissionAction->execute($uuid, $createAccessPermissionDTO);
 
             return new JsonResponse(
                 ['message' => $this->translator->trans('role.add.permission.success', [], 'roles')],

@@ -6,19 +6,13 @@ namespace App\Module\Company\Application\Command\Role;
 
 use App\Module\Company\Domain\Entity\Role;
 
-class UpdateRoleCommand
+final readonly class UpdateRoleCommand
 {
     public function __construct(
-        private readonly string $uuid,
-        private readonly string $name,
-        private readonly ?string $description,
-        private readonly Role $role,
+        private string $name,
+        private ?string $description,
+        private Role $role,
     ) {
-    }
-
-    public function getUUID(): string
-    {
-        return $this->uuid;
     }
 
     public function getName(): string

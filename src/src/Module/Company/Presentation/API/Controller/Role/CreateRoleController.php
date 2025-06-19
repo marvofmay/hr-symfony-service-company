@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class CreateRoleController extends AbstractController
+final class CreateRoleController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
@@ -29,10 +29,11 @@ class CreateRoleController extends AbstractController
             if (!$this->isGranted(PermissionEnum::CREATE, AccessEnum::ROLE)) {
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
+
             $createRoleAction->execute($createDTO);
 
             return new JsonResponse(
-                ['message' => $this->translator->trans('role.add.success', [], 'roles')],
+                ['message' => $this->translator->trans('role.add.success', [], 'roles'),],
                 Response::HTTP_CREATED
             );
         } catch (\Exception $error) {

@@ -15,9 +15,6 @@ readonly class CreateRoleAccessPermissionCommandHandler
 
     public function __invoke(CreateRoleAccessPermissionCommand $command): void
     {
-        $this->roleAccessPermissionCreator->create(
-            $command->getRoleUUID(),
-            $command->getAccesses(),
-        );
+        $this->roleAccessPermissionCreator->create($command->getRole(), $command->getAccesses());
     }
 }

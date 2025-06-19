@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\CommandHandler\Role;
 use App\Module\Company\Application\Command\Role\UpdateRoleCommand;
 use App\Module\Company\Domain\Service\Role\RoleUpdater;
 
-readonly class UpdateRoleCommandHandler
+final readonly class UpdateRoleCommandHandler
 {
     public function __construct(private RoleUpdater $roleUpdater,)
     {
@@ -15,10 +15,6 @@ readonly class UpdateRoleCommandHandler
 
     public function __invoke(UpdateRoleCommand $command): void
     {
-        $this->roleUpdater->update(
-            $command->getRole(),
-            $command->getName(),
-            $command->getDescription()
-        );
+        $this->roleUpdater->update($command->getRole(), $command->getName(), $command->getDescription());
     }
 }

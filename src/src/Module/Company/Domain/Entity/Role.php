@@ -9,6 +9,7 @@ use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\Permission;
+use App\Module\System\Domain\Entity\RoleAccess;
 use App\Module\System\Domain\Entity\RoleAccessPermission;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -63,18 +64,15 @@ class Role
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
     private Collection $employees;
 
-    #[ORM\ManyToMany(targetEntity: Access::class, inversedBy: "roles")]
-    #[ORM\JoinTable(name: "roles_access")]
-    #[ORM\JoinColumn(name: "role_uuid", referencedColumnName: "uuid", onDelete: 'CASCADE')]
-    #[ORM\InverseJoinColumn(name: "access_uuid", referencedColumnName: "uuid", onDelete: 'CASCADE')]
-    private Collection $accesses;
+    #[ORM\OneToMany(targetEntity: RoleAccess::class, mappedBy: "role", cascade: ['persist', 'remove'])]
+    private Collection $roleAccesses;
 
     #[ORM\OneToMany(targetEntity: RoleAccessPermission::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
     private Collection $accessPermissions;
 
     public function __construct() {
         $this->employees = new ArrayCollection();
-        $this->accesses = new ArrayCollection();
+        $this->roleAccesses = new ArrayCollection();
         $this->accessPermissions = new ArrayCollection();
     }
 
@@ -113,23 +111,30 @@ class Role
         return $this->employees;
     }
 
-    public function getAccesses(): Collection
+    public function getRoleAccesses(): Collection
     {
-        return $this->accesses;
+        return $this->roleAccesses;
     }
 
     public function addAccess(Access $access): void
     {
-        if (!$this->accesses->contains($access)) {
-            $this->accesses->add($access);
-            $access->addRole($this);
+        foreach ($this->roleAccesses as $roleAccess) {
+            if ($roleAccess->getAccess() === $access) {
+                return;
+            }
         }
+
+        $roleAccess = new RoleAccess($this, $access);
+        $this->roleAccesses->add($roleAccess);
     }
 
     public function removeAccess(Access $access): void
     {
-        if ($this->accesses->removeElement($access)) {
-            $access->removeRole($this);
+        foreach ($this->roleAccesses as $roleAccess) {
+            if ($roleAccess->getAccess() === $access) {
+                $this->roleAccesses->removeElement($roleAccess);
+                break;
+            }
         }
     }
 
@@ -137,5 +142,10 @@ class Role
     {
         $relation = new RoleAccessPermission($this, $access, $permission);
         $this->accessPermissions->add($relation);
+    }
+
+    public function getAccesses(): Collection
+    {
+        return $this->roleAccesses->map(fn(RoleAccess $ra) => $ra->getAccess());
     }
 }

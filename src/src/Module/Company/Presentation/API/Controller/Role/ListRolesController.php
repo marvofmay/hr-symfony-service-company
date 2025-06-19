@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ListRolesController extends AbstractController
+final class ListRolesController extends AbstractController
 {
     public function __construct(
         private readonly LoggerInterface $logger,

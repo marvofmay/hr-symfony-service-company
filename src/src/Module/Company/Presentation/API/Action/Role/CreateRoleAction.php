@@ -7,9 +7,10 @@ namespace App\Module\Company\Presentation\API\Action\Role;
 use App\Module\Company\Application\Command\Role\CreateRoleCommand;
 use App\Module\Company\Application\Validator\Role\RoleValidator;
 use App\Module\Company\Domain\DTO\Role\CreateDTO;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class CreateRoleAction
+final readonly class CreateRoleAction
 {
     public function __construct(private MessageBusInterface $commandBus, private RoleValidator $roleValidator,)
     {
@@ -17,12 +18,16 @@ readonly class CreateRoleAction
 
     public function execute(CreateDTO $createDTO): void
     {
-        $this->roleValidator->isRoleNameAlreadyExists($createDTO->getName());
-        $this->commandBus->dispatch(
-            new CreateRoleCommand(
-                $createDTO->getName(),
-                $createDTO->getDescription()
-            )
-        );
+        try {
+            $this->roleValidator->isRoleNameAlreadyExists($createDTO->getName());
+            $this->commandBus->dispatch(
+                new CreateRoleCommand(
+                    $createDTO->getName(),
+                    $createDTO->getDescription()
+                )
+            );
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
     }
 }

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\DTO\Role;
 
+use App\Common\Domain\Interface\DTOInterface;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
-use App\Module\Company\Structure\Validator\Constraints\Role\UniqueRoleName;
 
-class CreateDTO
+class CreateDTO implements DTOInterface
 {
     #[NotBlank(message: [
         'text' => 'role.name.required',

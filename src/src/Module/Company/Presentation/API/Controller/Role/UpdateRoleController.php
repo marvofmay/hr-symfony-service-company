@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class UpdateRoleController extends AbstractController
+final class UpdateRoleController extends AbstractController
 {
     public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
     {
@@ -30,11 +30,7 @@ class UpdateRoleController extends AbstractController
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
-            if ($uuid !== $updateDTO->getUUID()) {
-                throw new \Exception($this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators'), Response::HTTP_CONFLICT);
-            }
-
-            $updateRoleAction->execute($updateDTO);
+            $updateRoleAction->execute($uuid, $updateDTO);
 
             return new JsonResponse(['message' => $this->translator->trans('role.update.success', [], 'roles')], Response::HTTP_OK);
         } catch (\Exception $error) {

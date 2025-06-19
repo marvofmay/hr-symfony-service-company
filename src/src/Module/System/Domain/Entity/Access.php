@@ -41,9 +41,6 @@ class Access
     #[ORM\JoinColumn(name: 'module_uuid', referencedColumnName: 'uuid', nullable: false)]
     private Module $module;
 
-    #[ORM\ManyToMany(targetEntity: Role::class, mappedBy: 'accesses', cascade: ['persist', 'remove'])]
-    private Collection $roles;
-
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -70,9 +67,12 @@ class Access
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
 
+    #[ORM\OneToMany(mappedBy: 'access', targetEntity: RoleAccess::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $roleAccesses;
+
     public function __construct()
     {
-        $this->roles = new ArrayCollection();
+        $this->roleAccesses = new ArrayCollection();
     }
 
     public function getModule(): Module

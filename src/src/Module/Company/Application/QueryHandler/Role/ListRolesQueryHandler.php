@@ -8,7 +8,7 @@ use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Query\Role\ListRolesQuery;
 use App\Module\Company\Domain\Entity\Role;
 
-class ListRolesQueryHandler extends ListQueryHandlerAbstract
+final class ListRolesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListRolesQuery $query): array
     {

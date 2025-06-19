@@ -6,7 +6,7 @@ namespace App\Module\Company\Application\Command\Role;
 
 use Doctrine\Common\Collections\Collection;
 
-class DeleteMultipleRolesCommand
+final readonly class DeleteMultipleRolesCommand
 {
     public function __construct(public Collection $roles)
     {

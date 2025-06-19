@@ -4,7 +4,7 @@ role:
     notExists: "Rola o podanym UUID nie istnieje :uuid"
     required: "Wymagane UUID roli"
   name:
-    alreadyExists: "Rola o nazwie :name już istnieje"
+    alreadyExists: "Rola o nazwie \":name\" już istnieje"
     required: "Nazwa roli jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
@@ -30,6 +30,8 @@ role:
   import:
     success: "Role zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - role nie zostały zaimportowane"
+    file:
+      required: "Plik importu jest wymagany"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej roli"
   list:
@@ -46,4 +48,8 @@ role:
       super_admin: "Pełny dostęp do systemu, zarządzanie wszystkimi modułami i użytkownikami"
       admin: "Zarządza systemem i użytkownikami, ale z ograniczeniami względem superadministratora"
       employee: "Użytkownik z podstawowym dostępem do funkcjonalności systemu"
+  accesses:
+    alreadyExists: "Dostęp: \":accesses\", dla roli \":role\" już istnieje"
+    permissions:
+      alreadyExists: "Uprawnienia dla dostępu i roli już istnieją :items"
 

@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Role;
 
-readonly class CreateRoleAccessPermissionCommand
+use App\Module\Company\Domain\Entity\Role;
+
+final readonly class CreateRoleAccessPermissionCommand
 {
-    public function __construct(private string $roleUUID, private array $accesses)
+    public function __construct(private Role $role, private array $accesses)
     {
     }
-    public function getRoleUUID(): string
+    public function getRole(): Role
     {
-        return $this->roleUUID;
+        return $this->role;
     }
 
     public function getAccesses(): array

@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RoleReaderRepository extends ServiceEntityRepository implements RoleReaderInterface
@@ -22,7 +23,12 @@ class RoleReaderRepository extends ServiceEntityRepository implements RoleReader
 
     public function getRoleByUUID(string $uuid): ?Role
     {
-        return $this->findOneBy([Role::COLUMN_UUID => $uuid]);
+        $role = $this->findOneBy([Role::COLUMN_UUID => $uuid]);
+        if (null === $role) {
+            throw new \Exception($this->translator->trans('role.uuid.notExists', [':uuid' => $uuid], 'roles'), Response::HTTP_NOT_FOUND);
+        }
+
+        return $role;
     }
 
     public function getRolesByUUID(array $selectedUUID): Collection
