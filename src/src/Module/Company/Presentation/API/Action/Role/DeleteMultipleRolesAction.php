@@ -21,7 +21,7 @@ final readonly class DeleteMultipleRolesAction
         try {
             $this->commandBus->dispatch(
                 new DeleteMultipleRolesCommand(
-                    $this->roleReaderRepository->getRolesByUUID($deleteMultipleDTO->getSelectedUUID())
+                    $this->roleReaderRepository->getRolesByUUID($deleteMultipleDTO->selectedUUID)
                 )
             );
         } catch (HandlerFailedException $exception) {

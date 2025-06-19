@@ -18,6 +18,7 @@ industry:
     success: "Branża została pomyślnie usunięta"
     error: "Wystąpił błąd - branża nie została usunięta"
     multiple:
+      error: "Wystąpił błąd - branże nie zostały usunięte"
       success: "Branże zostały pomyślnie usunięte"
   import:
     success: "Branże zostały pomyślnie zaimportowane"

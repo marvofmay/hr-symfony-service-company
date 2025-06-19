@@ -19,7 +19,7 @@ readonly class DeleteMultipleIndustriesAction
     {
         $this->commandBus->dispatch(
             new DeleteMultipleIndustriesCommand(
-                $this->industryReaderRepository->getIndustriesByUUID($deleteMultipleDTO->getSelectedUUID())
+                $this->industryReaderRepository->getIndustriesByUUID($deleteMultipleDTO->selectedUUID)
             )
         );
     }

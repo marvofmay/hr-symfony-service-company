@@ -30,15 +30,28 @@ class IndustryReaderRepository extends ServiceEntityRepository implements Indust
         return $industry;
     }
 
-    public function getIndustriesByUUID(array $uuids): Collection
+    public function getIndustriesByUUID(array $selectedUUID): Collection
     {
-        $industries = $this->findBy([Industry::COLUMN_UUID => $uuids]);
+        if (!$selectedUUID) {
+            return new ArrayCollection();
+        }
 
-        if (empty($industries)) {
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(Industry::ALIAS)
+            ->from(Industry::class, Industry::ALIAS)
+            ->where(Industry::ALIAS . '.' . Industry::COLUMN_UUID . ' IN (:uuids)')
+            ->setParameter('uuids', $selectedUUID);
+
+        $industries = $qb->getQuery()->getResult();
+
+        $foundUUIDs = array_map(fn(Industry $industry) => $industry->getUUID(), $industries);
+        $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
+
+        if ($missingUUIDs) {
             throw new NotFindByUUIDException(sprintf(
                 '%s : %s',
                 $this->translator->trans('industry.uuid.notFound', [], 'industries'),
-                implode(', ', $uuids)
+                implode(', ', $missingUUIDs)
             ));
         }
 
