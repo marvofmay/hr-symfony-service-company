@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class PositionReaderRepository extends ServiceEntityRepository implements PositionReaderInterface
+final class PositionReaderRepository extends ServiceEntityRepository implements PositionReaderInterface
 {
     public function __construct(ManagerRegistry $registry, private TranslatorInterface $translator,)
     {

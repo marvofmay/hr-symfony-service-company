@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class EmployeeReaderRepository extends ServiceEntityRepository implements EmployeeReaderInterface
+final class EmployeeReaderRepository extends ServiceEntityRepository implements EmployeeReaderInterface
 {
     public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
     {

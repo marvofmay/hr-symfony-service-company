@@ -146,6 +146,6 @@ class Role
 
     public function getAccesses(): Collection
     {
-        return $this->roleAccesses->map(fn(RoleAccess $ra) => $ra->getAccess());
+        return $this->getRoleAccesses()->map(fn(RoleAccess $ra) => $ra->getAccess());
     }
 }

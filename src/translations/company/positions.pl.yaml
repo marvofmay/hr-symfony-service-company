@@ -10,7 +10,7 @@ position:
     expectedUniquePositionNameConstraint: "Oczekiwano unikalnej nazwy stanowiska"
   add:
     success: "Stanowisko zostało pomyślnie dodane"
-    error: "Wystąpił błąd - stanowisko nie zostało dodana"
+    error: "Wystąpił błąd - stanowisko nie zostało dodane"
   update:
     success: "Stanowisko zostało pomyślnie zaktualizowane"
     error: "Wystąpił błąd - stanowisko nie zostało zaktualizowane"
@@ -51,3 +51,5 @@ position:
       qa_tester: "Testuje oprogramowanie i zgłasza błędy."
       graphic_designer: "Projektuje materiały graficzne i interfejsy."
       customer_support_agent: "Pomaga klientom, odpowiada na pytania i rozwiązuje problemy."
+  departments:
+    alreadyExists: "Stanowisko o nazwie \":name\" już jest przypisane do departamentu: \":departments\""

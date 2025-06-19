@@ -10,7 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
-class AddressWriterRepository extends ServiceEntityRepository implements AddressWriterInterface
+final class AddressWriterRepository extends ServiceEntityRepository implements AddressWriterInterface
 {
     public function __construct(private readonly ManagerRegistry $registry, private EntityManagerInterface $entityManager)
     {

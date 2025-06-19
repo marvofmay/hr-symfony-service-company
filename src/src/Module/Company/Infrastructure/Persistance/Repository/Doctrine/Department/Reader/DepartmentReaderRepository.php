@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Department\Reader;
 
+use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class DepartmentReaderRepository extends ServiceEntityRepository implements DepartmentReaderInterface
+final class DepartmentReaderRepository extends ServiceEntityRepository implements DepartmentReaderInterface
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator,)
     {
         parent::__construct($registry, Department::class);
     }
@@ -28,12 +30,28 @@ class DepartmentReaderRepository extends ServiceEntityRepository implements Depa
 
     public function getDepartmentsByUUID(array $selectedUUID): Collection
     {
-        $departments = $this->getEntityManager()
-            ->createQuery(
-                'SELECT d FROM ' . Department::class . ' d WHERE d.' . Department::COLUMN_UUID . ' IN (:uuid)'
-            )
-            ->setParameter('uuid', $selectedUUID)
-            ->getResult();
+        if (!$selectedUUID) {
+            return new ArrayCollection();
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(Department::ALIAS)
+            ->from(Department::class, Department::ALIAS)
+            ->where(Department::ALIAS . '.' . Department::COLUMN_UUID . ' IN (:uuids)')
+            ->setParameter('uuids', $selectedUUID);
+
+        $departments = $qb->getQuery()->getResult();
+
+        $foundUUIDs = array_map(fn(Department $department) => $department->getUUID(), $departments);
+        $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
+
+        if ($missingUUIDs) {
+            throw new NotFindByUUIDException(sprintf(
+                '%s : %s',
+                $this->translator->trans('department.uuid.notFound', [], 'departments'),
+                implode(', ', $missingUUIDs)
+            ));
+        }
 
         return new ArrayCollection($departments);
     }

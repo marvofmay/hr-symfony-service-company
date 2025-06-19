@@ -10,7 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
-class IndustryWriterRepository extends ServiceEntityRepository implements IndustryWriterInterface
+final class IndustryWriterRepository extends ServiceEntityRepository implements IndustryWriterInterface
 {
     public function __construct(private readonly ManagerRegistry $registry)
     {

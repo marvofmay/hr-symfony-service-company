@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class RoleReaderRepository extends ServiceEntityRepository implements RoleReaderInterface
+final class RoleReaderRepository extends ServiceEntityRepository implements RoleReaderInterface
 {
     public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
     {

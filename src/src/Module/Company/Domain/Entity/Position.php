@@ -54,28 +54,16 @@ class Position
     #[Assert\NotBlank]
     private bool $active;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private \DateTimeInterface $createdAt;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $deletedAt = null;
-
-    #[ORM\ManyToMany(targetEntity: Department::class, inversedBy: "positions")]
-    #[ORM\JoinTable(name: "position_department")]
-    #[ORM\JoinColumn(name: "position_uuid", referencedColumnName: "uuid")]
-    #[ORM\InverseJoinColumn(name: "department_uuid", referencedColumnName: "uuid")]
-    private Collection $departments;
-
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'position', cascade: ['persist', 'remove'])]
     private Collection $employees;
 
+    #[ORM\OneToMany(targetEntity: PositionDepartment::class, mappedBy: "position", cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $positionDepartments;
+
     public function __construct()
     {
-        $this->departments = new ArrayCollection();
         $this->employees = new ArrayCollection();
+        $this->positionDepartments = new ArrayCollection();
     }
 
     public function getUUID(): UuidInterface
@@ -113,28 +101,30 @@ class Position
         $this->{self::COLUMN_ACTIVE} = $active;
     }
 
-    public function getDepartments(): Collection
+    public function getEmployees(): Collection
     {
-        return $this->departments;
+        return $this->employees;
+    }
+
+    public function getPositionDepartments(): Collection
+    {
+        return $this->positionDepartments;
     }
 
     public function addDepartment(Department $department): void
     {
-        if (!$this->departments->contains($department)) {
-            $this->departments->add($department);
-            $department->addPosition($this);
+        foreach ($this->positionDepartments as $positionDepartment) {
+            if ($positionDepartment->getAccess() === $department) {
+                return;
+            }
         }
+
+        $positionDepartment = new PositionDepartment($this, $department);
+        $this->positionDepartments->add($positionDepartment);
     }
 
-    public function removeDepartment(Department $department): void
+    public function getDepartments(): Collection
     {
-        if ($this->departments->removeElement($department)) {
-            $department->removePosition($this);
-        }
-    }
-
-    public function getEmployees(): Collection
-    {
-        return $this->employees;
+        return $this->positionDepartments->map(fn(PositionDepartment $pd) => $pd->getDepartment());
     }
 }

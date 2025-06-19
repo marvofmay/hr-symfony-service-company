@@ -6,12 +6,11 @@ namespace App\Module\Company\Domain\Service\Position;
 
 use App\Module\Company\Application\Command\Position\CreatePositionCommand;
 use App\Module\Company\Domain\Entity\Position;
-use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 
 readonly class PositionCreator
 {
-    public function __construct(private PositionWriterInterface $positionWriterRepository, private DepartmentReaderInterface $departmentReaderRepository,)
+    public function __construct(private PositionWriterInterface $positionWriterRepository,)
     {
     }
 
@@ -22,8 +21,8 @@ readonly class PositionCreator
         $position->setDescription($command->description);
         $position->setActive($command->active);
 
-        foreach ($command->departmentsUUID as $departmentUUID) {
-            $position->addDepartment($this->departmentReaderRepository->getDepartmentByUUID($departmentUUID));
+        foreach ($command->departments as $department) {
+            $position->addDepartment($department);
         }
 
         $this->positionWriterRepository->savePositionInDB($position);

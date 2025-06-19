@@ -82,17 +82,17 @@ class Department
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
     private Address $address;
 
-    #[ORM\ManyToMany(targetEntity: Position::class, mappedBy: 'departments')]
-    private Collection $positions;
-
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
     private Collection $employees;
+
+    #[ORM\OneToMany(targetEntity: PositionDepartment::class, mappedBy: "department", cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $positionDepartments;
 
     public function __construct()
     {
         $this->employees = new ArrayCollection();
-        $this->positions = new ArrayCollection();
         $this->contacts = new ArrayCollection();
+        $this->positionDepartments = new ArrayCollection();
     }
 
     public function getUUID(): UuidInterface
@@ -153,26 +153,6 @@ class Department
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
-    }
-
-    public function getPositions(): Collection
-    {
-        return $this->positions;
-    }
-
-    public function addPosition(Position $position): void
-    {
-        if (!$this->positions->contains($position)) {
-            $this->positions->add($position);
-            $position->addDepartment($this);
-        }
-    }
-
-    public function removePosition(Position $position): void
-    {
-        if ($this->positions->removeElement($position)) {
-            $position->removeDepartment($this);
-        }
     }
 
     public function getAddress(): Address

@@ -10,7 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
-class UserWriterRepository extends ServiceEntityRepository implements UserWriterInterface
+final class UserWriterRepository extends ServiceEntityRepository implements UserWriterInterface
 {
     public function __construct(private readonly ManagerRegistry $registry, private EntityManagerInterface $entityManager)
     {

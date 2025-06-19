@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class IndustryReaderRepository extends ServiceEntityRepository implements IndustryReaderInterface
+final class IndustryReaderRepository extends ServiceEntityRepository implements IndustryReaderInterface
 {
     public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
     {

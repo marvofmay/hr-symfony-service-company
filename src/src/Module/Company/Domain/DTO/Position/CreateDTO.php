@@ -7,7 +7,6 @@ namespace App\Module\Company\Domain\DTO\Position;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Company\Structure\Validator\Constraints\Department\ExistingDepartmentUUID;
-use App\Module\Company\Structure\Validator\Constraints\Position\UniquePositionName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateDTO
@@ -21,7 +20,6 @@ class CreateDTO
         'tooLong' => 'position.name.maximumLength',
         'domain' => 'positions',
     ])]
-    //#[UniquePositionName]
     public string $name = '' {
         get {
             return $this->name;
@@ -43,17 +41,10 @@ class CreateDTO
         }
     }
 
-    //#[Assert\NotBlank(message: 'position.add.departmentUUIDRequired')]
-    //#[Assert\All([
-    //    new Assert\Uuid(message: 'validate.invalidUUID'),
-    //    new ExistingDepartmentUUID(
-    //        message: ['uuidNotExists' => 'department.uuid.notExists', 'domain' => 'departments'],
-    //    ),
-    //])]
-    public ?array $departmentsUUID = [];
-
-    public function getDepartmentsUUID(): ?array
-    {
-        return $this->departmentsUUID;
+    public ?array $departmentsUUID = [] {
+        get {
+            return $this->departmentsUUID;
+        }
     }
+
 }

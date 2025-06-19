@@ -6,7 +6,6 @@ namespace App\Module\Company\Application\CommandHandler\Position;
 
 use App\Module\Company\Application\Command\Position\CreatePositionCommand;
 use App\Module\Company\Domain\Service\Position\PositionCreator;
-use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class CreatePositionCommandHandler
 {

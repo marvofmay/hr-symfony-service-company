@@ -24,7 +24,7 @@ class UpdatePositionAction
                 $updateDTO->name,
                 $updateDTO->description,
                 $updateDTO->active,
-                $updateDTO->getDepartmentsUUID(),
+                $updateDTO->departmentsUUID,
                 $this->positionReaderRepository->getPositionByUUID($updateDTO->getUUID())
             )
         );

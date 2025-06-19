@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250618112928 extends AbstractMigration
+final class Version20250619141006 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -36,7 +36,7 @@ final class Version20250618112928 extends AbstractMigration
         $this->addSql('CREATE TABLE note (uuid CHAR(36) NOT NULL, title VARCHAR(100) NOT NULL, content LONGTEXT DEFAULT NULL, priority VARCHAR(20) NOT NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at DATETIME DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, employee_uuid CHAR(36) NOT NULL, INDEX IDX_CFBDFA1464A61AE1 (employee_uuid), PRIMARY KEY(uuid)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE permission (uuid CHAR(36) NOT NULL, name VARCHAR(100) NOT NULL, description LONGTEXT DEFAULT NULL, active TINYINT(1) DEFAULT 1 NOT NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at DATETIME DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_E04992AA5E237E06 (name), PRIMARY KEY(uuid)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE position (uuid CHAR(36) NOT NULL, name VARCHAR(200) NOT NULL, description LONGTEXT DEFAULT NULL, active TINYINT(1) DEFAULT 1 NOT NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at DATETIME DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, PRIMARY KEY(uuid)) DEFAULT CHARACTER SET utf8mb4');
-        $this->addSql('CREATE TABLE position_department (position_uuid CHAR(36) NOT NULL, department_uuid CHAR(36) NOT NULL, INDEX IDX_E3FCCD0AC2E77EF8 (position_uuid), INDEX IDX_E3FCCD0A736537F3 (department_uuid), PRIMARY KEY(position_uuid, department_uuid)) DEFAULT CHARACTER SET utf8mb4');
+        $this->addSql('CREATE TABLE position_department (created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at DATETIME DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, position_uuid CHAR(36) NOT NULL, department_uuid CHAR(36) NOT NULL, INDEX IDX_E3FCCD0AC2E77EF8 (position_uuid), INDEX IDX_E3FCCD0A736537F3 (department_uuid), PRIMARY KEY(position_uuid, department_uuid)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE role (uuid CHAR(36) NOT NULL, name VARCHAR(100) NOT NULL, description LONGTEXT DEFAULT NULL, created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at DATETIME DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_57698A6A5E237E06 (name), PRIMARY KEY(uuid)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE role_access (created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at DATETIME DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, role_uuid CHAR(36) NOT NULL, access_uuid CHAR(36) NOT NULL, INDEX IDX_AD4FCAE56FC02232 (role_uuid), INDEX IDX_AD4FCAE527A636A0 (access_uuid), PRIMARY KEY(role_uuid, access_uuid)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE role_access_permission (created_at DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL, updated_at DATETIME DEFAULT NULL, deleted_at DATETIME DEFAULT NULL, role_uuid CHAR(36) NOT NULL, access_uuid CHAR(36) NOT NULL, permission_uuid CHAR(36) NOT NULL, INDEX IDX_8A9ECDD46FC02232 (role_uuid), INDEX IDX_8A9ECDD427A636A0 (access_uuid), INDEX IDX_8A9ECDD480B1CB06 (permission_uuid), PRIMARY KEY(role_uuid, access_uuid, permission_uuid)) DEFAULT CHARACTER SET utf8mb4');
@@ -63,8 +63,8 @@ final class Version20250618112928 extends AbstractMigration
         $this->addSql('ALTER TABLE import_log ADD CONSTRAINT FK_1B52C8453C53BE26 FOREIGN KEY (import_uuid) REFERENCES import (uuid) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE import_report ADD CONSTRAINT FK_B81ECD9C3C53BE26 FOREIGN KEY (import_uuid) REFERENCES import (uuid) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE note ADD CONSTRAINT FK_CFBDFA1464A61AE1 FOREIGN KEY (employee_uuid) REFERENCES employee (uuid) ON DELETE CASCADE');
-        $this->addSql('ALTER TABLE position_department ADD CONSTRAINT FK_E3FCCD0AC2E77EF8 FOREIGN KEY (position_uuid) REFERENCES position (uuid)');
-        $this->addSql('ALTER TABLE position_department ADD CONSTRAINT FK_E3FCCD0A736537F3 FOREIGN KEY (department_uuid) REFERENCES department (uuid)');
+        $this->addSql('ALTER TABLE position_department ADD CONSTRAINT FK_E3FCCD0AC2E77EF8 FOREIGN KEY (position_uuid) REFERENCES position (uuid) ON DELETE CASCADE');
+        $this->addSql('ALTER TABLE position_department ADD CONSTRAINT FK_E3FCCD0A736537F3 FOREIGN KEY (department_uuid) REFERENCES department (uuid) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE role_access ADD CONSTRAINT FK_AD4FCAE56FC02232 FOREIGN KEY (role_uuid) REFERENCES role (uuid) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE role_access ADD CONSTRAINT FK_AD4FCAE527A636A0 FOREIGN KEY (access_uuid) REFERENCES access (uuid) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE role_access_permission ADD CONSTRAINT FK_8A9ECDD46FC02232 FOREIGN KEY (role_uuid) REFERENCES role (uuid) ON DELETE CASCADE');

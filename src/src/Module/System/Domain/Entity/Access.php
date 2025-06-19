@@ -67,7 +67,7 @@ class Access
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
 
-    #[ORM\OneToMany(mappedBy: 'access', targetEntity: RoleAccess::class, cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: RoleAccess::class, mappedBy: 'access', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $roleAccesses;
 
     public function __construct()
@@ -118,22 +118,5 @@ class Access
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
-    }
-
-    public function getRoles(): Collection
-    {
-        return $this->roles;
-    }
-
-    public function addRole(Role $role): void
-    {
-        if (!$this->roles->contains($role)) {
-            $this->roles->add($role);
-        }
-    }
-
-    public function removeRole(Role $role): void
-    {
-        $this->roles->removeElement($role);
     }
 }

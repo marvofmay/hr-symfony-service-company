@@ -10,7 +10,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ContractTypeReaderRepository extends ServiceEntityRepository implements ContractTypeReaderInterface
+final class ContractTypeReaderRepository extends ServiceEntityRepository implements ContractTypeReaderInterface
 {
     public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
     {
