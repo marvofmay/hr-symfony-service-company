@@ -114,7 +114,7 @@ class Position
     public function addDepartment(Department $department): void
     {
         foreach ($this->positionDepartments as $positionDepartment) {
-            if ($positionDepartment->getAccess() === $department) {
+            if ($positionDepartment->getDepartment() === $department) {
                 return;
             }
         }
