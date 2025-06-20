@@ -99,19 +99,20 @@ services:
       - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
       - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
 
-  worker-company-xlsx-import:
-    container_name: worker-company-xlsx-import
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    command: [ "php", "bin/console", "messenger:consume", "company_xlsx_import", "--verbose", "--no-interaction" ]
-    depends_on:
-      - rabbitmq
-      - service-company
-    environment:
-      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
-    volumes:
-      - ./src:/var/www/html
+#  worker-company-xlsx-import:
+#    container_name: worker-company-xlsx-import
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    command: [ "php", "bin/console", "messenger:consume", "company_xlsx_import", "--verbose", "--no-interaction" ]
+#    depends_on:
+#      - rabbitmq
+#      - service-company
+#    environment:
+#      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+#    volumes:
+#      - ./src:/var/www/html
+
 #
 #  worker-department-xlsx-import:
 #    container_name: worker-department-xlsx-import
@@ -127,19 +128,19 @@ services:
 #    volumes:
 #      - ./src:/var/www/html
 
-  worker-employee-xlsx-import:
-    container_name: worker-employee-xlsx-import
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--verbose", "--no-interaction" ]
-    depends_on:
-      - rabbitmq
-      - service-company
-    environment:
-      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
-    volumes:
-      - ./src:/var/www/html
+#  worker-employee-xlsx-import:
+#    container_name: worker-employee-xlsx-import
+#    build:
+#      context: ./
+#      dockerfile: Dockerfile
+#    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--verbose", "--no-interaction" ]
+#    depends_on:
+#      - rabbitmq
+#      - service-company
+#    environment:
+#      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+#    volumes:
+#      - ./src:/var/www/html
 
   redis:
     image: redis:alpine
