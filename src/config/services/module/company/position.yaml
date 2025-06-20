@@ -20,3 +20,6 @@ services:
     App\Module\Company\Application\QueryHandler\Position\ListPositionsQueryHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'query.bus' }
+    App\Module\Company\Application\QueryHandler\Position\GetPositionByUUIDQueryHandler:
+        tags:
+            - { name: 'messenger.message_handler', bus: 'query.bus' }
