@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Entity;
 
-use App\Module\Company\Domain\Entity\Role;
+use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
+use App\Common\Domain\Trait\TimestampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -13,9 +15,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Common\Domain\Trait\AttributesEntityTrait;
-use App\Common\Domain\Trait\RelationsEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'access')]

@@ -15,12 +15,11 @@ use Symfony\Component\Messenger\MessageBusInterface;
 final readonly class CreateRoleAccessAction
 {
     public function __construct(
-        private MessageBusInterface   $commandBus,
-        private RoleReaderInterface   $roleReaderRepository,
+        private MessageBusInterface $commandBus,
+        private RoleReaderInterface $roleReaderRepository,
         private AccessReaderInterface $accessReaderRepository,
-        private RoleAccessValidator   $roleAccessValidator,
-    )
-    {
+        private RoleAccessValidator $roleAccessValidator,
+    ) {
     }
 
     public function execute(string $uuid, CreateAccessDTO $createAccessDTO): void

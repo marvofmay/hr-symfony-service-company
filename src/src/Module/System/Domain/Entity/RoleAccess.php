@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Entity;
 
-use App\Module\Company\Domain\Entity\Role;
-use Doctrine\ORM\Mapping as ORM;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
+use App\Module\Company\Domain\Entity\Role;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
@@ -34,7 +34,7 @@ class RoleAccess
     #[ORM\JoinColumn(name: 'access_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private Access $access;
 
-    public function __construct(Role $role, Access $access,)
+    public function __construct(Role $role, Access $access)
     {
         $this->role = $role;
         $this->access = $access;

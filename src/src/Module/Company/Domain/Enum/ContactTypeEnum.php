@@ -15,8 +15,8 @@ enum ContactTypeEnum: string implements EnumInterface
     public function label(): string
     {
         return match ($this) {
-            self::PHONE   => 'lowPriority',
-            self::EMAIL   => 'mediumPriority',
+            self::PHONE => 'lowPriority',
+            self::EMAIL => 'mediumPriority',
             self::WEBSITE => 'highPriority',
         };
     }

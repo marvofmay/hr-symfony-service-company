@@ -4,11 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Industry;
 
-use App\Common\Domain\DTO\UploadFileDTO;
-use App\Common\Domain\Enum\FileExtensionEnum;
-use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Module\Company\Application\Facade\ImportIndustriesFacade;
-use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,20 +19,19 @@ final class ImportIndustriesController extends AbstractController
 {
     public function __construct(
         private readonly ImportIndustriesFacade $importIndustriesFacade,
-        private readonly TranslatorInterface    $translator,
-    )
-    {
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     #[Route('/api/industries/import', name: 'import', methods: ['POST'])]
-    public function import(#[MapUploadedFile] ?UploadedFile $file,): JsonResponse
+    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
         if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::INDUSTRY)) {
             throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
         }
 
         if (!$file) {
-            return new JsonResponse(['message' => $this->translator->trans('industry.import.file.required', [], 'industries'),], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse(['message' => $this->translator->trans('industry.import.file.required', [], 'industries')], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $result = $this->importIndustriesFacade->handle($file);

@@ -10,7 +10,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class RoleValidator
 {
-    public function __construct(private RoleReaderInterface  $roleReaderRepository, private TranslatorInterface $translator) {}
+    public function __construct(private RoleReaderInterface $roleReaderRepository, private TranslatorInterface $translator)
+    {
+    }
 
     public function isRoleNameAlreadyExists(string $name, ?string $uuid = null): void
     {

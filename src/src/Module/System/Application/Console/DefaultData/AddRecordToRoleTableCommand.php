@@ -25,7 +25,7 @@ class AddRecordToRoleTableCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct();
     }
@@ -42,7 +42,7 @@ class AddRecordToRoleTableCommand extends Command
         $output->writeln('Checking and updating Roles table...');
         $roleRepository = $this->entityManager->getRepository(Role::class);
         $existingRoles = $roleRepository->createQueryBuilder(Role::ALIAS)
-            ->select(Role::ALIAS . '.' . Role::COLUMN_NAME)
+            ->select(Role::ALIAS.'.'.Role::COLUMN_NAME)
             ->getQuery()
             ->getArrayResult();
 

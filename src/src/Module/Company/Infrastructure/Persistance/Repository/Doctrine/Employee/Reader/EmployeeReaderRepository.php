@@ -24,7 +24,7 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
     public function getEmployeeByUUID(string $uuid): ?Employee
     {
         return $this->getEntityManager()
-            ->createQuery('SELECT e FROM ' . Employee::class . ' e WHERE e.' . Employee::COLUMN_UUID . ' = :uuid')
+            ->createQuery('SELECT e FROM '.Employee::class.' e WHERE e.'.Employee::COLUMN_UUID.' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
     }
@@ -36,17 +36,13 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
         }
 
         $employees = $this->getEntityManager()
-            ->createQuery('SELECT e FROM ' . Employee::class . ' e WHERE e.' . Employee::COLUMN_UUID . ' IN (:uuids)')
+            ->createQuery('SELECT e FROM '.Employee::class.' e WHERE e.'.Employee::COLUMN_UUID.' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID)
             ->getResult();
 
         if (count($employees) !== count($selectedUUID)) {
-            $missingUuids = array_diff($selectedUUID, array_map(fn($employee) => $employee->getUUID(), $employees));
-            throw new NotFindByUUIDException(sprintf(
-                '%s : %s',
-                $this->translator->trans('employee.uuid.notFound', [], 'employees'),
-                implode(', ', $missingUuids)
-            ));
+            $missingUuids = array_diff($selectedUUID, array_map(fn ($employee) => $employee->getUUID(), $employees));
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('employee.uuid.notFound', [], 'employees'), implode(', ', $missingUuids)));
         }
 
         return new ArrayCollection($employees);
@@ -58,7 +54,7 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
 
         $qb->select('e')
             ->from(Employee::class, 'e')
-            ->where('e.' . Employee::COLUMN_UUID . ' = :uuid')
+            ->where('e.'.Employee::COLUMN_UUID.' = :uuid')
             ->setParameter('uuid', $uuid);
 
         return null !== $qb->getQuery()->getOneOrNullResult();
@@ -70,11 +66,11 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
 
         $qb->select('u')
             ->from(User::class, 'u')
-            ->where('u.' . User::COLUMN_EMAIL . ' = :email')
+            ->where('u.'.User::COLUMN_EMAIL.' = :email')
             ->setParameter('email', $email);
 
         if (null !== $uuid) {
-            $qb->andWhere('u.' . User::COLUMN_EMPLOYEE_UUID . ' != :uuid')
+            $qb->andWhere('u.'.User::COLUMN_EMPLOYEE_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -95,7 +91,7 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
             ->where(sprintf('%s.%s = :pesel', Employee::ALIAS, Employee::COLUMN_PESEL))
             ->setParameter('pesel', $pesel);
 
-        if ($employeeUUID !== null) {
+        if (null !== $employeeUUID) {
             $qb->andWhere(sprintf('%s.uuid != :uuid', Employee::ALIAS))
                 ->setParameter('uuid', $employeeUUID);
         }

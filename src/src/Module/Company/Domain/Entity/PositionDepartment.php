@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
+use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
@@ -33,7 +33,7 @@ class PositionDepartment
     #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private Department $department;
 
-    public function __construct(Position $position, Department $department,)
+    public function __construct(Position $position, Department $department)
     {
         $this->position = $position;
         $this->department = $department;

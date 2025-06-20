@@ -12,7 +12,7 @@ final readonly class REGONValidator
             return 'regon.invalidLength';
         }
 
-        if (strlen($regon) === 9) {
+        if (9 === strlen($regon)) {
             $weights = [8, 9, 2, 3, 4, 5, 6, 7];
             $checksum = self::calculateChecksum($regon, $weights);
 
@@ -23,7 +23,7 @@ final readonly class REGONValidator
             return null;
         }
 
-        if (strlen($regon) === 14) {
+        if (14 === strlen($regon)) {
             $weights9 = [8, 9, 2, 3, 4, 5, 6, 7];
             $checksum9 = self::calculateChecksum(substr($regon, 0, 9), $weights9);
             if ($checksum9 !== (int) $regon[8]) {
@@ -51,6 +51,7 @@ final readonly class REGONValidator
         }
 
         $checksum = $sum % 11;
-        return $checksum === 10 ? 0 : $checksum;
+
+        return 10 === $checksum ? 0 : $checksum;
     }
 }

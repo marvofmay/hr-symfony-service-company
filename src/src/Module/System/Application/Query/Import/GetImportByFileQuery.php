@@ -8,5 +8,7 @@ use App\Module\System\Domain\Entity\File;
 
 final class GetImportByFileQuery
 {
-    public function __construct(public File $file,) {}
+    public function __construct(public File $file)
+    {
+    }
 }

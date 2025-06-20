@@ -9,8 +9,9 @@ use App\Module\Company\Domain\Service\Department\DepartmentCreator;
 
 readonly class CreateDepartmentCommandHandler
 {
-    public function __construct(private DepartmentCreator $departmentCreator,)
-    {}
+    public function __construct(private DepartmentCreator $departmentCreator)
+    {
+    }
 
     public function __invoke(CreateDepartmentCommand $command): void
     {

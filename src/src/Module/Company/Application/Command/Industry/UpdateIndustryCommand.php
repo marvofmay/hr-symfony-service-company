@@ -9,8 +9,8 @@ use App\Module\Company\Domain\Entity\Industry;
 final readonly class UpdateIndustryCommand
 {
     public function __construct(
-        private string   $name,
-        private ?string  $description,
+        private string $name,
+        private ?string $description,
         private Industry $industry,
     ) {
     }

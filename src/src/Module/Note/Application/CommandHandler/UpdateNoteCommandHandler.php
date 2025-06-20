@@ -9,7 +9,7 @@ use App\Module\Note\Domain\Service\NoteUpdater;
 
 readonly class UpdateNoteCommandHandler
 {
-    public function __construct(private NoteUpdater $noteUpdater,)
+    public function __construct(private NoteUpdater $noteUpdater)
     {
     }
 

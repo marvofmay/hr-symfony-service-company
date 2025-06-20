@@ -12,7 +12,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final readonly class CreateIndustryAction
 {
-    public function __construct(private MessageBusInterface $commandBus, private IndustryValidator $industryValidator,)
+    public function __construct(private MessageBusInterface $commandBus, private IndustryValidator $industryValidator)
     {
     }
 

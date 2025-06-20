@@ -6,5 +6,4 @@ namespace App\Common\Domain\Interface;
 
 interface QueryDTOInterface
 {
-
 }

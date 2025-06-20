@@ -18,15 +18,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 readonly class ImportDepartmentsCommandHandler
 {
     public function __construct(
-        private CompanyReaderInterface    $companyReaderRepository,
+        private CompanyReaderInterface $companyReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
         private DepartmentMultipleCreator $departmentMultipleCreator,
-        private ImportReaderInterface     $importReaderRepository,
-        private TranslatorInterface       $translator,
-        private UpdateImportAction        $updateImportAction,
-        private CacheInterface            $cache,
-    )
-    {
+        private ImportReaderInterface $importReaderRepository,
+        private TranslatorInterface $translator,
+        private UpdateImportAction $updateImportAction,
+        private CacheInterface $cache,
+    ) {
     }
 
     public function __invoke(ImportDepartmentsCommand $command): void

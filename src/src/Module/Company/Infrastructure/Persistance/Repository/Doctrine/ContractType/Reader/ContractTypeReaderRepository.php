@@ -27,11 +27,11 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('ct')
             ->from(ContractType::class, 'ct')
-            ->where('ct.' . ContractType::COLUMN_NAME . ' = :name')
+            ->where('ct.'.ContractType::COLUMN_NAME.' = :name')
             ->setParameter('name', $name);
 
         if ($uuid) {
-            $qb->andWhere('ct.' . ContractType::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere('ct.'.ContractType::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 

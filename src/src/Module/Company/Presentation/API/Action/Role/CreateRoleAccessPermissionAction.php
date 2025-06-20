@@ -13,7 +13,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final readonly class CreateRoleAccessPermissionAction
 {
-    public function __construct(private MessageBusInterface $commandBus, private RoleReaderInterface $roleReaderRepository, private RoleAccessPermissionValidator $roleAccessPermissionValidator,)
+    public function __construct(private MessageBusInterface $commandBus, private RoleReaderInterface $roleReaderRepository, private RoleAccessPermissionValidator $roleAccessPermissionValidator)
     {
     }
 

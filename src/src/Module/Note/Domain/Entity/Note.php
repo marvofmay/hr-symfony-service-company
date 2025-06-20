@@ -97,7 +97,6 @@ class Note
         return $this->priority;
     }
 
-
     public function setEmployee(Employee $employee): void
     {
         $this->employee = $employee;

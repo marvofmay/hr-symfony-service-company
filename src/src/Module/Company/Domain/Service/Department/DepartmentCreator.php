@@ -29,7 +29,7 @@ class DepartmentCreator
         protected CompanyReaderInterface $companyReaderRepository,
         protected DepartmentReaderInterface $departmentReaderRepository,
         protected DepartmentWriterInterface $departmentWriterRepository,
-   ) {
+    ) {
         $this->contacts = new ArrayCollection();
     }
 

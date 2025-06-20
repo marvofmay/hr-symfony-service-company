@@ -24,7 +24,7 @@ class AddRecordToContractTypeTableCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct();
     }
@@ -42,7 +42,7 @@ class AddRecordToContractTypeTableCommand extends Command
         $contractTypeRepository = $this->entityManager->getRepository(ContractType::class);
 
         $existingContractTypes = $contractTypeRepository->createQueryBuilder(ContractType::ALIAS)
-            ->select(ContractType::ALIAS . '.name')
+            ->select(ContractType::ALIAS.'.name')
             ->getQuery()
             ->getArrayResult();
 

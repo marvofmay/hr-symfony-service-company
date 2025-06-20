@@ -11,8 +11,9 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 final readonly class AskIndustryAction
 {
-    public function __construct(private MessageBusInterface $queryBus,)
-    {}
+    public function __construct(private MessageBusInterface $queryBus)
+    {
+    }
 
     public function ask(string $uuid): array
     {

@@ -13,7 +13,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class RoleAccessRepository extends ServiceEntityRepository implements RoleAccessInterface
 {
-    public function __construct(ManagerRegistry $registry,)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RoleAccess::class);
     }
@@ -21,8 +21,8 @@ class RoleAccessRepository extends ServiceEntityRepository implements RoleAccess
     public function isRoleHasAccess(Access $access, Role $role): bool
     {
         return null !== $this->findOneBy([
-           RoleAccess::RELATION_ACCESS => $access,
-           RoleAccess::RELATION_ROLE => $role,
+            RoleAccess::RELATION_ACCESS => $access,
+            RoleAccess::RELATION_ROLE => $role,
         ]);
     }
 }

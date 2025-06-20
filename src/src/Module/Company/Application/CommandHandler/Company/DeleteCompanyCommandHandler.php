@@ -7,7 +7,7 @@ use App\Module\Company\Domain\Service\Company\CompanyDeleter;
 
 readonly class DeleteCompanyCommandHandler
 {
-    public function __construct(private CompanyDeleter $companyDeleter,)
+    public function __construct(private CompanyDeleter $companyDeleter)
     {
     }
 

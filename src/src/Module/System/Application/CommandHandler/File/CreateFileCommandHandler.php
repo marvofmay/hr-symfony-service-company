@@ -9,7 +9,7 @@ use App\Module\System\Domain\Service\File\FileCreator;
 
 readonly class CreateFileCommandHandler
 {
-    public function __construct(private FileCreator $fileCreator,)
+    public function __construct(private FileCreator $fileCreator)
     {
     }
 

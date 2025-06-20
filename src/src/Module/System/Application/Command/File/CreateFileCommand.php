@@ -8,7 +8,7 @@ use App\Module\System\Domain\Entity\File;
 
 class CreateFileCommand
 {
-    public function __construct(public File $file,)
+    public function __construct(public File $file)
     {
     }
 }

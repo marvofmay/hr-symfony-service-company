@@ -12,7 +12,7 @@ final class ListRolesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListRolesQuery $query): array
     {
-      return $this->handle($query);
+        return $this->handle($query);
     }
 
     protected function getEntityClass(): string

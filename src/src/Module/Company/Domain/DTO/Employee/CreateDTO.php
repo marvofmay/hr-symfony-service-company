@@ -120,7 +120,7 @@ class CreateDTO
     public bool $active = true;
 
     #[Assert\All([
-        new Assert\Type(type: 'string')
+        new Assert\Type(type: 'string'),
     ])]
     #[Assert\Type('array')]
     #[Assert\Count(

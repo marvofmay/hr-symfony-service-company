@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Company\CompanyCreator;
 
 readonly class CreateCompanyCommandHandler
 {
-    public function __construct(private CompanyCreator $companyCreator,)
+    public function __construct(private CompanyCreator $companyCreator)
     {
     }
 

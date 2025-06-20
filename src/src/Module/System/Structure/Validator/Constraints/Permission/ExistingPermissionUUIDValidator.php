@@ -10,7 +10,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ExistingPermissionUUIDValidator extends ConstraintValidator
 {
-    public function __construct(private readonly PermissionReaderInterface $permissionReaderRepository, private readonly TranslatorInterface $translator,)
+    public function __construct(private readonly PermissionReaderInterface $permissionReaderRepository, private readonly TranslatorInterface $translator)
     {
     }
 

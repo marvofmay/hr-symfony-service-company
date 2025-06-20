@@ -8,15 +8,14 @@ use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
-use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'company')]
@@ -149,11 +148,11 @@ class Company
 
     public function getContacts(?ContactTypeEnum $type = null): Collection
     {
-        if ($type === null) {
+        if (null === $type) {
             return $this->contacts;
         }
 
-        return $this->contacts->filter(fn(Contact $contact) => $contact->getType() === $type->value);
+        return $this->contacts->filter(fn (Contact $contact) => $contact->getType() === $type->value);
     }
 
     public function addContact(Contact $contact): void
@@ -247,7 +246,8 @@ class Company
         }
     }
 
-    public function toArray(): array {
+    public function toArray(): array
+    {
         return [
             self::COLUMN_UUID => $this->getUuid()->toString(),
             self::COLUMN_FULL_NAME => $this->getFullName(),
@@ -258,7 +258,7 @@ class Company
             self::COLUMN_ACTIVE => $this->getActive(),
             'quantityDepartments' => $this->getDepartments()->count(),
             'quantityEmployees' => $this->getEmployees()->count(),
-            //ToDo:: use const RELATION_PARENT_COMPANY
+            // ToDo:: use const RELATION_PARENT_COMPANY
             'parentCompany' => $this->getParentCompany() ? $this->getParentCompany()->toArray() : null,
             self::COLUMN_CREATED_AT => $this->getCreatedAt(),
             self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),

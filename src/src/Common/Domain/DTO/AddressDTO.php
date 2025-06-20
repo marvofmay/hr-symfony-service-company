@@ -29,5 +29,6 @@ class AddressDTO
             type: 'bool',
         )]
         public bool $active = true,
-    ) {}
+    ) {
+    }
 }

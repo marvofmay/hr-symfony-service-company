@@ -64,13 +64,14 @@ class Role
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
     private Collection $employees;
 
-    #[ORM\OneToMany(targetEntity: RoleAccess::class, mappedBy: "role", cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: RoleAccess::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
     private Collection $roleAccesses;
 
     #[ORM\OneToMany(targetEntity: RoleAccessPermission::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
     private Collection $accessPermissions;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->employees = new ArrayCollection();
         $this->roleAccesses = new ArrayCollection();
         $this->accessPermissions = new ArrayCollection();
@@ -146,6 +147,6 @@ class Role
 
     public function getAccesses(): Collection
     {
-        return $this->getRoleAccesses()->map(fn(RoleAccess $ra) => $ra->getAccess());
+        return $this->getRoleAccesses()->map(fn (RoleAccess $ra) => $ra->getAccess());
     }
 }

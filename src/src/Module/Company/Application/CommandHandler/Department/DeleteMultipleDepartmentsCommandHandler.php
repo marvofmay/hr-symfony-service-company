@@ -9,12 +9,12 @@ use App\Module\Company\Domain\Service\Department\DepartmentMultipleDeleter;
 
 readonly class DeleteMultipleDepartmentsCommandHandler
 {
-    public function __construct(private DepartmentMultipleDeleter $departmentMultipleDeleter,)
+    public function __construct(private DepartmentMultipleDeleter $departmentMultipleDeleter)
     {
     }
 
     public function __invoke(DeleteMultipleDepartmentsCommand $command): void
     {
-       $this->departmentMultipleDeleter->multipleDelete($command->departments);
+        $this->departmentMultipleDeleter->multipleDelete($command->departments);
     }
 }

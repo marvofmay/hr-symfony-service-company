@@ -12,7 +12,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final readonly class CreateRoleAction
 {
-    public function __construct(private MessageBusInterface $commandBus, private RoleValidator $roleValidator,)
+    public function __construct(private MessageBusInterface $commandBus, private RoleValidator $roleValidator)
     {
     }
 

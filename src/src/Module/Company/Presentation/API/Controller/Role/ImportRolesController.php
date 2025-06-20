@@ -20,17 +20,18 @@ final class ImportRolesController extends AbstractController
     public function __construct(
         private readonly ImportRolesFacade $importRolesFacade,
         private readonly TranslatorInterface $translator,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/roles/import', name: 'import', methods: ['POST'])]
-    public function import(#[MapUploadedFile] ?UploadedFile $file,): JsonResponse
+    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
         if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::ROLE)) {
-            return new JsonResponse(['message' => $this->translator->trans('accessDenied', [], 'messages'),], Response::HTTP_FORBIDDEN);
+            return new JsonResponse(['message' => $this->translator->trans('accessDenied', [], 'messages')], Response::HTTP_FORBIDDEN);
         }
 
         if (!$file) {
-            return new JsonResponse(['message' => $this->translator->trans('role.import.file.required', [], 'roles'),], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse(['message' => $this->translator->trans('role.import.file.required', [], 'roles')], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $result = $this->importRolesFacade->handle($file);

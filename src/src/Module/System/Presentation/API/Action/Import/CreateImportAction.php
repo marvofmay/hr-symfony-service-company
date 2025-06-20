@@ -19,7 +19,6 @@ readonly class CreateImportAction
 
     public function execute(ImportKindEnum $kindEnum, ImportStatusEnum $statusEnum, ?File $file, ?Employee $employee = null): void
     {
-
         $this->commandBus->dispatch(new CreateImportCommand($kindEnum, $statusEnum, $file, $employee));
     }
 }

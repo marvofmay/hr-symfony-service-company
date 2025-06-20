@@ -8,5 +8,7 @@ use App\Module\System\Domain\Entity\Import;
 
 final class GetImportLogsByImportQuery
 {
-    public function __construct(public Import $import,) {}
+    public function __construct(public Import $import)
+    {
+    }
 }

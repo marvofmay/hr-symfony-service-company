@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 
 final readonly class GetImportLogsByImportQueryHandler
 {
-    public function __construct(private ImportLogReaderInterface $importLogReaderRepository,)
+    public function __construct(private ImportLogReaderInterface $importLogReaderRepository)
     {
     }
 

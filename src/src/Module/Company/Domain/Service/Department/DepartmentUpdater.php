@@ -29,7 +29,7 @@ class DepartmentUpdater extends DepartmentCreator
         protected DepartmentWriterInterface $departmentWriterRepository,
         protected ContactWriterInterface $contactWriterRepository,
         protected AddressWriterInterface $addressWriterRepository,
-   ) {
+    ) {
         parent::__construct($company, $department, $parentDepartment, $address, $companyReaderRepository, $departmentReaderRepository, $departmentWriterRepository);
     }
 

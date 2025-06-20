@@ -27,6 +27,7 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         if (null === $industry) {
             throw new \Exception($this->translator->trans('industry.uuid.notExists', [':uuid' => $uuid], 'industries'), Response::HTTP_NOT_FOUND);
         }
+
         return $industry;
     }
 
@@ -39,20 +40,16 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(Industry::ALIAS)
             ->from(Industry::class, Industry::ALIAS)
-            ->where(Industry::ALIAS . '.' . Industry::COLUMN_UUID . ' IN (:uuids)')
+            ->where(Industry::ALIAS.'.'.Industry::COLUMN_UUID.' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID);
 
         $industries = $qb->getQuery()->getResult();
 
-        $foundUUIDs = array_map(fn(Industry $industry) => $industry->getUUID(), $industries);
+        $foundUUIDs = array_map(fn (Industry $industry) => $industry->getUUID(), $industries);
         $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
 
         if ($missingUUIDs) {
-            throw new NotFindByUUIDException(sprintf(
-                '%s : %s',
-                $this->translator->trans('industry.uuid.notFound', [], 'industries'),
-                implode(', ', $missingUUIDs)
-            ));
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('industry.uuid.notFound', [], 'industries'), implode(', ', $missingUUIDs)));
         }
 
         return new ArrayCollection($industries);
@@ -66,7 +63,7 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
             ->where('i.'.Industry::COLUMN_NAME.' = :name')
             ->setParameter('name', $name);
 
-        if ($uuid !== null) {
+        if (null !== $uuid) {
             $qb->andWhere('i.'.Industry::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }

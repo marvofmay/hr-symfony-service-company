@@ -46,13 +46,41 @@ abstract class ListQueryAbstract
     }
 
     abstract protected function getAttributes(): array;
+
     abstract protected function getRelations(): array;
 
-    public function getLimit(): int { return $this->limit; }
-    public function getPage(): int { return $this->page; }
-    public function getOffset(): int { return $this->offset; }
-    public function getOrderBy(): string { return $this->orderBy; }
-    public function getOrderDirection(): string { return $this->orderDirection; }
-    public function getFilters(): array { return $this->filters; }
-    public function getIncludes(): array { return $this->includes; }
+    public function getLimit(): int
+    {
+        return $this->limit;
+    }
+
+    public function getPage(): int
+    {
+        return $this->page;
+    }
+
+    public function getOffset(): int
+    {
+        return $this->offset;
+    }
+
+    public function getOrderBy(): string
+    {
+        return $this->orderBy;
+    }
+
+    public function getOrderDirection(): string
+    {
+        return $this->orderDirection;
+    }
+
+    public function getFilters(): array
+    {
+        return $this->filters;
+    }
+
+    public function getIncludes(): array
+    {
+        return $this->includes;
+    }
 }

@@ -10,7 +10,7 @@ use App\Module\Note\Domain\Interface\NoteWriterInterface;
 
 readonly class NoteUpdater
 {
-    public function __construct(private NoteWriterInterface $noteWriterRepository,)
+    public function __construct(private NoteWriterInterface $noteWriterRepository)
     {
     }
 

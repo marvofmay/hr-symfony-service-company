@@ -23,7 +23,7 @@ final class AddressWriterRepository extends ServiceEntityRepository implements A
             return;
         }
 
-        if ($type === Address::HARD_DELETED_AT) {
+        if (Address::HARD_DELETED_AT === $type) {
             $this->getEntityManager()->getRepository(Address::class)->createQueryBuilder('address')
                 ->delete()
                 ->where('address.uuid = :uuid')

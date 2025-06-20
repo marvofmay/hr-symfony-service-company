@@ -7,11 +7,10 @@ namespace App\Module\Company\Domain\Service\Position;
 use App\Module\Company\Application\Command\Position\UpdatePositionCommand;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class PositionUpdater
 {
-    public function __construct(private PositionWriterInterface $positionWriterRepository, private DepartmentReaderInterface $departmentReaderRepository,)
+    public function __construct(private PositionWriterInterface $positionWriterRepository, private DepartmentReaderInterface $departmentReaderRepository)
     {
     }
 

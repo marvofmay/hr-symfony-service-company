@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 
 readonly class PositionCreator
 {
-    public function __construct(private PositionWriterInterface $positionWriterRepository,)
+    public function __construct(private PositionWriterInterface $positionWriterRepository)
     {
     }
 

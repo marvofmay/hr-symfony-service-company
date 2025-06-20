@@ -7,7 +7,7 @@ use App\Module\Company\Domain\Service\Department\DepartmentDeleter;
 
 readonly class DeleteDepartmentCommandHandler
 {
-    public function __construct(private DepartmentDeleter $departmentDeleter,)
+    public function __construct(private DepartmentDeleter $departmentDeleter)
     {
     }
 

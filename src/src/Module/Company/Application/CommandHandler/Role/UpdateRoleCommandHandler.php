@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Role\RoleUpdater;
 
 final readonly class UpdateRoleCommandHandler
 {
-    public function __construct(private RoleUpdater $roleUpdater,)
+    public function __construct(private RoleUpdater $roleUpdater)
     {
     }
 

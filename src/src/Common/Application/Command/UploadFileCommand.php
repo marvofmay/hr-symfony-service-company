@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class UploadFileCommand
 {
-    public function __construct(public UploadedFile $file, public string $uploadFilePath, public string $uploadFileName,)
+    public function __construct(public UploadedFile $file, public string $uploadFilePath, public string $uploadFileName)
     {
     }
 }

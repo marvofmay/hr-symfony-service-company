@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Common\Shared\Utils;
 
-use DateTime;
-
 final readonly class DateFormatValidator
 {
     public static function validate(?string $date, string $format): ?string
@@ -16,14 +14,14 @@ final readonly class DateFormatValidator
 
         $phpFormat = self::convertToPhpFormat($format);
 
-        $dt = DateTime::createFromFormat($phpFormat, $date);
-        $errors = DateTime::getLastErrors();
+        $dt = \DateTime::createFromFormat($phpFormat, $date);
+        $errors = \DateTime::getLastErrors();
 
         if (false === $errors) {
             return null;
         }
 
-        if ($dt === false || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
+        if (false === $dt || $errors['warning_count'] > 0 || $errors['error_count'] > 0) {
             return 'date.invalidFormat';
         }
 

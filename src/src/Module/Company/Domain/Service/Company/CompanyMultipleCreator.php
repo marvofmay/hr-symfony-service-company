@@ -21,13 +21,12 @@ final class CompanyMultipleCreator
     private Company $company;
 
     public function __construct(
-        private readonly CompanyWriterInterface   $companyWriterRepository,
-        private readonly CompanyReaderInterface   $companyReaderRepository,
+        private readonly CompanyWriterInterface $companyWriterRepository,
+        private readonly CompanyReaderInterface $companyReaderRepository,
         private readonly IndustryReaderRepository $industryReaderRepository,
-        private readonly ContactWriterRepository  $contactWriterRepository,
-        private readonly AddressWriterInterface   $addressWriterRepository,
-    )
-    {
+        private readonly ContactWriterRepository $contactWriterRepository,
+        private readonly AddressWriterInterface $addressWriterRepository,
+    ) {
     }
 
     public function multipleCreate(array $data): void
@@ -67,9 +66,9 @@ final class CompanyMultipleCreator
     {
         if (null === $item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID] || is_int($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID])) {
             $this->company = new Company();
-        } else if (is_string($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID])) {
+        } elseif (is_string($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID])) {
             $company = $this->companyReaderRepository->getCompanyByUUID($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_UUID]);
-            if ($company === null) {
+            if (null === $company) {
                 $this->company = new Company();
             } else {
                 $this->company = $company;
@@ -82,9 +81,9 @@ final class CompanyMultipleCreator
         $this->company->setFullName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME]);
         $this->company->setShortName($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_SHORT_NAME]);
         $this->company->setDescription($item[ImportCompaniesFromXLSX::COLUMN_COMPANY_DESCRIPTION]);
-        $this->company->setNip((string)$item[ImportCompaniesFromXLSX::COLUMN_NIP]);
-        $this->company->setRegon((string)$item[ImportCompaniesFromXLSX::COLUMN_REGON]);
-        $this->company->setActive((bool)$item[ImportCompaniesFromXLSX::COLUMN_ACTIVE]);
+        $this->company->setNip((string) $item[ImportCompaniesFromXLSX::COLUMN_NIP]);
+        $this->company->setRegon((string) $item[ImportCompaniesFromXLSX::COLUMN_REGON]);
+        $this->company->setActive((bool) $item[ImportCompaniesFromXLSX::COLUMN_ACTIVE]);
     }
 
     private function setAddress(array $item): void
@@ -123,7 +122,7 @@ final class CompanyMultipleCreator
         if (null !== $item[ImportCompaniesFromXLSX::COLUMN_EMAIL]) {
             $contact = new Contact();
             $contact->setType(ContactTypeEnum::EMAIL->value);
-            $contact->setData((string)$item[ImportCompaniesFromXLSX::COLUMN_EMAIL]);
+            $contact->setData((string) $item[ImportCompaniesFromXLSX::COLUMN_EMAIL]);
             $contact->setActive(true);
             $this->company->addContact($contact);
         }
@@ -146,10 +145,10 @@ final class CompanyMultipleCreator
 
         $parentCompanyUUID = $item[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_UUID] ?? null;
 
-        if ($parentCompanyUUID !== null) {
+        if (null !== $parentCompanyUUID) {
             if (is_int($parentCompanyUUID) && isset($temporaryCompanyMap[$parentCompanyUUID])) {
                 $this->company->setParentCompany($temporaryCompanyMap[$parentCompanyUUID]);
-            } else if (is_string($parentCompanyUUID)) {
+            } elseif (is_string($parentCompanyUUID)) {
                 $parentCompany = $this->companyReaderRepository->getCompanyByUUID($parentCompanyUUID);
                 if ($parentCompany instanceof Company) {
                     $this->company->setParentCompany($parentCompany);

@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Role\RoleCreator;
 
 readonly class CreateRoleCommandHandler
 {
-    public function __construct(private RoleCreator $roleCreator,)
+    public function __construct(private RoleCreator $roleCreator)
     {
     }
 

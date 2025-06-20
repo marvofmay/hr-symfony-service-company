@@ -6,7 +6,7 @@ namespace App\Module\Company\Application\Command\Industry;
 
 final readonly class ImportIndustriesCommand
 {
-    public function __construct(private string $importUUID,)
+    public function __construct(private string $importUUID)
     {
     }
 

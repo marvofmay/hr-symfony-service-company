@@ -36,7 +36,7 @@ class ListPositionsController extends AbstractController
         } catch (\Exception $error) {
             $this->logger->error(sprintf('%s. %s', $this->translator->trans('position.list.error', [], 'positions'), $error->getMessage()));
 
-            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('position.list.error', [], 'positions'),], $error->getCode());
+            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('position.list.error', [], 'positions')], $error->getCode());
         }
     }
 }

@@ -32,11 +32,11 @@ class GetPositionController extends AbstractController
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
-            $position =  $this->positionReaderRepository->getPositionByUUID($uuid);
+            $position = $this->positionReaderRepository->getPositionByUUID($uuid);
             $transformer = new PositionDataTransformer();
             $data = $transformer->transformToArray($position);
 
-            return new JsonResponse(['data' => $data,], Response::HTTP_OK);
+            return new JsonResponse(['data' => $data], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('position.view.error', [], 'positions'), $error->getMessage());
             $this->logger->error($message);

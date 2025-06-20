@@ -16,15 +16,14 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final readonly class ImportEmployeesValidator
 {
     public function __construct(
-        private TranslatorInterface          $translator,
-        private DepartmentReaderInterface    $departmentReaderRepository,
-        private EmployeeReaderInterface      $employeeReaderRepository,
-        private PositionReaderInterface      $positionReaderRepository,
+        private TranslatorInterface $translator,
+        private DepartmentReaderInterface $departmentReaderRepository,
+        private EmployeeReaderInterface $employeeReaderRepository,
+        private PositionReaderInterface $positionReaderRepository,
         private ContractTypeReaderRepository $contractTypeReaderRepository,
-        private RoleReaderInterface          $roleReaderRepository,
-        private CacheInterface               $cache,
-    )
-    {
+        private RoleReaderInterface $roleReaderRepository,
+        private CacheInterface $cache,
+    ) {
     }
 
     public function validate(Import $import): array

@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Entity;
 
+use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
+use App\Common\Domain\Trait\TimestampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use App\Common\Domain\Trait\AttributesEntityTrait;
-use App\Common\Domain\Trait\RelationsEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'permission')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
-
 class Permission
 {
     use TimestampableTrait;

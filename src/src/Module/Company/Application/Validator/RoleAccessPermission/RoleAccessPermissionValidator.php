@@ -12,7 +12,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class RoleAccessPermissionValidator
 {
-    public function __construct(private EntityManagerInterface $entityManager, private TranslatorInterface $translator,)
+    public function __construct(private EntityManagerInterface $entityManager, private TranslatorInterface $translator)
     {
     }
 
@@ -47,7 +47,7 @@ final readonly class RoleAccessPermissionValidator
                 $messages[] = sprintf('%s - %s - %s', $role->getName(), $accessName, $permissionName);
             }
 
-            $message = $this->translator->trans('role.accesses.permissions.alreadyExists', [':items' => implode(', ', $messages),], 'roles');
+            $message = $this->translator->trans('role.accesses.permissions.alreadyExists', [':items' => implode(', ', $messages)], 'roles');
 
             throw new \Exception($message, Response::HTTP_CONFLICT);
         }

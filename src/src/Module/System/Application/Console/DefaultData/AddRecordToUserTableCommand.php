@@ -41,8 +41,9 @@ class AddRecordToUserTableCommand extends Command
         $existingUser = $this->entityManager->getRepository(User::class)
             ->findOneBy([User::COLUMN_EMAIL => self::DEFAULT_EMAIL]);
 
-        if ($existingUser !== null) {
+        if (null !== $existingUser) {
             $output->writeln(sprintf('<comment>%s</comment>', self::INFO_EXISTS));
+
             return Command::SUCCESS;
         }
 

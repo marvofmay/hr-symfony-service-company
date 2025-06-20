@@ -30,8 +30,9 @@ final readonly class ImportEmployeesCommandHandler
         private EmployeeMultipleCreator $employeeMultipleCreator,
         private TranslatorInterface $translator,
         private UpdateImportAction $updateImportAction,
-        private CacheInterface               $cache,
-    ) {}
+        private CacheInterface $cache,
+    ) {
+    }
 
     public function __invoke(ImportEmployeesCommand $command): void
     {

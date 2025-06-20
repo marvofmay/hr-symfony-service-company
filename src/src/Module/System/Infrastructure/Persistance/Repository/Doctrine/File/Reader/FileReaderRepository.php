@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class FileReaderRepository extends ServiceEntityRepository implements FileReaderInterface
 {
-    public function __construct(ManagerRegistry $registry,)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, File::class);
     }
@@ -23,9 +23,9 @@ class FileReaderRepository extends ServiceEntityRepository implements FileReader
 
         $qb->select('f')
             ->from(File::class, 'f')
-            ->where('f.' . File::COLUMN_FILE_NAME . ' = :name')
-            ->andWhere('f.' . File::COLUMN_FILE_PATH . ' = :path')
-            ->andWhere('f.' . File::COLUMN_KIND . ' = :kind')
+            ->where('f.'.File::COLUMN_FILE_NAME.' = :name')
+            ->andWhere('f.'.File::COLUMN_FILE_PATH.' = :path')
+            ->andWhere('f.'.File::COLUMN_KIND.' = :kind')
             ->setParameter('name', $fileName)
             ->setParameter('path', $filePath)
             ->setParameter('kind', $enum->value);

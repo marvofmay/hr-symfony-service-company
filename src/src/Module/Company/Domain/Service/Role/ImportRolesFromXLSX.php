@@ -10,7 +10,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportRolesFromXLSX extends XLSXIterator
 {
-    public const int COLUMN_NAME        = 0;
+    public const int COLUMN_NAME = 0;
     public const int COLUMN_DESCRIPTION = 1;
 
     public function __construct(

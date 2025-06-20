@@ -14,8 +14,7 @@ final readonly class DeletePositionAction
     public function __construct(
         private MessageBusInterface $commandBus,
         private PositionReaderInterface $positionReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function execute(string $uuid): void

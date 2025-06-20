@@ -16,8 +16,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListNotesController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,) 
-    {}
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
+    {
+    }
 
     #[Route('/api/notes', name: 'api.notes.list', methods: ['GET'])]
     public function list(#[MapQueryString] NotesQueryDTO $queryDTO, AskNotesAction $askNotesAction): Response

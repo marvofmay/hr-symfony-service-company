@@ -16,7 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PositionReaderRepository extends ServiceEntityRepository implements PositionReaderInterface
 {
-    public function __construct(ManagerRegistry $registry, private TranslatorInterface $translator,)
+    public function __construct(ManagerRegistry $registry, private TranslatorInterface $translator)
     {
         parent::__construct($registry, Position::class);
     }
@@ -40,20 +40,16 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(Position::ALIAS)
             ->from(Position::class, Position::ALIAS)
-            ->where(Position::ALIAS . '.' . Position::COLUMN_UUID . ' IN (:uuids)')
+            ->where(Position::ALIAS.'.'.Position::COLUMN_UUID.' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID);
 
         $positions = $qb->getQuery()->getResult();
 
-        $foundUUIDs = array_map(fn(Position $position) => $position->getUUID(), $positions);
+        $foundUUIDs = array_map(fn (Position $position) => $position->getUUID(), $positions);
         $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
 
         if ($missingUUIDs) {
-            throw new NotFindByUUIDException(sprintf(
-                '%s : %s',
-                $this->translator->trans('position.uuid.notFound', [], 'positions'),
-                implode(', ', $missingUUIDs)
-            ));
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('position.uuid.notFound', [], 'positions'), implode(', ', $missingUUIDs)));
         }
 
         return new ArrayCollection($positions);
@@ -65,11 +61,11 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
 
         $qb->select('p')
             ->from(Position::class, 'p')
-            ->where('p.' . Position::COLUMN_NAME . ' = :name')
+            ->where('p.'.Position::COLUMN_NAME.' = :name')
             ->setParameter('name', $name);
 
         if (null !== $uuid) {
-            $qb->andWhere('p.' . Position::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere('p.'.Position::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 

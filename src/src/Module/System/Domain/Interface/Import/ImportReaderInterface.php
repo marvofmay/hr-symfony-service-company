@@ -10,5 +10,6 @@ use App\Module\System\Domain\Entity\Import;
 interface ImportReaderInterface
 {
     public function getImportByFile(File $file): ?Import;
+
     public function getImportByUuid(string $uuid): ?Import;
 }

@@ -31,7 +31,7 @@ class ImportIndustriesFromXLSX extends XLSXIterator
         }
 
         if ($this->industryExists($industryName)) {
-            $errorMessages[] = $this->formatErrorMessage('industry.name.alreadyExists', [':name' =>  $industryName]);
+            $errorMessages[] = $this->formatErrorMessage('industry.name.alreadyExists', [':name' => $industryName]);
         }
 
         return $errorMessages;

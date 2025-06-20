@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class AccessReaderRepository extends ServiceEntityRepository implements AccessReaderInterface
 {
-    public function __construct(ManagerRegistry $registry,)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Access::class);
     }

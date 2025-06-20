@@ -32,7 +32,8 @@ final readonly class UpdatePositionCommand
         return $this->active;
     }
 
-    public function getDepartmentsUUID(): ?array {
+    public function getDepartmentsUUID(): ?array
+    {
         return $this->departmentsUUID;
     }
 

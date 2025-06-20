@@ -10,7 +10,7 @@ use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 
 class GetImportByFileQueryHandler
 {
-    public function __construct(private ImportReaderInterface $importReaderRepository,)
+    public function __construct(private ImportReaderInterface $importReaderRepository)
     {
     }
 

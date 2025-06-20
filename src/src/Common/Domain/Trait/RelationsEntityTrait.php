@@ -5,15 +5,13 @@ declare(strict_types=1);
 namespace App\Common\Domain\Trait;
 
 use Doctrine\ORM\Mapping as ORM;
-use ReflectionClass;
-use ReflectionProperty;
 
 trait RelationsEntityTrait
 {
     public static function getRelations(): array
     {
-        $reflectionClass = new ReflectionClass(static::class);
-        $properties = $reflectionClass->getProperties(ReflectionProperty::IS_PRIVATE);
+        $reflectionClass = new \ReflectionClass(static::class);
+        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE);
 
         $relations = [];
 
@@ -25,7 +23,7 @@ trait RelationsEntityTrait
                     ORM\OneToOne::class,
                     ORM\OneToMany::class,
                     ORM\ManyToOne::class,
-                    ORM\ManyToMany::class
+                    ORM\ManyToMany::class,
                 ], true)) {
                     $relations[] = $property->getName();
                 }

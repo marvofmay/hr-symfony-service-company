@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Employee\EmployeeUpdater;
 
 readonly class UpdateEmployeeCommandHandler
 {
-    public function __construct(private EmployeeUpdater $employeeUpdater,)
+    public function __construct(private EmployeeUpdater $employeeUpdater)
     {
     }
 

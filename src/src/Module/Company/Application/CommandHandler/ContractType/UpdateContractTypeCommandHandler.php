@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\ContractType\ContractTypeUpdater;
 
 readonly class UpdateContractTypeCommandHandler
 {
-    public function __construct(private ContractTypeUpdater $contractTypeUpdater,)
+    public function __construct(private ContractTypeUpdater $contractTypeUpdater)
     {
     }
 

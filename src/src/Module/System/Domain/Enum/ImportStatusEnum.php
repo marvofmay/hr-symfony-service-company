@@ -16,8 +16,8 @@ enum ImportStatusEnum: string implements EnumInterface
     {
         return match ($this) {
             self::PENDING => 'pending',
-            self::FAILED  => 'failed',
-            self::DONE    => 'done',
+            self::FAILED => 'failed',
+            self::DONE => 'done',
         };
     }
 

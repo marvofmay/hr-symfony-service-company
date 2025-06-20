@@ -55,7 +55,7 @@ class CreateDTO
     public ?string $parentDepartmentUUID = null;
 
     #[Assert\All([
-        new Assert\Type(type: 'string')
+        new Assert\Type(type: 'string'),
     ])]
     #[Assert\Type('array')]
     #[Assert\Count(
@@ -65,7 +65,7 @@ class CreateDTO
     public ?array $phones = [];
 
     #[Assert\All([
-        new Assert\Type(type: 'string')
+        new Assert\Type(type: 'string'),
     ])]
     #[Assert\Type('array')]
     #[Assert\Count(
@@ -75,7 +75,7 @@ class CreateDTO
     public ?array $emails = [];
 
     #[Assert\All([
-        new Assert\Type(type: 'string')
+        new Assert\Type(type: 'string'),
     ])]
     #[Assert\Type('array')]
     #[Assert\Count(

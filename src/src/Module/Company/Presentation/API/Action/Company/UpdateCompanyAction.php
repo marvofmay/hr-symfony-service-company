@@ -11,7 +11,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class UpdateCompanyAction
 {
-    public function __construct(private MessageBusInterface $commandBus, private CompanyReaderInterface $companyReaderRepository,)
+    public function __construct(private MessageBusInterface $commandBus, private CompanyReaderInterface $companyReaderRepository)
     {
     }
 

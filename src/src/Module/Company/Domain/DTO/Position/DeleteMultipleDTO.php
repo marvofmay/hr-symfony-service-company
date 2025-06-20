@@ -17,5 +17,4 @@ final class DeleteMultipleDTO
             return $this->selectedUUID;
         }
     }
-
 }

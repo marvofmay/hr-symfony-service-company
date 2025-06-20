@@ -18,11 +18,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class GetDepartmentController extends AbstractController
 {
     public function __construct(
-        private readonly LoggerInterface           $logger,
+        private readonly LoggerInterface $logger,
         private readonly DepartmentReaderInterface $departmentReaderRepository,
-        private readonly TranslatorInterface       $translator,
-    )
-    {
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     #[Route('/api/departments/{uuid}', name: 'api.departments.get', methods: ['GET'])]
@@ -37,7 +36,7 @@ class GetDepartmentController extends AbstractController
             $department = $this->departmentReaderRepository->getDepartmentByUUID($uuid);
             $data = $transformer->transformToArray($department);
 
-            return new JsonResponse(['data' => $data,], Response::HTTP_OK);
+            return new JsonResponse(['data' => $data], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('department.view.error', [], 'departments'), $error->getMessage());
             $this->logger->error($message);

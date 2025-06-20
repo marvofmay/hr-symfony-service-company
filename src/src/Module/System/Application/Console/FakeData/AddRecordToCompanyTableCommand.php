@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Module\System\Application\Console\FakeData;
 
-use App\Module\Company\Domain\Enum\ContactTypeEnum;
-use App\Module\System\Application\Console\FakeData\Data\Company as CompanyFakeData;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\System\Application\Console\FakeData\Data\Company as CompanyFakeData;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Parameter;
@@ -46,9 +46,9 @@ class AddRecordToCompanyTableCommand extends Command
 
         $companyRepository = $this->entityManager->getRepository(Company::class);
         $existingCompany = $companyRepository->createQueryBuilder(Company::ALIAS)
-            ->where(Company::ALIAS . '.fullName = :fullName')
-            ->andWhere(Company::ALIAS . '.nip = :nip')
-            ->andWhere(Company::ALIAS . '.regon = :regon')
+            ->where(Company::ALIAS.'.fullName = :fullName')
+            ->andWhere(Company::ALIAS.'.nip = :nip')
+            ->andWhere(Company::ALIAS.'.regon = :regon')
             ->setParameters(new ArrayCollection([
                 new Parameter('fullName', $data['fullName']),
                 new Parameter('nip', $data['nip']),
@@ -57,8 +57,9 @@ class AddRecordToCompanyTableCommand extends Command
             ->getQuery()
             ->getOneOrNullResult();
 
-        if ($existingCompany !== null) {
+        if (null !== $existingCompany) {
             $output->writeln(sprintf('<comment>%s</comment>', self::INFO_ALREADY_EXISTS));
+
             return Command::SUCCESS;
         }
 

@@ -11,13 +11,12 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class UpdateContractTypeAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private readonly ContractTypeReaderInterface $contractTypeReaderRepository,)
+    public function __construct(private readonly MessageBusInterface $commandBus, private readonly ContractTypeReaderInterface $contractTypeReaderRepository)
     {
     }
 
     public function execute(UpdateDTO $updateDTO): void
     {
-
         $this->commandBus->dispatch(
             new UpdateContractTypeCommand(
                 $updateDTO->getUUID(),

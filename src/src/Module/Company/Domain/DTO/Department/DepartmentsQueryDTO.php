@@ -8,7 +8,7 @@ use App\Common\Domain\Abstract\QueryDTOAbstract;
 
 class DepartmentsQueryDTO extends QueryDTOAbstract
 {
-    public ?string $name= null;
+    public ?string $name = null;
 
     public ?string $description = null;
 

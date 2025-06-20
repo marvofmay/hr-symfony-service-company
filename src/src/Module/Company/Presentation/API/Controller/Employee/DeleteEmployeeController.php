@@ -16,7 +16,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DeleteEmployeeController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,) {
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
+    {
     }
 
     #[Route('/api/employees/{uuid}', name: 'api.employees.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]

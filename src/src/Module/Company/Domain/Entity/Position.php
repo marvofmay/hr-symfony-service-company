@@ -57,7 +57,7 @@ class Position
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'position', cascade: ['persist', 'remove'])]
     private Collection $employees;
 
-    #[ORM\OneToMany(targetEntity: PositionDepartment::class, mappedBy: "position", cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: PositionDepartment::class, mappedBy: 'position', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $positionDepartments;
 
     public function __construct()
@@ -125,6 +125,6 @@ class Position
 
     public function getDepartments(): Collection
     {
-        return $this->positionDepartments->map(fn(PositionDepartment $pd) => $pd->getDepartment());
+        return $this->positionDepartments->map(fn (PositionDepartment $pd) => $pd->getDepartment());
     }
 }

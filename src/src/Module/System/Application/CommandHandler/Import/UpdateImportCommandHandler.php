@@ -9,7 +9,7 @@ use App\Module\System\Domain\Service\Import\ImportUpdater;
 
 readonly class UpdateImportCommandHandler
 {
-    public function __construct(private ImportUpdater $importUpdater,)
+    public function __construct(private ImportUpdater $importUpdater)
     {
     }
 

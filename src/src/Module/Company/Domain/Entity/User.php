@@ -16,7 +16,6 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -112,8 +111,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function getRoles(): array
     {
-        //ToDo:: get Roles from relation employee, if employee not null
-        //$this->employee->role
+        // ToDo:: get Roles from relation employee, if employee not null
+        // $this->employee->role
         return [];
     }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Presentation\API\Action\Employee;
 
 use App\Common\Domain\Interface\QueryDTOInterface;
-use App\Module\Company\Application\Query\Employee\ListEmployeesQuery;;
+use App\Module\Company\Application\Query\Employee\ListEmployeesQuery;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 

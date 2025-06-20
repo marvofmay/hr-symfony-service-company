@@ -11,10 +11,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class PermissionReaderRepository extends ServiceEntityRepository implements PermissionReaderInterface
 {
-    public function __construct(ManagerRegistry $registry,)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Permission::class);
     }
+
     public function getPermissionByUuid(string $uuid): ?Permission
     {
         return $this->findOneBy([Permission::COLUMN_UUID => $uuid]);

@@ -28,7 +28,7 @@ final readonly class Company
             'nip' => '9316831327',
             'regon' => '9316831327',
             'description' => '',
-            'industryUUID' =>  $technologyUUID,
+            'industryUUID' => $technologyUUID,
             'active' => true,
             'phones' => [
                 '155-555-555',

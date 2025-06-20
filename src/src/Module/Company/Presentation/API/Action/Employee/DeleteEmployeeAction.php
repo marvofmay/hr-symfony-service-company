@@ -13,7 +13,8 @@ class DeleteEmployeeAction
     public function __construct(
         private readonly MessageBusInterface $commandBus,
         private readonly EmployeeReaderInterface $employeeReaderRepository,
-    ) {}
+    ) {
+    }
 
     public function execute(string $uuid): void
     {

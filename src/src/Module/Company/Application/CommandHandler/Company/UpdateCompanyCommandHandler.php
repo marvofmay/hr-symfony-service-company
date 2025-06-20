@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Company\CompanyUpdater;
 
 readonly class UpdateCompanyCommandHandler
 {
-    public function __construct(private CompanyUpdater $companyUpdater,)
+    public function __construct(private CompanyUpdater $companyUpdater)
     {
     }
 

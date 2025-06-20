@@ -14,7 +14,8 @@ readonly class UpdateDepartmentAction
     public function __construct(
         private MessageBusInterface $commandBus,
         private DepartmentReaderInterface $departmentReaderRepository,
-    ){}
+    ) {
+    }
 
     public function execute(UpdateDTO $updateDTO): void
     {

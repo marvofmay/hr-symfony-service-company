@@ -6,7 +6,7 @@ namespace App\Module\Company\Application\Command\Department;
 
 readonly class ImportDepartmentsCommand
 {
-    public function __construct(private string $importUUID,)
+    public function __construct(private string $importUUID)
     {
     }
 

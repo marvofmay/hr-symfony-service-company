@@ -12,7 +12,7 @@ class ListCompaniesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListCompaniesQuery $query): array
     {
-      return $this->handle($query);
+        return $this->handle($query);
     }
 
     protected function getEntityClass(): string

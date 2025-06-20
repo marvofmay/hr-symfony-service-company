@@ -14,30 +14,29 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportDepartmentsFromXLSX extends XLSXIterator
 {
-    public const int COLUMN_DEPARTMENT_UUID        = 0;
-    public const int COLUMN_DEPARTMENT_NAME        = 1;
+    public const int COLUMN_DEPARTMENT_UUID = 0;
+    public const int COLUMN_DEPARTMENT_NAME = 1;
     public const int COLUMN_DEPARTMENT_DESCRIPTION = 2;
     public const int COLUMN_PARENT_DEPARTMENT_UUID = 3;
-    public const int COLUMN_COMPANY_UUID           = 4;
-    public const int COLUMN_ACTIVE                 = 5;
-    public const int COLUMN_PHONE                  = 6;
-    public const int COLUMN_EMAIL                  = 7;
-    public const int COLUMN_WEBSITE                = 8;
-    public const int COLUMN_STREET                 = 9;
-    public const int COLUMN_POSTCODE               = 10;
-    public const int COLUMN_CITY                   = 11;
-    public const int COLUMN_COUNTRY                = 12;
+    public const int COLUMN_COMPANY_UUID = 4;
+    public const int COLUMN_ACTIVE = 5;
+    public const int COLUMN_PHONE = 6;
+    public const int COLUMN_EMAIL = 7;
+    public const int COLUMN_WEBSITE = 8;
+    public const int COLUMN_STREET = 9;
+    public const int COLUMN_POSTCODE = 10;
+    public const int COLUMN_CITY = 11;
+    public const int COLUMN_COUNTRY = 12;
 
     private array $errorMessages = [];
 
     public function __construct(
-        private readonly string                  $filePath,
-        private readonly TranslatorInterface     $translator,
-        private readonly CompanyReaderInterface  $companyReaderRepository,
+        private readonly string $filePath,
+        private readonly TranslatorInterface $translator,
+        private readonly CompanyReaderInterface $companyReaderRepository,
         private readonly DepartmentReaderInterface $departmentReaderRepository,
-        private readonly CacheInterface          $cache,
-    )
-    {
+        private readonly CacheInterface $cache,
+    ) {
         parent::__construct($this->filePath, $this->translator);
     }
 
@@ -62,15 +61,15 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
         ] = $row + [null, null, null, null, null, false, null, null, null, null, null, null, null];
 
         $validations = [
-            $this->isDepartmentExists((string)$name, is_string($departmentUUID) ? $departmentUUID : null),
+            $this->isDepartmentExists((string) $name, is_string($departmentUUID) ? $departmentUUID : null),
             $this->validateDepartmentUUID($departmentUUID),
-            $this->validateDepartmentName((string)$name),
-            $this->validateDepartmentDescription((string)$description),
+            $this->validateDepartmentName((string) $name),
+            $this->validateDepartmentDescription((string) $description),
             $this->validateParentDepartmentUUID($parentDepartmentUUID),
             $this->validateCompanyUUID($companyUUID),
             $this->validateActive($active),
             $this->validatePhone($phone),
-            $this->validateEmail((string)$email),
+            $this->validateEmail((string) $email),
             $this->validateWebsite($website),
             $this->validateStreet($street),
             $this->validatePostcode($postcode),
@@ -79,7 +78,7 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
         ];
 
         foreach ($validations as $errorMessage) {
-            if ($errorMessage !== null) {
+            if (null !== $errorMessage) {
                 $this->errorMessages[] = $errorMessage;
             }
         }
@@ -103,10 +102,10 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
             return null;
         }
 
-        $cacheKey = 'import_department_uuid_' . $departmentUUID;
+        $cacheKey = 'import_department_uuid_'.$departmentUUID;
 
         $exists = $this->cache->get($cacheKey, function () use ($departmentUUID) {
-            return $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID) !== null;
+            return null !== $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID);
         });
 
         if (!$exists) {
@@ -148,10 +147,10 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
             return null;
         }
 
-        $cacheKey = 'import_department_uuid_' . $parentDepartmentUUID;
+        $cacheKey = 'import_department_uuid_'.$parentDepartmentUUID;
 
         $exists = $this->cache->get($cacheKey, function () use ($parentDepartmentUUID) {
-            return $this->departmentReaderRepository->getDepartmentByUUID($parentDepartmentUUID) !== null;
+            return null !== $this->departmentReaderRepository->getDepartmentByUUID($parentDepartmentUUID);
         });
 
         if (!$exists) {
@@ -167,10 +166,10 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('department.companyUUID.required');
         }
 
-        $cacheKey = 'import_company_uuid_' . $companyUUID;
+        $cacheKey = 'import_company_uuid_'.$companyUUID;
 
         $exists = $this->cache->get($cacheKey, function () use ($companyUUID) {
-            return $this->companyReaderRepository->getCompanyByUUID($companyUUID) !== null;
+            return null !== $this->companyReaderRepository->getCompanyByUUID($companyUUID);
         });
 
         if (!$exists) {
@@ -215,10 +214,10 @@ class ImportDepartmentsFromXLSX extends XLSXIterator
 
     private function validateWebsite(?string $website): ?string
     {
-        //$errorMessage = WebsiteValidator::validate($website);
-        //if (null !== $errorMessage) {
+        // $errorMessage = WebsiteValidator::validate($website);
+        // if (null !== $errorMessage) {
         //    return $this->formatErrorMessage($errorMessage, [], 'validators');
-        //}
+        // }
 
         return null;
     }

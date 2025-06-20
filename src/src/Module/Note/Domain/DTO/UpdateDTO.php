@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Domain\DTO;
 
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Module\Note\Domain\Trait\TitleContentPriorityTrait;
 use App\Module\Note\Structure\Validator\Constraints\ExistingNoteUUID;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class UpdateDTO
 {

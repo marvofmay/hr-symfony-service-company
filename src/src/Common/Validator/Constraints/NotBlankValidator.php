@@ -25,10 +25,11 @@ class NotBlankValidator extends ConstraintValidator
                     ->setTranslationDomain($constraint->message['domain'])
                     ->addViolation();
             }
+
             return;
         }
 
-        if (null === $value || (is_string($value) && trim($value) === '')) {
+        if (null === $value || (is_string($value) && '' === trim($value))) {
             $this->context->buildViolation($constraint->message['text'])
                 ->setTranslationDomain($constraint->message['domain'])
                 ->addViolation();

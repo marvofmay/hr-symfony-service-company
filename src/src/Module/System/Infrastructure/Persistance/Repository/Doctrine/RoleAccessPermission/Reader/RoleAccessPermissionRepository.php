@@ -14,7 +14,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class RoleAccessPermissionRepository extends ServiceEntityRepository implements RoleAccessPermissionInterface
 {
-    public function __construct(ManagerRegistry $registry,)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, RoleAccessPermission::class);
     }
@@ -22,9 +22,9 @@ class RoleAccessPermissionRepository extends ServiceEntityRepository implements 
     public function isRoleHasAccessAndPermission(Permission $permission, Access $access, Role $role): bool
     {
         return null !== $this->findOneBy([
-           RoleAccessPermission::RELATION_PERMISSION => $permission,
-           RoleAccessPermission::RELATION_ACCESS => $access,
-           RoleAccessPermission::RELATION_ROLE => $role,
+            RoleAccessPermission::RELATION_PERMISSION => $permission,
+            RoleAccessPermission::RELATION_ACCESS => $access,
+            RoleAccessPermission::RELATION_ROLE => $role,
         ]);
     }
 }

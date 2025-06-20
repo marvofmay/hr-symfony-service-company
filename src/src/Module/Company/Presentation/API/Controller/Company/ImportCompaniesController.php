@@ -40,28 +40,27 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportCompaniesController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
     }
 
     #[Route('/api/companies/import', name: 'import', methods: ['POST'])]
     public function import(
         #[MapUploadedFile] UploadedFile $file,
-        UploadFileAction                $uploadFileAction,
-        ImportCompaniesAction           $importCompaniesAction,
-        ImportCompaniesValidator        $importCompaniesValidator,
-        CreateFileAction                $createFileAction,
-        AskFileAction                   $askFileAction,
-        CreateImportAction              $createImportAction,
-        UpdateImportAction              $updateImportAction,
-        ImportLogMultipleCreator        $importLogMultipleCreator,
-        AskImportAction                 $askImportAction,
-        AskImportLogsAction             $askImportLogsAction,
-        ValidatorInterface              $validator,
-        Security                        $security,
-        ParameterBagInterface           $params,
-    ): JsonResponse
-    {
+        UploadFileAction $uploadFileAction,
+        ImportCompaniesAction $importCompaniesAction,
+        ImportCompaniesValidator $importCompaniesValidator,
+        CreateFileAction $createFileAction,
+        AskFileAction $askFileAction,
+        CreateImportAction $createImportAction,
+        UpdateImportAction $updateImportAction,
+        ImportLogMultipleCreator $importLogMultipleCreator,
+        AskImportAction $askImportAction,
+        AskImportLogsAction $askImportLogsAction,
+        ValidatorInterface $validator,
+        Security $security,
+        ParameterBagInterface $params,
+    ): JsonResponse {
         try {
             if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::COMPANY)) {
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
@@ -89,7 +88,7 @@ class ImportCompaniesController extends AbstractController
                 $importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
 
                 foreach ($errors as $error) {
-                    $this->logger->error($this->translator->trans('company.import.error', [], 'companies') . ': ' . $error);
+                    $this->logger->error($this->translator->trans('company.import.error', [], 'companies').': '.$error);
                 }
 
                 $importLogs = $askImportLogsAction->ask($import);
@@ -103,8 +102,7 @@ class ImportCompaniesController extends AbstractController
 
             $importCompaniesAction->execute(new ImportDTO($import->getUUID()->toString()));
 
-            return new JsonResponse(['message' => $this->translator->trans('company.import.queued', [], 'companies'), 'errors' => [],], Response::HTTP_CREATED);
-
+            return new JsonResponse(['message' => $this->translator->trans('company.import.queued', [], 'companies'), 'errors' => []], Response::HTTP_CREATED);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('company.import.error', [], 'companies'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);

@@ -36,7 +36,7 @@ class ListContractTypesController extends AbstractController
         } catch (\Exception $error) {
             $this->logger->error(sprintf('%s. %s', $this->translator->trans('contractType.list.error', [], 'contract_types'), $error->getMessage()));
 
-            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('contractType.list.error', [], 'contract_types'),], $error->getCode());
+            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('contractType.list.error', [], 'contract_types')], $error->getCode());
         }
     }
 }

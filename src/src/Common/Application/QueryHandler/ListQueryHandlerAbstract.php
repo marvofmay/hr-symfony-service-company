@@ -37,7 +37,7 @@ abstract class ListQueryHandlerAbstract
         }
 
         $orderByField = $query->getOrderBy() ?? $this->getDefaultOrderBy();
-        if (strpos($orderByField, '.') === false) {
+        if (false === strpos($orderByField, '.')) {
             $orderByField = "{$this->getAlias()}.$orderByField";
         }
 
@@ -118,7 +118,7 @@ abstract class ListQueryHandlerAbstract
     {
         $transformer = $this->getTransformer();
 
-        return array_map(fn($item) => $this->transformItem($transformer, $item, $includes), $items);
+        return array_map(fn ($item) => $this->transformItem($transformer, $item, $includes), $items);
     }
 
     private function transformItem($transformer, $item, array $includes): array

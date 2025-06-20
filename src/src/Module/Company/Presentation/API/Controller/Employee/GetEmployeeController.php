@@ -36,8 +36,7 @@ class GetEmployeeController extends AbstractController
             $transformer = new EmployeeDataTransformer();
             $data = $transformer->transformToArray($employee);
 
-            return new JsonResponse(['data' => $data,], Response::HTTP_OK);
-
+            return new JsonResponse(['data' => $data], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('employee.view.error', [], 'employees'), $error->getMessage());
             $this->logger->error($message);

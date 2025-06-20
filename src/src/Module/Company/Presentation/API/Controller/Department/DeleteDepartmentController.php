@@ -7,7 +7,6 @@ namespace App\Module\Company\Presentation\API\Controller\Department;
 use App\Module\Company\Presentation\API\Action\Department\DeleteDepartmentAction;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

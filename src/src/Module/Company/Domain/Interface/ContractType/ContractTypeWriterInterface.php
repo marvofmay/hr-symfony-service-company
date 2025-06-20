@@ -10,7 +10,10 @@ use Doctrine\Common\Collections\Collection;
 interface ContractTypeWriterInterface
 {
     public function saveContractTypeInDB(ContractType $contractType): void;
+
     public function saveContractTypesInDB(Collection $contractTypes): void;
+
     public function deleteContractTypeInDB(ContractType $contractType): void;
+
     public function deleteMultipleContractTypesInDB(Collection $contractTypes): void;
 }

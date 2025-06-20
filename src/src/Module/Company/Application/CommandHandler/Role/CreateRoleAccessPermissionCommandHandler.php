@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Role\RoleAccessPermissionCreator;
 
 readonly class CreateRoleAccessPermissionCommandHandler
 {
-    public function __construct(private RoleAccessPermissionCreator $roleAccessPermissionCreator,)
+    public function __construct(private RoleAccessPermissionCreator $roleAccessPermissionCreator)
     {
     }
 

@@ -20,39 +20,38 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportEmployeesFromXLSX extends XLSXIterator
 {
-    public const COLUMN_EMPLOYEE_UUID        = 0;
-    public const COLUMN_DEPARTMENT_UUID      = 1;
-    public const COLUMN_POSITION_UUID        = 2;
-    public const COLUMN_CONTACT_TYPE_UUID    = 3;
-    public const COLUMN_ROLE_UUID            = 4;
+    public const COLUMN_EMPLOYEE_UUID = 0;
+    public const COLUMN_DEPARTMENT_UUID = 1;
+    public const COLUMN_POSITION_UUID = 2;
+    public const COLUMN_CONTACT_TYPE_UUID = 3;
+    public const COLUMN_ROLE_UUID = 4;
     public const COLUMN_PARENT_EMPLOYEE_UUID = 5;
-    public const COLUMN_EXTERNAL_UUID        = 6;
-    public const COLUMN_FIRST_NAME           = 7;
-    public const COLUMN_LAST_NAME            = 8;
-    public const COLUMN_EMPLOYMENT_FROM      = 9;
-    public const COLUMN_EMPLOYMENT_TO        = 10;
-    public const COLUMN_PESEL                = 11;
-    public const COLUMN_ACTIVE               = 12;
-    public const COLUMN_EMAIL                = 13;
-    public const COLUMN_PHONE                = 14;
-    public const COLUMN_STREET               = 15;
-    public const COLUMN_POSTCODE             = 16;
-    public const COLUMN_CITY                 = 17;
-    public const COLUMN_COUNTRY              = 18;
+    public const COLUMN_EXTERNAL_UUID = 6;
+    public const COLUMN_FIRST_NAME = 7;
+    public const COLUMN_LAST_NAME = 8;
+    public const COLUMN_EMPLOYMENT_FROM = 9;
+    public const COLUMN_EMPLOYMENT_TO = 10;
+    public const COLUMN_PESEL = 11;
+    public const COLUMN_ACTIVE = 12;
+    public const COLUMN_EMAIL = 13;
+    public const COLUMN_PHONE = 14;
+    public const COLUMN_STREET = 15;
+    public const COLUMN_POSTCODE = 16;
+    public const COLUMN_CITY = 17;
+    public const COLUMN_COUNTRY = 18;
 
     private array $errorMessages = [];
 
     public function __construct(
-        private readonly string                       $filePath,
-        private readonly TranslatorInterface          $translator,
-        private readonly DepartmentReaderInterface    $departmentReaderRepository,
-        private readonly EmployeeReaderInterface      $employeeReaderRepository,
-        private readonly PositionReaderInterface      $positionReaderRepository,
+        private readonly string $filePath,
+        private readonly TranslatorInterface $translator,
+        private readonly DepartmentReaderInterface $departmentReaderRepository,
+        private readonly EmployeeReaderInterface $employeeReaderRepository,
+        private readonly PositionReaderInterface $positionReaderRepository,
         private readonly ContractTypeReaderRepository $contractTypeReaderRepository,
-        private readonly RoleReaderInterface          $roleReaderRepository,
-        private readonly CacheInterface               $cache,
-    )
-    {
+        private readonly RoleReaderInterface $roleReaderRepository,
+        private readonly CacheInterface $cache,
+    ) {
         parent::__construct($this->filePath, $this->translator);
     }
 
@@ -83,7 +82,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         ] = $row + [null, null, null, null, null, null, null, null, null, null, null, null, false, null, null, null, null, null, null];
 
         $validations = [
-            $this->validateEmployeeExists((string)$pesel, (string)$email, is_string($employeeUUID) ? $employeeUUID : null),
+            $this->validateEmployeeExists((string) $pesel, (string) $email, is_string($employeeUUID) ? $employeeUUID : null),
             $this->validateEmployeeUUID($employeeUUID),
             $this->validateDepartmentUUID($departmentUUID),
             $this->validatePositionUUID($positionUUID),
@@ -93,11 +92,11 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             $this->validateExternalUUID($externalUUID),
             $this->validateFirstName($firstName),
             $this->validateLastName($lastName),
-            $this->validateEmploymentFrom((string)$employmentFrom),
-            $this->validateEmploymentTo((string)$employmentTo),
-            $this->validatePESEL((string)$pesel),
+            $this->validateEmploymentFrom((string) $employmentFrom),
+            $this->validateEmploymentTo((string) $employmentTo),
+            $this->validatePESEL((string) $pesel),
             $this->validateActive($active),
-            $this->validateEmail((string)$email),
+            $this->validateEmail((string) $email),
             $this->validatePhone($phone),
             $this->validateStreet($street),
             $this->validatePostcode($postcode),
@@ -106,7 +105,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         ];
 
         foreach ($validations as $errorMessage) {
-            if ($errorMessage !== null) {
+            if (null !== $errorMessage) {
                 $this->errorMessages[] = $errorMessage;
             }
         }
@@ -131,10 +130,10 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         }
 
         if (is_string($employeeUUID)) {
-            $cacheKey = 'import_employee_uuid_' . $employeeUUID;
+            $cacheKey = 'import_employee_uuid_'.$employeeUUID;
 
             $employeeExists = $this->cache->get($cacheKey, function () use ($employeeUUID) {
-                return $this->employeeReaderRepository->getEmployeeByUUID($employeeUUID) !== null;
+                return null !== $this->employeeReaderRepository->getEmployeeByUUID($employeeUUID);
             });
 
             if (!$employeeExists) {
@@ -151,10 +150,10 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('employee.departmentUUID.required');
         }
 
-        $cacheKey = 'import_department_uuid_' . $departmentUUID;
+        $cacheKey = 'import_department_uuid_'.$departmentUUID;
 
         $departmentExists = $this->cache->get($cacheKey, function () use ($departmentUUID) {
-            return $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID) !== null;
+            return null !== $this->departmentReaderRepository->getDepartmentByUUID($departmentUUID);
         });
 
         if (!$departmentExists) {
@@ -170,10 +169,10 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('employee.positionUUID.required');
         }
 
-        $cacheKey = 'import_position_uuid_' . $positionUUID;
+        $cacheKey = 'import_position_uuid_'.$positionUUID;
 
         $positionExists = $this->cache->get($cacheKey, function () use ($positionUUID) {
-            return $this->positionReaderRepository->getPositionByUUID($positionUUID) !== null;
+            return null !== $this->positionReaderRepository->getPositionByUUID($positionUUID);
         });
 
         if (!$positionExists) {
@@ -189,10 +188,10 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('employee.contractTypeUUID.required');
         }
 
-        $cacheKey = 'import_contract_type_uuid_' . $contractTypeUUID;
+        $cacheKey = 'import_contract_type_uuid_'.$contractTypeUUID;
 
         $contractTypeExists = $this->cache->get($cacheKey, function () use ($contractTypeUUID) {
-            return $this->contractTypeReaderRepository->getContractTypeByUUID($contractTypeUUID) !== null;
+            return null !== $this->contractTypeReaderRepository->getContractTypeByUUID($contractTypeUUID);
         });
 
         if (!$contractTypeExists) {
@@ -208,10 +207,10 @@ class ImportEmployeesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('employee.roleUUID.required');
         }
 
-        $cacheKey = 'import_role_uuid_' . $roleUUID;
+        $cacheKey = 'import_role_uuid_'.$roleUUID;
 
         $roleExists = $this->cache->get($cacheKey, function () use ($roleUUID) {
-            return $this->roleReaderRepository->getRoleByUUID($roleUUID) !== null;
+            return null !== $this->roleReaderRepository->getRoleByUUID($roleUUID);
         });
 
         if (!$roleExists) {
@@ -228,10 +227,10 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         }
 
         if (is_string($parentEmployeeUUID)) {
-            $cacheKey = 'import_employee_uuid_' . $parentEmployeeUUID;
+            $cacheKey = 'import_employee_uuid_'.$parentEmployeeUUID;
 
             $parentExists = $this->cache->get($cacheKey, function () use ($parentEmployeeUUID) {
-                return $this->employeeReaderRepository->getEmployeeByUUID($parentEmployeeUUID) !== null;
+                return null !== $this->employeeReaderRepository->getEmployeeByUUID($parentEmployeeUUID);
             });
 
             if (!$parentExists) {
@@ -265,7 +264,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
 
         $errorMessage = DateFormatValidator::validate($employmentFrom, DateFormatEnum::DD_MM_YYYY->value);
         if (null !== $errorMessage) {
-            return $this->formatErrorMessage('employee.employmentFrom.' . $errorMessage, [':dateFormat' => DateFormatEnum::DD_MM_YYYY->value]);
+            return $this->formatErrorMessage('employee.employmentFrom.'.$errorMessage, [':dateFormat' => DateFormatEnum::DD_MM_YYYY->value]);
         }
 
         return null;
@@ -276,7 +275,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
         if (!empty($employmentTo)) {
             $errorMessage = DateFormatValidator::validate($employmentTo, DateFormatEnum::DD_MM_YYYY->value);
             if (null !== $errorMessage) {
-                return $this->formatErrorMessage('employee.employmentTo.' . $errorMessage, [':dateFormat' => DateFormatEnum::DD_MM_YYYY->value]);
+                return $this->formatErrorMessage('employee.employmentTo.'.$errorMessage, [':dateFormat' => DateFormatEnum::DD_MM_YYYY->value]);
             }
         }
 

@@ -24,7 +24,7 @@ class AddRecordToPositionTableCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct();
     }
@@ -42,7 +42,7 @@ class AddRecordToPositionTableCommand extends Command
         $positionRepository = $this->entityManager->getRepository(Position::class);
 
         $existingPositions = $positionRepository->createQueryBuilder(Position::ALIAS)
-            ->select(Position::ALIAS . '.name')
+            ->select(Position::ALIAS.'.name')
             ->getQuery()
             ->getArrayResult();
 

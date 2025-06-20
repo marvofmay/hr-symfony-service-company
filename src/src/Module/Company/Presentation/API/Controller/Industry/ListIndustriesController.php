@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ListIndustriesController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
     }
 
@@ -34,7 +34,7 @@ final class ListIndustriesController extends AbstractController
         } catch (\Exception $error) {
             $this->logger->error(sprintf('%s. %s', $this->translator->trans('industry.list.error', [], 'industries'), $error->getMessage()));
 
-            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('industry.list.error', [], 'industries'),], $error->getCode());
+            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('industry.list.error', [], 'industries')], $error->getCode());
         }
     }
 }

@@ -17,8 +17,7 @@ final readonly class CreatePositionAction
         private MessageBusInterface $commandBus,
         private PositionValidator $positionValidator,
         private DepartmentReaderInterface $departmentReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function execute(CreateDTO $createDTO): void

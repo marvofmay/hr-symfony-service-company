@@ -25,5 +25,6 @@ class CreateEmployeeCommand implements CommandInterface
         public bool $active,
         public ?array $phones,
         public AddressDTO $address,
-    ) {}
+    ) {
+    }
 }

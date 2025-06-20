@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Department\DepartmentUpdater;
 
 readonly class UpdateDepartmentCommandHandler
 {
-    public function __construct(private DepartmentUpdater $departmentUpdater,)
+    public function __construct(private DepartmentUpdater $departmentUpdater)
     {
     }
 

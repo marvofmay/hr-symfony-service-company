@@ -15,12 +15,11 @@ use Symfony\Component\Messenger\MessageBusInterface;
 final readonly class UpdatePositionAction
 {
     public function __construct(
-        private MessageBusInterface     $commandBus,
+        private MessageBusInterface $commandBus,
         private PositionReaderInterface $positionReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
         private PositionValidator $positionValidator,
-    )
-    {
+    ) {
     }
 
     public function execute(string $uuid, UpdateDTO $updateDTO): void

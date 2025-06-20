@@ -17,20 +17,18 @@ use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 readonly class ImportPositionsCommandHandler
 {
     public function __construct(
-        private PositionReaderInterface  $positionReaderRepository,
+        private PositionReaderInterface $positionReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
-        private PositionMultipleCreator  $positionMultipleCreator,
-        private ImportReaderInterface    $importReaderRepository,
-        private TranslatorInterface      $translator,
-        private LoggerInterface          $logger,
+        private PositionMultipleCreator $positionMultipleCreator,
+        private ImportReaderInterface $importReaderRepository,
+        private TranslatorInterface $translator,
+        private LoggerInterface $logger,
         private ImportLogMultipleCreator $importLogMultipleCreator,
-        private UpdateImportAction       $updateImportAction,
-    )
-    {
+        private UpdateImportAction $updateImportAction,
+    ) {
     }
 
     public function __invoke(ImportPositionsCommand $command): void
@@ -51,7 +49,7 @@ readonly class ImportPositionsCommandHandler
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
 
             foreach ($errors as $error) {
-                $this->logger->error($this->translator->trans('position.import.error', [], 'positions') . ': ' . $error);
+                $this->logger->error($this->translator->trans('position.import.error', [], 'positions').': '.$error);
             }
         }
     }

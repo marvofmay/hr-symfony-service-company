@@ -26,7 +26,7 @@ class TransformerFactory
             ListRolesQueryHandler::class => new RoleDataTransformer(),
             ListIndustriesQueryHandler::class => new IndustryDataTransformer(),
             ListNotesQueryHandler::class => new NoteDataTransformer(),
-            default => throw new TransformerNotFoundException("No transformer found for handler: {$handlerClass}")
+            default => throw new TransformerNotFoundException("No transformer found for handler: {$handlerClass}"),
         };
     }
 }

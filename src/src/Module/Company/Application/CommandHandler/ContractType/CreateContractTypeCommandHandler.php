@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\ContractType\ContractTypeCreator;
 
 readonly class CreateContractTypeCommandHandler
 {
-    public function __construct(private ContractTypeCreator $contractTypeCreator,)
+    public function __construct(private ContractTypeCreator $contractTypeCreator)
     {
     }
 

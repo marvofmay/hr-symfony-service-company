@@ -16,7 +16,6 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'import')]
@@ -197,8 +196,8 @@ class Import
     public function toArray(): array
     {
         return [
-            Import::COLUMN_UUID   => $this->uuid->toString(),
-            Import::COLUMN_KIND   => $this->kind,
+            Import::COLUMN_UUID => $this->uuid->toString(),
+            Import::COLUMN_KIND => $this->kind,
             Import::COLUMN_STATUS => $this->status,
             Import::RELATION_LOGS => $this->importLogs->toArray(),
             Import::RELATION_FILE => $this->file->toArray(),

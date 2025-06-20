@@ -27,14 +27,7 @@ final readonly class RoleAccessValidator
         }
 
         if (count($existingAccesses) > 0) {
-            throw new \Exception(
-                $this->translator->trans(
-                    'role.accesses.alreadyExists',
-                    [':name' => $role->getName(), ':accesses' => implode(',', $existingAccesses)],
-                    'roles'
-                ),
-                Response::HTTP_CONFLICT
-            );
+            throw new \Exception($this->translator->trans('role.accesses.alreadyExists', [':name' => $role->getName(), ':accesses' => implode(',', $existingAccesses)], 'roles'), Response::HTTP_CONFLICT);
         }
     }
 }

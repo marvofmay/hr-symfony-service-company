@@ -8,7 +8,7 @@ use App\Module\System\Domain\Interface\Permission\PermissionReaderInterface;
 
 readonly class PermissionChecker
 {
-    public function __construct(private PermissionReaderInterface $permissionReaderRepository,)
+    public function __construct(private PermissionReaderInterface $permissionReaderRepository)
     {
     }
 

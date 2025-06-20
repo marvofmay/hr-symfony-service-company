@@ -8,7 +8,7 @@ final readonly class PESELValidator
 {
     public static function validate(string $pesel): ?string
     {
-        if (strlen($pesel) !== 11 || !ctype_digit($pesel)) {
+        if (11 !== strlen($pesel) || !ctype_digit($pesel)) {
             return 'pesel.invalidLength';
         }
 
@@ -30,6 +30,7 @@ final readonly class PESELValidator
         }
 
         $modulo = $sum % 10;
+
         return (10 - $modulo) % 10;
     }
 }

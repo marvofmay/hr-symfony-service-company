@@ -21,13 +21,12 @@ readonly class ImportContractTypesCommandHandler
     public function __construct(
         private ContractTypeReaderInterface $contractTypeReaderRepository,
         private ContractTypeMultipleCreator $contractTypeMultipleCreator,
-        private ImportReaderInterface       $importReaderRepository,
-        private TranslatorInterface         $translator,
-        private LoggerInterface             $logger,
-        private ImportLogMultipleCreator    $importLogMultipleCreator,
-        private UpdateImportAction          $updateImportAction,
-    )
-    {
+        private ImportReaderInterface $importReaderRepository,
+        private TranslatorInterface $translator,
+        private LoggerInterface $logger,
+        private ImportLogMultipleCreator $importLogMultipleCreator,
+        private UpdateImportAction $updateImportAction,
+    ) {
     }
 
     public function __invoke(ImportContractTypesCommand $command): void
@@ -47,7 +46,7 @@ readonly class ImportContractTypesCommandHandler
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
 
             foreach ($errors as $error) {
-                $this->logger->error($this->translator->trans('contractType.import.error', [], 'contract_types') . ': ' . $error);
+                $this->logger->error($this->translator->trans('contractType.import.error', [], 'contract_types').': '.$error);
             }
         }
     }

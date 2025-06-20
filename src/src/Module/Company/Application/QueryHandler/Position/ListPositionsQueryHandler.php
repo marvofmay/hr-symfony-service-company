@@ -51,7 +51,7 @@ class ListPositionsQueryHandler extends ListQueryHandlerAbstract
 
     protected function transformIncludes(array $items, array $includes): array
     {
-        $data = array_map(fn($role) => $role->toArray(), $items);
+        $data = array_map(fn ($role) => $role->toArray(), $items);
         foreach (Position::getRelations() as $relation) {
             foreach ($data as $key => $role) {
                 if (!in_array($relation, $includes) || empty($includes)) {

@@ -10,7 +10,7 @@ use App\Module\System\Domain\Interface\File\FileReaderInterface;
 
 class GetFileByNamePathAndKindQueryHandler
 {
-    public function __construct(private FileReaderInterface $fileReaderRepository,)
+    public function __construct(private FileReaderInterface $fileReaderRepository)
     {
     }
 

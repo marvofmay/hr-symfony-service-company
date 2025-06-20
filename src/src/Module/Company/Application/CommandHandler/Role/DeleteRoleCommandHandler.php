@@ -7,7 +7,7 @@ use App\Module\Company\Domain\Service\Role\RoleDeleter;
 
 readonly class DeleteRoleCommandHandler
 {
-    public function __construct(private RoleDeleter $roleDeleter,)
+    public function __construct(private RoleDeleter $roleDeleter)
     {
     }
 

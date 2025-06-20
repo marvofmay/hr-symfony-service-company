@@ -9,9 +9,10 @@ use App\Module\System\Domain\Service\Import\ImportCreator;
 
 readonly class CreateImportCommandHandler
 {
-    public function __construct(private ImportCreator $importCreator,)
+    public function __construct(private ImportCreator $importCreator)
     {
     }
+
     public function __invoke(CreateImportCommand $command): void
     {
         $this->importCreator->create($command->kindEnum, $command->statusEnum, $command->file, $command->employee);

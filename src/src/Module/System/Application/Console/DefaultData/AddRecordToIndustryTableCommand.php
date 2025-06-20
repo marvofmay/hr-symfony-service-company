@@ -24,7 +24,7 @@ class AddRecordToIndustryTableCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct();
     }
@@ -42,7 +42,7 @@ class AddRecordToIndustryTableCommand extends Command
         $industryRepository = $this->entityManager->getRepository(Industry::class);
 
         $existingIndustries = $industryRepository->createQueryBuilder(Industry::ALIAS)
-            ->select(Industry::ALIAS . '.name')
+            ->select(Industry::ALIAS.'.name')
             ->getQuery()
             ->getArrayResult();
 

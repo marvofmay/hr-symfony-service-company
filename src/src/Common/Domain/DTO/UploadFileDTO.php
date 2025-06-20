@@ -17,7 +17,7 @@ class UploadFileDTO
             'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
             'image/jpeg',
             'image/png',
-            'application/pdf'
+            'application/pdf',
         ]
     )]
     public UploadedFile $file;
@@ -25,7 +25,7 @@ class UploadFileDTO
     public string $uploadFilePath;
     public string $uploadFileName;
 
-    public function __construct(UploadedFile $file, string $uploadFilePath,string $uploadFileName,)
+    public function __construct(UploadedFile $file, string $uploadFilePath, string $uploadFileName)
     {
         $this->file = $file;
         $this->uploadFilePath = $uploadFilePath;

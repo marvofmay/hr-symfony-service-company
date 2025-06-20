@@ -10,7 +10,10 @@ use Doctrine\Common\Collections\Collection;
 interface EmployeeWriterInterface
 {
     public function saveEmployeeInDB(Employee $employee): void;
+
     public function saveEmployeesInDB(Collection $employees): void;
+
     public function deleteEmployeeInDB(Employee $employee): void;
+
     public function deleteMultipleEmployeesInDB(Collection $employees): void;
 }

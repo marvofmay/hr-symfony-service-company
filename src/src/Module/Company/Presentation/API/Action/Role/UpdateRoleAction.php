@@ -8,19 +8,16 @@ use App\Module\Company\Application\Command\Role\UpdateRoleCommand;
 use App\Module\Company\Application\Validator\Role\RoleValidator;
 use App\Module\Company\Domain\DTO\Role\UpdateDTO;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class UpdateRoleAction
 {
     public function __construct(
         private MessageBusInterface $commandBus,
         private RoleReaderInterface $roleReaderRepository,
-        private RoleValidator       $roleValidator,
-    )
-    {
+        private RoleValidator $roleValidator,
+    ) {
     }
 
     public function execute(string $uuid, UpdateDTO $updateDTO): void

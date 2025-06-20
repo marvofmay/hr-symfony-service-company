@@ -7,7 +7,7 @@ use App\Module\Note\Domain\Service\NoteDeleter;
 
 readonly class DeleteNoteCommandHandler
 {
-    public function __construct(private NoteDeleter $noteDeleter,)
+    public function __construct(private NoteDeleter $noteDeleter)
     {
     }
 

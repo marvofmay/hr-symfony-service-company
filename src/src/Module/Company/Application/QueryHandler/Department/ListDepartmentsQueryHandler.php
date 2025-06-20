@@ -12,7 +12,7 @@ class ListDepartmentsQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListDepartmentsQuery $query): array
     {
-      return $this->handle($query);
+        return $this->handle($query);
     }
 
     protected function getEntityClass(): string

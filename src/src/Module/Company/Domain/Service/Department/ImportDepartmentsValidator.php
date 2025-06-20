@@ -13,12 +13,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 readonly class ImportDepartmentsValidator
 {
     public function __construct(
-        private TranslatorInterface       $translator,
-        private CompanyReaderInterface    $companyReaderRepository,
+        private TranslatorInterface $translator,
+        private CompanyReaderInterface $companyReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
-        private CacheInterface   $cache,
-    )
-    {
+        private CacheInterface $cache,
+    ) {
     }
 
     public function validate(Import $import): array

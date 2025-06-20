@@ -12,7 +12,7 @@ class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListEmployeesQuery $query): array
     {
-      return $this->handle($query);
+        return $this->handle($query);
     }
 
     protected function getEntityClass(): string
@@ -52,7 +52,7 @@ class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
 
     protected function transformIncludes(array $items, array $includes): array
     {
-        $data = array_map(fn($employee) => $employee->toArray(), $items);
+        $data = array_map(fn ($employee) => $employee->toArray(), $items);
         foreach (Employee::getRelations() as $relation) {
             foreach ($data as $key => $employee) {
                 if (!in_array($relation, $includes) || empty($includes)) {

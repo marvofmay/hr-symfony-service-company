@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 final readonly class CreateRoleAccessCommand
 {
-    public function __construct(private Role $role, private Collection $accesses,)
+    public function __construct(private Role $role, private Collection $accesses)
     {
     }
 

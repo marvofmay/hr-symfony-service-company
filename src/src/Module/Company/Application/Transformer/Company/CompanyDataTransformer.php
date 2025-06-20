@@ -48,12 +48,12 @@ class CompanyDataTransformer
 
     private function transformDepartments($departments): ?array
     {
-        if ($departments === null || $departments->isEmpty()) {
+        if (null === $departments || $departments->isEmpty()) {
             return null;
         }
 
         return array_map(
-            fn(Department $department) => [
+            fn (Department $department) => [
                 Department::COLUMN_UUID => $department->getUUID()->toString(),
                 Department::COLUMN_NAME => $department->getName(),
                 Department::COLUMN_DESCRIPTION => $department->getDescription(),
@@ -65,12 +65,12 @@ class CompanyDataTransformer
 
     private function transformEmployees($employees): ?array
     {
-        if ($employees === null || $employees->isEmpty()) {
+        if (null === $employees || $employees->isEmpty()) {
             return null;
         }
 
         return array_map(
-            fn(Employee $employee) => [
+            fn (Employee $employee) => [
                 Employee::COLUMN_UUID => $employee->getUUID()->toString(),
                 Employee::COLUMN_FIRST_NAME => $employee->getFirstName(),
                 Employee::COLUMN_LAST_NAME => $employee->getLastName(),

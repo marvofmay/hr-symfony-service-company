@@ -11,6 +11,7 @@ final readonly class CreateRoleAccessPermissionCommand
     public function __construct(private Role $role, private array $accesses)
     {
     }
+
     public function getRole(): Role
     {
         return $this->role;

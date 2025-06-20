@@ -38,28 +38,26 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class ImportContractTypesController extends AbstractController
 {
     public function __construct(
-        private readonly LoggerInterface        $logger,
-        private readonly TranslatorInterface    $translator,
+        private readonly LoggerInterface $logger,
+        private readonly TranslatorInterface $translator,
         private readonly EntityManagerInterface $entityManager,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/contract_types/import', name: 'import', methods: ['POST'])]
     public function import(
         #[MapUploadedFile] UploadedFile $file,
-        UploadFileAction                $uploadFileAction,
-        ImportContractTypesAction       $importContractTypesAction,
-        CreateFileAction                $createFileAction,
-        AskFileAction                   $askFileAction,
-        CreateImportAction              $createImportAction,
-        AskImportAction                 $askImportAction,
-        AskImportLogsAction             $askImportLogsAction,
-        ValidatorInterface              $validator,
-        Security                        $security,
-        ParameterBagInterface           $params,
-    ): JsonResponse
-    {
+        UploadFileAction $uploadFileAction,
+        ImportContractTypesAction $importContractTypesAction,
+        CreateFileAction $createFileAction,
+        AskFileAction $askFileAction,
+        CreateImportAction $createImportAction,
+        AskImportAction $askImportAction,
+        AskImportLogsAction $askImportLogsAction,
+        ValidatorInterface $validator,
+        Security $security,
+        ParameterBagInterface $params,
+    ): JsonResponse {
         $this->entityManager->beginTransaction();
         try {
             if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::CONTRACT_TYPE)) {
@@ -85,13 +83,13 @@ class ImportContractTypesController extends AbstractController
 
             $this->entityManager->commit();
 
-            if ($import->getStatus() === ImportStatusEnum::DONE) {
-                return new JsonResponse(['message' => $this->translator->trans('contractType.import.success', [], 'contract_types'), 'errors' => [],], Response::HTTP_CREATED);
+            if (ImportStatusEnum::DONE === $import->getStatus()) {
+                return new JsonResponse(['message' => $this->translator->trans('contractType.import.success', [], 'contract_types'), 'errors' => []], Response::HTTP_CREATED);
             } else {
                 $importLogs = $askImportLogsAction->ask($import);
                 $errors = ImportLogErrorTransformer::map($importLogs);
 
-                return new JsonResponse(['message' => $this->translator->trans('contractType.import.error', [], 'contract_types'), 'errors' => $errors,], Response::HTTP_UNPROCESSABLE_ENTITY);
+                return new JsonResponse(['message' => $this->translator->trans('contractType.import.error', [], 'contract_types'), 'errors' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
         } catch (\Exception $error) {
             $this->entityManager->rollback();

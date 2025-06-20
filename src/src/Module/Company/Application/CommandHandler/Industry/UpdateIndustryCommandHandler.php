@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Industry\IndustryUpdater;
 
 readonly class UpdateIndustryCommandHandler
 {
-    public function __construct(private IndustryUpdater $industryUpdater,)
+    public function __construct(private IndustryUpdater $industryUpdater)
     {
     }
 

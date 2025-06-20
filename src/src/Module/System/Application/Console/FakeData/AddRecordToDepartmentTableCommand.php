@@ -28,7 +28,8 @@ class AddRecordToDepartmentTableCommand extends Command
     private const string COMPANY_NOT_EXISTS = 'Company not exists. No action taken.';
     private const string DEPARTMENT_ALREADY_EXISTS = 'Department already exists. No action taken.';
 
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly DepartmentFakeData $departmentFakeData,) {
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly DepartmentFakeData $departmentFakeData)
+    {
         parent::__construct();
     }
 
@@ -45,14 +46,14 @@ class AddRecordToDepartmentTableCommand extends Command
 
         $companyRepository = $this->entityManager->getRepository(Company::class);
         $existingCompany = $companyRepository->createQueryBuilder(Company::ALIAS)
-            ->where(Company::ALIAS . '.fullName = :fullName')
+            ->where(Company::ALIAS.'.fullName = :fullName')
             ->setParameters(new ArrayCollection([
                 new Parameter('fullName', CompanyFakeData::COMPANY_NAME_FUTURE_TECHNOLOGY),
             ]))
             ->getQuery()
             ->getOneOrNullResult();
 
-        if ($existingCompany === null) {
+        if (null === $existingCompany) {
             $output->writeln(sprintf('<comment>%s</comment>', self::COMPANY_NOT_EXISTS));
 
             return Command::SUCCESS;
@@ -62,14 +63,14 @@ class AddRecordToDepartmentTableCommand extends Command
         if (isset($data['departmentUUID']) && is_string($data['departmentUUID'])) {
             $departmentRepository = $this->entityManager->getRepository(Department::class);
             $existingDepartment = $departmentRepository->createQueryBuilder(Department::ALIAS)
-                ->where(Company::ALIAS . '.uuid = :uuid')
+                ->where(Company::ALIAS.'.uuid = :uuid')
                 ->setParameters(new ArrayCollection([
                     new Parameter('uuid', $data['departmentUUID']),
                 ]))
                 ->getQuery()
                 ->getOneOrNullResult();
 
-            if ($existingDepartment !== null) {
+            if (null !== $existingDepartment) {
                 $output->writeln(sprintf('<comment>%s</comment>', self::DEPARTMENT_ALREADY_EXISTS));
 
                 return Command::SUCCESS;

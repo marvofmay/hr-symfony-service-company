@@ -10,7 +10,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 class DeleteNoteAction
 {
-    public function __construct(private readonly MessageBusInterface $commandBus, private readonly NoteReaderInterface $noteReaderRepository,)
+    public function __construct(private readonly MessageBusInterface $commandBus, private readonly NoteReaderInterface $noteReaderRepository)
     {
     }
 

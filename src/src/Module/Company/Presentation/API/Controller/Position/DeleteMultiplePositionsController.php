@@ -25,9 +25,8 @@ final class DeleteMultiplePositionsController extends AbstractController
     #[Route('/api/positions/multiple', name: 'api.positions.delete_multiple', methods: ['DELETE'])]
     public function delete(
         #[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO,
-        DeleteMultiplePositionsAction $deleteMultiplePositionsAction
-    ): JsonResponse
-    {
+        DeleteMultiplePositionsAction $deleteMultiplePositionsAction,
+    ): JsonResponse {
         try {
             if (!$this->isGranted(PermissionEnum::DELETE, AccessEnum::POSITION)) {
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);

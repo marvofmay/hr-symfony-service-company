@@ -14,8 +14,9 @@ readonly class RoleAccessPermissionCreator
     public function __construct(
         private RoleWriterInterface $roleWriterRepository,
         private AccessReaderInterface $accessReaderRepository,
-        private PermissionReaderInterface $permissionReaderRepository
-    ) {}
+        private PermissionReaderInterface $permissionReaderRepository,
+    ) {
+    }
 
     public function create(Role $role, array $accesses): void
     {

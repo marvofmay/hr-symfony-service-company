@@ -23,7 +23,7 @@ final class UserWriterRepository extends ServiceEntityRepository implements User
             return;
         }
 
-        if ($type === User::HARD_DELETED_AT) {
+        if (User::HARD_DELETED_AT === $type) {
             $this->getEntityManager()->getRepository(User::class)->createQueryBuilder('user')
                 ->delete()
                 ->where('user.uuid = :uuid')

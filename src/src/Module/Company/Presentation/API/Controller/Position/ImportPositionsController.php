@@ -10,10 +10,6 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Position\ImportDTO;
-use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
-use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
-use App\Module\Company\Domain\Service\Position\ImportPositionsFromXLSX;
-use App\Module\Company\Presentation\API\Action\Industry\ImportIndustriesAction;
 use App\Module\Company\Presentation\API\Action\Position\ImportPositionsAction;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
@@ -33,7 +29,6 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
@@ -52,18 +47,17 @@ class ImportPositionsController extends AbstractController
     #[Route('/api/positions/import', name: 'import', methods: ['POST'])]
     public function import(
         #[MapUploadedFile] UploadedFile $file,
-        UploadFileAction                $uploadFileAction,
-        ImportPositionsAction           $importPositionsAction,
-        CreateFileAction                $createFileAction,
-        AskFileAction                   $askFileAction,
-        CreateImportAction              $createImportAction,
-        AskImportAction                 $askImportAction,
-        AskImportLogsAction             $askImportLogsAction,
-        ValidatorInterface              $validator,
-        Security                        $security,
-        ParameterBagInterface           $params,
-    )
-    {
+        UploadFileAction $uploadFileAction,
+        ImportPositionsAction $importPositionsAction,
+        CreateFileAction $createFileAction,
+        AskFileAction $askFileAction,
+        CreateImportAction $createImportAction,
+        AskImportAction $askImportAction,
+        AskImportLogsAction $askImportLogsAction,
+        ValidatorInterface $validator,
+        Security $security,
+        ParameterBagInterface $params,
+    ) {
         $this->entityManager->beginTransaction();
         try {
             if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::POSITION)) {
@@ -89,13 +83,13 @@ class ImportPositionsController extends AbstractController
 
             $this->entityManager->commit();
 
-            if ($import->getStatus() === ImportStatusEnum::DONE) {
-                return new JsonResponse(['message' => $this->translator->trans('position.import.success', [], 'positions'), 'errors' => [],], Response::HTTP_CREATED);
+            if (ImportStatusEnum::DONE === $import->getStatus()) {
+                return new JsonResponse(['message' => $this->translator->trans('position.import.success', [], 'positions'), 'errors' => []], Response::HTTP_CREATED);
             } else {
                 $importLogs = $askImportLogsAction->ask($import);
                 $errors = ImportLogErrorTransformer::map($importLogs);
 
-                return new JsonResponse(['message' => $this->translator->trans('position.import.error', [], 'positions'), 'errors' => $errors,], Response::HTTP_UNPROCESSABLE_ENTITY);
+                return new JsonResponse(['message' => $this->translator->trans('position.import.error', [], 'positions'), 'errors' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY);
             }
         } catch (\Exception $error) {
             $this->entityManager->rollback();

@@ -13,7 +13,7 @@ class UploadFileErrorTransformer
         return array_map(
             fn ($e) => [
                 'field' => $e->getPropertyPath(),
-                'message' => $e->getMessage()
+                'message' => $e->getMessage(),
             ], iterator_to_array($errors)
         );
     }

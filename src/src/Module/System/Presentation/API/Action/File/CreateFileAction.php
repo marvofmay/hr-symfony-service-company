@@ -13,7 +13,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class CreateFileAction
 {
-    public function __construct(private MessageBusInterface $commandBus,)
+    public function __construct(private MessageBusInterface $commandBus)
     {
     }
 

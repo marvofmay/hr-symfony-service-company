@@ -9,12 +9,12 @@ use App\Module\Company\Domain\Service\Employee\EmployeeMultipleDeleter;
 
 readonly class DeleteMultipleEmployeesCommandHandler
 {
-    public function __construct(private EmployeeMultipleDeleter $employeeMultipleDeleter,)
+    public function __construct(private EmployeeMultipleDeleter $employeeMultipleDeleter)
     {
     }
 
     public function __invoke(DeleteMultipleEmployeesCommand $command): void
     {
-       $this->employeeMultipleDeleter->multipleDelete($command->employees);
+        $this->employeeMultipleDeleter->multipleDelete($command->employees);
     }
 }

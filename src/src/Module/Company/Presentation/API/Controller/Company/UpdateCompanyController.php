@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UpdateCompanyController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
     }
 

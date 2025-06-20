@@ -40,20 +40,16 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('r')
             ->from(Role::class, 'r')
-            ->where('r.' . Role::COLUMN_UUID . ' IN (:uuids)')
+            ->where('r.'.Role::COLUMN_UUID.' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID);
 
         $roles = $qb->getQuery()->getResult();
 
-        $foundUUIDs = array_map(fn(Role $role) => $role->getUUID(), $roles);
+        $foundUUIDs = array_map(fn (Role $role) => $role->getUUID(), $roles);
         $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
 
         if ($missingUUIDs) {
-            throw new NotFindByUUIDException(sprintf(
-                '%s : %s',
-                $this->translator->trans('role.uuid.notFound', [], 'roles'),
-                implode(', ', $missingUUIDs)
-            ));
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('role.uuid.notFound', [], 'roles'), implode(', ', $missingUUIDs)));
         }
 
         return new ArrayCollection($roles);
@@ -64,11 +60,11 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('r')
             ->from(Role::class, 'r')
-            ->where('r.' . Role::COLUMN_NAME . ' = :name')
+            ->where('r.'.Role::COLUMN_NAME.' = :name')
             ->setParameter('name', $name);
 
         if ($uuid) {
-            $qb->andWhere('r.' . Role::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere('r.'.Role::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 

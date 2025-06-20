@@ -22,9 +22,9 @@ class ImportLog
     use TimestampableTrait;
     use AttributesEntityTrait;
 
-    public const COLUMN_UUID       = 'uuid';
-    public const COLUMN_KIND       = 'kind';
-    public const COLUMN_DATA       = 'data';
+    public const COLUMN_UUID = 'uuid';
+    public const COLUMN_KIND = 'kind';
+    public const COLUMN_DATA = 'data';
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';

@@ -11,9 +11,14 @@ use Doctrine\Common\Collections\Collection;
 interface EmployeeReaderInterface
 {
     public function getEmployeeByUUID(string $uuid): ?Employee;
+
     public function getEmployeesByUUID(array $selectedUUID): Collection;
+
     public function getEmployeeByEmail(string $email, ?string $uuid = null): ?User;
+
     public function isEmployeeWithUUIDExists(string $uuid): bool;
+
     public function isEmployeeWithEmailExists(string $email, ?string $uuid = null): bool;
+
     public function isEmployeeExists(string $pesel, ?string $employeeUUID = null): bool;
 }

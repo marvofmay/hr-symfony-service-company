@@ -26,7 +26,7 @@ class AddRecordToAccessTableCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct();
     }
@@ -46,14 +46,14 @@ class AddRecordToAccessTableCommand extends Command
         $accessRepository = $this->entityManager->getRepository(Access::class);
 
         $existingModules = $moduleRepository->createQueryBuilder(Module::ALIAS)
-            ->select(Module::ALIAS. '.'. Module::COLUMN_UUID, Module::ALIAS. '.'. Module::COLUMN_NAME)
+            ->select(Module::ALIAS.'.'.Module::COLUMN_UUID, Module::ALIAS.'.'.Module::COLUMN_NAME)
             ->getQuery()
             ->getArrayResult();
 
         $moduleMap = array_column($existingModules, Module::COLUMN_UUID, Module::COLUMN_NAME);
 
         $existingAccesses = $accessRepository->createQueryBuilder(Access::ALIAS)
-            ->select(Access::ALIAS . '.' . Access::COLUMN_NAME)
+            ->select(Access::ALIAS.'.'.Access::COLUMN_NAME)
             ->getQuery()
             ->getArrayResult();
 
@@ -64,7 +64,7 @@ class AddRecordToAccessTableCommand extends Command
             [$moduleName, $accessName] = explode('.', $accessEnum->value, 2);
 
             if (!isset($moduleMap[$moduleName])) {
-                $output->writeln(sprintf('<error>' . self::MODULE_NOT_FOUND_MESSAGE . '</error>', $moduleName));
+                $output->writeln(sprintf('<error>'.self::MODULE_NOT_FOUND_MESSAGE.'</error>', $moduleName));
 
                 return Command::FAILURE;
             }

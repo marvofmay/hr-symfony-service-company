@@ -26,8 +26,7 @@ final class DepartmentMultipleCreator
         private readonly DepartmentReaderInterface $departmentReaderRepository,
         private readonly ContactWriterRepository $contactWriterRepository,
         private readonly AddressWriterInterface $addressWriterRepository,
-    )
-    {
+    ) {
     }
 
     public function multipleCreate(array $data): void
@@ -67,9 +66,9 @@ final class DepartmentMultipleCreator
     {
         if (null === $item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_UUID] || is_int($item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_UUID])) {
             $this->department = new Department();
-        } else if (is_string($item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_UUID])) {
+        } elseif (is_string($item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_UUID])) {
             $department = $this->departmentReaderRepository->getDepartmentByUUID($item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_UUID]);
-            if ($department === null) {
+            if (null === $department) {
                 $this->department = new Department();
             } else {
                 $this->department = $department;
@@ -79,9 +78,9 @@ final class DepartmentMultipleCreator
 
     private function setMainDepartmentData(array $item): void
     {
-        $this->department->setName((string)$item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_NAME]);
-        $this->department->setDescription((string)$item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_DESCRIPTION]);
-        $this->department->setActive((bool)$item[ImportDepartmentsFromXLSX::COLUMN_ACTIVE]);
+        $this->department->setName((string) $item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_NAME]);
+        $this->department->setDescription((string) $item[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_DESCRIPTION]);
+        $this->department->setActive((bool) $item[ImportDepartmentsFromXLSX::COLUMN_ACTIVE]);
     }
 
     private function setAddress(array $item): void
@@ -120,7 +119,7 @@ final class DepartmentMultipleCreator
         if (null !== $item[ImportDepartmentsFromXLSX::COLUMN_EMAIL]) {
             $contact = new Contact();
             $contact->setType(ContactTypeEnum::EMAIL->value);
-            $contact->setData((string)$item[ImportDepartmentsFromXLSX::COLUMN_EMAIL]);
+            $contact->setData((string) $item[ImportDepartmentsFromXLSX::COLUMN_EMAIL]);
             $contact->setActive(true);
             $this->department->addContact($contact);
         }
@@ -143,7 +142,7 @@ final class DepartmentMultipleCreator
 
         $parentDepartmentUUID = $item[ImportDepartmentsFromXLSX::COLUMN_PARENT_DEPARTMENT_UUID] ?? null;
 
-        if ($parentDepartmentUUID !== null) {
+        if (null !== $parentDepartmentUUID) {
             if (is_int($parentDepartmentUUID) && isset($temporaryDepartmentMap[$parentDepartmentUUID])) {
                 $this->department->setParentDepartment($temporaryDepartmentMap[$parentDepartmentUUID]);
             } elseif (is_string($parentDepartmentUUID)) {

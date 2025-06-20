@@ -52,7 +52,7 @@ class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
 
     protected function transformIncludes(array $items, array $includes): array
     {
-        $data = array_map(fn($role) => $role->toArray(), $items);
+        $data = array_map(fn ($role) => $role->toArray(), $items);
         foreach (ContractType::getRelations() as $contractType) {
             foreach ($data as $key => $role) {
                 if (!in_array($contractType, $includes) || empty($includes)) {

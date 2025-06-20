@@ -18,7 +18,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class UpdateRoleController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
     {
     }
 

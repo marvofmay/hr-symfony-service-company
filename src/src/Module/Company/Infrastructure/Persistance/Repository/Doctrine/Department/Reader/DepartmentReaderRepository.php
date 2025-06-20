@@ -15,7 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class DepartmentReaderRepository extends ServiceEntityRepository implements DepartmentReaderInterface
 {
-    public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator,)
+    public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
     {
         parent::__construct($registry, Department::class);
     }
@@ -23,7 +23,7 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
     public function getDepartmentByUUID(string $uuid): ?Department
     {
         return $this->getEntityManager()
-            ->createQuery('SELECT d FROM ' . Department::class . ' d WHERE d.' . Department::COLUMN_UUID . ' = :uuid')
+            ->createQuery('SELECT d FROM '.Department::class.' d WHERE d.'.Department::COLUMN_UUID.' = :uuid')
             ->setParameter('uuid', $uuid)
             ->getOneOrNullResult();
     }
@@ -37,20 +37,16 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(Department::ALIAS)
             ->from(Department::class, Department::ALIAS)
-            ->where(Department::ALIAS . '.' . Department::COLUMN_UUID . ' IN (:uuids)')
+            ->where(Department::ALIAS.'.'.Department::COLUMN_UUID.' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID);
 
         $departments = $qb->getQuery()->getResult();
 
-        $foundUUIDs = array_map(fn(Department $department) => $department->getUUID(), $departments);
+        $foundUUIDs = array_map(fn (Department $department) => $department->getUUID(), $departments);
         $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
 
         if ($missingUUIDs) {
-            throw new NotFindByUUIDException(sprintf(
-                '%s : %s',
-                $this->translator->trans('department.uuid.notFound', [], 'departments'),
-                implode(', ', $missingUUIDs)
-            ));
+            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('department.uuid.notFound', [], 'departments'), implode(', ', $missingUUIDs)));
         }
 
         return new ArrayCollection($departments);
@@ -62,11 +58,11 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
 
         $qb->select('d')
             ->from(Department::class, 'd')
-            ->where('d.' . Department::COLUMN_NAME . ' = :name')
+            ->where('d.'.Department::COLUMN_NAME.' = :name')
             ->setParameter('name', $name);
 
         if (null !== $uuid) {
-            $qb->andWhere('d.' . Department::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere('d.'.Department::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -84,7 +80,7 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
 
         $qb->select('d')
             ->from(Department::class, 'd')
-            ->where('d.' . Department::COLUMN_UUID . ' = :uuid')
+            ->where('d.'.Department::COLUMN_UUID.' = :uuid')
             ->setParameter('uuid', $departmentUUID);
 
         return null !== $qb->getQuery()->getOneOrNullResult();

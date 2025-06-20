@@ -41,7 +41,7 @@ readonly class PayloadErrorEventSubscriber implements EventSubscriberInterface
 
         $event->setResponse(new JsonResponse([
             'message' => $this->translator->trans('errors.occurred', [], 'validators'),
-            'errors' => $errorMessages
+            'errors' => $errorMessages,
         ]));
     }
 }

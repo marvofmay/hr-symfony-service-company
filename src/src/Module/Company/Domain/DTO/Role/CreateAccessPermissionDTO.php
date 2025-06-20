@@ -19,20 +19,20 @@ class CreateAccessPermissionDTO
         new Assert\Collection([
             'fields' => [
                 'uuid' => [
-                    new NotBlank(message: ['text' => 'access.uuid.required', 'domain' => 'accesses',]),
+                    new NotBlank(message: ['text' => 'access.uuid.required', 'domain' => 'accesses']),
                     new Assert\Uuid(),
-                    new ExistingAccessUUID(message: ['uuidNotExists' => 'access.notExists', 'domain' => 'accesses'])
+                    new ExistingAccessUUID(message: ['uuidNotExists' => 'access.notExists', 'domain' => 'accesses']),
                 ],
                 'permissions' => [
-                    new NotBlank(message: ['text' => 'permission.uuid.required', 'domain' => 'permissions',]),
+                    new NotBlank(message: ['text' => 'permission.uuid.required', 'domain' => 'permissions']),
                     new Assert\All([
                         new Assert\Uuid(),
-                        new ExistingPermissionUUID(message: ['uuidNotExists' => 'permission.notExists', 'domain' => 'permissions'])
-                    ])
-                ]
+                        new ExistingPermissionUUID(message: ['uuidNotExists' => 'permission.notExists', 'domain' => 'permissions']),
+                    ]),
+                ],
             ],
-            'allowExtraFields' => false
-        ])
+            'allowExtraFields' => false,
+        ]),
     ])]
     public array $accesses = [];
 

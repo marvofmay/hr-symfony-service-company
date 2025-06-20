@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ImportReaderRepository extends ServiceEntityRepository implements ImportReaderInterface
 {
-    public function __construct(ManagerRegistry $registry,)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Import::class);
     }

@@ -11,10 +11,11 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ModuleReaderRepository extends ServiceEntityRepository implements ModuleReaderInterface
 {
-    public function __construct(ManagerRegistry $registry,)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Module::class);
     }
+
     public function getModuleByUUID(string $uuid): ?Module
     {
         return $this->findOneBy([Module::COLUMN_UUID => $uuid]);

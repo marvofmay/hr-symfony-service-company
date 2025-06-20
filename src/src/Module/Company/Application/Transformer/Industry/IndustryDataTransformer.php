@@ -40,12 +40,12 @@ class IndustryDataTransformer
 
     private function transformCompanies(?Collection $companies): ?array
     {
-        if ($companies === null || $companies->isEmpty()) {
+        if (null === $companies || $companies->isEmpty()) {
             return null;
         }
 
         return array_map(
-            fn(Company $company) => [
+            fn (Company $company) => [
                 Company::COLUMN_UUID => $company->getUUID()->toString(),
                 Company::COLUMN_FULL_NAME => $company->getFullName(),
                 Company::COLUMN_SHORT_NAME => $company->getShortName(),

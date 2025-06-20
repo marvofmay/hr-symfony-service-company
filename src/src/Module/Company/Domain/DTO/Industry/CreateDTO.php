@@ -29,5 +29,4 @@ class CreateDTO
             return $this->description;
         }
     }
-
 }

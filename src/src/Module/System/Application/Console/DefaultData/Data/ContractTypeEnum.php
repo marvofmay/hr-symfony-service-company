@@ -8,16 +8,16 @@ use App\Common\Domain\Interface\EnumInterface;
 
 enum ContractTypeEnum: string implements EnumInterface
 {
-    case EMPLOYMENT  = 'employment';
-    case B2B         = 'b2b';
-    case INTERNSHIP  = 'internship';
-    case CONTRACTOR  = 'contractor';
-    case TEMPORARY   = 'temporary';
-    case PART_TIME   = 'part_time';
-    case FULL_TIME   = 'full_time';
-    case COMMISSION  = 'commission';
-    case CONSULTING  = 'consulting';
-    case FREELANCE   = 'freelance';
+    case EMPLOYMENT = 'employment';
+    case B2B = 'b2b';
+    case INTERNSHIP = 'internship';
+    case CONTRACTOR = 'contractor';
+    case TEMPORARY = 'temporary';
+    case PART_TIME = 'part_time';
+    case FULL_TIME = 'full_time';
+    case COMMISSION = 'commission';
+    case CONSULTING = 'consulting';
+    case FREELANCE = 'freelance';
 
     public function label(): string
     {

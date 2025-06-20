@@ -8,17 +8,17 @@ use App\Common\Domain\Interface\EnumInterface;
 
 enum ModuleEnum: string implements EnumInterface
 {
-    case SYSTEM  = 'system';
+    case SYSTEM = 'system';
     case COMPANY = 'company';
-    case NOTE    = 'note';
-    case TASK    = 'task';
+    case NOTE = 'note';
+    case TASK = 'task';
 
     public function label(): string
     {
         return match ($this) {
-            self::SYSTEM  => self::SYSTEM->value,
+            self::SYSTEM => self::SYSTEM->value,
             self::COMPANY => self::COMPANY->value,
-            self::NOTE    => self::NOTE->value,
+            self::NOTE => self::NOTE->value,
         };
     }
 

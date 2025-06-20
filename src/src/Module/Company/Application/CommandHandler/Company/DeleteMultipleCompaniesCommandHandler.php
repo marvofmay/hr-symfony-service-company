@@ -9,12 +9,12 @@ use App\Module\Company\Domain\Service\Company\CompanyMultipleDeleter;
 
 readonly class DeleteMultipleCompaniesCommandHandler
 {
-    public function __construct(private CompanyMultipleDeleter $companyMultipleDeleter,)
+    public function __construct(private CompanyMultipleDeleter $companyMultipleDeleter)
     {
     }
 
     public function __invoke(DeleteMultipleCompaniesCommand $command): void
     {
-       $this->companyMultipleDeleter->multipleDelete($command->companies);
+        $this->companyMultipleDeleter->multipleDelete($command->companies);
     }
 }

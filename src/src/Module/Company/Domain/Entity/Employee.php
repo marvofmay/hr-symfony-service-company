@@ -292,11 +292,11 @@ class Employee
 
     public function getContacts(?ContactTypeEnum $type = null): Collection
     {
-        if ($type === null) {
+        if (null === $type) {
             return $this->contacts;
         }
 
-        return $this->contacts->filter(fn(Contact $contact) => $contact->getType() === $type->value);
+        return $this->contacts->filter(fn (Contact $contact) => $contact->getType() === $type->value);
     }
 
     public function addContact(Contact $contact): void

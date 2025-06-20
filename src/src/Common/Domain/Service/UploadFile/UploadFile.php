@@ -26,7 +26,7 @@ class UploadFile implements UploadFileInterface
     public function __construct(
         private readonly string $uploadDir,
         private readonly FileExtensionEnum $expectedUploadedFileExtension,
-        private ?string $fileName = null,)
+        private ?string $fileName = null, )
     {
     }
 

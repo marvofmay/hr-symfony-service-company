@@ -11,16 +11,16 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportPositionsFromXLSX extends XLSXIterator
 {
-    public const COLUMN_NAME            = 0;
-    public const COLUMN_DESCRIPTION     = 1;
-    public const COLUMN_ACTIVE          = 2;
+    public const COLUMN_NAME = 0;
+    public const COLUMN_DESCRIPTION = 1;
+    public const COLUMN_ACTIVE = 2;
     public const COLUMN_DEPARTMENT_UUID = 3;
 
     public function __construct(
         private readonly string $filePath,
         private readonly TranslatorInterface $translator,
         private readonly PositionReaderInterface $positionReaderRepository,
-        private readonly DepartmentReaderInterface $departmentReaderRepository
+        private readonly DepartmentReaderInterface $departmentReaderRepository,
     ) {
         parent::__construct($this->filePath, $this->translator);
     }
@@ -93,12 +93,12 @@ class ImportPositionsFromXLSX extends XLSXIterator
 
             [$name, $description, $active, $departmentUUID] = $data;
 
-            $key = md5($name . $description . $active);
+            $key = md5($name.$description.$active);
             if (!isset($groupedPositions[$key])) {
                 $groupedPositions[$key] = [
-                    self::COLUMN_NAME            => $name,
-                    self::COLUMN_DESCRIPTION     => $description,
-                    self::COLUMN_ACTIVE          => $active,
+                    self::COLUMN_NAME => $name,
+                    self::COLUMN_DESCRIPTION => $description,
+                    self::COLUMN_ACTIVE => $active,
                     self::COLUMN_DEPARTMENT_UUID => [],
                 ];
             }

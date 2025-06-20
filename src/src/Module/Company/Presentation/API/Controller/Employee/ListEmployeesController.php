@@ -18,7 +18,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListEmployeesController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,) {
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
+    {
     }
 
     #[Route('/api/employees', name: 'api.employees.list', methods: ['GET'])]
@@ -34,7 +35,7 @@ class ListEmployeesController extends AbstractController
             $message = sprintf('%s: %s', $this->translator->trans('employee.list.error', [], 'employees'), $error->getMessage());
             $this->logger->error($message);
 
-            return new JsonResponse(['message' => $this->translator->trans('employee.list.error', [], 'employees'),], $error->getCode());
+            return new JsonResponse(['message' => $this->translator->trans('employee.list.error', [], 'employees')], $error->getCode());
         }
     }
 }

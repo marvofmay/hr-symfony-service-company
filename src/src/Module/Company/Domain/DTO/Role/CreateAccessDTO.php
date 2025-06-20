@@ -23,5 +23,4 @@ class CreateAccessDTO
             return $this->accessUUID;
         }
     }
-
 }

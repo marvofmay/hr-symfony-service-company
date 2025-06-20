@@ -13,7 +13,8 @@ class DeleteDepartmentAction
     public function __construct(
         private readonly MessageBusInterface $commandBus,
         private readonly DepartmentReaderInterface $departmentReaderRepository,
-    ) {}
+    ) {
+    }
 
     public function execute(string $uuid): void
     {

@@ -9,7 +9,9 @@ use App\Module\Company\Domain\Service\Position\PositionCreator;
 
 readonly class CreatePositionCommandHandler
 {
-    public function __construct(private PositionCreator $positionCreator,) {}
+    public function __construct(private PositionCreator $positionCreator)
+    {
+    }
 
     public function __invoke(CreatePositionCommand $command): void
     {

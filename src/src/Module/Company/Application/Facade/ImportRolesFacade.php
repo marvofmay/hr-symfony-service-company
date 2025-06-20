@@ -42,7 +42,8 @@ final readonly class ImportRolesFacade
         private ValidatorInterface $validator,
         private Security $security,
         private ParameterBagInterface $params,
-    ) {}
+    ) {
+    }
 
     public function handle(UploadedFile $file): array
     {
@@ -71,7 +72,7 @@ final readonly class ImportRolesFacade
 
             $this->entityManager->commit();
 
-            if ($import->getStatus() === ImportStatusEnum::DONE) {
+            if (ImportStatusEnum::DONE === $import->getStatus()) {
                 return [
                     'success' => true,
                     'message' => $this->translator->trans('role.import.success', [], 'roles'),
@@ -79,6 +80,7 @@ final readonly class ImportRolesFacade
             }
 
             $importLogs = $this->askImportLogsAction->ask($import);
+
             return [
                 'success' => false,
                 'errors' => ImportLogErrorTransformer::map($importLogs),

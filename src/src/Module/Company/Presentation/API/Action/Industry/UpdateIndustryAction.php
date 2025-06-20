@@ -17,8 +17,7 @@ final readonly class UpdateIndustryAction
         private MessageBusInterface $commandBus,
         private IndustryReaderInterface $industryReaderRepository,
         private IndustryValidator $industryValidator,
-    )
-    {
+    ) {
     }
 
     public function execute(string $uuid, UpdateDTO $updateDTO): void

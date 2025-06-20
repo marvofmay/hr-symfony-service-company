@@ -11,8 +11,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 final readonly class DeleteRoleAction
 {
-    public function __construct(private MessageBusInterface $commandBus, private RoleReaderInterface $roleReaderRepository,)
-    {}
+    public function __construct(private MessageBusInterface $commandBus, private RoleReaderInterface $roleReaderRepository)
+    {
+    }
 
     public function execute(string $uuid): void
     {

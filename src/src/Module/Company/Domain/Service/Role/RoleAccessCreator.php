@@ -10,8 +10,9 @@ use Doctrine\Common\Collections\Collection;
 
 final readonly class RoleAccessCreator
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository,)
-    {}
+    public function __construct(private RoleWriterInterface $roleWriterRepository)
+    {
+    }
 
     public function create(Role $role, Collection $accesses): void
     {

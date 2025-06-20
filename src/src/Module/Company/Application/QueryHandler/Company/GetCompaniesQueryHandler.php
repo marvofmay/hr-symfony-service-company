@@ -24,7 +24,7 @@ class GetCompaniesQueryHandler
         $filters = $query->getFilters();
         $includes = $query->getIncludes();
 
-        //ToDo:: Refactor query - use left join with companyUUID, industryUUID
+        // ToDo:: Refactor query - use left join with companyUUID, industryUUID
         $queryBuilder = $this->entityManager->createQueryBuilder()
             ->select('c')
             ->from(Company::class, 'c');

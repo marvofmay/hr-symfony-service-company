@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 
 final readonly class GetRoleByUUIDQueryHandler
 {
-    public function __construct(private RoleReaderInterface $roleReaderRepository,)
+    public function __construct(private RoleReaderInterface $roleReaderRepository)
     {
     }
 

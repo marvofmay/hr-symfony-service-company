@@ -9,12 +9,12 @@ use App\Module\Company\Domain\Service\Role\RoleMultipleDeleter;
 
 readonly class DeleteMultipleRolesCommandHandler
 {
-    public function __construct(private RoleMultipleDeleter $roleMultipleDeleter,)
+    public function __construct(private RoleMultipleDeleter $roleMultipleDeleter)
     {
     }
 
     public function __invoke(DeleteMultipleRolesCommand $command): void
     {
-       $this->roleMultipleDeleter->multipleDelete($command->roles);
+        $this->roleMultipleDeleter->multipleDelete($command->roles);
     }
 }

@@ -10,7 +10,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class IndustryValidator
 {
-    public function __construct(private IndustryReaderInterface $industryReaderRepository, private TranslatorInterface $translator) {}
+    public function __construct(private IndustryReaderInterface $industryReaderRepository, private TranslatorInterface $translator)
+    {
+    }
 
     public function isIndustryNameAlreadyExists(string $name, ?string $uuid = null): void
     {

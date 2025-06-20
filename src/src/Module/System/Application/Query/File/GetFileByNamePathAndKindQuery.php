@@ -12,5 +12,6 @@ final class GetFileByNamePathAndKindQuery
         public string $fileName,
         public string $filePath,
         public FileKindEnum $fileKind,
-    ) {}
+    ) {
+    }
 }

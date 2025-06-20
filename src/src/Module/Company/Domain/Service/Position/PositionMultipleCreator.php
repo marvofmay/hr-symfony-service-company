@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class PositionMultipleCreator
 {
-    public function __construct(private PositionWriterInterface $positionWriterRepository, private DepartmentReaderInterface $departmentReaderRepository,)
+    public function __construct(private PositionWriterInterface $positionWriterRepository, private DepartmentReaderInterface $departmentReaderRepository)
     {
     }
 
@@ -22,7 +22,7 @@ readonly class PositionMultipleCreator
             $position = new Position();
             $position->setName($item[ImportPositionsFromXLSX::COLUMN_NAME]);
             $position->setDescription($item[ImportPositionsFromXLSX::COLUMN_DESCRIPTION]);
-            $position->setActive((bool)$item[ImportPositionsFromXLSX::COLUMN_ACTIVE]);
+            $position->setActive((bool) $item[ImportPositionsFromXLSX::COLUMN_ACTIVE]);
 
             $departments = $this->departmentReaderRepository->getDepartmentsByUUID([$item[ImportPositionsFromXLSX::COLUMN_DEPARTMENT_UUID]]);
             foreach ($departments as $department) {

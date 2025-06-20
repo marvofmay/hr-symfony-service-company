@@ -8,7 +8,6 @@ use App\Module\Company\Domain\DTO\Company\CompaniesQueryDTO;
 use App\Module\Company\Presentation\API\Action\Company\AskCompaniesAction;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use OpenApi\Attributes as OA;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

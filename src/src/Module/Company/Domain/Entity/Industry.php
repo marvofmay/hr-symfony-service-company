@@ -20,7 +20,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'industry')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
-
 class Industry
 {
     use TimestampableTrait;

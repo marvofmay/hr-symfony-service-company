@@ -32,26 +32,26 @@ class InitializeSystemFakeDataCommand extends Command
             'app:add-record-to-department-table',
         ];
 
-        $output->writeln("**************************************************************");
+        $output->writeln('**************************************************************');
         foreach ($commands as $commandName) {
-            $output->writeln("--------------------------------------------------------------");
+            $output->writeln('--------------------------------------------------------------');
             $output->writeln("<info>Command execution: $commandName</info>");
             $command = $application->find($commandName);
             $result = $command->run(new ArrayInput([]), $output);
 
-            if ($result !== Command::SUCCESS) {
+            if (Command::SUCCESS !== $result) {
                 $output->writeln("<error>Error during execution: $commandName</error>");
 
                 return $result;
             }
 
-            $output->writeln("--------------------------------------------------------------");
+            $output->writeln('--------------------------------------------------------------');
         }
 
-        $output->writeln("");
+        $output->writeln('');
         $output->writeln('<info>All commands were executed successfully :)</info>');
-        $output->writeln("");
-        $output->writeln("**************************************************************");
+        $output->writeln('');
+        $output->writeln('**************************************************************');
 
         return Command::SUCCESS;
     }

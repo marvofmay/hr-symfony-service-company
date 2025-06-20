@@ -18,11 +18,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class GetCompanyController extends AbstractController
 {
     public function __construct(
-        private readonly LoggerInterface        $logger,
+        private readonly LoggerInterface $logger,
         private readonly CompanyReaderInterface $companyReaderRepository,
-        private readonly TranslatorInterface    $translator,
-    )
-    {
+        private readonly TranslatorInterface $translator,
+    ) {
     }
 
     #[Route('/api/companies/{uuid}', name: 'api.companies.get', methods: ['GET'])]
@@ -37,7 +36,7 @@ class GetCompanyController extends AbstractController
             $transformer = new CompanyDataTransformer();
             $data = $transformer->transformToArray($company);
 
-            return new JsonResponse(['data' => $data,], Response::HTTP_OK);
+            return new JsonResponse(['data' => $data], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('company.view.error', [], 'companies'), $error->getMessage());
             $this->logger->error($message);

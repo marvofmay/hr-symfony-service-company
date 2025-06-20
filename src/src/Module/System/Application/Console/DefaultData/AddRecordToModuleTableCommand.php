@@ -24,7 +24,7 @@ class AddRecordToModuleTableCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct();
     }
@@ -42,7 +42,7 @@ class AddRecordToModuleTableCommand extends Command
 
         $moduleRepository = $this->entityManager->getRepository(Module::class);
         $existingModules = $moduleRepository->createQueryBuilder(Module::ALIAS)
-            ->select(Module::ALIAS . '.' . Module::COLUMN_NAME)
+            ->select(Module::ALIAS.'.'.Module::COLUMN_NAME)
             ->getQuery()
             ->getArrayResult();
 

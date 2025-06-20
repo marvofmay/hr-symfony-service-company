@@ -85,7 +85,7 @@ class Department
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'department', cascade: ['persist', 'remove'])]
     private Collection $employees;
 
-    #[ORM\OneToMany(targetEntity: PositionDepartment::class, mappedBy: "department", cascade: ['persist', 'remove'], orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: PositionDepartment::class, mappedBy: 'department', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $positionDepartments;
 
     public function __construct()
@@ -168,11 +168,11 @@ class Department
 
     public function getContacts(?ContactTypeEnum $type = null): Collection
     {
-        if ($type === null) {
+        if (null === $type) {
             return $this->contacts;
         }
 
-        return $this->contacts->filter(fn(Contact $contact) => $contact->getType() === $type->value);
+        return $this->contacts->filter(fn (Contact $contact) => $contact->getType() === $type->value);
     }
 
     public function addContact(Contact $contact): void

@@ -7,7 +7,7 @@ use App\Module\Company\Domain\Service\Employee\EmployeeDeleter;
 
 readonly class DeleteEmployeeCommandHandler
 {
-    public function __construct(private EmployeeDeleter $employeeDeleter,)
+    public function __construct(private EmployeeDeleter $employeeDeleter)
     {
     }
 

@@ -31,7 +31,8 @@ final class RoleWriterRepository extends ServiceEntityRepository implements Role
         $this->getEntityManager()->flush();
     }
 
-    public function deleteRoleInDB(Role $role): void {
+    public function deleteRoleInDB(Role $role): void
+    {
         $this->getEntityManager()->remove($role);
         $this->getEntityManager()->flush();
     }
@@ -46,6 +47,6 @@ final class RoleWriterRepository extends ServiceEntityRepository implements Role
             $this->getEntityManager()->remove($role);
         }
 
-        $this->getEntityManager()->flush();        
+        $this->getEntityManager()->flush();
     }
 }

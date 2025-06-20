@@ -9,13 +9,13 @@ final readonly class BoolValidator
     public static function validate(mixed $value): ?string
     {
         if (
-            $value === null ||
-            $value === true ||
-            $value === false ||
-            $value === 0 ||
-            $value === 1 ||
-            $value === '0' ||
-            $value === '1'
+            null === $value
+            || true === $value
+            || false === $value
+            || 0 === $value
+            || 1 === $value
+            || '0' === $value
+            || '1' === $value
         ) {
             return null;
         }

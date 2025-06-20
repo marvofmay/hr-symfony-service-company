@@ -8,7 +8,6 @@ use App\Module\Company\Domain\DTO\Department\UpdateDTO;
 use App\Module\Company\Presentation\API\Action\Department\UpdateDepartmentAction;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use Nelmio\ApiDocBundle\Attribute\Model;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

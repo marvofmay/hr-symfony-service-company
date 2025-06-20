@@ -18,8 +18,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class UpdatePositionController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator,)
-    {}
+    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
+    {
+    }
 
     #[Route('/api/positions/{uuid}', name: 'api.positions.update', methods: ['PUT'])]
     public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO, UpdatePositionAction $updatePositionAction): Response

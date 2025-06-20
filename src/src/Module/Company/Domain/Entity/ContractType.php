@@ -65,7 +65,8 @@ class ContractType
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->employees = new ArrayCollection();
     }
 
@@ -98,6 +99,7 @@ class ContractType
     {
         return $this->{self::COLUMN_ACTIVE};
     }
+
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;

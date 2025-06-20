@@ -16,33 +16,32 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportCompaniesFromXLSX extends XLSXIterator
 {
-    public const int COLUMN_COMPANY_UUID        = 0;
-    public const int COLUMN_COMPANY_FULL_NAME   = 1;
-    public const int COLUMN_COMPANY_SHORT_NAME  = 2;
+    public const int COLUMN_COMPANY_UUID = 0;
+    public const int COLUMN_COMPANY_FULL_NAME = 1;
+    public const int COLUMN_COMPANY_SHORT_NAME = 2;
     public const int COLUMN_COMPANY_DESCRIPTION = 3;
     public const int COLUMN_PARENT_COMPANY_UUID = 4;
-    public const int COLUMN_INDUSTRY_UUID       = 5;
-    public const int COLUMN_NIP                 = 6;
-    public const int COLUMN_REGON               = 7;
-    public const int COLUMN_ACTIVE              = 8;
-    public const int COLUMN_PHONE               = 9;
-    public const int COLUMN_EMAIL               = 10;
-    public const int COLUMN_WEBSITE             = 11;
-    public const int COLUMN_STREET              = 12;
-    public const int COLUMN_POSTCODE            = 13;
-    public const int COLUMN_CITY                = 14;
-    public const int COLUMN_COUNTRY             = 15;
+    public const int COLUMN_INDUSTRY_UUID = 5;
+    public const int COLUMN_NIP = 6;
+    public const int COLUMN_REGON = 7;
+    public const int COLUMN_ACTIVE = 8;
+    public const int COLUMN_PHONE = 9;
+    public const int COLUMN_EMAIL = 10;
+    public const int COLUMN_WEBSITE = 11;
+    public const int COLUMN_STREET = 12;
+    public const int COLUMN_POSTCODE = 13;
+    public const int COLUMN_CITY = 14;
+    public const int COLUMN_COUNTRY = 15;
 
     private array $errorMessages = [];
 
     public function __construct(
-        private readonly string                  $filePath,
-        private readonly TranslatorInterface     $translator,
-        private readonly CompanyReaderInterface  $companyReaderRepository,
+        private readonly string $filePath,
+        private readonly TranslatorInterface $translator,
+        private readonly CompanyReaderInterface $companyReaderRepository,
         private readonly IndustryReaderInterface $industryReaderRepository,
-        private readonly CacheInterface          $cache,
-    )
-    {
+        private readonly CacheInterface $cache,
+    ) {
         parent::__construct($this->filePath, $this->translator);
     }
 
@@ -70,18 +69,18 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         ] = $row + [null, null, null, null, null, null, null, null, false, null, null, null, null, null, null, null];
 
         $validations = [
-            $this->isCompanyExists((string)$nip, (string)$regon, is_string($companyUUID) ? $companyUUID : null),
+            $this->isCompanyExists((string) $nip, (string) $regon, is_string($companyUUID) ? $companyUUID : null),
             $this->validateCompanyUUID($companyUUID),
             $this->validateCompanyFullName($fullName),
             $this->validateCompanyShortName($shortName),
             $this->validateCompanyDescription($description),
             $this->validateParentCompanyUUID($parentCompanyUUID),
             $this->validateIndustryUUID($industryUUID),
-            $this->validateNIP((string)$nip),
-            $this->validateREGON((string)$regon),
+            $this->validateNIP((string) $nip),
+            $this->validateREGON((string) $regon),
             $this->validateActive($active),
             $this->validatePhone($phone),
-            $this->validateEmail((string)$email),
+            $this->validateEmail((string) $email),
             $this->validateWebsite($website),
             $this->validateStreet($street),
             $this->validatePostcode($postcode),
@@ -90,7 +89,7 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         ];
 
         foreach ($validations as $errorMessage) {
-            if ($errorMessage !== null) {
+            if (null !== $errorMessage) {
                 $this->errorMessages[] = $errorMessage;
             }
         }
@@ -115,10 +114,10 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         }
 
         if (is_string($companyUUID)) {
-            $cacheKey = 'import_company_uuid_' . $companyUUID;
+            $cacheKey = 'import_company_uuid_'.$companyUUID;
 
             $companyExists = $this->cache->get($cacheKey, function () use ($companyUUID) {
-                return $this->companyReaderRepository->getCompanyByUUID($companyUUID) !== null;
+                return null !== $this->companyReaderRepository->getCompanyByUUID($companyUUID);
             });
 
             if (!$companyExists) {
@@ -159,10 +158,10 @@ class ImportCompaniesFromXLSX extends XLSXIterator
         }
 
         if (is_string($parentCompanyUUID)) {
-            $cacheKey = 'import_company_uuid_' . $parentCompanyUUID;
+            $cacheKey = 'import_company_uuid_'.$parentCompanyUUID;
 
             $parentExists = $this->cache->get($cacheKey, function () use ($parentCompanyUUID) {
-                return $this->companyReaderRepository->getCompanyByUUID($parentCompanyUUID) !== null;
+                return null !== $this->companyReaderRepository->getCompanyByUUID($parentCompanyUUID);
             });
 
             if (!$parentExists) {
@@ -179,10 +178,10 @@ class ImportCompaniesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('company.industryUUID.required');
         }
 
-        $cacheKey = 'import_industry_uuid_' . $industryUUID;
+        $cacheKey = 'import_industry_uuid_'.$industryUUID;
 
         $industryExists = $this->cache->get($cacheKey, function () use ($industryUUID) {
-            return $this->industryReaderRepository->getIndustryByUUID($industryUUID) !== null;
+            return null !== $this->industryReaderRepository->getIndustryByUUID($industryUUID);
         });
 
         if (!$industryExists) {
@@ -259,10 +258,10 @@ class ImportCompaniesFromXLSX extends XLSXIterator
 
     private function validateWebsite(?string $website): ?string
     {
-        //$errorMessage = WebsiteValidator::validate($website);
-        //if (null !== $errorMessage) {
+        // $errorMessage = WebsiteValidator::validate($website);
+        // if (null !== $errorMessage) {
         //    return $this->formatErrorMessage($errorMessage, [], 'validators');
-        //}
+        // }
 
         return null;
     }

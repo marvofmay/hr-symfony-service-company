@@ -13,7 +13,8 @@ class DeleteCompanyAction
     public function __construct(
         private readonly MessageBusInterface $commandBus,
         private readonly CompanyReaderInterface $companyReaderRepository,
-    ) {}
+    ) {
+    }
 
     public function execute(string $uuid): void
     {

@@ -7,7 +7,7 @@ use App\Module\Company\Domain\Service\ContractType\ContractTypeDeleter;
 
 readonly class DeleteContractTypeCommandHandler
 {
-    public function __construct(private ContractTypeDeleter $contractTypeDeleter,)
+    public function __construct(private ContractTypeDeleter $contractTypeDeleter)
     {
     }
 

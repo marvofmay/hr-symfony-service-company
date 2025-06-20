@@ -31,7 +31,8 @@ final class CompanyWriterRepository extends ServiceEntityRepository implements C
         $this->getEntityManager()->flush();
     }
 
-    public function deleteCompanyInDB(Company $company): void {
+    public function deleteCompanyInDB(Company $company): void
+    {
         $this->getEntityManager()->remove($company);
         $this->getEntityManager()->flush();
     }
@@ -47,5 +48,5 @@ final class CompanyWriterRepository extends ServiceEntityRepository implements C
         }
 
         $this->getEntityManager()->flush();
-    }    
+    }
 }

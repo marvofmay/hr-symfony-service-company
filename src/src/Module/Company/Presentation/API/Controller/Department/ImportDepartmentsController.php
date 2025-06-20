@@ -10,9 +10,7 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Company\ImportDTO;
-use App\Module\Company\Domain\Service\Company\ImportCompaniesValidator;
 use App\Module\Company\Domain\Service\Department\ImportDepartmentsValidator;
-use App\Module\Company\Presentation\API\Action\Company\ImportCompaniesAction;
 use App\Module\Company\Presentation\API\Action\Department\ImportDepartmentsAction;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
@@ -45,28 +43,26 @@ class ImportDepartmentsController extends AbstractController
     public function __construct(
         private readonly LoggerInterface $logger,
         private readonly TranslatorInterface $translator,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/departments/import', name: 'import', methods: ['POST'])]
     public function import(
         #[MapUploadedFile] UploadedFile $file,
-        UploadFileAction                $uploadFileAction,
-        ImportDepartmentsAction        $importDepartmentsAction,
-        ImportDepartmentsValidator      $importDepartmentsValidator,
-        CreateFileAction                $createFileAction,
-        AskFileAction                   $askFileAction,
-        CreateImportAction              $createImportAction,
-        UpdateImportAction              $updateImportAction,
-        ImportLogMultipleCreator        $importLogMultipleCreator,
-        AskImportAction                 $askImportAction,
-        AskImportLogsAction             $askImportLogsAction,
-        ValidatorInterface              $validator,
-        Security                        $security,
-        ParameterBagInterface           $params,
-    ): JsonResponse
-    {
+        UploadFileAction $uploadFileAction,
+        ImportDepartmentsAction $importDepartmentsAction,
+        ImportDepartmentsValidator $importDepartmentsValidator,
+        CreateFileAction $createFileAction,
+        AskFileAction $askFileAction,
+        CreateImportAction $createImportAction,
+        UpdateImportAction $updateImportAction,
+        ImportLogMultipleCreator $importLogMultipleCreator,
+        AskImportAction $askImportAction,
+        AskImportLogsAction $askImportLogsAction,
+        ValidatorInterface $validator,
+        Security $security,
+        ParameterBagInterface $params,
+    ): JsonResponse {
         try {
             if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::DEPARTMENT)) {
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
@@ -94,7 +90,7 @@ class ImportDepartmentsController extends AbstractController
                 $importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
 
                 foreach ($errors as $error) {
-                    $this->logger->error($this->translator->trans('department.import.error', [], 'departments') . ': ' . $error);
+                    $this->logger->error($this->translator->trans('department.import.error', [], 'departments').': '.$error);
                 }
 
                 $importLogs = $askImportLogsAction->ask($import);
@@ -108,8 +104,7 @@ class ImportDepartmentsController extends AbstractController
 
             $importDepartmentsAction->execute(new ImportDTO($import->getUUID()->toString()));
 
-            return new JsonResponse(['message' => $this->translator->trans('department.import.queued', [], 'departments'), 'errors' => [],], Response::HTTP_CREATED);
-
+            return new JsonResponse(['message' => $this->translator->trans('department.import.queued', [], 'departments'), 'errors' => []], Response::HTTP_CREATED);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('department.import.error', [], 'departments'), $this->translator->trans($error->getMessage()));
             $this->logger->error($message);

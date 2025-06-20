@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 
 final readonly class GetIndustryByUUIDQueryHandler
 {
-    public function __construct(private IndustryReaderInterface $industryReaderRepository,)
+    public function __construct(private IndustryReaderInterface $industryReaderRepository)
     {
     }
 

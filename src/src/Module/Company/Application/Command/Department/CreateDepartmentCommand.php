@@ -19,5 +19,6 @@ class CreateDepartmentCommand implements CommandInterface
         public ?array $emails,
         public ?array $websites,
         public AddressDTO $address,
-    ) {}
+    ) {
+    }
 }

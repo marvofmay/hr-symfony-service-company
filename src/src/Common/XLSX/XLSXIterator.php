@@ -55,7 +55,7 @@ abstract class XLSXIterator implements XLSXIteratorInterface
                 $this->errors = array_merge($this->errors, $error);
             }
 
-            $this->rowIndex++;
+            ++$this->rowIndex;
         }
 
         return $this->errors;

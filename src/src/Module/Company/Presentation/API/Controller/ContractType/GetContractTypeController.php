@@ -32,11 +32,11 @@ class GetContractTypeController extends AbstractController
                 throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
             }
 
-            $contractType =  $this->contractTypeReaderRepository->getContractTypeByUUID($uuid);
+            $contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($uuid);
             $transformer = new ContractTypeDataTransformer();
             $data = $transformer->transformToArray($contractType);
 
-            return new JsonResponse(['data' => $data,], Response::HTTP_OK);
+            return new JsonResponse(['data' => $data], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('contractType.view.error', [], 'contract_types'), $error->getMessage());
             $this->logger->error($message);

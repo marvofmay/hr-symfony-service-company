@@ -24,7 +24,7 @@ class AddRecordToPermissionTableCommand extends Command
 
     public function __construct(
         private readonly EntityManagerInterface $entityManager,
-        private readonly TranslatorInterface $translator
+        private readonly TranslatorInterface $translator,
     ) {
         parent::__construct();
     }
@@ -42,7 +42,7 @@ class AddRecordToPermissionTableCommand extends Command
 
         $permissionRepository = $this->entityManager->getRepository(Permission::class);
         $existingPermissions = $permissionRepository->createQueryBuilder(Permission::ALIAS)
-            ->select(Permission::ALIAS . '.' . Permission::COLUMN_NAME)
+            ->select(Permission::ALIAS.'.'.Permission::COLUMN_NAME)
             ->getQuery()
             ->getArrayResult();
 

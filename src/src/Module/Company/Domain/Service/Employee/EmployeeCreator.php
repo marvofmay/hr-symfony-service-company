@@ -126,7 +126,7 @@ class EmployeeCreator
 
     protected function setContractType(string $contractTypeUUID): void
     {
-        $this->contractType =  $this->contractTypeReaderRepository->getContractTypeByUUID($contractTypeUUID);
+        $this->contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($contractTypeUUID);
     }
 
     protected function setRole(string $roleUUID): void
@@ -166,8 +166,8 @@ class EmployeeCreator
     {
         $password = sprintf('%s-%s', $email, $firstName);
         if (null === $this->employee->getUser()) {
-           $this->user->setEmail($email);
-           $this->user->setPassword($password);
+            $this->user->setEmail($email);
+            $this->user->setPassword($password);
         }
     }
 }

@@ -46,7 +46,7 @@ readonly class ImportRolesCommandHandler
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
 
             foreach ($errors as $error) {
-                $this->logger->error($this->translator->trans('role.import.error', [], 'roles') . ': ' . $error);
+                $this->logger->error($this->translator->trans('role.import.error', [], 'roles').': '.$error);
             }
         }
     }

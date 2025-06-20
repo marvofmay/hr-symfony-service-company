@@ -11,7 +11,7 @@ use App\Module\System\Domain\Enum\ImportStatusEnum;
 
 class CreateImportCommand
 {
-    public function __construct(public ImportKindEnum $kindEnum, public ImportStatusEnum $statusEnum, public File $file, public ?Employee $employee = null, )
+    public function __construct(public ImportKindEnum $kindEnum, public ImportStatusEnum $statusEnum, public File $file, public ?Employee $employee = null)
     {
     }
 }
