@@ -19,13 +19,20 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Show current dir
+        run: pwd
+
+      - name: List files
+        run: ls -la ../../
+
       - name: Set up Docker
-        run: |
-          docker compose -f ./docker-compose.yml up -d --build
+        working-directory: ${{ github.workspace }}
+        run: docker compose up -d --build
 
       - name: Wait for MySQL to be healthy
+        working-directory: ${{ github.workspace }}
         run: |
-          docker compose -f ./docker-compose.yml exec -T service-company-db-test \
+          docker compose exec -T service-company-db-test \
             bash -c 'until mysqladmin ping -h localhost --silent; do sleep 1; done'
 
       - name: Install Composer dependencies
