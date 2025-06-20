@@ -21,11 +21,11 @@ jobs:
 
       - name: Set up Docker
         run: |
-          docker compose -f ../../docker-compose.yml up -d --build
+          docker compose -f ./docker-compose.yml up -d --build
 
       - name: Wait for MySQL to be healthy
         run: |
-          docker compose -f ../../docker-compose.yml exec -T service-company-db-test \
+          docker compose -f ./docker-compose.yml exec -T service-company-db-test \
             bash -c 'until mysqladmin ping -h localhost --silent; do sleep 1; done'
 
       - name: Install Composer dependencies
