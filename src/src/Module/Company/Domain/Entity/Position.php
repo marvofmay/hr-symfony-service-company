@@ -34,7 +34,7 @@ class Position
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
     public const string RELATION_EMPLOYEES = 'employees';
-    public const string RELATION_DEPARTMENTS = 'departments';
+    public const string RELATION_DEPARTMENTS = 'positionDepartments';
     public const string ALIAS = 'position';
 
     #[ORM\Id]

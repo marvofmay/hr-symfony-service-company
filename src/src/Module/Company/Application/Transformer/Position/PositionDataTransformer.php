@@ -64,7 +64,7 @@ class PositionDataTransformer
         }
 
         return array_map(
-            fn (Employee $department) => [
+            fn (Department $department) => [
                 Department::COLUMN_UUID => $department->getUUID()->toString(),
                 Department::COLUMN_NAME => $department->getName(),
                 Department::COLUMN_DESCRIPTION => $department->getDescription(),

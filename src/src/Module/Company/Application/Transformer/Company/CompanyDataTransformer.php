@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Transformer\Company;
 
+use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Industry;
+use Doctrine\Common\Collections\Collection;
 
 class CompanyDataTransformer
 {
@@ -39,14 +42,15 @@ class CompanyDataTransformer
     {
         return match ($relation) {
             Company::RELATION_DEPARTMENTS => $this->transformDepartments($company->getDepartments()),
-            Company::RELATION_EMPLOYEES => $this->transformEmployees($company->getEmployees()),
+            Company::RELATION_ADDRESS => $this->transformAddress($company->getAddress()),
+            Company::RELATION_CONTACTS => $this->transformContacts($company->getContacts()),
             Company::RELATION_INDUSTRY => $this->transformIndustry($company->getIndustry()),
             Company::RELATION_PARENT_COMPANY => $this->transformParentCompany($company->getParentCompany()),
             default => null,
         };
     }
 
-    private function transformDepartments($departments): ?array
+    private function transformDepartments(Collection $departments): ?array
     {
         if (null === $departments || $departments->isEmpty()) {
             return null;
@@ -106,5 +110,35 @@ class CompanyDataTransformer
             Company::COLUMN_NIP => $parentCompany->getNIP(),
             Company::COLUMN_REGON => $parentCompany->getREGON(),
         ];
+    }
+
+    private function transformAddress(?Address $address): ?array
+    {
+        if (!$address) {
+            return null;
+        }
+
+        return [
+            Address::COLUMN_UUID => $address->getUUID()->toString(),
+            Address::COLUMN_STREET => $address->getStreet(),
+            Address::COLUMN_POSTCODE => $address->getPostcode(),
+            Address::COLUMN_CITY => $address->getCity(),
+            Address::COLUMN_COUNTRY => $address->getCountry(),
+        ];
+    }
+
+    private function transformContacts(Collection $contacts): ?array
+    {
+        if (null === $contacts || $contacts->isEmpty()) {
+            return null;
+        }
+
+        return array_map(
+            fn (Contact $contact) => [
+                Contact::COLUMN_TYPE => $contact->getType(),
+                Contact::COLUMN_DATA => $contact->getData(),
+            ],
+            $contacts->toArray()
+        );
     }
 }

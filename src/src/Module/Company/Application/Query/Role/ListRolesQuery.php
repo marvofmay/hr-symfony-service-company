@@ -8,7 +8,7 @@ use App\Common\Application\Query\ListQueryAbstract;
 use App\Common\Domain\Interface\QueryDTOInterface;
 use App\Module\Company\Domain\Entity\Role;
 
-class ListRolesQuery extends ListQueryAbstract
+final class ListRolesQuery extends ListQueryAbstract
 {
     public function __construct(protected QueryDTOInterface $queryDTO)
     {

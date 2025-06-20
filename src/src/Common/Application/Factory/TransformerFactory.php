@@ -8,10 +8,12 @@ use App\Common\Domain\Exception\TransformerNotFoundException;
 use App\Module\Company\Application\QueryHandler\Company\ListCompaniesQueryHandler;
 use App\Module\Company\Application\QueryHandler\Department\ListDepartmentsQueryHandler;
 use App\Module\Company\Application\QueryHandler\Industry\ListIndustriesQueryHandler;
+use App\Module\Company\Application\QueryHandler\Position\ListPositionsQueryHandler;
 use App\Module\Company\Application\QueryHandler\Role\ListRolesQueryHandler;
 use App\Module\Company\Application\Transformer\Company\CompanyDataTransformer;
 use App\Module\Company\Application\Transformer\Department\DepartmentDataTransformer;
 use App\Module\Company\Application\Transformer\Industry\IndustryDataTransformer;
+use App\Module\Company\Application\Transformer\Position\PositionDataTransformer;
 use App\Module\Company\Application\Transformer\Role\RoleDataTransformer;
 use App\Module\Note\Application\QueryHandler\ListNotesQueryHandler;
 use App\Module\Note\Application\Transformer\NoteDataTransformer;
@@ -25,6 +27,7 @@ class TransformerFactory
             ListCompaniesQueryHandler::class => new CompanyDataTransformer(),
             ListRolesQueryHandler::class => new RoleDataTransformer(),
             ListIndustriesQueryHandler::class => new IndustryDataTransformer(),
+            ListPositionsQueryHandler::class => new PositionDataTransformer(),
             ListNotesQueryHandler::class => new NoteDataTransformer(),
             default => throw new TransformerNotFoundException("No transformer found for handler: {$handlerClass}"),
         };

@@ -8,7 +8,7 @@ use App\Common\Application\Query\ListQueryAbstract;
 use App\Common\Domain\Interface\QueryDTOInterface;
 use App\Module\Company\Domain\Entity\Industry;
 
-class ListIndustriesQuery extends ListQueryAbstract
+final class ListIndustriesQuery extends ListQueryAbstract
 {
     public function __construct(protected QueryDTOInterface $queryDTO)
     {

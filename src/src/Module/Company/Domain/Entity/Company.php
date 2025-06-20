@@ -44,6 +44,8 @@ class Company
     public const COLUMN_DELETED_AT = 'deletedAt';
     public const RELATION_INDUSTRY = 'industry';
     public const RELATION_DEPARTMENTS = 'departments';
+    public const RELATION_ADDRESS = 'address';
+    public const RELATION_CONTACTS = 'contacts';
     public const RELATION_PARENT_COMPANY = 'parentCompany';
     public const ALIAS = 'company';
 

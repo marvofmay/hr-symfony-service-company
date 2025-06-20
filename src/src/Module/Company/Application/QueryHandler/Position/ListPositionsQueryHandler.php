@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\QueryHandler\Position;
+namespace App\Module\Company\Application\QueryHandler\Position;;
 
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Query\Position\ListPositionsQuery;
 use App\Module\Company\Domain\Entity\Position;
 
-class ListPositionsQueryHandler extends ListQueryHandlerAbstract
+final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListPositionsQuery $query): array
     {
@@ -22,7 +22,7 @@ class ListPositionsQueryHandler extends ListQueryHandlerAbstract
 
     protected function getAlias(): string
     {
-        return 'position';
+        return Position::ALIAS;
     }
 
     protected function getDefaultOrderBy(): string
@@ -47,20 +47,6 @@ class ListPositionsQueryHandler extends ListQueryHandlerAbstract
             Position::COLUMN_NAME,
             Position::COLUMN_DESCRIPTION,
         ];
-    }
-
-    protected function transformIncludes(array $items, array $includes): array
-    {
-        $data = array_map(fn ($role) => $role->toArray(), $items);
-        foreach (Position::getRelations() as $relation) {
-            foreach ($data as $key => $role) {
-                if (!in_array($relation, $includes) || empty($includes)) {
-                    unset($data[$key][$relation]);
-                }
-            }
-        }
-
-        return $data;
     }
 
     protected function getRelations(): array
