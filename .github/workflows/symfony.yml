@@ -1,0 +1,47 @@
+name: Symfony CI
+
+on:
+  push:
+    branches:
+      - "master"
+      - "feature/**"
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    env:
+      APP_ENV: test
+      DATABASE_URL: "mysql://root:root_password@service-company-db-test:3306/service_company?charset=utf8mb4"
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Docker
+        run: |
+          docker compose -f docker-compose.yml up -d --build
+
+      - name: Wait for MySQL to be healthy
+        run: |
+          docker compose -f docker-compose.yml exec -T service-company-db-test \
+            bash -c 'until mysqladmin ping -h localhost --silent; do sleep 1; done'
+
+      - name: Install Composer dependencies
+        run: |
+          docker compose exec -T service-company composer install --no-interaction --prefer-dist --optimize-autoloader
+
+      - name: Run Doctrine migrations
+        run: |
+          docker compose exec -T service-company php bin/console doctrine:migrations:migrate --no-interaction
+
+      - name: Initialize system data
+        run: |
+          docker compose exec -T service-company php bin/console app:initialize-system-default-data
+          docker compose exec -T service-company php bin/console app:initialize-system-fake-data
+
+      - name: Run PHPUnit tests
+        run: |
+          docker compose exec -T service-company php bin/phpunit
+

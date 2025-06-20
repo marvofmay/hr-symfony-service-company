@@ -140,6 +140,7 @@ services:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
     volumes:
       - ./src:/var/www/html
+
   redis:
     image: redis:alpine
     container_name: redis
