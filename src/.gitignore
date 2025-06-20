@@ -1,8 +1,6 @@
 /var/
 /vendor/
 /storage/
-.env
-.env.dev
 
 ###> lexik/jwt-authentication-bundle ###
 /config/jwt/*.pem
