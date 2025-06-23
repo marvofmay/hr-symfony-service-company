@@ -6,7 +6,9 @@ namespace App\Module\Company\Application\CommandHandler\Role;
 
 use App\Module\Company\Application\Command\Role\CreateRoleCommand;
 use App\Module\Company\Domain\Service\Role\RoleCreator;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler(bus: 'command.bus')]
 readonly class CreateRoleCommandHandler
 {
     public function __construct(private RoleCreator $roleCreator,)

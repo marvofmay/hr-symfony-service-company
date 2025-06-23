@@ -14,8 +14,10 @@ use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[AsMessageHandler(bus: 'command.bus')]
 readonly class ImportRolesCommandHandler
 {
     public function __construct(

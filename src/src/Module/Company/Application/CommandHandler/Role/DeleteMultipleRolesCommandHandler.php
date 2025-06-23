@@ -6,7 +6,9 @@ namespace App\Module\Company\Application\CommandHandler\Role;
 
 use App\Module\Company\Application\Command\Role\DeleteMultipleRolesCommand;
 use App\Module\Company\Domain\Service\Role\RoleMultipleDeleter;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
+#[AsMessageHandler(bus: 'command.bus')]
 readonly class DeleteMultipleRolesCommandHandler
 {
     public function __construct(private RoleMultipleDeleter $roleMultipleDeleter)

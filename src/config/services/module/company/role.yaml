@@ -2,34 +2,6 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-    #Role commands handlers
-    App\Module\Company\Application\CommandHandler\Role\CreateRoleCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Role\UpdateRoleCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Role\DeleteRoleCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Role\DeleteMultipleRolesCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Role\ImportRolesCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Role\CreateRoleAccessCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Role\CreateRoleAccessPermissionCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\QueryHandler\Role\ListRolesQueryHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'query.bus' }
-    App\Module\Company\Application\QueryHandler\Role\GetRoleByUUIDQueryHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'query.bus' }
 
     #Role events handlers:
     App\Module\Company\Application\EventSubscriber\Role\RoleEventLoggerSubscriber:
