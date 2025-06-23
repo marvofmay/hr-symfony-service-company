@@ -2,7 +2,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-    #Role handlers
+    #Role commands handlers
     App\Module\Company\Application\CommandHandler\Role\CreateRoleCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'command.bus' }
@@ -30,3 +30,8 @@ services:
     App\Module\Company\Application\QueryHandler\Role\GetRoleByUUIDQueryHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'query.bus' }
+
+    #Role events handlers:
+    App\Module\Company\Application\EventSubscriber\Role\RoleEventLoggerSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }

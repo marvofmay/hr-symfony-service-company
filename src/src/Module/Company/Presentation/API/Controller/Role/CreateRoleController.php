@@ -32,9 +32,7 @@ final class CreateRoleController extends AbstractController
 
             $createRoleAction->execute($createDTO);
 
-            return new JsonResponse(
-                ['message' => $this->translator->trans('role.add.success', [], 'roles')],
-                Response::HTTP_CREATED
+            return new JsonResponse(['message' => $this->translator->trans('role.add.success', [], 'roles')], Response::HTTP_CREATED
             );
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->translator->trans('role.add.error', [], 'roles'), $error->getMessage());

@@ -9,6 +9,7 @@ doctrine:
 
     profiling_collect_backtrace: '%kernel.debug%'
     use_savepoints: true
+
   orm:
     filters:
       soft_delete:
@@ -39,6 +40,7 @@ doctrine:
         dir: '%kernel.project_dir%/src/Module/System/Domain/Entity'
         prefix: 'App\Module\System\Domain\Entity'
         alias: System
+
 when@test:
   doctrine:
     dbal:
