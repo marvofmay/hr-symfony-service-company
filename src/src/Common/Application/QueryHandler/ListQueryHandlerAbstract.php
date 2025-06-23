@@ -10,7 +10,7 @@ use Doctrine\ORM\QueryBuilder;
 
 abstract class ListQueryHandlerAbstract
 {
-    public function __construct(protected readonly EntityManagerInterface $entityManager)
+    public function __construct(protected EntityManagerInterface $entityManager)
     {
     }
 

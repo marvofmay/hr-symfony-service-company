@@ -5,10 +5,12 @@ namespace App\Module\Company\Application\Facade;
 use App\Common\Domain\DTO\UploadFileDTO;
 use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Enum\FileKindEnum;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
 use App\Module\Company\Presentation\API\Action\Role\ImportRolesAction;
+use App\Module\System\Application\Event\LogEvent;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
 use App\Module\System\Domain\Enum\ImportKindEnum;
@@ -19,18 +21,15 @@ use App\Module\System\Presentation\API\Action\Import\AskImportAction;
 use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
 use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class ImportRolesFacade
 {
     public function __construct(
-        private LoggerInterface $logger,
-        private TranslatorInterface $translator,
         private EntityManagerInterface $entityManager,
         private UploadFileAction $uploadFileAction,
         private ImportRolesAction $importRolesAction,
@@ -42,6 +41,8 @@ final readonly class ImportRolesFacade
         private ValidatorInterface $validator,
         private Security $security,
         private ParameterBagInterface $params,
+        private MessageService $messageService,
+        private MessageBusInterface $eventBus,
     ) {
     }
 
@@ -56,10 +57,13 @@ final readonly class ImportRolesFacade
             $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
             $errors = $this->validator->validate($uploadFileDTO);
             if (count($errors) > 0) {
+                $message = $this->messageService->get('role.import.error', [], 'roles');
+                $this->eventBus->dispatch(new LogEvent($message));
+
                 return [
                     'success' => false,
                     'errors' => UploadFileErrorTransformer::map($errors),
-                    'message' => $this->translator->trans('role.import.error', [], 'roles'),
+                    'message' => $message,
                 ];
             }
 
@@ -73,23 +77,25 @@ final readonly class ImportRolesFacade
             $this->entityManager->commit();
 
             if (ImportStatusEnum::DONE === $import->getStatus()) {
+                $message = $this->messageService->get('role.import.success', [], 'roles');
                 return [
                     'success' => true,
-                    'message' => $this->translator->trans('role.import.success', [], 'roles'),
+                    'message' => $message,
                 ];
             }
 
             $importLogs = $this->askImportLogsAction->ask($import);
+            $message = $this->messageService->get('role.import.error', [], 'roles');
 
             return [
                 'success' => false,
                 'errors' => ImportLogErrorTransformer::map($importLogs),
-                'message' => $this->translator->trans('role.import.error', [], 'roles'),
+                'message' => $message,
             ];
         } catch (\Exception $error) {
             $this->entityManager->rollback();
-            $message = sprintf('%s. %s', $this->translator->trans('role.import.error', [], 'roles'), $this->translator->trans($error->getMessage()));
-            $this->logger->error($message);
+            $message = sprintf('%s. %s', $this->messageService->get('role.import.error', [], 'roles'), $this->messageService->get($error->getMessage()));
+            $this->eventBus->dispatch(new LogEvent($message));
 
             return [
                 'success' => false,

@@ -14,12 +14,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class CreateRoleController extends AbstractController
 {
-    public function __construct(private readonly MessageBusInterface $eventBus, private readonly MessageService $messageService)
+    public function __construct(private readonly EventDispatcherInterface $eventBus, private readonly MessageService $messageService)
     {
     }
 

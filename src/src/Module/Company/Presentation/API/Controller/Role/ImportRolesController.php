@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
+use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Facade\ImportRolesFacade;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
@@ -13,25 +14,22 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ImportRolesController extends AbstractController
 {
-    public function __construct(
-        private readonly ImportRolesFacade $importRolesFacade,
-        private readonly TranslatorInterface $translator,
-    ) {
+    public function __construct(private readonly ImportRolesFacade $importRolesFacade, private readonly MessageService $messageService,)
+    {
     }
 
     #[Route('/api/roles/import', name: 'import', methods: ['POST'])]
     public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
         if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::ROLE)) {
-            return new JsonResponse(['message' => $this->translator->trans('accessDenied', [], 'messages')], Response::HTTP_FORBIDDEN);
+            return new JsonResponse(['message' => $this->messageService->get('accessDenied')], Response::HTTP_FORBIDDEN);
         }
 
         if (!$file) {
-            return new JsonResponse(['message' => $this->translator->trans('role.import.file.required', [], 'roles')], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse(['message' => $this->messageService->get('role.import.file.required', [], 'roles')], Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $result = $this->importRolesFacade->handle($file);

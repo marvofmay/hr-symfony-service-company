@@ -69,9 +69,17 @@ class Access
     #[ORM\OneToMany(targetEntity: RoleAccess::class, mappedBy: 'access', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $roleAccesses;
 
+    #[ORM\OneToMany(
+        targetEntity: RoleAccessPermission::class,
+        mappedBy: 'access',
+        orphanRemoval: true
+    )]
+    private Collection $accessPermissions;
+
     public function __construct()
     {
         $this->roleAccesses = new ArrayCollection();
+        $this->accessPermissions = new ArrayCollection();
     }
 
     public function getModule(): Module
@@ -117,5 +125,17 @@ class Access
     public function setActive(bool $active): void
     {
         $this->{self::COLUMN_ACTIVE} = $active;
+    }
+
+    public function getAccessPermissions(): Collection
+    {
+        return $this->accessPermissions;
+    }
+
+    public function getPermissions(): Collection
+    {
+        $permissions = $this->accessPermissions->map(fn(RoleAccessPermission $rap) => $rap->getPermission())->toArray();
+
+        return new ArrayCollection(array_unique($permissions, SORT_REGULAR));
     }
 }

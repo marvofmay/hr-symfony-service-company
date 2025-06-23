@@ -10,6 +10,8 @@ use App\Module\System\Domain\Entity\Permission;
 use App\Module\System\Domain\Entity\RoleAccessPermission;
 use App\Module\System\Domain\Interface\RoleAccessPermission\RoleAccessPermissionInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class RoleAccessPermissionRepository extends ServiceEntityRepository implements RoleAccessPermissionInterface
@@ -26,5 +28,10 @@ class RoleAccessPermissionRepository extends ServiceEntityRepository implements 
             RoleAccessPermission::RELATION_ACCESS => $access,
             RoleAccessPermission::RELATION_ROLE => $role,
         ]);
+    }
+
+    public function getRoleAccessAndPermission(Role $role): Collection
+    {
+        return new ArrayCollection($this->findBy([RoleAccessPermission::RELATION_ROLE => $role,]));
     }
 }

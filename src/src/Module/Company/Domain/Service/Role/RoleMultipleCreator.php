@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Role;
 
+use App\Module\Company\Application\Event\Role\RoleImportedEvent;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class RoleMultipleCreator
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository)
+    public function __construct(private RoleWriterInterface $roleWriterRepository,  private EventDispatcherInterface $eventBus,)
     {
     }
 
@@ -26,5 +28,7 @@ readonly class RoleMultipleCreator
         }
 
         $this->roleWriterRepository->saveRolesInDB($roles);
+
+        $this->eventBus->dispatch(new RoleImportedEvent($roles));
     }
 }
