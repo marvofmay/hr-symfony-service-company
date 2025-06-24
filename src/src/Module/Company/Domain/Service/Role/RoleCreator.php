@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class RoleCreator
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventBus,)
+    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventBus)
     {
     }
 

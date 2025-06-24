@@ -9,7 +9,7 @@ use App\Module\Company\Application\Command\Role\ImportRolesCommand;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
 use App\Module\Company\Domain\Service\Role\RoleMultipleCreator;
-use App\Module\System\Application\Event\LogEvent;
+use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
@@ -53,7 +53,7 @@ readonly class ImportRolesCommandHandler
 
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
-                    new LogEvent($this->messageService->get('role.import.error', [], 'roles').': '.$error)
+                    new LogFileEvent($this->messageService->get('role.import.error', [], 'roles').': '.$error)
                 );
             }
         }

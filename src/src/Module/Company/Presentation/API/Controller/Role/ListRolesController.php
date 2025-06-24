@@ -7,19 +7,19 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\DTO\Role\RolesQueryDTO;
 use App\Module\Company\Presentation\API\Action\Role\AskRolesAction;
-use App\Module\System\Application\Event\LogEvent;
+use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final class ListRolesController extends AbstractController
 {
-    public function __construct(private readonly EventDispatcherInterface $eventBus, private readonly MessageService $messageService)
+    public function __construct(private readonly MessageBusInterface $eventBus, private readonly MessageService $messageService)
     {
     }
 
@@ -34,7 +34,7 @@ final class ListRolesController extends AbstractController
             return new JsonResponse(['data' => $askRolesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->messageService->get('role.list.error', [], 'roles'), $error->getMessage());
-            $this->eventBus->dispatch(new LogEvent($message));
+            $this->eventBus->dispatch(new LogFileEvent($message));
 
             return new JsonResponse(['message' => $message], $error->getCode());
         }

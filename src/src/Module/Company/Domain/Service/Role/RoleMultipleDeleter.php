@@ -19,6 +19,8 @@ readonly class RoleMultipleDeleter
     {
         $this->roleWriterRepository->deleteMultipleRolesInDB($roles);
 
-        $this->eventBus->dispatch(new RoleMultipleDeletedEvent($roles));
+        $this->eventBus->dispatch(new RoleMultipleDeletedEvent(
+            $roles->map(fn($role) => $role->getUUID())->toArray()
+        ));
     }
 }

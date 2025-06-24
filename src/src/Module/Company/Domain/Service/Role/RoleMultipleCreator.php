@@ -29,6 +29,6 @@ readonly class RoleMultipleCreator
 
         $this->roleWriterRepository->saveRolesInDB($roles);
 
-        $this->eventBus->dispatch(new RoleImportedEvent($roles));
+        $this->eventBus->dispatch(new RoleImportedEvent($data));
     }
 }

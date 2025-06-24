@@ -24,6 +24,6 @@ final readonly class RoleAccessCreator
 
         $this->roleWriterRepository->saveRoleInDB($role);
 
-        $this->eventBus->dispatch(new RoleAssignedAccessesEvent($role));
+        $this->eventBus->dispatch(new RoleAssignedAccessesEvent($accesses->toArray()));
     }
 }

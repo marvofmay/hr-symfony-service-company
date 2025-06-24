@@ -8,7 +8,7 @@ use App\Common\Domain\Interface\DomainEventInterface;
 
 final readonly class RoleViewedEvent implements DomainEventInterface
 {
-    public function __construct(public array $data)
+    public function __construct(public string $uuid)
     {
     }
 }

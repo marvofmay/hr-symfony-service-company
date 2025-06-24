@@ -22,10 +22,9 @@ final readonly class GetRoleByUUIDQueryHandler
     {
         $role = $this->roleReaderRepository->getRoleByUUID($query->uuid);
         $transformer = new RoleDataTransformer();
-        $roleTransformed = $transformer->transformToArray($role);
 
-        $this->eventBus->dispatch(new RoleViewedEvent($roleTransformed));
+        $this->eventBus->dispatch(new RoleViewedEvent($query->uuid));
 
-        return $roleTransformed;
+        return $transformer->transformToArray($role);
     }
 }

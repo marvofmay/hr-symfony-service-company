@@ -2,17 +2,19 @@
 
 namespace App\Module\System\Application\EventHandler;
 
-use App\Module\System\Application\Event\LogEvent;
+use App\Module\System\Application\Event\LogFileEvent;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-final readonly class LogEventHandler
+#[AsMessageHandler(bus: 'event.bus')]
+final readonly class LogFileEventHandler
 {
     public function __construct(private LoggerInterface $logger)
     {
     }
 
-    public function __invoke(LogEvent $event, string $level = LogLevel::ERROR): void
+    public function __invoke(LogFileEvent $event, string $level = LogLevel::ERROR): void
     {
         match ($level) {
             LogLevel::DEBUG => $this->logger->debug($event->message),

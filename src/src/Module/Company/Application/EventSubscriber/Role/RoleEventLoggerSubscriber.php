@@ -48,45 +48,37 @@ final readonly class RoleEventLoggerSubscriber implements EventSubscriberInterfa
 
     public function onCreated(RoleCreatedEvent $event): void
     {
-        $this->log($event::class, Role::class, $this->serializer->serialize($event->role, 'json'));
+        $this->log($event::class, Role::class, $this->serializer->serialize($event->getData(), 'json'));
     }
 
     public function onUpdated(RoleUpdatedEvent $event): void
     {
-        $this->log($event::class, Role::class, $this->serializer->serialize($event->role, 'json'));
+        $this->log($event::class, Role::class, $this->serializer->serialize($event->getData(), 'json'));
     }
 
     public function onDeleted(RoleDeletedEvent $event): void
     {
-        $this->log($event::class, Role::class, $this->serializer->serialize($event->role, 'json'));
+        $this->log($event::class, Role::class, $this->serializer->serialize($event->uuid, 'json'));
     }
 
     public function onViewed(RoleViewedEvent $event): void
     {
-        $this->log($event::class, Role::class, $this->serializer->serialize($event->data, 'json'));
+        $this->log($event::class, Role::class, $this->serializer->serialize($event->uuid, 'json'));
     }
 
     public function onListed(RoleListedEvent $event): void
     {
-        $this->log($event::class, Role::class, $this->serializer->serialize($event->data, 'json'));
+        $this->log($event::class, Role::class, $this->serializer->serialize($event->query, 'json'));
     }
 
     public function onImported(RoleImportedEvent $event): void
     {
-        $this->log($event::class, Role::class, $this->serializer->serialize($event->roles, 'json'));
+        $this->log($event::class, Role::class, $this->serializer->serialize($event->data, 'json'));
     }
 
     public function onAssignedAccesses(RoleAssignedAccessesEvent $event): void
     {
-        $this->log(
-            $event::class,
-            Role::class,
-            $this->serializer->serialize($event->role, 'json', [
-                'circular_reference_handler' => function ($object) {
-                    return $object->getUUID();
-                },
-            ])
-        );
+        $this->log($event::class, Role::class, $this->serializer->serialize($event->data, 'json'));
     }
 
     public function onAssignedPermissions(RoleAssignedPermissionsEvent $event): void
@@ -96,7 +88,7 @@ final readonly class RoleEventLoggerSubscriber implements EventSubscriberInterfa
 
     public function onMultipleDeleted(RoleMultipleDeletedEvent $event): void
     {
-        $this->log($event::class, Role::class, $this->serializer->serialize($event->roles, 'json'));
+        $this->log($event::class, Role::class, $this->serializer->serialize($event->data, 'json'));
     }
 
 

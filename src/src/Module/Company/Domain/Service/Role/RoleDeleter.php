@@ -19,6 +19,6 @@ readonly class RoleDeleter
     {
         $this->roleWriterRepository->deleteRoleInDB($role);
 
-        $this->eventBus->dispatch(new RoleDeletedEvent($role));
+        $this->eventBus->dispatch(new RoleDeletedEvent($role->getUUID()->toString()));
     }
 }

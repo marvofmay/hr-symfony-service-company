@@ -24,7 +24,7 @@ final class ListRolesQueryHandler extends ListQueryHandlerAbstract
     public function __invoke(ListRolesQuery $query): array
     {
         $data = $this->handle($query);
-        $this->eventBus->dispatch(new RoleListedEvent($data));
+        $this->eventBus->dispatch(new RoleListedEvent($query));
 
         return $data;
     }

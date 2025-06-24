@@ -59,7 +59,7 @@ class EventLog
     #[Assert\NotNull]
     private ?Employee $employee;
 
-    public function __construct(string $event, string $entity, ?string $data = null, ?Employee $employee)
+    public function __construct(string $event, string $entity, ?string $data = null, ?Employee $employee = null)
     {
         $this->event = $event;
         $this->entity = $entity;

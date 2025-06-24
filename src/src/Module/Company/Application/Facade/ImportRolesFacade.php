@@ -10,7 +10,7 @@ use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Role\ImportDTO;
 use App\Module\Company\Presentation\API\Action\Role\ImportRolesAction;
-use App\Module\System\Application\Event\LogEvent;
+use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
 use App\Module\System\Domain\Enum\ImportKindEnum;
@@ -58,7 +58,7 @@ final readonly class ImportRolesFacade
             $errors = $this->validator->validate($uploadFileDTO);
             if (count($errors) > 0) {
                 $message = $this->messageService->get('role.import.error', [], 'roles');
-                $this->eventBus->dispatch(new LogEvent($message));
+                $this->eventBus->dispatch(new LogFileEvent($message));
 
                 return [
                     'success' => false,
@@ -95,7 +95,7 @@ final readonly class ImportRolesFacade
         } catch (\Exception $error) {
             $this->entityManager->rollback();
             $message = sprintf('%s. %s', $this->messageService->get('role.import.error', [], 'roles'), $this->messageService->get($error->getMessage()));
-            $this->eventBus->dispatch(new LogEvent($message));
+            $this->eventBus->dispatch(new LogFileEvent($message));
 
             return [
                 'success' => false,
