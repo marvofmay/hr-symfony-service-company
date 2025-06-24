@@ -2,8 +2,3 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-
-    #Role events handlers:
-    App\Module\Company\Application\EventSubscriber\Role\RoleEventLoggerSubscriber:
-        tags:
-            - { name: kernel.event_subscriber }

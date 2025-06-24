@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class IndustryCreator
 {
-    public function __construct(private IndustryWriterInterface $industryWriterRepository, private EventDispatcherInterface $eventBus)
+    public function __construct(private IndustryWriterInterface $industryWriterRepository, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -23,6 +23,6 @@ readonly class IndustryCreator
 
         $this->industryWriterRepository->saveIndustryInDB($industry);
 
-        $this->eventBus->dispatch(new IndustryCreatedEvent($industry));
+        $this->eventDispatcher->dispatch(new IndustryCreatedEvent($industry));
     }
 }

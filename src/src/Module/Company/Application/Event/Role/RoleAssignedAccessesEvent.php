@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Event\Role;
 
-use App\Common\Domain\Interface\DomainEventInterface;
 
-final readonly class RoleAssignedAccessesEvent implements DomainEventInterface
+final readonly class RoleAssignedAccessesEvent
 {
     public function __construct(public array $data,) {}
 }

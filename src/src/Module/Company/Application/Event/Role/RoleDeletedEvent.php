@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Event\Role;
 
-use App\Common\Domain\Interface\DomainEventInterface;
 
-final readonly class RoleDeletedEvent implements DomainEventInterface
+final readonly class RoleDeletedEvent
 {
     public function __construct(public string $uuid) {}
 }

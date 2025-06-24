@@ -33,3 +33,4 @@ services:
       - { name: 'messenger.message_handler', bus: 'command.bus' }
 
   Symfony\Component\Validator\Validator\ValidatorInterface: '@validator'
+
