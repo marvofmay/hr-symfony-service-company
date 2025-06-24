@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class RoleCreator
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventBus)
+    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -23,6 +23,6 @@ readonly class RoleCreator
 
         $this->roleWriterRepository->saveRoleInDB($role);
 
-        $this->eventBus->dispatch(new RoleCreatedEvent($role));
+        $this->eventDispatcher->dispatch(new RoleCreatedEvent($role));
     }
 }

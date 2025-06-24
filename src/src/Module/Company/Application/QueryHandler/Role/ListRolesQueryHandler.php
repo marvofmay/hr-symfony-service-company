@@ -16,7 +16,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListRolesQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(protected EntityManagerInterface $entityManager,private EventDispatcherInterface $eventBus,)
+    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
     {
         parent::__construct($entityManager);
     }
@@ -24,7 +24,7 @@ final class ListRolesQueryHandler extends ListQueryHandlerAbstract
     public function __invoke(ListRolesQuery $query): array
     {
         $data = $this->handle($query);
-        $this->eventBus->dispatch(new RoleListedEvent($query));
+        $this->eventDispatcher->dispatch(new RoleListedEvent($query));
 
         return $data;
     }

@@ -8,5 +8,5 @@ interface LoggableEventInterface
 {
     public function getEntityClass(): string;
 
-    public function getData(): mixed;
+    public function getData(): array;
 }

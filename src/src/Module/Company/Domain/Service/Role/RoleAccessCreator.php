@@ -12,7 +12,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final readonly class RoleAccessCreator
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventBus)
+    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -24,6 +24,6 @@ final readonly class RoleAccessCreator
 
         $this->roleWriterRepository->saveRoleInDB($role);
 
-        $this->eventBus->dispatch(new RoleAssignedAccessesEvent($accesses->toArray()));
+        $this->eventDispatcher->dispatch(new RoleAssignedAccessesEvent($accesses->toArray()));
     }
 }

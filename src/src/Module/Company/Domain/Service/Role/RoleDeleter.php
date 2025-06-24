@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class RoleDeleter
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventBus)
+    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -19,6 +19,6 @@ readonly class RoleDeleter
     {
         $this->roleWriterRepository->deleteRoleInDB($role);
 
-        $this->eventBus->dispatch(new RoleDeletedEvent($role->getUUID()->toString()));
+        $this->eventDispatcher->dispatch(new RoleDeletedEvent($role->getUUID()->toString()));
     }
 }

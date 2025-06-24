@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class IndustryCreator
 {
-    public function __construct(private IndustryWriterInterface $industryWriterRepository, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(private IndustryWriterInterface $industryWriterRepository, private EventDispatcherInterface $eventDispatcher,)
     {
     }
 

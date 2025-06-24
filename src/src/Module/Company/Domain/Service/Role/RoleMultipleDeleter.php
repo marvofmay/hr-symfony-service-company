@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class RoleMultipleDeleter
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository,  private EventDispatcherInterface $eventBus,)
+    public function __construct(private RoleWriterInterface $roleWriterRepository,  private EventDispatcherInterface $eventDispatcher,)
     {
     }
 
@@ -19,7 +19,7 @@ readonly class RoleMultipleDeleter
     {
         $this->roleWriterRepository->deleteMultipleRolesInDB($roles);
 
-        $this->eventBus->dispatch(new RoleMultipleDeletedEvent(
+        $this->eventDispatcher->dispatch(new RoleMultipleDeletedEvent(
             $roles->map(fn($role) => $role->getUUID())->toArray()
         ));
     }

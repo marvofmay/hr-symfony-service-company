@@ -14,7 +14,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final readonly class GetRoleByUUIDQueryHandler
 {
-    public function __construct(private RoleReaderInterface $roleReaderRepository, private EventDispatcherInterface $eventBus)
+    public function __construct(private RoleReaderInterface $roleReaderRepository, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -23,7 +23,7 @@ final readonly class GetRoleByUUIDQueryHandler
         $role = $this->roleReaderRepository->getRoleByUUID($query->uuid);
         $transformer = new RoleDataTransformer();
 
-        $this->eventBus->dispatch(new RoleViewedEvent($query->uuid));
+        $this->eventDispatcher->dispatch(new RoleViewedEvent($query->uuid));
 
         return $transformer->transformToArray($role);
     }

@@ -12,7 +12,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class RoleMultipleCreator
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository,  private EventDispatcherInterface $eventBus,)
+    public function __construct(private RoleWriterInterface $roleWriterRepository,  private EventDispatcherInterface $eventDispatcher,)
     {
     }
 
@@ -29,6 +29,6 @@ readonly class RoleMultipleCreator
 
         $this->roleWriterRepository->saveRolesInDB($roles);
 
-        $this->eventBus->dispatch(new RoleImportedEvent($data));
+        $this->eventDispatcher->dispatch(new RoleImportedEvent($data));
     }
 }

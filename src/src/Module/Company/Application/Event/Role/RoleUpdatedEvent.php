@@ -6,9 +6,9 @@ namespace App\Module\Company\Application\Event\Role;
 
 use App\Module\Company\Domain\Entity\Role;
 
-final readonly class RoleUpdatedEvent
+final class RoleUpdatedEvent extends RoleEvent
 {
-    public function __construct(public Role $role) {}
+    public function __construct(public readonly Role $role) {}
 
     public function getData(): array
     {

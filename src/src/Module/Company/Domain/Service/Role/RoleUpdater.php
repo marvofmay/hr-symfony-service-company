@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class RoleUpdater
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventBus)
+    public function __construct(private RoleWriterInterface $roleWriterRepository, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -23,6 +23,6 @@ readonly class RoleUpdater
 
         $this->roleWriterRepository->saveRoleInDB($role);
 
-        $this->eventBus->dispatch(new RoleUpdatedEvent($role));
+        $this->eventDispatcher->dispatch(new RoleUpdatedEvent($role));
     }
 }

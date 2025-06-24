@@ -5,17 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\Event\Role;
 
 use App\Module\Company\Domain\Entity\Role;
-use App\Module\System\Domain\Interface\EventLog\LoggableEventInterface;
 
-final readonly class RoleCreatedEvent implements LoggableEventInterface
+final class RoleCreatedEvent extends RoleEvent
 {
-    public function __construct(public Role $role)
+    public function __construct(public readonly Role $role)
     {
-    }
-
-    public function getEntityClass(): string
-    {
-        return Role::class;
     }
 
     public function getData(): array
