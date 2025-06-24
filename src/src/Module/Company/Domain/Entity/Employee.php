@@ -9,6 +9,7 @@ use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimestampableTrait;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Note\Domain\Entity\Note;
+use App\Module\System\Domain\Entity\EventLog;
 use App\Module\System\Domain\Entity\File;
 use App\Module\System\Domain\Entity\Import;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -60,6 +61,12 @@ class Employee
     public const string RELATION_POSITION = 'position';
     public const string RELATION_CONTRACT_TYPE = 'contractType';
     public const string RELATION_PARENT_EMPLOYEE = 'parentEmployee';
+    public const string RELATION_NOTES = 'notes';
+    public const string RELATION_CONTACTS = 'contacts';
+    public const string RELATION_FILES = 'files';
+    public const string RELATION_IMPORTS = 'imports';
+    public const string RELATION_EVENT_LOGS = 'eventLogs';
+    
     public const string ALIAS = 'employee';
 
     #[ORM\Id]
@@ -139,12 +146,16 @@ class Employee
     #[ORM\OneToMany(targetEntity: Import::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
     private Collection $imports;
 
+    #[ORM\OneToMany(targetEntity: EventLog::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
+    private Collection $eventLogs;    
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
         $this->contacts = new ArrayCollection();
         $this->imports = new ArrayCollection();
         $this->files = new ArrayCollection();
+        $this->eventLogs = new ArrayCollection();
     }
 
     public function getUUID(): UuidInterface

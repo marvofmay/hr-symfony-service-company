@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Entity;
 
 use App\Common\Domain\Trait\TimestampableTrait;
+use App\Module\Company\Domain\Entity\Employee;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -47,16 +48,22 @@ class EventLog
     }
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $data = null {
+    private ?string $data {
         get {
             return $this->data;
         }
     }
 
-    public function __construct(string $event, string $entity, ?string $data = null)
+    #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'eventLogs')]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    #[Assert\NotNull]
+    private ?Employee $employee;
+
+    public function __construct(string $event, string $entity, ?string $data = null, ?Employee $employee)
     {
         $this->event = $event;
         $this->entity = $entity;
         $this->data = $data;
+        $this->employee = $employee;
     }
 }
