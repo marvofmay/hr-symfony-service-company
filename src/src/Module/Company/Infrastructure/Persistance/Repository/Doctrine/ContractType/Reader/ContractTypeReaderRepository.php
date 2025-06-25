@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\ContractType\Reader;
 
+use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContractTypeReaderRepository extends ServiceEntityRepository implements ContractTypeReaderInterface
@@ -19,7 +23,41 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
 
     public function getContractTypeByUUID(string $uuid): ?ContractType
     {
-        return $this->findOneBy(['uuid' => $uuid]);
+        $contractType = $this->findOneBy([ContractType::COLUMN_UUID => $uuid]);
+        if (null === $contractType) {
+            throw new \Exception($this->translator->trans('contractType.uuid.notExists', [':uuid' => $uuid], 'contract_types'), Response::HTTP_NOT_FOUND);
+        }
+
+        return $contractType;
+    }
+
+    public function getContractTypesByUUID(array $selectedUUID): Collection
+    {
+        if (!$selectedUUID) {
+            return new ArrayCollection();
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(ContractType::ALIAS)
+            ->from(ContractType::class, ContractType::ALIAS)
+            ->where(ContractType::ALIAS . '.' . ContractType::ALIAS::COLUMN_UUID . ' IN (:uuids)')
+            ->setParameter('uuids', $selectedUUID);
+
+        $contractTypes = $qb->getQuery()->getResult();
+
+        $foundUUIDs = array_map(fn(ContractType $contractType) => $contractType->getUUID(), $contractTypes);
+        $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
+
+        if ($missingUUIDs) {
+            throw new NotFindByUUIDException(
+                sprintf(
+                    '%s : %s',
+                    $this->translator->trans('contractType.uuid.notFound', [], 'contract_types'),
+                    implode(', ', $missingUUIDs)
+                ));
+        }
+
+        return new ArrayCollection($contractTypes);
     }
 
     public function getContractTypeByName(string $name, ?string $uuid = null): ?ContractType
@@ -27,11 +65,11 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('ct')
             ->from(ContractType::class, 'ct')
-            ->where('ct.'.ContractType::COLUMN_NAME.' = :name')
+            ->where('ct.' . ContractType::COLUMN_NAME . ' = :name')
             ->setParameter('name', $name);
 
         if ($uuid) {
-            $qb->andWhere('ct.'.ContractType::COLUMN_UUID.' != :uuid')
+            $qb->andWhere('ct.' . ContractType::COLUMN_UUID . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 

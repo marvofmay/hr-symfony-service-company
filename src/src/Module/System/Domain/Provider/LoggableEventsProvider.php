@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Provider;
 
+use App\Module\Company\Application\Event\ContractType\ContractTypeCreatedEvent;
+use App\Module\Company\Application\Event\ContractType\ContractTypeDeletedEvent;
+use App\Module\Company\Application\Event\ContractType\ContractTypeImportedEvent;
+use App\Module\Company\Application\Event\ContractType\ContractTypeListedEvent;
+use App\Module\Company\Application\Event\ContractType\ContractTypeMultipleDeletedEvent;
+use App\Module\Company\Application\Event\ContractType\ContractTypeUpdatedEvent;
+use App\Module\Company\Application\Event\ContractType\ContractTypeViewedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryCreatedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryDeletedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryImportedEvent;
@@ -37,7 +44,19 @@ final class LoggableEventsProvider
 
     private static function getEventClasses(): array
     {
+        return array_merge(
+            self::getRoleEventClasses(),
+            self::getIndustryEventClasses(),
+            self::getPositionEventClasses(),
+            self::getContractTypeEventsClasses()
+        );
+    }
+
+    private static function getRoleEventClasses(): array
+    {
         return [
+            RoleAssignedAccessesEvent::class,
+            RoleAssignedPermissionsEvent::class,
             RoleCreatedEvent::class,
             RoleUpdatedEvent::class,
             RoleDeletedEvent::class,
@@ -45,8 +64,12 @@ final class LoggableEventsProvider
             RoleListedEvent::class,
             RoleMultipleDeletedEvent::class,
             RoleImportedEvent::class,
-            RoleAssignedAccessesEvent::class,
-            RoleAssignedPermissionsEvent::class,
+        ];
+    }
+
+    private static function getIndustryEventClasses(): array
+    {
+        return [
             IndustryCreatedEvent::class,
             IndustryUpdatedEvent::class,
             IndustryDeletedEvent::class,
@@ -54,6 +77,12 @@ final class LoggableEventsProvider
             IndustryListedEvent::class,
             IndustryMultipleDeletedEvent::class,
             IndustryImportedEvent::class,
+        ];
+    }
+
+    private static function getPositionEventClasses(): array
+    {
+        return [
             PositionCreatedEvent::class,
             PositionUpdatedEvent::class,
             PositionDeletedEvent::class,
@@ -61,6 +90,19 @@ final class LoggableEventsProvider
             PositionListedEvent::class,
             PositionMultipleDeletedEvent::class,
             PositionImportedEvent::class,
+        ];
+    }
+
+    public static function getContractTypeEventsClasses(): array
+    {
+        return [
+            ContractTypeCreatedEvent::class,
+            ContractTypeUpdatedEvent::class,
+            ContractTypeDeletedEvent::class,
+            ContractTypeViewedEvent::class,
+            ContractTypeListedEvent::class,
+            ContractTypeMultipleDeletedEvent::class,
+            ContractTypeImportedEvent::class,
         ];
     }
 }

@@ -6,7 +6,6 @@ namespace App\Module\Company\Application\QueryHandler\Role;
 
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\Role\RoleListedEvent;
-use App\Module\Company\Application\Event\Role\RoleMultipleDeletedEvent;
 use App\Module\Company\Application\Query\Role\ListRolesQuery;
 use App\Module\Company\Domain\Entity\Role;
 use Doctrine\ORM\EntityManagerInterface;

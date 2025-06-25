@@ -3,7 +3,7 @@ contractType:
     notFound: "Forma zatrudnienia o podanym UUID nie istnieje"
     notExists: "Forma zatrudnienia o podanym UUID nie istnieje :uuid"
   name:
-    alreadyExists: "Forma zatrudnienia istnieje"
+    alreadyExists: "Forma zatrudnienia o nazwie \":name\" już istnieje"
     required: "Nazwa formy zatrudnienia jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"

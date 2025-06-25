@@ -5,13 +5,25 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\QueryHandler\ContractType;
 
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
+use App\Module\Company\Application\Event\ContractType\ContractTypeListedEvent;
 use App\Module\Company\Application\Query\ContractType\ListContractTypesQuery;
 use App\Module\Company\Domain\Entity\ContractType;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Doctrine\ORM\EntityManagerInterface;
 
+#[AsMessageHandler(bus: 'query.bus')]
 class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
 {
+    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
+    {
+        parent::__construct($entityManager);
+    }
+
     public function __invoke(ListContractTypesQuery $query): array
     {
+        $this->eventDispatcher->dispatch(new ContractTypeListedEvent([$query]));
+
         return $this->handle($query);
     }
 
@@ -22,7 +34,7 @@ class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
 
     protected function getAlias(): string
     {
-        return 'contractType';
+        return ContractType::ALIAS;
     }
 
     protected function getDefaultOrderBy(): string
@@ -48,20 +60,6 @@ class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
             ContractType::COLUMN_NAME,
             ContractType::COLUMN_DESCRIPTION,
         ];
-    }
-
-    protected function transformIncludes(array $items, array $includes): array
-    {
-        $data = array_map(fn ($role) => $role->toArray(), $items);
-        foreach (ContractType::getRelations() as $contractType) {
-            foreach ($data as $key => $role) {
-                if (!in_array($contractType, $includes) || empty($includes)) {
-                    unset($data[$key][$contractType]);
-                }
-            }
-        }
-
-        return $data;
     }
 
     protected function getRelations(): array

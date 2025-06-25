@@ -15,6 +15,7 @@ class ContractTypeDataTransformer
         $data = [
             ContractType::COLUMN_UUID => $contractType->getUUID()->toString(),
             ContractType::COLUMN_NAME => $contractType->getName(),
+            ContractType::COLUMN_ACTIVE => $contractType->getActive(),
             ContractType::COLUMN_DESCRIPTION => $contractType->getDescription(),
             ContractType::COLUMN_CREATED_AT => $contractType->getCreatedAt()?->format('Y-m-d H:i:s'),
             ContractType::COLUMN_UPDATED_AT => $contractType->getUpdatedAt()?->format('Y-m-d H:i:s'),
@@ -38,7 +39,7 @@ class ContractTypeDataTransformer
         };
     }
 
-    private function transformEmployees(Collection $employees): ?array
+    private function transformEmployees(?Collection $employees): ?array
     {
         if (null === $employees || $employees->isEmpty()) {
             return null;
@@ -49,7 +50,6 @@ class ContractTypeDataTransformer
                 Employee::COLUMN_UUID => $employee->getUUID()->toString(),
                 Employee::COLUMN_FIRST_NAME => $employee->getFirstName(),
                 Employee::COLUMN_LAST_NAME => $employee->getLastName(),
-                Employee::COLUMN_PESEL => $employee->getPESEL(),
             ],
             $employees->toArray()
         );

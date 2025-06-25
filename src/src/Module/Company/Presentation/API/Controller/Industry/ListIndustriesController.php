@@ -36,7 +36,7 @@ final class ListIndustriesController extends AbstractController
             $message = sprintf('%s. %s', $this->messageService->get('industry.list.error', [], 'industries'), $error->getMessage());
             $this->eventBus->dispatch(new LogFileEvent($message));
 
-            return new JsonResponse(['data' => [], 'message' => $this->messageService->get('industry.list.error', [], 'industries')], $error->getCode());
+            return new JsonResponse(['message' => $message], $error->getCode());
         }
     }
 }

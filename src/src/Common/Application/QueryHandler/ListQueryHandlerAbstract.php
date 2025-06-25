@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Common\Application\QueryHandler;
 
 use App\Common\Application\Factory\TransformerFactory;
+use App\Common\Application\Query\ListQueryAbstract;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
@@ -24,7 +25,7 @@ abstract class ListQueryHandlerAbstract
 
     abstract protected function getRelations(): array;
 
-    public function handle($query): array
+    public function handle(ListQueryAbstract $query): array
     {
         $queryBuilder = $this->createBaseQueryBuilder();
         $queryBuilder = $this->setFilters($queryBuilder, $query->getFilters());

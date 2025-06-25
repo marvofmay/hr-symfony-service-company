@@ -9,17 +9,11 @@ use App\Module\Company\Domain\Entity\ContractType;
 class UpdateContractTypeCommand
 {
     public function __construct(
-        private readonly string $uuid,
         private readonly string $name,
         private readonly ?string $description,
         private readonly ?bool $active,
         private readonly ContractType $contractType,
     ) {
-    }
-
-    public function getUUID(): string
-    {
-        return $this->uuid;
     }
 
     public function getName(): string
