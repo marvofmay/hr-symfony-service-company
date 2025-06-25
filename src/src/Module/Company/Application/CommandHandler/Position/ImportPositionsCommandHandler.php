@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Position;
 
 use App\Module\Company\Application\Command\Position\ImportPositionsCommand;
+use App\Module\Company\Application\Event\Position\PositionImportedEvent;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Service\Position\ImportPositionsFromXLSX;
@@ -15,6 +16,7 @@ use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 readonly class ImportPositionsCommandHandler
@@ -28,6 +30,7 @@ readonly class ImportPositionsCommandHandler
         private LoggerInterface $logger,
         private ImportLogMultipleCreator $importLogMultipleCreator,
         private UpdateImportAction $updateImportAction,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -44,6 +47,7 @@ readonly class ImportPositionsCommandHandler
         if (empty($errors)) {
             $this->positionMultipleCreator->multipleCreate($importer->import());
             $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
+            $this->eventDispatcher->dispatch(new PositionImportedEvent($importer->import()));
         } else {
             $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);

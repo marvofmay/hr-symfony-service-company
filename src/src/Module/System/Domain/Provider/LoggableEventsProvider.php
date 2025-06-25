@@ -11,7 +11,15 @@ use App\Module\Company\Application\Event\Industry\IndustryListedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryMultipleDeletedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryUpdatedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryViewedEvent;
+use App\Module\Company\Application\Event\Position\PositionCreatedEvent;
+use App\Module\Company\Application\Event\Position\PositionDeletedEvent;
+use App\Module\Company\Application\Event\Position\PositionImportedEvent;
+use App\Module\Company\Application\Event\Position\PositionListedEvent;
+use App\Module\Company\Application\Event\Position\PositionMultipleDeletedEvent;
+use App\Module\Company\Application\Event\Position\PositionUpdatedEvent;
+use App\Module\Company\Application\Event\Position\PositionViewedEvent;
 use App\Module\Company\Application\Event\Role\RoleAssignedAccessesEvent;
+use App\Module\Company\Application\Event\Role\RoleAssignedPermissionsEvent;
 use App\Module\Company\Application\Event\Role\RoleCreatedEvent;
 use App\Module\Company\Application\Event\Role\RoleDeletedEvent;
 use App\Module\Company\Application\Event\Role\RoleImportedEvent;
@@ -19,7 +27,6 @@ use App\Module\Company\Application\Event\Role\RoleListedEvent;
 use App\Module\Company\Application\Event\Role\RoleMultipleDeletedEvent;
 use App\Module\Company\Application\Event\Role\RoleUpdatedEvent;
 use App\Module\Company\Application\Event\Role\RoleViewedEvent;
-use App\Module\System\Domain\Interface\RoleAccessPermission\RoleAccessPermissionInterface;
 
 final class LoggableEventsProvider
 {
@@ -39,7 +46,7 @@ final class LoggableEventsProvider
             RoleMultipleDeletedEvent::class,
             RoleImportedEvent::class,
             RoleAssignedAccessesEvent::class,
-            RoleAccessPermissionInterface::class,
+            RoleAssignedPermissionsEvent::class,
             IndustryCreatedEvent::class,
             IndustryUpdatedEvent::class,
             IndustryDeletedEvent::class,
@@ -47,6 +54,13 @@ final class LoggableEventsProvider
             IndustryListedEvent::class,
             IndustryMultipleDeletedEvent::class,
             IndustryImportedEvent::class,
+            PositionCreatedEvent::class,
+            PositionUpdatedEvent::class,
+            PositionDeletedEvent::class,
+            PositionViewedEvent::class,
+            PositionListedEvent::class,
+            PositionMultipleDeletedEvent::class,
+            PositionImportedEvent::class,
         ];
     }
 }

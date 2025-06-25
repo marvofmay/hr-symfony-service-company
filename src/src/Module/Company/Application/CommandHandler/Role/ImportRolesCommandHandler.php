@@ -6,6 +6,7 @@ namespace App\Module\Company\Application\CommandHandler\Role;
 
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Command\Role\ImportRolesCommand;
+use App\Module\Company\Application\Event\Role\RoleImportedEvent;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
 use App\Module\Company\Domain\Service\Role\RoleMultipleCreator;
@@ -15,9 +16,9 @@ use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
-use Psr\Log\LogLevel;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
@@ -32,6 +33,7 @@ readonly class ImportRolesCommandHandler
         private UpdateImportAction $updateImportAction,
         private MessageBusInterface $eventBus,
         private MessageService $messageService,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -47,6 +49,8 @@ readonly class ImportRolesCommandHandler
         if (empty($errors)) {
             $this->roleMultipleCreator->multipleCreate($importer->import());
             $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
+
+            $this->eventDispatcher->dispatch(new RoleImportedEvent($importer->import()));
         } else {
             $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);

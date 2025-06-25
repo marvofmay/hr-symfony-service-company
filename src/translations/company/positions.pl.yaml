@@ -23,6 +23,8 @@ position:
   import:
     success: "Stanowiska zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - stanowiska nie zostały zaimportowane"
+    file:
+      required: "Plik importu stanowisk jest wymagany"
   view:
     error: "Wystapił błąd przy pobieraniu wybranego stanowiska"
   list:

@@ -7,6 +7,7 @@ namespace App\Module\Company\Application\QueryHandler\Role;
 use App\Module\Company\Application\Event\Role\RoleViewedEvent;
 use App\Module\Company\Application\Query\Role\GetRoleByUUIDQuery;
 use App\Module\Company\Application\Transformer\Role\RoleDataTransformer;
+use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -23,7 +24,9 @@ final readonly class GetRoleByUUIDQueryHandler
         $role = $this->roleReaderRepository->getRoleByUUID($query->uuid);
         $transformer = new RoleDataTransformer();
 
-        $this->eventDispatcher->dispatch(new RoleViewedEvent($query->uuid));
+        $this->eventDispatcher->dispatch(new RoleViewedEvent([
+            Role::COLUMN_UUID => $query->uuid
+        ]));
 
         return $transformer->transformToArray($role);
     }

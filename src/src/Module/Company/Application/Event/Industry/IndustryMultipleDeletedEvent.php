@@ -6,10 +6,4 @@ namespace App\Module\Company\Application\Event\Industry;
 
 final class IndustryMultipleDeletedEvent extends IndustryEvent
 {
-    public function __construct(public readonly array $data) {}
-
-    public function getData(): array
-    {
-        return $this->data;
-    }
 }

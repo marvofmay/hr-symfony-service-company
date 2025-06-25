@@ -5,13 +5,23 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\QueryHandler\Industry;
 
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
+use App\Module\Company\Application\Event\Industry\IndustryListedEvent;
 use App\Module\Company\Application\Query\Industry\ListIndustriesQuery;
 use App\Module\Company\Domain\Entity\Industry;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
 {
+    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
+    {
+        parent::__construct($entityManager);
+    }
+
     public function __invoke(ListIndustriesQuery $query): array
     {
+        $this->eventDispatcher->dispatch(new IndustryListedEvent([$query]));
+
         return $this->handle($query);
     }
 

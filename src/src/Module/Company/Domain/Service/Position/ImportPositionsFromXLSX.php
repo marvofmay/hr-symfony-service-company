@@ -39,7 +39,7 @@ class ImportPositionsFromXLSX extends XLSXIterator
         }
 
         if (!$this->isDepartmentWithUUIDExists($departmentUUID)) {
-            $errorMessages[] = $this->formatErrorMessage('department.uuid.notExists');
+            $errorMessages[] = $this->formatErrorMessage('department.uuid.notExists', [':uuid' => $departmentUUID], 'departments');
         }
 
         return $errorMessages;
@@ -65,14 +65,14 @@ class ImportPositionsFromXLSX extends XLSXIterator
 
     private function isDepartmentWithUUIDExists(string $departmentUUID): bool
     {
-        return $this->departmentReaderRepository->isDepartmentWithUUIDExists($departmentUUID);
+        return $this->departmentReaderRepository->isDepartmentExistsWithUUID($departmentUUID);
     }
 
-    private function formatErrorMessage(string $translationKey, array $parameters = []): string
+    private function formatErrorMessage(string $translationKey, array $parameters = [], string $domain = 'positions'): string
     {
         return sprintf(
             '%s - %s %d',
-            $this->translator->trans($translationKey, $parameters, 'positions'),
+            $this->translator->trans($translationKey, $parameters, $domain),
             $this->translator->trans('row'),
             count($this->errors) + 2
         );

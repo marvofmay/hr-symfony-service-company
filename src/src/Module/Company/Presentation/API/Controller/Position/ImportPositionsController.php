@@ -4,99 +4,41 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Position;
 
-use App\Common\Domain\DTO\UploadFileDTO;
-use App\Common\Domain\Enum\FileExtensionEnum;
-use App\Common\Domain\Enum\FileKindEnum;
-use App\Common\Domain\Service\UploadFile\UploadFile;
-use App\Common\Presentation\Action\UploadFileAction;
-use App\Module\Company\Domain\DTO\Position\ImportDTO;
-use App\Module\Company\Presentation\API\Action\Position\ImportPositionsAction;
-use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
-use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Company\Application\Facade\ImportPositionsFacade;
 use App\Module\System\Domain\Enum\AccessEnum;
-use App\Module\System\Domain\Enum\ImportKindEnum;
-use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use App\Module\System\Presentation\API\Action\File\AskFileAction;
-use App\Module\System\Presentation\API\Action\File\CreateFileAction;
-use App\Module\System\Presentation\API\Action\Import\AskImportAction;
-use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
-use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ImportPositionsController extends AbstractController
+final class ImportPositionsController extends AbstractController
 {
-    public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly TranslatorInterface $translator,
-        private readonly EntityManagerInterface $entityManager,
-    ) {
+    public function __construct(private readonly ImportPositionsFacade $importPositionsFacade, private readonly MessageService $messageService)
+    {
     }
 
     #[Route('/api/positions/import', name: 'import', methods: ['POST'])]
-    public function import(
-        #[MapUploadedFile] UploadedFile $file,
-        UploadFileAction $uploadFileAction,
-        ImportPositionsAction $importPositionsAction,
-        CreateFileAction $createFileAction,
-        AskFileAction $askFileAction,
-        CreateImportAction $createImportAction,
-        AskImportAction $askImportAction,
-        AskImportLogsAction $askImportLogsAction,
-        ValidatorInterface $validator,
-        Security $security,
-        ParameterBagInterface $params,
-    ) {
-        $this->entityManager->beginTransaction();
-        try {
-            if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::POSITION)) {
-                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
-            }
-            $employee = $security->getUser()->getEmployee();
-
-            $uploadFilePath = sprintf('%s/positions', $params->get('upload_file_path'));
-            $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
-
-            $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
-            $errors = $validator->validate($uploadFileDTO);
-            if (count($errors) > 0) {
-                return new JsonResponse(['message' => $this->translator->trans('position.import.error', [], 'positions'), 'errors' => UploadFileErrorTransformer::map($errors)], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-            $uploadFileAction->execute($uploadFileDTO);
-            $createFileAction->execute($fileName, $uploadFilePath, $employee);
-            $file = $askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
-            $createImportAction->execute(ImportKindEnum::IMPORT_POSITIONS, ImportStatusEnum::PENDING, $file, $employee);
-            $import = $askImportAction->ask($file);
-            $importPositionsAction->execute(new ImportDTO($import->getUUID()->toString()));
-
-            $this->entityManager->commit();
-
-            if (ImportStatusEnum::DONE === $import->getStatus()) {
-                return new JsonResponse(['message' => $this->translator->trans('position.import.success', [], 'positions'), 'errors' => []], Response::HTTP_CREATED);
-            } else {
-                $importLogs = $askImportLogsAction->ask($import);
-                $errors = ImportLogErrorTransformer::map($importLogs);
-
-                return new JsonResponse(['message' => $this->translator->trans('position.import.error', [], 'positions'), 'errors' => $errors], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-        } catch (\Exception $error) {
-            $this->entityManager->rollback();
-            $message = sprintf('%s. %s', $this->translator->trans('position.import.error', [], 'positions'), $this->translator->trans($error->getMessage()));
-            $this->logger->error($message);
-
-            return new JsonResponse(['message' => $message, 'errors' => []], $error->getCode());
+    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
+    {
+        if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::POSITION)) {
+            throw new \Exception($this->messageService->get('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
         }
+
+        if (!$file) {
+            return new JsonResponse(['message' => $this->messageService->get('position.import.file.required', [], 'positions')], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $result = $this->importPositionsFacade->handle($file);
+
+        $responseData = ['message' => $result['message']];
+        if (!empty($result['errors'])) {
+            $responseData['errors'] = $result['errors'];
+        }
+
+        return new JsonResponse($responseData, $result['success'] ? Response::HTTP_CREATED : Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 }

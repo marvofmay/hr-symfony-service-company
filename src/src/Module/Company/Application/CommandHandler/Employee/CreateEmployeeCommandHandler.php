@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Employee\EmployeeCreator;
 
 readonly class CreateEmployeeCommandHandler
 {
-    public function __construct(private EmployeeCreator $employeeCreator)
+    public function __construct(private EmployeeCreator $employeeCreator,)
     {
     }
 
