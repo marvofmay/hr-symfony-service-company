@@ -58,7 +58,6 @@ final readonly class ImportRolesFacade
             $errors = $this->validator->validate($uploadFileDTO);
             if (count($errors) > 0) {
                 $message = $this->messageService->get('role.import.error', [], 'roles');
-                $this->eventBus->dispatch(new LogFileEvent($message));
 
                 return [
                     'success' => false,

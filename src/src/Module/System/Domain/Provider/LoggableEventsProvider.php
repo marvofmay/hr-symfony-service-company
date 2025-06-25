@@ -5,6 +5,12 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Provider;
 
 use App\Module\Company\Application\Event\Industry\IndustryCreatedEvent;
+use App\Module\Company\Application\Event\Industry\IndustryDeletedEvent;
+use App\Module\Company\Application\Event\Industry\IndustryImportedEvent;
+use App\Module\Company\Application\Event\Industry\IndustryListedEvent;
+use App\Module\Company\Application\Event\Industry\IndustryMultipleDeletedEvent;
+use App\Module\Company\Application\Event\Industry\IndustryUpdatedEvent;
+use App\Module\Company\Application\Event\Industry\IndustryViewedEvent;
 use App\Module\Company\Application\Event\Role\RoleAssignedAccessesEvent;
 use App\Module\Company\Application\Event\Role\RoleCreatedEvent;
 use App\Module\Company\Application\Event\Role\RoleDeletedEvent;
@@ -35,6 +41,12 @@ final class LoggableEventsProvider
             RoleAssignedAccessesEvent::class,
             RoleAccessPermissionInterface::class,
             IndustryCreatedEvent::class,
+            IndustryUpdatedEvent::class,
+            IndustryDeletedEvent::class,
+            IndustryViewedEvent::class,
+            IndustryListedEvent::class,
+            IndustryMultipleDeletedEvent::class,
+            IndustryImportedEvent::class,
         ];
     }
 }

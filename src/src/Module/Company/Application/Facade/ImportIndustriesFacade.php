@@ -5,10 +5,12 @@ namespace App\Module\Company\Application\Facade;
 use App\Common\Domain\DTO\UploadFileDTO;
 use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Enum\FileKindEnum;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Domain\DTO\Industry\ImportDTO;
 use App\Module\Company\Presentation\API\Action\Industry\ImportIndustriesAction;
+use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
 use App\Module\System\Domain\Enum\ImportKindEnum;
@@ -19,18 +21,15 @@ use App\Module\System\Presentation\API\Action\Import\AskImportAction;
 use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
 use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class ImportIndustriesFacade
 {
     public function __construct(
-        private LoggerInterface $logger,
-        private TranslatorInterface $translator,
         private EntityManagerInterface $entityManager,
         private UploadFileAction $uploadFileAction,
         private ImportIndustriesAction $importIndustriesAction,
@@ -42,6 +41,8 @@ final readonly class ImportIndustriesFacade
         private ValidatorInterface $validator,
         private Security $security,
         private ParameterBagInterface $params,
+        private MessageService $messageService,
+        private MessageBusInterface $eventBus,
     ) {
     }
 
@@ -59,7 +60,7 @@ final readonly class ImportIndustriesFacade
                 return [
                     'success' => false,
                     'errors' => UploadFileErrorTransformer::map($errors),
-                    'message' => $this->translator->trans('industry.import.error', [], 'industries'),
+                    'message' => $this->messageService->get('industry.import.error', [], 'industries'),
                 ];
             }
 
@@ -75,7 +76,7 @@ final readonly class ImportIndustriesFacade
             if (ImportStatusEnum::DONE === $import->getStatus()) {
                 return [
                     'success' => true,
-                    'message' => $this->translator->trans('industry.import.success', [], 'industries'),
+                    'message' => $this->messageService->get('industry.import.success', [], 'industries'),
                 ];
             }
 
@@ -84,12 +85,12 @@ final readonly class ImportIndustriesFacade
             return [
                 'success' => false,
                 'errors' => ImportLogErrorTransformer::map($importLogs),
-                'message' => $this->translator->trans('industry.import.error', [], 'industries'),
+                'message' => $this->messageService->get('industry.import.error', [], 'industries'),
             ];
         } catch (\Exception $error) {
             $this->entityManager->rollback();
-            $message = sprintf('%s. %s', $this->translator->trans('industry.import.error', [], 'industries'), $this->translator->trans($error->getMessage()));
-            $this->logger->error($message);
+            $message = sprintf('%s. %s', $this->messageService->get('industry.import.error', [], 'industries'), $this->messageService->get($error->getMessage()));
+            $this->eventBus->dispatch(new LogFileEvent($message));
 
             return [
                 'success' => false,

@@ -27,7 +27,7 @@ final class CreateIndustryController extends AbstractController
     {
         try {
             if (!$this->isGranted(PermissionEnum::CREATE, AccessEnum::INDUSTRY)) {
-                throw new \Exception($this->messageService->get('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->messageService->get('accessDenied'), Response::HTTP_FORBIDDEN);
             }
 
             $createIndustryAction->execute($createDTO);

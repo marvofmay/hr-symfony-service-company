@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\Event\Role;
+namespace App\Module\Company\Application\Event\Industry;
 
-final class RoleMultipleDeletedEvent extends RoleEvent
+final class IndustryMultipleDeletedEvent extends IndustryEvent
 {
     public function __construct(public readonly array $data) {}
 

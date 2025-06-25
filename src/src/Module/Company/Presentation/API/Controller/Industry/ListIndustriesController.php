@@ -4,21 +4,22 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Industry;
 
+use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\DTO\Industry\IndustriesQueryDTO;
 use App\Module\Company\Presentation\API\Action\Industry\AskIndustriesAction;
+use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ListIndustriesController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
+    public function __construct(private readonly MessageBusInterface $eventBus, private readonly MessageService $messageService)
     {
     }
 
@@ -27,14 +28,15 @@ final class ListIndustriesController extends AbstractController
     {
         try {
             if (!$this->isGranted(PermissionEnum::LIST, AccessEnum::INDUSTRY)) {
-                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->messageService->get('accessDenied'), Response::HTTP_FORBIDDEN);
             }
 
             return new JsonResponse(['data' => $askIndustriesAction->ask($queryDTO)], Response::HTTP_OK);
         } catch (\Exception $error) {
-            $this->logger->error(sprintf('%s. %s', $this->translator->trans('industry.list.error', [], 'industries'), $error->getMessage()));
+            $message = sprintf('%s. %s', $this->messageService->get('industry.list.error', [], 'industries'), $error->getMessage());
+            $this->eventBus->dispatch(new LogFileEvent($message));
 
-            return new JsonResponse(['data' => [], 'message' => $this->translator->trans('industry.list.error', [], 'industries')], $error->getCode());
+            return new JsonResponse(['data' => [], 'message' => $this->messageService->get('industry.list.error', [], 'industries')], $error->getCode());
         }
     }
 }
