@@ -41,6 +41,19 @@ jobs:
       - name: Create test DB
         run: docker compose exec -T service-company php bin/console doctrine:database:create --env=test
 
+      - name: Debug test database users
+        run: |
+          docker compose exec -T service-company \
+            php -r '
+              require "vendor/autoload.php";
+              $kernel = new \App\Kernel("test", true);
+              $kernel->boot();
+              $container = $kernel->getContainer();
+              $em = $container->get(\Doctrine\ORM\EntityManagerInterface::class);
+              $users = $em->getRepository(\App\Module\Company\Domain\Entity\User::class)->findAll();
+              foreach ($users as $u) echo $u->getEmail()."\n";
+            '
+
       - name: Run migrations on test database
         run: docker compose exec -T service-company php bin/console doctrine:migrations:migrate --env=test --no-interaction
 
