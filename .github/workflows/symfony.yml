@@ -30,9 +30,6 @@ jobs:
       - name: Install dependencies
         run: docker compose exec -T service-company composer install
 
-      - name: Create main DB
-        run: docker compose exec -T service-company php bin/console doctrine:database:create --env=dev
-
       - name: Run migrations on main DB
         run: docker compose exec -T service-company php bin/console doctrine:migrations:migrate --no-interaction --env=dev
 
