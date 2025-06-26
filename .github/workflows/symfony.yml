@@ -13,7 +13,7 @@ jobs:
 
     env:
       APP_ENV: test
-      JWT_PASSPHRASE: '8ee1dd6c3195b4c8cc145973953e9508edd99b32a40106759a3659adb0159e5e'
+      JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
       JWT_SECRET_KEY: ${{ secrets.JWT_PRIVATE_KEY }}
       JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC_KEY }}
       DATABASE_URL: "mysql://root:root_password@service-company-db:3306/service_company?serverVersion=8.0&charset=utf8mb4"
