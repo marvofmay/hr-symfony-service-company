@@ -52,9 +52,6 @@ abstract class FunctionalTestBase extends WebTestCase
 
     protected function getAuthenticatedClient(string $email = 'admin.hrapp@gmail.com', string $password = 'Admin123!'): KernelBrowser
     {
-        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
-        echo sprintf('User email: %s , user secret: %s', $user->getEmail(), $user->getPassword());
-
         $this->client->request('POST', '/api/login', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode([
@@ -66,8 +63,6 @@ abstract class FunctionalTestBase extends WebTestCase
         $data = json_decode($response->getContent(), true);
 
         $token = $data['token'] ?? null;
-
-        echo 'token: ' . $token;
 
         if (!$response->isSuccessful() || !$token) {
             throw new \RuntimeException('Nie udało się zalogować użytkownika testowego.');
