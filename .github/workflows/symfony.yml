@@ -12,43 +12,39 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      APP_ENV: test
-      DATABASE_URL: "mysql://root:root_password@service-company-db:3306/service_company_test?charset=utf8mb4"
+      APP_ENV: dev
+      DATABASE_URL: "mysql://root:root_password@service-company-db:3306/service_company?serverVersion=8.0&charset=utf8mb4"
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Show current dir
-        run: pwd
-
-      - name: List files
-        run: ls -la ../../
-
-      - name: Set up Docker
-        working-directory: ${{ github.workspace }}
+      - name: Start containers
         run: docker compose up -d --build
 
       - name: Wait for MySQL to be healthy
-        working-directory: ${{ github.workspace }}
         run: |
-          docker compose exec -T service-company-db-test \
+          docker compose exec -T service-company-db \
             bash -c 'until mysqladmin ping -h localhost --silent; do sleep 1; done'
 
-      - name: Install Composer dependencies
-        run: |
-          docker compose exec -T service-company composer install --no-interaction --prefer-dist --optimize-autoloader
+      - name: Install dependencies
+        run: docker compose exec -T service-company composer install
 
-      - name: Run Doctrine migrations
-        run: |
-          docker compose exec -T service-company php bin/console doctrine:migrations:migrate --no-interaction
+      - name: Create main DB
+        run: docker compose exec -T service-company php bin/console doctrine:database:create --env=dev
 
-      - name: Initialize system data
+      - name: Run migrations on main DB
+        run: docker compose exec -T service-company php bin/console doctrine:migrations:migrate --no-interaction --env=dev
+
+      - name: Initialize system data (dev DB)
         run: |
-          docker compose exec -T service-company php bin/console app:initialize-system-default-data
-          docker compose exec -T service-company php bin/console app:initialize-system-fake-data
+          docker compose exec -T service-company php bin/console app:initialize-system-default-data --env=dev
+          docker compose exec -T service-company php bin/console app:initialize-system-fake-data --env=dev
+
+      - name: Create test DB
+        run: docker compose exec -T service-company php bin/console doctrine:database:create --env=test
 
       - name: Run PHPUnit tests
-        run: |
-          docker compose exec -T service-company php bin/phpunit
+        run: docker compose exec -T service-company php bin/phpunit
+
 
