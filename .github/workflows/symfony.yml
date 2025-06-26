@@ -13,7 +13,7 @@ jobs:
 
     env:
       APP_ENV: test
-      DATABASE_URL: "mysql://root:root_password@service-company-db-test:3306/service_company?charset=utf8mb4"
+      DATABASE_URL: "mysql://root:root_password@service-company-db:3306/service_company_test?charset=utf8mb4"
 
     steps:
       - name: Checkout repo
