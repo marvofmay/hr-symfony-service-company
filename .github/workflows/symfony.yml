@@ -35,6 +35,7 @@ jobs:
 
       - name: Write JWT keys
         run: |
+          JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
           echo "${{ secrets.JWT_PRIVATE_KEY }}" > config/jwt/private.pem
           echo "${{ secrets.JWT_PUBLIC_KEY }}" > config/jwt/public.pem
           chmod 600 config/jwt/private.pem config/jwt/public.pem        
