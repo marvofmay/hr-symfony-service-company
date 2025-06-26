@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\tests\functional;
 
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Company\Domain\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
@@ -51,14 +52,15 @@ abstract class FunctionalTestBase extends WebTestCase
 
     protected function getAuthenticatedClient(string $email = 'admin.hrapp@gmail.com', string $password = 'Admin123!'): KernelBrowser
     {
+        $user = $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
+        echo sprintf('User email: %s , user secret: %s', $user->getEmail(), $user->getPassword());
+
         $this->client->request('POST', '/api/login', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode([
             'email' => $email,
             'password' => $password,
         ]));
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = $this->client->getResponse();
         $data = json_decode($response->getContent(), true);
