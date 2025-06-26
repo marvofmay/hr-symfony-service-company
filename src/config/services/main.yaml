@@ -3,9 +3,9 @@ services:
     autowire: true
     autoconfigure: true
 
-  App\Module\Company\Domain\Entity\User:
-    arguments:
-      $userPasswordHasher: '@security.user_password_hasher'
+#  App\Module\Company\Domain\Entity\User:
+#    arguments:
+#      $userPasswordHasher: '@security.user_password_hasher'
 
   App\:
     resource: '../../src/'

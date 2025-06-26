@@ -15,7 +15,7 @@ class UniqueCompanyFullNameValidator extends ConstraintValidator
     {
     }
 
-    public function validate(mixed $value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof UniqueCompanyFullName) {
             throw new \InvalidArgumentException(sprintf('%s can only be used with UniqueCompanyFullName constraint.', __CLASS__));

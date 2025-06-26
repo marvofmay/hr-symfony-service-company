@@ -15,7 +15,7 @@ class UniqueIndustryNameValidator extends ConstraintValidator
     {
     }
 
-    public function validate(mixed $value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof UniqueIndustryName) {
             throw new \InvalidArgumentException(sprintf('%s can only be used with UniqueIndustryName constraint.', __CLASS__));

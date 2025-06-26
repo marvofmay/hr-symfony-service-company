@@ -23,6 +23,7 @@ use App\Module\Company\Domain\Interface\Employee\EmployeeWriterInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Interface\User\UserWriterInterface;
+use App\Module\Company\Domain\Service\User\UserFactory;
 use Doctrine\Common\Collections\ArrayCollection;
 
 class EmployeeCreator
@@ -30,22 +31,24 @@ class EmployeeCreator
     protected ArrayCollection $contacts;
 
     public function __construct(
-        protected Department $department,
-        protected Employee $employee,
-        protected ?Employee $parentEmployee,
-        protected Role $role,
-        protected Position $position,
-        protected ContractType $contractType,
-        protected User $user,
-        protected Address $address,
-        protected EmployeeWriterInterface $employeeWriterRepository,
-        protected DepartmentReaderInterface $departmentReaderRepository,
-        protected EmployeeReaderInterface $employeeReaderRepository,
+        protected Department                  $department,
+        protected Employee                    $employee,
+        protected ?Employee                   $parentEmployee,
+        protected Role                        $role,
+        protected Position                    $position,
+        protected ContractType                $contractType,
+        protected User                        $user,
+        protected Address                     $address,
+        protected EmployeeWriterInterface     $employeeWriterRepository,
+        protected DepartmentReaderInterface   $departmentReaderRepository,
+        protected EmployeeReaderInterface     $employeeReaderRepository,
         protected ContractTypeReaderInterface $contractTypeReaderRepository,
-        protected PositionReaderInterface $positionReaderRepository,
-        protected RoleReaderInterface $roleReaderRepository,
-        protected UserWriterInterface $userWriterRepository,
-    ) {
+        protected PositionReaderInterface     $positionReaderRepository,
+        protected RoleReaderInterface         $roleReaderRepository,
+        protected UserWriterInterface         $userWriterRepository,
+        protected UserFactory                 $userFactory,
+    )
+    {
         $this->contacts = new ArrayCollection();
     }
 
@@ -64,7 +67,7 @@ class EmployeeCreator
         $this->setParentEmployee($command->parentEmployeeUUID);
         $this->setAddress($command->address);
         $this->setContacts($command->phones);
-        $this->setUser($command->email, $command->firstName);
+        $this->setUser($command->email);
 
         $this->setEmployeeMainData($command);
         $this->setEmployeeRelations();
@@ -137,8 +140,8 @@ class EmployeeCreator
     protected function setContacts(array $phones, array $emails = [], array $websites = []): void
     {
         $dataSets = [
-            ContactTypeEnum::PHONE->value => $phones,
-            ContactTypeEnum::EMAIL->value => $emails,
+            ContactTypeEnum::PHONE->value   => $phones,
+            ContactTypeEnum::EMAIL->value   => $emails,
             ContactTypeEnum::WEBSITE->value => $websites,
         ];
 
@@ -162,12 +165,9 @@ class EmployeeCreator
         $this->address->setActive($addressDTO->active);
     }
 
-    protected function setUser(string $email, string $firstName): void
+    protected function setUser(string $email): void
     {
-        $password = sprintf('%s-%s', $email, $firstName);
-        if (null === $this->employee->getUser()) {
-            $this->user->setEmail($email);
-            $this->user->setPassword($password);
-        }
+        $user = $this->userFactory->create($email, $email);
+        $this->user = $user;
     }
 }

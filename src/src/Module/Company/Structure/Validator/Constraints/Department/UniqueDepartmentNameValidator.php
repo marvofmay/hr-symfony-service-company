@@ -15,7 +15,7 @@ class UniqueDepartmentNameValidator extends ConstraintValidator
     {
     }
 
-    public function validate(mixed $value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof UniqueDepartmentName) {
             throw new \InvalidArgumentException(sprintf('%s can only be used with UniqueDepartmentName constraint.', __CLASS__));

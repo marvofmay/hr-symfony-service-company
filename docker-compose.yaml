@@ -3,8 +3,6 @@ version: '3.8'
 volumes:
   mysql-data-service-company:
     driver: local
-  mysql-data-service-company-test:
-    driver: local
   redis-data:
 
 services:
@@ -23,8 +21,6 @@ services:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
     depends_on:
       service-company-db:
-        condition: service_healthy
-      service-company-db-test:
         condition: service_healthy
       rabbitmq:
         condition: service_started
@@ -48,25 +44,6 @@ services:
       timeout: 5s
       retries: 10
 
-  service-company-db-test:
-    container_name: service-company-db-test
-    image: mysql
-    restart: always
-    ports:
-      - "3307:3306"
-    environment:
-      MYSQL_ROOT_PASSWORD: root_password
-      MYSQL_DATABASE: service_company
-      MYSQL_USER: user_test
-      MYSQL_PASSWORD: password_test
-      MYSQL_ROOT_HOST: "%"
-    volumes:
-      - mysql-data-service-company-test:/var/lib/mysql
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      timeout: 5s
-      retries: 10
-
   phpmyadmin-company:
     image: phpmyadmin/phpmyadmin
     container_name: phpmyadmin-company
@@ -75,15 +52,6 @@ services:
       - "8081:80"
     environment:
       PMA_HOST: service-company-db
-
-  phpmyadmin-company-test:
-    image: phpmyadmin/phpmyadmin
-    container_name: phpmyadmin-company-test
-    restart: always
-    ports:
-      - "8082:80"
-    environment:
-      PMA_HOST: service-company-db-test
 
   rabbitmq:
     image: rabbitmq:management

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\Company\Domain\Entity\User;
+use App\Module\Company\Domain\Service\User\UserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -14,15 +15,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:add-record-to-user-table')]
 class AddRecordToUserTableCommand extends Command
 {
-    private const DESCRIPTION = 'Fills the User table with default data';
-    private const HELP = 'This command allows you to populate the User table with default data.';
-    private const SUCCESS_MESSAGE = 'User table has been filled with data successfully!';
-    private const INFO_EXISTS = 'Default user already exists. No changes made.';
-    private const CHECKING_INFO = 'Checking if default user exists...';
-    private const DEFAULT_EMAIL = 'admin.hrapp@gmail.com';
-    private const DEFAULT_PASSWORD = 'Admin123!';
+    private const string DESCRIPTION      = 'Fills the User table with default data';
+    private const string HELP             = 'This command allows you to populate the User table with default data.';
+    private const string SUCCESS_MESSAGE  = 'User table has been filled with data successfully!';
+    private const string INFO_EXISTS      = 'Default user already exists. No changes made.';
+    private const string CHECKING_INFO    = 'Checking if default user exists...';
+    private const string DEFAULT_EMAIL    = 'admin.hrapp@gmail.com';
+    private const string DEFAULT_PASSWORD = 'Admin123!';
 
-    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly User $user)
+    public function __construct(private readonly EntityManagerInterface $entityManager, private readonly UserFactory $userFactory)
     {
         parent::__construct();
     }
@@ -47,10 +48,9 @@ class AddRecordToUserTableCommand extends Command
             return Command::SUCCESS;
         }
 
-        $this->user->setEmail(self::DEFAULT_EMAIL);
-        $this->user->setPassword(self::DEFAULT_PASSWORD);
+        $user = $this->userFactory->create(self::DEFAULT_EMAIL, self::DEFAULT_PASSWORD);
 
-        $this->entityManager->persist($this->user);
+        $this->entityManager->persist($user);
         $this->entityManager->flush();
 
         $output->writeln(sprintf('<info>%s</info>', self::SUCCESS_MESSAGE));

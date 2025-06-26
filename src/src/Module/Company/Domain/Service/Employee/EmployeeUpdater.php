@@ -24,30 +24,33 @@ use App\Module\Company\Domain\Interface\Employee\EmployeeWriterInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Interface\User\UserWriterInterface;
+use App\Module\Company\Domain\Service\User\UserFactory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class EmployeeUpdater extends EmployeeCreator
 {
     public function __construct(
-        protected Department $department,
-        protected Employee $employee,
-        protected ?Employee $parentEmployee,
-        protected Role $role,
-        protected Position $position,
-        protected ContractType $contractType,
-        protected User $user,
-        protected Address $address,
-        protected EmployeeWriterInterface $employeeWriterRepository,
-        protected DepartmentReaderInterface $departmentReaderRepository,
-        protected EmployeeReaderInterface $employeeReaderRepository,
+        protected Department                  $department,
+        protected Employee                    $employee,
+        protected ?Employee                   $parentEmployee,
+        protected Role                        $role,
+        protected Position                    $position,
+        protected ContractType                $contractType,
+        protected User                        $user,
+        protected Address                     $address,
+        protected EmployeeWriterInterface     $employeeWriterRepository,
+        protected DepartmentReaderInterface   $departmentReaderRepository,
+        protected EmployeeReaderInterface     $employeeReaderRepository,
         protected ContractTypeReaderInterface $contractTypeReaderRepository,
-        protected PositionReaderInterface $positionReaderRepository,
-        protected RoleReaderInterface $roleReaderRepository,
-        protected UserWriterInterface $userWriterRepository,
-        protected ContactWriterInterface $contactWriterRepository,
-        protected AddressWriterInterface $addressWriterRepository,
+        protected PositionReaderInterface     $positionReaderRepository,
+        protected RoleReaderInterface         $roleReaderRepository,
+        protected UserWriterInterface         $userWriterRepository,
+        protected ContactWriterInterface      $contactWriterRepository,
+        protected AddressWriterInterface      $addressWriterRepository,
         protected UserPasswordHasherInterface $userPasswordHasher,
-    ) {
+        protected UserFactory                 $userFactory,
+    )
+    {
         parent::__construct(
             $department,
             $employee,
@@ -64,6 +67,7 @@ class EmployeeUpdater extends EmployeeCreator
             $positionReaderRepository,
             $roleReaderRepository,
             $userWriterRepository,
+            $userFactory,
         );
     }
 
@@ -91,15 +95,10 @@ class EmployeeUpdater extends EmployeeCreator
         parent::setAddress($addressDTO);
     }
 
-    protected function setUser(string $email, string $firstName): void
+    protected function setUser(string $email): void
     {
-        $password = sprintf('%s-%s', $email, $firstName);
-
-        if (null !== $this->employee->getUser() && $this->employee->getUser()->getEmail() !== $email) {
-            $this->userWriterRepository->deleteUserInDB($this->employee->getUser(), User::HARD_DELETED_AT);
-            $this->user = new User($this->userPasswordHasher);
+        if (null !== $this->user && $this->user->getEmail() !== $email) {
             $this->user->setEmail($email);
-            $this->user->setPassword($password);
         }
     }
 }

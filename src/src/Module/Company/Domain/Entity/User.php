@@ -9,22 +9,16 @@ use App\Common\Domain\Trait\TimestampableTrait;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\UniqueConstraint;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
-#[ORM\Table(
-    name: 'user',
-    uniqueConstraints: [
-        new UniqueConstraint(name: 'unique_email', columns: ['email']),
-    ]
-)]
+#[ORM\Table(name: 'user')]
+#[ORM\UniqueConstraint(name: 'unique_email', columns: ['email'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class User implements PasswordAuthenticatedUserInterface, UserInterface
@@ -76,17 +70,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true)]
     private ?Employee $employee = null;
 
-    public function __construct(private ?UserPasswordHasherInterface $userPasswordHasher)
+    public function __construct()
     {
-    }
-
-    public function hashPassword(string $password): string
-    {
-        if (null === $this->userPasswordHasher) {
-            throw new \LogicException('Password hasher is not set.');
-        }
-
-        return $this->userPasswordHasher->hashPassword($this, $password);
     }
 
     public function getUUID(): UuidInterface
@@ -131,9 +116,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         $this->{self::COLUMN_EMAIL} = $email;
     }
 
-    public function setPassword(string $password): void
+    public function setPassword(string $hashedPassword): void
     {
-        $this->{self::COLUMN_PASSWORD} = $this->hashPassword($password);
+        $this->{self::COLUMN_PASSWORD} = $hashedPassword;
     }
 
     public function getSalt(): ?string

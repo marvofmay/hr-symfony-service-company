@@ -15,7 +15,7 @@ class UniqueRoleNameValidator extends ConstraintValidator
     {
     }
 
-    public function validate(mixed $value, Constraint $constraint)
+    public function validate(mixed $value, Constraint $constraint): void
     {
         if (!$constraint instanceof UniqueRoleName) {
             throw new \InvalidArgumentException(sprintf('%s can only be used with UniqueRoleName constraint.', __CLASS__));
