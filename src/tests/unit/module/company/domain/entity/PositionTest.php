@@ -1,6 +1,6 @@
 <?php
 
-namespace App\tests\unit\module\company\entity;
+namespace App\tests\unit\module\company\domain\entity;
 
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Position;

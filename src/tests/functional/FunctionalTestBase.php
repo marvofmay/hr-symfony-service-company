@@ -12,6 +12,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
+use Symfony\Component\HttpFoundation\Response;
 
 abstract class FunctionalTestBase extends WebTestCase
 {
@@ -54,7 +55,7 @@ abstract class FunctionalTestBase extends WebTestCase
         $users = $this->em->getRepository(User::class)->findAll();
 
         foreach ($users as $user) {
-            echo 'user email: ' . $user->getEmail() . PHP_EOL;
+            echo 'user email: ' . $user->getEmail() . ' --- user hashed password: ' . $user->getPassword() . PHP_EOL;
         }
 
         $this->client->request('POST', '/api/login', [], [], [
@@ -63,6 +64,8 @@ abstract class FunctionalTestBase extends WebTestCase
             'email' => $email,
             'password' => $password,
         ]));
+
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
 
         $response = $this->client->getResponse();
         $data = json_decode($response->getContent(), true);

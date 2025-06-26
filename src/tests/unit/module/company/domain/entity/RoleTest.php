@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\tests\unit\module\company\entity;
+namespace App\tests\unit\module\company\domain\entity;
 
 use App\Module\Company\Domain\Entity\Role;
 use PHPUnit\Framework\TestCase;
