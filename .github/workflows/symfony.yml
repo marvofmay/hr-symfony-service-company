@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
+      JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
       APP_ENV: dev
       DATABASE_URL: "mysql://root:root_password@service-company-db:3306/service_company?serverVersion=8.0&charset=utf8mb4"
 
@@ -35,7 +36,6 @@ jobs:
 
       - name: Write JWT keys
         run: |
-          JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
           echo "${{ secrets.JWT_PRIVATE_KEY }}" > config/jwt/private.pem
           echo "${{ secrets.JWT_PUBLIC_KEY }}" > config/jwt/public.pem
           chmod 600 config/jwt/private.pem config/jwt/public.pem        
