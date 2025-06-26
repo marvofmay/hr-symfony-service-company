@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      APP_ENV: dev
+      APP_ENV: test
       JWT_PASSPHRASE: ${{ secrets.JWT_PASSPHRASE }}
       JWT_SECRET_KEY: ${{ secrets.JWT_PRIVATE }}
       JWT_PUBLIC_KEY: ${{ secrets.JWT_PUBLIC }}
