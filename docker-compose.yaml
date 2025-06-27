@@ -25,7 +25,7 @@ services:
 
   service-company-db:
     container_name: service-company-db
-    image: mysql
+    image: mysql:9.3.0
     restart: always
     ports:
         - "3306:3306"
