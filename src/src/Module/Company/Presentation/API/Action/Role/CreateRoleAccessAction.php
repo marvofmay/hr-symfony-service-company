@@ -27,6 +27,7 @@ final readonly class CreateRoleAccessAction
         try {
             $role = $this->roleReaderRepository->getRoleByUUID($uuid);
             $accesses = $this->accessReaderRepository->getAccessesByUUID($createAccessDTO->accessUUID);
+
             $this->roleAccessValidator->isAccessesAlreadyAssignedToRole($role, $accesses);
 
             $this->commandBus->dispatch(new CreateRoleAccessCommand($role, $accesses));

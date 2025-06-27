@@ -2,7 +2,6 @@
 
 namespace App\tests\unit\module\company\domain\dto\role;
 
-
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\DTO\Role\CreateAccessDTO;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
@@ -11,7 +10,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CreateRoleAccessTest extends KernelTestCase
 {
     private ValidatorInterface $validator;
-    private MessageService $messageService;
+    private MessageService     $messageService;
 
     protected function setUp(): void
     {
@@ -48,8 +47,9 @@ class CreateRoleAccessTest extends KernelTestCase
         $this->assertSame($this->messageService->get('uuid.invalid', [], 'validators'), $violation->getMessage());
     }
 
-    public function testValidAccessUUIDsPassValidation(): void
+    public function testNotExistsAccessValidation(): void
     {
+
         $dto = new CreateAccessDTO();
         $dto->accessUUID = [
             '550e8400-e29b-41d4-a716-446655440000',
@@ -58,6 +58,6 @@ class CreateRoleAccessTest extends KernelTestCase
 
         $violations = $this->validator->validate($dto);
 
-        $this->assertCount(0, $violations);
+        $this->assertCount(2, $violations);
     }
 }
