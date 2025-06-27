@@ -7,7 +7,6 @@ namespace App\tests\unit\module\company\domain\dto\role;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\DTO\Role\UpdateDTO;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Symfony\Component\Validator\Validation;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UpdateRoleTest extends KernelTestCase

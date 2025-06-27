@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace App\tests\functional;
 
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Domain\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Tools\SchemaTool;
-use Symfony\Component\HttpFoundation\Response;
 
 abstract class FunctionalTestBase extends WebTestCase
 {
