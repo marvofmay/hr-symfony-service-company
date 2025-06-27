@@ -25,12 +25,12 @@ class CreateRoleTest extends KernelTestCase
     public function testValidDto(): void
     {
         $dto = new CreateDTO();
-        $dto->name = 'Rola testowa';
-        $dto->description = 'Opis';
+        $dto->name = 'Some role';
+        $dto->description = 'Des description ....';
 
         $errors = $this->validator->validate($dto);
 
-        $this->assertCount(0, $errors, 'DTO nie powinno mieć błędów walidacji.');
+        $this->assertCount(0, $errors, 'DTO should not has errors');
     }
 
     public function testNameIsTooShort(): void
