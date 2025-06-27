@@ -71,6 +71,6 @@ jobs:
         run: docker compose exec -T service-company php bin/console doctrine:migrations:migrate --env=test --no-interaction
 
       - name: Run PHPUnit tests
-        run: docker compose exec -T service-company php bin/phpunit
+        run: docker compose exec -T service-company php bin/phpunit --display-deprecations=never
 
 
