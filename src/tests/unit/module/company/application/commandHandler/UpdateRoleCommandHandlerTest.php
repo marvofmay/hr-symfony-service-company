@@ -8,7 +8,8 @@ use App\Module\Company\Application\Event\Role\RoleUpdatedEvent;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleUpdaterInterface;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Ramsey\Uuid\Uuid;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class UpdateRoleCommandHandlerTest extends TestCase
 {

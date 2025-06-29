@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Role;
 
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Interface\Role\RoleDeleterInterface;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 
-readonly class RoleDeleter
+final readonly class RoleDeleter implements RoleDeleterInterface
 {
     public function __construct(private RoleWriterInterface $roleWriterRepository,)
     {

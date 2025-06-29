@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\tests\unit\module\company\application\command;
+namespace App\tests\integration\module\company\application\command;
 
 use App\Module\Company\Application\Command\Role\CreateRoleCommand;
 use PHPUnit\Framework\TestCase;
