@@ -7,14 +7,14 @@ namespace App\Module\Company\Application\CommandHandler\Role;
 use App\Module\Company\Application\Command\Role\CreateRoleCommand;
 use App\Module\Company\Application\Event\Role\RoleCreatedEvent;
 use App\Module\Company\Domain\Entity\Role;
-use App\Module\Company\Domain\Service\Role\RoleCreator;
+use App\Module\Company\Domain\Interface\Role\RoleCreatorInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
 readonly class CreateRoleCommandHandler
 {
-    public function __construct(private RoleCreator $roleCreator, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(private RoleCreatorInterface $roleCreator, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
