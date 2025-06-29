@@ -1,6 +1,6 @@
 <?php
 
-namespace App\tests\functional\api\role;
+namespace App\tests\functional\api\module\company\role;
 
 use App\tests\functional\FunctionalTestBase;
 use Symfony\Component\HttpFoundation\Response;

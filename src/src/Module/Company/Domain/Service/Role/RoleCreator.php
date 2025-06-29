@@ -8,7 +8,7 @@ use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleCreatorInterface;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 
-readonly class RoleCreator implements RoleCreatorInterface
+final readonly class RoleCreator implements RoleCreatorInterface
 {
     public function __construct(private RoleWriterInterface $roleWriterRepository,)
     {

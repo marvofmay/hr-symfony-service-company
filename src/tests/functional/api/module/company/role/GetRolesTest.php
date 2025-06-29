@@ -1,6 +1,6 @@
 <?php
 
-namespace App\tests\functional\api\role;
+namespace App\tests\functional\api\module\company\role;
 
 use App\Module\System\Application\Console\DefaultData\Data\RoleEnum;
 use Symfony\Component\HttpFoundation\Response;
