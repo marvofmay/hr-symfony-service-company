@@ -24,31 +24,31 @@ class CompanyAggregate extends AbstractAggregateRoot
     private REGON $regon;
     private ?string $description = null;
     private bool $active = true;
-    public ?Address $address;
+    public Address $address;
 
     public static function create(
         string $fullName,
-        string $shortName,
-        string $description = null,
         string $nip,
         string $regon,
-        ?CompanyUUID $parentCompanyUUID = null,
         IndustryUUID $industryUUID,
         bool $active,
-        ?Address $address
+        Address $address,
+        ?string $shortName = null,
+        ?string $description = null,
+        ?CompanyUUID $parentCompanyUUID = null,
     ): self {
         $aggregate = new self();
         $aggregate->record(new CompanyCreatedEvent(
             CompanyUUID::generate(),
             $fullName,
-            $shortName,
-            $description,
             $nip,
             $regon,
-            $parentCompanyUUID,
             $industryUUID,
             $active,
-            $address
+            $address,
+            $shortName,
+            $description,
+            $parentCompanyUUID,
         ));
 
         return $aggregate;

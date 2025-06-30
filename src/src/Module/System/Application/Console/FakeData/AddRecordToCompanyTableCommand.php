@@ -13,6 +13,7 @@ use App\Module\System\Application\Console\FakeData\Data\Company as CompanyFakeDa
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Parameter;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -66,6 +67,7 @@ class AddRecordToCompanyTableCommand extends Command
         $industry = $this->entityManager->getRepository(Industry::class)->find($data['industryUUID']);
 
         $company = new Company();
+        $company->setUUID(Uuid::uuid4()->toString());
         $company->setFullName($data['fullName']);
         $company->setShortName($data['shortName']);
         $company->setNip($data['nip']);

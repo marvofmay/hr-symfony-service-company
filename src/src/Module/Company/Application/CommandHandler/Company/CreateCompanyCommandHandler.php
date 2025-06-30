@@ -30,14 +30,14 @@ readonly class CreateCompanyCommandHandler
     {
         $companyAggregate = CompanyAggregate::create(
             $command->fullName,
-            $command->shortName,
-            $command->description,
             $command->nip,
             $command->regon,
-            $command->parentCompanyUUID,
             IndustryUUID::fromString($command->industryUUID),
             $command->active,
             Address::fromDTO($command->address),
+            $command->shortName,
+            $command->description,
+            $command->parentCompanyUUID,
         );
 
         $events = $companyAggregate->pullEvents();

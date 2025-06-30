@@ -16,14 +16,14 @@ final readonly class CompanyCreatedEvent implements DomainEventInterface
     public function __construct(
         public CompanyUUID $uuid,
         public string $fullName,
-        public ?string $shortName = null,
-        public ?string $description = null,
         public string $nip,
         public string $regon,
-        public ?CompanyUUID $parentCompanyUUID = null,
         public IndustryUUID $industryUUID,
         public bool $active,
-        public ?Address $address,
+        public Address $address,
+        public ?string $shortName = null,
+        public ?string $description = null,
+        public ?CompanyUUID $parentCompanyUUID = null,
     ) {}
 
     public function getOccurredAt(): \DateTimeImmutable
