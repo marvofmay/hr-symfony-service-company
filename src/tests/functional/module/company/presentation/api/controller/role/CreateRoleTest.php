@@ -14,8 +14,8 @@ class CreateRoleTest extends FunctionalTestBase
         $this->client->request('POST', '/api/roles', [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode([
-            'name' => 'Rola xxx',
-            'description' => 'opis roli xxx',
+            'name' => 'Some role',
+            'description' => 'Some role description ...',
         ]));
 
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
