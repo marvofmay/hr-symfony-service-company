@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\tests\unit\module\company\domain\service\role;
 
 use App\Module\Company\Domain\Entity\Role;

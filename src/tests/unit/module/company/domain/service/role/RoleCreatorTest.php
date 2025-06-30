@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\tests\unit\module\company\domain\service\role;
 
 use App\Module\Company\Domain\Entity\Role;
@@ -11,7 +13,7 @@ class RoleCreatorTest extends TestCase
 {
     public function testItCreatesAndSavesRole(): void
     {
-        $name = 'Użytkownik';
+        $name = 'User';
         $description = $name . ' ...';
 
         $writer = $this->createMock(RoleWriterInterface::class);

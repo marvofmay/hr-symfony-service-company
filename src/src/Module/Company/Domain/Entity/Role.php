@@ -17,6 +17,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -72,6 +73,9 @@ class Role
 
     public function __construct()
     {
+        $this->uuid = Uuid::uuid4();
+        $this->createdAt = new \DateTime();
+
         $this->employees = new ArrayCollection();
         $this->roleAccesses = new ArrayCollection();
         $this->accessPermissions = new ArrayCollection();

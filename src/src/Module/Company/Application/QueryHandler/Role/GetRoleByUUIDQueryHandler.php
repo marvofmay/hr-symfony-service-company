@@ -24,9 +24,7 @@ final readonly class GetRoleByUUIDQueryHandler
         $role = $this->roleReaderRepository->getRoleByUUID($query->uuid);
         $transformer = new RoleDataTransformer();
 
-        $this->eventDispatcher->dispatch(new RoleViewedEvent([
-            Role::COLUMN_UUID => $query->uuid
-        ]));
+        $this->eventDispatcher->dispatch(new RoleViewedEvent([Role::COLUMN_UUID => $query->uuid]));
 
         return $transformer->transformToArray($role);
     }
