@@ -15,7 +15,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListRolesQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(public EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
     {
         parent::__construct($entityManager);
     }
@@ -27,22 +27,22 @@ final class ListRolesQueryHandler extends ListQueryHandlerAbstract
         return $this->handle($query);
     }
 
-    protected function getEntityClass(): string
+    public function getEntityClass(): string
     {
         return Role::class;
     }
 
-    protected function getAlias(): string
+    public function getAlias(): string
     {
         return Role::ALIAS;
     }
 
-    protected function getDefaultOrderBy(): string
+    public function getDefaultOrderBy(): string
     {
         return Role::COLUMN_CREATED_AT;
     }
 
-    protected function getAllowedFilters(): array
+    public function getAllowedFilters(): array
     {
         return [
             Role::COLUMN_NAME,
@@ -53,7 +53,7 @@ final class ListRolesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getPhraseSearchColumns(): array
+    public function getPhraseSearchColumns(): array
     {
         return [
             Role::COLUMN_NAME,
@@ -61,7 +61,7 @@ final class ListRolesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Role::getRelations();
     }

@@ -40,8 +40,8 @@ class RoleAccessPermissionCreatorTest extends TestCase
         $permissionReaderMock->expects($this->exactly(2))
             ->method('getPermissionByUUID')
             ->willReturnMap([
-                ['perm-uuid-1', $permissionObj1],
-                ['perm-uuid-2', $permissionObj2],
+                ['permission-uuid-1', $permissionObj1],
+                ['permission-uuid-2', $permissionObj2],
             ]);
 
         $roleWriterMock->expects($this->once())

@@ -7,30 +7,32 @@ namespace App\Module\Company\Application\QueryHandler\Employee;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Query\Employee\ListEmployeesQuery;
 use App\Module\Company\Domain\Entity\Employee;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
+#[AsMessageHandler(bus: 'query.bus')]
+final class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListEmployeesQuery $query): array
     {
         return $this->handle($query);
     }
 
-    protected function getEntityClass(): string
+    public function getEntityClass(): string
     {
         return Employee::class;
     }
 
-    protected function getAlias(): string
+    public function getAlias(): string
     {
         return 'employee';
     }
 
-    protected function getDefaultOrderBy(): string
+    public function getDefaultOrderBy(): string
     {
         return Employee::COLUMN_CREATED_AT;
     }
 
-    protected function getAllowedFilters(): array
+    public function getAllowedFilters(): array
     {
         return [
             Employee::COLUMN_FIRST_NAME,
@@ -42,7 +44,7 @@ class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getPhraseSearchColumns(): array
+    public function getPhraseSearchColumns(): array
     {
         return [
             Employee::COLUMN_FIRST_NAME,
@@ -50,7 +52,7 @@ class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function transformIncludes(array $items, array $includes): array
+    public function transformIncludes(array $items, array $includes): array
     {
         $data = array_map(fn ($employee) => $employee->toArray(), $items);
         foreach (Employee::getRelations() as $relation) {
@@ -64,7 +66,7 @@ class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
         return $data;
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Employee::getRelations();
     }

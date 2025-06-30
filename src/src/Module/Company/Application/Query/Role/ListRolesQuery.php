@@ -15,12 +15,12 @@ final class ListRolesQuery extends ListQueryAbstract
         parent::__construct($queryDTO);
     }
 
-    protected function getAttributes(): array
+    public function getAttributes(): array
     {
         return Role::getAttributes();
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Role::getRelations();
     }

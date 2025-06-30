@@ -7,30 +7,32 @@ namespace App\Module\Company\Application\QueryHandler\Department;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Query\Department\ListDepartmentsQuery;
 use App\Module\Company\Domain\Entity\Department;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class ListDepartmentsQueryHandler extends ListQueryHandlerAbstract
+#[AsMessageHandler(bus: 'query.bus')]
+final class ListDepartmentsQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListDepartmentsQuery $query): array
     {
         return $this->handle($query);
     }
 
-    protected function getEntityClass(): string
+    public function getEntityClass(): string
     {
         return Department::class;
     }
 
-    protected function getAlias(): string
+    public function getAlias(): string
     {
         return Department::ALIAS;
     }
 
-    protected function getDefaultOrderBy(): string
+    public function getDefaultOrderBy(): string
     {
         return Department::COLUMN_CREATED_AT;
     }
 
-    protected function getAllowedFilters(): array
+    public function getAllowedFilters(): array
     {
         return [
             Department::COLUMN_NAME,
@@ -42,7 +44,7 @@ class ListDepartmentsQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getPhraseSearchColumns(): array
+    public function getPhraseSearchColumns(): array
     {
         return [
             Department::COLUMN_NAME,
@@ -50,7 +52,7 @@ class ListDepartmentsQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Department::getRelations();
     }

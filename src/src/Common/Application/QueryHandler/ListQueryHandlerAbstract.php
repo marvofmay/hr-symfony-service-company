@@ -5,27 +5,28 @@ declare(strict_types=1);
 namespace App\Common\Application\QueryHandler;
 
 use App\Common\Application\Factory\TransformerFactory;
-use App\Common\Application\Query\ListQueryAbstract;
+use App\Common\Domain\Interface\ListQueryHandlerInterface;
+use App\Common\Domain\Interface\ListQueryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
-abstract class ListQueryHandlerAbstract
+abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
 {
     public function __construct(protected EntityManagerInterface $entityManager)
     {
     }
 
-    abstract protected function getEntityClass(): string;
+    abstract public function getEntityClass(): string;
 
-    abstract protected function getAlias(): string;
+    abstract public function getAlias(): string;
 
-    abstract protected function getDefaultOrderBy(): string;
+    abstract public function getDefaultOrderBy(): string;
 
-    abstract protected function getAllowedFilters(): array;
+    abstract public function getAllowedFilters(): array;
 
-    abstract protected function getRelations(): array;
+    abstract public function getRelations(): array;
 
-    public function handle(ListQueryAbstract $query): array
+    public function handle(ListQueryInterface $query): array
     {
         $queryBuilder = $this->createBaseQueryBuilder();
         $queryBuilder = $this->setFilters($queryBuilder, $query->getFilters());
@@ -57,14 +58,14 @@ abstract class ListQueryHandlerAbstract
         ];
     }
 
-    private function createBaseQueryBuilder(): QueryBuilder
+    public function createBaseQueryBuilder(): QueryBuilder
     {
         return $this->entityManager->getRepository($this->getEntityClass())->createQueryBuilder($this->getAlias());
     }
 
-    abstract protected function getPhraseSearchColumns(): array;
+    abstract public function getPhraseSearchColumns(): array;
 
-    private function setFilters(QueryBuilder $queryBuilder, array $filters): QueryBuilder
+    public function setFilters(QueryBuilder $queryBuilder, array $filters): QueryBuilder
     {
         $alias = $this->getAlias();
         $allowedFilters = $this->getAllowedFilters();
@@ -110,19 +111,19 @@ abstract class ListQueryHandlerAbstract
         return $queryBuilder;
     }
 
-    protected function getTransformer(): object
+    public function getTransformer(): object
     {
         return TransformerFactory::createForHandler(static::class);
     }
 
-    protected function transformIncludes(array $items, array $includes): array
+    public function transformIncludes(array $items, array $includes): array
     {
         $transformer = $this->getTransformer();
 
         return array_map(fn ($item) => $this->transformItem($transformer, $item, $includes), $items);
     }
 
-    private function transformItem($transformer, $item, array $includes): array
+    public function transformItem($transformer, $item, array $includes): array
     {
         return method_exists($transformer, 'transformToArray')
             ? $transformer->transformToArray($item, $includes)

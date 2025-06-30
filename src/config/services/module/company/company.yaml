@@ -18,6 +18,3 @@ services:
     App\Module\Company\Application\CommandHandler\Company\ImportCompaniesCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\QueryHandler\Company\ListCompaniesQueryHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'query.bus' } 

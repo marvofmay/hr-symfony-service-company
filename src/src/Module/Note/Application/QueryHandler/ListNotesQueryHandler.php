@@ -7,30 +7,32 @@ namespace App\Module\Note\Application\QueryHandler;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Note\Application\Query\ListNotesQuery;
 use App\Module\Note\Domain\Entity\Note;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class ListNotesQueryHandler extends ListQueryHandlerAbstract
+#[AsMessageHandler(bus: 'query.bus')]
+final class ListNotesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListNotesQuery $query): array
     {
         return $this->handle($query);
     }
 
-    protected function getEntityClass(): string
+    public function getEntityClass(): string
     {
         return Note::class;
     }
 
-    protected function getAlias(): string
+    public function getAlias(): string
     {
         return Note::ALIAS;
     }
 
-    protected function getDefaultOrderBy(): string
+    public function getDefaultOrderBy(): string
     {
         return Note::COLUMN_CREATED_AT;
     }
 
-    protected function getAllowedFilters(): array
+    public function getAllowedFilters(): array
     {
         return [
             Note::COLUMN_TITLE,
@@ -42,7 +44,7 @@ class ListNotesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getPhraseSearchColumns(): array
+    public function getPhraseSearchColumns(): array
     {
         return [
             Note::COLUMN_TITLE,
@@ -51,7 +53,7 @@ class ListNotesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Note::getRelations();
     }

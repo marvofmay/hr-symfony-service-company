@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace App\Common\Application\Query;
 
+use App\Common\Domain\Interface\ListQueryInterface;
 use App\Common\Domain\Interface\QueryDTOInterface;
 
-abstract class ListQueryAbstract
+abstract class ListQueryAbstract implements ListQueryInterface
 {
     protected int $limit;
     protected int $page;
@@ -45,9 +46,9 @@ abstract class ListQueryAbstract
         }
     }
 
-    abstract protected function getAttributes(): array;
+    abstract public function getAttributes(): array;
 
-    abstract protected function getRelations(): array;
+    abstract public function getRelations(): array;
 
     public function getLimit(): int
     {

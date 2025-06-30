@@ -8,19 +8,19 @@ use App\Common\Application\Query\ListQueryAbstract;
 use App\Common\Domain\Interface\QueryDTOInterface;
 use App\Module\Company\Domain\Entity\Company;
 
-class ListCompaniesQuery extends ListQueryAbstract
+final class ListCompaniesQuery extends ListQueryAbstract
 {
     public function __construct(protected QueryDTOInterface $queryDTO)
     {
         parent::__construct($queryDTO);
     }
 
-    protected function getAttributes(): array
+    public function getAttributes(): array
     {
         return Company::getAttributes();
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Company::getRelations();
     }

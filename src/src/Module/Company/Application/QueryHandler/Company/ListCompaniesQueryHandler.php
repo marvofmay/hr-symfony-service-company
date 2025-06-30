@@ -7,30 +7,32 @@ namespace App\Module\Company\Application\QueryHandler\Company;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Query\Company\ListCompaniesQuery;
 use App\Module\Company\Domain\Entity\Company;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class ListCompaniesQueryHandler extends ListQueryHandlerAbstract
+#[AsMessageHandler(bus: 'query.bus')]
+final class ListCompaniesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __invoke(ListCompaniesQuery $query): array
     {
         return $this->handle($query);
     }
 
-    protected function getEntityClass(): string
+    public function getEntityClass(): string
     {
         return Company::class;
     }
 
-    protected function getAlias(): string
+    public function getAlias(): string
     {
         return Company::ALIAS;
     }
 
-    protected function getDefaultOrderBy(): string
+    public function getDefaultOrderBy(): string
     {
         return Company::COLUMN_CREATED_AT;
     }
 
-    protected function getAllowedFilters(): array
+    public function getAllowedFilters(): array
     {
         return [
             Company::COLUMN_FULL_NAME,
@@ -45,7 +47,7 @@ class ListCompaniesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getPhraseSearchColumns(): array
+    public function getPhraseSearchColumns(): array
     {
         return [
             Company::COLUMN_FULL_NAME,
@@ -56,7 +58,7 @@ class ListCompaniesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Company::getRelations();
     }

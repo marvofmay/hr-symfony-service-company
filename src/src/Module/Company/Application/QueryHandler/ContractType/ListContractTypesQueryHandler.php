@@ -13,7 +13,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[AsMessageHandler(bus: 'query.bus')]
-class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
+final class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
     {
@@ -27,22 +27,22 @@ class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
         return $this->handle($query);
     }
 
-    protected function getEntityClass(): string
+    public function getEntityClass(): string
     {
         return ContractType::class;
     }
 
-    protected function getAlias(): string
+    public function getAlias(): string
     {
         return ContractType::ALIAS;
     }
 
-    protected function getDefaultOrderBy(): string
+    public function getDefaultOrderBy(): string
     {
         return ContractType::COLUMN_CREATED_AT;
     }
 
-    protected function getAllowedFilters(): array
+    public function getAllowedFilters(): array
     {
         return [
             ContractType::COLUMN_NAME,
@@ -54,7 +54,7 @@ class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getPhraseSearchColumns(): array
+    public function getPhraseSearchColumns(): array
     {
         return [
             ContractType::COLUMN_NAME,
@@ -62,7 +62,7 @@ class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return ContractType::getRelations();
     }

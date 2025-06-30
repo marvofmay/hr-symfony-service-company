@@ -9,8 +9,10 @@ use App\Module\Company\Application\Event\Position\PositionListedEvent;
 use App\Module\Company\Application\Query\Position\ListPositionsQuery;
 use App\Module\Company\Domain\Entity\Position;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+#[AsMessageHandler(bus: 'query.bus')]
 final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
 {
     public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
@@ -23,22 +25,22 @@ final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
         return $this->handle($query);
     }
 
-    protected function getEntityClass(): string
+    public function getEntityClass(): string
     {
         return Position::class;
     }
 
-    protected function getAlias(): string
+    public function getAlias(): string
     {
         return Position::ALIAS;
     }
 
-    protected function getDefaultOrderBy(): string
+    public function getDefaultOrderBy(): string
     {
         return Position::COLUMN_CREATED_AT;
     }
 
-    protected function getAllowedFilters(): array
+    public function getAllowedFilters(): array
     {
         return [
             Position::COLUMN_NAME,
@@ -49,7 +51,7 @@ final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getPhraseSearchColumns(): array
+    public function getPhraseSearchColumns(): array
     {
         return [
             Position::COLUMN_NAME,
@@ -57,7 +59,7 @@ final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Position::getRelations();
     }

@@ -15,12 +15,12 @@ final class ListPositionsQuery extends ListQueryAbstract
         parent::__construct($queryDTO);
     }
 
-    protected function getAttributes(): array
+    public function getAttributes(): array
     {
         return Position::getAttributes();
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Position::getRelations();
     }

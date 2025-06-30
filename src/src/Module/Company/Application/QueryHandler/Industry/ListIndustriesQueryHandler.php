@@ -9,9 +9,11 @@ use App\Module\Company\Application\Event\Industry\IndustryListedEvent;
 use App\Module\Company\Application\Query\Industry\ListIndustriesQuery;
 use App\Module\Company\Domain\Entity\Industry;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
+#[AsMessageHandler(bus: 'query.bus')]
+final class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
     {
@@ -25,22 +27,22 @@ class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
         return $this->handle($query);
     }
 
-    protected function getEntityClass(): string
+    public function getEntityClass(): string
     {
         return Industry::class;
     }
 
-    protected function getAlias(): string
+    public function getAlias(): string
     {
         return Industry::ALIAS;
     }
 
-    protected function getDefaultOrderBy(): string
+    public function getDefaultOrderBy(): string
     {
         return Industry::COLUMN_CREATED_AT;
     }
 
-    protected function getAllowedFilters(): array
+    public function getAllowedFilters(): array
     {
         return [
             Industry::COLUMN_NAME,
@@ -51,7 +53,7 @@ class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getPhraseSearchColumns(): array
+    public function getPhraseSearchColumns(): array
     {
         return [
             Industry::COLUMN_NAME,
@@ -59,7 +61,7 @@ class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
         ];
     }
 
-    protected function getRelations(): array
+    public function getRelations(): array
     {
         return Industry::getRelations();
     }
