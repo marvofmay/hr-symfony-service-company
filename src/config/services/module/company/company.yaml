@@ -18,8 +18,3 @@ services:
     App\Module\Company\Application\CommandHandler\Company\ImportCompaniesCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'command.bus' }
-
-#    #Listener
-#    App\Module\Company\Application\Projector\CompanyProjector:
-#        tags:
-#            - { name: kernel.event_listener, event: App\Module\Company\Domain\Event\Company\CompanyCreatedEvent, method: onCompanyCreated }

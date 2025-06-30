@@ -11,7 +11,6 @@ use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\IndustryUUID;
 use App\Module\Company\Domain\Entity\Company;
-use App\Module\Company\Domain\Service\Company\CompanyCreator;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

@@ -48,6 +48,7 @@ class CompanyCreator
 
     protected function setCompanyMainData(CompanyCreatedEvent $event): void
     {
+        $this->company->setUUID($event->uuid->toString());
         $this->company->setFullName($event->fullName);
         $this->company->setShortName($event->shortName);
         $this->company->setNIP($event->nip);
