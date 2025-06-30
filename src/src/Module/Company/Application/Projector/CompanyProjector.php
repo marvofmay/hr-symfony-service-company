@@ -14,7 +14,7 @@ final readonly class CompanyProjector
     {
     }
 
-
+    #[AsEventListener(event: CompanyCreatedEvent::class)]
     public function onCompanyCreated(CompanyCreatedEvent $event): void
     {
         $this->companyCreator->create($event);
