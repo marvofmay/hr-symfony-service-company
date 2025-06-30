@@ -4,14 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
-use App\Common\Domain\DTO\AddressDTO;
-use App\Common\Domain\Interface\CommandInterface;
-use App\Module\Company\Application\Command\Company\CreateCompanyCommand;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address as AddressValueObject;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
@@ -31,43 +30,43 @@ class CompanyCreator
         $this->contacts = new ArrayCollection();
     }
 
-    public function create(CreateCompanyCommand $command): void
+    public function create(CompanyCreatedEvent $event): void
     {
         $this->company = new Company();
-        $this->setCompany($command);
+        $this->setCompany($event);
 
         $this->companyWriterRepository->saveCompanyInDB($this->company);
     }
 
-    protected function setCompany(CommandInterface $command): void
+    protected function setCompany(CompanyCreatedEvent $event): void
     {
-        $this->setCompanyMainData($command);
-        $this->setAddress($command->address);
-        $this->setContacts($command->phones, $command->emails, $command->websites);
-        $this->setCompanyRelations($command);
+        $this->setCompanyMainData($event);
+        $this->setAddress($event->address);
+        //$this->setContacts($event->phones, $event->emails, $event->websites);
+        $this->setCompanyRelations($event);
     }
 
-    protected function setCompanyMainData(CommandInterface $command): void
+    protected function setCompanyMainData(CompanyCreatedEvent $event): void
     {
-        $this->company->setFullName($command->fullName);
-        $this->company->setShortName($command->shortName);
-        $this->company->setNIP($command->nip);
-        $this->company->setREGON($command->regon);
-        $this->company->setDescription($command->description);
-        $this->company->setActive($command->active);
+        $this->company->setFullName($event->fullName);
+        $this->company->setShortName($event->shortName);
+        $this->company->setNIP($event->nip);
+        $this->company->setREGON($event->regon);
+        $this->company->setDescription($event->description);
+        $this->company->setActive($event->active);
     }
 
-    protected function setCompanyRelations(CommandInterface $command): void
+    protected function setCompanyRelations(CompanyCreatedEvent $event): void
     {
-        if (null !== $command->industryUUID) {
-            $industry = $this->industryReaderRepository->getIndustryByUUID($command->industryUUID);
+        if (null !== $event->industryUUID) {
+            $industry = $this->industryReaderRepository->getIndustryByUUID($event->industryUUID->toString());
             if ($industry instanceof Industry) {
                 $this->company->setIndustry($industry);
             }
         }
 
-        if (null !== $command->parentCompanyUUID) {
-            $parentCompany = $this->companyReaderRepository->getCompanyByUUID($command->parentCompanyUUID);
+        if (null !== $event->parentCompanyUUID) {
+            $parentCompany = $this->companyReaderRepository->getCompanyByUUID($event->parentCompanyUUID->toString());
             if ($parentCompany instanceof Company) {
                 $this->company->setParentCompany($parentCompany);
             }
@@ -99,12 +98,12 @@ class CompanyCreator
         }
     }
 
-    protected function setAddress(AddressDTO $addressDTO): void
+    protected function setAddress(AddressValueObject $address): void
     {
-        $this->address->setStreet($addressDTO->street);
-        $this->address->setPostcode($addressDTO->postcode);
-        $this->address->setCity($addressDTO->city);
-        $this->address->setCountry($addressDTO->country);
-        $this->address->setActive($addressDTO->active);
+        $this->address->setStreet($address->getStreet());
+        $this->address->setPostcode($address->getPostcode());
+        $this->address->setCity($address->getCity());
+        $this->address->setCountry($address->getCountry());
+        $this->address->setActive($address->getActive());
     }
 }

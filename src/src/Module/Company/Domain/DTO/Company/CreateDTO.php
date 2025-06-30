@@ -49,14 +49,14 @@ class CreateDTO
     )]
     public ?string $industryUUID = null;
 
-    #[MinMaxLength(min: 10, max: 20, message: [
+    #[MinMaxLength(min: 10, max:10, message: [
         'tooShort' => 'company.nip.minimumLength',
         'tooLong' => 'company.nip.maximumLength',
         'domain' => 'companies',
     ])]
     public ?string $nip = null;
 
-    #[MinMaxLength(min: 14, max: 20, message: [
+    #[MinMaxLength(min: 9, max: 14, message: [
         'tooShort' => 'company.regon.minimumLength',
         'tooLong' => 'company.regon.maximumLength',
         'domain' => 'companies',

@@ -43,6 +43,12 @@ doctrine:
         dir: '%kernel.project_dir%/src/Module/System/Domain/Entity'
         prefix: 'App\Module\System\Domain\Entity'
         alias: System
+      common:
+        is_bundle: false
+        type: attribute
+        dir: '%kernel.project_dir%/src/Common/Domain/Entity'
+        prefix: 'App\Common\Domain\Entity'
+        alias: System
 
 when@test:
   doctrine:

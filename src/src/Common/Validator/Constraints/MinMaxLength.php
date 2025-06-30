@@ -7,13 +7,13 @@ namespace App\Common\Validator\Constraints;
 use Symfony\Component\Validator\Constraint;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD)]
-class ExpectedLength extends Constraint
+class MinMaxLength extends Constraint
 {
     public function __construct(
         public int $min,
         public int $max,
         public array $message = [
-            'expectedLength' => 'validation.expectedLength',
+            ':qty' => 'validation.minLength',
             'domain' => 'validators',
         ],
         ?array $groups = null,
