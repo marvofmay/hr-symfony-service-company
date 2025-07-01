@@ -8,9 +8,12 @@ use App\Common\Domain\Abstract\AbstractAggregateRoot;
 use App\Common\Domain\Interface\DomainEventInterface;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\IndustryUUID;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\NIP;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 
 class CompanyAggregate extends AbstractAggregateRoot
@@ -24,18 +27,24 @@ class CompanyAggregate extends AbstractAggregateRoot
     private REGON $regon;
     private ?string $description = null;
     private bool $active = true;
-    public Address $address;
+    private Address $address;
+    private Phones $phones;
+    private ?Emails $emails = null;
+    private ?Websites $websites = null;
 
     public static function create(
         string $fullName,
-        string $nip,
-        string $regon,
+        NIP $nip,
+        REGON $regon,
         IndustryUUID $industryUUID,
         bool $active,
         Address $address,
+        Phones $phones,
         ?string $shortName = null,
         ?string $description = null,
         ?CompanyUUID $parentCompanyUUID = null,
+        ?Emails $emails = null,
+        ?Websites $websites = null,
     ): self {
         $aggregate = new self();
         $aggregate->record(new CompanyCreatedEvent(
@@ -46,9 +55,12 @@ class CompanyAggregate extends AbstractAggregateRoot
             $industryUUID,
             $active,
             $address,
+            $phones,
             $shortName,
             $description,
             $parentCompanyUUID,
+            $emails,
+            $websites,
         ));
 
         return $aggregate;
@@ -61,12 +73,15 @@ class CompanyAggregate extends AbstractAggregateRoot
             $this->fullName = $event->fullName;
             $this->shortName = $event->shortName;
             $this->description = $event->description;
-            $this->nip = new NIP($event->nip);
-            $this->regon = new REGON($event->regon);
-            $this->parentCompanyUUID = $event->parentCompanyUUID ?? null;
+            $this->nip = $event->nip;
+            $this->regon = $event->regon;
+            $this->parentCompanyUUID = $event->parentCompanyUUID;
             $this->industryUUID = $event->industryUUID;
             $this->active = $event->active;
             $this->address = $event->address;
+            $this->phones = $event->phones;
+            $this->emails = $event->emails;
+            $this->websites = $event->websites;
         }
     }
 

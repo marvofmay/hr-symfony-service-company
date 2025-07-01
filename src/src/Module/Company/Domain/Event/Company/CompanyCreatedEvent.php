@@ -7,7 +7,12 @@ namespace App\Module\Company\Domain\Event\Company;
 use App\Common\Domain\Interface\DomainEventInterface;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\IndustryUUID;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\NIP;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 
 final readonly class CompanyCreatedEvent implements DomainEventInterface
 {
@@ -16,14 +21,17 @@ final readonly class CompanyCreatedEvent implements DomainEventInterface
     public function __construct(
         public CompanyUUID $uuid,
         public string $fullName,
-        public string $nip,
-        public string $regon,
+        public NIP $nip,
+        public REGON $regon,
         public IndustryUUID $industryUUID,
         public bool $active,
         public Address $address,
+        public Phones $phones,
         public ?string $shortName = null,
         public ?string $description = null,
         public ?CompanyUUID $parentCompanyUUID = null,
+        public ?Emails $emails = null,
+        public ?Websites $websites = null,
     ) {}
 
     public function getOccurredAt(): \DateTimeImmutable

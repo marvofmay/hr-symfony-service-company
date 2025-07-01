@@ -9,7 +9,13 @@ use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Company\CreateCompanyCommand;
 use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\IndustryUUID;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\NIP;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Entity\Company;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -30,14 +36,17 @@ readonly class CreateCompanyCommandHandler
     {
         $companyAggregate = CompanyAggregate::create(
             $command->fullName,
-            $command->nip,
-            $command->regon,
+            NIP::fromString($command->nip),
+            REGON::fromString($command->regon),
             IndustryUUID::fromString($command->industryUUID),
             $command->active,
             Address::fromDTO($command->address),
+            Phones::fromArray($command->phones),
             $command->shortName,
             $command->description,
-            $command->parentCompanyUUID,
+            $command->parentCompanyUUID ? CompanyUUID::fromString($command->parentCompanyUUID) : null,
+            $command->emails ? Emails::fromArray($command->emails) : null,
+            $command->websites ? Websites::fromArray($command->websites) : null,
         );
 
         $events = $companyAggregate->pullEvents();

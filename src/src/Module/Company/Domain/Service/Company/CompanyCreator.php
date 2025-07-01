@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Company;
 
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address as AddressValueObject;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
@@ -42,7 +45,7 @@ class CompanyCreator
     {
         $this->setCompanyMainData($event);
         $this->setAddress($event->address);
-        //$this->setContacts($event->phones, $event->emails, $event->websites);
+        $this->setContacts($event->phones, $event->emails, $event->websites);
         $this->setCompanyRelations($event);
     }
 
@@ -51,8 +54,8 @@ class CompanyCreator
         $this->company->setUUID($event->uuid->toString());
         $this->company->setFullName($event->fullName);
         $this->company->setShortName($event->shortName);
-        $this->company->setNIP($event->nip);
-        $this->company->setREGON($event->regon);
+        $this->company->setNIP($event->nip->getValue());
+        $this->company->setREGON($event->regon->getValue());
         $this->company->setDescription($event->description);
         $this->company->setActive($event->active);
     }
@@ -80,12 +83,12 @@ class CompanyCreator
         $this->company->setAddress($this->address);
     }
 
-    protected function setContacts(array $phones, array $emails = [], array $websites = []): void
+    protected function setContacts(Phones $phones, ?Emails $emails = null, ?Websites $websites = null): void
     {
         $dataSets = [
-            ContactTypeEnum::PHONE->value => $phones,
-            ContactTypeEnum::EMAIL->value => $emails,
-            ContactTypeEnum::WEBSITE->value => $websites,
+            ContactTypeEnum::PHONE->value => $phones->toArray(),
+            ContactTypeEnum::EMAIL->value => $emails->toArray(),
+            ContactTypeEnum::WEBSITE->value => $websites->toArray(),
         ];
 
         foreach ($dataSets as $type => $values) {
