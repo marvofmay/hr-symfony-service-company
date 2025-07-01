@@ -36,10 +36,6 @@ final class CompanyAggregateReaderRepository extends ServiceEntityRepository imp
                 'json'
             );
 
-            if (property_exists($event, 'uuid')) {
-                $event->uuid = CompanyUUID::fromString($eventEntity->getAggregateUUID());
-            }
-
             $domainEvents[] = $event;
         }
 

@@ -28,3 +28,6 @@ services:
 
     App\Module\Company\Infrastructure\Normalizer\Company\WebsitesNormalizer:
         tags: [ 'serializer.normalizer' ]
+
+    App\Module\Company\Infrastructure\Normalizer\Company\CompanyUUIDNormalizer:
+        tags: [ 'serializer.normalizer' ]

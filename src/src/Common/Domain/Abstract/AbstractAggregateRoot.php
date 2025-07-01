@@ -9,7 +9,6 @@ use App\Common\Domain\Interface\DomainEventInterface;
 
 abstract class AbstractAggregateRoot implements AggregateRootInterface
 {
-
     protected array $recordedEvents = [];
 
     public function pullEvents(): array
