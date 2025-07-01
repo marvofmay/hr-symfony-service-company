@@ -8,7 +8,7 @@ use App\Module\Company\Application\Command\Company\CreateCompanyCommand;
 use App\Module\Company\Domain\DTO\Company\CreateDTO;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class CreateCompanyAction
+final readonly class CreateCompanyAction
 {
     public function __construct(private MessageBusInterface $commandBus)
     {

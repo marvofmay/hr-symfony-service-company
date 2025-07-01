@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
+use App\Common\Domain\Interface\DomainEventInterface;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address as AddressValueObject;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
@@ -13,7 +14,6 @@ use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
-use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
@@ -33,7 +33,7 @@ class CompanyCreator
         $this->contacts = new ArrayCollection();
     }
 
-    public function create(CompanyCreatedEvent $event): void
+    public function create(DomainEventInterface $event): void
     {
         $this->company = new Company();
         $this->setCompany($event);
@@ -41,7 +41,7 @@ class CompanyCreator
         $this->companyWriterRepository->saveCompanyInDB($this->company);
     }
 
-    protected function setCompany(CompanyCreatedEvent $event): void
+    protected function setCompany(DomainEventInterface $event): void
     {
         $this->setCompanyMainData($event);
         $this->setAddress($event->address);
@@ -49,7 +49,7 @@ class CompanyCreator
         $this->setCompanyRelations($event);
     }
 
-    protected function setCompanyMainData(CompanyCreatedEvent $event): void
+    protected function setCompanyMainData(DomainEventInterface $event): void
     {
         $this->company->setUUID($event->uuid->toString());
         $this->company->setFullName($event->fullName);
@@ -60,7 +60,7 @@ class CompanyCreator
         $this->company->setActive($event->active);
     }
 
-    protected function setCompanyRelations(CompanyCreatedEvent $event): void
+    protected function setCompanyRelations(DomainEventInterface $event): void
     {
         if (null !== $event->industryUUID) {
             $industry = $this->industryReaderRepository->getIndustryByUUID($event->industryUUID->toString());
@@ -102,12 +102,12 @@ class CompanyCreator
         }
     }
 
-    protected function setAddress(AddressValueObject $address): void
+    protected function setAddress(AddressValueObject $addressValueObject): void
     {
-        $this->address->setStreet($address->getStreet());
-        $this->address->setPostcode($address->getPostcode());
-        $this->address->setCity($address->getCity());
-        $this->address->setCountry($address->getCountry());
-        $this->address->setActive($address->getActive());
+        $this->address->setStreet($addressValueObject->getStreet());
+        $this->address->setPostcode($addressValueObject->getPostcode());
+        $this->address->setCity($addressValueObject->getCity());
+        $this->address->setCountry($addressValueObject->getCountry());
+        $this->address->setActive($addressValueObject->getActive());
     }
 }

@@ -15,6 +15,7 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
+use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 
 class CompanyAggregate extends AbstractAggregateRoot
 {
@@ -47,6 +48,7 @@ class CompanyAggregate extends AbstractAggregateRoot
         ?Websites $websites = null,
     ): self {
         $aggregate = new self();
+
         $aggregate->record(new CompanyCreatedEvent(
             CompanyUUID::generate(),
             $fullName,
@@ -66,9 +68,42 @@ class CompanyAggregate extends AbstractAggregateRoot
         return $aggregate;
     }
 
+    public function update(
+        string $fullName,
+        NIP $nip,
+        REGON $regon,
+        IndustryUUID $industryUUID,
+        bool $active,
+        Address $address,
+        Phones $phones,
+        ?string $shortName = null,
+        ?string $description = null,
+        ?CompanyUUID $parentCompanyUUID = null,
+        ?Emails $emails = null,
+        ?Websites $websites = null,
+    ): self {
+        $this->record(new CompanyUpdatedEvent(
+            $this->uuid,
+            $fullName,
+            $nip,
+            $regon,
+            $industryUUID,
+            $active,
+            $address,
+            $phones,
+            $shortName,
+            $description,
+            $parentCompanyUUID,
+            $emails,
+            $websites,
+        ));
+
+        return $this;
+    }
+
     protected function apply(DomainEventInterface $event): void
     {
-        if ($event instanceof CompanyCreatedEvent) {
+        if ($event instanceof CompanyCreatedEvent || $event instanceof CompanyUpdatedEvent) {
             $this->uuid = $event->uuid;
             $this->fullName = $event->fullName;
             $this->shortName = $event->shortName;

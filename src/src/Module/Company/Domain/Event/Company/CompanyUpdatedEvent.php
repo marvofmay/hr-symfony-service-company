@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Module\Company\Domain\Event\Company;
 
 use App\Common\Domain\Interface\DomainEventInterface;
@@ -14,7 +12,7 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 
-final class CompanyCreatedEvent implements DomainEventInterface
+final readonly class CompanyUpdatedEvent implements DomainEventInterface
 {
     public \DateTimeImmutable $occurredAt;
 

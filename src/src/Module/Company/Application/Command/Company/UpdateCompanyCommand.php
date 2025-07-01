@@ -8,7 +8,7 @@ use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
 use App\Module\Company\Domain\Entity\Company;
 
-class UpdateCompanyCommand implements CommandInterface
+final class UpdateCompanyCommand implements CommandInterface
 {
     public function __construct(
         public Company $company,
