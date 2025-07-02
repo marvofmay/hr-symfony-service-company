@@ -157,4 +157,27 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
 
         return null !== $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function getDeletedCompanyByUUID(string $uuid): ?Company
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $deletedCompany =  $this->createQueryBuilder(Company::ALIAS)
+                ->where(Company::ALIAS . '.' . Company::COLUMN_UUID . ' = :uuid')
+                ->andWhere(Company::ALIAS . '.' . Company::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (null === $deletedCompany) {
+                throw new \Exception($this->translator->trans('company.deleted.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
+            }
+
+            return $deletedCompany;
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
 }

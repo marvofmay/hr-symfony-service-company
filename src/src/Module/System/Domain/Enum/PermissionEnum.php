@@ -11,6 +11,7 @@ enum PermissionEnum: string implements EnumInterface
     case CREATE = 'create';
     case UPDATE = 'update';
     case DELETE = 'delete';
+    case RESTORE = 'restore';
     case VIEW = 'view';
     case LIST = 'list';
     case IMPORT = 'import';

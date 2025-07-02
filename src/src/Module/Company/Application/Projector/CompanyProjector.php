@@ -6,18 +6,21 @@ namespace App\Module\Company\Application\Projector;
 
 use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
+use App\Module\Company\Domain\Event\Company\CompanyRestoredEvent;
 use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 use App\Module\Company\Domain\Service\Company\CompanyCreator;
 use App\Module\Company\Domain\Service\Company\CompanyDeleter;
+use App\Module\Company\Domain\Service\Company\CompanyRestorer;
 use App\Module\Company\Domain\Service\Company\CompanyUpdater;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 final readonly class CompanyProjector
 {
     public function __construct(
-        private CompanyCreator $companyCreator,
-        private CompanyUpdater $companyUpdater,
-        private CompanyDeleter $companyDeleter,
+        private CompanyCreator  $companyCreator,
+        private CompanyUpdater  $companyUpdater,
+        private CompanyDeleter  $companyDeleter,
+        private CompanyRestorer $companyRestorer,
     )
     {
     }
@@ -38,5 +41,11 @@ final readonly class CompanyProjector
     public function onCompanyDeleted(CompanyDeletedEvent $event): void
     {
         $this->companyDeleter->delete($event);
+    }
+
+    #[AsEventListener(event: CompanyRestoredEvent::class)]
+    public function onCompanyRestored(CompanyRestoredEvent $event): void
+    {
+        $this->companyRestorer->restore($event);
     }
 }

@@ -3,21 +3,21 @@ services:
         autowire: true
         autoconfigure: true
     #Company handlers
-    App\Module\Company\Application\CommandHandler\Company\CreateCompanyCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Company\UpdateCompanyCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Company\DeleteCompanyCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Company\DeleteMultipleCompaniesCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
-    App\Module\Company\Application\CommandHandler\Company\ImportCompaniesCommandHandler:
-        tags:
-            - { name: 'messenger.message_handler', bus: 'command.bus' }
+#    App\Module\Company\Application\CommandHandler\Company\CreateCompanyCommandHandler:
+#        tags:
+#            - { name: 'messenger.message_handler', bus: 'command.bus' }
+#    App\Module\Company\Application\CommandHandler\Company\UpdateCompanyCommandHandler:
+#        tags:
+#            - { name: 'messenger.message_handler', bus: 'command.bus' }
+#    App\Module\Company\Application\CommandHandler\Company\DeleteCompanyCommandHandler:
+#        tags:
+#            - { name: 'messenger.message_handler', bus: 'command.bus' }
+#    App\Module\Company\Application\CommandHandler\Company\DeleteMultipleCompaniesCommandHandler:
+#        tags:
+#            - { name: 'messenger.message_handler', bus: 'command.bus' }
+#    App\Module\Company\Application\CommandHandler\Company\ImportCompaniesCommandHandler:
+#        tags:
+#            - { name: 'messenger.message_handler', bus: 'command.bus' }
 
     #Serializers/Normalizers
     App\Module\Company\Infrastructure\Normalizer\Company\PhonesNormalizer:

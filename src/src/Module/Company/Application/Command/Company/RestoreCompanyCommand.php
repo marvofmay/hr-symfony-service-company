@@ -6,7 +6,7 @@ namespace App\Module\Company\Application\Command\Company;
 
 use App\Module\Company\Domain\Entity\Company;
 
-final readonly class DeleteCompanyCommand
+final readonly class RestoreCompanyCommand
 {
     public function __construct(private Company $company)
     {

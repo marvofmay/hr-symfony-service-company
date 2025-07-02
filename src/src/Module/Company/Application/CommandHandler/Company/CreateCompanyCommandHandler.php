@@ -18,10 +18,12 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Entity\Company;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-readonly class CreateCompanyCommandHandler
+#[AsMessageHandler(bus: 'command.bus')]
+final readonly class CreateCompanyCommandHandler
 {
     public function __construct(
         private EventStoreCreator $eventStoreCreator,

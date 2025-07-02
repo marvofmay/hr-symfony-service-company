@@ -30,4 +30,6 @@ interface CompanyReaderInterface
     public function isCompanyExistsWithUUID(string $uuid): bool;
 
     public function isCompanyExists(string $nip, string $regon, ?string $companyUUID = null): bool;
+
+    public function getDeletedCompanyByUUID(string $uuid): ?Company;
 }

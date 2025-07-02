@@ -12,10 +12,12 @@ use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-readonly class ImportCompaniesCommandHandler
+#[AsMessageHandler(bus: 'command.bus')]
+final readonly class ImportCompaniesCommandHandler
 {
     public function __construct(
         private CompanyReaderInterface $companyReaderRepository,

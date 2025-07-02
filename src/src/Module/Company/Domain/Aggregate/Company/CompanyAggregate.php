@@ -16,6 +16,7 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
+use App\Module\Company\Domain\Event\Company\CompanyRestoredEvent;
 use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 
 class CompanyAggregate extends AbstractAggregateRoot
@@ -116,6 +117,17 @@ class CompanyAggregate extends AbstractAggregateRoot
         return $this;
     }
 
+    public function restore(): self
+    {
+        if (!$this->deleted) {
+            throw new \DomainException('Company is not deleted.');
+        }
+
+        $this->record(new CompanyRestoredEvent($this->uuid));
+
+        return $this;
+    }
+
     protected function apply(DomainEventInterface $event): void
     {
         if ($event instanceof CompanyCreatedEvent || $event instanceof CompanyUpdatedEvent) {
@@ -137,6 +149,10 @@ class CompanyAggregate extends AbstractAggregateRoot
         if ($event instanceof CompanyDeletedEvent) {
             $this->deleted = true;
         }
+
+        if ($event instanceof CompanyRestoredEvent) {
+            $this->deleted = false;
+        }
     }
 
     public function getUUID(): CompanyUUID
@@ -144,18 +160,18 @@ class CompanyAggregate extends AbstractAggregateRoot
         return $this->uuid;
     }
 
-    public function getParentCompanyUUID(): ?CompanyUUID
-    {
-        return $this->parentCompanyUUID;
-    }
-
-    public function getNIP(): Nip
-    {
-        return $this->nip;
-    }
-
-    public function getREGON(): Regon
-    {
-        return $this->regon;
-    }
+    //public function getParentCompanyUUID(): ?CompanyUUID
+    //{
+    //    return $this->parentCompanyUUID;
+    //}
+    //
+    //public function getNIP(): Nip
+    //{
+    //    return $this->nip;
+    //}
+    //
+    //public function getREGON(): Regon
+    //{
+    //    return $this->regon;
+    //}
 }

@@ -4,7 +4,7 @@ namespace App\Module\Company\Application\CommandHandler\Company;
 
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
-use App\Module\Company\Application\Command\Company\DeleteCompanyCommand;
+use App\Module\Company\Application\Command\Company\RestoreCompanyCommand;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Interface\Company\CompanyAggregateReaderInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final readonly class DeleteCompanyCommandHandler
+final readonly class RestoreCompanyCommandHandler
 {
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
@@ -26,13 +26,13 @@ final readonly class DeleteCompanyCommandHandler
     {
     }
 
-    public function __invoke(DeleteCompanyCommand $command): void
+    public function __invoke(RestoreCompanyCommand $command): void
     {
         $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID(
             CompanyUUID::fromString($command->getCompany()->getUUID()->toString())
         );
 
-        $companyAggregate->delete();
+        $companyAggregate->restore();
 
         $events = $companyAggregate->pullEvents();
         foreach ($events as $event) {

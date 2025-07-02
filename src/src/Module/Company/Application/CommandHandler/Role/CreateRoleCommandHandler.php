@@ -12,7 +12,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-readonly class CreateRoleCommandHandler
+final readonly class CreateRoleCommandHandler
 {
     public function __construct(private RoleCreatorInterface $roleCreator, private EventDispatcherInterface $eventDispatcher)
     {

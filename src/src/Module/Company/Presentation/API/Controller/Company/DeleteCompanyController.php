@@ -26,7 +26,7 @@ class DeleteCompanyController extends AbstractController
     {
         try {
             if (!$this->isGranted(PermissionEnum::DELETE, AccessEnum::COMPANY)) {
-                throw new \Exception($this->messageService->get('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->messageService->get('accessDenied'), Response::HTTP_FORBIDDEN);
             }
 
             $deleteCompanyAction->execute($uuid);
