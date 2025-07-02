@@ -8,7 +8,6 @@ use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
 use App\Module\Company\Structure\Validator\Constraints\Company\ExistingCompanyUUID;
-use App\Module\Company\Structure\Validator\Constraints\Company\UniqueCompanyFullName;
 use App\Module\Company\Structure\Validator\Constraints\Industry\ExistingIndustryUUID;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -23,7 +22,6 @@ class CreateDTO
         'tooLong' => 'company.fullName.maximumLength',
         'domain' => 'companies',
     ])]
-    #[UniqueCompanyFullName]
     public string $fullName = '';
 
     public ?string $shortName = null;

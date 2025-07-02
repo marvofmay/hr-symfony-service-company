@@ -39,6 +39,9 @@ company:
     error: "Wystąpił błąd - firma nie została usunięta"
     multiple:
       success: "Firmy zostały pomyślnie usunięte"
+  restore:
+    success: "Firma została pomyślnie przywrócona"
+    error: "Wystąpił błąd - firma nie została przywrócona"
   import:
     queued: "Plik został dodany do kolejki importu firm. Otrzymasz powiadmienie o statusie importu."
     success: "Firmy zostały pomyślnie zaimportowane"
