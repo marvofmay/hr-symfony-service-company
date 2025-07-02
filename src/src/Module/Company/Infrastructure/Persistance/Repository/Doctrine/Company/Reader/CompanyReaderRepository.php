@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class CompanyReaderRepository extends ServiceEntityRepository implements CompanyReaderInterface
@@ -22,7 +23,12 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
 
     public function getCompanyByUUID(string $uuid): ?Company
     {
-        return $this->findOneBy([Company::COLUMN_UUID => $uuid]);
+        $company = $this->findOneBy([Company::COLUMN_UUID => $uuid]);
+        if (null === $company) {
+            throw new \Exception($this->translator->trans('company.uuid.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
+        }
+
+        return $company;
     }
 
     public function getCompaniesByUUID(array $selectedUUID): Collection

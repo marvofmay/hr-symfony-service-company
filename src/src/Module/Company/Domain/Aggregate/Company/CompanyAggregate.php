@@ -15,38 +15,41 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
+use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 
 class CompanyAggregate extends AbstractAggregateRoot
 {
-    private CompanyUUID $uuid;
+    private CompanyUUID  $uuid;
     private ?CompanyUUID $parentCompanyUUID = null;
     private IndustryUUID $industryUUID;
-    private string $fullName;
-    private ?string $shortName = null;
-    private NIP $nip;
-    private REGON $regon;
-    private ?string $description = null;
-    private bool $active = true;
-    private Address $address;
-    private Phones $phones;
-    private ?Emails $emails = null;
-    private ?Websites $websites = null;
+    private string       $fullName;
+    private ?string      $shortName         = null;
+    private NIP          $nip;
+    private REGON        $regon;
+    private ?string      $description       = null;
+    private bool         $active            = true;
+    private Address      $address;
+    private Phones       $phones;
+    private ?Emails      $emails            = null;
+    private ?Websites    $websites          = null;
+    private bool         $deleted           = false;
 
     public static function create(
-        string $fullName,
-        NIP $nip,
-        REGON $regon,
+        string       $fullName,
+        NIP          $nip,
+        REGON        $regon,
         IndustryUUID $industryUUID,
-        bool $active,
-        Address $address,
-        Phones $phones,
-        ?string $shortName = null,
-        ?string $description = null,
+        bool         $active,
+        Address      $address,
+        Phones       $phones,
+        ?string      $shortName = null,
+        ?string      $description = null,
         ?CompanyUUID $parentCompanyUUID = null,
-        ?Emails $emails = null,
-        ?Websites $websites = null,
-    ): self {
+        ?Emails      $emails = null,
+        ?Websites    $websites = null,
+    ): self
+    {
         $aggregate = new self();
 
         $aggregate->record(new CompanyCreatedEvent(
@@ -69,19 +72,24 @@ class CompanyAggregate extends AbstractAggregateRoot
     }
 
     public function update(
-        string $fullName,
-        NIP $nip,
-        REGON $regon,
+        string       $fullName,
+        NIP          $nip,
+        REGON        $regon,
         IndustryUUID $industryUUID,
-        bool $active,
-        Address $address,
-        Phones $phones,
-        ?string $shortName = null,
-        ?string $description = null,
+        bool         $active,
+        Address      $address,
+        Phones       $phones,
+        ?string      $shortName = null,
+        ?string      $description = null,
         ?CompanyUUID $parentCompanyUUID = null,
-        ?Emails $emails = null,
-        ?Websites $websites = null,
-    ): self {
+        ?Emails      $emails = null,
+        ?Websites    $websites = null,
+    ): self
+    {
+        if ($this->deleted) {
+            throw new \DomainException('Cannot update a deleted company.');
+        }
+
         $this->record(new CompanyUpdatedEvent(
             $this->uuid,
             $fullName,
@@ -97,6 +105,13 @@ class CompanyAggregate extends AbstractAggregateRoot
             $emails,
             $websites,
         ));
+
+        return $this;
+    }
+
+    public function delete(): self
+    {
+        $this->record(new CompanyDeletedEvent($this->uuid));
 
         return $this;
     }
@@ -117,6 +132,10 @@ class CompanyAggregate extends AbstractAggregateRoot
             $this->phones = $event->phones;
             $this->emails = $event->emails;
             $this->websites = $event->websites;
+        }
+
+        if ($event instanceof CompanyDeletedEvent) {
+            $this->deleted = true;
         }
     }
 

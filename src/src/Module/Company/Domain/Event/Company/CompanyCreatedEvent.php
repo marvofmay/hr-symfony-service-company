@@ -14,7 +14,7 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 
-final class CompanyCreatedEvent implements DomainEventInterface
+final readonly class CompanyCreatedEvent implements DomainEventInterface
 {
     public \DateTimeImmutable $occurredAt;
 
