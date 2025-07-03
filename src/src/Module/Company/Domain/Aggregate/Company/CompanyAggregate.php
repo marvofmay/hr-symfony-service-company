@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Aggregate\Company;
 
-use App\Common\Domain\Abstract\AbstractAggregateRoot;
+use App\Common\Domain\Abstract\AggregateRootAbstract;
 use App\Common\Domain\Interface\DomainEventInterface;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
@@ -19,7 +19,7 @@ use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyRestoredEvent;
 use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 
-class CompanyAggregate extends AbstractAggregateRoot
+class CompanyAggregate extends AggregateRootAbstract
 {
     private CompanyUUID  $uuid;
     private ?CompanyUUID $parentCompanyUUID = null;

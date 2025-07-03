@@ -11,6 +11,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class DepartmentReaderRepository extends ServiceEntityRepository implements DepartmentReaderInterface
@@ -20,12 +21,14 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
         parent::__construct($registry, Department::class);
     }
 
-    public function getDepartmentByUUID(string $uuid): ?Department
+    public function getDepartmentByUUID(string $uuid): Department
     {
-        return $this->getEntityManager()
-            ->createQuery('SELECT d FROM '.Department::class.' d WHERE d.'.Department::COLUMN_UUID.' = :uuid')
-            ->setParameter('uuid', $uuid)
-            ->getOneOrNullResult();
+        $department = $this->findOneBy([Department::COLUMN_UUID => $uuid]);
+        if (null === $department) {
+            throw new \Exception($this->translator->trans('department.uuid.notExists', [':uuid' => $uuid], 'departments'), Response::HTTP_NOT_FOUND);
+        }
+
+        return $department;
     }
 
     public function getDepartmentsByUUID(array $selectedUUID): Collection

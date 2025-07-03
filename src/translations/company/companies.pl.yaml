@@ -7,7 +7,7 @@ company:
     notExists: "Firma o podanym UUID nie istnieje :uuid"
     required: "UUID firmy jest wymagane"
   fullName:
-    alreadyExists: "Firma o podanej nazwie już istnieje"
+    alreadyExists: "Firma o podanej \":name\" nazwie już istnieje"
     required: "Nazwa firmy jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"

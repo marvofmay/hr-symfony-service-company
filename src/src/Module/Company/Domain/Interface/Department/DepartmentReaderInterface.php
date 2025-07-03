@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface DepartmentReaderInterface
 {
-    public function getDepartmentByUUID(string $uuid): ?Department;
+    public function getDepartmentByUUID(string $uuid): Department;
 
     public function getDepartmentsByUUID(array $selectedUUID): Collection;
 

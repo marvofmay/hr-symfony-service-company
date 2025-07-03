@@ -20,4 +20,16 @@ final readonly class CompanyValidator
             throw new \Exception($this->translator->trans('company.alreadyExists', [':nip' => $nip, ':regon' => $regon], 'companies'), Response::HTTP_CONFLICT);
         }
     }
+
+    public function isCompanyWithFullNameAlreadyExists(string $fullName, ?string $uuid = null): void
+    {
+        if ($this->companyReaderRepository->isCompanyExistsWithFullName($fullName, $uuid)) {
+            throw new \Exception($this->translator->trans('company.fullName.alreadyExists', [':name' => $fullName], 'companies'), Response::HTTP_CONFLICT);
+        }
+    }
+
+    public function isCompanyExists(string $uuid): void
+    {
+        $this->companyReaderRepository->getCompanyByUUID($uuid);
+    }
 }

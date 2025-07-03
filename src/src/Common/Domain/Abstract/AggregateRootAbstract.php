@@ -7,7 +7,7 @@ namespace App\Common\Domain\Abstract;
 use App\Common\Domain\Interface\AggregateRootInterface;
 use App\Common\Domain\Interface\DomainEventInterface;
 
-abstract class AbstractAggregateRoot implements AggregateRootInterface
+abstract class AggregateRootAbstract implements AggregateRootInterface
 {
     protected array $recordedEvents = [];
 
