@@ -10,14 +10,32 @@ use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
 
 readonly class CompanyRestorer
 {
-    public function __construct(private CompanyWriterInterface $companyWriterRepository, private CompanyReaderInterface $companyReaderRepository,)
+    public function __construct(
+        private CompanyWriterInterface $companyWriterRepository,
+        private CompanyReaderInterface $companyReaderRepository,
+    )
     {
     }
 
     public function restore(DomainEventInterface $event): void
     {
+        $now = new \DateTime();
+
         $company = $this->companyReaderRepository->getDeletedCompanyByUUID($event->uuid->toString());
         $company->setDeletedAt(null);
+        $company->setUpdatedAt($now);
+
+        $address = $this->companyReaderRepository->getDeletedAddressByCompanyByUUID($event->uuid->toString());
+        if ($address) {
+            $address->setDeletedAt(null);
+            $address->setUpdatedAt($now);
+        }
+
+        $contacts = $this->companyReaderRepository->getDeletedContactsByCompanyByUUID($event->uuid->toString());
+        foreach ($contacts as $contact) {
+            $contact->setDeletedAt(null);
+            $contact->setUpdatedAt($now);
+        }
 
         $this->companyWriterRepository->saveCompanyInDB($company);
     }

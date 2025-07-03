@@ -17,6 +17,7 @@ services:
       - ./src:/var/www/html
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+      - TZ=Europe/Warsaw
     depends_on:
       service-company-db:
         condition: service_healthy
