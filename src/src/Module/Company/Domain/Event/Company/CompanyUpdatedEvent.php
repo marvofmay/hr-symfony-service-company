@@ -14,8 +14,6 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 
 final readonly class CompanyUpdatedEvent implements DomainEventInterface
 {
-    public \DateTimeImmutable $occurredAt;
-
     public function __construct(
         public CompanyUUID $uuid,
         public string $fullName,
@@ -31,9 +29,4 @@ final readonly class CompanyUpdatedEvent implements DomainEventInterface
         public ?Emails $emails = null,
         public ?Websites $websites = null,
     ) {}
-
-    public function getOccurredAt(): \DateTimeImmutable
-    {
-        return $this->occurredAt;
-    }
 }
