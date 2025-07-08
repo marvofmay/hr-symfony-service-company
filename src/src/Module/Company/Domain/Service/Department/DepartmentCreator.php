@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Department;
 
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
+use App\Common\Domain\Interface\DomainEventInterface;
 use App\Module\Company\Application\Command\Department\CreateDepartmentCommand;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
@@ -33,21 +34,23 @@ class DepartmentCreator
         $this->contacts = new ArrayCollection();
     }
 
-    public function create(CreateDepartmentCommand $command): void
+    public function create(DomainEventInterface $event): void
     {
-        $this->setDepartment($command);
+        $this->setDepartment($event);
         $this->departmentWriterRepository->saveDepartmentInDB($this->department);
     }
 
-    protected function setDepartment(CommandInterface $command): void
+    protected function setDepartment(DomainEventInterface $event): void
     {
-        $this->setCompany($command->companyUUID);
-        $this->setParentDepartment($command->parentDepartmentUUID);
-        $this->setAddress($command->address);
-        $this->setContacts($command->phones, $command->emails, $command->websites);
-
-        $this->setDepartmentMainData($command);
-        $this->setDepartmentRelations();
+        $this->setCompany($event->companyUUID);
+        if (null !== $event->parentDepartmentUUID) {
+            $this->setParentDepartment($event->parentDepartmentUUID);
+        }
+        //$this->setAddress($command->address);
+        //$this->setContacts($command->phones, $command->emails, $command->websites);
+        //
+        //$this->setDepartmentMainData($command);
+        //$this->setDepartmentRelations();
     }
 
     protected function setDepartmentMainData(CommandInterface $command): void
@@ -72,19 +75,13 @@ class DepartmentCreator
         $this->department->setAddress($this->address);
     }
 
-    protected function setCompany(?string $companyUUID): void
+    protected function setCompany(string $companyUUID): void
     {
         $this->company = $this->companyReaderRepository->getCompanyByUUID($companyUUID);
     }
 
-    protected function setParentDepartment(?string $parentDepartmentUUID): void
+    protected function setParentDepartment(string $parentDepartmentUUID): void
     {
-        if (null === $parentDepartmentUUID) {
-            $this->parentDepartment = null;
-
-            return;
-        }
-
         $this->parentDepartment = $this->departmentReaderRepository->getDepartmentByUUID($parentDepartmentUUID);
     }
 

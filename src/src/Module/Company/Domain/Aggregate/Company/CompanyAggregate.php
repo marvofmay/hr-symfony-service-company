@@ -9,10 +9,12 @@ use App\Common\Domain\Interface\DomainEventInterface;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\FullName;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\IndustryUUID;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\NIP;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\ShortName;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
@@ -24,27 +26,27 @@ class CompanyAggregate extends AggregateRootAbstract
     private CompanyUUID  $uuid;
     private ?CompanyUUID $parentCompanyUUID = null;
     private IndustryUUID $industryUUID;
-    private string       $fullName;
-    private ?string      $shortName         = null;
+    private FullName       $fullName;
+    private ?ShortName      $shortName         = null;
     private NIP          $nip;
     private REGON        $regon;
     private ?string      $description       = null;
     private bool         $active            = true;
     private Address      $address;
-    private Phones       $phones;
+    private ?Phones      $phones            = null;
     private ?Emails      $emails            = null;
     private ?Websites    $websites          = null;
     private bool         $deleted           = false;
 
     public static function create(
-        string       $fullName,
+        FullName     $fullName,
         NIP          $nip,
         REGON        $regon,
         IndustryUUID $industryUUID,
         bool         $active,
         Address      $address,
         Phones       $phones,
-        ?string      $shortName = null,
+        ?ShortName   $shortName = null,
         ?string      $description = null,
         ?CompanyUUID $parentCompanyUUID = null,
         ?Emails      $emails = null,
@@ -73,14 +75,14 @@ class CompanyAggregate extends AggregateRootAbstract
     }
 
     public function update(
-        string       $fullName,
+        FullName     $fullName,
         NIP          $nip,
         REGON        $regon,
         IndustryUUID $industryUUID,
         bool         $active,
         Address      $address,
         Phones       $phones,
-        ?string      $shortName = null,
+        ?ShortName   $shortName = null,
         ?string      $description = null,
         ?CompanyUUID $parentCompanyUUID = null,
         ?Emails      $emails = null,
@@ -159,19 +161,4 @@ class CompanyAggregate extends AggregateRootAbstract
     {
         return $this->uuid;
     }
-
-    //public function getParentCompanyUUID(): ?CompanyUUID
-    //{
-    //    return $this->parentCompanyUUID;
-    //}
-    //
-    //public function getNIP(): Nip
-    //{
-    //    return $this->nip;
-    //}
-    //
-    //public function getREGON(): Regon
-    //{
-    //    return $this->regon;
-    //}
 }

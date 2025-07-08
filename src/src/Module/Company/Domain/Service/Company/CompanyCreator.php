@@ -35,7 +35,6 @@ class CompanyCreator
 
     public function create(DomainEventInterface $event): void
     {
-        $this->company = new Company();
         $this->setCompany($event);
 
         $this->companyWriterRepository->saveCompanyInDB($this->company);
@@ -52,8 +51,8 @@ class CompanyCreator
     protected function setCompanyMainData(DomainEventInterface $event): void
     {
         $this->company->setUUID($event->uuid->toString());
-        $this->company->setFullName($event->fullName);
-        $this->company->setShortName($event->shortName);
+        $this->company->setFullName($event->fullName->getValue());
+        $this->company->setShortName($event->shortName->getValue());
         $this->company->setNIP($event->nip->getValue());
         $this->company->setREGON($event->regon->getValue());
         $this->company->setDescription($event->description);

@@ -12,18 +12,18 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 
-final readonly class DepartmentCreatedEvent implements DomainEventInterface
+final readonly class DepartmentUpdatedEvent implements DomainEventInterface
 {
     public function __construct(
-        public DepartmentUUID $uuid,
-        public CompanyUUID $companyUUID,
-        public string $name,
-        public Address $address,
-        public bool $active,
-        public ?string $description = null,
-        public ?Phones $phones = null,
-        public ?Emails $emails = null,
-        public ?Websites $websites = null,
-        public DepartmentUUID $parentDepartmentUUID,
+        DepartmentUUID $uuid,
+        CompanyUUID $companyUUID,
+        string      $name,
+        Address     $address,
+        bool        $active = true,
+        ?string     $description = null,
+        ?Phones     $phones = null,
+        ?Emails     $emails = null,
+        ?Websites   $websites = null,
+        ?DepartmentUUID $parentDepartmentUUID = null
     ) {}
 }
