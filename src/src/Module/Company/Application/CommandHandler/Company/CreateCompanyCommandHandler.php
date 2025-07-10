@@ -18,7 +18,6 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\ShortName;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
-use App\Module\Company\Domain\Entity\Company;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -59,7 +58,7 @@ final readonly class CreateCompanyCommandHandler
                 new EventStore(
                     $event->uuid->toString(),
                     $event::class,
-                    Company::class,
+                    CompanyAggregate::class,
                     $this->serializer->serialize($event, 'json'),
                     $this->security->getUser()->getEmployee()?->getUUID(),
                 )

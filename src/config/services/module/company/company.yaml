@@ -4,14 +4,5 @@ services:
         autoconfigure: true
 
     #Serializers/Normalizers
-    App\Module\Company\Infrastructure\Normalizer\Company\PhonesNormalizer:
-        tags: [ 'serializer.normalizer' ]
-
-    App\Module\Company\Infrastructure\Normalizer\Company\EmailsNormalizer:
-        tags: [ 'serializer.normalizer' ]
-
-    App\Module\Company\Infrastructure\Normalizer\Company\WebsitesNormalizer:
-        tags: [ 'serializer.normalizer' ]
-
     App\Module\Company\Infrastructure\Normalizer\Company\CompanyUUIDNormalizer:
         tags: [ 'serializer.normalizer' ]

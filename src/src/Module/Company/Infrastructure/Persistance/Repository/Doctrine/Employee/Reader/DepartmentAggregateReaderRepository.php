@@ -2,28 +2,29 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Company\Reader;
+namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Employee\Reader;
 
 use App\Common\Domain\Entity\EventStore;
 use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
-use App\Module\Company\Domain\Interface\Company\CompanyAggregateReaderInterface;
+use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
+use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Serializer\SerializerInterface;
 
-final class CompanyAggregateReaderRepository extends ServiceEntityRepository implements CompanyAggregateReaderInterface
+final class DepartmentAggregateReaderRepository extends ServiceEntityRepository implements DepartmentAggregateReaderInterface
 {
     public function __construct(ManagerRegistry $registry, private SerializerInterface $serializer)
     {
         parent::__construct($registry, EventStore::class);
     }
 
-    public function getCompanyAggregateByUUID(CompanyUUID $uuid): CompanyAggregate
+    public function getDepartmentAggregateByUUID(CompanyUUID $uuid): CompanyAggregate
     {
         $events = $this->findBy([
             'aggregateUUID'  => $uuid->toString(),
-            'aggregateClass' => CompanyAggregate::class,
+            'aggregateClass' => DepartmentAggregate::class,
         ], ['createdAt' => 'ASC']);
 
         if (empty($events)) {

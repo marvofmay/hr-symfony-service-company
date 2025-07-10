@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Infrastructure\Normalizer\Company;
+namespace App\Module\Company\Infrastructure\Normalizer\Shared;
 
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class WebsitesNormalizer implements NormalizerInterface, DenormalizerInterface
 {

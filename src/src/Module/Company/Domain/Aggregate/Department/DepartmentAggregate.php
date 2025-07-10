@@ -12,6 +12,7 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
+use App\Module\Company\Domain\Aggregate\Department\ValueObject\Name;
 use App\Module\Company\Domain\Event\Department\DepartmentCreatedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentDeletedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentRestoredEvent;
@@ -32,14 +33,14 @@ class DepartmentAggregate extends AggregateRootAbstract
     private bool           $deleted              = false;
 
     public static function create(
-        CompanyUUID $companyUUID,
-        string      $name,
-        Address     $address,
-        bool        $active = true,
-        ?string     $description = null,
-        ?Phones     $phones = null,
-        ?Emails     $emails = null,
-        ?Websites   $websites = null,
+        CompanyUUID     $companyUUID,
+        Name            $name,
+        Address         $address,
+        bool            $active = true,
+        ?string         $description = null,
+        ?Phones         $phones = null,
+        ?Emails         $emails = null,
+        ?Websites       $websites = null,
         ?DepartmentUUID $parentDepartmentUUID = null
     ): self
     {
@@ -62,14 +63,14 @@ class DepartmentAggregate extends AggregateRootAbstract
     }
 
     public function update(
-        CompanyUUID $companyUUID,
-        string      $name,
-        bool        $active,
-        Address     $address,
-        ?string     $description = null,
-        ?Phones     $phones = null,
-        ?Emails     $emails = null,
-        ?Websites   $websites = null,
+        CompanyUUID     $companyUUID,
+        Name            $name,
+        bool            $active,
+        Address         $address,
+        ?string         $description = null,
+        ?Phones         $phones = null,
+        ?Emails         $emails = null,
+        ?Websites       $websites = null,
         ?DepartmentUUID $parentDepartmentUUID = null
     ): self
     {

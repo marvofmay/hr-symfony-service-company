@@ -5,35 +5,17 @@ declare(strict_types=1);
 namespace App\Module\Company\Infrastructure\Normalizer\Company;
 
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use App\Module\Company\Infrastructure\Normalizer\AbstractUUIDNormalizer;
 
-class CompanyUUIDNormalizer implements NormalizerInterface, DenormalizerInterface
+class CompanyUUIDNormalizer extends AbstractUUIDNormalizer
 {
-    public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
+    protected function getSupportedClass(): string
     {
-        return $data instanceof CompanyUUID;
+        return CompanyUUID::class;
     }
 
-    public function normalize(mixed $data, ?string $format = null, array $context = []): string
+    protected function fromString(string $value): CompanyUUID
     {
-        return $data->toString();
-    }
-
-    public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
-    {
-        return $type === CompanyUUID::class;
-    }
-
-    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): CompanyUUID
-    {
-        return CompanyUUID::fromString($data);
-    }
-
-    public function getSupportedTypes(?string $format): array
-    {
-        return [
-            CompanyUUID::class => true,
-        ];
+        return CompanyUUID::fromString($value);
     }
 }

@@ -11,19 +11,22 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
+use App\Module\Company\Domain\Aggregate\Department\ValueObject\Name;
 
 final readonly class DepartmentCreatedEvent implements DomainEventInterface
 {
     public function __construct(
         public DepartmentUUID $uuid,
-        public CompanyUUID $companyUUID,
-        public string $name,
-        public Address $address,
-        public bool $active,
-        public ?string $description = null,
-        public ?Phones $phones = null,
-        public ?Emails $emails = null,
-        public ?Websites $websites = null,
-        public DepartmentUUID $parentDepartmentUUID,
-    ) {}
+        public CompanyUUID    $companyUUID,
+        public Name           $name,
+        public Address        $address,
+        public bool           $active,
+        public ?string        $description = null,
+        public ?Phones        $phones = null,
+        public ?Emails        $emails = null,
+        public ?Websites      $websites = null,
+        public ?DepartmentUUID $parentDepartmentUUID = null,
+    )
+    {
+    }
 }

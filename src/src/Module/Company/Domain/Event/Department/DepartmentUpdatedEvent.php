@@ -11,19 +11,22 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
+use App\Module\Company\Domain\Aggregate\Department\ValueObject\Name;
 
 final readonly class DepartmentUpdatedEvent implements DomainEventInterface
 {
     public function __construct(
-        DepartmentUUID $uuid,
-        CompanyUUID $companyUUID,
-        string      $name,
-        Address     $address,
-        bool        $active = true,
-        ?string     $description = null,
-        ?Phones     $phones = null,
-        ?Emails     $emails = null,
-        ?Websites   $websites = null,
+        DepartmentUUID  $uuid,
+        CompanyUUID     $companyUUID,
+        Name            $name,
+        Address         $address,
+        bool            $active = true,
+        ?string         $description = null,
+        ?Phones         $phones = null,
+        ?Emails         $emails = null,
+        ?Websites       $websites = null,
         ?DepartmentUUID $parentDepartmentUUID = null
-    ) {}
+    )
+    {
+    }
 }

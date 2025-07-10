@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Department;
 
-use App\Common\Domain\DTO\AddressDTO;
-use App\Common\Domain\Interface\CommandInterface;
 use App\Common\Domain\Interface\DomainEventInterface;
-use App\Module\Company\Application\Command\Department\CreateDepartmentCommand;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address as AddressValueObject;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Entity\Address;
-use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
@@ -23,9 +23,7 @@ class DepartmentCreator
     protected ArrayCollection $contacts;
 
     public function __construct(
-        protected Company $company,
         protected Department $department,
-        protected ?Department $parentDepartment,
         protected Address $address,
         protected CompanyReaderInterface $companyReaderRepository,
         protected DepartmentReaderInterface $departmentReaderRepository,
@@ -42,30 +40,28 @@ class DepartmentCreator
 
     protected function setDepartment(DomainEventInterface $event): void
     {
-        $this->setCompany($event->companyUUID);
+        $this->setAddress($event->address);
+        $this->setContacts($event->phones, $event->emails, $event->websites);
+
+        $this->setDepartmentMainData($event);
+        $this->setDepartmentRelations($event);
+    }
+
+    protected function setDepartmentMainData(DomainEventInterface $event): void
+    {
+        $this->department->setName($event->name->getValue());
+        $this->department->setDescription($event->description);
+        $this->department->setActive($event->active);
+    }
+
+    protected function setDepartmentRelations(DomainEventInterface $event): void
+    {
+        $company = $this->companyReaderRepository->getCompanyByUUID($event->companyUUID->toString());
+        $this->department->setCompany($company);
+
         if (null !== $event->parentDepartmentUUID) {
-            $this->setParentDepartment($event->parentDepartmentUUID);
-        }
-        //$this->setAddress($command->address);
-        //$this->setContacts($command->phones, $command->emails, $command->websites);
-        //
-        //$this->setDepartmentMainData($command);
-        //$this->setDepartmentRelations();
-    }
-
-    protected function setDepartmentMainData(CommandInterface $command): void
-    {
-        $this->department->setName($command->name);
-        $this->department->setDescription($command->description);
-        $this->department->setActive($command->active);
-    }
-
-    protected function setDepartmentRelations(): void
-    {
-        $this->department->setCompany($this->company);
-
-        if (null !== $this->parentDepartment) {
-            $this->department->setParentDepartment($this->parentDepartment);
+            $parentDepartment = $this->departmentReaderRepository->getDepartmentByUUID($event->parentDepartmentUUID->toString());
+            $this->department->setParentDepartment($parentDepartment);
         }
 
         foreach ($this->contacts as $contact) {
@@ -75,22 +71,12 @@ class DepartmentCreator
         $this->department->setAddress($this->address);
     }
 
-    protected function setCompany(string $companyUUID): void
-    {
-        $this->company = $this->companyReaderRepository->getCompanyByUUID($companyUUID);
-    }
-
-    protected function setParentDepartment(string $parentDepartmentUUID): void
-    {
-        $this->parentDepartment = $this->departmentReaderRepository->getDepartmentByUUID($parentDepartmentUUID);
-    }
-
-    protected function setContacts(array $phones, array $emails = [], array $websites = []): void
+    protected function setContacts(Phones $phones, ?Emails $emails = null, ?Websites $websites = null): void
     {
         $dataSets = [
-            ContactTypeEnum::PHONE->value => $phones,
-            ContactTypeEnum::EMAIL->value => $emails,
-            ContactTypeEnum::WEBSITE->value => $websites,
+            ContactTypeEnum::PHONE->value => $phones->toArray(),
+            ContactTypeEnum::EMAIL->value => $emails->toArray(),
+            ContactTypeEnum::WEBSITE->value => $websites->toArray(),
         ];
 
         foreach ($dataSets as $type => $values) {
@@ -104,12 +90,12 @@ class DepartmentCreator
         }
     }
 
-    protected function setAddress(AddressDTO $addressDTO): void
+    protected function setAddress(AddressValueObject $addressValueObject): void
     {
-        $this->address->setStreet($addressDTO->street);
-        $this->address->setPostcode($addressDTO->postcode);
-        $this->address->setCity($addressDTO->city);
-        $this->address->setCountry($addressDTO->country);
-        $this->address->setActive($addressDTO->active);
+        $this->address->setStreet($addressValueObject->getStreet());
+        $this->address->setPostcode($addressValueObject->getPostcode());
+        $this->address->setCity($addressValueObject->getCity());
+        $this->address->setCountry($addressValueObject->getCountry());
+        $this->address->setActive($addressValueObject->getActive());
     }
 }

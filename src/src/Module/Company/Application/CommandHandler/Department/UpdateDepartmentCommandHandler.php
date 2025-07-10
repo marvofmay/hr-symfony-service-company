@@ -6,8 +6,10 @@ namespace App\Module\Company\Application\CommandHandler\Department;
 
 use App\Module\Company\Application\Command\Department\UpdateDepartmentCommand;
 use App\Module\Company\Domain\Service\Department\DepartmentUpdater;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-readonly class UpdateDepartmentCommandHandler
+#[AsMessageHandler(bus: 'command.bus')]
+final readonly class UpdateDepartmentCommandHandler
 {
     public function __construct(private DepartmentUpdater $departmentUpdater)
     {
