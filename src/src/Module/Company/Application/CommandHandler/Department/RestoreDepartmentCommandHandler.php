@@ -4,7 +4,7 @@ namespace App\Module\Company\Application\CommandHandler\Department;
 
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
-use App\Module\Company\Application\Command\Department\DeleteDepartmentCommand;
+use App\Module\Company\Application\Command\Department\RestoreDepartmentCommand;
 use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInterface;
@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final readonly class DeleteDepartmentCommandHandler
+final readonly class RestoreDepartmentCommandHandler
 {
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
@@ -26,13 +26,13 @@ final readonly class DeleteDepartmentCommandHandler
     {
     }
 
-    public function __invoke(DeleteDepartmentCommand $command): void
+    public function __invoke(RestoreDepartmentCommand $command): void
     {
         $departmentAggregate = $this->departmentAggregateReaderRepository->getDepartmentAggregateByUUID(
             DepartmentUUID::fromString($command->getDepartment()->getUUID()->toString())
         );
 
-        $departmentAggregate->delete();
+        $departmentAggregate->restore();
 
         $events = $departmentAggregate->pullEvents();
         foreach ($events as $event) {

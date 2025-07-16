@@ -5,8 +5,8 @@ namespace App\Module\Company\Application\CommandHandler\Company;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Company\DeleteCompanyCommand;
+use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
-use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Interface\Company\CompanyAggregateReaderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -40,7 +40,7 @@ final readonly class DeleteCompanyCommandHandler
                 new EventStore(
                     $event->uuid->toString(),
                     $event::class,
-                    Company::class,
+                    CompanyAggregate::class,
                     $this->serializer->serialize($event, 'json'),
                     $this->security->getUser()->getEmployee()?->getUUID(),
                 )

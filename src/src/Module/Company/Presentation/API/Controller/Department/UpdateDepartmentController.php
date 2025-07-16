@@ -28,7 +28,7 @@ class UpdateDepartmentController extends AbstractController
     {
         try {
             if (!$this->isGranted(PermissionEnum::UPDATE, AccessEnum::DEPARTMENT)) {
-                throw new \Exception($this->messageService->get('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->messageService->get('accessDenied'), Response::HTTP_FORBIDDEN);
             }
 
             $updateDepartmentAction->execute($updateDTO, $uuid);

@@ -1,5 +1,11 @@
 department:
   alreadyExists: "Departament o podanej nazwie \":name\" już istnieje"
+  deleted:
+    notExists: "Departament o podanym UUID :uuid nie istnieje lub nie został usunięty"
+    address:
+      notExists: "Adres departamentu o podanym UUID :uuid nie istnieje lub nie został usunięty"
+    contacts:
+      notExists: "Kontakt departamentu o podanym UUID :uuid nie istnieje lub nie został usunięty"
   uuid:
     notExists: "Departament o podanym UUID nie istnieje :uuid"
     notFound: "Departament o podanym UUID nie istnieje"
@@ -26,6 +32,9 @@ department:
     error: "Wystąpił błąd - departament nie został usunięty"
     multiple:
       success: "Departamenty zostały pomyślnie usunięte"
+  restore:
+    success: "Department została pomyślnie przywrócony"
+    error: "Wystąpił błąd - department nie został przywrócony"
   import:
     queued: "Plik został dodany do kolejki importu departamentów. Otrzymasz powiadmienie o statusie importu."
     success: "Departamenty zostały pomyślnie zaimportowane"

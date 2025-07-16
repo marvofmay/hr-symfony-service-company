@@ -20,17 +20,17 @@ use App\Module\Company\Domain\Event\Department\DepartmentUpdatedEvent;
 
 class DepartmentAggregate extends AggregateRootAbstract
 {
-    private DepartmentUUID $uuid;
-    private CompanyUUID    $companyUUID;
-    private ?CompanyUUID   $parentDepartmentUUID = null;
-    private string         $name;
-    private ?string        $description          = null;
-    private ?bool          $active               = true;
-    private Address        $address;
-    private ?Phones        $phones               = null;
-    private ?Emails        $emails               = null;
-    private ?Websites      $websites             = null;
-    private bool           $deleted              = false;
+    private DepartmentUUID  $uuid;
+    private CompanyUUID     $companyUUID;
+    private ?DepartmentUUID $parentDepartmentUUID = null;
+    private Name            $name;
+    private ?string         $description          = null;
+    private ?bool           $active               = true;
+    private Address         $address;
+    private ?Phones         $phones               = null;
+    private ?Emails         $emails               = null;
+    private ?Websites       $websites             = null;
+    private bool            $deleted              = false;
 
     public static function create(
         CompanyUUID     $companyUUID,
@@ -65,8 +65,8 @@ class DepartmentAggregate extends AggregateRootAbstract
     public function update(
         CompanyUUID     $companyUUID,
         Name            $name,
-        bool            $active,
         Address         $address,
+        bool            $active,
         ?string         $description = null,
         ?Phones         $phones = null,
         ?Emails         $emails = null,
@@ -116,6 +116,15 @@ class DepartmentAggregate extends AggregateRootAbstract
     {
         if ($event instanceof DepartmentCreatedEvent || $event instanceof DepartmentUpdatedEvent) {
             $this->uuid = $event->uuid;
+            $this->name = $event->name;
+            $this->description = $event->description;
+            $this->companyUUID = $event->companyUUID;
+            $this->parentDepartmentUUID = $event->parentDepartmentUUID;
+            $this->active = $event->active;
+            $this->address = $event->address;
+            $this->phones = $event->phones;
+            $this->emails = $event->emails;
+            $this->websites = $event->websites;
         }
 
         if ($event instanceof DepartmentDeletedEvent) {

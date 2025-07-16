@@ -49,6 +49,7 @@ class DepartmentCreator
 
     protected function setDepartmentMainData(DomainEventInterface $event): void
     {
+        $this->department->setUUID($event->uuid->toString());
         $this->department->setName($event->name->getValue());
         $this->department->setDescription($event->description);
         $this->department->setActive($event->active);

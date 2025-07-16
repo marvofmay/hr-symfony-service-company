@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Employee\Reader;
+namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Department\Reader;
 
 use App\Common\Domain\Entity\EventStore;
-use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
+use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -20,7 +19,7 @@ final class DepartmentAggregateReaderRepository extends ServiceEntityRepository 
         parent::__construct($registry, EventStore::class);
     }
 
-    public function getDepartmentAggregateByUUID(CompanyUUID $uuid): CompanyAggregate
+    public function getDepartmentAggregateByUUID(DepartmentUUID $uuid): DepartmentAggregate
     {
         $events = $this->findBy([
             'aggregateUUID'  => $uuid->toString(),
@@ -43,6 +42,6 @@ final class DepartmentAggregateReaderRepository extends ServiceEntityRepository 
             $domainEvents[] = $event;
         }
 
-        return CompanyAggregate::reconstituteFromHistory($domainEvents);
+        return DepartmentAggregate::reconstituteFromHistory($domainEvents);
     }
 }

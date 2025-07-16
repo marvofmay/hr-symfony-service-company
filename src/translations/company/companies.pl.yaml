@@ -2,6 +2,10 @@ company:
   alreadyExists: "Firma o padanym NIP :nip lub REGON :regon już istnieje"
   deleted:
     notExists: "Firma o podanym UUID :uuid nie istnieje lub nie została usunięta"
+    address:
+      notExists: "Adres firmy o podanym UUID :uuid nie istnieje lub nie został usunięty"
+    contacts:
+      notExists: "Kontakt firmy o podanym UUID :uuid nie istnieje lub nie został usunięty"
   uuid:
     notFound: "Firma o podanym UUID nie istnieje"
     notExists: "Firma o podanym UUID nie istnieje :uuid"

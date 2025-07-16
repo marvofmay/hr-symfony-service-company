@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Department\Reader;
 
 use App\Common\Domain\Exception\NotFindByUUIDException;
+use App\Module\Company\Domain\Entity\Address;
+use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -87,5 +90,86 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
             ->setParameter('uuid', $departmentUUID);
 
         return null !== $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function getDeletedDepartmentByUUID(string $uuid): ?Department
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $deletedDepartment =  $this->createQueryBuilder(Department::ALIAS)
+                ->where(Department::ALIAS . '.' . Department::COLUMN_UUID . ' = :uuid')
+                ->andWhere(Department::ALIAS . '.' . Department::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (null === $deletedDepartment) {
+                throw new \Exception($this->translator->trans('department.deleted.notExists', [':uuid' => $uuid], 'departments'), Response::HTTP_NOT_FOUND);
+            }
+
+            return $deletedDepartment;
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+
+    public function getDeletedAddressByDepartmentByUUID(string $uuid): ?Address
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $deletedAddress = $qb->select(Address::ALIAS)
+                ->from(Address::class, Address::ALIAS)
+                ->join(Address::ALIAS . '.department', Department::ALIAS)
+                ->where(Department::ALIAS . '.uuid = :uuid')
+                ->andWhere(Address::ALIAS . '.deletedAt IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (null === $deletedAddress) {
+                throw new \Exception(
+                    $this->translator->trans('department.deleted.address.notExists', [':uuid' => $uuid], 'departments'),
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return $deletedAddress;
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+
+    public function getDeletedContactsByDepartmentByUUID(string $uuid): Collection
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $deletedContacts = $qb->select(Contact::ALIAS)
+                ->from(Contact::class, Contact::ALIAS)
+                ->join(Contact::ALIAS . '.' . Contact::RELATION_DEPARTMENT , 'co')
+                ->where('co.uuid = :uuid')
+                ->andWhere(Contact::ALIAS . '.deletedAt IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getResult();
+
+            if (empty($deletedContacts)) {
+                throw new \Exception(
+                    $this->translator->trans('department.deleted.contacts.notExists', [':uuid' => $uuid], 'departments'),
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return new ArrayCollection($deletedContacts);
+        } finally {
+            $filters->enable('soft_delete');
+        }
     }
 }

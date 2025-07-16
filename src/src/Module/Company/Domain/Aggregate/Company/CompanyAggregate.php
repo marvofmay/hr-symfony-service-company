@@ -26,8 +26,8 @@ class CompanyAggregate extends AggregateRootAbstract
     private CompanyUUID  $uuid;
     private ?CompanyUUID $parentCompanyUUID = null;
     private IndustryUUID $industryUUID;
-    private FullName       $fullName;
-    private ?ShortName      $shortName         = null;
+    private FullName     $fullName;
+    private ?ShortName   $shortName         = null;
     private NIP          $nip;
     private REGON        $regon;
     private ?string      $description       = null;

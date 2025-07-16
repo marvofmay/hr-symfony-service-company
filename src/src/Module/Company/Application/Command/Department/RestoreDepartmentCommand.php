@@ -6,9 +6,9 @@ namespace App\Module\Company\Application\Command\Department;
 
 use App\Module\Company\Domain\Entity\Department;
 
-readonly class DeleteDepartmentCommand
+final readonly class RestoreDepartmentCommand
 {
-    public function __construct(private Department $department)
+    public function __construct(private Department $department,)
     {
     }
 
