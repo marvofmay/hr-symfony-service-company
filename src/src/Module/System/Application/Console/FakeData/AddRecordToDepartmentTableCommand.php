@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\System\Application\Console\FakeData;
 
+use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
@@ -78,6 +79,7 @@ class AddRecordToDepartmentTableCommand extends Command
         }
 
         $department = new Department();
+        $department->setUUID(DepartmentUUID::generate()->toString());
         $department->setName($data['name']);
         $department->setDescription($data['description']);
         $department->setActive($data['active']);

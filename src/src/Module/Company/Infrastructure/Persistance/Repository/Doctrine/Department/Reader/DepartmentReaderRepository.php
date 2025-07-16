@@ -6,7 +6,6 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Depa
 
 use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Address;
-use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
