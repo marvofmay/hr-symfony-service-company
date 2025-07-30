@@ -38,4 +38,9 @@ final readonly class PositionValidator
             throw new \Exception($this->translator->trans('position.departments.alreadyExists', [':name' => $position->getName(), ':departments' => implode(',', $existingDepartments)], 'positions'), Response::HTTP_CONFLICT);
         }
     }
+
+    public function isPositionExists(string $uuid): void
+    {
+        $this->positionReaderRepository->getPositionByUUID($uuid);
+    }
 }

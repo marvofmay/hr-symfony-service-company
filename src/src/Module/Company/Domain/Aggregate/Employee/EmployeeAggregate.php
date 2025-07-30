@@ -7,60 +7,80 @@ namespace App\Module\Company\Domain\Aggregate\Employee;
 use App\Common\Domain\Abstract\AggregateRootAbstract;
 use App\Common\Domain\Interface\DomainEventInterface;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\ShortName;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
-use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
-use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
-use App\Module\Company\Domain\Event\Company\CompanyRestoredEvent;
-use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
+use App\Module\Company\Domain\Aggregate\Employee\ValueObject\ContractTypeUUID;
+use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
+use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmploymentFrom;
+use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmploymentTo;
+use App\Module\Company\Domain\Aggregate\Employee\ValueObject\FirstName;
+use App\Module\Company\Domain\Aggregate\Employee\ValueObject\LastName;
+use App\Module\Company\Domain\Aggregate\Employee\ValueObject\PESEL;
+use App\Module\Company\Domain\Aggregate\Employee\ValueObject\PositionUUID;
+use App\Module\Company\Domain\Aggregate\Employee\ValueObject\RoleUUID;
+use App\Module\Company\Domain\Event\Employee\EmployeeCreatedEvent;
+use App\Module\Company\Domain\Event\Employee\EmployeeDeletedEvent;
+use App\Module\Company\Domain\Event\Employee\EmployeeRestoredEvent;
+use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
 
 class EmployeeAggregate extends AggregateRootAbstract
 {
-    private EmployeeAggregate  $uuid;
+    private FirstName      $firstName;
+    private LastName       $lastName;
+    private PESEL          $pesel;
+    private EmploymentFrom $employmentFrom;
 
-    private bool         $active            = true;
-    private Address      $address;
-    private ?Phones      $phones            = null;
-    private ?Emails      $emails            = null;
-    private ?Websites    $websites          = null;
-    private bool         $deleted           = false;
+    private DepartmentUUID   $departmentUUID;
+    private PositionUUID     $positionUUID;
+    private ContractTypeUUID $contractTypeUUID;
+    private RoleUUID         $roleUUID;
+    private Emails           $emails;
+    private Address          $address;
+    private ?string          $externalUUID = null;
+    private ?EmploymentTo    $employmentTo = null;
+    private ?EmployeeUUID    $uuid         = null;
+    private bool             $active       = true;
+    private ?Phones          $phones       = null;
+    private bool             $deleted      = false;
 
     public static function create(
-        FirstName $firstName,
-        LastName $lastName,
-        PESEL          $pesel,
-        EmploymentFrom $employmentFrom,
-        DepartmentUUID $departmentUUID,
-        RoleUUID $roleUUID,
-        bool         $active,
-        ?ExternalUUID $externalUUID,
-        ?Address      $address,
-        ?Phones       $phones,
-        ?CompanyUUID $parentCompanyUUID = null,
-        ?Emails      $emails = null,
-        ?Websites    $websites = null,
+        FirstName        $firstName,
+        LastName         $lastName,
+        PESEL            $pesel,
+        EmploymentFrom   $employmentFrom,
+        DepartmentUUID   $departmentUUID,
+        PositionUUID     $positionUUID,
+        ContractTypeUUID $contractTypeUUID,
+        RoleUUID         $roleUUID,
+        Emails           $emails,
+        Address          $address,
+        ?string          $externalUUID = null,
+        bool             $active,
+        ?Phones          $phones = null,
+        ?EmployeeUUID    $parentEmployeeUUID = null,
+        ?EmploymentTo    $employmentTo = null,
     ): self
     {
         $aggregate = new self();
 
-        $aggregate->record(new CompanyCreatedEvent(
-            CompanyUUID::generate(),
-            $fullName,
-            $nip,
-            $regon,
-            $industryUUID,
-            $active,
-            $address,
-            $phones,
-            $shortName,
-            $description,
-            $parentCompanyUUID,
+        $aggregate->record(new EmployeeCreatedEvent(
+            EmployeeUUID::generate(),
+            $firstName,
+            $lastName,
+            $pesel,
+            $employmentFrom,
+            $departmentUUID,
+            $positionUUID,
+            $contractTypeUUID,
+            $roleUUID,
             $emails,
-            $websites,
+            $address,
+            $active,
+            $externalUUID,
+            $phones,
+            $parentEmployeeUUID,
+            $employmentTo,
         ));
 
         return $aggregate;
@@ -78,7 +98,6 @@ class EmployeeAggregate extends AggregateRootAbstract
     //    ?string      $description = null,
     //    ?CompanyUUID $parentCompanyUUID = null,
     //    ?Emails      $emails = null,
-    //    ?Websites    $websites = null,
     //): self
     //{
     //    if ($this->deleted) {
@@ -98,7 +117,6 @@ class EmployeeAggregate extends AggregateRootAbstract
     //        $description,
     //        $parentCompanyUUID,
     //        $emails,
-    //        $websites,
     //    ));
     //
     //    return $this;
@@ -124,32 +142,20 @@ class EmployeeAggregate extends AggregateRootAbstract
 
     protected function apply(DomainEventInterface $event): void
     {
-        if ($event instanceof CompanyCreatedEvent || $event instanceof CompanyUpdatedEvent) {
+        if ($event instanceof EmployeeCreatedEvent || $event instanceof EmployeeUpdatedEvent) {
             $this->uuid = $event->uuid;
-            $this->fullName = $event->fullName;
-            $this->shortName = $event->shortName;
-            $this->description = $event->description;
-            $this->nip = $event->nip;
-            $this->regon = $event->regon;
-            $this->parentCompanyUUID = $event->parentCompanyUUID;
-            $this->industryUUID = $event->industryUUID;
-            $this->active = $event->active;
-            $this->address = $event->address;
-            $this->phones = $event->phones;
-            $this->emails = $event->emails;
-            $this->websites = $event->websites;
         }
 
-        if ($event instanceof CompanyDeletedEvent) {
+        if ($event instanceof EmployeeDeletedEvent) {
             $this->deleted = true;
         }
 
-        if ($event instanceof CompanyRestoredEvent) {
+        if ($event instanceof EmployeeRestoredEvent) {
             $this->deleted = false;
         }
     }
 
-    public function getUUID(): CompanyUUID
+    public function getUUID(): EmployeeUUID
     {
         return $this->uuid;
     }

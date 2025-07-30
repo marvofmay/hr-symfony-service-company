@@ -20,4 +20,9 @@ final readonly class ContractTypeValidator
             throw new \Exception($this->translator->trans('contractType.name.alreadyExists', [':name' => $name], 'contract_types'), Response::HTTP_CONFLICT);
         }
     }
+
+    public function isContractTypeExists(string $uuid): void
+    {
+        $this->contractTypeReaderRepository->getContractTypeByUUID($uuid);
+    }
 }

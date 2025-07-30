@@ -21,21 +21,21 @@ readonly class UpdateEmployeeAction
         $this->commandBus->dispatch(
             new UpdateEmployeeCommand(
                 $employee,
-                $updateDTO->getDepartmentUUID(),
-                $updateDTO->getPositionUUID(),
-                $updateDTO->getContractTypeUUID(),
-                $updateDTO->getRoleUUID(),
-                $updateDTO->getParentEmployeeUUID(),
-                $updateDTO->getExternalUUID(),
-                $updateDTO->getEmail(),
-                $updateDTO->getFirstName(),
-                $updateDTO->getLastName(),
-                $updateDTO->getPESEL(),
-                $updateDTO->getEmploymentFrom(),
-                $updateDTO->getEmploymentTo(),
-                $updateDTO->getActive(),
-                $updateDTO->getPhones(),
-                $updateDTO->getAddress()
+                $updateDTO->departmentUUID,
+                $updateDTO->positionUUID,
+                $updateDTO->contractTypeUUID,
+                $updateDTO->roleUUID,
+                $updateDTO->parentEmployeeUUID,
+                $updateDTO->externalUUID,
+                $updateDTO->email,
+                $updateDTO->firstName,
+                $updateDTO->lastName,
+                $updateDTO->pesel,
+                $updateDTO->employmentFrom,
+                $updateDTO->employmentTo,
+                $updateDTO->active,
+                $updateDTO->phones,
+                $updateDTO->address
             )
         );
     }

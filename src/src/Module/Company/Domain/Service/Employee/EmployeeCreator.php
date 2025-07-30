@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Employee;
 
-use App\Common\Domain\DTO\AddressDTO;
-use App\Common\Domain\Interface\CommandInterface;
-use App\Module\Company\Application\Command\Employee\CreateEmployeeCommand;
+use App\Common\Domain\Interface\DomainEventInterface;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\ContractType;
@@ -25,6 +25,7 @@ use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Interface\User\UserWriterInterface;
 use App\Module\Company\Domain\Service\User\UserFactory;
 use Doctrine\Common\Collections\ArrayCollection;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address as AddressValueObject;
 
 class EmployeeCreator
 {
@@ -52,38 +53,38 @@ class EmployeeCreator
         $this->contacts = new ArrayCollection();
     }
 
-    public function create(CreateEmployeeCommand $command): void
+    public function create(DomainEventInterface $event): void
     {
-        $this->setEmployee($command);
+        $this->setEmployee($event);
         $this->employeeWriterRepository->saveEmployeeInDB($this->employee);
     }
 
-    protected function setEmployee(CommandInterface $command): void
+    protected function setEmployee(DomainEventInterface $event): void
     {
-        $this->setDepartment($command->departmentUUID);
-        $this->setRole($command->roleUUID);
-        $this->setPosition($command->positionUUID);
-        $this->setContractType($command->contractTypeUUID);
-        $this->setParentEmployee($command->parentEmployeeUUID);
-        $this->setAddress($command->address);
-        $this->setContacts($command->phones);
-        $this->setUser($command->email);
+        $this->setDepartment($event->departmentUUID->toString());
+        $this->setRole($event->roleUUID->toString());
+        $this->setPosition($event->positionUUID->toString());
+        $this->setContractType($event->contractTypeUUID->toString());
+        $this->setParentEmployee($event->parentEmployeeUUID?->toString());
+        $this->setAddress($event->address);
+        $this->setContacts($event->phones, $event->emails);
+        $this->setUser($event->emails->toArray()[0]);
 
-        $this->setEmployeeMainData($command);
+        $this->setEmployeeMainData($event);
         $this->setEmployeeRelations();
     }
 
-    protected function setEmployeeMainData(CommandInterface $command): void
+    protected function setEmployeeMainData(DomainEventInterface $event): void
     {
-        $this->employee->setFirstName($command->firstName);
-        $this->employee->setLastName($command->lastName);
-        $this->employee->setPESEL($command->pesel);
-        $this->employee->setExternalUUID($command->externalUUID);
-        $this->employee->setEmploymentFrom(\DateTime::createFromFormat('Y-m-d', $command->employmentFrom));
-        if (null !== $command->employmentTo) {
-            $this->employee->setEmploymentTo(\DateTime::createFromFormat('Y-m-d', $command->employmentTo));
+        $this->employee->setFirstName($event->firstName->getValue());
+        $this->employee->setLastName($event->lastName->getValue());
+        $this->employee->setPESEL($event->pesel->getValue());
+        $this->employee->setExternalUUID($event->externalUUID);
+        $this->employee->setEmploymentFrom(\DateTime::createFromFormat('Y-m-d', $event->employmentFrom->getValue()));
+        if (null !== $event->employmentTo) {
+            $this->employee->setEmploymentTo(\DateTime::createFromFormat('Y-m-d', $event->employmentTo->getValue()));
         }
-        $this->employee->setActive($command->active);
+        $this->employee->setActive($event->active);
     }
 
     protected function setEmployeeRelations(): void
@@ -137,12 +138,11 @@ class EmployeeCreator
         $this->role = $this->roleReaderRepository->getRoleByUUID($roleUUID);
     }
 
-    protected function setContacts(array $phones, array $emails = [], array $websites = []): void
+    protected function setContacts(Phones $phones, ?Emails $emails = null): void
     {
         $dataSets = [
             ContactTypeEnum::PHONE->value   => $phones,
             ContactTypeEnum::EMAIL->value   => $emails,
-            ContactTypeEnum::WEBSITE->value => $websites,
         ];
 
         foreach ($dataSets as $type => $values) {
@@ -156,13 +156,13 @@ class EmployeeCreator
         }
     }
 
-    protected function setAddress(AddressDTO $addressDTO): void
+    protected function setAddress(AddressValueObject $address): void
     {
-        $this->address->setStreet($addressDTO->street);
-        $this->address->setPostcode($addressDTO->postcode);
-        $this->address->setCity($addressDTO->city);
-        $this->address->setCountry($addressDTO->country);
-        $this->address->setActive($addressDTO->active);
+        $this->address->setStreet($address->getStreet());
+        $this->address->setPostcode($address->getPostcode());
+        $this->address->setCity($address->getCity());
+        $this->address->setCountry($address->getCountry());
+        $this->address->setActive($address->getActive());
     }
 
     protected function setUser(string $email): void

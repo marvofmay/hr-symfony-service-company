@@ -20,4 +20,9 @@ final readonly class RoleValidator
             throw new \Exception($this->translator->trans('role.name.alreadyExists', [':name' => $name], 'roles'), Response::HTTP_CONFLICT);
         }
     }
+
+    public function isRoleExists(string $uuid): void
+    {
+        $this->roleReaderRepository->getRoleByUUID($uuid);
+    }
 }
