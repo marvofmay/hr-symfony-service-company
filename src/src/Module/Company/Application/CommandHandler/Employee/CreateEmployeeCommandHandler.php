@@ -53,7 +53,7 @@ readonly class CreateEmployeeCommandHandler
             $command->active,
             Phones::fromArray($command->phones),
             $command->parentEmployeeUUID ? EmployeeUUID::fromString($command->parentEmployeeUUID) : null,
-            $command->employmentTo ? EmploymentTo::fromString($command->employmentTo) : null,
+            $command->employmentTo ? EmploymentTo::fromString($command->employmentTo, EmploymentFrom::fromString($command->employmentFrom)) : null,
         );
 
         $events = $employeeAggregate->pullEvents();

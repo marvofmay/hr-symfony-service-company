@@ -28,6 +28,7 @@ employee:
   employmentTo:
     date:
       invalidFormat: "Nieprawidłowy format daty zwolnienia pracownika - wymagany format :dateFormat"
+    mustBeAfterEmploymentFrom: "Data \"zatrudnienie do\", musi być większa od daty \"zatrudnienie od\""
   phone:
     required: "Telefon prcownika jest wymagany"
   street:
