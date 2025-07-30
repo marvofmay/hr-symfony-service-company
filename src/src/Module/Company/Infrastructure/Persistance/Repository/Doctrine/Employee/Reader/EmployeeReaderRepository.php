@@ -82,7 +82,12 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
         return !is_null($this->getEmployeeByEmail($email, $uuid));
     }
 
-    public function isEmployeeExists(string $pesel, ?string $employeeUUID = null): bool
+    public function isEmployeeWithPESELExists(string $pesel, ?string $uuid = null): bool
+    {
+        return !is_null($this->getEmployeeByPESEL($pesel, $uuid));
+    }
+
+    public function getEmployeeByPESEL(string $pesel, ?string $employeeUUID = null): ?Employee
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -96,6 +101,11 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
                 ->setParameter('uuid', $employeeUUID);
         }
 
-        return null !== $qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function isEmployeeAlreadyExists(string $email, string $pesel, ?string $employeeUUID = null): bool
+    {
+        return $this->isEmployeeWithPESELExists($pesel, $employeeUUID) || $this->isEmployeeWithEmailExists($email, $employeeUUID);
     }
 }

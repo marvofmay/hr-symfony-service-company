@@ -29,7 +29,7 @@ final readonly class CreateEmployeeAction
 
     public function execute(CreateDTO $createDTO): void
     {
-        $this->employeeValidator->isEmployeeAlreadyExists($createDTO->email);
+        $this->employeeValidator->isEmployeeAlreadyExists($createDTO->email, $createDTO->pesel);
         $this->departmentValidator->isDepartmentExists($createDTO->departmentUUID);
         $this->positionValidator->isPositionExists($createDTO->positionUUID);
         $this->contractTypeValidator->isContractTypeExists($createDTO->contractTypeUUID);

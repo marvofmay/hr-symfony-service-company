@@ -141,8 +141,8 @@ class EmployeeCreator
     protected function setContacts(Phones $phones, ?Emails $emails = null): void
     {
         $dataSets = [
-            ContactTypeEnum::PHONE->value   => $phones,
-            ContactTypeEnum::EMAIL->value   => $emails,
+            ContactTypeEnum::PHONE->value => $phones->toArray(),
+            ContactTypeEnum::EMAIL->value => $emails->toArray(),
         ];
 
         foreach ($dataSets as $type => $values) {
