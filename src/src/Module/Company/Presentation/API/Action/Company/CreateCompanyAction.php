@@ -5,31 +5,44 @@ declare(strict_types=1);
 namespace App\Module\Company\Presentation\API\Action\Company;
 
 use App\Module\Company\Application\Command\Company\CreateCompanyCommand;
+use App\Module\Company\Application\Validator\Company\CompanyValidator;
+use App\Module\Company\Application\Validator\Industry\IndustryValidator;
 use App\Module\Company\Domain\DTO\Company\CreateDTO;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class CreateCompanyAction
+final readonly class CreateCompanyAction
 {
-    public function __construct(private MessageBusInterface $commandBus)
+    public function __construct(
+        private MessageBusInterface $commandBus,
+        private CompanyValidator $companyValidator,
+        private IndustryValidator $industryValidator,
+    )
     {
     }
 
     public function execute(CreateDTO $createDTO): void
     {
+        $this->companyValidator->isCompanyWithFullNameAlreadyExists($createDTO->fullName);
+        $this->companyValidator->isCompanyAlreadyExists($createDTO->nip, $createDTO->regon);
+        $this->industryValidator->isIndustryExists($createDTO->industryUUID);
+        if (null !== $createDTO->parentCompanyUUID) {
+            $this->companyValidator->isCompanyExists($createDTO->parentCompanyUUID);
+        }
+
         $this->commandBus->dispatch(
             new CreateCompanyCommand(
-                $createDTO->getFullName(),
-                $createDTO->getShortName(),
-                $createDTO->getActive(),
-                $createDTO->getParentCompanyUUID(),
-                $createDTO->getNip(),
-                $createDTO->getREGON(),
-                $createDTO->getDescription(),
-                $createDTO->getIndustryUUID(),
-                $createDTO->getPhones(),
-                $createDTO->getEmails(),
-                $createDTO->getWebsites(),
-                $createDTO->getAddress()
+                $createDTO->fullName,
+                $createDTO->shortName,
+                $createDTO->active,
+                $createDTO->parentCompanyUUID,
+                $createDTO->nip,
+                $createDTO->regon,
+                $createDTO->description,
+                $createDTO->industryUUID,
+                $createDTO->phones,
+                $createDTO->emails,
+                $createDTO->websites,
+                $createDTO->address
             )
         );
     }

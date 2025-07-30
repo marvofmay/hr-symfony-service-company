@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface IndustryReaderInterface
 {
-    public function getIndustryByUUID(string $uuid): ?Industry;
+    public function getIndustryByUUID(string $uuid): Industry;
 
     public function getIndustriesByUUID(array $selectedUUID): Collection;
 

@@ -1,0 +1,8 @@
+App\Module\Company\Infrastructure\Normalizer\Shared\PhonesNormalizer:
+  tags: [ 'serializer.normalizer' ]
+
+App\Module\Company\Infrastructure\Normalizer\Shared\EmailsNormalizer:
+  tags: [ 'serializer.normalizer' ]
+
+App\Module\Company\Infrastructure\Normalizer\Shared\WebsitesNormalizer:
+  tags: [ 'serializer.normalizer' ]

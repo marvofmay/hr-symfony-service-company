@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Department;
 
-use App\Common\Domain\DTO\AddressDTO;
-use App\Module\Company\Application\Command\Department\UpdateDepartmentCommand;
+use App\Common\Domain\Interface\DomainEventInterface;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address as AddressValueObject;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
@@ -30,17 +33,18 @@ class DepartmentUpdater extends DepartmentCreator
         protected ContactWriterInterface $contactWriterRepository,
         protected AddressWriterInterface $addressWriterRepository,
     ) {
-        parent::__construct($company, $department, $parentDepartment, $address, $companyReaderRepository, $departmentReaderRepository, $departmentWriterRepository);
+        parent::__construct($department, $address, $companyReaderRepository, $departmentReaderRepository, $departmentWriterRepository);
     }
 
-    public function update(UpdateDepartmentCommand $command): void
+    public function update(DomainEventInterface $event): void
     {
-        $this->department = $command->department;
-        $this->setDepartment($command);
+        $department = $this->departmentReaderRepository->getDepartmentByUUID($event->uuid->toString());
+        $this->department = $department;
+        $this->setDepartment($event);
         $this->departmentWriterRepository->saveDepartmentInDB($this->department);
     }
 
-    protected function setContacts(array $phones, array $emails = [], array $websites = []): void
+    protected function setContacts(Phones $phones, ?Emails $emails = null, ?Websites $websites = null): void
     {
         foreach ([ContactTypeEnum::PHONE, ContactTypeEnum::EMAIL, ContactTypeEnum::WEBSITE] as $enum) {
             $contacts = $this->department->getContacts($enum);
@@ -50,11 +54,11 @@ class DepartmentUpdater extends DepartmentCreator
         parent::setContacts($phones, $emails, $websites);
     }
 
-    protected function setAddress(AddressDTO $addressDTO): void
+    protected function setAddress(AddressValueObject $addressValueObject): void
     {
         $address = $this->department->getAddress();
         $this->addressWriterRepository->deleteAddressInDB($address, Address::HARD_DELETED_AT);
 
-        parent::setAddress($addressDTO);
+        parent::setAddress($addressValueObject);
     }
 }

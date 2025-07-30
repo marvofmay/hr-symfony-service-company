@@ -18,6 +18,7 @@ class DeleteCompanyAction
 
     public function execute(string $uuid): void
     {
-        $this->commandBus->dispatch(new DeleteCompanyCommand($this->companyReaderRepository->getCompanyByUUID($uuid)));
+        $company = $this->companyReaderRepository->getCompanyByUUID($uuid);
+        $this->commandBus->dispatch(new DeleteCompanyCommand($company));
     }
 }

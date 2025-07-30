@@ -29,3 +29,4 @@ import:
   noData: "Brak danych do importu"
 errors:
   occurred: "Wystąpiły błędy"
+invalidUUID: "Nieprawidłowy format UUID"

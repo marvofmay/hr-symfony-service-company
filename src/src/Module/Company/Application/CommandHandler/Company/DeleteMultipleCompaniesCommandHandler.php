@@ -6,8 +6,10 @@ namespace App\Module\Company\Application\CommandHandler\Company;
 
 use App\Module\Company\Application\Command\Company\DeleteMultipleCompaniesCommand;
 use App\Module\Company\Domain\Service\Company\CompanyMultipleDeleter;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-readonly class DeleteMultipleCompaniesCommandHandler
+#[AsMessageHandler(bus: 'command.bus')]
+final readonly class DeleteMultipleCompaniesCommandHandler
 {
     public function __construct(private CompanyMultipleDeleter $companyMultipleDeleter)
     {

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
-use App\Common\Domain\DTO\AddressDTO;
-use App\Common\Domain\Interface\CommandInterface;
-use App\Module\Company\Application\Command\Company\CreateCompanyCommand;
+use App\Common\Domain\Interface\DomainEventInterface;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address as AddressValueObject;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
@@ -31,43 +33,43 @@ class CompanyCreator
         $this->contacts = new ArrayCollection();
     }
 
-    public function create(CreateCompanyCommand $command): void
+    public function create(DomainEventInterface $event): void
     {
-        $this->company = new Company();
-        $this->setCompany($command);
+        $this->setCompany($event);
 
         $this->companyWriterRepository->saveCompanyInDB($this->company);
     }
 
-    protected function setCompany(CommandInterface $command): void
+    protected function setCompany(DomainEventInterface $event): void
     {
-        $this->setCompanyMainData($command);
-        $this->setAddress($command->address);
-        $this->setContacts($command->phones, $command->emails, $command->websites);
-        $this->setCompanyRelations($command);
+        $this->setCompanyMainData($event);
+        $this->setAddress($event->address);
+        $this->setContacts($event->phones, $event->emails, $event->websites);
+        $this->setCompanyRelations($event);
     }
 
-    protected function setCompanyMainData(CommandInterface $command): void
+    protected function setCompanyMainData(DomainEventInterface $event): void
     {
-        $this->company->setFullName($command->fullName);
-        $this->company->setShortName($command->shortName);
-        $this->company->setNIP($command->nip);
-        $this->company->setREGON($command->regon);
-        $this->company->setDescription($command->description);
-        $this->company->setActive($command->active);
+        $this->company->setUUID($event->uuid->toString());
+        $this->company->setFullName($event->fullName->getValue());
+        $this->company->setShortName($event->shortName->getValue());
+        $this->company->setNIP($event->nip->getValue());
+        $this->company->setREGON($event->regon->getValue());
+        $this->company->setDescription($event->description);
+        $this->company->setActive($event->active);
     }
 
-    protected function setCompanyRelations(CommandInterface $command): void
+    protected function setCompanyRelations(DomainEventInterface $event): void
     {
-        if (null !== $command->industryUUID) {
-            $industry = $this->industryReaderRepository->getIndustryByUUID($command->industryUUID);
+        if (null !== $event->industryUUID) {
+            $industry = $this->industryReaderRepository->getIndustryByUUID($event->industryUUID->toString());
             if ($industry instanceof Industry) {
                 $this->company->setIndustry($industry);
             }
         }
 
-        if (null !== $command->parentCompanyUUID) {
-            $parentCompany = $this->companyReaderRepository->getCompanyByUUID($command->parentCompanyUUID);
+        if (null !== $event->parentCompanyUUID) {
+            $parentCompany = $this->companyReaderRepository->getCompanyByUUID($event->parentCompanyUUID->toString());
             if ($parentCompany instanceof Company) {
                 $this->company->setParentCompany($parentCompany);
             }
@@ -80,12 +82,12 @@ class CompanyCreator
         $this->company->setAddress($this->address);
     }
 
-    protected function setContacts(array $phones, array $emails = [], array $websites = []): void
+    protected function setContacts(Phones $phones, ?Emails $emails = null, ?Websites $websites = null): void
     {
         $dataSets = [
-            ContactTypeEnum::PHONE->value => $phones,
-            ContactTypeEnum::EMAIL->value => $emails,
-            ContactTypeEnum::WEBSITE->value => $websites,
+            ContactTypeEnum::PHONE->value => $phones->toArray(),
+            ContactTypeEnum::EMAIL->value => $emails->toArray(),
+            ContactTypeEnum::WEBSITE->value => $websites->toArray(),
         ];
 
         foreach ($dataSets as $type => $values) {
@@ -99,12 +101,12 @@ class CompanyCreator
         }
     }
 
-    protected function setAddress(AddressDTO $addressDTO): void
+    protected function setAddress(AddressValueObject $addressValueObject): void
     {
-        $this->address->setStreet($addressDTO->street);
-        $this->address->setPostcode($addressDTO->postcode);
-        $this->address->setCity($addressDTO->city);
-        $this->address->setCountry($addressDTO->country);
-        $this->address->setActive($addressDTO->active);
+        $this->address->setStreet($addressValueObject->getStreet());
+        $this->address->setPostcode($addressValueObject->getPostcode());
+        $this->address->setCity($addressValueObject->getCity());
+        $this->address->setCountry($addressValueObject->getCountry());
+        $this->address->setActive($addressValueObject->getActive());
     }
 }

@@ -13,7 +13,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -51,8 +51,6 @@ class Company
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Company::class)]
@@ -110,6 +108,11 @@ class Company
     public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
+    }
+
+    public function setUUID(string $uuid): void
+    {
+        $this->uuid = Uuid::fromString($uuid);
     }
 
     public function getParentCompany(): ?Company
@@ -259,9 +262,7 @@ class Company
             self::COLUMN_REGON => $this->getRegon(),
             self::COLUMN_ACTIVE => $this->getActive(),
             'quantityDepartments' => $this->getDepartments()->count(),
-            'quantityEmployees' => $this->getEmployees()->count(),
-            // ToDo:: use const RELATION_PARENT_COMPANY
-            'parentCompany' => $this->getParentCompany() ? $this->getParentCompany()->toArray() : null,
+            self::RELATION_PARENT_COMPANY => $this->getParentCompany() ? $this->getParentCompany()->toArray() : null,
             self::COLUMN_CREATED_AT => $this->getCreatedAt(),
             self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
             self::COLUMN_DELETED_AT => $this->getDeletedAt(),

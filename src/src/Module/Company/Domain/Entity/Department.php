@@ -14,6 +14,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -44,8 +45,6 @@ class Department
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'departments')]
@@ -98,6 +97,11 @@ class Department
     public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
+    }
+
+    public function setUUID(string $uuid): void
+    {
+        $this->uuid = Uuid::fromString($uuid);
     }
 
     public function getCompany(): Company

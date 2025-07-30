@@ -1,11 +1,17 @@
 company:
   alreadyExists: "Firma o padanym NIP :nip lub REGON :regon już istnieje"
+  deleted:
+    notExists: "Firma o podanym UUID :uuid nie istnieje lub nie została usunięta"
+    address:
+      notExists: "Adres firmy o podanym UUID :uuid nie istnieje lub nie został usunięty"
+    contacts:
+      notExists: "Kontakt firmy o podanym UUID :uuid nie istnieje lub nie został usunięty"
   uuid:
     notFound: "Firma o podanym UUID nie istnieje"
     notExists: "Firma o podanym UUID nie istnieje :uuid"
     required: "UUID firmy jest wymagane"
   fullName:
-    alreadyExists: "Firma o podanej nazwie już istnieje"
+    alreadyExists: "Firma o podanej \":name\" nazwie już istnieje"
     required: "Nazwa firmy jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
@@ -13,6 +19,7 @@ company:
   nip:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
+    exactLength: "NIP musi mieć dokładnie 10 cyfr"
     alreadyExists: "Firma o podanym NIP już istnieje"
     required: "NIP firmy jest wymagany"
   regon:
@@ -36,6 +43,9 @@ company:
     error: "Wystąpił błąd - firma nie została usunięta"
     multiple:
       success: "Firmy zostały pomyślnie usunięte"
+  restore:
+    success: "Firma została pomyślnie przywrócona"
+    error: "Wystąpił błąd - firma nie została przywrócona"
   import:
     queued: "Plik został dodany do kolejki importu firm. Otrzymasz powiadmienie o statusie importu."
     success: "Firmy zostały pomyślnie zaimportowane"

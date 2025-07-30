@@ -5,12 +5,15 @@ declare(strict_types=1);
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Company\Reader;
 
 use App\Common\Domain\Exception\NotFindByUUIDException;
+use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class CompanyReaderRepository extends ServiceEntityRepository implements CompanyReaderInterface
@@ -22,7 +25,12 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
 
     public function getCompanyByUUID(string $uuid): ?Company
     {
-        return $this->findOneBy([Company::COLUMN_UUID => $uuid]);
+        $company = $this->findOneBy([Company::COLUMN_UUID => $uuid]);
+        if (null === $company) {
+            throw new \Exception($this->translator->trans('company.uuid.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
+        }
+
+        return $company;
     }
 
     public function getCompaniesByUUID(array $selectedUUID): Collection
@@ -150,5 +158,86 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         }
 
         return null !== $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function getDeletedCompanyByUUID(string $uuid): ?Company
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $deletedCompany =  $this->createQueryBuilder(Company::ALIAS)
+                ->where(Company::ALIAS . '.' . Company::COLUMN_UUID . ' = :uuid')
+                ->andWhere(Company::ALIAS . '.' . Company::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (null === $deletedCompany) {
+                throw new \Exception($this->translator->trans('company.deleted.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
+            }
+
+            return $deletedCompany;
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+
+    public function getDeletedAddressByCompanyByUUID(string $uuid): ?Address
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $deletedAddress = $qb->select('a')
+                ->from(Address::class, 'a')
+                ->join('a.company', 'c')
+                ->where('c.uuid = :uuid')
+                ->andWhere('a.deletedAt IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (null === $deletedAddress) {
+                throw new \Exception(
+                    $this->translator->trans('company.deleted.address.notExists', [':uuid' => $uuid], 'companies'),
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return $deletedAddress;
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+
+    public function getDeletedContactsByCompanyByUUID(string $uuid): Collection
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $deletedContacts = $qb->select('c')
+                ->from(Contact::class, 'c')
+                ->join('c.company', 'co')
+                ->where('co.uuid = :uuid')
+                ->andWhere('c.deletedAt IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getResult();
+
+            if (empty($deletedContacts)) {
+                throw new \Exception(
+                    $this->translator->trans('company.deleted.contacts.notExists', [':uuid' => $uuid], 'companies'),
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return new ArrayCollection($deletedContacts);
+        } finally {
+            $filters->enable('soft_delete');
+        }
     }
 }

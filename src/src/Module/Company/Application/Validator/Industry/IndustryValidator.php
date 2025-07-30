@@ -20,4 +20,9 @@ final readonly class IndustryValidator
             throw new \Exception($this->translator->trans('industry.name.alreadyExists', [':name' => $name], 'industries'), Response::HTTP_CONFLICT);
         }
     }
+
+    public function isIndustryExists(string $uuid): void
+    {
+        $this->industryReaderRepository->getIndustryByUUID($uuid);
+    }
 }

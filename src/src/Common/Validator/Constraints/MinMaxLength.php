@@ -13,8 +13,7 @@ class MinMaxLength extends Constraint
         public int $min,
         public int $max,
         public array $message = [
-            'tooShort' => 'validation.tooShort',
-            'tooLong' => 'validation.tooLong',
+            ':qty' => 'validation.minLength',
             'domain' => 'validators',
         ],
         ?array $groups = null,

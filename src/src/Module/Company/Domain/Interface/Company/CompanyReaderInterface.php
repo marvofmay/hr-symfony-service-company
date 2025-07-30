@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Interface\Company;
 
+use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use Doctrine\Common\Collections\Collection;
 
@@ -30,4 +31,9 @@ interface CompanyReaderInterface
     public function isCompanyExistsWithUUID(string $uuid): bool;
 
     public function isCompanyExists(string $nip, string $regon, ?string $companyUUID = null): bool;
+
+    public function getDeletedCompanyByUUID(string $uuid): ?Company;
+
+    public function getDeletedAddressByCompanyByUUID(string $uuid): ?Address;
+    public function getDeletedContactsByCompanyByUUID(string $uuid): Collection;
 }

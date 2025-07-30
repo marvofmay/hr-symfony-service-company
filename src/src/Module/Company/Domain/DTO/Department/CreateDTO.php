@@ -7,9 +7,6 @@ namespace App\Module\Company\Domain\DTO\Department;
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
-use App\Module\Company\Structure\Validator\Constraints\Company\ExistingCompanyUUID;
-use App\Module\Company\Structure\Validator\Constraints\Department\ExistingDepartmentUUID;
-use App\Module\Company\Structure\Validator\Constraints\Department\UniqueDepartmentName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateDTO
@@ -23,36 +20,49 @@ class CreateDTO
         'tooLong' => 'department.name.maximumLength',
         'domain' => 'companies',
     ])]
-    #[UniqueDepartmentName]
-    public string $name = '';
+    public string $name = '' {
+        get {
+            return $this->name;
+        }
+    }
 
     #[MinMaxLength(min: 3, max: 500, message: [
         'tooShort' => 'department.description.minimumLength',
         'tooLong' => 'department.description.maximumLength',
         'domain' => 'companies',
     ])]
-    public ?string $description = null;
+    public ?string $description = null {
+        get {
+            return $this->description;
+        }
+    }
 
     #[Assert\Type(
         type: 'bool',
     )]
-    public bool $active = true;
+    public bool $active = true {
+        get {
+            return $this->active;
+        }
+    }
 
     #[NotBlank(message: [
         'text' => 'company.uuid.required',
         'domain' => 'companies',
     ])]
     #[Assert\Uuid(message: 'company.invalidUUID')]
-    #[ExistingCompanyUUID(
-        message: ['uuidNotExists' => 'company.uuid.notExists', 'domain' => 'companies']
-    )]
-    public ?string $companyUUID = null;
+    public ?string $companyUUID = null {
+        get {
+            return $this->companyUUID;
+        }
+    }
 
     #[Assert\Uuid(message: 'department.invalidUUID')]
-    #[ExistingDepartmentUUID(
-        message: ['uuidNotExists' => 'department.uuid.notExists', 'domain' => 'departments']
-    )]
-    public ?string $parentDepartmentUUID = null;
+    public ?string $parentDepartmentUUID = null {
+        get {
+            return $this->parentDepartmentUUID;
+        }
+    }
 
     #[Assert\All([
         new Assert\Type(type: 'string'),
@@ -62,7 +72,11 @@ class CreateDTO
         max: 3,
         maxMessage: 'phones.max'
     )]
-    public ?array $phones = [];
+    public ?array $phones = [] {
+        get {
+            return $this->phones;
+        }
+    }
 
     #[Assert\All([
         new Assert\Type(type: 'string'),
@@ -72,7 +86,11 @@ class CreateDTO
         max: 3,
         maxMessage: 'emails.max'
     )]
-    public ?array $emails = [];
+    public ?array $emails = [] {
+        get {
+            return $this->emails;
+        }
+    }
 
     #[Assert\All([
         new Assert\Type(type: 'string'),
@@ -82,54 +100,18 @@ class CreateDTO
         max: 3,
         maxMessage: 'websites.max'
     )]
-    public ?array $websites = [];
+    public ?array $websites = [] {
+        get {
+            return $this->websites;
+        }
+    }
 
     #[Assert\NotBlank]
     #[Assert\Valid]
-    public AddressDTO $address;
-
-    public function getName(): string
-    {
-        return $this->name;
+    public AddressDTO $address {
+        get {
+            return $this->address;
+        }
     }
 
-    public function getActive(): bool
-    {
-        return $this->active;
-    }
-
-    public function getCompanyUUID(): ?string
-    {
-        return $this->companyUUID;
-    }
-
-    public function getParentDepartmentUUID(): ?string
-    {
-        return $this->parentDepartmentUUID;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getPhones(): ?array
-    {
-        return $this->phones;
-    }
-
-    public function getEmails(): ?array
-    {
-        return $this->emails;
-    }
-
-    public function getWebsites(): ?array
-    {
-        return $this->websites;
-    }
-
-    public function getAddress(): AddressDTO
-    {
-        return $this->address;
-    }
 }

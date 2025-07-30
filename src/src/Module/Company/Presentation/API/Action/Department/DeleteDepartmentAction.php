@@ -18,6 +18,7 @@ class DeleteDepartmentAction
 
     public function execute(string $uuid): void
     {
-        $this->commandBus->dispatch(new DeleteDepartmentCommand($this->departmentReaderRepository->getDepartmentByUUID($uuid)));
+        $department = $this->departmentReaderRepository->getDepartmentByUUID($uuid);
+        $this->commandBus->dispatch(new DeleteDepartmentCommand($department));
     }
 }

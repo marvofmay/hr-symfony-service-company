@@ -34,6 +34,12 @@ class Contact
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
 
+    public const ALIAS = 'contact';
+
+    public const RELATION_COMPANY = 'company';
+    public const RELATION_DEPARTMENT = 'department';
+    public const RELATION_EMPLOYEE = 'employee';
+
     public const SOFT_DELETED_AT = 'soft';
     public const HARD_DELETED_AT = 'hard';
 

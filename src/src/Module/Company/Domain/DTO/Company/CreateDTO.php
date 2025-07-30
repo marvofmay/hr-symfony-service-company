@@ -7,9 +7,6 @@ namespace App\Module\Company\Domain\DTO\Company;
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
-use App\Module\Company\Structure\Validator\Constraints\Company\ExistingCompanyUUID;
-use App\Module\Company\Structure\Validator\Constraints\Company\UniqueCompanyFullName;
-use App\Module\Company\Structure\Validator\Constraints\Industry\ExistingIndustryUUID;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class CreateDTO
@@ -23,52 +20,78 @@ class CreateDTO
         'tooLong' => 'company.fullName.maximumLength',
         'domain' => 'companies',
     ])]
-    #[UniqueCompanyFullName]
-    public string $fullName = '';
+    public string $fullName = '' {
+        get {
+            return $this->fullName;
+        }
+    }
 
-    public ?string $shortName = null;
+    public ?string $shortName = null {
+        get {
+            return $this->shortName;
+        }
+    }
 
     #[Assert\Type(
         type: 'bool',
     )]
-    public bool $active = true;
+    public bool $active = true {
+        get {
+            return $this->active;
+        }
+    }
 
     #[Assert\Uuid(message: 'invalidUUID')]
-    #[ExistingCompanyUUID(
-        message: ['uuidNotExists' => 'company.uuid.notExists', 'domain' => 'companies']
-    )]
-    public ?string $parentCompanyUUID = null;
+    public ?string $parentCompanyUUID = null {
+        get {
+            return $this->parentCompanyUUID;
+        }
+    }
 
     #[NotBlank(message: [
         'text' => 'company.industryUUID.required',
         'domain' => 'companies',
     ])]
     #[Assert\Uuid(message: 'invalidUUID')]
-    #[ExistingIndustryUUID(
-        message: ['uuidNotExists' => 'industry.uuid.notExists', 'domain' => 'industries']
-    )]
-    public ?string $industryUUID = null;
+    public ?string $industryUUID = null {
+        get {
+            return $this->industryUUID;
+        }
+    }
 
-    #[MinMaxLength(min: 10, max: 20, message: [
+    #[MinMaxLength(min: 10, max:10, message: [
         'tooShort' => 'company.nip.minimumLength',
         'tooLong' => 'company.nip.maximumLength',
+        'exactMessage' => 'company.nip.exactLength',
         'domain' => 'companies',
     ])]
-    public ?string $nip = null;
+    public ?string $nip = null {
+        get {
+            return $this->nip;
+        }
+    }
 
-    #[MinMaxLength(min: 14, max: 20, message: [
+    #[MinMaxLength(min: 9, max: 14, message: [
         'tooShort' => 'company.regon.minimumLength',
         'tooLong' => 'company.regon.maximumLength',
         'domain' => 'companies',
     ])]
-    public ?string $regon = null;
+    public ?string $regon = null {
+        get {
+            return $this->regon;
+        }
+    }
 
     #[MinMaxLength(min: 3, max: 500, message: [
         'tooShort' => 'company.description.minimumLength',
         'tooLong' => 'company.description.maximumLength',
         'domain' => 'companies',
     ])]
-    public ?string $description = null;
+    public ?string $description = null {
+        get {
+            return $this->description;
+        }
+    }
 
     #[Assert\All([
         new Assert\Type(type: 'string'),
@@ -78,7 +101,11 @@ class CreateDTO
         max: 3,
         maxMessage: 'phones.max'
     )]
-    public ?array $phones = [];
+    public ?array $phones = [] {
+        get {
+            return $this->phones;
+        }
+    }
 
     #[Assert\All([
         new Assert\Type(type: 'string'),
@@ -88,7 +115,11 @@ class CreateDTO
         max: 3,
         maxMessage: 'emails.max'
     )]
-    public ?array $emails = [];
+    public ?array $emails = [] {
+        get {
+            return $this->emails;
+        }
+    }
 
     #[Assert\All([
         new Assert\Type(type: 'string'),
@@ -98,69 +129,18 @@ class CreateDTO
         max: 3,
         maxMessage: 'websites.max'
     )]
-    public ?array $websites = [];
+    public ?array $websites = [] {
+        get {
+            return $this->websites;
+        }
+    }
 
     #[Assert\NotBlank]
     #[Assert\Valid]
-    public AddressDTO $address;
-
-    public function getFullName(): string
-    {
-        return $this->fullName;
+    public AddressDTO $address {
+        get {
+            return $this->address;
+        }
     }
 
-    public function getShortName(): ?string
-    {
-        return $this->shortName;
-    }
-
-    public function getActive(): bool
-    {
-        return $this->active;
-    }
-
-    public function getParentCompanyUUID(): ?string
-    {
-        return $this->parentCompanyUUID;
-    }
-
-    public function getIndustryUUID(): ?string
-    {
-        return $this->industryUUID;
-    }
-
-    public function getNIP(): ?string
-    {
-        return $this->nip;
-    }
-
-    public function getREGON(): ?string
-    {
-        return $this->regon;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getPhones(): ?array
-    {
-        return $this->phones;
-    }
-
-    public function getEmails(): ?array
-    {
-        return $this->emails;
-    }
-
-    public function getWebsites(): ?array
-    {
-        return $this->websites;
-    }
-
-    public function getAddress(): AddressDTO
-    {
-        return $this->address;
-    }
 }

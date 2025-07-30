@@ -21,7 +21,7 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         parent::__construct($registry, Industry::class);
     }
 
-    public function getIndustryByUUID(string $uuid): ?Industry
+    public function getIndustryByUUID(string $uuid): Industry
     {
         $industry = $this->findOneBy([Industry::COLUMN_UUID => $uuid]);
         if (null === $industry) {

@@ -37,4 +37,11 @@ api_department_delete_multiple:
 api_departments_list:
   path: api/departments
   controller: App\Module\Company\Presentation\API\Controller\Department\ListDepartmentsController::list
-  methods: [GET]  
+  methods: [GET]
+
+api_department_restore:
+  path: api/departments/{uuid}/restore
+  controller: App\Module\Company\Presentation\API\Controller\Department\RestoreDepartmentController::restore
+  methods: [ PATCH ]
+  requirements:
+    uuid: '[0-9a-fA-F-]{36}'

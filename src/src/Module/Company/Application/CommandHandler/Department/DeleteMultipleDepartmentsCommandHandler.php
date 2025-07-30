@@ -6,8 +6,10 @@ namespace App\Module\Company\Application\CommandHandler\Department;
 
 use App\Module\Company\Application\Command\Department\DeleteMultipleDepartmentsCommand;
 use App\Module\Company\Domain\Service\Department\DepartmentMultipleDeleter;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-readonly class DeleteMultipleDepartmentsCommandHandler
+#[AsMessageHandler(bus: 'command.bus')]
+final readonly class DeleteMultipleDepartmentsCommandHandler
 {
     public function __construct(private DepartmentMultipleDeleter $departmentMultipleDeleter)
     {
