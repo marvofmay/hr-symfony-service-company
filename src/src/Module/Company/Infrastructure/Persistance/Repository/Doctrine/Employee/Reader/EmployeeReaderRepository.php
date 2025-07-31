@@ -12,6 +12,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class EmployeeReaderRepository extends ServiceEntityRepository implements EmployeeReaderInterface
@@ -23,10 +24,12 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
 
     public function getEmployeeByUUID(string $uuid): ?Employee
     {
-        return $this->getEntityManager()
-            ->createQuery('SELECT e FROM '.Employee::class.' e WHERE e.'.Employee::COLUMN_UUID.' = :uuid')
-            ->setParameter('uuid', $uuid)
-            ->getOneOrNullResult();
+        $employee = $this->findOneBy([Employee::COLUMN_UUID => $uuid]);
+        if (null === $employee) {
+            throw new \Exception($this->translator->trans('employee.uuid.notExists', [':uuid' => $uuid], 'employees'), Response::HTTP_NOT_FOUND);
+        }
+
+        return $employee;
     }
 
     public function getEmployeesByUUID(array $selectedUUID): Collection

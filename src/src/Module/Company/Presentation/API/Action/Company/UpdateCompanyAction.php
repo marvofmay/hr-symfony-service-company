@@ -25,8 +25,8 @@ final readonly class UpdateCompanyAction
     public function execute(string $uuid, UpdateDTO $updateDTO): void
     {
         $company = $this->companyReaderRepository->getCompanyByUUID($uuid);
-        $this->companyValidator->isCompanyAlreadyExists($updateDTO->nip, $updateDTO->regon, $uuid);
         $this->companyValidator->isCompanyWithFullNameAlreadyExists($updateDTO->fullName, $uuid);
+        $this->companyValidator->isCompanyAlreadyExists($updateDTO->nip, $updateDTO->regon, $uuid);
         $this->industryValidator->isIndustryExists($updateDTO->industryUUID);
         if (null !== $updateDTO->parentCompanyUUID) {
             $this->companyValidator->isCompanyExists($updateDTO->parentCompanyUUID);

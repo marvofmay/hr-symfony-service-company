@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Infrastructure\Normalizer\ContractType;
+namespace App\Module\Company\Infrastructure\Normalizer;
 
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\ContractTypeUUID;
-use App\Module\Company\Infrastructure\Normalizer\AbstractUUIDNormalizer;
 
 class ContractTypeUUIDNormalizer extends AbstractUUIDNormalizer
 {

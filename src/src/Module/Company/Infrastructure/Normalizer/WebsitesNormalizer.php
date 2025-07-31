@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Infrastructure\Normalizer\Shared;
+namespace App\Module\Company\Infrastructure\Normalizer;
 
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
+use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
-class PhonesNormalizer implements NormalizerInterface, DenormalizerInterface
+class WebsitesNormalizer implements NormalizerInterface, DenormalizerInterface
 {
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return $data instanceof Phones;
+        return $data instanceof Websites;
     }
 
     public function normalize(mixed $data, ?string $format = null, array $context = []): array
@@ -22,18 +22,18 @@ class PhonesNormalizer implements NormalizerInterface, DenormalizerInterface
 
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === Phones::class;
+        return $type === Websites::class;
     }
 
-    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): Phones
+    public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): Websites
     {
-        return Phones::fromArray($data);
+        return Websites::fromArray($data);
     }
 
     public function getSupportedTypes(?string $format): array
     {
         return [
-            Phones::class => true,
+            Websites::class => true,
         ];
     }
 }

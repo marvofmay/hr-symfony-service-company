@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Event\Company;
 
 use App\Common\Domain\Interface\DomainEventInterface;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\FullName;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\IndustryUUID;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\NIP;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\REGON;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\ShortName;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Websites;
+use App\Module\Company\Domain\Aggregate\ValueObject\Address;
+use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
+use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 
 final readonly class CompanyCreatedEvent implements DomainEventInterface
 {

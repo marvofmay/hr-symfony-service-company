@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Domain\Aggregate\Company\ValueObject;
+namespace App\Module\Company\Domain\Aggregate\ValueObject;
 
 final readonly class Emails
 {

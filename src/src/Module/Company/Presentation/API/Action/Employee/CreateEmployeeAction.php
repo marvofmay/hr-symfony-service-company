@@ -8,7 +8,6 @@ use App\Module\Company\Application\Command\Employee\CreateEmployeeCommand;
 use App\Module\Company\Application\Validator\ContractType\ContractTypeValidator;
 use App\Module\Company\Application\Validator\Department\DepartmentValidator;
 use App\Module\Company\Application\Validator\Employee\EmployeeValidator;
-use App\Module\Company\Application\Validator\Industry\IndustryValidator;
 use App\Module\Company\Application\Validator\Position\PositionValidator;
 use App\Module\Company\Application\Validator\Role\RoleValidator;
 use App\Module\Company\Domain\DTO\Employee\CreateDTO;
