@@ -6,9 +6,6 @@ namespace App\Module\Company\Domain\Aggregate\Employee;
 
 use App\Common\Domain\Abstract\AggregateRootAbstract;
 use App\Common\Domain\Interface\DomainEventInterface;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\ContractTypeUUID;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
@@ -19,6 +16,9 @@ use App\Module\Company\Domain\Aggregate\Employee\ValueObject\LastName;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\PESEL;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\PositionUUID;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\RoleUUID;
+use App\Module\Company\Domain\Aggregate\ValueObject\Address;
+use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Event\Employee\EmployeeCreatedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeDeletedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeRestoredEvent;
@@ -26,6 +26,8 @@ use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
 
 class EmployeeAggregate extends AggregateRootAbstract
 {
+    private EmployeeUUID   $uuid;
+    private ?EmployeeUUID  $parentEmployeeUUID = null;
     private FirstName      $firstName;
     private LastName       $lastName;
     private PESEL          $pesel;
@@ -39,7 +41,6 @@ class EmployeeAggregate extends AggregateRootAbstract
     private Address          $address;
     private ?string          $externalUUID = null;
     private ?EmploymentTo    $employmentTo = null;
-    private ?EmployeeUUID    $uuid         = null;
     private bool             $active       = true;
     private ?Phones          $phones       = null;
     private bool             $deleted      = false;
@@ -56,7 +57,7 @@ class EmployeeAggregate extends AggregateRootAbstract
         Emails           $emails,
         Address          $address,
         ?string          $externalUUID = null,
-        bool             $active,
+        ?bool            $active = true,
         ?Phones          $phones = null,
         ?EmployeeUUID    $parentEmployeeUUID = null,
         ?EmploymentTo    $employmentTo = null,
@@ -86,64 +87,87 @@ class EmployeeAggregate extends AggregateRootAbstract
         return $aggregate;
     }
 
-    //public function update(
-    //    FullName     $fullName,
-    //    NIP          $nip,
-    //    REGON        $regon,
-    //    IndustryUUID $industryUUID,
-    //    bool         $active,
-    //    Address      $address,
-    //    Phones       $phones,
-    //    ?ShortName   $shortName = null,
-    //    ?string      $description = null,
-    //    ?CompanyUUID $parentCompanyUUID = null,
-    //    ?Emails      $emails = null,
-    //): self
-    //{
-    //    if ($this->deleted) {
-    //        throw new \DomainException('Cannot update a deleted company.');
-    //    }
-    //
-    //    $this->record(new CompanyUpdatedEvent(
-    //        $this->uuid,
-    //        $fullName,
-    //        $nip,
-    //        $regon,
-    //        $industryUUID,
-    //        $active,
-    //        $address,
-    //        $phones,
-    //        $shortName,
-    //        $description,
-    //        $parentCompanyUUID,
-    //        $emails,
-    //    ));
-    //
-    //    return $this;
-    //}
-    //
-    //public function delete(): self
-    //{
-    //    $this->record(new CompanyDeletedEvent($this->uuid));
-    //
-    //    return $this;
-    //}
-    //
-    //public function restore(): self
-    //{
-    //    if (!$this->deleted) {
-    //        throw new \DomainException('Company is not deleted.');
-    //    }
-    //
-    //    $this->record(new CompanyRestoredEvent($this->uuid));
-    //
-    //    return $this;
-    //}
+    public function update(
+        FirstName        $firstName,
+        LastName         $lastName,
+        PESEL            $pesel,
+        EmploymentFrom   $employmentFrom,
+        DepartmentUUID   $departmentUUID,
+        PositionUUID     $positionUUID,
+        ContractTypeUUID $contractTypeUUID,
+        RoleUUID         $roleUUID,
+        Emails           $emails,
+        Address          $address,
+        ?string          $externalUUID = null,
+        ?bool            $active = true,
+        ?Phones          $phones = null,
+        ?EmployeeUUID    $parentEmployeeUUID = null,
+        ?EmploymentTo    $employmentTo = null,
+    ): self
+    {
+        if ($this->deleted) {
+            throw new \DomainException('Cannot update a deleted employee.');
+        }
+
+        $this->record(new EmployeeUpdatedEvent(
+            $this->uuid,
+            $firstName,
+            $lastName,
+            $pesel,
+            $employmentFrom,
+            $departmentUUID,
+            $positionUUID,
+            $contractTypeUUID,
+            $roleUUID,
+            $emails,
+            $address,
+            $active,
+            $externalUUID,
+            $phones,
+            $parentEmployeeUUID,
+            $employmentTo,
+        ));
+
+        return $this;
+    }
+
+    public function delete(): self
+    {
+        $this->record(new EmployeeDeletedEvent($this->uuid));
+
+        return $this;
+    }
+
+    public function restore(): self
+    {
+        if (!$this->deleted) {
+            throw new \DomainException('Employee is not deleted.');
+        }
+
+        $this->record(new EmployeeRestoredEvent($this->uuid));
+
+        return $this;
+    }
 
     protected function apply(DomainEventInterface $event): void
     {
         if ($event instanceof EmployeeCreatedEvent || $event instanceof EmployeeUpdatedEvent) {
             $this->uuid = $event->uuid;
+            $this->firstName = $event->firstName;
+            $this->lastName = $event->lastName;
+            $this->pesel = $event->pesel;
+            $this->employmentFrom = $event->employmentFrom;
+            $this->departmentUUID = $event->departmentUUID;
+            $this->positionUUID = $event->positionUUID;
+            $this->contractTypeUUID = $event->contractTypeUUID;
+            $this->roleUUID = $event->roleUUID;
+            $this->emails = $event->emails;
+            $this->address = $event->address;
+            $this->active = $event->active;
+            $this->externalUUID = $event->externalUUID;
+            $this->phones = $event->phones;
+            $this->parentEmployeeUUID = $event->parentEmployeeUUID;
+            $this->employmentTo = $event->employmentTo;
         }
 
         if ($event instanceof EmployeeDeletedEvent) {

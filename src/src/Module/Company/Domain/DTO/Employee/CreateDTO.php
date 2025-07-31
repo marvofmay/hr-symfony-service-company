@@ -7,14 +7,13 @@ namespace App\Module\Company\Domain\DTO\Employee;
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
-use App\Module\Company\Structure\Validator\Constraints\ContractType\ExistingContractTypeUUID;
-use App\Module\Company\Structure\Validator\Constraints\Department\ExistingDepartmentUUID;
-use App\Module\Company\Structure\Validator\Constraints\Employee\ExistingEmployeeUUID;
-use App\Module\Company\Structure\Validator\Constraints\Employee\UniqueEmployeeEmail;
-use App\Module\Company\Structure\Validator\Constraints\Position\ExistingPositionUUID;
-use App\Module\Company\Structure\Validator\Constraints\Role\ExistingRoleUUID;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Module\Company\Structure\Validator\Constraints\Employee\EmploymentDateRange;
 
+#[EmploymentDateRange(message: [
+    'text' => 'employee.employmentTo.mustBeAfterEmploymentFrom',
+    'domain' => 'employees',
+])]
 class CreateDTO
 {
     #[NotBlank(message: [
@@ -68,7 +67,7 @@ class CreateDTO
         }
     }
 
-    public ?string $externalUUID {
+    public ?string $externalUUID = null {
         get {
             return $this->externalUUID;
         }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Projector;
 
-use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentCreatedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentDeletedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentRestoredEvent;

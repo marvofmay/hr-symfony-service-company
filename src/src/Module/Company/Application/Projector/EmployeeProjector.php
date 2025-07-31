@@ -4,25 +4,19 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Projector;
 
-use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
-use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
-use App\Module\Company\Domain\Event\Company\CompanyRestoredEvent;
-use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeCreatedEvent;
-use App\Module\Company\Domain\Service\Company\CompanyCreator;
-use App\Module\Company\Domain\Service\Company\CompanyDeleter;
-use App\Module\Company\Domain\Service\Company\CompanyRestorer;
-use App\Module\Company\Domain\Service\Company\CompanyUpdater;
+use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
 use App\Module\Company\Domain\Service\Employee\EmployeeCreator;
+use App\Module\Company\Domain\Service\Employee\EmployeeUpdater;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 final readonly class EmployeeProjector
 {
     public function __construct(
         private EmployeeCreator  $employeeCreator,
-        //private CompanyUpdater  $companyUpdater,
-        //private CompanyDeleter  $companyDeleter,
-        //private CompanyRestorer $companyRestorer,
+        private EmployeeUpdater  $employeeUpdater,
+        //private EmployeeDeleter  $employeeDeleter,
+        //private EmployeeRestorer $employeeRestorer,
     )
     {
     }
@@ -33,20 +27,20 @@ final readonly class EmployeeProjector
         $this->employeeCreator->create($event);
     }
 
-    //#[AsEventListener(event: CompanyUpdatedEvent::class)]
-    //public function onCompanyUpdated(CompanyUpdatedEvent $event): void
-    //{
-    //    $this->companyUpdater->update($event);
-    //}
-    //
-    //#[AsEventListener(event: CompanyDeletedEvent::class)]
-    //public function onCompanyDeleted(CompanyDeletedEvent $event): void
+    #[AsEventListener(event: EmployeeUpdatedEvent::class)]
+    public function onEmployeeUpdated(EmployeeUpdatedEvent $event): void
+    {
+        $this->employeeUpdater->update($event);
+    }
+
+    //#[AsEventListener(event: EmployeeDeletedEvent::class)]
+    //public function onEmployeeDeleted(EmployeeDeletedEvent $event): void
     //{
     //    $this->companyDeleter->delete($event);
     //}
     //
-    //#[AsEventListener(event: CompanyRestoredEvent::class)]
-    //public function onCompanyRestored(CompanyRestoredEvent $event): void
+    //#[AsEventListener(event: EmployeeRestoredEvent::class)]
+    //public function onEmployeeRestored(EmployeeRestoredEvent $event): void
     //{
     //    $this->companyRestorer->restore($event);
     //}

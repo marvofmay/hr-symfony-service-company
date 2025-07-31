@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Employee;
 
+use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\DTO\Employee\UpdateDTO;
 use App\Module\Company\Presentation\API\Action\Employee\UpdateEmployeeAction;
 use App\Module\System\Domain\Enum\AccessEnum;
@@ -18,7 +19,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class UpdateEmployeeController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
+    public function __construct(private readonly LoggerInterface $logger, private readonly MessageService $messageService,)
     {
     }
 
@@ -27,18 +28,14 @@ class UpdateEmployeeController extends AbstractController
     {
         try {
             if (!$this->isGranted(PermissionEnum::UPDATE, AccessEnum::EMPLOYEE)) {
-                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+                throw new \Exception($this->messageService->get('accessDenied'), Response::HTTP_FORBIDDEN);
             }
 
-            if ($uuid !== $updateDTO->getUUID()) {
-                throw new \Exception($this->translator->trans('uuid.differentUUIDInBodyRawAndUrl', [], 'validators'), Response::HTTP_CONFLICT);
-            }
+            $updateEmployeeAction->execute($uuid, $updateDTO);
 
-            $updateEmployeeAction->execute($updateDTO);
-
-            return new JsonResponse(['message' => $this->translator->trans('employee.update.success', [], 'employees')], Response::HTTP_CREATED);
+            return new JsonResponse(['message' => $this->messageService->get('employee.update.success', [], 'employees')], Response::HTTP_CREATED);
         } catch (\Exception $error) {
-            $message = sprintf('%s. %s', $this->translator->trans('employee.update.error', [], 'employees'), $error->getMessage());
+            $message = sprintf('%s. %s', $this->messageService->get('employee.update.error', [], 'employees'), $error->getMessage());
             $this->logger->error($message);
 
             return new JsonResponse(['message' => $message], $error->getCode());

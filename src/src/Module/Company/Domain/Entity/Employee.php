@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -71,8 +71,6 @@ class Employee
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
@@ -163,9 +161,9 @@ class Employee
         return $this->{self::COLUMN_UUID};
     }
 
-    public function setUuid(UuidInterface $uuid): void
+    public function setUUID(string $uuid): void
     {
-        $this->{self::COLUMN_UUID} = $uuid;
+        $this->uuid = Uuid::fromString($uuid);
     }
 
     public function getUser(): ?User

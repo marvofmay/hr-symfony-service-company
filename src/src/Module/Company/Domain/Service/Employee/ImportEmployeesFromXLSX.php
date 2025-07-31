@@ -115,7 +115,7 @@ class ImportEmployeesFromXLSX extends XLSXIterator
 
     private function validateEmployeeExists(string $pesel, string $email, ?string $employeeUUID): ?string
     {
-        $isEmployeeExists = $this->employeeReaderRepository->isEmployeeExists($pesel, $email, $employeeUUID);
+        $isEmployeeExists = $this->employeeReaderRepository->isEmployeeAlreadyExists($pesel, $email, $employeeUUID);
         if ($isEmployeeExists) {
             return $this->formatErrorMessage('employee.alreadyExists', [':pesel' => $pesel, ':email' => $email]);
         }

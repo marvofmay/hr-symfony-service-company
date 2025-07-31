@@ -2,7 +2,3 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-
-    #Serializers/Normalizers
-    App\Module\Company\Infrastructure\Normalizer\Department\DepartmentUUIDNormalizer:
-        tags: [ 'serializer.normalizer' ]

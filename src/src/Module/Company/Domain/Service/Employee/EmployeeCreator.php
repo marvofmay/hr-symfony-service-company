@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Employee;
 
 use App\Common\Domain\Interface\DomainEventInterface;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
+use App\Module\Company\Domain\Aggregate\ValueObject\Address as AddressValueObject;
+use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\ContractType;
@@ -25,7 +26,6 @@ use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Interface\User\UserWriterInterface;
 use App\Module\Company\Domain\Service\User\UserFactory;
 use Doctrine\Common\Collections\ArrayCollection;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address as AddressValueObject;
 
 class EmployeeCreator
 {
@@ -76,6 +76,7 @@ class EmployeeCreator
 
     protected function setEmployeeMainData(DomainEventInterface $event): void
     {
+        $this->employee->setUUID($event->uuid->toString());
         $this->employee->setFirstName($event->firstName->getValue());
         $this->employee->setLastName($event->lastName->getValue());
         $this->employee->setPESEL($event->pesel->getValue());
@@ -138,11 +139,11 @@ class EmployeeCreator
         $this->role = $this->roleReaderRepository->getRoleByUUID($roleUUID);
     }
 
-    protected function setContacts(Phones $phones, ?Emails $emails = null): void
+    protected function setContacts(Phones $phones, Emails $emails): void
     {
         $dataSets = [
-            ContactTypeEnum::PHONE->value   => $phones,
-            ContactTypeEnum::EMAIL->value   => $emails,
+            ContactTypeEnum::PHONE->value => $phones->toArray(),
+            ContactTypeEnum::EMAIL->value => $emails->toArray(),
         ];
 
         foreach ($dataSets as $type => $values) {
@@ -156,13 +157,13 @@ class EmployeeCreator
         }
     }
 
-    protected function setAddress(AddressValueObject $address): void
+    protected function setAddress(AddressValueObject $addressValueObject): void
     {
-        $this->address->setStreet($address->getStreet());
-        $this->address->setPostcode($address->getPostcode());
-        $this->address->setCity($address->getCity());
-        $this->address->setCountry($address->getCountry());
-        $this->address->setActive($address->getActive());
+        $this->address->setStreet($addressValueObject->getStreet());
+        $this->address->setPostcode($addressValueObject->getPostcode());
+        $this->address->setCity($addressValueObject->getCity());
+        $this->address->setCountry($addressValueObject->getCountry());
+        $this->address->setActive($addressValueObject->getActive());
     }
 
     protected function setUser(string $email): void

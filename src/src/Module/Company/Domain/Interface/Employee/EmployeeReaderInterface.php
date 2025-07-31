@@ -16,9 +16,13 @@ interface EmployeeReaderInterface
 
     public function getEmployeeByEmail(string $email, ?string $uuid = null): ?User;
 
+    public function getEmployeeByPESEL(string $pesel, ?string $employeeUUID = null): ?Employee;
+
     public function isEmployeeWithUUIDExists(string $uuid): bool;
 
     public function isEmployeeWithEmailExists(string $email, ?string $uuid = null): bool;
 
-    public function isEmployeeExists(string $pesel, ?string $employeeUUID = null): bool;
+    public function isEmployeeWithPESELExists(string $pesel, ?string $uuid = null): bool;
+
+    public function isEmployeeAlreadyExists(string $email, string $pesel, ?string $employeeUUID = null): bool;
 }

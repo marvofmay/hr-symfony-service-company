@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Infrastructure\Normalizer\Department;
+namespace App\Module\Company\Infrastructure\Normalizer;
 
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
-use App\Module\Company\Infrastructure\Normalizer\AbstractUUIDNormalizer;
 
 class DepartmentUUIDNormalizer extends AbstractUUIDNormalizer
 {

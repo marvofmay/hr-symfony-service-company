@@ -6,7 +6,7 @@ namespace App\Module\Company\Domain\Aggregate\Employee\ValueObject;
 
 class EmploymentDateAbstract
 {
-    protected \DateTimeImmutable $date;
+    protected ?\DateTimeImmutable $date;
 
     public function __construct(string $dateString)
     {
@@ -22,11 +22,6 @@ class EmploymentDateAbstract
     public function toDateTime(): \DateTimeImmutable
     {
         return $this->date;
-    }
-
-    public static function fromString(string $value): static
-    {
-        return new static($value);
     }
 
     public function __toString(): string

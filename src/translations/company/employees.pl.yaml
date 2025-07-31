@@ -1,11 +1,13 @@
 employee:
-  alreadyExists: "Pracownik o podanym PESEL :pesel już istnieje"
+  alreadyExists: "Pracownik o podanym PESEL :pesel lub email :email już istnieje"
   uuid:
     notFound: "Pracownik o podanym UUID nie istnieje"
     notExists: "Pracownik o podanym UUID nie istnieje :uuid"
     required: "UUID pracownika jest wymagane"
+  pesel:
+    alreadyExists: "Pracownik o podanym PESEL :pesel już istnieje"
   email:
-    alreadyExists: "Pracownik o podanym emailu już istnieje"
+    alreadyExists: "Pracownik o podanym emailu :email już istnieje"
     required: "Email pracownika jest wymagany"
   firstName:
     required: "Imię pracownika jest wymagane"
@@ -26,6 +28,7 @@ employee:
   employmentTo:
     date:
       invalidFormat: "Nieprawidłowy format daty zwolnienia pracownika - wymagany format :dateFormat"
+    mustBeAfterEmploymentFrom: "Data \"zatrudnienie do\", musi być większa od daty \"zatrudnienie od\""
   phone:
     required: "Telefon prcownika jest wymagany"
   street:

@@ -6,18 +6,17 @@ namespace App\Module\Company\Domain\Aggregate\Employee\ValueObject;
 
 class EmploymentTo extends EmploymentDateAbstract
 {
-    public function __construct(?string $dateString, EmploymentFrom $from)
+    protected ?\DateTimeImmutable $date;
+
+    public static function fromString(?string $dateString, EmploymentFrom $from): static
     {
-        if ($dateString === null) {
-            $this->date = $from->toDateTime();
+        $instance = new static($dateString);
 
-            return;
-        }
-
-        parent::__construct($dateString);
-
-        if ($this->date <= $from->toDateTime()) {
+        if ($instance->date !== null && $instance->date <= $from->toDateTime()) {
             throw new \InvalidArgumentException("EmploymentTo must be after EmploymentFrom.");
         }
+
+        return $instance;
     }
+
 }

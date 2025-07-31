@@ -12,6 +12,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class EmployeeReaderRepository extends ServiceEntityRepository implements EmployeeReaderInterface
@@ -23,10 +24,12 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
 
     public function getEmployeeByUUID(string $uuid): ?Employee
     {
-        return $this->getEntityManager()
-            ->createQuery('SELECT e FROM '.Employee::class.' e WHERE e.'.Employee::COLUMN_UUID.' = :uuid')
-            ->setParameter('uuid', $uuid)
-            ->getOneOrNullResult();
+        $employee = $this->findOneBy([Employee::COLUMN_UUID => $uuid]);
+        if (null === $employee) {
+            throw new \Exception($this->translator->trans('employee.uuid.notExists', [':uuid' => $uuid], 'employees'), Response::HTTP_NOT_FOUND);
+        }
+
+        return $employee;
     }
 
     public function getEmployeesByUUID(array $selectedUUID): Collection
@@ -82,7 +85,12 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
         return !is_null($this->getEmployeeByEmail($email, $uuid));
     }
 
-    public function isEmployeeExists(string $pesel, ?string $employeeUUID = null): bool
+    public function isEmployeeWithPESELExists(string $pesel, ?string $uuid = null): bool
+    {
+        return !is_null($this->getEmployeeByPESEL($pesel, $uuid));
+    }
+
+    public function getEmployeeByPESEL(string $pesel, ?string $employeeUUID = null): ?Employee
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -96,6 +104,11 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
                 ->setParameter('uuid', $employeeUUID);
         }
 
-        return null !== $qb->getQuery()->getOneOrNullResult();
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function isEmployeeAlreadyExists(string $email, string $pesel, ?string $employeeUUID = null): bool
+    {
+        return $this->isEmployeeWithPESELExists($pesel, $employeeUUID) || $this->isEmployeeWithEmailExists($email, $employeeUUID);
     }
 }

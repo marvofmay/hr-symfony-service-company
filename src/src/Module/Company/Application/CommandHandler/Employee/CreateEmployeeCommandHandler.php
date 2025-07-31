@@ -7,9 +7,6 @@ namespace App\Module\Company\Application\CommandHandler\Employee;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Employee\CreateEmployeeCommand;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Address;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Emails;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Aggregate\Employee\EmployeeAggregate;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\ContractTypeUUID;
@@ -21,10 +18,15 @@ use App\Module\Company\Domain\Aggregate\Employee\ValueObject\LastName;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\PESEL;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\PositionUUID;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\RoleUUID;
+use App\Module\Company\Domain\Aggregate\ValueObject\Address;
+use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
+use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+#[AsMessageHandler(bus: 'command.bus')]
 readonly class CreateEmployeeCommandHandler
 {
     public function __construct(
@@ -53,7 +55,7 @@ readonly class CreateEmployeeCommandHandler
             $command->active,
             Phones::fromArray($command->phones),
             $command->parentEmployeeUUID ? EmployeeUUID::fromString($command->parentEmployeeUUID) : null,
-            $command->employmentTo ? EmploymentTo::fromString($command->employmentTo) : null,
+            $command->employmentTo ? EmploymentTo::fromString($command->employmentTo, EmploymentFrom::fromString($command->employmentFrom)) : null,
         );
 
         $events = $employeeAggregate->pullEvents();
