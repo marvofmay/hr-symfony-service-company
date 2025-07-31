@@ -3,12 +3,6 @@ services:
         autowire: true
         autoconfigure: true
     #Employee handlers
-#    App\Module\Company\Application\CommandHandler\Employee\CreateEmployeeCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'command.bus' }
-#    App\Module\Company\Application\CommandHandler\Employee\UpdateEmployeeCommandHandler:
-#        tags:
-#            - { name: 'messenger.message_handler', bus: 'command.bus' }
     App\Module\Company\Application\CommandHandler\Employee\DeleteEmployeeCommandHandler:
         tags:
             - { name: 'messenger.message_handler', bus: 'command.bus' }
