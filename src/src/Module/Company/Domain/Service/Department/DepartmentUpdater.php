@@ -20,7 +20,7 @@ use App\Module\Company\Domain\Interface\Contact\ContactWriterInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentWriterInterface;
 
-class DepartmentUpdater extends DepartmentCreator
+final class DepartmentUpdater extends DepartmentCreator
 {
     public function __construct(
         protected Company $company,

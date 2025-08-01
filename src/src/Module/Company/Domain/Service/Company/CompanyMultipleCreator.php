@@ -16,16 +16,16 @@ use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Contact\Wr
 use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Industry\Reader\IndustryReaderRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class CompanyMultipleCreator
+final readonly class CompanyMultipleCreator
 {
     private Company $company;
 
     public function __construct(
-        private readonly CompanyWriterInterface $companyWriterRepository,
-        private readonly CompanyReaderInterface $companyReaderRepository,
-        private readonly IndustryReaderRepository $industryReaderRepository,
-        private readonly ContactWriterRepository $contactWriterRepository,
-        private readonly AddressWriterInterface $addressWriterRepository,
+        private CompanyWriterInterface $companyWriterRepository,
+        private CompanyReaderInterface $companyReaderRepository,
+        private IndustryReaderRepository $industryReaderRepository,
+        private ContactWriterRepository $contactWriterRepository,
+        private AddressWriterInterface $addressWriterRepository,
     ) {
     }
 

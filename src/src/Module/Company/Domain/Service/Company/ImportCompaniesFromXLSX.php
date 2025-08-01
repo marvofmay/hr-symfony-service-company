@@ -14,7 +14,7 @@ use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ImportCompaniesFromXLSX extends XLSXIterator
+final class ImportCompaniesFromXLSX extends XLSXIterator
 {
     public const int COLUMN_COMPANY_UUID = 0;
     public const int COLUMN_COMPANY_FULL_NAME = 1;

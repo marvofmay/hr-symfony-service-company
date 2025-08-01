@@ -29,7 +29,7 @@ use App\Module\Company\Domain\Interface\User\UserWriterInterface;
 use App\Module\Company\Domain\Service\User\UserFactory;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class EmployeeUpdater extends EmployeeCreator
+final class EmployeeUpdater extends EmployeeCreator
 {
     public function __construct(
         protected Department                  $department,

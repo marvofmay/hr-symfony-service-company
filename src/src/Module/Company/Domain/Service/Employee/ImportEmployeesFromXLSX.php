@@ -18,7 +18,7 @@ use App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\ContractTy
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ImportEmployeesFromXLSX extends XLSXIterator
+final class ImportEmployeesFromXLSX extends XLSXIterator
 {
     public const COLUMN_EMPLOYEE_UUID = 0;
     public const COLUMN_DEPARTMENT_UUID = 1;

@@ -8,16 +8,18 @@ use App\Module\Company\Application\Command\Employee\DeleteEmployeeCommand;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class DeleteEmployeeAction
+final readonly class DeleteEmployeeAction
 {
     public function __construct(
-        private readonly MessageBusInterface $commandBus,
-        private readonly EmployeeReaderInterface $employeeReaderRepository,
+        private MessageBusInterface $commandBus,
+        private EmployeeReaderInterface $employeeReaderRepository,
     ) {
     }
 
     public function execute(string $uuid): void
     {
-        $this->commandBus->dispatch(new DeleteEmployeeCommand($this->employeeReaderRepository->getEmployeeByUUID($uuid)));
+        $this->commandBus->dispatch(
+            new DeleteEmployeeCommand($this->employeeReaderRepository->getEmployeeByUUID($uuid))
+        );
     }
 }

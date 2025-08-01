@@ -10,7 +10,7 @@ use App\Module\Company\Application\Validator\Department\DepartmentValidator;
 use App\Module\Company\Domain\DTO\Department\CreateDTO;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class CreateDepartmentAction
+final readonly class CreateDepartmentAction
 {
     public function __construct(
         private MessageBusInterface $commandBus,

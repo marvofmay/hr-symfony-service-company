@@ -6,8 +6,10 @@ namespace App\Module\Company\Application\CommandHandler\Employee;
 
 use App\Module\Company\Application\Command\Employee\DeleteMultipleEmployeesCommand;
 use App\Module\Company\Domain\Service\Employee\EmployeeMultipleDeleter;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-readonly class DeleteMultipleEmployeesCommandHandler
+#[AsMessageHandler(bus: 'command.bus')]
+final readonly class DeleteMultipleEmployeesCommandHandler
 {
     public function __construct(private EmployeeMultipleDeleter $employeeMultipleDeleter)
     {

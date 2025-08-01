@@ -11,7 +11,7 @@ use App\Module\Company\Domain\DTO\Department\UpdateDTO;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class UpdateDepartmentAction
+final readonly class UpdateDepartmentAction
 {
     public function __construct(
         private MessageBusInterface $commandBus,

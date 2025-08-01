@@ -7,9 +7,9 @@ namespace App\Module\Company\Domain\Service\Company;
 use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
 use Doctrine\Common\Collections\Collection;
 
-readonly class CompanyMultipleDeleter
+final readonly class CompanyMultipleDeleter
 {
-    public function __construct(private CompanyWriterInterface $roleWriterRepository)
+    public function __construct(private CompanyWriterInterface $roleWriterRepository,)
     {
     }
 

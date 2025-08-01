@@ -10,7 +10,10 @@ use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
 
 final readonly class CompanyDeleter
 {
-    public function __construct(private CompanyWriterInterface $companyWriterRepository, private CompanyReaderInterface $companyReaderRepository,)
+    public function __construct(
+        private CompanyWriterInterface $companyWriterRepository,
+        private CompanyReaderInterface $companyReaderRepository,
+    )
     {
     }
 

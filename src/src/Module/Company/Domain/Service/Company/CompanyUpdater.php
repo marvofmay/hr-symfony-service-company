@@ -19,7 +19,7 @@ use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
 use App\Module\Company\Domain\Interface\Contact\ContactWriterInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 
-class CompanyUpdater extends CompanyCreator
+final class CompanyUpdater extends CompanyCreator
 {
     public function __construct(
         protected Company $company,
