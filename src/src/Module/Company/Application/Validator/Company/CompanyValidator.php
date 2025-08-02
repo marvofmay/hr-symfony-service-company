@@ -32,4 +32,18 @@ final readonly class CompanyValidator
     {
         $this->companyReaderRepository->getCompanyByUUID($uuid);
     }
+
+    public function isCompaniesExists(array $uuids): void
+    {
+        $errors = [];
+        foreach ($uuids as $uuid) {
+            if (!$this->companyReaderRepository->isCompanyExistsWithUUID($uuid)) {
+                $errors[] = $this->translator->trans('company.uuid.notExists', [':uuid' => $uuid], 'companies');
+            }
+        }
+
+        if (!empty($errors)) {
+            throw new \Exception(implode(', ', $errors), Response::HTTP_NOT_FOUND);
+        }
+    }
 }

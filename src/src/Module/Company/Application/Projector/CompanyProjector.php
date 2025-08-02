@@ -6,10 +6,13 @@ namespace App\Module\Company\Application\Projector;
 
 use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
+use App\Module\Company\Domain\Event\Company\CompanyMassDeletedEvent;
+use App\Module\Company\Domain\Event\Company\CompanyMultipleDeletedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyRestoredEvent;
 use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 use App\Module\Company\Domain\Service\Company\CompanyCreator;
 use App\Module\Company\Domain\Service\Company\CompanyDeleter;
+use App\Module\Company\Domain\Service\Company\CompanyMultipleDeleter;
 use App\Module\Company\Domain\Service\Company\CompanyRestorer;
 use App\Module\Company\Domain\Service\Company\CompanyUpdater;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -17,10 +20,11 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 final readonly class CompanyProjector
 {
     public function __construct(
-        private CompanyCreator  $companyCreator,
-        private CompanyUpdater  $companyUpdater,
-        private CompanyDeleter  $companyDeleter,
-        private CompanyRestorer $companyRestorer,
+        private CompanyCreator         $companyCreator,
+        private CompanyUpdater         $companyUpdater,
+        private CompanyDeleter         $companyDeleter,
+        private CompanyRestorer        $companyRestorer,
+        private CompanyMultipleDeleter $companyMultipleDeleter,
     )
     {
     }

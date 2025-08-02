@@ -31,7 +31,6 @@ final class CompanyAggregateReaderRepository extends ServiceEntityRepository imp
         }
 
         $domainEvents = [];
-
         foreach ($events as $eventEntity) {
             $event = $this->serializer->deserialize(
                 $eventEntity->getPayload(),
