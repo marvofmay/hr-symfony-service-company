@@ -6,9 +6,11 @@ namespace App\Module\Company\Application\Projector;
 
 use App\Module\Company\Domain\Event\Employee\EmployeeCreatedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeDeletedEvent;
+use App\Module\Company\Domain\Event\Employee\EmployeeRestoredEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
 use App\Module\Company\Domain\Service\Employee\EmployeeCreator;
 use App\Module\Company\Domain\Service\Employee\EmployeeDeleter;
+use App\Module\Company\Domain\Service\Employee\EmployeeRestorer;
 use App\Module\Company\Domain\Service\Employee\EmployeeUpdater;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
@@ -18,7 +20,7 @@ final readonly class EmployeeProjector
         private EmployeeCreator  $employeeCreator,
         private EmployeeUpdater  $employeeUpdater,
         private EmployeeDeleter  $employeeDeleter,
-        //private EmployeeRestorer $employeeRestorer,
+        private EmployeeRestorer $employeeRestorer,
     )
     {
     }
@@ -41,9 +43,9 @@ final readonly class EmployeeProjector
         $this->employeeDeleter->delete($event);
     }
 
-    //#[AsEventListener(event: EmployeeRestoredEvent::class)]
-    //public function onEmployeeRestored(EmployeeRestoredEvent $event): void
-    //{
-    //    $this->companyRestorer->restore($event);
-    //}
+    #[AsEventListener(event: EmployeeRestoredEvent::class)]
+    public function onEmployeeRestored(EmployeeRestoredEvent $event): void
+    {
+        $this->employeeRestorer->restore($event);
+    }
 }

@@ -54,6 +54,9 @@ employee:
     error: "Wystąpił błąd - pracownik nie został usunięty"
     multiple:
       success: "Pracownicy zostali pomyślnie usunięci"
+  restore:
+    success: "Pracownik został pomyślnie przywrócony"
+    error: "Wystąpił błąd - pracownik nie został przywrócony"
   import:
     queued: "Plik został dodany do kolejki importu pracowników. Otrzymasz powiadmienie o statusie importu."
     success: "Pracownicy zostali pomyślnie zaimportowani"

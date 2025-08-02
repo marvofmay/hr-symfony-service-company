@@ -7,7 +7,6 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Empl
 use App\Common\Domain\Entity\EventStore;
 use App\Module\Company\Domain\Aggregate\Employee\EmployeeAggregate;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
-use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmploymentFrom;
 use App\Module\Company\Domain\Interface\Employee\EmployeeAggregateReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;

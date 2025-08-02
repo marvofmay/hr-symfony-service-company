@@ -8,11 +8,11 @@ use App\Module\Company\Application\Command\Company\RestoreCompanyCommand;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class RestoreCompanyAction
+final readonly class RestoreCompanyAction
 {
     public function __construct(
-        private readonly MessageBusInterface $commandBus,
-        private readonly CompanyReaderInterface $companyReaderRepository,
+        private MessageBusInterface    $commandBus,
+        private CompanyReaderInterface $companyReaderRepository,
     ) {
     }
 
