@@ -25,4 +25,18 @@ final readonly class DepartmentValidator
     {
         $this->departmentReaderRepository->getDepartmentByUUID($uuid);
     }
+
+    public function isDepartmentsExists(array $uuids): void
+    {
+        $errors = [];
+        foreach ($uuids as $uuid) {
+            if (!$this->departmentReaderRepository->isDepartmentExistsWithUUID($uuid)) {
+                $errors[] = $this->translator->trans('department.uuid.notExists', [':uuid' => $uuid], 'departments');
+            }
+        }
+
+        if (!empty($errors)) {
+            throw new \Exception(implode(', ', $errors), Response::HTTP_NOT_FOUND);
+        }
+    }
 }
