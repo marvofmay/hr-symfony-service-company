@@ -30,4 +30,18 @@ final readonly class EmployeeValidator
     {
         $this->employeeReaderRepository->getEmployeeByUUID($uuid);
     }
+
+    public function isEmployeesExists(array $uuids): void
+    {
+        $errors = [];
+        foreach ($uuids as $uuid) {
+            if (!$this->employeeReaderRepository->isEmployeeWithUUIDExists($uuid)) {
+                $errors[] = $this->translator->trans('employee.uuid.notExists', [':uuid' => $uuid], 'employees');
+            }
+        }
+
+        if (!empty($errors)) {
+            throw new \Exception(implode(', ', $errors), Response::HTTP_NOT_FOUND);
+        }
+    }
 }

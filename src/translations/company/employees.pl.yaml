@@ -54,6 +54,7 @@ employee:
     error: "Wystąpił błąd - pracownik nie został usunięty"
     multiple:
       success: "Pracownicy zostali pomyślnie usunięci"
+      error: "Wystąpił błąd - pracownicy nie zostali usunięci"
   restore:
     success: "Pracownik został pomyślnie przywrócony"
     error: "Wystąpił błąd - pracownik nie został przywrócony"

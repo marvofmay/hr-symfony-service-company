@@ -22,10 +22,10 @@ readonly class DeleteMultipleDepartmentsAction
 
     public function execute(DeleteMultipleDTO $deleteMultipleDTO): void
     {
-        $this->departmentValidator->isDepartmentsExists($deleteMultipleDTO->getSelectedUUID());
+        $this->departmentValidator->isDepartmentsExists($deleteMultipleDTO->selectedUUID);
         $this->commandBus->dispatch(
             new DeleteMultipleDepartmentsCommand(
-                $this->departmentReaderRepository->getDepartmentsByUUID($deleteMultipleDTO->getSelectedUUID())
+                $this->departmentReaderRepository->getDepartmentsByUUID($deleteMultipleDTO->selectedUUID)
             )
         );
     }

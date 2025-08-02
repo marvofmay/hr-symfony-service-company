@@ -22,10 +22,10 @@ readonly class DeleteMultipleCompaniesAction
 
     public function execute(DeleteMultipleDTO $deleteMultipleDTO): void
     {
-        $this->companyValidator->isCompaniesExists($deleteMultipleDTO->getSelectedUUID());
+        $this->companyValidator->isCompaniesExists($deleteMultipleDTO->selectedUUID);
         $this->commandBus->dispatch(
             new DeleteMultipleCompaniesCommand(
-                $this->companyReaderRepository->getCompaniesByUUID($deleteMultipleDTO->getSelectedUUID())
+                $this->companyReaderRepository->getCompaniesByUUID($deleteMultipleDTO->selectedUUID)
             )
         );
     }
