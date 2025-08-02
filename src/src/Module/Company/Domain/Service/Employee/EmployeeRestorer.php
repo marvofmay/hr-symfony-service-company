@@ -37,6 +37,12 @@ final readonly class EmployeeRestorer
             $contact->setUpdatedAt($now);
         }
 
+        $user = $this->employeeReaderRepository->getDeletedUserByEmployeeUUID($event->uuid->toString());
+        if ($user) {
+            $user->setDeletedAt(null);
+            $user->setUpdatedAt($now);
+        }
+
         $this->employeeWriterRepository->saveEmployeeInDB($employee);
     }
 }

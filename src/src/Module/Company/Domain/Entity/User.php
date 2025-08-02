@@ -34,9 +34,12 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
     public const RELATION_ROLES = 'roles';
+    public const RELATION_EMPLOYEE = 'employee';
 
     public const SOFT_DELETED_AT = 'soft';
     public const HARD_DELETED_AT = 'hard';
+
+    public const string ALIAS = 'user';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -96,8 +99,9 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function getRoles(): array
     {
-        // ToDo:: get Roles from relation employee, if employee not null
+        // ToDo:: get Role from relation employee, if employee not null
         // $this->employee->role
+
         return [];
     }
 
