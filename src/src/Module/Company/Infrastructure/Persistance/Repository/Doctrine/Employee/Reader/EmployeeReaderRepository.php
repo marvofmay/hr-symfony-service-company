@@ -85,8 +85,6 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
 
     public function isEmployeeWithEmailExists(string $email, ?string $uuid = null): bool
     {
-        $x = !is_null($this->getEmployeeByEmail($email, $uuid));
-
         return !is_null($this->getEmployeeByEmail($email, $uuid));
     }
 
