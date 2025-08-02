@@ -12,7 +12,7 @@ use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ImportDepartmentsFromXLSX extends XLSXIterator
+final class ImportDepartmentsFromXLSX extends XLSXIterator
 {
     public const int COLUMN_DEPARTMENT_UUID = 0;
     public const int COLUMN_DEPARTMENT_NAME = 1;

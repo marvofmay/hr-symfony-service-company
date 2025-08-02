@@ -10,7 +10,7 @@ use App\Module\System\Domain\Entity\Import;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-readonly class ImportCompaniesValidator
+final readonly class ImportCompaniesValidator
 {
     public function __construct(
         private TranslatorInterface $translator,

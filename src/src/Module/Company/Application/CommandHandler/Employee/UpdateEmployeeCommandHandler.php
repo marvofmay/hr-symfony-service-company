@@ -28,7 +28,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-readonly class UpdateEmployeeCommandHandler
+final readonly class UpdateEmployeeCommandHandler
 {
     public function __construct(
         private EventStoreCreator $eventStoreCreator,

@@ -7,7 +7,7 @@ namespace App\Module\Company\Domain\Service\Department;
 use App\Module\Company\Domain\Interface\Department\DepartmentWriterInterface;
 use Doctrine\Common\Collections\Collection;
 
-readonly class DepartmentMultipleDeleter
+final readonly class DepartmentMultipleDeleter
 {
     public function __construct(private DepartmentWriterInterface $departmentWriterRepository)
     {

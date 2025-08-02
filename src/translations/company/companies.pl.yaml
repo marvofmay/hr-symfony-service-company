@@ -43,6 +43,7 @@ company:
     error: "Wystąpił błąd - firma nie została usunięta"
     multiple:
       success: "Firmy zostały pomyślnie usunięte"
+      error: "Wystąpił błąd - firmy nie zostały usunięte"
   restore:
     success: "Firma została pomyślnie przywrócona"
     error: "Wystąpił błąd - firma nie została przywrócona"

@@ -22,7 +22,7 @@ use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class EmployeeMultipleCreator
+final readonly class EmployeeMultipleCreator
 {
     private Employee $employee;
 

@@ -5,12 +5,18 @@ permission:
     description: "Uprawnienie aktualizacji zasobu"
   delete:
     description: "Uprawnienie usuwania zasobu"
+  restore:
+    description: "Uprawnienie przywracania zasobu"
   view:
     description: "Uprawnienie podglądu zasobu"
   list:
     description: "Uprawnienie listowania zasobu"
   import:
     description: "Uprawnienie do importu danych dp zasobu"
+  assign_permission_to_access_role:
+    description: "Uprawnienie do przypisywania uprawnień do roli"
+  assign_access_to_role:
+    description: "Uprawnienie do przypisywania dostepu do roli"
   notExists: "Uprawnienie o podanym UUID nie istnieje :uuid"
   uuid:
     required: "Wymagane UUID uprawnienia"

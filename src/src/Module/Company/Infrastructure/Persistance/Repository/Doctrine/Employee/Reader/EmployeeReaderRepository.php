@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Employee\Reader;
 
 use App\Common\Domain\Exception\NotFindByUUIDException;
+use App\Module\Company\Domain\Entity\Address;
+use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\User;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
@@ -110,5 +113,119 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
     public function isEmployeeAlreadyExists(string $email, string $pesel, ?string $employeeUUID = null): bool
     {
         return $this->isEmployeeWithPESELExists($pesel, $employeeUUID) || $this->isEmployeeWithEmailExists($email, $employeeUUID);
+    }
+
+    public function getDeletedEmployeeByUUID(string $uuid): ?Employee
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $deletedEmployee =  $this->createQueryBuilder(Employee::ALIAS)
+                ->where(Employee::ALIAS . '.' . Employee::COLUMN_UUID . ' = :uuid')
+                ->andWhere(Employee::ALIAS . '.' . Employee::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (null === $deletedEmployee) {
+                throw new \Exception($this->translator->trans('employee.deleted.notExists', [':uuid' => $uuid], 'employees'), Response::HTTP_NOT_FOUND);
+            }
+
+            return $deletedEmployee;
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+
+    public function getDeletedAddressByEmployeeByUUID(string $uuid): ?Address
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $deletedAddress = $qb->select(Address::ALIAS)
+                ->from(Address::class, Address::ALIAS)
+                ->join(Address::ALIAS . '.' . Address::RELATION_EMPLOYEE, Employee::ALIAS)
+                ->where(Employee::ALIAS  . '.' . Employee::COLUMN_UUID . ' = :uuid')
+                ->andWhere(Address::ALIAS . '.' . Address::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (null === $deletedAddress) {
+                throw new \Exception(
+                    $this->translator->trans('employee.deleted.address.notExists', [':uuid' => $uuid], 'employees'),
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return $deletedAddress;
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+
+    public function getDeletedContactsByEmployeeByUUID(string $uuid): Collection
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $deletedContacts = $qb->select(Contact::ALIAS)
+                ->from(Contact::class, Contact::ALIAS)
+                ->join(Contact::ALIAS . '.' . Contact::RELATION_EMPLOYEE, Employee::ALIAS)
+                ->where(Employee::ALIAS . '. ' . Employee::COLUMN_UUID . ' = :uuid')
+                ->andWhere(Contact::ALIAS . '.' . Contact::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getResult();
+
+            if (empty($deletedContacts)) {
+                throw new \Exception(
+                    $this->translator->trans('company.deleted.contacts.notExists', [':uuid' => $uuid], 'companies'),
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return new ArrayCollection($deletedContacts);
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+
+    public function getDeletedUserByEmployeeUUID(string $uuid): ?User
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $qb = $this->getEntityManager()->createQueryBuilder();
+            $deletedUser = $qb->select(User::ALIAS)
+                ->from(User::class, User::ALIAS)
+                ->join(User::ALIAS . '.' . User::RELATION_EMPLOYEE, Employee::ALIAS)
+                ->where(Employee::ALIAS . '. ' . Employee::COLUMN_UUID . ' = :uuid')
+                ->andWhere(User::ALIAS . '.' . User::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            if (null === $deletedUser) {
+                throw new \Exception(
+                    $this->translator->trans(
+                        'employee.deleted.notExists',
+                        [':uuid' => $uuid],
+                        'employees'
+                    ),
+                    Response::HTTP_NOT_FOUND
+                );
+            }
+
+            return $deletedUser;
+        } finally {
+            $filters->enable('soft_delete');
+        }
     }
 }

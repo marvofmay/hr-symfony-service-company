@@ -8,11 +8,11 @@ use App\Module\Company\Application\Command\Department\RestoreDepartmentCommand;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class RestoreDepartmentAction
+final readonly class RestoreDepartmentAction
 {
     public function __construct(
-        private readonly MessageBusInterface $commandBus,
-        private readonly DepartmentReaderInterface $departmentReaderRepository,
+        private MessageBusInterface       $commandBus,
+        private DepartmentReaderInterface $departmentReaderRepository,
     ) {
     }
 
