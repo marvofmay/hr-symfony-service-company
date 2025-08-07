@@ -59,7 +59,7 @@ final readonly class ImportCompaniesCommandHandler
             $this->cache,
         );
 
-        $nipMap = [];  // NIP (string) => CompanyUUID
+        $nipMap = [];
         $preparedRows = [];
 
         foreach ($importer->import() as $row) {

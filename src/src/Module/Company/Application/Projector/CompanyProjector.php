@@ -52,12 +52,12 @@ final readonly class CompanyProjector
         $this->companyRestorer->restore($event);
     }
 
-    #[AsEventListener(event: CompanyMultipleImportedEvent::class)]
-    public function onCompanyMultipleImported(CompanyMultipleImportedEvent $event): void
-    {
-        $this->companyMultipleCreator->multipleCreate($event);
-
-        // $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
-        // ToDo save notification about DONE import - immediately
-    }
+    //#[AsEventListener(event: CompanyMultipleImportedEvent::class)]
+    //public function onCompanyMultipleImported(CompanyMultipleImportedEvent $event): void
+    //{
+    //    $this->companyMultipleCreator->multipleCreate($event);
+    //
+    //    // $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
+    //    // ToDo save notification about DONE import - immediately
+    //}
 }

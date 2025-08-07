@@ -10,7 +10,6 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use App\Module\Company\Domain\Entity\Address;
-use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Company\Domain\Interface\Address\AddressWriterInterface;
@@ -22,15 +21,13 @@ use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 final class CompanyUpdater extends CompanyCreator
 {
     public function __construct(
-        protected Company $company,
-        protected Address $address,
         protected CompanyWriterInterface $companyWriterRepository,
         protected CompanyReaderInterface $companyReaderRepository,
         protected IndustryReaderInterface $industryReaderRepository,
         protected ContactWriterInterface $contactWriterRepository,
         protected AddressWriterInterface $addressWriterRepository,
     ) {
-        parent::__construct($company, $address, $companyWriterRepository, $companyReaderRepository, $industryReaderRepository);
+        parent::__construct($companyWriterRepository, $companyReaderRepository, $industryReaderRepository);
     }
 
     public function update(DomainEventInterface $event): void
