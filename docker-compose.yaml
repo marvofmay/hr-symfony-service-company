@@ -17,6 +17,7 @@ services:
       - ./src:/var/www/html
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+      - MAILER_DSN=smtp://mailpit:1025
     depends_on:
       service-company-db:
         condition: service_healthy
@@ -116,3 +117,10 @@ services:
     restart: always
     volumes:
       - redis-data:/data
+
+  mailpit:
+    image: axllent/mailpit
+    container_name: mailpit
+    ports:
+      - "8025:8025" # UI dostępne pod http://localhost:8025
+      - "1025:1025" # SMTP
