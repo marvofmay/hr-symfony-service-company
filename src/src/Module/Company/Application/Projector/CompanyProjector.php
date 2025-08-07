@@ -6,13 +6,12 @@ namespace App\Module\Company\Application\Projector;
 
 use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
-use App\Module\Company\Domain\Event\Company\CompanyMassDeletedEvent;
-use App\Module\Company\Domain\Event\Company\CompanyMultipleDeletedEvent;
+use App\Module\Company\Domain\Event\Company\CompanyMultipleImportedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyRestoredEvent;
 use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 use App\Module\Company\Domain\Service\Company\CompanyCreator;
 use App\Module\Company\Domain\Service\Company\CompanyDeleter;
-use App\Module\Company\Domain\Service\Company\CompanyMultipleDeleter;
+use App\Module\Company\Domain\Service\Company\CompanyMultipleCreator;
 use App\Module\Company\Domain\Service\Company\CompanyRestorer;
 use App\Module\Company\Domain\Service\Company\CompanyUpdater;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
@@ -24,7 +23,7 @@ final readonly class CompanyProjector
         private CompanyUpdater         $companyUpdater,
         private CompanyDeleter         $companyDeleter,
         private CompanyRestorer        $companyRestorer,
-        private CompanyMultipleDeleter $companyMultipleDeleter,
+        private CompanyMultipleCreator $companyMultipleCreator,
     )
     {
     }
@@ -51,5 +50,14 @@ final readonly class CompanyProjector
     public function onCompanyRestored(CompanyRestoredEvent $event): void
     {
         $this->companyRestorer->restore($event);
+    }
+
+    #[AsEventListener(event: CompanyMultipleImportedEvent::class)]
+    public function onCompanyMultipleImported(CompanyMultipleImportedEvent $event): void
+    {
+        $this->companyMultipleCreator->multipleCreate($event);
+
+        // $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
+        // ToDo save notification about DONE import - immediately
     }
 }

@@ -36,7 +36,6 @@ class CompanyCreator
     public function create(DomainEventInterface $event): void
     {
         $this->setCompany($event);
-
         $this->companyWriterRepository->saveCompanyInDB($this->company);
     }
 
@@ -68,18 +67,18 @@ class CompanyCreator
             }
         }
 
-        if (null !== $event->parentCompanyUUID) {
-            $parentCompany = $this->companyReaderRepository->getCompanyByUUID($event->parentCompanyUUID->toString());
-            if ($parentCompany instanceof Company) {
-                $this->company->setParentCompany($parentCompany);
-            }
-        }
+        //if (null !== $event->parentCompanyUUID) {
+        //    $parentCompany = $this->companyReaderRepository->getCompanyByUUID($event->parentCompanyUUID->toString());
+        //    if ($parentCompany instanceof Company) {
+        //        $this->company->setParentCompany($parentCompany);
+        //    }
+        //}
 
-        foreach ($this->contacts as $contact) {
-            $this->company->addContact($contact);
-        }
+        //foreach ($this->contacts as $contact) {
+        //    $this->company->addContact($contact);
+        //}
 
-        $this->company->setAddress($this->address);
+        //$this->company->setAddress($this->address);
     }
 
     protected function setContacts(Phones $phones, ?Emails $emails = null, ?Websites $websites = null): void

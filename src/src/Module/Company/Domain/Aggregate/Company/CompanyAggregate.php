@@ -51,12 +51,13 @@ class CompanyAggregate extends AggregateRootAbstract
         ?CompanyUUID $parentCompanyUUID = null,
         ?Emails      $emails = null,
         ?Websites    $websites = null,
+        ?CompanyUUID $uuid = null,
     ): self
     {
         $aggregate = new self();
 
         $aggregate->record(new CompanyCreatedEvent(
-            CompanyUUID::generate(),
+            $uuid ?? CompanyUUID::generate(),
             $fullName,
             $nip,
             $regon,

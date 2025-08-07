@@ -20,7 +20,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
     public const int COLUMN_COMPANY_FULL_NAME = 1;
     public const int COLUMN_COMPANY_SHORT_NAME = 2;
     public const int COLUMN_COMPANY_DESCRIPTION = 3;
-    public const int COLUMN_PARENT_COMPANY_UUID = 4;
+    public const int COLUMN_PARENT_COMPANY_NIP = 4;
     public const int COLUMN_INDUSTRY_UUID = 5;
     public const int COLUMN_NIP = 6;
     public const int COLUMN_REGON = 7;

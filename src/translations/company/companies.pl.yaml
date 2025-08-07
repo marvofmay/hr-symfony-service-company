@@ -51,6 +51,8 @@ company:
     queued: "Plik został dodany do kolejki importu firm. Otrzymasz powiadmienie o statusie importu."
     success: "Firmy zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - firmy nie zostały zaimportowane"
+    file:
+      required: "Plik importu firm jest wymagany"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej firmy"
   list:

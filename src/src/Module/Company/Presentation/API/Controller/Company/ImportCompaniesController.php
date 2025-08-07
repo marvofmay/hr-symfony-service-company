@@ -7,8 +7,11 @@ namespace App\Module\Company\Presentation\API\Controller\Company;
 use App\Common\Domain\DTO\UploadFileDTO;
 use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Enum\FileKindEnum;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
+use App\Module\Company\Application\Facade\ImportCompaniesFacade;
+use App\Module\Company\Application\Facade\ImportRolesFacade;
 use App\Module\Company\Domain\DTO\Company\ImportDTO;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesValidator;
 use App\Module\Company\Presentation\API\Action\Company\ImportCompaniesAction;
@@ -40,74 +43,77 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportCompaniesController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
+    public function __construct(private readonly ImportCompaniesFacade $importCompaniesFacade, private readonly MessageService $messageService,)
     {
     }
 
     #[Route('/api/companies/import', name: 'import', methods: ['POST'])]
-    public function import(
-        #[MapUploadedFile] UploadedFile $file,
-        UploadFileAction $uploadFileAction,
-        ImportCompaniesAction $importCompaniesAction,
-        ImportCompaniesValidator $importCompaniesValidator,
-        CreateFileAction $createFileAction,
-        AskFileAction $askFileAction,
-        CreateImportAction $createImportAction,
-        UpdateImportAction $updateImportAction,
-        ImportLogMultipleCreator $importLogMultipleCreator,
-        AskImportAction $askImportAction,
-        AskImportLogsAction $askImportLogsAction,
-        ValidatorInterface $validator,
-        Security $security,
-        ParameterBagInterface $params,
-    ): JsonResponse {
-        try {
-            if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::COMPANY)) {
-                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
-            }
-            $employee = $security->getUser()->getEmployee();
+    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse {
 
-            $uploadFilePath = sprintf('%s/companies', $params->get('upload_file_path'));
-            $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
-
-            $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
-            $errors = $validator->validate($uploadFileDTO);
-            if (count($errors) > 0) {
-                return new JsonResponse(['message' => $this->translator->trans('company.import.error', [], 'companies'), 'errors' => UploadFileErrorTransformer::map($errors)], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-            $uploadFileAction->execute($uploadFileDTO);
-            $createFileAction->execute($fileName, $uploadFilePath, $employee);
-            $file = $askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
-            $createImportAction->execute(ImportKindEnum::IMPORT_COMPANIES, ImportStatusEnum::PENDING, $file, $employee);
-            $import = $askImportAction->ask($file);
-
-            $errors = $importCompaniesValidator->validate($import);
-            if (!empty($errors)) {
-                $updateImportAction->execute($import, ImportStatusEnum::FAILED);
-                $importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
-
-                foreach ($errors as $error) {
-                    $this->logger->error($this->translator->trans('company.import.error', [], 'companies').': '.$error);
-                }
-
-                $importLogs = $askImportLogsAction->ask($import);
-                $mappedErrors = ImportLogErrorTransformer::map($importLogs);
-
-                return new JsonResponse([
-                    'message' => $this->translator->trans('company.import.error', [], 'companies'),
-                    'errors' => $mappedErrors,
-                ], Response::HTTP_UNPROCESSABLE_ENTITY);
-            }
-
-            $importCompaniesAction->execute(new ImportDTO($import->getUUID()->toString()));
-
-            return new JsonResponse(['message' => $this->translator->trans('company.import.queued', [], 'companies'), 'errors' => []], Response::HTTP_CREATED);
-        } catch (\Exception $error) {
-            $message = sprintf('%s. %s', $this->translator->trans('company.import.error', [], 'companies'), $this->translator->trans($error->getMessage()));
-            $this->logger->error($message);
-
-            return new JsonResponse(['message' => $message, 'errors' => []], $error->getCode());
+        if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::COMPANY)) {
+            return new JsonResponse(['message' => $this->messageService->get('accessDenied')], Response::HTTP_FORBIDDEN);
         }
+
+        if (!$file) {
+            return new JsonResponse(['message' => $this->messageService->get('company.import.file.required', [], 'companies')], Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+
+        $result = $this->importCompaniesFacade->handle($file);
+
+        $responseData = ['message' => $result['message']];
+        if (!empty($result['errors'])) {
+            $responseData['errors'] = $result['errors'];
+        }
+
+        return new JsonResponse($responseData, $result['success'] ? Response::HTTP_CREATED : Response::HTTP_UNPROCESSABLE_ENTITY);
+
+        //try {
+        //    if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::COMPANY)) {
+        //        throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
+        //    }
+        //    $employee = $security->getUser()->getEmployee();
+        //
+        //    $uploadFilePath = sprintf('%s/companies', $params->get('upload_file_path'));
+        //    $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
+        //
+        //    $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
+        //    $errors = $validator->validate($uploadFileDTO);
+        //    if (count($errors) > 0) {
+        //        return new JsonResponse(['message' => $this->translator->trans('company.import.error', [], 'companies'), 'errors' => UploadFileErrorTransformer::map($errors)], Response::HTTP_UNPROCESSABLE_ENTITY);
+        //    }
+        //
+        //    $uploadFileAction->execute($uploadFileDTO);
+        //    $createFileAction->execute($fileName, $uploadFilePath, $employee);
+        //    $file = $askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
+        //    $createImportAction->execute(ImportKindEnum::IMPORT_COMPANIES, ImportStatusEnum::PENDING, $file, $employee);
+        //    $import = $askImportAction->ask($file);
+        //
+        //    $errors = $importCompaniesValidator->validate($import);
+        //    if (!empty($errors)) {
+        //        $updateImportAction->execute($import, ImportStatusEnum::FAILED);
+        //        $importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
+        //
+        //        foreach ($errors as $error) {
+        //            $this->logger->error($this->translator->trans('company.import.error', [], 'companies').': '.$error);
+        //        }
+        //
+        //        $importLogs = $askImportLogsAction->ask($import);
+        //        $mappedErrors = ImportLogErrorTransformer::map($importLogs);
+        //
+        //        return new JsonResponse([
+        //            'message' => $this->translator->trans('company.import.error', [], 'companies'),
+        //            'errors' => $mappedErrors,
+        //        ], Response::HTTP_UNPROCESSABLE_ENTITY);
+        //    }
+        //
+        //    $importCompaniesAction->execute(new ImportDTO($import->getUUID()->toString()));
+        //
+        //    return new JsonResponse(['message' => $this->translator->trans('company.import.queued', [], 'companies'), 'errors' => []], Response::HTTP_CREATED);
+        //} catch (\Exception $error) {
+        //    $message = sprintf('%s. %s', $this->translator->trans('company.import.error', [], 'companies'), $this->translator->trans($error->getMessage()));
+        //    $this->logger->error($message);
+        //
+        //    return new JsonResponse(['message' => $message, 'errors' => []], $error->getCode());
+        //}
     }
 }
