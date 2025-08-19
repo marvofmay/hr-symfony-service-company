@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Aggregate\Company\ValueObject;
 
-final class FullName
+final class FullName extends CompanyNameAbstract
 {
-    private string $value;
-
     public function __construct(string $value)
     {
         $trimmed = trim($value);
@@ -24,21 +22,11 @@ final class FullName
             throw new \InvalidArgumentException('FullName must be at most 500 characters.');
         }
 
-        $this->value = $trimmed;
+        parent::__construct($trimmed);
     }
 
-    public static function fromString(string $value): self
+    public static function fromString(string $value): static
     {
         return new self($value);
-    }
-
-    public function getValue(): string
-    {
-        return $this->value;
-    }
-
-    public function __toString(): string
-    {
-        return $this->value;
     }
 }

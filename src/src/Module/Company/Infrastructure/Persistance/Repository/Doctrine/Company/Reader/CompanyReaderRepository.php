@@ -23,7 +23,7 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         parent::__construct($registry, Company::class);
     }
 
-    public function getCompanyByUUID(string $uuid): ?Company
+    public function getCompanyByUUID(string $uuid): Company
     {
         $company = $this->findOneBy([Company::COLUMN_UUID => $uuid]);
         if (null === $company) {
@@ -59,6 +59,22 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
             ->from(Company::class, Company::ALIAS)
             ->where(Company::ALIAS.'.'.Company::COLUMN_FULL_NAME.' = :name')
             ->setParameter('name', $fullName);
+
+        if (null !== $uuid) {
+            $qb->andWhere(Company::ALIAS.'.'.Company::COLUMN_UUID.' != :uuid')
+                ->setParameter('uuid', $uuid);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function getCompanyByInternalCode(string $internalCode, ?string $uuid = null): ?Company
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select(Company::ALIAS)
+            ->from(Company::class, Company::ALIAS)
+            ->where(Company::ALIAS.'.'.Company::COLUMN_INTERNAL_CODE.' = :internalCode')
+            ->setParameter('internalCode', $internalCode);
 
         if (null !== $uuid) {
             $qb->andWhere(Company::ALIAS.'.'.Company::COLUMN_UUID.' != :uuid')
@@ -121,6 +137,11 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         return !is_null($this->getCompanyByFullName($name, $uuid));
     }
 
+    public function isCompanyExistsWithInternalCode(string $internalCode, ?string $uuid = null): bool
+    {
+        return !is_null($this->getCompanyByInternalCode($internalCode, $uuid));
+    }
+
     public function isCompanyExistsWithNIP(string $nip, ?string $uuid = null): bool
     {
         return !is_null($this->getCompanyByNIP($nip, $uuid));
@@ -148,7 +169,15 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
 
         $qb->select(Company::ALIAS)
             ->from(Company::class, Company::ALIAS)
-            ->where(sprintf('%s.%s = :nip OR %s.%s = :regon', Company::ALIAS, Company::COLUMN_NIP, Company::ALIAS, Company::COLUMN_REGON))
+            ->where(
+                sprintf(
+                    '%s.%s = :nip OR %s.%s = :regon',
+                    Company::ALIAS,
+                    Company::COLUMN_NIP,
+                    Company::ALIAS,
+                    Company::COLUMN_REGON,
+                )
+            )
             ->setParameter('nip', $nip)
             ->setParameter('regon', $regon);
 

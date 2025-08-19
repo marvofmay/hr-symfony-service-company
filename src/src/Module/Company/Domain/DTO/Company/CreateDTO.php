@@ -32,6 +32,12 @@ class CreateDTO
         }
     }
 
+    public ?string $internalCode = null {
+        get {
+            return $this->internalCode;
+        }
+    }
+
     #[Assert\Type(
         type: 'bool',
     )]

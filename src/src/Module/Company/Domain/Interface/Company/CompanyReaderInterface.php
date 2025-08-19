@@ -10,11 +10,12 @@ use Doctrine\Common\Collections\Collection;
 
 interface CompanyReaderInterface
 {
-    public function getCompanyByUUID(string $uuid): ?Company;
+    public function getCompanyByUUID(string $uuid): Company;
 
     public function getCompaniesByUUID(array $selectedUUID): Collection;
 
     public function getCompanyByFullName(string $fullName, ?string $uuid): ?Company;
+    public function getCompanyByInternalCode(string $internalCode, ?string $uuid): ?Company;
 
     public function getCompanyByShortName(string $shortName, ?string $uuid): ?Company;
 
@@ -23,6 +24,7 @@ interface CompanyReaderInterface
     public function getCompanyByREGON(string $regon, ?string $uuid): ?Company;
 
     public function isCompanyExistsWithFullName(string $name, ?string $uuid = null): bool;
+    public function isCompanyExistsWithInternalCode(string $internalCode, ?string $uuid = null): bool;
 
     public function isCompanyExistsWithNIP(string $nip, ?string $uuid = null): bool;
 

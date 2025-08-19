@@ -28,15 +28,17 @@ class CompanyAggregate extends AggregateRootAbstract
     private IndustryUUID $industryUUID;
     private FullName     $fullName;
     private ?ShortName   $shortName         = null;
-    private NIP          $nip;
-    private REGON        $regon;
-    private ?string      $description       = null;
-    private bool         $active            = true;
-    private Address      $address;
-    private ?Phones      $phones            = null;
-    private ?Emails      $emails            = null;
-    private ?Websites    $websites          = null;
-    private bool         $deleted           = false;
+
+    private ?string   $internalCode = null;
+    private NIP       $nip;
+    private REGON     $regon;
+    private ?string   $description         = null;
+    private bool      $active              = true;
+    private Address   $address;
+    private ?Phones   $phones              = null;
+    private ?Emails   $emails              = null;
+    private ?Websites $websites            = null;
+    private bool      $deleted             = false;
 
     public static function create(
         FullName     $fullName,
@@ -47,6 +49,7 @@ class CompanyAggregate extends AggregateRootAbstract
         Address      $address,
         Phones       $phones,
         ?ShortName   $shortName = null,
+        ?string      $internalCode = null,
         ?string      $description = null,
         ?CompanyUUID $parentCompanyUUID = null,
         ?Emails      $emails = null,
@@ -66,6 +69,7 @@ class CompanyAggregate extends AggregateRootAbstract
             $address,
             $phones,
             $shortName,
+            $internalCode,
             $description,
             $parentCompanyUUID,
             $emails,
@@ -137,6 +141,7 @@ class CompanyAggregate extends AggregateRootAbstract
             $this->uuid = $event->uuid;
             $this->fullName = $event->fullName;
             $this->shortName = $event->shortName;
+            $this->internalCode = $event->internalCode;
             $this->description = $event->description;
             $this->nip = $event->nip;
             $this->regon = $event->regon;

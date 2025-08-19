@@ -28,6 +28,13 @@ final readonly class CompanyValidator
         }
     }
 
+    public function isCompanyWithInternalCodeAlreadyExists(string $companyInternalCode, ?string $uuid = null): void
+    {
+        if ($this->companyReaderRepository->isCompanyExistsWithInternalCode($companyInternalCode, $uuid)) {
+            throw new \Exception($this->translator->trans('company.companyInternalCode.alreadyExists', [':name' => $companyInternalCode], 'companies'), Response::HTTP_CONFLICT);
+        }
+    }
+
     public function isCompanyExists(string $uuid): void
     {
         $this->companyReaderRepository->getCompanyByUUID($uuid);

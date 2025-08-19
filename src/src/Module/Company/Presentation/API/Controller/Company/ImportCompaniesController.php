@@ -4,42 +4,16 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
-use App\Common\Domain\DTO\UploadFileDTO;
-use App\Common\Domain\Enum\FileExtensionEnum;
-use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Common\Domain\Service\UploadFile\UploadFile;
-use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Application\Facade\ImportCompaniesFacade;
-use App\Module\Company\Application\Facade\ImportRolesFacade;
-use App\Module\Company\Domain\DTO\Company\ImportDTO;
-use App\Module\Company\Domain\Service\Company\ImportCompaniesValidator;
-use App\Module\Company\Presentation\API\Action\Company\ImportCompaniesAction;
-use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
-use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
 use App\Module\System\Domain\Enum\AccessEnum;
-use App\Module\System\Domain\Enum\ImportKindEnum;
-use App\Module\System\Domain\Enum\ImportLogKindEnum;
-use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
-use App\Module\System\Presentation\API\Action\File\AskFileAction;
-use App\Module\System\Presentation\API\Action\File\CreateFileAction;
-use App\Module\System\Presentation\API\Action\Import\AskImportAction;
-use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
-use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
-use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportCompaniesController extends AbstractController
 {
@@ -55,7 +29,10 @@ class ImportCompaniesController extends AbstractController
         }
 
         if (!$file) {
-            return new JsonResponse(['message' => $this->messageService->get('company.import.file.required', [], 'companies')], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse(
+                ['message' => $this->messageService->get('company.import.file.required', [], 'companies')],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
         $result = $this->importCompaniesFacade->handle($file);
@@ -66,54 +43,5 @@ class ImportCompaniesController extends AbstractController
         }
 
         return new JsonResponse($responseData, $result['success'] ? Response::HTTP_CREATED : Response::HTTP_UNPROCESSABLE_ENTITY);
-
-        //try {
-        //    if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::COMPANY)) {
-        //        throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
-        //    }
-        //    $employee = $security->getUser()->getEmployee();
-        //
-        //    $uploadFilePath = sprintf('%s/companies', $params->get('upload_file_path'));
-        //    $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
-        //
-        //    $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
-        //    $errors = $validator->validate($uploadFileDTO);
-        //    if (count($errors) > 0) {
-        //        return new JsonResponse(['message' => $this->translator->trans('company.import.error', [], 'companies'), 'errors' => UploadFileErrorTransformer::map($errors)], Response::HTTP_UNPROCESSABLE_ENTITY);
-        //    }
-        //
-        //    $uploadFileAction->execute($uploadFileDTO);
-        //    $createFileAction->execute($fileName, $uploadFilePath, $employee);
-        //    $file = $askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
-        //    $createImportAction->execute(ImportKindEnum::IMPORT_COMPANIES, ImportStatusEnum::PENDING, $file, $employee);
-        //    $import = $askImportAction->ask($file);
-        //
-        //    $errors = $importCompaniesValidator->validate($import);
-        //    if (!empty($errors)) {
-        //        $updateImportAction->execute($import, ImportStatusEnum::FAILED);
-        //        $importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
-        //
-        //        foreach ($errors as $error) {
-        //            $this->logger->error($this->translator->trans('company.import.error', [], 'companies').': '.$error);
-        //        }
-        //
-        //        $importLogs = $askImportLogsAction->ask($import);
-        //        $mappedErrors = ImportLogErrorTransformer::map($importLogs);
-        //
-        //        return new JsonResponse([
-        //            'message' => $this->translator->trans('company.import.error', [], 'companies'),
-        //            'errors' => $mappedErrors,
-        //        ], Response::HTTP_UNPROCESSABLE_ENTITY);
-        //    }
-        //
-        //    $importCompaniesAction->execute(new ImportDTO($import->getUUID()->toString()));
-        //
-        //    return new JsonResponse(['message' => $this->translator->trans('company.import.queued', [], 'companies'), 'errors' => []], Response::HTTP_CREATED);
-        //} catch (\Exception $error) {
-        //    $message = sprintf('%s. %s', $this->translator->trans('company.import.error', [], 'companies'), $this->translator->trans($error->getMessage()));
-        //    $this->logger->error($message);
-        //
-        //    return new JsonResponse(['message' => $message, 'errors' => []], $error->getCode());
-        //}
     }
 }

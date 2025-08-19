@@ -14,8 +14,8 @@ final readonly class CreateCompanyAction
 {
     public function __construct(
         private MessageBusInterface $commandBus,
-        private CompanyValidator $companyValidator,
-        private IndustryValidator $industryValidator,
+        private CompanyValidator    $companyValidator,
+        private IndustryValidator   $industryValidator,
     )
     {
     }
@@ -23,6 +23,9 @@ final readonly class CreateCompanyAction
     public function execute(CreateDTO $createDTO): void
     {
         $this->companyValidator->isCompanyWithFullNameAlreadyExists($createDTO->fullName);
+        if (null !== $createDTO->internalCode) {
+            $this->companyValidator->isCompanyWithInternalCodeAlreadyExists($createDTO->internalCode);
+        }
         $this->companyValidator->isCompanyAlreadyExists($createDTO->nip, $createDTO->regon);
         $this->industryValidator->isIndustryExists($createDTO->industryUUID);
         if (null !== $createDTO->parentCompanyUUID) {
@@ -33,6 +36,7 @@ final readonly class CreateCompanyAction
             new CreateCompanyCommand(
                 $createDTO->fullName,
                 $createDTO->shortName,
+                $createDTO->internalCode,
                 $createDTO->active,
                 $createDTO->parentCompanyUUID,
                 $createDTO->nip,

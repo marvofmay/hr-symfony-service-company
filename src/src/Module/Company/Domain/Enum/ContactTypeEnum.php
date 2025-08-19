@@ -25,4 +25,13 @@ enum ContactTypeEnum: string implements EnumInterface
     {
         return array_column(self::cases(), 'value');
     }
+
+    public static function communicationTypes(): array
+    {
+        return [
+            self::PHONE,
+            self::EMAIL,
+            self::WEBSITE,
+        ];
+    }
 }

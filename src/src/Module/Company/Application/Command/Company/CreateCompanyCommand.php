@@ -12,6 +12,7 @@ final readonly class CreateCompanyCommand implements CommandInterface
     public function __construct(
         public string $fullName,
         public ?string $shortName,
+        public ?string $internalCode,
         public bool $active,
         public ?string $parentCompanyUUID,
         public string $nip,

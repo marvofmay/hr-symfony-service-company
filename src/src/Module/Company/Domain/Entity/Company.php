@@ -35,6 +35,7 @@ class Company
     public const COLUMN_COMPANY_UUID = 'companyUuid';
     public const COLUMN_FULL_NAME = 'fullName';
     public const COLUMN_SHORT_NAME = 'shortName';
+    public const COLUMN_INTERNAL_CODE = 'internalCode';
     public const COLUMN_DESCRIPTION = 'description';
     public const COLUMN_NIP = 'nip';
     public const COLUMN_REGON = 'regon';
@@ -73,6 +74,9 @@ class Company
 
     #[ORM\Column(type: Types::STRING, length: 200, nullable: true)]
     private ?string $shortName;
+
+    #[ORM\Column(type: Types::STRING, length: 200, nullable: true)]
+    private ?string $internalCode;
 
     #[ORM\Column(type: Types::STRING, length: 20, nullable: false)]
     private string $nip;
@@ -186,6 +190,16 @@ class Company
     public function setShortName(?string $shortName): void
     {
         $this->{self::COLUMN_SHORT_NAME} = $shortName;
+    }
+
+    public function getInternalCode(): ?string
+    {
+        return $this->{self::COLUMN_INTERNAL_CODE};
+    }
+
+    public function setInternalCode(?string $internalCode): void
+    {
+        $this->{self::COLUMN_INTERNAL_CODE} = $internalCode;
     }
 
     public function getNip(): string

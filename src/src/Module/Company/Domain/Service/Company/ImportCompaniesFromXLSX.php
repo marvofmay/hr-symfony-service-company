@@ -16,22 +16,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ImportCompaniesFromXLSX extends XLSXIterator
 {
-    public const int COLUMN_COMPANY_UUID = 0;
-    public const int COLUMN_COMPANY_FULL_NAME = 1;
-    public const int COLUMN_COMPANY_SHORT_NAME = 2;
-    public const int COLUMN_COMPANY_DESCRIPTION = 3;
-    public const int COLUMN_PARENT_COMPANY_NIP = 4;
-    public const int COLUMN_INDUSTRY_UUID = 5;
-    public const int COLUMN_NIP = 6;
-    public const int COLUMN_REGON = 7;
-    public const int COLUMN_ACTIVE = 8;
-    public const int COLUMN_PHONE = 9;
-    public const int COLUMN_EMAIL = 10;
-    public const int COLUMN_WEBSITE = 11;
-    public const int COLUMN_STREET = 12;
-    public const int COLUMN_POSTCODE = 13;
-    public const int COLUMN_CITY = 14;
-    public const int COLUMN_COUNTRY = 15;
+    public const int COLUMN_COMPANY_FULL_NAME = 0;
+    public const int COLUMN_COMPANY_SHORT_NAME = 1;
+    public const int COLUMN_COMPANY_DESCRIPTION = 2;
+    public const int COLUMN_PARENT_COMPANY_NIP = 3;
+    public const int COLUMN_INDUSTRY_UUID = 4;
+    public const int COLUMN_NIP = 5;
+    public const int COLUMN_REGON = 6;
+    public const int COLUMN_ACTIVE = 7;
+    public const int COLUMN_PHONE = 8;
+    public const int COLUMN_EMAIL = 9;
+    public const int COLUMN_WEBSITE = 10;
+    public const int COLUMN_STREET = 11;
+    public const int COLUMN_POSTCODE = 12;
+    public const int COLUMN_CITY = 13;
+    public const int COLUMN_COUNTRY = 14;
 
     private array $errorMessages = [];
 
@@ -50,11 +49,9 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         $this->errorMessages = [];
 
         [
-            $companyUUID,
             $fullName,
             $shortName,
             $description,
-            $parentCompanyUUID,
             $industryUUID,
             $nip,
             $regon,
@@ -69,12 +66,9 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         ] = $row + [null, null, null, null, null, null, null, null, false, null, null, null, null, null, null, null];
 
         $validations = [
-            $this->isCompanyExists((string) $nip, (string) $regon, is_string($companyUUID) ? $companyUUID : null),
-            $this->validateCompanyUUID($companyUUID),
             $this->validateCompanyFullName($fullName),
             $this->validateCompanyShortName($shortName),
             $this->validateCompanyDescription($description),
-            $this->validateParentCompanyUUID($parentCompanyUUID),
             $this->validateIndustryUUID($industryUUID),
             $this->validateNIP((string) $nip),
             $this->validateREGON((string) $regon),
@@ -97,36 +91,31 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         return $this->errorMessages;
     }
 
-    private function isCompanyExists($nip, $regon, $companyUUID): ?string
-    {
-        $isCompanyExists = $this->companyReaderRepository->isCompanyExists($nip, $regon, $companyUUID);
-        if ($isCompanyExists) {
-            return $this->formatErrorMessage('company.alreadyExists', [':nip' => $nip, ':regon' => $regon]);
-        }
+    //private function isCompanyExists($nip, $regon): bool
+    //{
+    //    return $this->companyReaderRepository->isCompanyExists($nip, $regon);
+    //}
 
-        return null;
-    }
-
-    private function validateCompanyUUID(string|int|null $companyUUID): ?string
-    {
-        if (empty($companyUUID)) {
-            return null;
-        }
-
-        if (is_string($companyUUID)) {
-            $cacheKey = 'import_company_uuid_'.$companyUUID;
-
-            $companyExists = $this->cache->get($cacheKey, function () use ($companyUUID) {
-                return null !== $this->companyReaderRepository->getCompanyByUUID($companyUUID);
-            });
-
-            if (!$companyExists) {
-                return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $companyUUID]);
-            }
-        }
-
-        return null;
-    }
+    //private function validateCompanyUUID(string|int|null $companyUUID): ?string
+    //{
+    //    if (empty($companyUUID)) {
+    //        return null;
+    //    }
+    //
+    //    if (is_string($companyUUID)) {
+    //        $cacheKey = 'import_company_uuid_'.$companyUUID;
+    //
+    //        $companyExists = $this->cache->get($cacheKey, function () use ($companyUUID) {
+    //            return null !== $this->companyReaderRepository->getCompanyByUUID($companyUUID);
+    //        });
+    //
+    //        if (!$companyExists) {
+    //            return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $companyUUID]);
+    //        }
+    //    }
+    //
+    //    return null;
+    //}
 
     private function validateCompanyFullName(?string $fullName): ?string
     {
