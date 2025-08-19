@@ -37,6 +37,7 @@ final readonly class UpdateCompanyAction
                 $company,
                 $updateDTO->fullName,
                 $updateDTO->shortName,
+                $updateDTO->internalCode,
                 $updateDTO->active,
                 $updateDTO->parentCompanyUUID,
                 $updateDTO->nip,

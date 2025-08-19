@@ -13,21 +13,22 @@ class CompanyFactory
     {
         $company = new Company();
         $company->setUUID($event->uuid->toString());
-        $company->setFullName($event->fullName->getValue());
-        $company->setShortName($event->shortName->getValue());
-        $company->setInternalCode($event->internalCode);
-        $company->setNIP($event->nip->getValue());
-        $company->setREGON($event->regon->getValue());
-        $company->setDescription($event->description);
-        $company->setActive($event->active);
+
+        $this->mapEventToCompany($company, $event);
 
         return $company;
     }
 
     public function updateFromEvent(Company $company, DomainEventInterface $event): void
     {
+        $this->mapEventToCompany($company, $event);
+    }
+
+    private function mapEventToCompany(Company $company, DomainEventInterface $event): void
+    {
         $company->setFullName($event->fullName->getValue());
         $company->setShortName($event->shortName->getValue());
+        $company->setInternalCode($event->internalCode);
         $company->setNIP($event->nip->getValue());
         $company->setREGON($event->regon->getValue());
         $company->setDescription($event->description);

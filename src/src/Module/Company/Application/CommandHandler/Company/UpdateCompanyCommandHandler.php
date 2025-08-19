@@ -52,6 +52,7 @@ final readonly class UpdateCompanyCommandHandler
             Address::fromDTO($command->address),
             Phones::fromArray($command->phones),
             ShortName::fromString($command->shortName),
+            $command->internalCode,
             $command->description,
             $command->parentCompanyUUID ? CompanyUUID::fromString($command->parentCompanyUUID) : null,
             $command->emails ? Emails::fromArray($command->emails) : null,

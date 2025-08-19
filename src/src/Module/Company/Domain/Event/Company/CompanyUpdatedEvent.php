@@ -28,6 +28,7 @@ final readonly class CompanyUpdatedEvent implements DomainEventInterface
         public Address $address,
         public Phones $phones,
         public ?ShortName $shortName = null,
+        public ?string $internalCode = null,
         public ?string $description = null,
         public ?CompanyUUID $parentCompanyUUID = null,
         public ?Emails $emails = null,

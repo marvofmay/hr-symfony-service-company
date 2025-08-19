@@ -14,6 +14,7 @@ final class UpdateCompanyCommand implements CommandInterface
         public Company $company,
         public string $fullName,
         public ?string $shortName,
+        public ?string $internalCode,
         public bool $active,
         public ?string $parentCompanyUUID,
         public string $nip,
