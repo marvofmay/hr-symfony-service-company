@@ -14,7 +14,6 @@ final readonly class ImportCompaniesValidator
 {
     public function __construct(
         private TranslatorInterface $translator,
-        private CompanyReaderInterface $companyReaderRepository,
         private IndustryReaderInterface $industryReaderRepository,
         private CacheInterface $cache,
     ) {
@@ -25,7 +24,6 @@ final readonly class ImportCompaniesValidator
         $importer = new ImportCompaniesFromXLSX(
             sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()),
             $this->translator,
-            $this->companyReaderRepository,
             $this->industryReaderRepository,
             $this->cache,
         );

@@ -17,7 +17,7 @@ use App\Module\Company\Domain\Service\Company\Factory\AddressFactory;
 use App\Module\Company\Domain\Service\Company\Factory\CompanyFactory;
 use App\Module\Company\Domain\Service\Company\Factory\ContactFactory;
 
-final class CompanyUpdater extends CompanyCreator
+final class CompanyUpdater
 {
     public function __construct(
         private CompanyFactory $companyFactory,

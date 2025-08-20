@@ -18,26 +18,26 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
 {
     public const int COLUMN_COMPANY_FULL_NAME = 0;
     public const int COLUMN_COMPANY_SHORT_NAME = 1;
-    public const int COLUMN_COMPANY_DESCRIPTION = 2;
-    public const int COLUMN_PARENT_COMPANY_NIP = 3;
-    public const int COLUMN_INDUSTRY_UUID = 4;
-    public const int COLUMN_NIP = 5;
-    public const int COLUMN_REGON = 6;
-    public const int COLUMN_ACTIVE = 7;
-    public const int COLUMN_PHONE = 8;
-    public const int COLUMN_EMAIL = 9;
-    public const int COLUMN_WEBSITE = 10;
-    public const int COLUMN_STREET = 11;
-    public const int COLUMN_POSTCODE = 12;
-    public const int COLUMN_CITY = 13;
-    public const int COLUMN_COUNTRY = 14;
+    public const int COLUMN_COMPANY_INTERNAL_CODE = 2;
+    public const int COLUMN_COMPANY_DESCRIPTION = 3;
+    public const int COLUMN_PARENT_COMPANY_NIP = 4;
+    public const int COLUMN_INDUSTRY_UUID = 5;
+    public const int COLUMN_NIP = 6;
+    public const int COLUMN_REGON = 7;
+    public const int COLUMN_ACTIVE = 8;
+    public const int COLUMN_PHONE = 9;
+    public const int COLUMN_EMAIL = 10;
+    public const int COLUMN_WEBSITE = 11;
+    public const int COLUMN_STREET = 12;
+    public const int COLUMN_POSTCODE = 13;
+    public const int COLUMN_CITY = 14;
+    public const int COLUMN_COUNTRY = 15;
 
     private array $errorMessages = [];
 
     public function __construct(
         private readonly string $filePath,
         private readonly TranslatorInterface $translator,
-        private readonly CompanyReaderInterface $companyReaderRepository,
         private readonly IndustryReaderInterface $industryReaderRepository,
         private readonly CacheInterface $cache,
     ) {
@@ -91,32 +91,6 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         return $this->errorMessages;
     }
 
-    //private function isCompanyExists($nip, $regon): bool
-    //{
-    //    return $this->companyReaderRepository->isCompanyExists($nip, $regon);
-    //}
-
-    //private function validateCompanyUUID(string|int|null $companyUUID): ?string
-    //{
-    //    if (empty($companyUUID)) {
-    //        return null;
-    //    }
-    //
-    //    if (is_string($companyUUID)) {
-    //        $cacheKey = 'import_company_uuid_'.$companyUUID;
-    //
-    //        $companyExists = $this->cache->get($cacheKey, function () use ($companyUUID) {
-    //            return null !== $this->companyReaderRepository->getCompanyByUUID($companyUUID);
-    //        });
-    //
-    //        if (!$companyExists) {
-    //            return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $companyUUID]);
-    //        }
-    //    }
-    //
-    //    return null;
-    //}
-
     private function validateCompanyFullName(?string $fullName): ?string
     {
         if (empty($fullName)) {
@@ -137,27 +111,6 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
 
     private function validateCompanyDescription(?string $description): ?string
     {
-        return null;
-    }
-
-    private function validateParentCompanyUUID(string|int|null $parentCompanyUUID): ?string
-    {
-        if (empty($parentCompanyUUID)) {
-            return null;
-        }
-
-        if (is_string($parentCompanyUUID)) {
-            $cacheKey = 'import_company_uuid_'.$parentCompanyUUID;
-
-            $parentExists = $this->cache->get($cacheKey, function () use ($parentCompanyUUID) {
-                return null !== $this->companyReaderRepository->getCompanyByUUID($parentCompanyUUID);
-            });
-
-            if (!$parentExists) {
-                return $this->formatErrorMessage('company.uuid.notExists', [':uuid' => $parentCompanyUUID]);
-            }
-        }
-
         return null;
     }
 
