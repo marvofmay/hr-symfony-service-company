@@ -96,9 +96,4 @@ abstract class XLSXIterator implements XLSXIteratorInterface
     {
         return $this->errors;
     }
-
-    public function hasErrors(): bool
-    {
-        return count($this->errors) > 0;
-    }
 }

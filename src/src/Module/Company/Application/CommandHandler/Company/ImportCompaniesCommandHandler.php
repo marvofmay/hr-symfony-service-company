@@ -38,7 +38,7 @@ final readonly class ImportCompaniesCommandHandler
             $import->getFile()->getFilePath(),
             $import->getFile()->getFileName()
         );
-        $preparedRows = $importer->importCompanies($import);
+        $preparedRows = $importer->run($import);
 
         $multiEvent = new CompanyMultipleImportedEvent($preparedRows);
         $this->eventStoreCreator->create(

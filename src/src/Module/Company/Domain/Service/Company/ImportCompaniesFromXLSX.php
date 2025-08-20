@@ -295,7 +295,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         return CompanyUUID::fromString($existingParentCompany->getUUID()->toString());
     }
 
-    public function importCompanies(Import $import): array
+    public function run(Import $import): array
     {
         $errors = $this->validateBeforeImport();
 

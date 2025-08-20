@@ -12,5 +12,9 @@ interface XLSXIteratorInterface
 
     public function validateRow(array $row): array;
 
+    public function validateBeforeImport(): array;
+
     public function getErrors(): array;
+
+    public function import(): array;
 }
