@@ -14,7 +14,7 @@ abstract class XLSXIterator implements XLSXIteratorInterface
 {
     protected ?Worksheet $worksheet = null;
     protected array $errors = [];
-    protected $rowIndex = 2;
+    protected int $rowIndex = 2;
 
     public function __construct(private readonly string $filePath, private readonly TranslatorInterface $translator)
     {
@@ -95,5 +95,10 @@ abstract class XLSXIterator implements XLSXIteratorInterface
     public function getErrors(): array
     {
         return $this->errors;
+    }
+
+    public function hasErrors(): bool
+    {
+        return count($this->errors) > 0;
     }
 }

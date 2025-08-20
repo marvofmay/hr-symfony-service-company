@@ -4,43 +4,61 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
+use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Shared\Utils\BoolValidator;
 use App\Common\Shared\Utils\EmailValidator;
 use App\Common\Shared\Utils\NIPValidator;
 use App\Common\Shared\Utils\REGONValidator;
 use App\Common\XLSX\XLSXIterator;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
+use App\Module\System\Application\Event\LogFileEvent;
+use App\Module\System\Domain\Entity\Import;
+use App\Module\System\Domain\Enum\ImportLogKindEnum;
+use App\Module\System\Domain\Enum\ImportStatusEnum;
+use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
+use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ImportCompaniesFromXLSX extends XLSXIterator
 {
-    public const int COLUMN_COMPANY_FULL_NAME = 0;
-    public const int COLUMN_COMPANY_SHORT_NAME = 1;
+    public const int COLUMN_COMPANY_FULL_NAME     = 0;
+    public const int COLUMN_COMPANY_SHORT_NAME    = 1;
     public const int COLUMN_COMPANY_INTERNAL_CODE = 2;
-    public const int COLUMN_COMPANY_DESCRIPTION = 3;
-    public const int COLUMN_PARENT_COMPANY_NIP = 4;
-    public const int COLUMN_INDUSTRY_UUID = 5;
-    public const int COLUMN_NIP = 6;
-    public const int COLUMN_REGON = 7;
-    public const int COLUMN_ACTIVE = 8;
-    public const int COLUMN_PHONE = 9;
-    public const int COLUMN_EMAIL = 10;
-    public const int COLUMN_WEBSITE = 11;
-    public const int COLUMN_STREET = 12;
-    public const int COLUMN_POSTCODE = 13;
-    public const int COLUMN_CITY = 14;
-    public const int COLUMN_COUNTRY = 15;
+    public const int COLUMN_COMPANY_DESCRIPTION   = 3;
+    public const int COLUMN_PARENT_COMPANY_NIP    = 4;
+    public const int COLUMN_INDUSTRY_UUID         = 5;
+    public const int COLUMN_NIP                   = 6;
+    public const int COLUMN_REGON                 = 7;
+    public const int COLUMN_ACTIVE                = 8;
+    public const int COLUMN_PHONE                 = 9;
+    public const int COLUMN_EMAIL                 = 10;
+    public const int COLUMN_WEBSITE               = 11;
+    public const int COLUMN_STREET                = 12;
+    public const int COLUMN_POSTCODE              = 13;
+    public const int COLUMN_CITY                  = 14;
+    public const int COLUMN_COUNTRY               = 15;
 
     private array $errorMessages = [];
 
     public function __construct(
-        private readonly string $filePath,
-        private readonly TranslatorInterface $translator,
-        private readonly IndustryReaderInterface $industryReaderRepository,
-        private readonly CacheInterface $cache,
-    ) {
+        private readonly string                   $filePath,
+        private readonly TranslatorInterface      $translator,
+        private readonly CompanyReaderInterface   $companyReaderRepository,
+        private readonly IndustryReaderInterface  $industryReaderRepository,
+        private readonly CompanyAggregateCreator  $companyAggregateCreator,
+        private readonly CompanyAggregateUpdater  $companyAggregateUpdater,
+        private readonly ImportCompaniesPreparer  $importCompaniesPreparer,
+        private readonly CacheInterface           $cache,
+        private readonly UpdateImportAction       $updateImportAction,
+        private readonly ImportLogMultipleCreator $importLogMultipleCreator,
+        private readonly MessageService           $messageService,
+        private readonly MessageBusInterface      $eventBus,
+    )
+    {
         parent::__construct($this->filePath, $this->translator);
     }
 
@@ -51,7 +69,9 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         [
             $fullName,
             $shortName,
+            $internalCompanyCode,
             $description,
+            $parentUUID,
             $industryUUID,
             $nip,
             $regon,
@@ -70,11 +90,11 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             $this->validateCompanyShortName($shortName),
             $this->validateCompanyDescription($description),
             $this->validateIndustryUUID($industryUUID),
-            $this->validateNIP((string) $nip),
-            $this->validateREGON((string) $regon),
+            $this->validateNIP((string)$nip),
+            $this->validateREGON((string)$regon),
             $this->validateActive($active),
             $this->validatePhone($phone),
-            $this->validateEmail((string) $email),
+            $this->validateEmail((string)$email),
             $this->validateWebsite($website),
             $this->validateStreet($street),
             $this->validatePostcode($postcode),
@@ -120,7 +140,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('company.industryUUID.required');
         }
 
-        $cacheKey = 'import_industry_uuid_'.$industryUUID;
+        $cacheKey = 'import_industry_uuid_' . $industryUUID;
 
         $industryExists = $this->cache->get($cacheKey, function () use ($industryUUID) {
             return null !== $this->industryReaderRepository->getIndustryByUUID($industryUUID);
@@ -252,5 +272,64 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             $this->translator->trans('row'),
             $this->rowIndex
         );
+    }
+
+    private function resolveParentUUID(array $row, array $nipMap): ?CompanyUUID
+    {
+        $parentRaw = $row[self::COLUMN_PARENT_COMPANY_NIP] ?? null;
+        if ($parentRaw === null) {
+            return null;
+        }
+
+        $parentNIP = trim((string)$parentRaw);
+        if ($parentNIP === '') {
+            return null;
+        }
+
+        if (isset($nipMap[$parentNIP])) {
+            return $nipMap[$parentNIP];
+        }
+
+        $existingParentCompany = $this->companyReaderRepository->getCompanyByNIP($parentNIP);
+
+        return CompanyUUID::fromString($existingParentCompany->getUUID()->toString());
+    }
+
+    public function importCompanies(Import $import): array
+    {
+        $errors = $this->validateBeforeImport();
+
+        if (!empty($errors)) {
+            $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
+            $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
+            foreach ($errors as $error) {
+                $this->eventBus->dispatch(
+                    new LogFileEvent($this->messageService->get('company.import.error', [], 'companies') . ': ' . $error)
+                );
+            }
+
+            $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
+
+            return $this->import();
+        } else {
+            [$preparedRows, $nipMap] = $this->importCompaniesPreparer->prepare($this->import());
+
+            foreach ($preparedRows as $row) {
+                $parentUUID = $this->resolveParentUUID($row, $nipMap);
+
+                $nip = trim((string)$row[ImportCompaniesFromXLSX::COLUMN_NIP]);
+                $uuid = $nipMap[$nip];
+
+                if (!$row['_is_company_already_exists_with_nip']) {
+                    $this->companyAggregateCreator->create($row, $nip, $uuid, $parentUUID);
+                } else {
+                    $this->companyAggregateUpdater->update($row, $nip, $uuid, $parentUUID);
+                }
+            }
+
+            $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
+        }
+
+        return $preparedRows;
     }
 }

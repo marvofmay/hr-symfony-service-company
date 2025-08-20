@@ -1,0 +1,60 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Module\System\Domain\Factory;
+
+use App\Common\Domain\Interface\XLSXIteratorInterface;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
+use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
+use App\Module\Company\Domain\Service\Company\CompanyAggregateCreator;
+use App\Module\Company\Domain\Service\Company\CompanyAggregateUpdater;
+use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
+use App\Module\Company\Domain\Service\Company\ImportCompaniesPreparer;
+use App\Module\System\Domain\Enum\ImportKindEnum;
+use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
+use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
+
+final readonly class ImporterFactory
+{
+    public function __construct(
+        private TranslatorInterface      $translator,
+        private CompanyReaderInterface   $companyReaderRepository,
+        private IndustryReaderInterface  $industryReaderRepository,
+        private CompanyAggregateCreator  $companyAggregateCreator,
+        private CompanyAggregateUpdater  $companyAggregateUpdater,
+        private ImportCompaniesPreparer  $importCompaniesPreparer,
+        private CacheInterface           $cache,
+        private UpdateImportAction       $updateImportAction,
+        private ImportLogMultipleCreator $importLogMultipleCreator,
+        private MessageService           $messageService,
+        private MessageBusInterface      $eventBus,
+    )
+    {
+    }
+
+    public function getImporter(ImportKindEnum $type, string $filePath, string $fileName): XLSXIteratorInterface
+    {
+        return match ($type) {
+            ImportKindEnum::IMPORT_COMPANIES => new ImportCompaniesFromXLSX(
+                sprintf('%s/%s', $filePath, $fileName),
+                $this->translator,
+                $this->companyReaderRepository,
+                $this->industryReaderRepository,
+                $this->companyAggregateCreator,
+                $this->companyAggregateUpdater,
+                $this->importCompaniesPreparer,
+                $this->cache,
+                $this->updateImportAction,
+                $this->importLogMultipleCreator,
+                $this->messageService,
+                $this->eventBus,
+            ),
+            default => throw new \InvalidArgumentException("Unsupported importer type: $type->value"),
+        };
+    }
+}
