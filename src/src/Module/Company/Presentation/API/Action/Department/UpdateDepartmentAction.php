@@ -35,6 +35,7 @@ final readonly class UpdateDepartmentAction
             new UpdateDepartmentCommand(
                 $department,
                 $updateDTO->name,
+                $updateDTO->internalCode,
                 $updateDTO->description,
                 $updateDTO->active,
                 $updateDTO->companyUUID,

@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Company;
 
 use App\Common\Domain\Interface\DomainEventInterface;
 use App\Module\Company\Domain\Entity\Address;
+use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Company\Domain\Interface\Address\AddressWriterInterface;
@@ -17,7 +18,7 @@ use App\Module\Company\Domain\Service\Company\Factory\CompanyFactory;
 use App\Module\Company\Domain\Service\Factory\AddressFactory;
 use App\Module\Company\Domain\Service\Factory\ContactFactory;
 
-final class CompanyUpdater
+final readonly class CompanyUpdater
 {
     public function __construct(
         private CompanyFactory $companyFactory,
@@ -70,7 +71,7 @@ final class CompanyUpdater
         }
     }
 
-    private function deleteContacts($company): void
+    private function deleteContacts(Company $company): void
     {
         foreach (ContactTypeEnum::communicationTypes() as $type) {
             $contacts = $company->getContacts($type);

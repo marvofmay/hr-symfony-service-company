@@ -14,6 +14,7 @@ use App\Module\Company\Domain\Service\Company\CompanyAggregateUpdater;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesPreparer;
 use App\Module\Company\Domain\Service\Department\DepartmentAggregateCreator;
+use App\Module\Company\Domain\Service\Department\DepartmentAggregateUpdater;
 use App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX;
 use App\Module\Company\Domain\Service\Department\ImportDepartmentsPreparer;
 use App\Module\System\Domain\Enum\ImportKindEnum;
@@ -26,20 +27,21 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final readonly class ImporterFactory
 {
     public function __construct(
-        private TranslatorInterface       $translator,
-        private CompanyReaderInterface    $companyReaderRepository,
-        private DepartmentReaderInterface $departmentReaderRepository,
-        private IndustryReaderInterface   $industryReaderRepository,
-        private ImportCompaniesPreparer   $importCompaniesPreparer,
-        private CompanyAggregateCreator   $companyAggregateCreator,
-        private CompanyAggregateUpdater   $companyAggregateUpdater,
-        private ImportDepartmentsPreparer $importDepartmentsPreparer,
+        private TranslatorInterface        $translator,
+        private CompanyReaderInterface     $companyReaderRepository,
+        private DepartmentReaderInterface  $departmentReaderRepository,
+        private IndustryReaderInterface    $industryReaderRepository,
+        private ImportCompaniesPreparer    $importCompaniesPreparer,
+        private CompanyAggregateCreator    $companyAggregateCreator,
+        private CompanyAggregateUpdater    $companyAggregateUpdater,
+        private ImportDepartmentsPreparer  $importDepartmentsPreparer,
         private DepartmentAggregateCreator $departmentAggregateCreator,
-        private CacheInterface            $cache,
-        private UpdateImportAction        $updateImportAction,
-        private ImportLogMultipleCreator  $importLogMultipleCreator,
-        private MessageService            $messageService,
-        private MessageBusInterface       $eventBus,
+        private DepartmentAggregateUpdater $departmentAggregateUpdater,
+        private CacheInterface             $cache,
+        private UpdateImportAction         $updateImportAction,
+        private ImportLogMultipleCreator   $importLogMultipleCreator,
+        private MessageService             $messageService,
+        private MessageBusInterface        $eventBus,
     )
     {
     }
@@ -67,6 +69,7 @@ final readonly class ImporterFactory
                 $this->companyReaderRepository,
                 $this->departmentReaderRepository,
                 $this->departmentAggregateCreator,
+                $this->departmentAggregateUpdater,
                 $this->importDepartmentsPreparer,
                 $this->cache,
                 $this->updateImportAction,

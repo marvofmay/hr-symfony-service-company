@@ -7,6 +7,7 @@ namespace App\Common\Domain\Abstract;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Domain\Interface\Company\CompanyAggregateReaderInterface;
+use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -19,6 +20,7 @@ class AggregateAbstract
         protected SerializerInterface $serializer,
         protected EventDispatcherInterface $eventDispatcher,
         protected CompanyAggregateReaderInterface $companyAggregateReaderRepository,
+        protected DepartmentAggregateReaderInterface $departmentAggregateReaderRepository,
     ) {}
 
     protected function commitEvents(array $events, string $aggregateClass): void

@@ -45,6 +45,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         private readonly CompanyReaderInterface     $companyReaderRepository,
         private readonly DepartmentReaderInterface  $departmentReaderRepository,
         private readonly DepartmentAggregateCreator $departmentAggregateCreator,
+        private readonly DepartmentAggregateUpdater $departmentAggregateUpdater,
         private readonly ImportDepartmentsPreparer  $importDepartmentsPreparer,
         private readonly CacheInterface             $cache,
         private readonly UpdateImportAction         $updateImportAction,
@@ -129,8 +130,8 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
             return null;
         }
 
-        if (strlen($description) < 50) {
-            return $this->formatErrorMessage('department.description.minimumLength', [':qty' => 50]);
+        if (strlen($description) < 30) {
+            return $this->formatErrorMessage('department.description.minimumLength', [':qty' => 30]);
         }
 
         return null;
@@ -312,7 +313,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
                 if (!$row['_is_department_already_exists_with_internal_code']) {
                     $this->departmentAggregateCreator->create($row, $uuid, $parentUUID);
                 } else {
-                    //$this->departmentAggregateUpdater->update($row, $internalCode, $uuid, $parentUUID);
+                    $this->departmentAggregateUpdater->update($row, $parentUUID);
                 }
             }
 

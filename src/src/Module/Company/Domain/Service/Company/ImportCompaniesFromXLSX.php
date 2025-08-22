@@ -336,7 +336,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
                 if (!$row['_is_company_already_exists_with_nip']) {
                     $this->companyAggregateCreator->create($row, $uuid, $parentUUID);
                 } else {
-                    $this->companyAggregateUpdater->update($row, $uuid, $parentUUID);
+                    $this->companyAggregateUpdater->update($row, $parentUUID);
                 }
             }
 

@@ -19,7 +19,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 
 final class CompanyAggregateUpdater extends AggregateAbstract
 {
-    public function update(array $row, CompanyUUID $uuid, ?CompanyUUID $parentUUID): void
+    public function update(array $row, ?CompanyUUID $parentUUID): void
     {
         $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID(
             CompanyUUID::fromString($row['_aggregate_uuid'])
