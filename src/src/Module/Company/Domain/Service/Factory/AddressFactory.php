@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Entity\Address;
 
 final readonly class AddressFactory
 {
-    public function createFromValueObject(AddressValueObject $addressValueObject): Address
+    public function create(AddressValueObject $addressValueObject): Address
     {
         $address = new Address();
         $address->setStreet($addressValueObject->getStreet());

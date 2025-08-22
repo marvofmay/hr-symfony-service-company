@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Entity\Company;
 
 class CompanyFactory
 {
-    public function createFromEvent(DomainEventInterface $event): Company
+    public function create(DomainEventInterface $event): Company
     {
         $company = new Company();
         $company->setUUID($event->uuid->toString());

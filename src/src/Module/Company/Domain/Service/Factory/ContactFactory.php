@@ -12,7 +12,7 @@ use App\Module\Company\Domain\Enum\ContactTypeEnum;
 
 class ContactFactory
 {
-    public function createContacts(Phones $phones, ?Emails $emails = null, ?Websites $websites = null): array
+    public function create(Phones $phones, ?Emails $emails = null, ?Websites $websites = null): array
     {
         $contacts = [];
 

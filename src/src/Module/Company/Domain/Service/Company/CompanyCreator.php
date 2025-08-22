@@ -25,9 +25,9 @@ class CompanyCreator
 
     public function create(DomainEventInterface $event): void
     {
-        $company = $this->companyFactory->createFromEvent($event);
-        $address = $this->addressFactory->createFromValueObject($event->address);
-        $contacts = $this->contactFactory->createContacts($event->phones, $event->emails, $event->websites);
+        $company = $this->companyFactory->create($event);
+        $address = $this->addressFactory->create($event->address);
+        $contacts = $this->contactFactory->create($event->phones, $event->emails, $event->websites);
         $company->setAddress($address);
 
         foreach ($contacts as $contact) {

@@ -38,10 +38,10 @@ final class CompanyUpdater
         $this->deleteAddress($company->getAddress());
         $this->deleteContacts($company);
 
-        $address = $this->addressFactory->createFromValueObject($event->address);
+        $address = $this->addressFactory->create($event->address);
         $company->setAddress($address);
 
-        $contacts = $this->contactFactory->createContacts($event->phones, $event->emails, $event->websites);
+        $contacts = $this->contactFactory->create($event->phones, $event->emails, $event->websites);
         foreach ($contacts as $contact) {
             $company->addContact($contact);
         }

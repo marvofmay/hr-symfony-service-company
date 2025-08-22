@@ -32,8 +32,8 @@ final readonly class DepartmentCreator
     public function create(DomainEventInterface $event): void
     {
         $department = $this->departmentFactory->createFromEvent($event);
-        $address = $this->addressFactory->createFromValueObject($event->address);
-        $contacts = $this->contactFactory->createContacts($event->phones, $event->emails, $event->websites);
+        $address = $this->addressFactory->create($event->address);
+        $contacts = $this->contactFactory->create($event->phones, $event->emails, $event->websites);
         $department->setAddress($address);
 
         foreach ($contacts as $contact) {
