@@ -71,7 +71,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             $shortName,
             $internalCompanyCode,
             $description,
-            $parentUUID,
+            $parentCompanyUUID,
             $industryUUID,
             $nip,
             $regon,
@@ -88,7 +88,9 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         $validations = [
             $this->validateCompanyFullName($fullName),
             $this->validateCompanyShortName($shortName),
+            $this->validateInternalCompanyCode($internalCompanyCode),
             $this->validateCompanyDescription($description),
+            $this->validateParentCompanyUUID((string)$parentCompanyUUID),
             $this->validateIndustryUUID($industryUUID),
             $this->validateNIP((string)$nip),
             $this->validateREGON((string)$regon),
@@ -129,8 +131,19 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         return null;
     }
 
+    private function validateInternalCompanyCode($internalCompanyCode): ?string
+    {
+        return null;
+    }
+
     private function validateCompanyDescription(?string $description): ?string
     {
+        return null;
+    }
+
+    private function validateParentCompanyUUID(?string $parentCompanyUUID): ?string
+    {
+        // ToDo:: if not null, then check if company with NIP exists
         return null;
     }
 
@@ -317,13 +330,13 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             foreach ($preparedRows as $row) {
                 $parentUUID = $this->resolveParentUUID($row, $nipMap);
 
-                $nip = trim((string)$row[ImportCompaniesFromXLSX::COLUMN_NIP]);
+                $nip = trim((string)$row[self::COLUMN_NIP]);
                 $uuid = $nipMap[$nip];
 
                 if (!$row['_is_company_already_exists_with_nip']) {
-                    $this->companyAggregateCreator->create($row, $nip, $uuid, $parentUUID);
+                    $this->companyAggregateCreator->create($row, $uuid, $parentUUID);
                 } else {
-                    $this->companyAggregateUpdater->update($row, $nip, $uuid, $parentUUID);
+                    $this->companyAggregateUpdater->update($row, $uuid, $parentUUID);
                 }
             }
 

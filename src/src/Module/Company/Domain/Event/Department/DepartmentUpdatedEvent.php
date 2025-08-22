@@ -19,6 +19,7 @@ final readonly class DepartmentUpdatedEvent implements DomainEventInterface
         public DepartmentUUID  $uuid,
         public CompanyUUID     $companyUUID,
         public Name            $name,
+        public string          $internalCode,
         public Address         $address,
         public bool            $active = true,
         public ?string         $description = null,

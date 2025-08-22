@@ -74,7 +74,28 @@ class RolesApi
         'apiRolesGet' => [
             'application/json',
         ],
+        'apiRolesImportPost' => [
+            'multipart/form-data',
+        ],
+        'apiRolesMultipleDelete' => [
+            'application/json',
+        ],
         'apiRolesPost' => [
+            'application/json',
+        ],
+        'apiRolesUuidAccessesPost' => [
+            'application/json',
+        ],
+        'apiRolesUuidAcessesPermissionsPost' => [
+            'application/json',
+        ],
+        'apiRolesUuidDelete' => [
+            'application/json',
+        ],
+        'apiRolesUuidGet' => [
+            'application/json',
+        ],
+        'apiRolesUuidPut' => [
             'application/json',
         ],
     ];
@@ -130,15 +151,22 @@ class RolesApi
      *
      * Pobiera listę ról
      *
+     * @param  int $page Numer strony (paginacja) (optional, default to 1)
+     * @param  int $page_size Liczba elementów na stronę (optional, default to 10)
+     * @param  string $sort_by Pole do sortowania (np. name) (optional)
+     * @param  string $sort_direction Kierunek sortowania (optional)
+     * @param  int $deleted Filtr usuniętych rekordów (0 - aktywne, 1 - usunięte) (optional)
+     * @param  string $phrase Wyszukiwana fraza (optional)
+     * @param  string $includes Relacje do załadowania (np. employees) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesGet'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return \OpenAPI\Client\Model\ApiRolesGet200Response
      */
-    public function apiRolesGet(string $contentType = self::contentTypes['apiRolesGet'][0])
+    public function apiRolesGet($page = 1, $page_size = 10, $sort_by = null, $sort_direction = null, $deleted = null, $phrase = null, $includes = null, string $contentType = self::contentTypes['apiRolesGet'][0])
     {
-        list($response) = $this->apiRolesGetWithHttpInfo($contentType);
+        list($response) = $this->apiRolesGetWithHttpInfo($page, $page_size, $sort_by, $sort_direction, $deleted, $phrase, $includes, $contentType);
         return $response;
     }
 
@@ -147,15 +175,22 @@ class RolesApi
      *
      * Pobiera listę ról
      *
+     * @param  int $page Numer strony (paginacja) (optional, default to 1)
+     * @param  int $page_size Liczba elementów na stronę (optional, default to 10)
+     * @param  string $sort_by Pole do sortowania (np. name) (optional)
+     * @param  string $sort_direction Kierunek sortowania (optional)
+     * @param  int $deleted Filtr usuniętych rekordów (0 - aktywne, 1 - usunięte) (optional)
+     * @param  string $phrase Wyszukiwana fraza (optional)
+     * @param  string $includes Relacje do załadowania (np. employees) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesGet'] to see the possible values for this operation
      *
      * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
      * @throws \InvalidArgumentException
      * @return array of \OpenAPI\Client\Model\ApiRolesGet200Response, HTTP status code, HTTP response headers (array of strings)
      */
-    public function apiRolesGetWithHttpInfo(string $contentType = self::contentTypes['apiRolesGet'][0])
+    public function apiRolesGetWithHttpInfo($page = 1, $page_size = 10, $sort_by = null, $sort_direction = null, $deleted = null, $phrase = null, $includes = null, string $contentType = self::contentTypes['apiRolesGet'][0])
     {
-        $request = $this->apiRolesGetRequest($contentType);
+        $request = $this->apiRolesGetRequest($page, $page_size, $sort_by, $sort_direction, $deleted, $phrase, $includes, $contentType);
 
         try {
             $options = $this->createHttpClientOption();
@@ -270,14 +305,21 @@ class RolesApi
      *
      * Pobiera listę ról
      *
+     * @param  int $page Numer strony (paginacja) (optional, default to 1)
+     * @param  int $page_size Liczba elementów na stronę (optional, default to 10)
+     * @param  string $sort_by Pole do sortowania (np. name) (optional)
+     * @param  string $sort_direction Kierunek sortowania (optional)
+     * @param  int $deleted Filtr usuniętych rekordów (0 - aktywne, 1 - usunięte) (optional)
+     * @param  string $phrase Wyszukiwana fraza (optional)
+     * @param  string $includes Relacje do załadowania (np. employees) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function apiRolesGetAsync(string $contentType = self::contentTypes['apiRolesGet'][0])
+    public function apiRolesGetAsync($page = 1, $page_size = 10, $sort_by = null, $sort_direction = null, $deleted = null, $phrase = null, $includes = null, string $contentType = self::contentTypes['apiRolesGet'][0])
     {
-        return $this->apiRolesGetAsyncWithHttpInfo($contentType)
+        return $this->apiRolesGetAsyncWithHttpInfo($page, $page_size, $sort_by, $sort_direction, $deleted, $phrase, $includes, $contentType)
             ->then(
                 function ($response) {
                     return $response[0];
@@ -290,15 +332,22 @@ class RolesApi
      *
      * Pobiera listę ról
      *
+     * @param  int $page Numer strony (paginacja) (optional, default to 1)
+     * @param  int $page_size Liczba elementów na stronę (optional, default to 10)
+     * @param  string $sort_by Pole do sortowania (np. name) (optional)
+     * @param  string $sort_direction Kierunek sortowania (optional)
+     * @param  int $deleted Filtr usuniętych rekordów (0 - aktywne, 1 - usunięte) (optional)
+     * @param  string $phrase Wyszukiwana fraza (optional)
+     * @param  string $includes Relacje do załadowania (np. employees) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Promise\PromiseInterface
      */
-    public function apiRolesGetAsyncWithHttpInfo(string $contentType = self::contentTypes['apiRolesGet'][0])
+    public function apiRolesGetAsyncWithHttpInfo($page = 1, $page_size = 10, $sort_by = null, $sort_direction = null, $deleted = null, $phrase = null, $includes = null, string $contentType = self::contentTypes['apiRolesGet'][0])
     {
         $returnType = '\OpenAPI\Client\Model\ApiRolesGet200Response';
-        $request = $this->apiRolesGetRequest($contentType);
+        $request = $this->apiRolesGetRequest($page, $page_size, $sort_by, $sort_direction, $deleted, $phrase, $includes, $contentType);
 
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -339,13 +388,27 @@ class RolesApi
     /**
      * Create request for operation 'apiRolesGet'
      *
+     * @param  int $page Numer strony (paginacja) (optional, default to 1)
+     * @param  int $page_size Liczba elementów na stronę (optional, default to 10)
+     * @param  string $sort_by Pole do sortowania (np. name) (optional)
+     * @param  string $sort_direction Kierunek sortowania (optional)
+     * @param  int $deleted Filtr usuniętych rekordów (0 - aktywne, 1 - usunięte) (optional)
+     * @param  string $phrase Wyszukiwana fraza (optional)
+     * @param  string $includes Relacje do załadowania (np. employees) (optional)
      * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesGet'] to see the possible values for this operation
      *
      * @throws \InvalidArgumentException
      * @return \GuzzleHttp\Psr7\Request
      */
-    public function apiRolesGetRequest(string $contentType = self::contentTypes['apiRolesGet'][0])
+    public function apiRolesGetRequest($page = 1, $page_size = 10, $sort_by = null, $sort_direction = null, $deleted = null, $phrase = null, $includes = null, string $contentType = self::contentTypes['apiRolesGet'][0])
     {
+
+
+
+
+
+
+
 
 
         $resourcePath = '/api/roles';
@@ -355,6 +418,69 @@ class RolesApi
         $httpBody = '';
         $multipart = false;
 
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $page,
+            'page', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $page_size,
+            'pageSize', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort_by,
+            'sortBy', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $sort_direction,
+            'sortDirection', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $deleted,
+            'deleted', // param base name
+            'integer', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $phrase,
+            'phrase', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
+        // query params
+        $queryParams = array_merge($queryParams, ObjectSerializer::toQueryValue(
+            $includes,
+            'includes', // param base name
+            'string', // openApiType
+            'form', // style
+            true, // explode
+            false // required
+        ) ?? []);
 
 
 
@@ -410,6 +536,730 @@ class RolesApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation apiRolesImportPost
+     *
+     * Importuje role z pliku
+     *
+     * @param  \SplFileObject $file Plik Excel (.xlsx) z kolumnami: name (wymagane), description (opcjonalne) (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesImportPost'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Client\Model\ApiRolesImportPost201Response|\OpenAPI\Client\Model\ApiRolesImportPost500Response
+     */
+    public function apiRolesImportPost($file = null, string $contentType = self::contentTypes['apiRolesImportPost'][0])
+    {
+        list($response) = $this->apiRolesImportPostWithHttpInfo($file, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation apiRolesImportPostWithHttpInfo
+     *
+     * Importuje role z pliku
+     *
+     * @param  \SplFileObject $file Plik Excel (.xlsx) z kolumnami: name (wymagane), description (opcjonalne) (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesImportPost'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Client\Model\ApiRolesImportPost201Response|\OpenAPI\Client\Model\ApiRolesImportPost500Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function apiRolesImportPostWithHttpInfo($file = null, string $contentType = self::contentTypes['apiRolesImportPost'][0])
+    {
+        $request = $this->apiRolesImportPostRequest($file, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 201:
+                    if ('\OpenAPI\Client\Model\ApiRolesImportPost201Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesImportPost201Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesImportPost201Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\OpenAPI\Client\Model\ApiRolesImportPost500Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesImportPost500Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesImportPost500Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\ApiRolesImportPost201Response';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 201:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesImportPost201Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesImportPost500Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation apiRolesImportPostAsync
+     *
+     * Importuje role z pliku
+     *
+     * @param  \SplFileObject $file Plik Excel (.xlsx) z kolumnami: name (wymagane), description (opcjonalne) (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesImportPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesImportPostAsync($file = null, string $contentType = self::contentTypes['apiRolesImportPost'][0])
+    {
+        return $this->apiRolesImportPostAsyncWithHttpInfo($file, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation apiRolesImportPostAsyncWithHttpInfo
+     *
+     * Importuje role z pliku
+     *
+     * @param  \SplFileObject $file Plik Excel (.xlsx) z kolumnami: name (wymagane), description (opcjonalne) (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesImportPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesImportPostAsyncWithHttpInfo($file = null, string $contentType = self::contentTypes['apiRolesImportPost'][0])
+    {
+        $returnType = '\OpenAPI\Client\Model\ApiRolesImportPost201Response';
+        $request = $this->apiRolesImportPostRequest($file, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'apiRolesImportPost'
+     *
+     * @param  \SplFileObject $file Plik Excel (.xlsx) z kolumnami: name (wymagane), description (opcjonalne) (optional)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesImportPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function apiRolesImportPostRequest($file = null, string $contentType = self::contentTypes['apiRolesImportPost'][0])
+    {
+
+
+
+        $resourcePath = '/api/roles/import';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+        // form params
+        if ($file !== null) {
+            $multipart = true;
+            $formParams['file'] = [];
+            $paramFiles = is_array($file) ? $file : [$file];
+            foreach ($paramFiles as $paramFile) {
+                $formParams['file'][] = \GuzzleHttp\Psr7\Utils::tryFopen(
+                    ObjectSerializer::toFormValue($paramFile),
+                    'rb'
+                );
+            }
+        }
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation apiRolesMultipleDelete
+     *
+     * Usuwa wskazane role
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesMultipleDeleteRequest $api_roles_multiple_delete_request api_roles_multiple_delete_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesMultipleDelete'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Client\Model\ApiRolesMultipleDelete200Response|\OpenAPI\Client\Model\ApiRolesMultipleDelete422Response|\OpenAPI\Client\Model\ApiRolesMultipleDelete500Response
+     */
+    public function apiRolesMultipleDelete($api_roles_multiple_delete_request, string $contentType = self::contentTypes['apiRolesMultipleDelete'][0])
+    {
+        list($response) = $this->apiRolesMultipleDeleteWithHttpInfo($api_roles_multiple_delete_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation apiRolesMultipleDeleteWithHttpInfo
+     *
+     * Usuwa wskazane role
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesMultipleDeleteRequest $api_roles_multiple_delete_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesMultipleDelete'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Client\Model\ApiRolesMultipleDelete200Response|\OpenAPI\Client\Model\ApiRolesMultipleDelete422Response|\OpenAPI\Client\Model\ApiRolesMultipleDelete500Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function apiRolesMultipleDeleteWithHttpInfo($api_roles_multiple_delete_request, string $contentType = self::contentTypes['apiRolesMultipleDelete'][0])
+    {
+        $request = $this->apiRolesMultipleDeleteRequest($api_roles_multiple_delete_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('\OpenAPI\Client\Model\ApiRolesMultipleDelete200Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesMultipleDelete200Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesMultipleDelete200Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 422:
+                    if ('\OpenAPI\Client\Model\ApiRolesMultipleDelete422Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesMultipleDelete422Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesMultipleDelete422Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\OpenAPI\Client\Model\ApiRolesMultipleDelete500Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesMultipleDelete500Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesMultipleDelete500Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\ApiRolesMultipleDelete200Response';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesMultipleDelete200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesMultipleDelete422Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesMultipleDelete500Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation apiRolesMultipleDeleteAsync
+     *
+     * Usuwa wskazane role
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesMultipleDeleteRequest $api_roles_multiple_delete_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesMultipleDelete'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesMultipleDeleteAsync($api_roles_multiple_delete_request, string $contentType = self::contentTypes['apiRolesMultipleDelete'][0])
+    {
+        return $this->apiRolesMultipleDeleteAsyncWithHttpInfo($api_roles_multiple_delete_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation apiRolesMultipleDeleteAsyncWithHttpInfo
+     *
+     * Usuwa wskazane role
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesMultipleDeleteRequest $api_roles_multiple_delete_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesMultipleDelete'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesMultipleDeleteAsyncWithHttpInfo($api_roles_multiple_delete_request, string $contentType = self::contentTypes['apiRolesMultipleDelete'][0])
+    {
+        $returnType = '\OpenAPI\Client\Model\ApiRolesMultipleDelete200Response';
+        $request = $this->apiRolesMultipleDeleteRequest($api_roles_multiple_delete_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'apiRolesMultipleDelete'
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesMultipleDeleteRequest $api_roles_multiple_delete_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesMultipleDelete'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function apiRolesMultipleDeleteRequest($api_roles_multiple_delete_request, string $contentType = self::contentTypes['apiRolesMultipleDelete'][0])
+    {
+
+        // verify the required parameter 'api_roles_multiple_delete_request' is set
+        if ($api_roles_multiple_delete_request === null || (is_array($api_roles_multiple_delete_request) && count($api_roles_multiple_delete_request) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $api_roles_multiple_delete_request when calling apiRolesMultipleDelete'
+            );
+        }
+
+
+        $resourcePath = '/api/roles/multiple';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($api_roles_multiple_delete_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($api_roles_multiple_delete_request));
+            } else {
+                $httpBody = $api_roles_multiple_delete_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'DELETE',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody
@@ -790,6 +1640,1838 @@ class RolesApi
         $query = ObjectSerializer::buildQuery($queryParams);
         return new Request(
             'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation apiRolesUuidAccessesPost
+     *
+     * Dodaje dostępy dla roli
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAccessesPostRequest $api_roles_uuid_accesses_post_request api_roles_uuid_accesses_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAccessesPost'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Client\Model\ApiRolesUuidAccessesPost201Response|\OpenAPI\Client\Model\ApiRolesUuidAccessesPost500Response
+     */
+    public function apiRolesUuidAccessesPost($api_roles_uuid_accesses_post_request, string $contentType = self::contentTypes['apiRolesUuidAccessesPost'][0])
+    {
+        list($response) = $this->apiRolesUuidAccessesPostWithHttpInfo($api_roles_uuid_accesses_post_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation apiRolesUuidAccessesPostWithHttpInfo
+     *
+     * Dodaje dostępy dla roli
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAccessesPostRequest $api_roles_uuid_accesses_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAccessesPost'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Client\Model\ApiRolesUuidAccessesPost201Response|\OpenAPI\Client\Model\ApiRolesUuidAccessesPost500Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function apiRolesUuidAccessesPostWithHttpInfo($api_roles_uuid_accesses_post_request, string $contentType = self::contentTypes['apiRolesUuidAccessesPost'][0])
+    {
+        $request = $this->apiRolesUuidAccessesPostRequest($api_roles_uuid_accesses_post_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 201:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidAccessesPost201Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidAccessesPost201Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidAccessesPost201Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidAccessesPost500Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidAccessesPost500Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidAccessesPost500Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\ApiRolesUuidAccessesPost201Response';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 201:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidAccessesPost201Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidAccessesPost500Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation apiRolesUuidAccessesPostAsync
+     *
+     * Dodaje dostępy dla roli
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAccessesPostRequest $api_roles_uuid_accesses_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAccessesPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidAccessesPostAsync($api_roles_uuid_accesses_post_request, string $contentType = self::contentTypes['apiRolesUuidAccessesPost'][0])
+    {
+        return $this->apiRolesUuidAccessesPostAsyncWithHttpInfo($api_roles_uuid_accesses_post_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation apiRolesUuidAccessesPostAsyncWithHttpInfo
+     *
+     * Dodaje dostępy dla roli
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAccessesPostRequest $api_roles_uuid_accesses_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAccessesPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidAccessesPostAsyncWithHttpInfo($api_roles_uuid_accesses_post_request, string $contentType = self::contentTypes['apiRolesUuidAccessesPost'][0])
+    {
+        $returnType = '\OpenAPI\Client\Model\ApiRolesUuidAccessesPost201Response';
+        $request = $this->apiRolesUuidAccessesPostRequest($api_roles_uuid_accesses_post_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'apiRolesUuidAccessesPost'
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAccessesPostRequest $api_roles_uuid_accesses_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAccessesPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function apiRolesUuidAccessesPostRequest($api_roles_uuid_accesses_post_request, string $contentType = self::contentTypes['apiRolesUuidAccessesPost'][0])
+    {
+
+        // verify the required parameter 'api_roles_uuid_accesses_post_request' is set
+        if ($api_roles_uuid_accesses_post_request === null || (is_array($api_roles_uuid_accesses_post_request) && count($api_roles_uuid_accesses_post_request) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $api_roles_uuid_accesses_post_request when calling apiRolesUuidAccessesPost'
+            );
+        }
+
+
+        $resourcePath = '/api/roles/{uuid}/accesses';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($api_roles_uuid_accesses_post_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($api_roles_uuid_accesses_post_request));
+            } else {
+                $httpBody = $api_roles_uuid_accesses_post_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation apiRolesUuidAcessesPermissionsPost
+     *
+     * Dodaje pozwolenia dostępu dla roli
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPostRequest $api_roles_uuid_acesses_permissions_post_request api_roles_uuid_acesses_permissions_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAcessesPermissionsPost'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost201Response|\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost500Response
+     */
+    public function apiRolesUuidAcessesPermissionsPost($api_roles_uuid_acesses_permissions_post_request, string $contentType = self::contentTypes['apiRolesUuidAcessesPermissionsPost'][0])
+    {
+        list($response) = $this->apiRolesUuidAcessesPermissionsPostWithHttpInfo($api_roles_uuid_acesses_permissions_post_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation apiRolesUuidAcessesPermissionsPostWithHttpInfo
+     *
+     * Dodaje pozwolenia dostępu dla roli
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPostRequest $api_roles_uuid_acesses_permissions_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAcessesPermissionsPost'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost201Response|\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost500Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function apiRolesUuidAcessesPermissionsPostWithHttpInfo($api_roles_uuid_acesses_permissions_post_request, string $contentType = self::contentTypes['apiRolesUuidAcessesPermissionsPost'][0])
+    {
+        $request = $this->apiRolesUuidAcessesPermissionsPostRequest($api_roles_uuid_acesses_permissions_post_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 201:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost201Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost201Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost201Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost500Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost500Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost500Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost201Response';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 201:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost201Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost500Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation apiRolesUuidAcessesPermissionsPostAsync
+     *
+     * Dodaje pozwolenia dostępu dla roli
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPostRequest $api_roles_uuid_acesses_permissions_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAcessesPermissionsPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidAcessesPermissionsPostAsync($api_roles_uuid_acesses_permissions_post_request, string $contentType = self::contentTypes['apiRolesUuidAcessesPermissionsPost'][0])
+    {
+        return $this->apiRolesUuidAcessesPermissionsPostAsyncWithHttpInfo($api_roles_uuid_acesses_permissions_post_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation apiRolesUuidAcessesPermissionsPostAsyncWithHttpInfo
+     *
+     * Dodaje pozwolenia dostępu dla roli
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPostRequest $api_roles_uuid_acesses_permissions_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAcessesPermissionsPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidAcessesPermissionsPostAsyncWithHttpInfo($api_roles_uuid_acesses_permissions_post_request, string $contentType = self::contentTypes['apiRolesUuidAcessesPermissionsPost'][0])
+    {
+        $returnType = '\OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPost201Response';
+        $request = $this->apiRolesUuidAcessesPermissionsPostRequest($api_roles_uuid_acesses_permissions_post_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'apiRolesUuidAcessesPermissionsPost'
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidAcessesPermissionsPostRequest $api_roles_uuid_acesses_permissions_post_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidAcessesPermissionsPost'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function apiRolesUuidAcessesPermissionsPostRequest($api_roles_uuid_acesses_permissions_post_request, string $contentType = self::contentTypes['apiRolesUuidAcessesPermissionsPost'][0])
+    {
+
+        // verify the required parameter 'api_roles_uuid_acesses_permissions_post_request' is set
+        if ($api_roles_uuid_acesses_permissions_post_request === null || (is_array($api_roles_uuid_acesses_permissions_post_request) && count($api_roles_uuid_acesses_permissions_post_request) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $api_roles_uuid_acesses_permissions_post_request when calling apiRolesUuidAcessesPermissionsPost'
+            );
+        }
+
+
+        $resourcePath = '/api/roles/{uuid}/acesses/permissions';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($api_roles_uuid_acesses_permissions_post_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($api_roles_uuid_acesses_permissions_post_request));
+            } else {
+                $httpBody = $api_roles_uuid_acesses_permissions_post_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'POST',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation apiRolesUuidDelete
+     *
+     * Usuwa wskazana rolę
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidDelete'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Client\Model\ApiRolesUuidDelete200Response|\OpenAPI\Client\Model\ApiRolesUuidGet404Response|\OpenAPI\Client\Model\ApiRolesUuidDelete500Response
+     */
+    public function apiRolesUuidDelete($uuid, string $contentType = self::contentTypes['apiRolesUuidDelete'][0])
+    {
+        list($response) = $this->apiRolesUuidDeleteWithHttpInfo($uuid, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation apiRolesUuidDeleteWithHttpInfo
+     *
+     * Usuwa wskazana rolę
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidDelete'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Client\Model\ApiRolesUuidDelete200Response|\OpenAPI\Client\Model\ApiRolesUuidGet404Response|\OpenAPI\Client\Model\ApiRolesUuidDelete500Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function apiRolesUuidDeleteWithHttpInfo($uuid, string $contentType = self::contentTypes['apiRolesUuidDelete'][0])
+    {
+        $request = $this->apiRolesUuidDeleteRequest($uuid, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidDelete200Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidDelete200Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidDelete200Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 404:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidGet404Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidGet404Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidGet404Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidDelete500Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidDelete500Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidDelete500Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\ApiRolesUuidDelete200Response';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidDelete200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidGet404Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidDelete500Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation apiRolesUuidDeleteAsync
+     *
+     * Usuwa wskazana rolę
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidDelete'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidDeleteAsync($uuid, string $contentType = self::contentTypes['apiRolesUuidDelete'][0])
+    {
+        return $this->apiRolesUuidDeleteAsyncWithHttpInfo($uuid, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation apiRolesUuidDeleteAsyncWithHttpInfo
+     *
+     * Usuwa wskazana rolę
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidDelete'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidDeleteAsyncWithHttpInfo($uuid, string $contentType = self::contentTypes['apiRolesUuidDelete'][0])
+    {
+        $returnType = '\OpenAPI\Client\Model\ApiRolesUuidDelete200Response';
+        $request = $this->apiRolesUuidDeleteRequest($uuid, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'apiRolesUuidDelete'
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidDelete'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function apiRolesUuidDeleteRequest($uuid, string $contentType = self::contentTypes['apiRolesUuidDelete'][0])
+    {
+
+        // verify the required parameter 'uuid' is set
+        if ($uuid === null || (is_array($uuid) && count($uuid) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $uuid when calling apiRolesUuidDelete'
+            );
+        }
+
+
+        $resourcePath = '/api/roles/{uuid}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($uuid !== null) {
+            $resourcePath = str_replace(
+                '{' . 'uuid' . '}',
+                ObjectSerializer::toPathValue($uuid),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'DELETE',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation apiRolesUuidGet
+     *
+     * Pobiera wskazaną rolę
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidGet'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Client\Model\ApiRolesUuidGet200Response|\OpenAPI\Client\Model\ApiRolesUuidGet404Response|\OpenAPI\Client\Model\ApiRolesUuidGet500Response
+     */
+    public function apiRolesUuidGet($uuid, string $contentType = self::contentTypes['apiRolesUuidGet'][0])
+    {
+        list($response) = $this->apiRolesUuidGetWithHttpInfo($uuid, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation apiRolesUuidGetWithHttpInfo
+     *
+     * Pobiera wskazaną rolę
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidGet'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Client\Model\ApiRolesUuidGet200Response|\OpenAPI\Client\Model\ApiRolesUuidGet404Response|\OpenAPI\Client\Model\ApiRolesUuidGet500Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function apiRolesUuidGetWithHttpInfo($uuid, string $contentType = self::contentTypes['apiRolesUuidGet'][0])
+    {
+        $request = $this->apiRolesUuidGetRequest($uuid, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 200:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidGet200Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidGet200Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidGet200Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 404:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidGet404Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidGet404Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidGet404Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidGet500Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidGet500Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidGet500Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\ApiRolesUuidGet200Response';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 200:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidGet200Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidGet404Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidGet500Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation apiRolesUuidGetAsync
+     *
+     * Pobiera wskazaną rolę
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidGet'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidGetAsync($uuid, string $contentType = self::contentTypes['apiRolesUuidGet'][0])
+    {
+        return $this->apiRolesUuidGetAsyncWithHttpInfo($uuid, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation apiRolesUuidGetAsyncWithHttpInfo
+     *
+     * Pobiera wskazaną rolę
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidGet'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidGetAsyncWithHttpInfo($uuid, string $contentType = self::contentTypes['apiRolesUuidGet'][0])
+    {
+        $returnType = '\OpenAPI\Client\Model\ApiRolesUuidGet200Response';
+        $request = $this->apiRolesUuidGetRequest($uuid, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'apiRolesUuidGet'
+     *
+     * @param  string $uuid UUID roli (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidGet'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function apiRolesUuidGetRequest($uuid, string $contentType = self::contentTypes['apiRolesUuidGet'][0])
+    {
+
+        // verify the required parameter 'uuid' is set
+        if ($uuid === null || (is_array($uuid) && count($uuid) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $uuid when calling apiRolesUuidGet'
+            );
+        }
+
+
+        $resourcePath = '/api/roles/{uuid}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+        // path params
+        if ($uuid !== null) {
+            $resourcePath = str_replace(
+                '{' . 'uuid' . '}',
+                ObjectSerializer::toPathValue($uuid),
+                $resourcePath
+            );
+        }
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'GET',
+            $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
+            $headers,
+            $httpBody
+        );
+    }
+
+    /**
+     * Operation apiRolesUuidPut
+     *
+     * Aktualizuje wskazaną rolę
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidPutRequest $api_roles_uuid_put_request api_roles_uuid_put_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidPut'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return \OpenAPI\Client\Model\ApiRolesUuidPut201Response|\OpenAPI\Client\Model\ApiRolesPost422Response|\OpenAPI\Client\Model\ApiRolesUuidPut500Response
+     */
+    public function apiRolesUuidPut($api_roles_uuid_put_request, string $contentType = self::contentTypes['apiRolesUuidPut'][0])
+    {
+        list($response) = $this->apiRolesUuidPutWithHttpInfo($api_roles_uuid_put_request, $contentType);
+        return $response;
+    }
+
+    /**
+     * Operation apiRolesUuidPutWithHttpInfo
+     *
+     * Aktualizuje wskazaną rolę
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidPutRequest $api_roles_uuid_put_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidPut'] to see the possible values for this operation
+     *
+     * @throws \OpenAPI\Client\ApiException on non-2xx response or if the response body is not in the expected format
+     * @throws \InvalidArgumentException
+     * @return array of \OpenAPI\Client\Model\ApiRolesUuidPut201Response|\OpenAPI\Client\Model\ApiRolesPost422Response|\OpenAPI\Client\Model\ApiRolesUuidPut500Response, HTTP status code, HTTP response headers (array of strings)
+     */
+    public function apiRolesUuidPutWithHttpInfo($api_roles_uuid_put_request, string $contentType = self::contentTypes['apiRolesUuidPut'][0])
+    {
+        $request = $this->apiRolesUuidPutRequest($api_roles_uuid_put_request, $contentType);
+
+        try {
+            $options = $this->createHttpClientOption();
+            try {
+                $response = $this->client->send($request, $options);
+            } catch (RequestException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    $e->getResponse() ? $e->getResponse()->getHeaders() : null,
+                    $e->getResponse() ? (string) $e->getResponse()->getBody() : null
+                );
+            } catch (ConnectException $e) {
+                throw new ApiException(
+                    "[{$e->getCode()}] {$e->getMessage()}",
+                    (int) $e->getCode(),
+                    null,
+                    null
+                );
+            }
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode < 200 || $statusCode > 299) {
+                throw new ApiException(
+                    sprintf(
+                        '[%d] Error connecting to the API (%s)',
+                        $statusCode,
+                        (string) $request->getUri()
+                    ),
+                    $statusCode,
+                    $response->getHeaders(),
+                    (string) $response->getBody()
+                );
+            }
+
+            switch($statusCode) {
+                case 201:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidPut201Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidPut201Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidPut201Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 422:
+                    if ('\OpenAPI\Client\Model\ApiRolesPost422Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesPost422Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesPost422Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                case 500:
+                    if ('\OpenAPI\Client\Model\ApiRolesUuidPut500Response' === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ('\OpenAPI\Client\Model\ApiRolesUuidPut500Response' !== 'string') {
+                            try {
+                                $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                            } catch (\JsonException $exception) {
+                                throw new ApiException(
+                                    sprintf(
+                                        'Error JSON decoding server response (%s)',
+                                        $request->getUri()
+                                    ),
+                                    $statusCode,
+                                    $response->getHeaders(),
+                                    $content
+                                );
+                            }
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, '\OpenAPI\Client\Model\ApiRolesUuidPut500Response', []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+            }
+
+            $returnType = '\OpenAPI\Client\Model\ApiRolesUuidPut201Response';
+            if ($returnType === '\SplFileObject') {
+                $content = $response->getBody(); //stream goes to serializer
+            } else {
+                $content = (string) $response->getBody();
+                if ($returnType !== 'string') {
+                    try {
+                        $content = json_decode($content, false, 512, JSON_THROW_ON_ERROR);
+                    } catch (\JsonException $exception) {
+                        throw new ApiException(
+                            sprintf(
+                                'Error JSON decoding server response (%s)',
+                                $request->getUri()
+                            ),
+                            $statusCode,
+                            $response->getHeaders(),
+                            $content
+                        );
+                    }
+                }
+            }
+
+            return [
+                ObjectSerializer::deserialize($content, $returnType, []),
+                $response->getStatusCode(),
+                $response->getHeaders()
+            ];
+
+        } catch (ApiException $e) {
+            switch ($e->getCode()) {
+                case 201:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidPut201Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 422:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesPost422Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 500:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\OpenAPI\Client\Model\ApiRolesUuidPut500Response',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+            }
+            throw $e;
+        }
+    }
+
+    /**
+     * Operation apiRolesUuidPutAsync
+     *
+     * Aktualizuje wskazaną rolę
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidPutRequest $api_roles_uuid_put_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidPut'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidPutAsync($api_roles_uuid_put_request, string $contentType = self::contentTypes['apiRolesUuidPut'][0])
+    {
+        return $this->apiRolesUuidPutAsyncWithHttpInfo($api_roles_uuid_put_request, $contentType)
+            ->then(
+                function ($response) {
+                    return $response[0];
+                }
+            );
+    }
+
+    /**
+     * Operation apiRolesUuidPutAsyncWithHttpInfo
+     *
+     * Aktualizuje wskazaną rolę
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidPutRequest $api_roles_uuid_put_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidPut'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Promise\PromiseInterface
+     */
+    public function apiRolesUuidPutAsyncWithHttpInfo($api_roles_uuid_put_request, string $contentType = self::contentTypes['apiRolesUuidPut'][0])
+    {
+        $returnType = '\OpenAPI\Client\Model\ApiRolesUuidPut201Response';
+        $request = $this->apiRolesUuidPutRequest($api_roles_uuid_put_request, $contentType);
+
+        return $this->client
+            ->sendAsync($request, $this->createHttpClientOption())
+            ->then(
+                function ($response) use ($returnType) {
+                    if ($returnType === '\SplFileObject') {
+                        $content = $response->getBody(); //stream goes to serializer
+                    } else {
+                        $content = (string) $response->getBody();
+                        if ($returnType !== 'string') {
+                            $content = json_decode($content);
+                        }
+                    }
+
+                    return [
+                        ObjectSerializer::deserialize($content, $returnType, []),
+                        $response->getStatusCode(),
+                        $response->getHeaders()
+                    ];
+                },
+                function ($exception) {
+                    $response = $exception->getResponse();
+                    $statusCode = $response->getStatusCode();
+                    throw new ApiException(
+                        sprintf(
+                            '[%d] Error connecting to the API (%s)',
+                            $statusCode,
+                            $exception->getRequest()->getUri()
+                        ),
+                        $statusCode,
+                        $response->getHeaders(),
+                        (string) $response->getBody()
+                    );
+                }
+            );
+    }
+
+    /**
+     * Create request for operation 'apiRolesUuidPut'
+     *
+     * @param  \OpenAPI\Client\Model\ApiRolesUuidPutRequest $api_roles_uuid_put_request (required)
+     * @param  string $contentType The value for the Content-Type header. Check self::contentTypes['apiRolesUuidPut'] to see the possible values for this operation
+     *
+     * @throws \InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Request
+     */
+    public function apiRolesUuidPutRequest($api_roles_uuid_put_request, string $contentType = self::contentTypes['apiRolesUuidPut'][0])
+    {
+
+        // verify the required parameter 'api_roles_uuid_put_request' is set
+        if ($api_roles_uuid_put_request === null || (is_array($api_roles_uuid_put_request) && count($api_roles_uuid_put_request) === 0)) {
+            throw new \InvalidArgumentException(
+                'Missing the required parameter $api_roles_uuid_put_request when calling apiRolesUuidPut'
+            );
+        }
+
+
+        $resourcePath = '/api/roles/{uuid}';
+        $formParams = [];
+        $queryParams = [];
+        $headerParams = [];
+        $httpBody = '';
+        $multipart = false;
+
+
+
+
+
+        $headers = $this->headerSelector->selectHeaders(
+            ['application/json', ],
+            $contentType,
+            $multipart
+        );
+
+        // for model (json/xml)
+        if (isset($api_roles_uuid_put_request)) {
+            if (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the body
+                $httpBody = \GuzzleHttp\Utils::jsonEncode(ObjectSerializer::sanitizeForSerialization($api_roles_uuid_put_request));
+            } else {
+                $httpBody = $api_roles_uuid_put_request;
+            }
+        } elseif (count($formParams) > 0) {
+            if ($multipart) {
+                $multipartContents = [];
+                foreach ($formParams as $formParamName => $formParamValue) {
+                    $formParamValueItems = is_array($formParamValue) ? $formParamValue : [$formParamValue];
+                    foreach ($formParamValueItems as $formParamValueItem) {
+                        $multipartContents[] = [
+                            'name' => $formParamName,
+                            'contents' => $formParamValueItem
+                        ];
+                    }
+                }
+                // for HTTP post (form)
+                $httpBody = new MultipartStream($multipartContents);
+
+            } elseif (stripos($headers['Content-Type'], 'application/json') !== false) {
+                # if Content-Type contains "application/json", json_encode the form parameters
+                $httpBody = \GuzzleHttp\Utils::jsonEncode($formParams);
+            } else {
+                // for HTTP post (form)
+                $httpBody = ObjectSerializer::buildQuery($formParams);
+            }
+        }
+
+        // this endpoint requires Bearer (JWT) authentication (access token)
+        if (!empty($this->config->getAccessToken())) {
+            $headers['Authorization'] = 'Bearer ' . $this->config->getAccessToken();
+        }
+
+        $defaultHeaders = [];
+        if ($this->config->getUserAgent()) {
+            $defaultHeaders['User-Agent'] = $this->config->getUserAgent();
+        }
+
+        $headers = array_merge(
+            $defaultHeaders,
+            $headerParams,
+            $headers
+        );
+
+        $operationHost = $this->config->getHost();
+        $query = ObjectSerializer::buildQuery($queryParams);
+        return new Request(
+            'PUT',
             $operationHost . $resourcePath . ($query ? "?{$query}" : ''),
             $headers,
             $httpBody

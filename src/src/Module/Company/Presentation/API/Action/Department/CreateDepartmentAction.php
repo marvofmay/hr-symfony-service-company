@@ -24,6 +24,9 @@ final readonly class CreateDepartmentAction
     {
         $this->companyValidator->isCompanyExists($createDTO->companyUUID);
         $this->departmentValidator->isDepartmentExistsWithName($createDTO->name);
+        if (null !== $createDTO->internalCode) {
+            $this->departmentValidator->isDepartmentWithInternalCodeAlreadyExists($createDTO->internalCode);
+        }
         if (null !== $createDTO->parentDepartmentUUID) {
             $this->departmentValidator->isDepartmentExists($createDTO->parentDepartmentUUID);
         }
@@ -31,6 +34,7 @@ final readonly class CreateDepartmentAction
         $this->commandBus->dispatch(
             new CreateDepartmentCommand(
                 $createDTO->name,
+                $createDTO->internalCode,
                 $createDTO->description,
                 $createDTO->active,
                 $createDTO->companyUUID,

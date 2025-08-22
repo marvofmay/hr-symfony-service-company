@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Domain\Service\Company;
+namespace App\Common\Domain\Abstract;
 
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
-use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Interface\Company\CompanyAggregateReaderInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 
-class CompanyAggregateAbstract
+class AggregateAbstract
 {
     public function __construct(
         protected EventStoreCreator $eventStoreCreator,
@@ -22,14 +21,14 @@ class CompanyAggregateAbstract
         protected CompanyAggregateReaderInterface $companyAggregateReaderRepository,
     ) {}
 
-    protected function storeAndDispatchEvents(array $events): void
+    protected function commitEvents(array $events, string $aggregateClass): void
     {
         foreach ($events as $event) {
             $this->eventStoreCreator->create(
                 new EventStore(
                     $event->uuid->toString(),
                     $event::class,
-                    CompanyAggregate::class,
+                    $aggregateClass,
                     $this->serializer->serialize($event, 'json'),
                     $this->security->getUser()?->getEmployee()?->getUUID(),
                 )

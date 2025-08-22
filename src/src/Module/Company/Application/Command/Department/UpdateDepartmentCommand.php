@@ -13,6 +13,7 @@ class UpdateDepartmentCommand implements CommandInterface
     public function __construct(
         public Department $department,
         public string $name,
+        public string $internalCode,
         public ?string $description,
         public bool $active,
         public string $companyUUID,

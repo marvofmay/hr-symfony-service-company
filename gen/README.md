@@ -50,7 +50,7 @@ require_once(__DIR__ . '/vendor/autoload.php');
 
 
 
-$apiInstance = new OpenAPI\Client\Api\LOGINApi(
+$apiInstance = new OpenAPI\Client\Api\LoginApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
     new GuzzleHttp\Client()
@@ -61,7 +61,7 @@ try {
     $result = $apiInstance->apiLoginPost($api_login_post_request);
     print_r($result);
 } catch (Exception $e) {
-    echo 'Exception when calling LOGINApi->apiLoginPost: ', $e->getMessage(), PHP_EOL;
+    echo 'Exception when calling LoginApi->apiLoginPost: ', $e->getMessage(), PHP_EOL;
 }
 
 ```
@@ -72,22 +72,70 @@ All URIs are relative to *http://127.0.0.1:81*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
-*LOGINApi* | [**apiLoginPost**](docs/Api/LOGINApi.md#apiloginpost) | **POST** /api/login | Logowanie
+*LoginApi* | [**apiLoginPost**](docs/Api/LoginApi.md#apiloginpost) | **POST** /api/login | Logowanie
+*NotesApi* | [**apiNotesGet**](docs/Api/NotesApi.md#apinotesget) | **GET** /api/notes | Pobiera listę notatek
+*NotesApi* | [**apiNotesPost**](docs/Api/NotesApi.md#apinotespost) | **POST** /api/notes | Dodaje notatkę
+*NotesApi* | [**apiNotesUuidDelete**](docs/Api/NotesApi.md#apinotesuuiddelete) | **DELETE** /api/notes/{uuid} | Usuwa wskazana rolę
+*NotesApi* | [**apiNotesUuidGet**](docs/Api/NotesApi.md#apinotesuuidget) | **GET** /api/notes/{uuid} | Pobiera wskazaną notatkę
+*NotesApi* | [**apiNotesUuidPut**](docs/Api/NotesApi.md#apinotesuuidput) | **PUT** /api/notes/{uuid} | Aktualizuje wskazaną notatkę
 *RolesApi* | [**apiRolesGet**](docs/Api/RolesApi.md#apirolesget) | **GET** /api/roles | Pobiera listę ról
+*RolesApi* | [**apiRolesImportPost**](docs/Api/RolesApi.md#apirolesimportpost) | **POST** /api/roles/import | Importuje role z pliku
+*RolesApi* | [**apiRolesMultipleDelete**](docs/Api/RolesApi.md#apirolesmultipledelete) | **DELETE** /api/roles/multiple | Usuwa wskazane role
 *RolesApi* | [**apiRolesPost**](docs/Api/RolesApi.md#apirolespost) | **POST** /api/roles | Dodaje rolę
+*RolesApi* | [**apiRolesUuidAccessesPost**](docs/Api/RolesApi.md#apirolesuuidaccessespost) | **POST** /api/roles/{uuid}/accesses | Dodaje dostępy dla roli
+*RolesApi* | [**apiRolesUuidAcessesPermissionsPost**](docs/Api/RolesApi.md#apirolesuuidacessespermissionspost) | **POST** /api/roles/{uuid}/acesses/permissions | Dodaje pozwolenia dostępu dla roli
+*RolesApi* | [**apiRolesUuidDelete**](docs/Api/RolesApi.md#apirolesuuiddelete) | **DELETE** /api/roles/{uuid} | Usuwa wskazana rolę
+*RolesApi* | [**apiRolesUuidGet**](docs/Api/RolesApi.md#apirolesuuidget) | **GET** /api/roles/{uuid} | Pobiera wskazaną rolę
+*RolesApi* | [**apiRolesUuidPut**](docs/Api/RolesApi.md#apirolesuuidput) | **PUT** /api/roles/{uuid} | Aktualizuje wskazaną rolę
 
 ## Models
 
 - [ApiLoginPost200Response](docs/Model/ApiLoginPost200Response.md)
 - [ApiLoginPost401Response](docs/Model/ApiLoginPost401Response.md)
 - [ApiLoginPostRequest](docs/Model/ApiLoginPostRequest.md)
+- [ApiNotesGet200Response](docs/Model/ApiNotesGet200Response.md)
+- [ApiNotesGet200ResponseData](docs/Model/ApiNotesGet200ResponseData.md)
+- [ApiNotesPost201Response](docs/Model/ApiNotesPost201Response.md)
+- [ApiNotesPost422Response](docs/Model/ApiNotesPost422Response.md)
+- [ApiNotesPost500Response](docs/Model/ApiNotesPost500Response.md)
+- [ApiNotesPostRequest](docs/Model/ApiNotesPostRequest.md)
+- [ApiNotesUuidDelete200Response](docs/Model/ApiNotesUuidDelete200Response.md)
+- [ApiNotesUuidDelete500Response](docs/Model/ApiNotesUuidDelete500Response.md)
+- [ApiNotesUuidGet200Response](docs/Model/ApiNotesUuidGet200Response.md)
+- [ApiNotesUuidGet200ResponseData](docs/Model/ApiNotesUuidGet200ResponseData.md)
+- [ApiNotesUuidGet404Response](docs/Model/ApiNotesUuidGet404Response.md)
+- [ApiNotesUuidGet500Response](docs/Model/ApiNotesUuidGet500Response.md)
+- [ApiNotesUuidPut201Response](docs/Model/ApiNotesUuidPut201Response.md)
+- [ApiNotesUuidPut500Response](docs/Model/ApiNotesUuidPut500Response.md)
 - [ApiRolesGet200Response](docs/Model/ApiRolesGet200Response.md)
 - [ApiRolesGet200ResponseData](docs/Model/ApiRolesGet200ResponseData.md)
 - [ApiRolesGet200ResponseDataItemsInner](docs/Model/ApiRolesGet200ResponseDataItemsInner.md)
+- [ApiRolesImportPost201Response](docs/Model/ApiRolesImportPost201Response.md)
+- [ApiRolesImportPost500Response](docs/Model/ApiRolesImportPost500Response.md)
+- [ApiRolesMultipleDelete200Response](docs/Model/ApiRolesMultipleDelete200Response.md)
+- [ApiRolesMultipleDelete422Response](docs/Model/ApiRolesMultipleDelete422Response.md)
+- [ApiRolesMultipleDelete500Response](docs/Model/ApiRolesMultipleDelete500Response.md)
+- [ApiRolesMultipleDeleteRequest](docs/Model/ApiRolesMultipleDeleteRequest.md)
 - [ApiRolesPost201Response](docs/Model/ApiRolesPost201Response.md)
 - [ApiRolesPost422Response](docs/Model/ApiRolesPost422Response.md)
 - [ApiRolesPost500Response](docs/Model/ApiRolesPost500Response.md)
 - [ApiRolesPostRequest](docs/Model/ApiRolesPostRequest.md)
+- [ApiRolesUuidAccessesPost201Response](docs/Model/ApiRolesUuidAccessesPost201Response.md)
+- [ApiRolesUuidAccessesPost500Response](docs/Model/ApiRolesUuidAccessesPost500Response.md)
+- [ApiRolesUuidAccessesPostRequest](docs/Model/ApiRolesUuidAccessesPostRequest.md)
+- [ApiRolesUuidAcessesPermissionsPost201Response](docs/Model/ApiRolesUuidAcessesPermissionsPost201Response.md)
+- [ApiRolesUuidAcessesPermissionsPost500Response](docs/Model/ApiRolesUuidAcessesPermissionsPost500Response.md)
+- [ApiRolesUuidAcessesPermissionsPostRequest](docs/Model/ApiRolesUuidAcessesPermissionsPostRequest.md)
+- [ApiRolesUuidAcessesPermissionsPostRequestAccessesInner](docs/Model/ApiRolesUuidAcessesPermissionsPostRequestAccessesInner.md)
+- [ApiRolesUuidDelete200Response](docs/Model/ApiRolesUuidDelete200Response.md)
+- [ApiRolesUuidDelete500Response](docs/Model/ApiRolesUuidDelete500Response.md)
+- [ApiRolesUuidGet200Response](docs/Model/ApiRolesUuidGet200Response.md)
+- [ApiRolesUuidGet200ResponseData](docs/Model/ApiRolesUuidGet200ResponseData.md)
+- [ApiRolesUuidGet404Response](docs/Model/ApiRolesUuidGet404Response.md)
+- [ApiRolesUuidGet500Response](docs/Model/ApiRolesUuidGet500Response.md)
+- [ApiRolesUuidPut201Response](docs/Model/ApiRolesUuidPut201Response.md)
+- [ApiRolesUuidPut500Response](docs/Model/ApiRolesUuidPut500Response.md)
+- [ApiRolesUuidPutRequest](docs/Model/ApiRolesUuidPutRequest.md)
 
 ## Authorization
 

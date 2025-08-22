@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Domain\Service\Company\Factory;
+namespace App\Module\Company\Domain\Service\Factory;
 
-use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Address as AddressValueObject;
+use App\Module\Company\Domain\Entity\Address;
 
 final readonly class AddressFactory
 {

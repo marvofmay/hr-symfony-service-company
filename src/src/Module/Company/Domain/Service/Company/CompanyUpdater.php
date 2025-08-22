@@ -13,9 +13,9 @@ use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
 use App\Module\Company\Domain\Interface\Contact\ContactWriterInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
-use App\Module\Company\Domain\Service\Company\Factory\AddressFactory;
 use App\Module\Company\Domain\Service\Company\Factory\CompanyFactory;
-use App\Module\Company\Domain\Service\Company\Factory\ContactFactory;
+use App\Module\Company\Domain\Service\Factory\AddressFactory;
+use App\Module\Company\Domain\Service\Factory\ContactFactory;
 
 final class CompanyUpdater
 {

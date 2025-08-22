@@ -11,6 +11,7 @@ class CreateDepartmentCommand implements CommandInterface
 {
     public function __construct(
         public string $name,
+        public string $internalCode,
         public ?string $description,
         public bool $active,
         public string $companyUUID,

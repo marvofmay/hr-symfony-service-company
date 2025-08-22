@@ -8,9 +8,9 @@ use App\Common\Domain\Interface\DomainEventInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
-use App\Module\Company\Domain\Service\Company\Factory\AddressFactory;
 use App\Module\Company\Domain\Service\Company\Factory\CompanyFactory;
-use App\Module\Company\Domain\Service\Company\Factory\ContactFactory;
+use App\Module\Company\Domain\Service\Factory\AddressFactory;
+use App\Module\Company\Domain\Service\Factory\ContactFactory;
 
 class CompanyCreator
 {
@@ -28,7 +28,6 @@ class CompanyCreator
         $company = $this->companyFactory->createFromEvent($event);
         $address = $this->addressFactory->createFromValueObject($event->address);
         $contacts = $this->contactFactory->createContacts($event->phones, $event->emails, $event->websites);
-
         $company->setAddress($address);
 
         foreach ($contacts as $contact) {

@@ -24,6 +24,7 @@ class DepartmentAggregate extends AggregateRootAbstract
     private CompanyUUID     $companyUUID;
     private ?DepartmentUUID $parentDepartmentUUID = null;
     private Name            $name;
+    private string          $internalCode;
     private ?string         $description          = null;
     private ?bool           $active               = true;
     private Address         $address;
@@ -35,21 +36,24 @@ class DepartmentAggregate extends AggregateRootAbstract
     public static function create(
         CompanyUUID     $companyUUID,
         Name            $name,
+        string          $internalCode,
         Address         $address,
         bool            $active = true,
         ?string         $description = null,
         ?Phones         $phones = null,
         ?Emails         $emails = null,
         ?Websites       $websites = null,
-        ?DepartmentUUID $parentDepartmentUUID = null
+        ?DepartmentUUID $parentDepartmentUUID = null,
+        ?DepartmentUUID $uuid = null
     ): self
     {
         $aggregate = new self();
 
         $aggregate->record(new DepartmentCreatedEvent(
-            DepartmentUUID::generate(),
+            $uuid ?? DepartmentUUID::generate(),
             $companyUUID,
             $name,
+            $internalCode,
             $address,
             $active,
             $description,
@@ -65,6 +69,7 @@ class DepartmentAggregate extends AggregateRootAbstract
     public function update(
         CompanyUUID     $companyUUID,
         Name            $name,
+        string          $internalCode,
         Address         $address,
         bool            $active,
         ?string         $description = null,
@@ -82,6 +87,7 @@ class DepartmentAggregate extends AggregateRootAbstract
             $this->uuid,
             $companyUUID,
             $name,
+            $internalCode,
             $address,
             $active,
             $description,
@@ -117,6 +123,7 @@ class DepartmentAggregate extends AggregateRootAbstract
         if ($event instanceof DepartmentCreatedEvent || $event instanceof DepartmentUpdatedEvent) {
             $this->uuid = $event->uuid;
             $this->name = $event->name;
+            $this->internalCode = $event->internalCode;
             $this->description = $event->description;
             $this->companyUUID = $event->companyUUID;
             $this->parentDepartmentUUID = $event->parentDepartmentUUID;

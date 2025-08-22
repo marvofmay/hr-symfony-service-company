@@ -57,7 +57,7 @@ class ApiLoginPostRequest implements ModelInterface, ArrayAccess, \JsonSerializa
       * @var string[]
       */
     protected static $openAPITypes = [
-        'name' => 'string',
+        'email' => 'string',
         'password' => 'string'
     ];
 
@@ -69,7 +69,7 @@ class ApiLoginPostRequest implements ModelInterface, ArrayAccess, \JsonSerializa
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'name' => null,
+        'email' => null,
         'password' => null
     ];
 
@@ -79,7 +79,7 @@ class ApiLoginPostRequest implements ModelInterface, ArrayAccess, \JsonSerializa
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'name' => false,
+        'email' => false,
         'password' => false
     ];
 
@@ -169,7 +169,7 @@ class ApiLoginPostRequest implements ModelInterface, ArrayAccess, \JsonSerializa
      * @var string[]
      */
     protected static $attributeMap = [
-        'name' => 'name',
+        'email' => 'email',
         'password' => 'password'
     ];
 
@@ -179,7 +179,7 @@ class ApiLoginPostRequest implements ModelInterface, ArrayAccess, \JsonSerializa
      * @var string[]
      */
     protected static $setters = [
-        'name' => 'setName',
+        'email' => 'setEmail',
         'password' => 'setPassword'
     ];
 
@@ -189,7 +189,7 @@ class ApiLoginPostRequest implements ModelInterface, ArrayAccess, \JsonSerializa
      * @var string[]
      */
     protected static $getters = [
-        'name' => 'getName',
+        'email' => 'getEmail',
         'password' => 'getPassword'
     ];
 
@@ -250,7 +250,7 @@ class ApiLoginPostRequest implements ModelInterface, ArrayAccess, \JsonSerializa
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('name', $data ?? [], null);
+        $this->setIfExists('email', $data ?? [], null);
         $this->setIfExists('password', $data ?? [], null);
     }
 
@@ -281,8 +281,8 @@ class ApiLoginPostRequest implements ModelInterface, ArrayAccess, \JsonSerializa
     {
         $invalidProperties = [];
 
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
+        if ($this->container['email'] === null) {
+            $invalidProperties[] = "'email' can't be null";
         }
         if ($this->container['password'] === null) {
             $invalidProperties[] = "'password' can't be null";
@@ -303,28 +303,28 @@ class ApiLoginPostRequest implements ModelInterface, ArrayAccess, \JsonSerializa
 
 
     /**
-     * Gets name
+     * Gets email
      *
      * @return string
      */
-    public function getName()
+    public function getEmail()
     {
-        return $this->container['name'];
+        return $this->container['email'];
     }
 
     /**
-     * Sets name
+     * Sets email
      *
-     * @param string $name name
+     * @param string $email email
      *
      * @return self
      */
-    public function setName($name)
+    public function setEmail($email)
     {
-        if (is_null($name)) {
-            throw new \InvalidArgumentException('non-nullable name cannot be null');
+        if (is_null($email)) {
+            throw new \InvalidArgumentException('non-nullable email cannot be null');
         }
-        $this->container['name'] = $name;
+        $this->container['email'] = $email;
 
         return $this;
     }

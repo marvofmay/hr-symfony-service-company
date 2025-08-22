@@ -3,9 +3,9 @@ company:
   deleted:
     notExists: "Firma o podanym UUID :uuid nie istnieje lub nie została usunięta"
     address:
-      notExists: "Adres firmy o podanym UUID :uuid nie istnieje lub nie został usunięty"
+      notExists: "Adres firmy o podanym UUID :uuid nie istnieje lub został usunięty"
     contacts:
-      notExists: "Kontakt firmy o podanym UUID :uuid nie istnieje lub nie został usunięty"
+      notExists: "Kontakt firmy o podanym UUID :uuid nie istnieje lub został usunięty"
   uuid:
     notFound: "Firma o podanym UUID nie istnieje"
     notExists: "Firma o podanym UUID nie istnieje :uuid"
@@ -16,7 +16,7 @@ company:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
     expectedUniqueCompanyNameConstraint: "Oczekiwano unikalnej nazwy firmy"
-  companyInternalCode:
+  internalCode:
     alreadyExists: "Firma o podanym kodzie wewnętrznym \":internalCode\" już istnieje"
   nip:
     minimumLength: "Minimalnie znaków :qty"

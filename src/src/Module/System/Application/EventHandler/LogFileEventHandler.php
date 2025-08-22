@@ -14,9 +14,9 @@ final readonly class LogFileEventHandler
     {
     }
 
-    public function __invoke(LogFileEvent $event, string $level = LogLevel::ERROR): void
+    public function __invoke(LogFileEvent $event): void
     {
-        match ($level) {
+        match ($event->level) {
             LogLevel::DEBUG => $this->logger->debug($event->message),
             LogLevel::NOTICE => $this->logger->notice($event->message),
             LogLevel::WARNING => $this->logger->warning($event->message),

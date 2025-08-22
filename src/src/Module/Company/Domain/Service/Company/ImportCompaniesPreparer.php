@@ -7,7 +7,7 @@ namespace App\Module\Company\Domain\Service\Company;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 
-class ImportCompaniesPreparer
+final readonly class ImportCompaniesPreparer
 {
     public function __construct(
         private CompanyReaderInterface $companyReaderRepository,

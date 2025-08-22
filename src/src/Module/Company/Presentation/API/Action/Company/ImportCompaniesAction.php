@@ -9,7 +9,7 @@ use App\Module\Company\Domain\DTO\Company\ImportDTO;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class ImportCompaniesAction
+final readonly class ImportCompaniesAction
 {
     public function __construct(private MessageBusInterface $commandBus)
     {

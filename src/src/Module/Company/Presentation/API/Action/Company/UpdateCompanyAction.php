@@ -31,6 +31,9 @@ final readonly class UpdateCompanyAction
         if (null !== $updateDTO->parentCompanyUUID) {
             $this->companyValidator->isCompanyExists($updateDTO->parentCompanyUUID);
         }
+        if (null !== $updateDTO->internalCode) {
+            $this->companyValidator->isCompanyWithInternalCodeAlreadyExists($updateDTO->internalCode, $uuid);
+        }
 
         $this->commandBus->dispatch(
             new UpdateCompanyCommand(

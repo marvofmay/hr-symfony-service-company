@@ -18,11 +18,26 @@ class CreateDTO
     #[MinMaxLength(min: 3, max: 200, message: [
         'tooShort' => 'department.name.minimumLength',
         'tooLong' => 'department.name.maximumLength',
-        'domain' => 'companies',
+        'domain' => 'departments',
     ])]
-    public string $name = '' {
+    public string $name {
         get {
             return $this->name;
+        }
+    }
+
+    #[NotBlank(message: [
+        'text' => 'department.internalCode.required',
+        'domain' => 'departments',
+    ])]
+    #[MinMaxLength(min: 3, max: 50, message: [
+        'tooShort' => 'department.internalCode.minimumLength',
+        'tooLong' => 'department.internalCode.maximumLength',
+        'domain' => 'departments',
+    ])]
+    public string $internalCode {
+        get {
+            return $this->internalCode;
         }
     }
 

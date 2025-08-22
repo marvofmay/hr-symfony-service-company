@@ -57,7 +57,6 @@ class ApiLoginPost401Response implements ModelInterface, ArrayAccess, \JsonSeria
       * @var string[]
       */
     protected static $openAPITypes = [
-        'code' => 'int',
         'message' => 'string'
     ];
 
@@ -69,7 +68,6 @@ class ApiLoginPost401Response implements ModelInterface, ArrayAccess, \JsonSeria
       * @psalm-var array<string, string|null>
       */
     protected static $openAPIFormats = [
-        'code' => null,
         'message' => null
     ];
 
@@ -79,7 +77,6 @@ class ApiLoginPost401Response implements ModelInterface, ArrayAccess, \JsonSeria
       * @var boolean[]
       */
     protected static array $openAPINullables = [
-        'code' => false,
         'message' => false
     ];
 
@@ -169,7 +166,6 @@ class ApiLoginPost401Response implements ModelInterface, ArrayAccess, \JsonSeria
      * @var string[]
      */
     protected static $attributeMap = [
-        'code' => 'code',
         'message' => 'message'
     ];
 
@@ -179,7 +175,6 @@ class ApiLoginPost401Response implements ModelInterface, ArrayAccess, \JsonSeria
      * @var string[]
      */
     protected static $setters = [
-        'code' => 'setCode',
         'message' => 'setMessage'
     ];
 
@@ -189,7 +184,6 @@ class ApiLoginPost401Response implements ModelInterface, ArrayAccess, \JsonSeria
      * @var string[]
      */
     protected static $getters = [
-        'code' => 'getCode',
         'message' => 'getMessage'
     ];
 
@@ -250,7 +244,6 @@ class ApiLoginPost401Response implements ModelInterface, ArrayAccess, \JsonSeria
      */
     public function __construct(array $data = null)
     {
-        $this->setIfExists('code', $data ?? [], null);
         $this->setIfExists('message', $data ?? [], null);
     }
 
@@ -295,33 +288,6 @@ class ApiLoginPost401Response implements ModelInterface, ArrayAccess, \JsonSeria
         return count($this->listInvalidProperties()) === 0;
     }
 
-
-    /**
-     * Gets code
-     *
-     * @return int|null
-     */
-    public function getCode()
-    {
-        return $this->container['code'];
-    }
-
-    /**
-     * Sets code
-     *
-     * @param int|null $code code
-     *
-     * @return self
-     */
-    public function setCode($code)
-    {
-        if (is_null($code)) {
-            throw new \InvalidArgumentException('non-nullable code cannot be null');
-        }
-        $this->container['code'] = $code;
-
-        return $this;
-    }
 
     /**
      * Gets message

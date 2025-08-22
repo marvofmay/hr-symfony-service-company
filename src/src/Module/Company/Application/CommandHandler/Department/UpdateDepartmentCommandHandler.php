@@ -43,6 +43,7 @@ final readonly class UpdateDepartmentCommandHandler
         $departmentAggregate->update(
             CompanyUUID::fromString($command->companyUUID),
             Name::fromString($command->name),
+            $command->internalCode,
             Address::fromDTO($command->address),
             $command->active,
             $command->description,

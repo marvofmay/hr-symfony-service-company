@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
+use App\Common\Domain\Abstract\AggregateAbstract;
 use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\FullName;
@@ -16,13 +17,13 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 
-final class CompanyAggregateCreator extends CompanyAggregateAbstract
+final class CompanyAggregateCreator extends AggregateAbstract
 {
-    public function create(array $row, string $nip, CompanyUUID $uuid, ?CompanyUUID $parentUUID): void
+    public function create(array $row, CompanyUUID $uuid, ?CompanyUUID $parentUUID): void
     {
         $companyAggregate = CompanyAggregate::create(
             FullName::fromString($row[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME]),
-            NIP::fromString($nip),
+            NIP::fromString((string)$row[ImportCompaniesFromXLSX::COLUMN_NIP]),
             REGON::fromString((string)$row[ImportCompaniesFromXLSX::COLUMN_REGON]),
             IndustryUUID::fromString($row[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID]),
             (bool)$row[ImportCompaniesFromXLSX::COLUMN_ACTIVE],
@@ -42,6 +43,6 @@ final class CompanyAggregateCreator extends CompanyAggregateAbstract
             $uuid
         );
 
-        $this->storeAndDispatchEvents($companyAggregate->pullEvents());
+        $this->commitEvents($companyAggregate->pullEvents(), CompanyAggregate::class);
     }
 }

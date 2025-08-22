@@ -6,9 +6,10 @@ namespace App\Module\Company\Presentation\API\Action\Department;
 
 use App\Module\Company\Application\Command\Department\ImportDepartmentsCommand;
 use App\Module\Company\Domain\DTO\Company\ImportDTO;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class ImportDepartmentsAction
+final readonly class ImportDepartmentsAction
 {
     public function __construct(private MessageBusInterface $commandBus)
     {
@@ -16,6 +17,10 @@ readonly class ImportDepartmentsAction
 
     public function execute(ImportDTO $importDTO): void
     {
-        $this->commandBus->dispatch(new ImportDepartmentsCommand($importDTO->importUUID));
+        try {
+            $this->commandBus->dispatch(new ImportDepartmentsCommand($importDTO->importUUID));
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
     }
 }

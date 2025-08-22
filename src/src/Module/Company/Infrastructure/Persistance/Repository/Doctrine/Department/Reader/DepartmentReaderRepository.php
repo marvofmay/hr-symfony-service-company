@@ -79,6 +79,22 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
         return !is_null($this->getDepartmentByName($name, $departmentUUID));
     }
 
+    public function getDepartmentByInternalCode(string $internalCode, ?string $uuid = null): ?Department
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+        $qb->select(Department::ALIAS)
+            ->from(Department::class, Department::ALIAS)
+            ->where(Department::ALIAS.'.'.Department::COLUMN_INTERNAL_CODE.' = :internalCode')
+            ->setParameter('internalCode', $internalCode);
+
+        if (null !== $uuid) {
+            $qb->andWhere(Department::ALIAS.'.'.Department::COLUMN_UUID.' != :uuid')
+                ->setParameter('uuid', $uuid);
+        }
+
+        return $qb->getQuery()->getOneOrNullResult();
+    }
+
     public function isDepartmentExistsWithUUID(string $departmentUUID): bool
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -89,6 +105,11 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
             ->setParameter('uuid', $departmentUUID);
 
         return null !== $qb->getQuery()->getOneOrNullResult();
+    }
+
+    public function isDepartmentExistsWithInternalCode(string $internalCode, ?string $uuid = null): bool
+    {
+        return !is_null($this->getDepartmentByInternalCode($internalCode, $uuid));
     }
 
     public function getDeletedDepartmentByUUID(string $uuid): ?Department

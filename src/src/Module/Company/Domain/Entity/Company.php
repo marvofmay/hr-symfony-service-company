@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'idx_short_name', columns: ['short_name'])]
 #[ORM\Index(name: 'idx_nip', columns: ['nip'])]
 #[ORM\Index(name: 'idx_regon', columns: ['regon'])]
-#[ORM\Index(name: 'idx_active', columns: ['active'])]
+#[ORM\Index(name: 'idx_internal_code', columns: ['internal_code'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Company
@@ -31,24 +31,24 @@ class Company
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const COLUMN_UUID = 'uuid';
-    public const COLUMN_COMPANY_UUID = 'companyUuid';
-    public const COLUMN_FULL_NAME = 'fullName';
-    public const COLUMN_SHORT_NAME = 'shortName';
-    public const COLUMN_INTERNAL_CODE = 'internalCode';
-    public const COLUMN_DESCRIPTION = 'description';
-    public const COLUMN_NIP = 'nip';
-    public const COLUMN_REGON = 'regon';
-    public const COLUMN_ACTIVE = 'active';
-    public const COLUMN_CREATED_AT = 'createdAt';
-    public const COLUMN_UPDATED_AT = 'updatedAt';
-    public const COLUMN_DELETED_AT = 'deletedAt';
-    public const RELATION_INDUSTRY = 'industry';
-    public const RELATION_DEPARTMENTS = 'departments';
-    public const RELATION_ADDRESS = 'address';
-    public const RELATION_CONTACTS = 'contacts';
-    public const RELATION_PARENT_COMPANY = 'parentCompany';
-    public const ALIAS = 'company';
+    public const string COLUMN_UUID = 'uuid';
+    public const string COLUMN_COMPANY_UUID = 'companyUuid';
+    public const string COLUMN_FULL_NAME = 'fullName';
+    public const string COLUMN_SHORT_NAME = 'shortName';
+    public const string COLUMN_INTERNAL_CODE = 'internalCode';
+    public const string COLUMN_DESCRIPTION = 'description';
+    public const string COLUMN_NIP = 'nip';
+    public const string COLUMN_REGON = 'regon';
+    public const string COLUMN_ACTIVE = 'active';
+    public const string COLUMN_CREATED_AT = 'createdAt';
+    public const string COLUMN_UPDATED_AT = 'updatedAt';
+    public const string COLUMN_DELETED_AT = 'deletedAt';
+    public const string RELATION_INDUSTRY = 'industry';
+    public const string RELATION_DEPARTMENTS = 'departments';
+    public const string RELATION_ADDRESS = 'address';
+    public const string RELATION_CONTACTS = 'contacts';
+    public const string RELATION_PARENT_COMPANY = 'parentCompany';
+    public const string ALIAS = 'company';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -75,7 +75,7 @@ class Company
     #[ORM\Column(type: Types::STRING, length: 200, nullable: true)]
     private ?string $shortName;
 
-    #[ORM\Column(type: Types::STRING, length: 200, nullable: true)]
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
     private ?string $internalCode;
 
     #[ORM\Column(type: Types::STRING, length: 20, nullable: false)]

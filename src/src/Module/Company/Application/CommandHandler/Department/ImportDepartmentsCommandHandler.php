@@ -4,45 +4,50 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\CommandHandler\Department;
 
+use App\Common\Domain\Entity\EventStore;
+use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Department\ImportDepartmentsCommand;
-use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
-use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
-use App\Module\Company\Domain\Service\Department\DepartmentMultipleCreator;
-use App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX;
-use App\Module\System\Domain\Enum\ImportStatusEnum;
+use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
+use App\Module\Company\Domain\Event\Department\DepartmentMultipleImportedEvent;
+use App\Module\System\Domain\Enum\ImportKindEnum;
+use App\Module\System\Domain\Factory\ImporterFactory;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
-use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
+use Ramsey\Uuid\Uuid;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
 final readonly class ImportDepartmentsCommandHandler
 {
     public function __construct(
-        private CompanyReaderInterface $companyReaderRepository,
-        private DepartmentReaderInterface $departmentReaderRepository,
-        private DepartmentMultipleCreator $departmentMultipleCreator,
         private ImportReaderInterface $importReaderRepository,
-        private TranslatorInterface $translator,
-        private UpdateImportAction $updateImportAction,
-        private CacheInterface $cache,
+        private EventStoreCreator     $eventStoreCreator,
+        private Security              $security,
+        private SerializerInterface   $serializer,
+        private ImporterFactory       $importerFactory,
     ) {
     }
 
     public function __invoke(ImportDepartmentsCommand $command): void
     {
         $import = $this->importReaderRepository->getImportByUUID($command->getImportUUID());
-        $importer = new ImportDepartmentsFromXLSX(
-            sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()),
-            $this->translator,
-            $this->companyReaderRepository,
-            $this->departmentReaderRepository,
-            $this->cache,
+        $importer = $this->importerFactory->getImporter(
+            ImportKindEnum::IMPORT_DEPARTMENTS,
+            $import->getFile()->getFilePath(),
+            $import->getFile()->getFileName()
         );
+        $preparedRows = $importer->run($import);
 
-        $this->departmentMultipleCreator->multipleCreate($importer->import());
-        $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
-        // ToDo save notification about DONE import - immediately - if checked in settings
+        $multiEvent = new DepartmentMultipleImportedEvent($preparedRows);
+        $this->eventStoreCreator->create(
+            new EventStore(
+                Uuid::uuid4()->toString(),
+                $multiEvent::class,
+                DepartmentAggregate::class,
+                $this->serializer->serialize($multiEvent, 'json'),
+                $this->security->getUser()?->getEmployee()?->getUUID(),
+            )
+        );
     }
 }

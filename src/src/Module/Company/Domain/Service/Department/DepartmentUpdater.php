@@ -20,45 +20,5 @@ use App\Module\Company\Domain\Interface\Contact\ContactWriterInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentWriterInterface;
 
-final class DepartmentUpdater extends DepartmentCreator
-{
-    public function __construct(
-        protected Company $company,
-        protected Department $department,
-        protected ?Department $parentDepartment,
-        protected Address $address,
-        protected CompanyReaderInterface $companyReaderRepository,
-        protected DepartmentReaderInterface $departmentReaderRepository,
-        protected DepartmentWriterInterface $departmentWriterRepository,
-        protected ContactWriterInterface $contactWriterRepository,
-        protected AddressWriterInterface $addressWriterRepository,
-    ) {
-        parent::__construct($department, $address, $companyReaderRepository, $departmentReaderRepository, $departmentWriterRepository);
-    }
-
-    public function update(DomainEventInterface $event): void
-    {
-        $department = $this->departmentReaderRepository->getDepartmentByUUID($event->uuid->toString());
-        $this->department = $department;
-        $this->setDepartment($event);
-        $this->departmentWriterRepository->saveDepartmentInDB($this->department);
-    }
-
-    protected function setContacts(Phones $phones, ?Emails $emails = null, ?Websites $websites = null): void
-    {
-        foreach ([ContactTypeEnum::PHONE, ContactTypeEnum::EMAIL, ContactTypeEnum::WEBSITE] as $enum) {
-            $contacts = $this->department->getContacts($enum);
-            $this->contactWriterRepository->deleteContactsInDB($contacts, Contact::HARD_DELETED_AT);
-        }
-
-        parent::setContacts($phones, $emails, $websites);
-    }
-
-    protected function setAddress(AddressValueObject $addressValueObject): void
-    {
-        $address = $this->department->getAddress();
-        $this->addressWriterRepository->deleteAddressInDB($address, Address::HARD_DELETED_AT);
-
-        parent::setAddress($addressValueObject);
-    }
+final class DepartmentUpdater {
 }

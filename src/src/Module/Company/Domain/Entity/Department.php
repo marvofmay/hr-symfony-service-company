@@ -13,14 +13,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'department')]
-#[ORM\Index(name: 'idx_active', columns: ['active'])]
+#[ORM\Index(name: 'idx_internal_code', columns: ['internal_code'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Department
@@ -33,6 +32,7 @@ class Department
     public const string COLUMN_COMPANY_UUID = 'company_uuid';
     public const string COLUMN_DEPARTMENT_UUID = 'department_uuid';
     public const string COLUMN_NAME = 'name';
+    public const string COLUMN_INTERNAL_CODE = 'internalCode';
     public const string COLUMN_DESCRIPTION = 'description';
     public const string COLUMN_ACTIVE = 'active';
     public const string COLUMN_CREATED_AT = 'createdAt';
@@ -58,6 +58,9 @@ class Department
     #[ORM\Column(type: Types::STRING, length: 1000)]
     #[Assert\NotBlank]
     private string $name;
+
+    #[ORM\Column(type: Types::STRING, length: 50)]
+    private ?string $internalCode;
 
     #[ORM\Column(type: Types::STRING, length: 500, nullable: true)]
     private ?string $description = null;
@@ -137,6 +140,16 @@ class Department
     public function setName(string $name): void
     {
         $this->{self::COLUMN_NAME} = $name;
+    }
+
+    public function getInternalCode(): ?string
+    {
+        return $this->{self::COLUMN_INTERNAL_CODE};
+    }
+
+    public function setInternalCode(?string $internalCode): void
+    {
+        $this->{self::COLUMN_INTERNAL_CODE} = $internalCode;
     }
 
     public function getDescription(): ?string

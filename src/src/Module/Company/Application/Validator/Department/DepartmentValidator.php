@@ -39,4 +39,18 @@ final readonly class DepartmentValidator
             throw new \Exception(implode(', ', $errors), Response::HTTP_NOT_FOUND);
         }
     }
+
+    public function isDepartmentWithInternalCodeAlreadyExists(string $departmentInternalCode, ?string $uuid = null): void
+    {
+        if ($this->departmentReaderRepository->isDepartmentExistsWithInternalCode($departmentInternalCode, $uuid)) {
+            throw new \Exception($this->translator->trans('department.internalCode.alreadyExists', [':internalCode' => $departmentInternalCode], 'departments'), Response::HTTP_CONFLICT);
+        }
+    }
+
+    public function isDepartmentWithInternalCodeExists(string $departmentInternalCode, ?string $uuid = null): void
+    {
+        if (!$this->departmentReaderRepository->isDepartmentExistsWithInternalCode($departmentInternalCode, $uuid)) {
+            throw new \Exception($this->translator->trans('department.internalCode.notExists', [':internalCode' => $departmentInternalCode], 'departments'), Response::HTTP_CONFLICT);
+        }
+    }
 }

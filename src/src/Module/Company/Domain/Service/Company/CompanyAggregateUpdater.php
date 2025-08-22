@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
+use App\Common\Domain\Abstract\AggregateAbstract;
+use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\FullName;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\IndustryUUID;
@@ -15,9 +17,9 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 
-final class CompanyAggregateUpdater extends CompanyAggregateAbstract
+final class CompanyAggregateUpdater extends AggregateAbstract
 {
-    public function update(array $row, string $nip, CompanyUUID $uuid, ?CompanyUUID $parentUUID): void
+    public function update(array $row, CompanyUUID $uuid, ?CompanyUUID $parentUUID): void
     {
         $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID(
             CompanyUUID::fromString($row['_aggregate_uuid'])
@@ -25,7 +27,7 @@ final class CompanyAggregateUpdater extends CompanyAggregateAbstract
 
         $companyAggregate->update(
             FullName::fromString($row[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME]),
-            NIP::fromString($nip),
+            NIP::fromString((string)$row[ImportCompaniesFromXLSX::COLUMN_NIP]),
             REGON::fromString((string)$row[ImportCompaniesFromXLSX::COLUMN_REGON]),
             IndustryUUID::fromString($row[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID]),
             (bool)$row[ImportCompaniesFromXLSX::COLUMN_ACTIVE],
@@ -42,9 +44,8 @@ final class CompanyAggregateUpdater extends CompanyAggregateAbstract
             $parentUUID,
             $row[ImportCompaniesFromXLSX::COLUMN_EMAIL] ? Emails::fromArray([$row[ImportCompaniesFromXLSX::COLUMN_EMAIL]]) : null,
             $row[ImportCompaniesFromXLSX::COLUMN_WEBSITE] ? Websites::fromArray([$row[ImportCompaniesFromXLSX::COLUMN_WEBSITE]]) : null,
-            $uuid
         );
 
-        $this->storeAndDispatchEvents($companyAggregate->pullEvents());
+        $this->commitEvents($companyAggregate->pullEvents(), CompanyAggregate::class);
     }
 }

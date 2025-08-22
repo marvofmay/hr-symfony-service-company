@@ -140,7 +140,7 @@ final readonly class DepartmentMultipleCreator
             $this->department->setCompany($company);
         }
 
-        $parentDepartmentUUID = $item[ImportDepartmentsFromXLSX::COLUMN_PARENT_DEPARTMENT_UUID] ?? null;
+        $parentDepartmentUUID = $item[ImportDepartmentsFromXLSX::COLUMN_PARENT_DEPARTMENT_INTERNAL_CODE] ?? null;
 
         if (null !== $parentDepartmentUUID) {
             if (is_int($parentDepartmentUUID) && isset($temporaryDepartmentMap[$parentDepartmentUUID])) {
