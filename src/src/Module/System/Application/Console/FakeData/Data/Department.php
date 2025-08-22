@@ -17,6 +17,7 @@ final readonly class Department
         return [
             'companyName' => CompanyFakeData::COMPANY_NAME_FUTURE_TECHNOLOGY,
             'name' => 'Departament aplikacji internetowych',
+            'internalCode' => 'dai',
             'description' => 'Departament aplikacji internetowych - opis',
             'departmentUUID' => null,
             'active' => true,

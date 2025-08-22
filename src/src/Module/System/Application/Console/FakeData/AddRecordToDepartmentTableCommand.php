@@ -81,6 +81,7 @@ class AddRecordToDepartmentTableCommand extends Command
         $department = new Department();
         $department->setUUID(DepartmentUUID::generate()->toString());
         $department->setName($data['name']);
+        $department->setInternalCode($data['internalCode']);
         $department->setDescription($data['description']);
         $department->setActive($data['active']);
         $department->setCompany($existingCompany);
