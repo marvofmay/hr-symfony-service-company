@@ -295,8 +295,10 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
     private function validateEmail(?string $email): ?string
     {
         if (null === $email) {
-            return $this->formatErrorMessage('employee.email.required', [], 'employees');
+            return $this->formatErrorMessage('employee.email.required');
         }
+
+        // ToDo:: check if employee with an email and a different PESEL alreday exists in the DB
 
         $errorMessage = EmailValidator::validate($email);
         if (null !== $errorMessage) {
