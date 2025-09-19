@@ -25,22 +25,25 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ImportCompaniesFromXLSX extends XLSXIterator
 {
-    public const int COLUMN_COMPANY_FULL_NAME     = 0;
-    public const int COLUMN_COMPANY_SHORT_NAME    = 1;
-    public const int COLUMN_COMPANY_INTERNAL_CODE = 2;
-    public const int COLUMN_COMPANY_DESCRIPTION   = 3;
-    public const int COLUMN_PARENT_COMPANY_NIP    = 4;
-    public const int COLUMN_INDUSTRY_UUID         = 5;
-    public const int COLUMN_NIP                   = 6;
-    public const int COLUMN_REGON                 = 7;
-    public const int COLUMN_ACTIVE                = 8;
-    public const int COLUMN_PHONE                 = 9;
-    public const int COLUMN_EMAIL                 = 10;
-    public const int COLUMN_WEBSITE               = 11;
-    public const int COLUMN_STREET                = 12;
-    public const int COLUMN_POSTCODE              = 13;
-    public const int COLUMN_CITY                  = 14;
-    public const int COLUMN_COUNTRY               = 15;
+    public const int COLUMN_COMPANY_FULL_NAME = 0;
+    public const int COLUMN_NIP               = 1;
+    public const int COLUMN_REGON             = 2;
+    public const int COLUMN_STREET            = 3;
+    public const int COLUMN_POSTCODE          = 4;
+    public const int COLUMN_CITY              = 5;
+    public const int COLUMN_COUNTRY           = 6;
+    public const int COLUMN_INDUSTRY_UUID     = 7;
+    public const int COLUMN_COMPANY_SHORT_NAME    = 8;
+    public const int COLUMN_COMPANY_INTERNAL_CODE = 9;
+    public const int COLUMN_COMPANY_DESCRIPTION   = 10;
+    public const int COLUMN_PARENT_COMPANY_NIP    = 11;
+    public const int COLUMN_PHONE   = 12;
+    public const int COLUMN_EMAIL   = 13;
+    public const int COLUMN_WEBSITE = 14;
+    public const int COLUMN_ACTIVE  = 15;
+
+    public const string COLUMN_DYNAMIC_IS_COMPANY_WITH_NIP_ALREADY_EXISTS = '_is_company_already_exists_with_nip';
+    public const string COLUMN_DYNAMIC_AGGREGATE_UUID = '_aggregate_uuid';
 
     private array $errorMessages = [];
 
@@ -68,21 +71,21 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
 
         [
             $fullName,
-            $shortName,
-            $internalCompanyCode,
-            $description,
-            $parentCompanyUUID,
-            $industryUUID,
             $nip,
             $regon,
-            $active,
-            $phone,
-            $email,
-            $website,
             $street,
             $postcode,
             $city,
             $country,
+            $industryUUID,
+            $shortName,
+            $internalCompanyCode,
+            $description,
+            $parentCompanyNIP,
+            $phone,
+            $email,
+            $website,
+            $active,
         ] = $row + [null, null, null, null, null, null, null, null, false, null, null, null, null, null, null, null];
 
         $validations = [
@@ -90,7 +93,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             $this->validateCompanyShortName($shortName),
             $this->validateInternalCompanyCode($internalCompanyCode),
             $this->validateCompanyDescription($description),
-            $this->validateParentCompanyUUID((string)$parentCompanyUUID),
+            $this->validateParentCompanyNIP((string)$parentCompanyNIP),
             $this->validateIndustryUUID($industryUUID),
             $this->validateNIP((string)$nip),
             $this->validateREGON((string)$regon),
@@ -141,9 +144,18 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function validateParentCompanyUUID(?string $parentCompanyUUID): ?string
+    private function validateParentCompanyNIP(?string $parentCompanyNIP): ?string
     {
-        // ToDo:: if not null, then check if company with NIP exists
+        if (empty($parentCompanyNIP)) {
+            return null;
+        }
+
+        $parentCompanyNIP = preg_replace('/\D/', '', $parentCompanyNIP);
+        $errorMessage = NIPValidator::validate($parentCompanyNIP);
+        if (null !== $errorMessage) {
+            return $this->formatErrorMessage($errorMessage, [], 'validators');
+        }
+
         return null;
     }
 
@@ -156,7 +168,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         $cacheKey = 'import_industry_uuid_' . $industryUUID;
 
         $industryExists = $this->cache->get($cacheKey, function () use ($industryUUID) {
-            return null !== $this->industryReaderRepository->getIndustryByUUID($industryUUID);
+            return $this->industryReaderRepository->isIndustryExistsWithUUID($industryUUID);
         });
 
         if (!$industryExists) {
@@ -172,8 +184,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('company.nip.required');
         }
 
-        $nip = preg_replace('/\D/', '', $nip ?? '');
-
+        $nip = preg_replace('/\D/', '', $nip);
         $errorMessage = NIPValidator::validate($nip);
         if (null !== $errorMessage) {
             return $this->formatErrorMessage($errorMessage, [], 'validators');
@@ -188,8 +199,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             return $this->formatErrorMessage('company.regon.required');
         }
 
-        $regon = preg_replace('/\D/', '', $regon ?? '');
-
+        $regon = preg_replace('/\D/', '', $regon);
         $errorMessage = REGONValidator::validate($regon);
         if (null !== $errorMessage) {
             return $this->formatErrorMessage($errorMessage, [], 'validators');
@@ -210,22 +220,24 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
 
     private function validatePhone(?string $phone): ?string
     {
-        if (null === $phone) {
-            return $this->formatErrorMessage('company.contact.phone.required');
-        }
+        //if (null === $phone) {
+        //    return $this->formatErrorMessage('company.contact.phone.required');
+        //}
 
         return null;
     }
 
     private function validateEmail(?string $email): ?string
     {
-        if (empty($email)) {
-            return $this->formatErrorMessage('company.contact.email.required');
-        }
+        //if (empty($email)) {
+        //    return $this->formatErrorMessage('company.contact.email.required');
+        //}
 
-        $errorMessage = EmailValidator::validate($email);
-        if (null !== $errorMessage) {
-            return $this->formatErrorMessage($errorMessage, [], 'validators');
+        if (!empty($email)) {
+            $errorMessage = EmailValidator::validate($email);
+            if (null !== $errorMessage) {
+                return $this->formatErrorMessage($errorMessage, [], 'validators');
+            }
         }
 
         return null;
@@ -333,7 +345,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
                 $nip = trim((string)$row[self::COLUMN_NIP]);
                 $uuid = $nipMap[$nip];
 
-                if (!$row['_is_company_already_exists_with_nip']) {
+                if (!$row[ImportCompaniesFromXLSX::COLUMN_DYNAMIC_IS_COMPANY_WITH_NIP_ALREADY_EXISTS]) {
                     $this->companyAggregateCreator->create($row, $uuid, $parentUUID);
                 } else {
                     $this->companyAggregateUpdater->update($row, $parentUUID);

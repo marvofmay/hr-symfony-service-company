@@ -40,6 +40,7 @@ class EmployeeAggregate extends AggregateRootAbstract
     private Emails           $emails;
     private Address          $address;
     private ?string          $externalUUID = null;
+    private ?string          $internalCode = null;
     private ?EmploymentTo    $employmentTo = null;
     private bool             $active       = true;
     private ?Phones          $phones       = null;
@@ -57,16 +58,18 @@ class EmployeeAggregate extends AggregateRootAbstract
         Emails           $emails,
         Address          $address,
         ?string          $externalUUID = null,
+        ?string          $internalCode = null,
         ?bool            $active = true,
         ?Phones          $phones = null,
         ?EmployeeUUID    $parentEmployeeUUID = null,
         ?EmploymentTo    $employmentTo = null,
+        ?EmployeeUUID    $uuid = null
     ): self
     {
         $aggregate = new self();
 
         $aggregate->record(new EmployeeCreatedEvent(
-            EmployeeUUID::generate(),
+            $uuid ?? EmployeeUUID::generate(),
             $firstName,
             $lastName,
             $pesel,
@@ -79,6 +82,7 @@ class EmployeeAggregate extends AggregateRootAbstract
             $address,
             $active,
             $externalUUID,
+            $internalCode,
             $phones,
             $parentEmployeeUUID,
             $employmentTo,
@@ -99,6 +103,7 @@ class EmployeeAggregate extends AggregateRootAbstract
         Emails           $emails,
         Address          $address,
         ?string          $externalUUID = null,
+        ?string          $internalCode = null,
         ?bool            $active = true,
         ?Phones          $phones = null,
         ?EmployeeUUID    $parentEmployeeUUID = null,
@@ -123,6 +128,7 @@ class EmployeeAggregate extends AggregateRootAbstract
             $address,
             $active,
             $externalUUID,
+            $internalCode,
             $phones,
             $parentEmployeeUUID,
             $employmentTo,
@@ -165,6 +171,7 @@ class EmployeeAggregate extends AggregateRootAbstract
             $this->address = $event->address;
             $this->active = $event->active;
             $this->externalUUID = $event->externalUUID;
+            $this->internalCode = $event->internalCode;
             $this->phones = $event->phones;
             $this->parentEmployeeUUID = $event->parentEmployeeUUID;
             $this->employmentTo = $event->employmentTo;

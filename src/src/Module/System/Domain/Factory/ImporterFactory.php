@@ -7,8 +7,12 @@ namespace App\Module\System\Domain\Factory;
 use App\Common\Domain\Interface\XLSXIteratorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
+use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
+use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
+use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
+use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Service\Company\CompanyAggregateCreator;
 use App\Module\Company\Domain\Service\Company\CompanyAggregateUpdater;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
@@ -17,6 +21,10 @@ use App\Module\Company\Domain\Service\Department\DepartmentAggregateCreator;
 use App\Module\Company\Domain\Service\Department\DepartmentAggregateUpdater;
 use App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX;
 use App\Module\Company\Domain\Service\Department\ImportDepartmentsPreparer;
+use App\Module\Company\Domain\Service\Employee\EmployeeAggregateCreator;
+use App\Module\Company\Domain\Service\Employee\EmployeeAggregateUpdater;
+use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
+use App\Module\Company\Domain\Service\Employee\ImportEmployeesPreparer;
 use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
@@ -27,21 +35,28 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final readonly class ImporterFactory
 {
     public function __construct(
-        private TranslatorInterface        $translator,
-        private CompanyReaderInterface     $companyReaderRepository,
-        private DepartmentReaderInterface  $departmentReaderRepository,
-        private IndustryReaderInterface    $industryReaderRepository,
-        private ImportCompaniesPreparer    $importCompaniesPreparer,
-        private CompanyAggregateCreator    $companyAggregateCreator,
-        private CompanyAggregateUpdater    $companyAggregateUpdater,
-        private ImportDepartmentsPreparer  $importDepartmentsPreparer,
-        private DepartmentAggregateCreator $departmentAggregateCreator,
-        private DepartmentAggregateUpdater $departmentAggregateUpdater,
-        private CacheInterface             $cache,
-        private UpdateImportAction         $updateImportAction,
-        private ImportLogMultipleCreator   $importLogMultipleCreator,
-        private MessageService             $messageService,
-        private MessageBusInterface        $eventBus,
+        private TranslatorInterface         $translator,
+        private CompanyReaderInterface      $companyReaderRepository,
+        private DepartmentReaderInterface   $departmentReaderRepository,
+        private EmployeeReaderInterface     $employeeReaderRepository,
+        private PositionReaderInterface     $positionReaderRepository,
+        private ContractTypeReaderInterface $contractTypeReaderRepository,
+        private RoleReaderInterface         $roleReaderRepository,
+        private IndustryReaderInterface     $industryReaderRepository,
+        private ImportCompaniesPreparer     $importCompaniesPreparer,
+        private CompanyAggregateCreator     $companyAggregateCreator,
+        private CompanyAggregateUpdater     $companyAggregateUpdater,
+        private ImportDepartmentsPreparer   $importDepartmentsPreparer,
+        private DepartmentAggregateCreator  $departmentAggregateCreator,
+        private DepartmentAggregateUpdater  $departmentAggregateUpdater,
+        private EmployeeAggregateCreator    $employeeAggregateCreator,
+        private EmployeeAggregateUpdater    $employeeAggregateUpdater,
+        private ImportEmployeesPreparer     $importEmployeesPreparer,
+        private CacheInterface              $cache,
+        private UpdateImportAction          $updateImportAction,
+        private ImportLogMultipleCreator    $importLogMultipleCreator,
+        private MessageService              $messageService,
+        private MessageBusInterface         $eventBus,
     )
     {
     }
@@ -71,6 +86,23 @@ final readonly class ImporterFactory
                 $this->departmentAggregateCreator,
                 $this->departmentAggregateUpdater,
                 $this->importDepartmentsPreparer,
+                $this->cache,
+                $this->updateImportAction,
+                $this->importLogMultipleCreator,
+                $this->messageService,
+                $this->eventBus,
+            ),
+            ImportKindEnum::IMPORT_EMPLOYEES => new ImportEmployeesFromXLSX(
+                sprintf('%s/%s', $filePath, $fileName),
+                $this->translator,
+                $this->departmentReaderRepository,
+                $this->employeeReaderRepository,
+                $this->positionReaderRepository,
+                $this->contractTypeReaderRepository,
+                $this->roleReaderRepository,
+                $this->employeeAggregateCreator,
+                $this->employeeAggregateUpdater,
+                $this->importEmployeesPreparer,
                 $this->cache,
                 $this->updateImportAction,
                 $this->importLogMultipleCreator,

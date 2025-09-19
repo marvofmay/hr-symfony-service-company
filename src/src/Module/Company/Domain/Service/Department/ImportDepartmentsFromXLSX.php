@@ -25,17 +25,19 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
 {
     public const int COLUMN_DEPARTMENT_NAME                 = 0;
     public const int COLUMN_DEPARTMENT_INTERNAL_CODE        = 1;
-    public const int COLUMN_DEPARTMENT_DESCRIPTION          = 2;
-    public const int COLUMN_PARENT_DEPARTMENT_INTERNAL_CODE = 3;
-    public const int COLUMN_COMPANY_UUID                    = 4;
-    public const int COLUMN_ACTIVE                          = 5;
+    public const int COLUMN_STREET                          = 2;
+    public const int COLUMN_POSTCODE                        = 3;
+    public const int COLUMN_CITY                            = 4;
+    public const int COLUMN_COUNTRY                         = 5;
     public const int COLUMN_PHONE                           = 6;
-    public const int COLUMN_EMAIL                           = 7;
-    public const int COLUMN_WEBSITE                         = 8;
-    public const int COLUMN_STREET                          = 9;
-    public const int COLUMN_POSTCODE                        = 10;
-    public const int COLUMN_CITY                            = 11;
-    public const int COLUMN_COUNTRY                         = 12;
+    public const int COLUMN_COMPANY_UUID                    = 7;
+    public const int COLUMN_DEPARTMENT_DESCRIPTION          = 8;
+    public const int COLUMN_PARENT_DEPARTMENT_INTERNAL_CODE = 9;
+    public const int COLUMN_EMAIL                           = 10;
+    public const int COLUMN_WEBSITE                         = 11;
+    public const int COLUMN_ACTIVE                          = 12;
+    public const string COLUMN_DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS = '_is_department_already_exists_with_internal_code';
+    public const string COLUMN_DYNAMIC_AGGREGATE_UUID = '_aggregate_uuid';
 
     private array $errorMessages = [];
 
@@ -64,24 +66,24 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         [
             $name,
             $internalCode,
-            $description,
-            $parentDepartmentUUID,
-            $companyUUID,
-            $active,
-            $phone,
-            $email,
-            $website,
             $street,
             $postcode,
             $city,
             $country,
+            $phone,
+            $companyUUID,
+            $description,
+            $parentDepartmentInternalCode,
+            $email,
+            $website,
+            $active,
         ] = $row + [null, null, null, null, null, false, null, null, null, null, null, null, null];
 
         $validations = [
             $this->validateDepartmentName((string)$name),
             $this->validateDepartmentInternalCode((string)$internalCode),
             $this->validateDepartmentDescription((string)$description),
-            $this->validateParentDepartmentUUID($parentDepartmentUUID),
+            $this->validateParentDepartmentInternalCode($parentDepartmentInternalCode),
             $this->validateCompanyUUID($companyUUID),
             $this->validateActive($active),
             $this->validatePhone($phone),
@@ -137,22 +139,8 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         return null;
     }
 
-    private function validateParentDepartmentUUID(string|int|null $parentDepartmentInternalCode): ?string
+    private function validateParentDepartmentInternalCode(?string $parentDepartmentInternalCode): ?string
     {
-        if (empty($parentDepartmentInternalCode) || !is_string($parentDepartmentInternalCode)) {
-            return null;
-        }
-
-        $cacheKey = 'import_department_internal_code_' . $parentDepartmentInternalCode;
-
-        $exists = $this->cache->get($cacheKey, function () use ($parentDepartmentInternalCode) {
-            return $this->departmentReaderRepository->isDepartmentExistsWithInternalCode($parentDepartmentInternalCode);
-        });
-
-        if (!$exists) {
-            return $this->formatErrorMessage('department.internalCode.notExists', [':uuid' => $parentDepartmentInternalCode]);
-        }
-
         return null;
     }
 
@@ -165,7 +153,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         $cacheKey = 'import_company_uuid_' . $companyUUID;
 
         $exists = $this->cache->get($cacheKey, function () use ($companyUUID) {
-            return null !== $this->companyReaderRepository->getCompanyByUUID($companyUUID);
+            return $this->companyReaderRepository->isCompanyExistsWithUUID($companyUUID);
         });
 
         if (!$exists) {
@@ -196,8 +184,12 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
 
     private function validateEmail(?string $email): ?string
     {
+        //if (empty($email)) {
+        //    return $this->formatErrorMessage('department.contact.email.required');
+        //}
+
         if (empty($email)) {
-            return $this->formatErrorMessage('department.contact.email.required');
+            return null;
         }
 
         $errorMessage = EmailValidator::validate($email);
@@ -310,7 +302,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
                 $internalCode = trim((string)$row[self::COLUMN_DEPARTMENT_INTERNAL_CODE]);
                 $uuid = $internalCodeMap[$internalCode];
 
-                if (!$row['_is_department_already_exists_with_internal_code']) {
+                if (!$row[ImportDepartmentsFromXLSX::COLUMN_DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS]) {
                     $this->departmentAggregateCreator->create($row, $uuid, $parentUUID);
                 } else {
                     $this->departmentAggregateUpdater->update($row, $parentUUID);

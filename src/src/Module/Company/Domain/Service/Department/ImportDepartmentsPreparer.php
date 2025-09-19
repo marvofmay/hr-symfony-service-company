@@ -22,7 +22,7 @@ final readonly class ImportDepartmentsPreparer
             $internalCode = trim((string) $row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_INTERNAL_CODE]);
 
             $existingDepartment = $this->departmentReaderRepository->getDepartmentByInternalCode($internalCode);
-            $row['_is_department_already_exists_with_internal_code'] = null !== $existingDepartment;
+            $row[ImportDepartmentsFromXLSX::COLUMN_DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS] = null !== $existingDepartment;
 
             if (!isset($internalCodeMap[$internalCode])) {
                 $internalCodeMap[$internalCode] = $existingDepartment
@@ -30,7 +30,7 @@ final readonly class ImportDepartmentsPreparer
                     : DepartmentUUID::generate();
             }
 
-            $row['_aggregate_uuid'] = $internalCodeMap[$internalCode]->toString();
+            $row[ImportDepartmentsFromXLSX::COLUMN_DYNAMIC_AGGREGATE_UUID] = $internalCodeMap[$internalCode]->toString();
             $preparedRows[] = $row;
         }
 

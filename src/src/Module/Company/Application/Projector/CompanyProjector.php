@@ -53,6 +53,7 @@ final readonly class CompanyProjector
     #[AsEventListener(event: CompanyMultipleImportedEvent::class)]
     public function onCompanyMultipleImported(CompanyMultipleImportedEvent $event): void
     {
-        // ToDo save notification about DONE import - immediately
+        // ToDo: save notification about DONE import - immediately
+        // ToDo: if notification for import companies is turned on by employee in employee settings
     }
 }

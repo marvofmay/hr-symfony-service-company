@@ -58,6 +58,7 @@ final readonly class UpdateEmployeeCommandHandler
             Emails::fromArray([$command->email]),
             Address::fromDTO($command->address),
             $command->externalUUID,
+            $command->internalCode,
             $command->active,
             Phones::fromArray($command->phones),
             $command->parentEmployeeUUID ? EmployeeUUID::fromString($command->parentEmployeeUUID) : null,

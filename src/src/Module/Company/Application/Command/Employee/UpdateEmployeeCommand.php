@@ -18,6 +18,7 @@ class UpdateEmployeeCommand implements CommandInterface
         public string $roleUUID,
         public ?string $parentEmployeeUUID,
         public ?string $externalUUID,
+        public ?string $internalCode,
         public string $email,
         public string $firstName,
         public string $lastName,

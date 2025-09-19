@@ -84,7 +84,9 @@ class CreateDTO
     ])]
     #[Assert\Type('array')]
     #[Assert\Count(
+        min: 1,
         max: 3,
+        minMessage: 'phones.min',
         maxMessage: 'phones.max'
     )]
     public ?array $phones = [] {

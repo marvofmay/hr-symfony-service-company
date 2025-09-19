@@ -22,7 +22,7 @@ final readonly class ImportCompaniesPreparer
             $nip = trim((string) $row[ImportCompaniesFromXLSX::COLUMN_NIP]);
 
             $existingCompany = $this->companyReaderRepository->getCompanyByNIP($nip);
-            $row['_is_company_already_exists_with_nip'] = null !== $existingCompany;
+            $row[ImportCompaniesFromXLSX::COLUMN_DYNAMIC_IS_COMPANY_WITH_NIP_ALREADY_EXISTS] = null !== $existingCompany;
 
             if (!isset($nipMap[$nip])) {
                 $nipMap[$nip] = $existingCompany
@@ -30,7 +30,7 @@ final readonly class ImportCompaniesPreparer
                     : CompanyUUID::generate();
             }
 
-            $row['_aggregate_uuid'] = $nipMap[$nip]->toString();
+            $row[ImportCompaniesFromXLSX::COLUMN_DYNAMIC_AGGREGATE_UUID] = $nipMap[$nip]->toString();
             $preparedRows[] = $row;
         }
 

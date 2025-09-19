@@ -49,6 +49,7 @@ final readonly class UpdateEmployeeAction
                 $updateDTO->roleUUID,
                 $updateDTO->parentEmployeeUUID,
                 $updateDTO->externalUUID,
+                $updateDTO->internalCode,
                 $updateDTO->email,
                 $updateDTO->firstName,
                 $updateDTO->lastName,

@@ -1,7 +1,9 @@
 module:
   system:
-    description: ""
+    description: "Moduł głównych elementów systemu, jak powiadomienia, wiadomości, logi, itp."
   company:
-    description: ""
+    description: "Moduł zarządzania firmą, jak firmy, oddziały, pracownicy, role, stanowiska, itp."
   note:
-    description: ""
+    description: "Moduł notatek pracownika."
+  task:
+    description: "Moduł dodawania / aktualizacji / usuwania zadań dla pracowników."

@@ -53,6 +53,7 @@ final readonly class DepartmentProjector
     #[AsEventListener(event: DepartmentMultipleImportedEvent::class)]
     public function onDepartmentMultipleImported(DepartmentMultipleImportedEvent $event): void
     {
-        // ToDo save notification about DONE import - immediately
+        // ToDo: save notification about DONE import - immediately
+        // ToDo: if notification for import departments is turned on by employee in employee settings
     }
 }

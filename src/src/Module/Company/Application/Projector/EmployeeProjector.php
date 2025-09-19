@@ -6,6 +6,7 @@ namespace App\Module\Company\Application\Projector;
 
 use App\Module\Company\Domain\Event\Employee\EmployeeCreatedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeDeletedEvent;
+use App\Module\Company\Domain\Event\Employee\EmployeeMultipleImportedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeRestoredEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
 use App\Module\Company\Domain\Service\Employee\EmployeeCreator;
@@ -47,5 +48,12 @@ final readonly class EmployeeProjector
     public function onEmployeeRestored(EmployeeRestoredEvent $event): void
     {
         $this->employeeRestorer->restore($event);
+    }
+
+    #[AsEventListener(event: EmployeeMultipleImportedEvent::class)]
+    public function onEmployeeMultipleImported(EmployeeMultipleImportedEvent $event): void
+    {
+        // ToDo: save notification about DONE import - immediately
+        // ToDo: if notification for import employees is turned on by employee in employee settings
     }
 }

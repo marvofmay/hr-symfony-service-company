@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Department;
 
 use App\Common\Domain\Abstract\AggregateAbstract;
-use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
+use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\Name;
 use App\Module\Company\Domain\Aggregate\ValueObject\Address;
@@ -40,6 +40,6 @@ final class DepartmentAggregateUpdater extends AggregateAbstract
             $parentUUID,
         );
 
-        $this->commitEvents($departmentAggregate->pullEvents(), CompanyAggregate::class);
+        $this->commitEvents($departmentAggregate->pullEvents(), DepartmentAggregate::class);
     }
 }

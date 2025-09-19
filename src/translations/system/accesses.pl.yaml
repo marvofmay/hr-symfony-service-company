@@ -1,27 +1,30 @@
 access:
-  company:
+  company: #moduleName
     company:
-      description: ""
+      description: "Dostęp do firm."
     department:
-      description: ""
+      description: "Dostęp do działów firm."
     employee:
-      description: ""
+      description: "Dostęp do pracowników"
     role:
-      description: ""
+      description: "Dostęp do ról."
     position:
-      description: ""
+      description: "Dostęp do stanowisk w firmie,"
     contractType:
-      description: ""
+      description: "Dostęp do rodzajów umów."
     industry:
-      description: ""
+      description: "Dostęp do branż."
     import:
-      description: ""
-  system:
+      description: "Dostęp do importów."
+  system: #moduleName
     setting:
-      description: ""
-  note:
+      description: "Dostęp do ustawień."
+  note: #moduleName
     note:
-      description: ""
+      description: "Dostęp do notatek pracownika."
+  task: #moduleName
+    task:
+      description: "Dostęp do zadań."
   notExists: "Dostęp o podanym UUID nie istnieje :uuid"
   uuid:
     required: "Wymagane UUID dostępu"

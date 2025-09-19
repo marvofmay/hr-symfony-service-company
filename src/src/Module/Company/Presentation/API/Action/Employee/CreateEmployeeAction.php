@@ -45,6 +45,7 @@ final readonly class CreateEmployeeAction
                 $createDTO->roleUUID,
                 $createDTO->parentEmployeeUUID,
                 $createDTO->externalUUID,
+                $createDTO->internalCode,
                 $createDTO->email,
                 $createDTO->firstName,
                 $createDTO->lastName,

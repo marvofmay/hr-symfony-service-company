@@ -6,8 +6,8 @@ file:
   chooseFile: "Wskaż plik"
   required: "Plik jest wymagany"
 phones:
-  min: "Musisz podać minimalnie :min numery telefonów."
-  max: "Możesz podać maksymalnie :max numery telefonów."
+  min: "Musisz podać minimalnie {{ limit }} numery telefonów."
+  max: "Możesz podać maksymalnie {{ limit }} numery telefonów."
 boolean:
   invalid: "Nieprawidłowa wartość boolean"
 nip:

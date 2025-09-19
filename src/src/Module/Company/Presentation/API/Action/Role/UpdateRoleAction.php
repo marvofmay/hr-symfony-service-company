@@ -24,9 +24,9 @@ final readonly class UpdateRoleAction
     {
         try {
             $role = $this->roleReaderRepository->getRoleByUUID($uuid);
-            $this->roleValidator->isRoleNameAlreadyExists($updateDTO->getName(), $uuid);
+            $this->roleValidator->isRoleNameAlreadyExists($updateDTO->name, $uuid);
 
-            $this->commandBus->dispatch(new UpdateRoleCommand($updateDTO->getName(), $updateDTO->getDescription(), $role));
+            $this->commandBus->dispatch(new UpdateRoleCommand($updateDTO->name, $updateDTO->description, $role));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }

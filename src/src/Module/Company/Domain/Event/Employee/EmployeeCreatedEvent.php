@@ -35,6 +35,7 @@ final readonly class EmployeeCreatedEvent implements DomainEventInterface
         public Address          $address,
         public bool             $active,
         public ?string          $externalUUID = null,
+        public ?string          $internalCode = null,
         public ?Phones          $phones = null,
         public ?EmployeeUUID    $parentEmployeeUUID = null,
         public ?EmploymentTo    $employmentTo = null,

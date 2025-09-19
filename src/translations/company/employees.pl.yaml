@@ -6,6 +6,7 @@ employee:
     required: "UUID pracownika jest wymagane"
   pesel:
     alreadyExists: "Pracownik o podanym PESEL :pesel już istnieje"
+    notExists: "Pracownik o podanym PESEL :pesel nie istnieje lub został usunięty"
   email:
     alreadyExists: "Pracownik o podanym emailu :email już istnieje"
     required: "Email pracownika jest wymagany"
@@ -62,3 +63,5 @@ employee:
     queued: "Plik został dodany do kolejki importu pracowników. Otrzymasz powiadmienie o statusie importu."
     success: "Pracownicy zostali pomyślnie zaimportowani"
     error: "Wystąpił błąd - pracownicy nie zostali zaimportowani"
+    file:
+      required: "Plik importu pracowników jest wymagany"

@@ -19,9 +19,9 @@ final readonly class CreateRoleAction
     public function execute(CreateDTO $createDTO): void
     {
         try {
-            $this->roleValidator->isRoleNameAlreadyExists($createDTO->getName());
+            $this->roleValidator->isRoleNameAlreadyExists($createDTO->name);
             $this->commandBus->dispatch(
-                new CreateRoleCommand($createDTO->getName(), $createDTO->getDescription())
+                new CreateRoleCommand($createDTO->name, $createDTO->description)
             );
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();

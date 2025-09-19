@@ -49,6 +49,7 @@ class Employee
     public const string COLUMN_FIRST_NAME = 'firstName';
     public const string COLUMN_LAST_NAME = 'lastName';
     public const string COLUMN_PESEL = 'pesel';
+    public const string COLUMN_INTERNAL_CODE = 'internalCode';
     public const string COLUMN_EMPLOYMENT_FROM = 'employmentFrom';
     public const string COLUMN_EMPLOYMENT_TO = 'employmentTo';
     public const string COLUMN_ACTIVE = 'active';
@@ -107,6 +108,9 @@ class Employee
     #[ORM\Column(type: Types::STRING, length: 11, nullable: false)]
     #[Assert\NotBlank()]
     private string $pesel;
+
+    #[ORM\Column(type: Types::STRING, length: 50, nullable: true)]
+    private ?string $internalCode;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: false)]
     private ?\DateTimeInterface $employmentFrom;
@@ -267,6 +271,16 @@ class Employee
     public function setPESEL(string $pesel): void
     {
         $this->{self::COLUMN_PESEL} = $pesel;
+    }
+
+    public function getInternalCode(): ?string
+    {
+        return $this->{self::COLUMN_INTERNAL_CODE};
+    }
+
+    public function setInternalCode(?string $internalCode): void
+    {
+        $this->{self::COLUMN_INTERNAL_CODE} = $internalCode;
     }
 
     public function getEmploymentFrom(): \DateTimeInterface

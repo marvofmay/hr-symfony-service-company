@@ -67,12 +67,6 @@ class CreateDTO
         }
     }
 
-    public ?string $externalUUID = null {
-        get {
-            return $this->externalUUID;
-        }
-    }
-
     #[NotBlank(message: [
         'text' => 'employee.email.required',
         'domain' => 'employees',
@@ -124,6 +118,18 @@ class CreateDTO
     public string $pesel {
         get {
             return $this->pesel;
+        }
+    }
+
+    public ?string $externalUUID = null {
+        get {
+            return $this->externalUUID;
+        }
+    }
+
+    public ?string $internalCode = null {
+        get {
+            return $this->internalCode;
         }
     }
 
