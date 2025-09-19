@@ -233,6 +233,8 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         //    return $this->formatErrorMessage('company.contact.email.required');
         //}
 
+        // ToDo:: check if employee with an email and a different PESEL alreday exists in the DB
+
         if (!empty($email)) {
             $errorMessage = EmailValidator::validate($email);
             if (null !== $errorMessage) {
