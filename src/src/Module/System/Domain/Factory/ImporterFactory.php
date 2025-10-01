@@ -25,6 +25,7 @@ use App\Module\Company\Domain\Service\Employee\EmployeeAggregateCreator;
 use App\Module\Company\Domain\Service\Employee\EmployeeAggregateUpdater;
 use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
 use App\Module\Company\Domain\Service\Employee\ImportEmployeesPreparer;
+use App\Module\Company\Domain\Service\Employee\ImportEmployeesReferenceLoader;
 use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
@@ -35,28 +36,31 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final readonly class ImporterFactory
 {
     public function __construct(
-        private TranslatorInterface         $translator,
-        private CompanyReaderInterface      $companyReaderRepository,
-        private DepartmentReaderInterface   $departmentReaderRepository,
-        private EmployeeReaderInterface     $employeeReaderRepository,
-        private PositionReaderInterface     $positionReaderRepository,
-        private ContractTypeReaderInterface $contractTypeReaderRepository,
-        private RoleReaderInterface         $roleReaderRepository,
-        private IndustryReaderInterface     $industryReaderRepository,
-        private ImportCompaniesPreparer     $importCompaniesPreparer,
-        private CompanyAggregateCreator     $companyAggregateCreator,
-        private CompanyAggregateUpdater     $companyAggregateUpdater,
-        private ImportDepartmentsPreparer   $importDepartmentsPreparer,
-        private DepartmentAggregateCreator  $departmentAggregateCreator,
-        private DepartmentAggregateUpdater  $departmentAggregateUpdater,
-        private EmployeeAggregateCreator    $employeeAggregateCreator,
-        private EmployeeAggregateUpdater    $employeeAggregateUpdater,
-        private ImportEmployeesPreparer     $importEmployeesPreparer,
-        private CacheInterface              $cache,
-        private UpdateImportAction          $updateImportAction,
-        private ImportLogMultipleCreator    $importLogMultipleCreator,
-        private MessageService              $messageService,
-        private MessageBusInterface         $eventBus,
+        private TranslatorInterface            $translator,
+        private CompanyReaderInterface         $companyReaderRepository,
+        private DepartmentReaderInterface      $departmentReaderRepository,
+        private EmployeeReaderInterface        $employeeReaderRepository,
+        private PositionReaderInterface        $positionReaderRepository,
+        private ContractTypeReaderInterface    $contractTypeReaderRepository,
+        private RoleReaderInterface            $roleReaderRepository,
+        private IndustryReaderInterface        $industryReaderRepository,
+        private ImportCompaniesPreparer        $importCompaniesPreparer,
+        private CompanyAggregateCreator        $companyAggregateCreator,
+        private CompanyAggregateUpdater        $companyAggregateUpdater,
+        private ImportDepartmentsPreparer      $importDepartmentsPreparer,
+        private DepartmentAggregateCreator     $departmentAggregateCreator,
+        private DepartmentAggregateUpdater     $departmentAggregateUpdater,
+        private EmployeeAggregateCreator       $employeeAggregateCreator,
+        private EmployeeAggregateUpdater       $employeeAggregateUpdater,
+        private ImportEmployeesPreparer        $importEmployeesPreparer,
+        private CacheInterface                 $cache,
+        private UpdateImportAction             $updateImportAction,
+        private ImportLogMultipleCreator       $importLogMultipleCreator,
+        private MessageService                 $messageService,
+        private MessageBusInterface            $eventBus,
+        private ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
+        private iterable                       $importSharedValidators,
+        private iterable                       $importEmployeesValidators,
     )
     {
     }
@@ -95,19 +99,16 @@ final readonly class ImporterFactory
             ImportKindEnum::IMPORT_EMPLOYEES => new ImportEmployeesFromXLSX(
                 sprintf('%s/%s', $filePath, $fileName),
                 $this->translator,
-                $this->departmentReaderRepository,
-                $this->employeeReaderRepository,
-                $this->positionReaderRepository,
-                $this->contractTypeReaderRepository,
-                $this->roleReaderRepository,
                 $this->employeeAggregateCreator,
                 $this->employeeAggregateUpdater,
                 $this->importEmployeesPreparer,
-                $this->cache,
                 $this->updateImportAction,
                 $this->importLogMultipleCreator,
                 $this->messageService,
                 $this->eventBus,
+                $this->importEmployeesReferenceLoader,
+                $this->importSharedValidators,
+                $this->importEmployeesValidators,
             ),
             default => throw new \InvalidArgumentException("Unsupported importer type: $type->value"),
         };

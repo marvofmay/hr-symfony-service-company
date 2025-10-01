@@ -1,0 +1,31 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Module\Company\Application\Validator\Employee;
+
+use App\Common\Domain\Interface\ImportRowValidatorInterface;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+
+#[AutoconfigureTag('app.import_employees_validator')]
+class ContractTypeUUIDValidator implements ImportRowValidatorInterface
+{
+    public function __construct(private MessageService $messageService) {}
+
+    public function validate(array $row, array $additionalData = []): ?string
+    {
+        $contractTypeUUID = $row[ImportEmployeesFromXLSX::COLUMN_CONTACT_TYPE_UUID] ?? null;
+        if (empty($contractTypeUUID)) {
+            return $this->messageService->get('employee.contractTypeUUID.required', [], 'employees');
+        }
+
+        $contractTypeExists = isset($additionalData['contractTypes'][$contractTypeUUID]);
+        if (!$contractTypeExists) {
+            return $this->messageService->get('contractType.uuid.notExists', [':uuid' => $contractTypeUUID], 'contract_types');
+        }
+
+        return null;
+    }
+}

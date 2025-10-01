@@ -33,7 +33,7 @@ final readonly class DepartmentUpdater {
     public function update(DomainEventInterface $event): void
     {
         $department = $this->departmentReaderRepository->getDepartmentByUUID($event->uuid->toString());
-        $this->departmentFactory->updateFromEvent($department, $event);
+        $this->departmentFactory->update($department, $event);
 
         $this->deleteAddress($department->getAddress());
         $this->deleteContacts($department->getContacts());

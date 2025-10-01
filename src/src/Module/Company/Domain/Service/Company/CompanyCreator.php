@@ -18,9 +18,9 @@ class CompanyCreator
         private CompanyFactory $companyFactory,
         private AddressFactory $addressFactory,
         private ContactFactory $contactFactory,
-        private CompanyWriterInterface $companyWriter,
-        private CompanyReaderInterface $companyReader,
-        private IndustryReaderInterface $industryReader,
+        private CompanyWriterInterface $companyWriterRepository,
+        private CompanyReaderInterface $companyReaderRepository,
+        private IndustryReaderInterface $industryReaderRepository,
     ) {}
 
     public function create(DomainEventInterface $event): void
@@ -29,25 +29,24 @@ class CompanyCreator
         $address = $this->addressFactory->create($event->address);
         $contacts = $this->contactFactory->create($event->phones, $event->emails, $event->websites);
         $company->setAddress($address);
-
         foreach ($contacts as $contact) {
             $company->addContact($contact);
         }
 
         if ($event->industryUUID) {
-            $industry = $this->industryReader->getIndustryByUUID($event->industryUUID->toString());
+            $industry = $this->industryReaderRepository->getIndustryByUUID($event->industryUUID->toString());
             if ($industry) {
                 $company->setIndustry($industry);
             }
         }
 
         if ($event->parentCompanyUUID) {
-            $parent = $this->companyReader->getCompanyByUUID($event->parentCompanyUUID->toString());
+            $parent = $this->companyReaderRepository->getCompanyByUUID($event->parentCompanyUUID->toString());
             if ($parent) {
                 $company->setParentCompany($parent);
             }
         }
 
-        $this->companyWriter->saveCompanyInDB($company);
+        $this->companyWriterRepository->saveCompanyInDB($company);
     }
 }

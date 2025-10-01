@@ -40,22 +40,22 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(ContractType::ALIAS)
             ->from(ContractType::class, ContractType::ALIAS)
-            ->where(ContractType::ALIAS . '.' . ContractType::ALIAS::COLUMN_UUID . ' IN (:uuids)')
+            ->where(ContractType::ALIAS . '.' . ContractType::COLUMN_UUID . ' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID);
 
         $contractTypes = $qb->getQuery()->getResult();
 
-        $foundUUIDs = array_map(fn(ContractType $contractType) => $contractType->getUUID(), $contractTypes);
-        $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
-
-        if ($missingUUIDs) {
-            throw new NotFindByUUIDException(
-                sprintf(
-                    '%s : %s',
-                    $this->translator->trans('contractType.uuid.notFound', [], 'contract_types'),
-                    implode(', ', $missingUUIDs)
-                ));
-        }
+        //$foundUUIDs = array_map(fn(ContractType $contractType) => $contractType->getUUID(), $contractTypes);
+        //$missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
+        //
+        //if ($missingUUIDs) {
+        //    throw new NotFindByUUIDException(
+        //        sprintf(
+        //            '%s : %s',
+        //            $this->translator->trans('contractType.uuid.notFound', [], 'contract_types'),
+        //            implode(', ', $missingUUIDs)
+        //        ));
+        //}
 
         return new ArrayCollection($contractTypes);
     }

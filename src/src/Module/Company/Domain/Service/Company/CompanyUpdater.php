@@ -34,7 +34,7 @@ final readonly class CompanyUpdater
     public function update(DomainEventInterface $event): void
     {
         $company = $this->companyReader->getCompanyByUUID($event->uuid->toString());
-        $this->companyFactory->updateFromEvent($company, $event);
+        $this->companyFactory->update($company, $event);
 
         $this->deleteAddress($company->getAddress());
         $this->deleteContacts($company);

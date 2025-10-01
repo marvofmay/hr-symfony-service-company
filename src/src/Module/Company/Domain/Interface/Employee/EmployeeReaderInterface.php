@@ -20,6 +20,8 @@ interface EmployeeReaderInterface
 
     public function getEmployeeByPESEL(string $pesel, ?string $employeeUUID = null): ?Employee;
 
+    public function getEmployeesByPESEL(array $selectedPESEL): Collection;
+
     public function isEmployeeWithUUIDExists(string $uuid): bool;
 
     public function isEmployeeWithEmailExists(string $email, ?string $uuid = null): bool;

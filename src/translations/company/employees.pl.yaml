@@ -7,6 +7,7 @@ employee:
   pesel:
     alreadyExists: "Pracownik o podanym PESEL :pesel już istnieje"
     notExists: "Pracownik o podanym PESEL :pesel nie istnieje lub został usunięty"
+    required: "PESEL pracownika jest wymagany"
   email:
     alreadyExists: "Pracownik o podanym emailu :email już istnieje"
     required: "Email pracownika jest wymagany"

@@ -35,7 +35,7 @@ final readonly class EmployeeProjector
     #[AsEventListener(event: EmployeeUpdatedEvent::class)]
     public function onEmployeeUpdated(EmployeeUpdatedEvent $event): void
     {
-        $this->employeeUpdater->update($event);
+       //$this->employeeUpdater->update($event);
     }
 
     #[AsEventListener(event: EmployeeDeletedEvent::class)]

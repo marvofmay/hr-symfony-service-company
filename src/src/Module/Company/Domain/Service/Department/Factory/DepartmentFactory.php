@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Entity\Department;
 
 class DepartmentFactory
 {
-    public function createFromEvent(DomainEventInterface $event): Department
+    public function create(DomainEventInterface $event): Department
     {
         $department = new Department();
         $department->setUUID($event->uuid->toString());
@@ -19,7 +19,7 @@ class DepartmentFactory
         return $department;
     }
 
-    public function updateFromEvent(Department $department, DomainEventInterface $event): void
+    public function update(Department $department, DomainEventInterface $event): void
     {
         $this->mapEventToDepartment($department, $event);
     }

@@ -20,7 +20,6 @@ final readonly class ImportEmployeesPreparer
 
         foreach ($rows as $row) {
             $pesel = trim((string) $row[ImportEmployeesFromXLSX::COLUMN_PESEL]);
-
             $existingEmployee = $this->employeeReaderRepository->getEmployeeByPESEL($pesel);
             $row[ImportEmployeesFromXLSX::COLUMN_DYNAMIC_IS_EMPLOYEE_WITH_PESEL_ALREADY_EXISTS] = null !== $existingEmployee;
 

@@ -47,12 +47,12 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
 
         $departments = $qb->getQuery()->getResult();
 
-        $foundUUIDs = array_map(fn (Department $department) => $department->getUUID(), $departments);
-        $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
-
-        if ($missingUUIDs) {
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('department.uuid.notFound', [], 'departments'), implode(', ', $missingUUIDs)));
-        }
+        //$foundUUIDs = array_map(fn (Department $department) => $department->getUUID(), $departments);
+        //$missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
+        //
+        //if ($missingUUIDs) {
+        //    throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('department.uuid.notFound', [], 'departments'), implode(', ', $missingUUIDs)));
+        //}
 
         return new ArrayCollection($departments);
     }

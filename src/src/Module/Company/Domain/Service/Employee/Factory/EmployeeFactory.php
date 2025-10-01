@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Entity\Employee;
 
 class EmployeeFactory
 {
-    public function createFromEvent(DomainEventInterface $event): Employee
+    public function create(DomainEventInterface $event): Employee
     {
         $employee = new Employee();
         $employee->setUUID($event->uuid->toString());
@@ -19,7 +19,7 @@ class EmployeeFactory
         return $employee;
     }
 
-    public function updateFromEvent(Employee $employee, DomainEventInterface $event): void
+    public function update(Employee $employee, DomainEventInterface $event): void
     {
         $this->mapEventToEmployee($employee, $event);
     }
@@ -29,6 +29,11 @@ class EmployeeFactory
         $employee->setUUID($event->uuid->toString());
         $employee->setFirstName($event->firstName->getValue());
         $employee->setLastName($event->lastName->getValue());
+        $employee->setPESEL($event->pesel->getValue());
+        $employee->setEmploymentFrom(\DateTime::createFromFormat('Y-m-d', $event->employmentFrom->getValue()));
+        if (null !== $event->employmentTo) {
+            $employee->setEmploymentTo(\DateTime::createFromFormat('Y-m-d', $event->employmentTo->getValue()));
+        }
         $employee->setInternalCode($event->internalCode);
         $employee->setExternalUUID($event->externalUUID);
         $employee->setActive($event->active);

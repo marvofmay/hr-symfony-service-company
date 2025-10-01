@@ -1,5 +1,5 @@
 name: "nazwa"
-row: "wiersz"
+row: "wiersz :index"
 expectedXLSXFile: "oczekiwano pliku XLSX"
 expectedPDFFile: "oczekiwano pliku PDF"
 notAllowedTypeFile: "niedozwolony typ pliku"

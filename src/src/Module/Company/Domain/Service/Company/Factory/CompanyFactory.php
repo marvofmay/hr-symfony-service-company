@@ -19,7 +19,7 @@ class CompanyFactory
         return $company;
     }
 
-    public function updateFromEvent(Company $company, DomainEventInterface $event): void
+    public function update(Company $company, DomainEventInterface $event): void
     {
         $this->mapEventToCompany($company, $event);
     }

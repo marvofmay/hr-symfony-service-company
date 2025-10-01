@@ -21,7 +21,7 @@ class ImportRolesFromXLSX extends XLSXIterator
         parent::__construct($this->filePath, $this->translator);
     }
 
-    public function validateRow(array $row): array
+    public function validateRow(array $row, int $index): array
     {
         $errorMessages = [];
         [$roleName] = $row + [null];

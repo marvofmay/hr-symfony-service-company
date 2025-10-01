@@ -51,7 +51,7 @@ abstract class XLSXIterator implements XLSXIteratorInterface
                 $rowData[] = $cell->getValue();
             }
 
-            if ($error = $this->validateRow($rowData)) {
+            if ($error = $this->validateRow($rowData, $this->rowIndex)) {
                 $this->errors = array_merge($this->errors, $error);
             }
 
@@ -90,7 +90,7 @@ abstract class XLSXIterator implements XLSXIteratorInterface
         return $this->iterateRows();
     }
 
-    abstract public function validateRow(array $row): array;
+    abstract public function validateRow(array $row, int $index): array;
 
     public function getErrors(): array
     {

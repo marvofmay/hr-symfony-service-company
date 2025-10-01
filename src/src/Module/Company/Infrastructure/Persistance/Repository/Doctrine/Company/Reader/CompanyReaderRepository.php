@@ -44,10 +44,10 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
             ->setParameter('uuids', $selectedUUID)
             ->getResult();
 
-        if (count($companies) !== count($selectedUUID)) {
-            $missingUuids = array_diff($selectedUUID, array_map(fn ($company) => $company->getUUID(), $companies));
-            throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('company.uuid.notFound', [], 'companies'), implode(', ', $missingUuids)));
-        }
+        //if (count($companies) !== count($selectedUUID)) {
+        //    $missingUuids = array_diff($selectedUUID, array_map(fn ($company) => $company->getUUID(), $companies));
+        //    throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('company.uuid.notFound', [], 'companies'), implode(', ', $missingUuids)));
+        //}
 
         return new ArrayCollection($companies);
     }

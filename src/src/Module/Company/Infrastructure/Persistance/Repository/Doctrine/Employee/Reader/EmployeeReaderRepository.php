@@ -110,6 +110,22 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
         return $qb->getQuery()->getOneOrNullResult();
     }
 
+    public function getEmployeesByPESEL(array $selectedPESEL): Collection
+    {
+        if ($selectedPESEL === []) {
+            return new ArrayCollection();
+        }
+
+        $employees = $this->getEntityManager()
+            ->createQuery(
+                'SELECT e FROM ' . Employee::class . ' e WHERE e.pesel IN (:pesels)'
+            )
+            ->setParameter('pesels', $selectedPESEL)
+            ->getResult();
+
+        return new ArrayCollection($employees);
+    }
+
     public function isEmployeeAlreadyExists(string $email, string $pesel, ?string $employeeUUID = null): bool
     {
         return $this->isEmployeeWithPESELExists($pesel, $employeeUUID) || $this->isEmployeeWithEmailExists($email, $employeeUUID);
