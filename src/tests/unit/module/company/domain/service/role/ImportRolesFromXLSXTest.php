@@ -28,7 +28,7 @@ class ImportRolesFromXLSXTest extends  TestCase
     {
         $importer = $this->getImporter();
 
-        $errors = $importer->validateRow(['']);
+        $errors = $importer->validateRow([''], 1);
 
         $this->assertNotEmpty($errors);
         $this->assertStringContainsString('role.name.required', $errors[0]);
@@ -38,7 +38,7 @@ class ImportRolesFromXLSXTest extends  TestCase
     {
         $importer = $this->getImporter();
 
-        $errors = $importer->validateRow(['ab']);
+        $errors = $importer->validateRow(['ab'], 1);
 
         $this->assertNotEmpty($errors);
         $this->assertStringContainsString('role.name.minimumLength', $errors[0]);
@@ -52,7 +52,7 @@ class ImportRolesFromXLSXTest extends  TestCase
 
         $importer = $this->getImporter();
 
-        $errors = $importer->validateRow(['ExistingRole']);
+        $errors = $importer->validateRow(['ExistingRole'], 1);
 
         $this->assertNotEmpty($errors);
         $this->assertStringContainsString('role.name.alreadyExists', $errors[0]);
@@ -66,7 +66,7 @@ class ImportRolesFromXLSXTest extends  TestCase
 
         $importer = $this->getImporter();
 
-        $errors = $importer->validateRow(['ValidRole']);
+        $errors = $importer->validateRow(['ValidRole'], 1);
 
         $this->assertEmpty($errors);
     }

@@ -23,7 +23,7 @@ use App\Module\Company\Domain\Service\Factory\AddressFactory;
 use App\Module\Company\Domain\Service\Factory\ContactFactory;
 use App\Module\Company\Domain\Service\User\UserFactory;
 
-readonly class EmployeeCreator
+final readonly class EmployeeCreator
 {
     public function __construct(
         private EmployeeFactory             $employeeFactory,
@@ -47,6 +47,7 @@ readonly class EmployeeCreator
         $email = $event->emails->toArray()[0];
         $user = $this->userFactory->create($email, $email);
 
+        // ToDo:: cache
         $department = $this->departmentReaderRepository->getDepartmentByUUID($event->departmentUUID->toString());
         $role = $this->roleReaderRepository->getRoleByUUID($event->roleUUID->toString());
         $position = $this->positionReaderRepository->getPositionByUUID($event->positionUUID->toString());
