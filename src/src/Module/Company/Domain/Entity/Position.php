@@ -127,4 +127,16 @@ class Position
     {
         return $this->positionDepartments->map(fn (PositionDepartment $pd) => $pd->getDepartment());
     }
+
+    public function removeDepartment(Department $department): void
+    {
+        foreach ($this->positionDepartments as $key => $positionDepartment) {
+            if ($positionDepartment->getDepartment() === $department) {
+                $this->positionDepartments->remove($key);
+                $positionDepartment->setPosition(null);
+                $positionDepartment->setDepartment(null);
+                break;
+            }
+        }
+    }
 }

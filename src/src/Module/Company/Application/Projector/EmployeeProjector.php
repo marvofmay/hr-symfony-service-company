@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Projector;
 
-use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Event\Employee\EmployeeCreatedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeDeletedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeMultipleImportedEvent;
@@ -36,7 +35,7 @@ final readonly class EmployeeProjector
     #[AsEventListener(event: EmployeeUpdatedEvent::class)]
     public function onEmployeeUpdated(EmployeeUpdatedEvent $event): void
     {
-        //$this->employeeUpdater->update($event);
+        $this->employeeUpdater->update($event);
     }
 
     #[AsEventListener(event: EmployeeDeletedEvent::class)]

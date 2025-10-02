@@ -49,15 +49,6 @@ final readonly class EmployeeCreator
         $email = $event->emails->toArray()[0];
         $user = $this->userFactory->create($email, $email);
 
-        // ToDo:: cache
-        //$department = $this->departmentReaderRepository->getDepartmentByUUID($event->departmentUUID->toString());
-        //$role = $this->roleReaderRepository->getRoleByUUID($event->roleUUID->toString());
-        //$position = $this->positionReaderRepository->getPositionByUUID($event->positionUUID->toString());
-        //$contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($event->contractTypeUUID->toString());
-        //$parentEmployee = $event->parentEmployeeUUID?->toString()
-        //    ? $this->employeeReaderRepository->getEmployeeByUUID($event->parentEmployeeUUID->toString())
-        //    : null;
-
         $department = $this->entityReferenceCache->get(
             Department::class,
             $event->departmentUUID->toString(),
@@ -98,7 +89,7 @@ final readonly class EmployeeCreator
         $this->employeeWriterRepository->saveEmployeeInDB($employee);
     }
 
-    protected function setEmployeeRelations(
+    private function setEmployeeRelations(
         Employee     $employee,
         Department   $department,
         Role         $role,

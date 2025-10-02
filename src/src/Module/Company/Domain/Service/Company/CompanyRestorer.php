@@ -19,22 +19,22 @@ final readonly class CompanyRestorer
 
     public function restore(DomainEventInterface $event): void
     {
-        $now = new \DateTime();
+        //$now = new \DateTime();
 
         $company = $this->companyReaderRepository->getDeletedCompanyByUUID($event->uuid->toString());
         $company->setDeletedAt(null);
-        $company->setUpdatedAt($now);
+        //$company->setUpdatedAt($now);
 
         $address = $this->companyReaderRepository->getDeletedAddressByCompanyByUUID($event->uuid->toString());
         if ($address) {
             $address->setDeletedAt(null);
-            $address->setUpdatedAt($now);
+            //$address->setUpdatedAt($now);
         }
 
         $contacts = $this->companyReaderRepository->getDeletedContactsByCompanyByUUID($event->uuid->toString());
         foreach ($contacts as $contact) {
             $contact->setDeletedAt(null);
-            $contact->setUpdatedAt($now);
+            //$contact->setUpdatedAt($now);
         }
 
         $this->companyWriterRepository->saveCompanyInDB($company);

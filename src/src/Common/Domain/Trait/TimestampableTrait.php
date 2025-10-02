@@ -33,9 +33,10 @@ trait TimestampableTrait
         return $this->updatedAt;
     }
 
-    public function setUpdatedAt(\DateTimeInterface $updatedAt): void
+    #[ORM\PreUpdate]
+    public function setUpdatedAt(): void
     {
-        $this->updatedAt = $updatedAt;
+        $this->updatedAt = new \DateTime();
     }
 
     public function getDeletedAt(): ?\DateTimeInterface

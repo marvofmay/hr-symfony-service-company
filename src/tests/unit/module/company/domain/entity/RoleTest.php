@@ -26,7 +26,7 @@ class RoleTest extends TestCase
         $this->role->setDescription('Admin role');
         $createdAt = new \DateTime();
         $this->role->setCreatedAt();
-        $this->role->setUpdatedAt($createdAt);
+        //$this->role->setUpdatedAt($createdAt);
         $this->role->setDeletedAt($createdAt);
 
         $this->assertEquals($uuid, $this->role->getUuid());

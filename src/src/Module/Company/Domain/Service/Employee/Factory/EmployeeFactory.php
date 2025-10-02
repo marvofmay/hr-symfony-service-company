@@ -26,7 +26,6 @@ class EmployeeFactory
 
     private function mapEventToEmployee(Employee $employee, DomainEventInterface $event): void
     {
-        $employee->setUUID($event->uuid->toString());
         $employee->setFirstName($event->firstName->getValue());
         $employee->setLastName($event->lastName->getValue());
         $employee->setPESEL($event->pesel->getValue());

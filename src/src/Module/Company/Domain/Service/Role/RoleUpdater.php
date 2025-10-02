@@ -18,7 +18,6 @@ final readonly class RoleUpdater implements RoleUpdaterInterface
     {
         $role->setName($name);
         $role->setDescription($description);
-        $role->setUpdatedAt(new \DateTime());
 
         $this->roleWriterRepository->saveRoleInDB($role);
     }
