@@ -30,8 +30,6 @@ readonly class PositionUpdater
             $position->addDepartment($this->departmentReaderRepository->getDepartmentByUUID($departmentUUID));
         }
 
-        //$position->setUpdatedAt(new \DateTime());
-
         $this->positionWriterRepository->savePositionInDB($position);
     }
 }

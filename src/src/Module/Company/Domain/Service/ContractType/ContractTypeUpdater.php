@@ -18,7 +18,6 @@ readonly class ContractTypeUpdater
         $contractType->setName($name);
         $contractType->setDescription($description);
         $contractType->setActive($active);
-        //$contractType->setUpdatedAt(new \DateTime());
 
         $this->contractTypeWriterRepository->saveContractTypeInDB($contractType);
     }

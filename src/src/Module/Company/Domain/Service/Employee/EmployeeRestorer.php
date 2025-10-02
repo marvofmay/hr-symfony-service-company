@@ -19,8 +19,6 @@ final readonly class EmployeeRestorer
 
     public function restore(DomainEventInterface $event): void
     {
-        //$now = new \DateTime();
-
         $employee = $this->employeeReaderRepository->getDeletedEmployeeByUUID($event->uuid->toString());
         $employee->setDeletedAt(null);
         //$employee->setUpdatedAt($now);
@@ -28,19 +26,16 @@ final readonly class EmployeeRestorer
         $address = $this->employeeReaderRepository->getDeletedAddressByEmployeeByUUID($event->uuid->toString());
         if ($address) {
             $address->setDeletedAt(null);
-            //$address->setUpdatedAt($now);
         }
 
         $contacts = $this->employeeReaderRepository->getDeletedContactsByEmployeeByUUID($event->uuid->toString());
         foreach ($contacts as $contact) {
             $contact->setDeletedAt(null);
-            //$contact->setUpdatedAt($now);
         }
 
         $user = $this->employeeReaderRepository->getDeletedUserByEmployeeUUID($event->uuid->toString());
         if ($user) {
             $user->setDeletedAt(null);
-            //$user->setUpdatedAt($now);
         }
 
         $this->employeeWriterRepository->saveEmployeeInDB($employee);
