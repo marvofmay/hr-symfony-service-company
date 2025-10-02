@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Employee;
 
 use App\Common\Domain\Interface\DomainEventInterface;
+use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Entity\Department;
@@ -36,6 +37,7 @@ final readonly class EmployeeCreator
         private PositionReaderInterface     $positionReaderRepository,
         private RoleReaderInterface         $roleReaderRepository,
         private UserFactory                 $userFactory,
+        private EntityReferenceCache        $entityReferenceCache,
     )
     {
     }
@@ -48,12 +50,44 @@ final readonly class EmployeeCreator
         $user = $this->userFactory->create($email, $email);
 
         // ToDo:: cache
-        $department = $this->departmentReaderRepository->getDepartmentByUUID($event->departmentUUID->toString());
-        $role = $this->roleReaderRepository->getRoleByUUID($event->roleUUID->toString());
-        $position = $this->positionReaderRepository->getPositionByUUID($event->positionUUID->toString());
-        $contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($event->contractTypeUUID->toString());
+        //$department = $this->departmentReaderRepository->getDepartmentByUUID($event->departmentUUID->toString());
+        //$role = $this->roleReaderRepository->getRoleByUUID($event->roleUUID->toString());
+        //$position = $this->positionReaderRepository->getPositionByUUID($event->positionUUID->toString());
+        //$contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($event->contractTypeUUID->toString());
+        //$parentEmployee = $event->parentEmployeeUUID?->toString()
+        //    ? $this->employeeReaderRepository->getEmployeeByUUID($event->parentEmployeeUUID->toString())
+        //    : null;
+
+        $department = $this->entityReferenceCache->get(
+            Department::class,
+            $event->departmentUUID->toString(),
+            fn(string $uuid) => $this->departmentReaderRepository->getDepartmentByUUID($uuid)
+        );
+
+        $role = $this->entityReferenceCache->get(
+            Role::class,
+            $event->roleUUID->toString(),
+            fn(string $uuid) => $this->roleReaderRepository->getRoleByUUID($uuid)
+        );
+
+        $position = $this->entityReferenceCache->get(
+            Position::class,
+            $event->positionUUID->toString(),
+            fn(string $uuid) => $this->positionReaderRepository->getPositionByUUID($uuid)
+        );
+
+        $contractType = $this->entityReferenceCache->get(
+            ContractType::class,
+            $event->contractTypeUUID->toString(),
+            fn(string $uuid) => $this->contractTypeReaderRepository->getContractTypeByUUID($uuid)
+        );
+
         $parentEmployee = $event->parentEmployeeUUID?->toString()
-            ? $this->employeeReaderRepository->getEmployeeByUUID($event->parentEmployeeUUID->toString())
+            ? $this->entityReferenceCache->get(
+                Employee::class,
+                $event->parentEmployeeUUID->toString(),
+                fn(string $uuid) => $this->employeeReaderRepository->getEmployeeByUUID($uuid)
+            )
             : null;
 
         $address = $this->addressFactory->create($event->address);

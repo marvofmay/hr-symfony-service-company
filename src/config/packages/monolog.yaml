@@ -1,6 +1,7 @@
 monolog:
     channels:
         - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+        - import
 
 when@test:
     monolog:
@@ -57,4 +58,9 @@ when@dev:
                 path: "%kernel.logs_dir%/deprecations.log"
                 level: debug
                 channels: [deprecation]
+            import:
+                type: stream
+                path: "%kernel.logs_dir%/import.log"
+                level: debug
+                channels: ["import"]
 

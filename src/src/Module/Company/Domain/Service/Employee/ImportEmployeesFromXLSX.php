@@ -7,11 +7,6 @@ namespace App\Module\Company\Domain\Service\Employee;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\XLSX\XLSXIterator;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
-use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
-use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
-use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
-use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
-use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Entity\Import;
 use App\Module\System\Domain\Enum\ImportLogKindEnum;
@@ -19,7 +14,6 @@ use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ImportEmployeesFromXLSX extends XLSXIterator

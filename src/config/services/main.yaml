@@ -34,3 +34,9 @@ services:
 
   Symfony\Component\Validator\Validator\ValidatorInterface: '@validator'
 
+  App\Module\System\Application\EventHandler\LogFileEventHandler:
+    arguments:
+      $loggers: !service_locator
+        main: '@monolog.logger'
+        import: '@monolog.logger.import'
+

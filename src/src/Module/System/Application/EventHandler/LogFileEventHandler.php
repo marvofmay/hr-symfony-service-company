@@ -3,28 +3,32 @@
 namespace App\Module\System\Application\EventHandler;
 
 use App\Module\System\Application\Event\LogFileEvent;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Contracts\Service\ServiceProviderInterface;
 
 #[AsMessageHandler(bus: 'event.bus')]
 final readonly class LogFileEventHandler
 {
-    public function __construct(private LoggerInterface $logger)
+    public function __construct(private ServiceProviderInterface $loggers,)
     {
     }
 
     public function __invoke(LogFileEvent $event): void
     {
+        $logger = $this->loggers->has($event->channel)
+            ? $this->loggers->get($event->channel)
+            : $this->loggers->get('main');
+
         match ($event->level) {
-            LogLevel::DEBUG => $this->logger->debug($event->message),
-            LogLevel::NOTICE => $this->logger->notice($event->message),
-            LogLevel::WARNING => $this->logger->warning($event->message),
-            LogLevel::ERROR => $this->logger->error($event->message),
-            LogLevel::CRITICAL => $this->logger->critical($event->message),
-            LogLevel::ALERT => $this->logger->alert($event->message),
-            LogLevel::EMERGENCY => $this->logger->emergency($event->message),
-            default => $this->logger->info($event->message),
+            LogLevel::DEBUG => $logger->debug($event->message),
+            LogLevel::NOTICE => $logger->notice($event->message),
+            LogLevel::WARNING => $logger->warning($event->message),
+            LogLevel::ERROR => $logger->error($event->message),
+            LogLevel::CRITICAL => $logger->critical($event->message),
+            LogLevel::ALERT => $logger->alert($event->message),
+            LogLevel::EMERGENCY => $logger->emergency($event->message),
+            default => $logger->info($event->message),
         };
     }
 }
