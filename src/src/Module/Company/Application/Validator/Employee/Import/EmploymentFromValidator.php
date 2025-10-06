@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\Validator\Employee;
+namespace App\Module\Company\Application\Validator\Employee\Import;
 
 use App\Common\Domain\Enum\DateFormatEnum;
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
@@ -11,7 +11,7 @@ use App\Common\Shared\Utils\DateFormatValidator;
 use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_employees_validator')]
+#[AutoconfigureTag('app.import_employee_validator')]
 class EmploymentFromValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService) {}

@@ -22,6 +22,9 @@ pesel:
 email:
   invalid: "Nieprawidłowy email"
   required: "Email jest wymagany"
+website:
+  invalidProtocol: "Tylko http:// lub https://"
+  invalid: "Niepoprawna składnia adresu strony internetowej"
 date:
   required: "Data jest wymagana"
   invalidFormat: "Nieprawidłowy format daty - wymagany format :dateFormat"

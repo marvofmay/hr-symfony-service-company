@@ -6,4 +6,5 @@ services:
     App\Module\System\Domain\Factory\ImporterFactory:
       arguments:
         $importSharedValidators: !tagged_iterator 'app.import_shared_validator'
-        $importEmployeesValidators: !tagged_iterator 'app.import_employees_validator'
+        $importCompaniesValidators: !tagged_iterator 'app.import_company_validator'
+        $importEmployeesValidators: !tagged_iterator 'app.import_employee_validator'

@@ -14,7 +14,6 @@ final class EntityReferenceCache
 
     public function __construct(private readonly MessageBusInterface $eventBus,)
     {
-
     }
 
     public function get(string $className, string $uuid, callable $loader): object
@@ -32,7 +31,7 @@ final class EntityReferenceCache
     {
         $this->eventBus->dispatch(
             new LogFileEvent(
-                $className . ':' . $uuid . ' not exists in cache',
+                $className . ':' . $uuid . ' not exists in cache - query to DB',
                 LogLevel::INFO,
                 'import'
             ));

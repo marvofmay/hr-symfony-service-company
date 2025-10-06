@@ -71,6 +71,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
     public function validateRow(array $row, int $index): array
     {
         $this->importEmployeesReferenceLoader->preload($this->import());
+
         $departments = $this->importEmployeesReferenceLoader->getDepartments();
         $positions = $this->importEmployeesReferenceLoader->getPositions();
         $contractTypes = $this->importEmployeesReferenceLoader->getContractTypes();
@@ -115,8 +116,6 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
 
         $this->importEmployeesReferenceLoader->preload($this->import());
         $employees = $this->importEmployeesReferenceLoader->getEmployees();
-
-        //$existingParentEmployee = $this->employeeReaderRepository->getEmployeeByPESEL($parentPESEL);
 
         $existingParentEmployee = $employees[$parentPESEL];
 

@@ -69,8 +69,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $deletedAt = null;
 
-    #[ORM\OneToOne(targetEntity: Employee::class, inversedBy: 'user')]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true)]
+    #[ORM\OneToOne(targetEntity: Employee::class, inversedBy: 'user', cascade: ['remove'])]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     private ?Employee $employee = null;
 
     public function __construct()

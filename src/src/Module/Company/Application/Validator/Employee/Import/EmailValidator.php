@@ -2,30 +2,32 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\Validator\Employee;
+namespace App\Module\Company\Application\Validator\Employee\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Shared\Utils\EmailValidator as Email;
 use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
-use App\Common\Shared\Utils\PESELValidator as PESEL;
 
-#[AutoconfigureTag('app.import_employees_validator')]
-class ParentEmployeePESELValidator implements ImportRowValidatorInterface
+#[AutoconfigureTag('app.import_employee_validator')]
+class EmailValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService) {}
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $parentEmployeePESEL = $row[ImportEmployeesFromXLSX::COLUMN_PARENT_EMPLOYEE_PESEL] ?? null;
-        if (empty($parentEmployeePESEL)) {
-            return null;
+        $email = $row[ImportEmployeesFromXLSX::COLUMN_EMAIL] ?? null;
+        if (null === $email) {
+            return $this->messageService->get('employee.email.required', [], 'employees');
         }
 
-        $errorMessage = PESEL::validate($parentEmployeePESEL);
+        $errorMessage = Email::validate($email);
         if (null !== $errorMessage) {
             return $this->messageService->get($errorMessage, [], 'validators');
         }
+
+        // ToDo:: check if employee with an email and a different PESEL alreday exists in the DB
 
         return null;
     }

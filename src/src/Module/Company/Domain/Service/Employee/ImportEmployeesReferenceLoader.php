@@ -19,11 +19,11 @@ final class ImportEmployeesReferenceLoader
     private array $contractTypes = [];
 
     public function __construct(
-        private DepartmentReaderInterface   $departmentReaderRepository,
-        private PositionReaderInterface     $positionReaderRepository,
-        private RoleReaderInterface         $roleReaderRepository,
-        private EmployeeReaderInterface     $employeeReaderRepository,
-        private ContractTypeReaderInterface $contractTypeReaderRepository,
+        private readonly DepartmentReaderInterface   $departmentReaderRepository,
+        private readonly PositionReaderInterface     $positionReaderRepository,
+        private readonly RoleReaderInterface         $roleReaderRepository,
+        private readonly EmployeeReaderInterface     $employeeReaderRepository,
+        private readonly ContractTypeReaderInterface $contractTypeReaderRepository,
     )
     {
     }

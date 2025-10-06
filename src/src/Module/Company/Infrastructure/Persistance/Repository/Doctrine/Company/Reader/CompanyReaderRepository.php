@@ -52,6 +52,20 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         return new ArrayCollection($companies);
     }
 
+    public function getCompaniesByNIP(array $selectedNIP): Collection
+    {
+        if (empty($selectedNIP)) {
+            return new ArrayCollection();
+        }
+
+        $companies = $this->getEntityManager()
+            ->createQuery('SELECT c FROM '.Company::class.' c WHERE c.'.Company::COLUMN_NIP.' IN (:nips)')
+            ->setParameter('nips', $selectedNIP)
+            ->getResult();
+
+        return new ArrayCollection($companies);
+    }
+
     public function getCompanyByFullName(string $fullName, ?string $uuid = null): ?Company
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

@@ -17,6 +17,7 @@ use App\Module\Company\Domain\Service\Company\CompanyAggregateCreator;
 use App\Module\Company\Domain\Service\Company\CompanyAggregateUpdater;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesPreparer;
+use App\Module\Company\Domain\Service\Company\ImportCompaniesReferenceLoader;
 use App\Module\Company\Domain\Service\Department\DepartmentAggregateCreator;
 use App\Module\Company\Domain\Service\Department\DepartmentAggregateUpdater;
 use App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX;
@@ -39,11 +40,6 @@ final readonly class ImporterFactory
         private TranslatorInterface            $translator,
         private CompanyReaderInterface         $companyReaderRepository,
         private DepartmentReaderInterface      $departmentReaderRepository,
-        private EmployeeReaderInterface        $employeeReaderRepository,
-        private PositionReaderInterface        $positionReaderRepository,
-        private ContractTypeReaderInterface    $contractTypeReaderRepository,
-        private RoleReaderInterface            $roleReaderRepository,
-        private IndustryReaderInterface        $industryReaderRepository,
         private ImportCompaniesPreparer        $importCompaniesPreparer,
         private CompanyAggregateCreator        $companyAggregateCreator,
         private CompanyAggregateUpdater        $companyAggregateUpdater,
@@ -58,8 +54,10 @@ final readonly class ImporterFactory
         private ImportLogMultipleCreator       $importLogMultipleCreator,
         private MessageService                 $messageService,
         private MessageBusInterface            $eventBus,
+        private ImportCompaniesReferenceLoader $importCompaniesReferenceLoader,
         private ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
         private iterable                       $importSharedValidators,
+        private iterable                       $importCompaniesValidators,
         private iterable                       $importEmployeesValidators,
     )
     {
@@ -72,15 +70,16 @@ final readonly class ImporterFactory
                 sprintf('%s/%s', $filePath, $fileName),
                 $this->translator,
                 $this->companyReaderRepository,
-                $this->industryReaderRepository,
                 $this->companyAggregateCreator,
                 $this->companyAggregateUpdater,
                 $this->importCompaniesPreparer,
-                $this->cache,
                 $this->updateImportAction,
                 $this->importLogMultipleCreator,
                 $this->messageService,
                 $this->eventBus,
+                $this->importCompaniesReferenceLoader,
+                $this->importSharedValidators,
+                $this->importCompaniesValidators,
             ),
             ImportKindEnum::IMPORT_DEPARTMENTS => new ImportDepartmentsFromXLSX(
                 sprintf('%s/%s', $filePath, $fileName),

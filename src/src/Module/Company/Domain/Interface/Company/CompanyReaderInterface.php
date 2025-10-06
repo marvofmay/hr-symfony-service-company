@@ -15,15 +15,19 @@ interface CompanyReaderInterface
     public function getCompaniesByUUID(array $selectedUUID): Collection;
 
     public function getCompanyByFullName(string $fullName, ?string $uuid): ?Company;
+
     public function getCompanyByInternalCode(string $internalCode, ?string $uuid): ?Company;
 
     public function getCompanyByShortName(string $shortName, ?string $uuid): ?Company;
 
     public function getCompanyByNIP(string $nip, ?string $uuid): ?Company;
 
+    public function getCompaniesByNIP(array $selectedNIP): Collection;
+
     public function getCompanyByREGON(string $regon, ?string $uuid): ?Company;
 
     public function isCompanyExistsWithFullName(string $name, ?string $uuid = null): bool;
+
     public function isCompanyExistsWithInternalCode(string $internalCode, ?string $uuid = null): bool;
 
     public function isCompanyExistsWithNIP(string $nip, ?string $uuid = null): bool;
@@ -37,5 +41,6 @@ interface CompanyReaderInterface
     public function getDeletedCompanyByUUID(string $uuid): ?Company;
 
     public function getDeletedAddressByCompanyByUUID(string $uuid): ?Address;
+
     public function getDeletedContactsByCompanyByUUID(string $uuid): Collection;
 }

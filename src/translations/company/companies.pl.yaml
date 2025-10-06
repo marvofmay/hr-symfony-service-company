@@ -24,6 +24,7 @@ company:
     exactLength: "NIP musi mieć dokładnie 10 cyfr"
     alreadyExists: "Firma o podanym NIP już istnieje"
     required: "NIP firmy jest wymagany"
+    notExists: "Firma o podanym NIP :nip nie istnieje lub została usunięta"
   regon:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
