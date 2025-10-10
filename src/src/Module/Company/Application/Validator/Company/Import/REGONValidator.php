@@ -17,8 +17,8 @@ class REGONValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $regon = $row[ImportCompaniesFromXLSX::COLUMN_REGON] ?? null;
-        if (null === $regon) {
+        $regon = (string)$row[ImportCompaniesFromXLSX::COLUMN_REGON] ?? null;
+        if (empty($regon)) {
             return $this->messageService->get('company.regon.required', [], 'companies');
         }
 

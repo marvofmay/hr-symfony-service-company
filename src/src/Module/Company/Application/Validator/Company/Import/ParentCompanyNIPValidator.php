@@ -17,8 +17,8 @@ class ParentCompanyNIPValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $parentCompanyNIP = $row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP] ?? null;
-        if (null === $parentCompanyNIP) {
+        $parentCompanyNIP = (string)$row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP] ?? null;
+        if (empty($parentCompanyNIP)) {
             return null;
         }
 
@@ -28,10 +28,10 @@ class ParentCompanyNIPValidator implements ImportRowValidatorInterface
             return $this->messageService->get($errorMessage, [], 'validators');
         }
 
-        $companyExists = isset($additionalData['companies'][$parentCompanyNIP]);
-        if (!$companyExists) {
-            return $this->messageService->get('company.nip.notExists', [':nip' => $parentCompanyNIP], 'company');
-        }        
+        //$companyExists = isset($additionalData['companies'][$parentCompanyNIP]);
+        //if (!$companyExists) {
+        //    return $this->messageService->get('company.nip.notExists', [':nip' => $parentCompanyNIP], 'companies');
+        //}
 
         return null;
     }
