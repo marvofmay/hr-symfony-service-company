@@ -13,15 +13,14 @@ final readonly class EmployeeRestorer
     public function __construct(
         private EmployeeWriterInterface $employeeWriterRepository,
         private EmployeeReaderInterface $employeeReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function restore(DomainEventInterface $event): void
     {
         $employee = $this->employeeReaderRepository->getDeletedEmployeeByUUID($event->uuid->toString());
         $employee->setDeletedAt(null);
-        //$employee->setUpdatedAt($now);
+        // $employee->setUpdatedAt($now);
 
         $address = $this->employeeReaderRepository->getDeletedAddressByEmployeeByUUID($event->uuid->toString());
         if ($address) {

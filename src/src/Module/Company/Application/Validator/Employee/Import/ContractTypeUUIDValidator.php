@@ -12,7 +12,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.import_employee_validator')]
 class ContractTypeUUIDValidator implements ImportRowValidatorInterface
 {
-    public function __construct(private MessageService $messageService) {}
+    public function __construct(private MessageService $messageService)
+    {
+    }
 
     public function validate(array $row, array $additionalData = []): ?string
     {

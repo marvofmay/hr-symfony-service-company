@@ -19,9 +19,8 @@ class ImportContractTypesController extends AbstractController
 {
     public function __construct(
         private readonly ImportContractTypesFacade $importContractTypesFacade,
-        private readonly MessageService            $messageService,
-    )
-    {
+        private readonly MessageService $messageService,
+    ) {
     }
 
     #[Route('/api/contract_types/import', name: 'import', methods: ['POST'])]

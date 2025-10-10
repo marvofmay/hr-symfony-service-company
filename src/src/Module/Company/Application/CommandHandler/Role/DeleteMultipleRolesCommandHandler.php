@@ -13,7 +13,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'command.bus')]
 readonly class DeleteMultipleRolesCommandHandler
 {
-    public function __construct(private RoleMultipleDeleter $roleMultipleDeleter, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private RoleMultipleDeleter $roleMultipleDeleter, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -21,7 +21,7 @@ readonly class DeleteMultipleRolesCommandHandler
     {
         $this->roleMultipleDeleter->multipleDelete($command->roles);
         $this->eventDispatcher->dispatch(new RoleMultipleDeletedEvent(
-            $command->roles->map(fn($role) => $role->getUUID())->toArray()
+            $command->roles->map(fn ($role) => $role->getUUID())->toArray()
         ));
     }
 }

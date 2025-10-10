@@ -23,8 +23,8 @@ final readonly class UpdateRoleCommandHandler
         $this->roleUpdater->update($command->getRole(), $command->getName(), $command->getDescription());
 
         $this->eventDispatcher->dispatch(new RoleUpdatedEvent([
-            Role::COLUMN_UUID        => $command->getRole()->getUUID(),
-            Role::COLUMN_NAME        => $command->getName(),
+            Role::COLUMN_UUID => $command->getRole()->getUUID(),
+            Role::COLUMN_NAME => $command->getName(),
             Role::COLUMN_DESCRIPTION => $command->getDescription(),
         ]));
     }

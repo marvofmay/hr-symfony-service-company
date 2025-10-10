@@ -11,7 +11,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 final readonly class RestoreDepartmentAction
 {
     public function __construct(
-        private MessageBusInterface       $commandBus,
+        private MessageBusInterface $commandBus,
         private DepartmentReaderInterface $departmentReaderRepository,
     ) {
     }

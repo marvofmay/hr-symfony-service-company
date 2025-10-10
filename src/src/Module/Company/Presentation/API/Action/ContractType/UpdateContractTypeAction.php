@@ -14,11 +14,10 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class UpdateContractTypeAction
 {
     public function __construct(
-        private readonly MessageBusInterface         $commandBus,
+        private readonly MessageBusInterface $commandBus,
         private readonly ContractTypeReaderInterface $contractTypeReaderRepository,
-        private readonly ContractTypeValidator       $contractTypeValidator,
-    )
-    {
+        private readonly ContractTypeValidator $contractTypeValidator,
+    ) {
     }
 
     public function execute(string $uuid, UpdateDTO $updateDTO): void

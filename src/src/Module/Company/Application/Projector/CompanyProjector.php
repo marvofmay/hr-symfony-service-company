@@ -18,12 +18,11 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 final readonly class CompanyProjector
 {
     public function __construct(
-        private CompanyCreator  $companyCreator,
-        private CompanyUpdater  $companyUpdater,
-        private CompanyDeleter  $companyDeleter,
+        private CompanyCreator $companyCreator,
+        private CompanyUpdater $companyUpdater,
+        private CompanyDeleter $companyDeleter,
         private CompanyRestorer $companyRestorer,
-    )
-    {
+    ) {
     }
 
     #[AsEventListener(event: CompanyCreatedEvent::class)]

@@ -45,12 +45,12 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
 
         $industries = $qb->getQuery()->getResult();
 
-        //$foundUUIDs = array_map(fn (Industry $industry) => $industry->getUUID(), $industries);
-        //$missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
+        // $foundUUIDs = array_map(fn (Industry $industry) => $industry->getUUID(), $industries);
+        // $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
         //
-        //if ($missingUUIDs) {
+        // if ($missingUUIDs) {
         //    throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('industry.uuid.notFound', [], 'industries'), implode(', ', $missingUUIDs)));
-        //}
+        // }
 
         return new ArrayCollection($industries);
     }

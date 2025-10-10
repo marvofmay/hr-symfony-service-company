@@ -18,48 +18,46 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ImportEmployeesFromXLSX extends XLSXIterator
 {
-    public const int COLUMN_FIRST_NAME            = 0;
-    public const int COLUMN_LAST_NAME             = 1;
-    public const int COLUMN_PESEL                 = 2;
-    public const int COLUMN_EMAIL                 = 3;
-    public const int COLUMN_PHONE                 = 4;
-    public const int COLUMN_STREET                = 5;
-    public const int COLUMN_POSTCODE              = 6;
-    public const int COLUMN_CITY                  = 7;
-    public const int COLUMN_COUNTRY               = 8;
-    public const int COLUMN_EMPLOYMENT_FROM       = 9;
-    public const int COLUMN_DEPARTMENT_UUID       = 10;
-    public const int COLUMN_POSITION_UUID         = 11;
-    public const int COLUMN_CONTACT_TYPE_UUID     = 12;
-    public const int COLUMN_ROLE_UUID             = 13;
+    public const int COLUMN_FIRST_NAME = 0;
+    public const int COLUMN_LAST_NAME = 1;
+    public const int COLUMN_PESEL = 2;
+    public const int COLUMN_EMAIL = 3;
+    public const int COLUMN_PHONE = 4;
+    public const int COLUMN_STREET = 5;
+    public const int COLUMN_POSTCODE = 6;
+    public const int COLUMN_CITY = 7;
+    public const int COLUMN_COUNTRY = 8;
+    public const int COLUMN_EMPLOYMENT_FROM = 9;
+    public const int COLUMN_DEPARTMENT_UUID = 10;
+    public const int COLUMN_POSITION_UUID = 11;
+    public const int COLUMN_CONTACT_TYPE_UUID = 12;
+    public const int COLUMN_ROLE_UUID = 13;
     public const int COLUMN_PARENT_EMPLOYEE_PESEL = 14;
-    public const int COLUMN_INTERNAL_CODE         = 15;
-    public const int COLUMN_EXTERNAL_UUID         = 16;
-    public const int COLUMN_EMPLOYMENT_TO         = 17;
-    public const int COLUMN_ACTIVE                = 18;
+    public const int COLUMN_INTERNAL_CODE = 15;
+    public const int COLUMN_EXTERNAL_UUID = 16;
+    public const int COLUMN_EMPLOYMENT_TO = 17;
+    public const int COLUMN_ACTIVE = 18;
 
     public const string COLUMN_DYNAMIC_IS_EMPLOYEE_WITH_PESEL_ALREADY_EXISTS = '_is_employee_already_exists_with_pesel';
-    public const string COLUMN_DYNAMIC_AGGREGATE_UUID                        = '_aggregate_uuid';
-
+    public const string COLUMN_DYNAMIC_AGGREGATE_UUID = '_aggregate_uuid';
 
     private array $errorMessages = [];
     private array $validators;
 
     public function __construct(
-        private readonly string                         $filePath,
-        private readonly TranslatorInterface            $translator,
-        private readonly EmployeeAggregateCreator       $employeeAggregateCreator,
-        private readonly EmployeeAggregateUpdater       $employeeAggregateUpdater,
-        private readonly ImportEmployeesPreparer        $importEmployeesPreparer,
-        private readonly UpdateImportAction             $updateImportAction,
-        private readonly ImportLogMultipleCreator       $importLogMultipleCreator,
-        private readonly MessageService                 $messageService,
-        private readonly MessageBusInterface            $eventBus,
+        private readonly string $filePath,
+        private readonly TranslatorInterface $translator,
+        private readonly EmployeeAggregateCreator $employeeAggregateCreator,
+        private readonly EmployeeAggregateUpdater $employeeAggregateUpdater,
+        private readonly ImportEmployeesPreparer $importEmployeesPreparer,
+        private readonly UpdateImportAction $updateImportAction,
+        private readonly ImportLogMultipleCreator $importLogMultipleCreator,
+        private readonly MessageService $messageService,
+        private readonly MessageBusInterface $eventBus,
         private readonly ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
-        private readonly iterable                       $sharedValidators,
-        private readonly iterable                       $employeesValidators,
-    )
-    {
+        private readonly iterable $sharedValidators,
+        private readonly iterable $employeesValidators,
+    ) {
         parent::__construct($this->filePath, $this->translator);
 
         $this->validators = array_merge(
@@ -91,7 +89,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
                 ]
             );
             if (null !== $error) {
-                $this->errorMessages[] = sprintf('%s - %s',$error, $this->messageService->get('row', [':index' => $index]));
+                $this->errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
             }
         }
 
@@ -101,12 +99,12 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
     private function resolveParentUUID(array $row, array $peselMap): ?EmployeeUUID
     {
         $parentRaw = $row[self::COLUMN_PARENT_EMPLOYEE_PESEL] ?? null;
-        if ($parentRaw === null) {
+        if (null === $parentRaw) {
             return null;
         }
 
-        $parentPESEL = trim((string)$parentRaw);
-        if ($parentPESEL === '') {
+        $parentPESEL = trim((string) $parentRaw);
+        if ('' === $parentPESEL) {
             return null;
         }
 
@@ -131,7 +129,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
-                    new LogFileEvent($this->messageService->get('employee.import.error', [], 'employees') . ': ' . $error)
+                    new LogFileEvent($this->messageService->get('employee.import.error', [], 'employees').': '.$error)
                 );
             }
 
@@ -144,7 +142,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
             foreach ($preparedRows as $row) {
                 $parentUUID = $this->resolveParentUUID($row, $peselMap);
 
-                $pesel = trim((string)$row[self::COLUMN_PESEL]);
+                $pesel = trim((string) $row[self::COLUMN_PESEL]);
                 $uuid = $peselMap[$pesel];
 
                 if (!$row[ImportEmployeesFromXLSX::COLUMN_DYNAMIC_IS_EMPLOYEE_WITH_PESEL_ALREADY_EXISTS]) {

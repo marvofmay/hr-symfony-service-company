@@ -36,7 +36,7 @@ class UpdateRoleTest extends FunctionalTestBase
         $updatedRoleName = 'Updated role';
         $updatedRoleDescription = 'Updated role description';
 
-        $this->client->request('PUT', '/api/roles/' . $roleUUID, [], [], [
+        $this->client->request('PUT', '/api/roles/'.$roleUUID, [], [], [
             'CONTENT_TYPE' => 'application/json',
         ], json_encode([
             'name' => $updatedRoleName,

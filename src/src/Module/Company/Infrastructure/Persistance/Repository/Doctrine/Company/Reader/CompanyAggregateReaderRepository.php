@@ -22,12 +22,12 @@ final class CompanyAggregateReaderRepository extends ServiceEntityRepository imp
     public function getCompanyAggregateByUUID(CompanyUUID $uuid): CompanyAggregate
     {
         $events = $this->findBy([
-            'aggregateUUID'  => $uuid->toString(),
+            'aggregateUUID' => $uuid->toString(),
             'aggregateClass' => CompanyAggregate::class,
         ], ['createdAt' => 'ASC']);
 
         if (empty($events)) {
-            throw new \RuntimeException('Aggregate not found: ' . $uuid->toString());
+            throw new \RuntimeException('Aggregate not found: '.$uuid->toString());
         }
 
         $domainEvents = [];

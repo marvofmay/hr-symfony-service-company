@@ -8,5 +8,7 @@ use App\Common\Domain\Interface\DomainEventInterface;
 
 final readonly class CompanyMultipleDeletedEvent implements DomainEventInterface
 {
-    public function __construct(public array $uuids,) {}
+    public function __construct(public array $uuids)
+    {
+    }
 }

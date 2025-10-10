@@ -21,13 +21,12 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final readonly class DeleteMultipleCompaniesCommandHandler
 {
     public function __construct(
-        private EventDispatcherInterface        $eventDispatcher,
+        private EventDispatcherInterface $eventDispatcher,
         private CompanyAggregateReaderInterface $companyAggregateReaderRepository,
-        private EventStoreCreator               $eventStoreCreator,
-        private Security                        $security,
-        private SerializerInterface             $serializer,
-    )
-    {
+        private EventStoreCreator $eventStoreCreator,
+        private Security $security,
+        private SerializerInterface $serializer,
+    ) {
     }
 
     public function __invoke(DeleteMultipleCompaniesCommand $command): void

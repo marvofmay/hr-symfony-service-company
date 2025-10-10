@@ -25,7 +25,7 @@ final readonly class GetContractTypeByUUIDQueryHandler
         $transformer = new ContractTypeDataTransformer();
 
         $this->eventDispatcher->dispatch(new ContractTypeViewedEvent([
-            ContractType::COLUMN_UUID => $query->uuid
+            ContractType::COLUMN_UUID => $query->uuid,
         ]));
 
         return $transformer->transformToArray($contractType);

@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CreateRoleAccessTest extends KernelTestCase
 {
     private ValidatorInterface $validator;
-    private MessageService     $messageService;
+    private MessageService $messageService;
 
     protected function setUp(): void
     {
@@ -49,7 +49,6 @@ class CreateRoleAccessTest extends KernelTestCase
 
     public function testNotExistsAccessValidation(): void
     {
-
         $dto = new CreateAccessDTO();
         $dto->accessUUID = [
             '550e8400-e29b-41d4-a716-446655440000',

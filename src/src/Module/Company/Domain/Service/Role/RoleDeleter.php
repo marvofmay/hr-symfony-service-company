@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 
 final readonly class RoleDeleter implements RoleDeleterInterface
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository,)
+    public function __construct(private RoleWriterInterface $roleWriterRepository)
     {
     }
 

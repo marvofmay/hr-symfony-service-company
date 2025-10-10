@@ -22,12 +22,12 @@ final class DepartmentAggregateReaderRepository extends ServiceEntityRepository 
     public function getDepartmentAggregateByUUID(DepartmentUUID $uuid): DepartmentAggregate
     {
         $events = $this->findBy([
-            'aggregateUUID'  => $uuid->toString(),
+            'aggregateUUID' => $uuid->toString(),
             'aggregateClass' => DepartmentAggregate::class,
         ], ['createdAt' => 'ASC']);
 
         if (empty($events)) {
-            throw new \RuntimeException('Aggregate not found: ' . $uuid->toString());
+            throw new \RuntimeException('Aggregate not found: '.$uuid->toString());
         }
 
         $domainEvents = [];

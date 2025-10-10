@@ -65,7 +65,7 @@ class CreateDTO
         }
     }
 
-    #[MinMaxLength(min: 10, max:10, message: [
+    #[MinMaxLength(min: 10, max: 10, message: [
         'tooShort' => 'company.nip.minimumLength',
         'tooLong' => 'company.nip.maximumLength',
         'exactMessage' => 'company.nip.exactLength',
@@ -148,5 +148,4 @@ class CreateDTO
             return $this->address;
         }
     }
-
 }

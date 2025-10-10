@@ -36,8 +36,7 @@ final readonly class UpdateEmployeeCommandHandler
         private SerializerInterface $serializer,
         private EventDispatcherInterface $eventDispatcher,
         private EmployeeAggregateReaderInterface $employeeAggregateReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function __invoke(UpdateEmployeeCommand $command): void

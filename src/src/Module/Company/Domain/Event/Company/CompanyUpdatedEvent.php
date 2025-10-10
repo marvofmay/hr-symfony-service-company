@@ -33,5 +33,6 @@ final readonly class CompanyUpdatedEvent implements DomainEventInterface
         public ?CompanyUUID $parentCompanyUUID = null,
         public ?Emails $emails = null,
         public ?Websites $websites = null,
-    ) {}
+    ) {
+    }
 }

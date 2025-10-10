@@ -30,5 +30,4 @@ class CreateDTO implements DTOInterface
             return $this->description;
         }
     }
-
 }

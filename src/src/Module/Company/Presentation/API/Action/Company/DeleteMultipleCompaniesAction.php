@@ -16,8 +16,7 @@ readonly class DeleteMultipleCompaniesAction
         private MessageBusInterface $commandBus,
         private CompanyReaderInterface $companyReaderRepository,
         private CompanyValidator $companyValidator,
-    )
-    {
+    ) {
     }
 
     public function execute(DeleteMultipleDTO $deleteMultipleDTO): void

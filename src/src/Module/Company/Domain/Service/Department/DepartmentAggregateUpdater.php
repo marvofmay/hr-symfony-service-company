@@ -32,7 +32,7 @@ final class DepartmentAggregateUpdater extends AggregateAbstract
                 $row[ImportDepartmentsFromXLSX::COLUMN_CITY],
                 $row[ImportDepartmentsFromXLSX::COLUMN_COUNTRY]
             ),
-            (bool)$row[ImportDepartmentsFromXLSX::COLUMN_ACTIVE],
+            (bool) $row[ImportDepartmentsFromXLSX::COLUMN_ACTIVE],
             $row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_DESCRIPTION],
             $row[ImportDepartmentsFromXLSX::COLUMN_PHONE] ? Phones::fromArray([$row[ImportDepartmentsFromXLSX::COLUMN_PHONE]]) : null,
             $row[ImportDepartmentsFromXLSX::COLUMN_EMAIL] ? Emails::fromArray([$row[ImportDepartmentsFromXLSX::COLUMN_EMAIL]]) : null,

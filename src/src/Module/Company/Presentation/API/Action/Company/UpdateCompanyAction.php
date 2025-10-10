@@ -18,8 +18,7 @@ final readonly class UpdateCompanyAction
         private CompanyReaderInterface $companyReaderRepository,
         private CompanyValidator $companyValidator,
         private IndustryValidator $industryValidator,
-    )
-    {
+    ) {
     }
 
     public function execute(string $uuid, UpdateDTO $updateDTO): void

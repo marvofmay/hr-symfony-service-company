@@ -18,14 +18,13 @@ final readonly class DepartmentCreator
     protected ArrayCollection $contacts;
 
     public function __construct(
-        protected DepartmentFactory       $departmentFactory,
-        private AddressFactory            $addressFactory,
-        private ContactFactory            $contactFactory,
-        private CompanyReaderInterface    $companyReaderRepository,
+        protected DepartmentFactory $departmentFactory,
+        private AddressFactory $addressFactory,
+        private ContactFactory $contactFactory,
+        private CompanyReaderInterface $companyReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
         private DepartmentWriterInterface $departmentWriterRepository,
-    )
-    {
+    ) {
         $this->contacts = new ArrayCollection();
     }
 

@@ -7,8 +7,8 @@ namespace App\Module\Company\Domain\DTO\Employee;
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
-use Symfony\Component\Validator\Constraints as Assert;
 use App\Module\Company\Structure\Validator\Constraints\Employee\EmploymentDateRange;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[EmploymentDateRange(message: [
     'text' => 'employee.employmentTo.mustBeAfterEmploymentFrom',
@@ -183,5 +183,4 @@ class CreateDTO
             return $this->address;
         }
     }
-
 }

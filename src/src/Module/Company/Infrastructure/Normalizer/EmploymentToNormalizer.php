@@ -23,7 +23,7 @@ class EmploymentToNormalizer implements NormalizerInterface, DenormalizerInterfa
 
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === EmploymentTo::class;
+        return EmploymentTo::class === $type;
     }
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): EmploymentTo

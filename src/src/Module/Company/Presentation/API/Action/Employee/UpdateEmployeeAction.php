@@ -18,14 +18,13 @@ final readonly class UpdateEmployeeAction
 {
     public function __construct(
         private MessageBusInterface $commandBus,
-        private EmployeeReaderInterface $employeeReaderRepository, 
+        private EmployeeReaderInterface $employeeReaderRepository,
         private DepartmentValidator $departmentValidator,
         private EmployeeValidator $employeeValidator,
         private PositionValidator $positionValidator,
         private ContractTypeValidator $contractTypeValidator,
         private RoleValidator $roleValidator,
-    )
-    {
+    ) {
     }
 
     public function execute(string $uuid, UpdateDTO $updateDTO): void

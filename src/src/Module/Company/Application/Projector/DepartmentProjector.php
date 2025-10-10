@@ -18,12 +18,11 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 final readonly class DepartmentProjector
 {
     public function __construct(
-        private DepartmentCreator  $departmentCreator,
-        private DepartmentUpdater  $departmentUpdater,
-        private DepartmentDeleter  $departmentDeleter,
+        private DepartmentCreator $departmentCreator,
+        private DepartmentUpdater $departmentUpdater,
+        private DepartmentDeleter $departmentDeleter,
         private DepartmentRestorer $departmentRestorer,
-    )
-    {
+    ) {
     }
 
     #[AsEventListener(event: DepartmentCreatedEvent::class)]

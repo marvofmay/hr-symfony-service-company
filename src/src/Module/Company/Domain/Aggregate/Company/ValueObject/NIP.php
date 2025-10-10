@@ -13,7 +13,7 @@ final readonly class NIP
     {
         $error = NIPValidator::validate($value);
 
-        if ($error !== null) {
+        if (null !== $error) {
             throw new \Exception($error, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }

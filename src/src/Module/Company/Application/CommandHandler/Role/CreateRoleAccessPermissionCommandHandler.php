@@ -13,7 +13,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'command.bus')]
 readonly class CreateRoleAccessPermissionCommandHandler
 {
-    public function __construct(private RoleAccessPermissionCreator $roleAccessPermissionCreator, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private RoleAccessPermissionCreator $roleAccessPermissionCreator, private EventDispatcherInterface $eventDispatcher)
     {
     }
 

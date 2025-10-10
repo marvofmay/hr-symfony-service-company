@@ -22,8 +22,7 @@ final readonly class DeleteCompanyCommandHandler
         private EventStoreCreator $eventStoreCreator,
         private Security $security,
         private SerializerInterface $serializer,
-    )
-    {
+    ) {
     }
 
     public function __invoke(DeleteCompanyCommand $command): void

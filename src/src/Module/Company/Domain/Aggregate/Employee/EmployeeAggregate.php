@@ -26,46 +26,45 @@ use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
 
 class EmployeeAggregate extends AggregateRootAbstract
 {
-    private EmployeeUUID   $uuid;
-    private ?EmployeeUUID  $parentEmployeeUUID = null;
-    private FirstName      $firstName;
-    private LastName       $lastName;
-    private PESEL          $pesel;
+    private EmployeeUUID $uuid;
+    private ?EmployeeUUID $parentEmployeeUUID = null;
+    private FirstName $firstName;
+    private LastName $lastName;
+    private PESEL $pesel;
     private EmploymentFrom $employmentFrom;
 
-    private DepartmentUUID   $departmentUUID;
-    private PositionUUID     $positionUUID;
+    private DepartmentUUID $departmentUUID;
+    private PositionUUID $positionUUID;
     private ContractTypeUUID $contractTypeUUID;
-    private RoleUUID         $roleUUID;
-    private Emails           $emails;
-    private Address          $address;
-    private ?string          $externalUUID = null;
-    private ?string          $internalCode = null;
-    private ?EmploymentTo    $employmentTo = null;
-    private bool             $active       = true;
-    private ?Phones          $phones       = null;
-    private bool             $deleted      = false;
+    private RoleUUID $roleUUID;
+    private Emails $emails;
+    private Address $address;
+    private ?string $externalUUID = null;
+    private ?string $internalCode = null;
+    private ?EmploymentTo $employmentTo = null;
+    private bool $active = true;
+    private ?Phones $phones = null;
+    private bool $deleted = false;
 
     public static function create(
-        FirstName        $firstName,
-        LastName         $lastName,
-        PESEL            $pesel,
-        EmploymentFrom   $employmentFrom,
-        DepartmentUUID   $departmentUUID,
-        PositionUUID     $positionUUID,
+        FirstName $firstName,
+        LastName $lastName,
+        PESEL $pesel,
+        EmploymentFrom $employmentFrom,
+        DepartmentUUID $departmentUUID,
+        PositionUUID $positionUUID,
         ContractTypeUUID $contractTypeUUID,
-        RoleUUID         $roleUUID,
-        Emails           $emails,
-        Address          $address,
-        ?string          $externalUUID = null,
-        ?string          $internalCode = null,
-        ?bool            $active = true,
-        ?Phones          $phones = null,
-        ?EmployeeUUID    $parentEmployeeUUID = null,
-        ?EmploymentTo    $employmentTo = null,
-        ?EmployeeUUID    $uuid = null
-    ): self
-    {
+        RoleUUID $roleUUID,
+        Emails $emails,
+        Address $address,
+        ?string $externalUUID = null,
+        ?string $internalCode = null,
+        ?bool $active = true,
+        ?Phones $phones = null,
+        ?EmployeeUUID $parentEmployeeUUID = null,
+        ?EmploymentTo $employmentTo = null,
+        ?EmployeeUUID $uuid = null,
+    ): self {
         $aggregate = new self();
 
         $aggregate->record(new EmployeeCreatedEvent(
@@ -92,24 +91,23 @@ class EmployeeAggregate extends AggregateRootAbstract
     }
 
     public function update(
-        FirstName        $firstName,
-        LastName         $lastName,
-        PESEL            $pesel,
-        EmploymentFrom   $employmentFrom,
-        DepartmentUUID   $departmentUUID,
-        PositionUUID     $positionUUID,
+        FirstName $firstName,
+        LastName $lastName,
+        PESEL $pesel,
+        EmploymentFrom $employmentFrom,
+        DepartmentUUID $departmentUUID,
+        PositionUUID $positionUUID,
         ContractTypeUUID $contractTypeUUID,
-        RoleUUID         $roleUUID,
-        Emails           $emails,
-        Address          $address,
-        ?string          $externalUUID = null,
-        ?string          $internalCode = null,
-        ?bool            $active = true,
-        ?Phones          $phones = null,
-        ?EmployeeUUID    $parentEmployeeUUID = null,
-        ?EmploymentTo    $employmentTo = null,
-    ): self
-    {
+        RoleUUID $roleUUID,
+        Emails $emails,
+        Address $address,
+        ?string $externalUUID = null,
+        ?string $internalCode = null,
+        ?bool $active = true,
+        ?Phones $phones = null,
+        ?EmployeeUUID $parentEmployeeUUID = null,
+        ?EmploymentTo $employmentTo = null,
+    ): self {
         if ($this->deleted) {
             throw new \DomainException('Cannot update a deleted employee.');
         }

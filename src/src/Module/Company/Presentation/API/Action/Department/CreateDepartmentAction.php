@@ -16,8 +16,7 @@ final readonly class CreateDepartmentAction
         private MessageBusInterface $commandBus,
         private CompanyValidator $companyValidator,
         private DepartmentValidator $departmentValidator,
-    )
-    {
+    ) {
     }
 
     public function execute(CreateDTO $createDTO): void

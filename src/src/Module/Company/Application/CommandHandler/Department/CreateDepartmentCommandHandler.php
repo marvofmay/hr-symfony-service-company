@@ -28,8 +28,7 @@ final readonly class CreateDepartmentCommandHandler
         private Security $security,
         private SerializerInterface $serializer,
         private EventDispatcherInterface $eventDispatcher,
-    )
-    {
+    ) {
     }
 
     public function __invoke(CreateDepartmentCommand $command): void

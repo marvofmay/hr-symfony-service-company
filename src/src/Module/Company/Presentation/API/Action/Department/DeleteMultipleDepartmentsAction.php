@@ -16,8 +16,7 @@ readonly class DeleteMultipleDepartmentsAction
         private MessageBusInterface $commandBus,
         private DepartmentReaderInterface $departmentReaderRepository,
         private DepartmentValidator $departmentValidator,
-    )
-    {
+    ) {
     }
 
     public function execute(DeleteMultipleDTO $deleteMultipleDTO): void

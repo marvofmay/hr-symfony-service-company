@@ -14,6 +14,8 @@ interface RoleReaderInterface
     public function getRoleByName(string $name, ?string $uuid): ?Role;
 
     public function getRolesByUUID(array $selectedUUID): Collection;
+
     public function isRoleExists(string $name, ?string $uuid = null): bool;
+
     public function isRoleWithUUIDExists(string $uuid): bool;
 }

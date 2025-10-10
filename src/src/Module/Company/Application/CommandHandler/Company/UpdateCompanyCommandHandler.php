@@ -33,8 +33,7 @@ final readonly class UpdateCompanyCommandHandler
         private SerializerInterface $serializer,
         private EventDispatcherInterface $eventDispatcher,
         private CompanyAggregateReaderInterface $companyAggregateReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function __invoke(UpdateCompanyCommand $command): void

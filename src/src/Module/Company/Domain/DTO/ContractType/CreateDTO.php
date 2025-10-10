@@ -39,5 +39,4 @@ class CreateDTO
             return $this->active;
         }
     }
-
 }

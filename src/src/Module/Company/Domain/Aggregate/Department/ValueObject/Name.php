@@ -12,7 +12,7 @@ final class Name
     {
         $trimmed = trim($value);
 
-        if ($trimmed === '') {
+        if ('' === $trimmed) {
             throw new \InvalidArgumentException('Name is required.');
         }
 

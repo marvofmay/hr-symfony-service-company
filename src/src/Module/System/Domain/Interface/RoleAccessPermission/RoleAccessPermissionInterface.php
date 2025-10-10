@@ -12,5 +12,6 @@ use Doctrine\Common\Collections\Collection;
 interface RoleAccessPermissionInterface
 {
     public function isRoleHasAccessAndPermission(Permission $permission, Access $access, Role $role): bool;
+
     public function getRoleAccessAndPermission(Role $role): Collection;
 }

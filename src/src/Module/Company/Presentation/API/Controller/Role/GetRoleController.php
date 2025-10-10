@@ -18,7 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 final class GetRoleController extends AbstractController
 {
     public function __construct(private readonly MessageBusInterface $eventBus, private readonly MessageService $messageService)
-    {}
+    {
+    }
 
     #[Route('/api/roles/{uuid}', name: 'api.roles.get', methods: ['GET'])]
     public function get(string $uuid, AskRoleAction $askRoleAction): JsonResponse

@@ -77,6 +77,7 @@ final readonly class ImportContractTypesFacade
 
             if (ImportStatusEnum::DONE === $import->getStatus()) {
                 $message = $this->messageService->get('contractType.import.success', [], 'contract_types');
+
                 return [
                     'success' => true,
                     'message' => $message,

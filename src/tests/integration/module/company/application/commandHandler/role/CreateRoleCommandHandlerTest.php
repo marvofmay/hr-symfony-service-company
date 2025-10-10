@@ -21,7 +21,7 @@ class CreateRoleCommandHandlerTest extends FunctionalTestBase
         $repo = $container->get(RoleReaderInterface::class);
 
         $roleName = 'Moderator';
-        $roleDescription = $roleName . ' ...';
+        $roleDescription = $roleName.' ...';
 
         $command = new CreateRoleCommand($roleName, $roleDescription);
         $handler($command);

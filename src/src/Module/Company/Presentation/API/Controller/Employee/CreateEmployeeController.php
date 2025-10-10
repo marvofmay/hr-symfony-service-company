@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class CreateEmployeeController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly MessageService $messageService,)
+    public function __construct(private readonly LoggerInterface $logger, private readonly MessageService $messageService)
     {
     }
 

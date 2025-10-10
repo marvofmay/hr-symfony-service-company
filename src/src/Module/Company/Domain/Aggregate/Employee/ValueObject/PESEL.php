@@ -14,7 +14,7 @@ final readonly class PESEL
     {
         $error = PESELValidator::validate($pesel);
 
-        if ($error !== null) {
+        if (null !== $error) {
             throw new \InvalidArgumentException(sprintf('Invalid PESEL: %s', $error));
         }
 

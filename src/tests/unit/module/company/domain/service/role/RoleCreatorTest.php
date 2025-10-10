@@ -14,7 +14,7 @@ class RoleCreatorTest extends TestCase
     public function testItCreatesAndSavesRole(): void
     {
         $name = 'User';
-        $description = $name . ' ...';
+        $description = $name.' ...';
 
         $writer = $this->createMock(RoleWriterInterface::class);
 

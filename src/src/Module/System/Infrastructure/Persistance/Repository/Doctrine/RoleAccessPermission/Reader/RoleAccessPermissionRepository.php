@@ -32,6 +32,6 @@ class RoleAccessPermissionRepository extends ServiceEntityRepository implements 
 
     public function getRoleAccessAndPermission(Role $role): Collection
     {
-        return new ArrayCollection($this->findBy([RoleAccessPermission::RELATION_ROLE => $role,]));
+        return new ArrayCollection($this->findBy([RoleAccessPermission::RELATION_ROLE => $role]));
     }
 }

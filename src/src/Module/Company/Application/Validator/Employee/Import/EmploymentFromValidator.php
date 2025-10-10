@@ -14,7 +14,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.import_employee_validator')]
 class EmploymentFromValidator implements ImportRowValidatorInterface
 {
-    public function __construct(private MessageService $messageService) {}
+    public function __construct(private MessageService $messageService)
+    {
+    }
 
     public function validate(array $row, array $additionalData = []): ?string
     {
@@ -26,7 +28,7 @@ class EmploymentFromValidator implements ImportRowValidatorInterface
 
         $errorMessage = DateFormatValidator::validate($employmentFrom, DateFormatEnum::YYYY_MM_DD->value);
         if (null !== $errorMessage) {
-            return $this->messageService->get('employee.employmentFrom.' . $errorMessage, [':dateFormat' => DateFormatEnum::YYYY_MM_DD->value], 'employees');
+            return $this->messageService->get('employee.employmentFrom.'.$errorMessage, [':dateFormat' => DateFormatEnum::YYYY_MM_DD->value], 'employees');
         }
 
         return null;

@@ -13,11 +13,13 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.import_company_validator')]
 class ParentCompanyNIPValidator implements ImportRowValidatorInterface
 {
-    public function __construct(private MessageService $messageService) {}
+    public function __construct(private MessageService $messageService)
+    {
+    }
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $parentCompanyNIP = (string)$row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP] ?? null;
+        $parentCompanyNIP = (string) $row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP] ?? null;
         if (empty($parentCompanyNIP)) {
             return null;
         }
@@ -28,10 +30,10 @@ class ParentCompanyNIPValidator implements ImportRowValidatorInterface
             return $this->messageService->get($errorMessage, [], 'validators');
         }
 
-        //$companyExists = isset($additionalData['companies'][$parentCompanyNIP]);
-        //if (!$companyExists) {
+        // $companyExists = isset($additionalData['companies'][$parentCompanyNIP]);
+        // if (!$companyExists) {
         //    return $this->messageService->get('company.nip.notExists', [':nip' => $parentCompanyNIP], 'companies');
-        //}
+        // }
 
         return null;
     }

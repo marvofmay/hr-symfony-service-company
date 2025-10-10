@@ -8,5 +8,7 @@ use Psr\Log\LogLevel;
 
 final readonly class LogFileEvent
 {
-    public function __construct(public string $message, public string $level = LogLevel::ALERT, public string $channel = 'main') {}
+    public function __construct(public string $message, public string $level = LogLevel::ALERT, public string $channel = 'main')
+    {
+    }
 }

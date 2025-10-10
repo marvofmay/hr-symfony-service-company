@@ -13,8 +13,7 @@ final readonly class CompanyDeleter
     public function __construct(
         private CompanyWriterInterface $companyWriterRepository,
         private CompanyReaderInterface $companyReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function delete(DomainEventInterface $event): void

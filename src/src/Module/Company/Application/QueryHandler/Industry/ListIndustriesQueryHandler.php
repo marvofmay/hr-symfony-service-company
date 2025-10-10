@@ -15,7 +15,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct($entityManager);
     }

@@ -20,7 +20,8 @@ use Symfony\Component\Routing\Annotation\Route;
 final class CreateIndustryController extends AbstractController
 {
     public function __construct(private readonly MessageBusInterface $eventBus, private readonly MessageService $messageService)
-    {}
+    {
+    }
 
     #[Route('/api/industries', name: 'api.industries.create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO, CreateIndustryAction $createIndustryAction): JsonResponse

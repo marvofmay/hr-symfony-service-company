@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
 
 readonly class IndustryCreator
 {
-    public function __construct(private IndustryWriterInterface $industryWriterRepository,)
+    public function __construct(private IndustryWriterInterface $industryWriterRepository)
     {
     }
 

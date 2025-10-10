@@ -59,6 +59,7 @@ class RoleAccessPermissionCreatorTest extends TestCase
                 return $access === $accessObj1;
             }), $this->callback(function ($permission) use (&$calls, $permissionObj1, $permissionObj2) {
                 $calls[] = $permission;
+
                 return $permission === $permissionObj1 || $permission === $permissionObj2;
             }));
 

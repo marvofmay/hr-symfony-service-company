@@ -38,7 +38,6 @@ class Address
 
     public const ALIAS = 'address';
 
-
     public const RELATION_COMPANY = 'company';
     public const RELATION_DEPARTMENT = 'department';
     public const RELATION_EMPLOYEE = 'employee';

@@ -20,9 +20,9 @@ readonly class CreatePositionCommandHandler
     {
         $this->positionCreator->create($command);
         $this->eventDispatcher->dispatch(new PositionCreatedEvent([
-            Position::COLUMN_NAME        => $command->name,
+            Position::COLUMN_NAME => $command->name,
             Position::COLUMN_DESCRIPTION => $command->description,
-            Position::COLUMN_ACTIVE      => $command->active,
+            Position::COLUMN_ACTIVE => $command->active,
         ]));
     }
 }

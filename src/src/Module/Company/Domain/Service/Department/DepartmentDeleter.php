@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Interface\Department\DepartmentWriterInterface;
 
 final readonly class DepartmentDeleter
 {
-    public function __construct(private DepartmentWriterInterface $departmentWriterRepository, private DepartmentReaderInterface $departmentReaderRepository,)
+    public function __construct(private DepartmentWriterInterface $departmentWriterRepository, private DepartmentReaderInterface $departmentReaderRepository)
     {
     }
 

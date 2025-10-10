@@ -15,12 +15,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:add-record-to-user-table')]
 class AddRecordToUserTableCommand extends Command
 {
-    private const string DESCRIPTION      = 'Fills the User table with default data';
-    private const string HELP             = 'This command allows you to populate the User table with default data.';
-    private const string SUCCESS_MESSAGE  = 'User table has been filled with data successfully!';
-    private const string INFO_EXISTS      = 'Default user already exists. No changes made.';
-    private const string CHECKING_INFO    = 'Checking if default user exists...';
-    private const string DEFAULT_EMAIL    = 'admin.hrapp@gmail.com';
+    private const string DESCRIPTION = 'Fills the User table with default data';
+    private const string HELP = 'This command allows you to populate the User table with default data.';
+    private const string SUCCESS_MESSAGE = 'User table has been filled with data successfully!';
+    private const string INFO_EXISTS = 'Default user already exists. No changes made.';
+    private const string CHECKING_INFO = 'Checking if default user exists...';
+    private const string DEFAULT_EMAIL = 'admin.hrapp@gmail.com';
     private const string DEFAULT_PASSWORD = 'Admin123!';
 
     public function __construct(private readonly EntityManagerInterface $entityManager, private readonly UserFactory $userFactory)

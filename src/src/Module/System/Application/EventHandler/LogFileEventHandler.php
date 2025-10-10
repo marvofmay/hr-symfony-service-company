@@ -10,7 +10,7 @@ use Symfony\Contracts\Service\ServiceProviderInterface;
 #[AsMessageHandler(bus: 'event.bus')]
 final readonly class LogFileEventHandler
 {
-    public function __construct(private ServiceProviderInterface $loggers,)
+    public function __construct(private ServiceProviderInterface $loggers)
     {
     }
 

@@ -17,7 +17,7 @@ class UpdateRoleCommandHandlerTest extends TestCase
     {
         $name = 'Użytkownik';
         $description = 'Użytkownik ...';
-        $uuid =  Uuid::fromString('123e4567-e89b-12d3-a456-426614174000');
+        $uuid = Uuid::fromString('123e4567-e89b-12d3-a456-426614174000');
 
         $role = $this->createMock(Role::class);
         $role->method('getUUID')->willReturn($uuid);
@@ -35,10 +35,9 @@ class UpdateRoleCommandHandlerTest extends TestCase
             ->expects($this->once())
             ->method('dispatch')
             ->with($this->callback(
-                fn(RoleUpdatedEvent $event) =>
-                    $event->getData()[Role::COLUMN_UUID] === $uuid &&
-                    $event->getData()[Role::COLUMN_NAME] === $name &&
-                    $event->getData()[Role::COLUMN_DESCRIPTION] === $description
+                fn (RoleUpdatedEvent $event) => $event->getData()[Role::COLUMN_UUID] === $uuid
+                    && $event->getData()[Role::COLUMN_NAME] === $name
+                    && $event->getData()[Role::COLUMN_DESCRIPTION] === $description
             ));
 
         $handler = new UpdateRoleCommandHandler($roleUpdater, $eventDispatcher);

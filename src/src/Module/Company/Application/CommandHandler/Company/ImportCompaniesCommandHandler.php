@@ -22,12 +22,11 @@ final readonly class ImportCompaniesCommandHandler
 {
     public function __construct(
         private ImportReaderInterface $importReaderRepository,
-        private EventStoreCreator     $eventStoreCreator,
-        private Security              $security,
-        private SerializerInterface   $serializer,
-        private ImporterFactory       $importerFactory,
-    )
-    {
+        private EventStoreCreator $eventStoreCreator,
+        private Security $security,
+        private SerializerInterface $serializer,
+        private ImporterFactory $importerFactory,
+    ) {
     }
 
     public function __invoke(ImportCompaniesCommand $command): void

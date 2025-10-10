@@ -14,7 +14,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'command.bus')]
 final readonly class UpdateContractTypeCommandHandler
 {
-    public function __construct(private ContractTypeUpdater $contractTypeUpdater, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private ContractTypeUpdater $contractTypeUpdater, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -22,10 +22,10 @@ final readonly class UpdateContractTypeCommandHandler
     {
         $this->contractTypeUpdater->update($command->getContractType(), $command->getName(), $command->getDescription(), $command->getActive());
         $this->eventDispatcher->dispatch(new ContractTypeUpdatedEvent([
-            ContractType::COLUMN_UUID        => $command->getContractType()->getUUID(),
-            ContractType::COLUMN_NAME        => $command->getName(),
+            ContractType::COLUMN_UUID => $command->getContractType()->getUUID(),
+            ContractType::COLUMN_NAME => $command->getName(),
             ContractType::COLUMN_DESCRIPTION => $command->getDescription(),
-            ContractType::COLUMN_ACTIVE      => $command->getActive(),
+            ContractType::COLUMN_ACTIVE => $command->getActive(),
         ]));
     }
 }

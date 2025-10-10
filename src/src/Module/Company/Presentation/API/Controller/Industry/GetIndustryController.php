@@ -18,7 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class GetIndustryController extends AbstractController
 {
     public function __construct(private readonly MessageBusInterface $eventBus, private readonly MessageService $messageService)
-    {}
+    {
+    }
 
     #[Route('/api/industries/{uuid}', name: 'api.industries.get', methods: ['GET'])]
     public function get(string $uuid, AskIndustryAction $askIndustryAction): JsonResponse

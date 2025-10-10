@@ -6,26 +6,25 @@ namespace App\Module\Company\Domain\Service\Employee;
 
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
+use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
-use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 
 final class ImportEmployeesReferenceLoader
 {
-    private array $departments   = [];
-    private array $positions     = [];
-    private array $roles         = [];
-    private array $employees     = [];
+    private array $departments = [];
+    private array $positions = [];
+    private array $roles = [];
+    private array $employees = [];
     private array $contractTypes = [];
 
     public function __construct(
-        private readonly DepartmentReaderInterface   $departmentReaderRepository,
-        private readonly PositionReaderInterface     $positionReaderRepository,
-        private readonly RoleReaderInterface         $roleReaderRepository,
-        private readonly EmployeeReaderInterface     $employeeReaderRepository,
+        private readonly DepartmentReaderInterface $departmentReaderRepository,
+        private readonly PositionReaderInterface $positionReaderRepository,
+        private readonly RoleReaderInterface $roleReaderRepository,
+        private readonly EmployeeReaderInterface $employeeReaderRepository,
         private readonly ContractTypeReaderInterface $contractTypeReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function preload(array $rows): void
@@ -38,19 +37,19 @@ final class ImportEmployeesReferenceLoader
 
         foreach ($rows as $row) {
             if (!empty($row[ImportEmployeesFromXLSX::COLUMN_DEPARTMENT_UUID])) {
-                $departmentUUIDs[] = (string)$row[ImportEmployeesFromXLSX::COLUMN_DEPARTMENT_UUID];
+                $departmentUUIDs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_DEPARTMENT_UUID];
             }
             if (!empty($row[ImportEmployeesFromXLSX::COLUMN_POSITION_UUID])) {
-                $positionUUIDs[] = (string)$row[ImportEmployeesFromXLSX::COLUMN_POSITION_UUID];
+                $positionUUIDs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_POSITION_UUID];
             }
             if (!empty($row[ImportEmployeesFromXLSX::COLUMN_ROLE_UUID])) {
-                $roleUUIDs[] = (string)$row[ImportEmployeesFromXLSX::COLUMN_ROLE_UUID];
+                $roleUUIDs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_ROLE_UUID];
             }
             if (!empty($row[ImportEmployeesFromXLSX::COLUMN_CONTACT_TYPE_UUID])) {
-                $contractTypeUUIDs[] = (string)$row[ImportEmployeesFromXLSX::COLUMN_CONTACT_TYPE_UUID];
+                $contractTypeUUIDs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_CONTACT_TYPE_UUID];
             }
             if (!empty($row[ImportEmployeesFromXLSX::COLUMN_PARENT_EMPLOYEE_PESEL])) {
-                $employeePESELs[] = (string)$row[ImportEmployeesFromXLSX::COLUMN_PARENT_EMPLOYEE_PESEL];
+                $employeePESELs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_PARENT_EMPLOYEE_PESEL];
             }
         }
 

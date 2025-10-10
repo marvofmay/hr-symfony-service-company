@@ -8,8 +8,8 @@ final class ShortName extends CompanyNameAbstract
 {
     public function __construct(?string $value)
     {
-        $trimmed = $value !== null ? trim($value) : null;
-        parent::__construct($trimmed === '' ? null : $trimmed);
+        $trimmed = null !== $value ? trim($value) : null;
+        parent::__construct('' === $trimmed ? null : $trimmed);
     }
 
     public static function fromString(string $value): static

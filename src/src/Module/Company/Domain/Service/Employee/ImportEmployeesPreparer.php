@@ -11,7 +11,8 @@ final readonly class ImportEmployeesPreparer
 {
     public function __construct(
         private EmployeeReaderInterface $employeeReaderRepository,
-    ) {}
+    ) {
+    }
 
     public function prepare(iterable $rows): array
     {

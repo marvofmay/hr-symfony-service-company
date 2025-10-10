@@ -17,13 +17,13 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportCompaniesController extends AbstractController
 {
-    public function __construct(private readonly ImportCompaniesFacade $importCompaniesFacade, private readonly MessageService $messageService,)
+    public function __construct(private readonly ImportCompaniesFacade $importCompaniesFacade, private readonly MessageService $messageService)
     {
     }
 
     #[Route('/api/companies/import', name: 'import', methods: ['POST'])]
-    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse {
-
+    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
+    {
         if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::COMPANY)) {
             return new JsonResponse(['message' => $this->messageService->get('accessDenied')], Response::HTTP_FORBIDDEN);
         }

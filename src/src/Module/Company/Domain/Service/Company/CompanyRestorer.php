@@ -13,8 +13,7 @@ final readonly class CompanyRestorer
     public function __construct(
         private CompanyWriterInterface $companyWriterRepository,
         private CompanyReaderInterface $companyReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function restore(DomainEventInterface $event): void

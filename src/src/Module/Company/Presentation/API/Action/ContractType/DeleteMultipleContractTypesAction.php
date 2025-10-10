@@ -19,11 +19,11 @@ readonly class DeleteMultipleContractTypesAction
     public function execute(DeleteMultipleDTO $deleteMultipleDTO): void
     {
         try {
-        $this->commandBus->dispatch(
-            new DeleteMultipleContractTypesCommand(
-                $this->contractTypeReaderRepository->getContractTypesByUUID($deleteMultipleDTO->getSelectedUUID())
-            )
-        );
+            $this->commandBus->dispatch(
+                new DeleteMultipleContractTypesCommand(
+                    $this->contractTypeReaderRepository->getContractTypesByUUID($deleteMultipleDTO->getSelectedUUID())
+                )
+            );
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }

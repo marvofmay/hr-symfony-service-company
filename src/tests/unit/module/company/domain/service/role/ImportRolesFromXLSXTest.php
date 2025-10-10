@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ImportRolesFromXLSXTest extends  TestCase
+class ImportRolesFromXLSXTest extends TestCase
 {
     private TranslatorInterface $translator;
     private RoleReaderInterface $reader;

@@ -17,8 +17,8 @@ use App\Module\Company\Domain\Service\Factory\AddressFactory;
 use App\Module\Company\Domain\Service\Factory\ContactFactory;
 use Doctrine\Common\Collections\Collection;
 
-final readonly class DepartmentUpdater {
-
+final readonly class DepartmentUpdater
+{
     public function __construct(
         private DepartmentFactory $departmentFactory,
         private AddressFactory $addressFactory,
@@ -28,7 +28,8 @@ final readonly class DepartmentUpdater {
         private DepartmentWriterInterface $departmentWriterRepository,
         private ContactWriterInterface $contactWriterRepository,
         private AddressWriterInterface $addressWriterRepository,
-    ) {}
+    ) {
+    }
 
     public function update(DomainEventInterface $event): void
     {
@@ -59,7 +60,7 @@ final readonly class DepartmentUpdater {
 
     private function deleteAddress(?Address $address): void
     {
-        if ($address !== null) {
+        if (null !== $address) {
             $this->addressWriterRepository->deleteAddressInDB($address, Address::HARD_DELETED_AT);
         }
     }

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace App\tests\functional;
 
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\SchemaTool;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\SchemaTool;
 
 abstract class FunctionalTestBase extends WebTestCase
 {
@@ -66,7 +66,7 @@ abstract class FunctionalTestBase extends WebTestCase
             throw new \RuntimeException('Nie udało się zalogować użytkownika testowego.');
         }
 
-        $this->client->setServerParameter('HTTP_Authorization', 'Bearer ' . $token);
+        $this->client->setServerParameter('HTTP_Authorization', 'Bearer '.$token);
 
         return $this->client;
     }

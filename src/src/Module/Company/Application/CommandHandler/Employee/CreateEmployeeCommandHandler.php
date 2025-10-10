@@ -30,12 +30,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final readonly class CreateEmployeeCommandHandler
 {
     public function __construct(
-        private EventStoreCreator        $eventStoreCreator,
-        private Security                 $security,
-        private SerializerInterface      $serializer,
+        private EventStoreCreator $eventStoreCreator,
+        private Security $security,
+        private SerializerInterface $serializer,
         private EventDispatcherInterface $eventDispatcher,
-    )
-    {
+    ) {
     }
 
     public function __invoke(CreateEmployeeCommand $command): void

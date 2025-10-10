@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class RoleMultipleCreator
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository,)
+    public function __construct(private RoleWriterInterface $roleWriterRepository)
     {
     }
 

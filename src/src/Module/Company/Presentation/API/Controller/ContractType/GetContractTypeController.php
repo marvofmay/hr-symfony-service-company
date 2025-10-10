@@ -18,7 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class GetContractTypeController extends AbstractController
 {
     public function __construct(private readonly MessageBusInterface $eventBus, private readonly MessageService $messageService)
-    {}
+    {
+    }
 
     #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.get', methods: ['GET'])]
     public function get(string $uuid, AskContractTypeAction $askContractTypeAction): JsonResponse

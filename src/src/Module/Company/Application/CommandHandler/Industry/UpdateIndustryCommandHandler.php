@@ -11,7 +11,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class UpdateIndustryCommandHandler
 {
-    public function __construct(private IndustryUpdater $industryUpdater, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private IndustryUpdater $industryUpdater, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -24,8 +24,8 @@ readonly class UpdateIndustryCommandHandler
         );
 
         $this->eventDispatcher->dispatch([
-            Industry::COLUMN_UUID        => $command->getIndustry()->getUUID(),
-            Industry::COLUMN_NAME        => $command->getName(),
+            Industry::COLUMN_UUID => $command->getIndustry()->getUUID(),
+            Industry::COLUMN_NAME => $command->getName(),
             Industry::COLUMN_DESCRIPTION => $command->getDescription(),
         ]);
     }

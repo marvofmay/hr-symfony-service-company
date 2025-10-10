@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class CreateRoleAccessPermissionTest extends KernelTestCase
 {
     private ValidatorInterface $validator;
-    private MessageService     $messageService;
+    private MessageService $messageService;
 
     protected function setUp(): void
     {
@@ -55,6 +55,7 @@ class CreateRoleAccessPermissionTest extends KernelTestCase
                 return true;
             }
         }
+
         return false;
     }
 }

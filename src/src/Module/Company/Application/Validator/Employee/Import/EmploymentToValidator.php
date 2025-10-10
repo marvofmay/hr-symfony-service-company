@@ -26,7 +26,7 @@ class EmploymentToValidator implements ImportRowValidatorInterface
         if (!empty($employmentTo)) {
             $errorMessage = DateFormatValidator::validate($employmentTo, DateFormatEnum::YYYY_MM_DD->value);
             if (null !== $errorMessage) {
-                return $this->messageService->get('employee.employmentTo.' . $errorMessage, [':dateFormat' => DateFormatEnum::YYYY_MM_DD->value], 'employees');
+                return $this->messageService->get('employee.employmentTo.'.$errorMessage, [':dateFormat' => DateFormatEnum::YYYY_MM_DD->value], 'employees');
             }
 
             if (!empty($employmentFrom)) {

@@ -12,10 +12,9 @@ use Symfony\Component\Messenger\MessageBusInterface;
 class DeleteContractTypeAction
 {
     public function __construct(
-        private readonly MessageBusInterface         $commandBus,
+        private readonly MessageBusInterface $commandBus,
         private readonly ContractTypeReaderInterface $contractTypeReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function execute(string $uuid): void

@@ -42,7 +42,7 @@ final class EmployeeAggregateCreator extends AggregateAbstract
             ),
             $row[ImportEmployeesFromXLSX::COLUMN_EXTERNAL_UUID],
             $row[ImportEmployeesFromXLSX::COLUMN_INTERNAL_CODE],
-            (bool)$row[ImportEmployeesFromXLSX::COLUMN_ACTIVE],
+            (bool) $row[ImportEmployeesFromXLSX::COLUMN_ACTIVE],
             Phones::fromArray([$row[ImportEmployeesFromXLSX::COLUMN_PHONE]]),
             $parentUUID,
             $row[ImportEmployeesFromXLSX::COLUMN_EMPLOYMENT_TO] ? EmploymentTo::fromString($row[ImportEmployeesFromXLSX::COLUMN_EMPLOYMENT_TO], EmploymentFrom::fromString($row[ImportEmployeesFromXLSX::COLUMN_EMPLOYMENT_FROM])) : null,

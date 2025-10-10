@@ -16,18 +16,17 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 final readonly class DepartmentUpdatedEvent implements DomainEventInterface
 {
     public function __construct(
-        public DepartmentUUID  $uuid,
-        public CompanyUUID     $companyUUID,
-        public Name            $name,
-        public string          $internalCode,
-        public Address         $address,
-        public bool            $active = true,
-        public ?string         $description = null,
-        public ?Phones         $phones = null,
-        public ?Emails         $emails = null,
-        public ?Websites       $websites = null,
-        public ?DepartmentUUID $parentDepartmentUUID = null
-    )
-    {
+        public DepartmentUUID $uuid,
+        public CompanyUUID $companyUUID,
+        public Name $name,
+        public string $internalCode,
+        public Address $address,
+        public bool $active = true,
+        public ?string $description = null,
+        public ?Phones $phones = null,
+        public ?Emails $emails = null,
+        public ?Websites $websites = null,
+        public ?DepartmentUUID $parentDepartmentUUID = null,
+    ) {
     }
 }

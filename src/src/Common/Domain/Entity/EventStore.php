@@ -46,7 +46,7 @@ class EventStore
         string $aggregateType,
         string $aggregateClass,
         string $payload,
-        ?Employee $employee = null
+        ?Employee $employee = null,
     ) {
         $this->aggregateUUID = $aggregateUUID;
         $this->aggregateType = $aggregateType;
@@ -85,5 +85,4 @@ class EventStore
     {
         return $this->createdAt;
     }
-
 }

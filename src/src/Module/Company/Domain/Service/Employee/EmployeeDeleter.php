@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Interface\Employee\EmployeeWriterInterface;
 
 readonly class EmployeeDeleter
 {
-    public function __construct(private EmployeeWriterInterface $employeeWriterRepository, private EmployeeReaderInterface $employeeReaderRepository,)
+    public function __construct(private EmployeeWriterInterface $employeeWriterRepository, private EmployeeReaderInterface $employeeReaderRepository)
     {
     }
 

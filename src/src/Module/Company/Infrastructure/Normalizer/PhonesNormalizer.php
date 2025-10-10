@@ -22,7 +22,7 @@ class PhonesNormalizer implements NormalizerInterface, DenormalizerInterface
 
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === Phones::class;
+        return Phones::class === $type;
     }
 
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): Phones

@@ -9,7 +9,7 @@ use App\Common\Domain\Interface\EventStoreWriterInterface;
 
 class EventStoreCreator
 {
-    public function __construct(protected EventStoreWriterInterface $eventStoreWriterRepository,)
+    public function __construct(protected EventStoreWriterInterface $eventStoreWriterRepository)
     {
     }
 

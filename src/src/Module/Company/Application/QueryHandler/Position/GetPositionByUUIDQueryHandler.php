@@ -13,7 +13,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final readonly class GetPositionByUUIDQueryHandler
 {
-    public function __construct(private PositionReaderInterface $positionReaderRepository, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private PositionReaderInterface $positionReaderRepository, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -23,7 +23,7 @@ final readonly class GetPositionByUUIDQueryHandler
         $transformer = new PositionDataTransformer();
 
         $this->eventDispatcher->dispatch(new PositionViewedEvent([
-            Position::COLUMN_UUID => $query->uuid
+            Position::COLUMN_UUID => $query->uuid,
         ]));
 
         return $transformer->transformToArray($position);

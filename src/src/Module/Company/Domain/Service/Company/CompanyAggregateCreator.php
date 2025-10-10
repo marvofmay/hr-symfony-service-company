@@ -23,10 +23,10 @@ final class CompanyAggregateCreator extends AggregateAbstract
     {
         $companyAggregate = CompanyAggregate::create(
             FullName::fromString($row[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME]),
-            NIP::fromString((string)$row[ImportCompaniesFromXLSX::COLUMN_NIP]),
-            REGON::fromString((string)$row[ImportCompaniesFromXLSX::COLUMN_REGON]),
+            NIP::fromString((string) $row[ImportCompaniesFromXLSX::COLUMN_NIP]),
+            REGON::fromString((string) $row[ImportCompaniesFromXLSX::COLUMN_REGON]),
             IndustryUUID::fromString($row[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID]),
-            (bool)$row[ImportCompaniesFromXLSX::COLUMN_ACTIVE],
+            (bool) $row[ImportCompaniesFromXLSX::COLUMN_ACTIVE],
             new Address(
                 $row[ImportCompaniesFromXLSX::COLUMN_STREET],
                 $row[ImportCompaniesFromXLSX::COLUMN_POSTCODE],

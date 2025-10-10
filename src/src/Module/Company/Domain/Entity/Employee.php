@@ -67,7 +67,7 @@ class Employee
     public const string RELATION_FILES = 'files';
     public const string RELATION_IMPORTS = 'imports';
     public const string RELATION_EVENT_LOGS = 'eventLogs';
-    
+
     public const string ALIAS = 'employee';
 
     #[ORM\Id]
@@ -149,7 +149,7 @@ class Employee
     private Collection $imports;
 
     #[ORM\OneToMany(targetEntity: EventLog::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    private Collection $eventLogs;    
+    private Collection $eventLogs;
 
     public function __construct()
     {

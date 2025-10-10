@@ -22,24 +22,23 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 final readonly class EmployeeUpdatedEvent implements DomainEventInterface
 {
     public function __construct(
-        public EmployeeUUID     $uuid,
-        public FirstName        $firstName,
-        public LastName         $lastName,
-        public PESEL            $pesel,
-        public EmploymentFrom   $employmentFrom,
-        public DepartmentUUID   $departmentUUID,
-        public PositionUUID     $positionUUID,
+        public EmployeeUUID $uuid,
+        public FirstName $firstName,
+        public LastName $lastName,
+        public PESEL $pesel,
+        public EmploymentFrom $employmentFrom,
+        public DepartmentUUID $departmentUUID,
+        public PositionUUID $positionUUID,
         public ContractTypeUUID $contractTypeUUID,
-        public RoleUUID         $roleUUID,
-        public Emails           $emails,
-        public Address          $address,
-        public bool             $active,
-        public ?string          $externalUUID = null,
-        public ?string          $internalCode = null,
-        public ?Phones          $phones = null,
-        public ?EmployeeUUID    $parentEmployeeUUID = null,
-        public ?EmploymentTo    $employmentTo = null,
-    )
-    {
+        public RoleUUID $roleUUID,
+        public Emails $emails,
+        public Address $address,
+        public bool $active,
+        public ?string $externalUUID = null,
+        public ?string $internalCode = null,
+        public ?Phones $phones = null,
+        public ?EmployeeUUID $parentEmployeeUUID = null,
+        public ?EmploymentTo $employmentTo = null,
+    ) {
     }
 }

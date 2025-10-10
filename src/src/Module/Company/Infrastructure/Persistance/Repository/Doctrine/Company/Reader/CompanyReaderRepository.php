@@ -44,10 +44,10 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
             ->setParameter('uuids', $selectedUUID)
             ->getResult();
 
-        //if (count($companies) !== count($selectedUUID)) {
+        // if (count($companies) !== count($selectedUUID)) {
         //    $missingUuids = array_diff($selectedUUID, array_map(fn ($company) => $company->getUUID(), $companies));
         //    throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('company.uuid.notFound', [], 'companies'), implode(', ', $missingUuids)));
-        //}
+        // }
 
         return new ArrayCollection($companies);
     }
@@ -209,9 +209,9 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         $filters->disable('soft_delete');
 
         try {
-            $deletedCompany =  $this->createQueryBuilder(Company::ALIAS)
-                ->where(Company::ALIAS . '.' . Company::COLUMN_UUID . ' = :uuid')
-                ->andWhere(Company::ALIAS . '.' . Company::COLUMN_DELETED_AT . ' IS NOT NULL')
+            $deletedCompany = $this->createQueryBuilder(Company::ALIAS)
+                ->where(Company::ALIAS.'.'.Company::COLUMN_UUID.' = :uuid')
+                ->andWhere(Company::ALIAS.'.'.Company::COLUMN_DELETED_AT.' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
@@ -243,10 +243,7 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
                 ->getOneOrNullResult();
 
             if (null === $deletedAddress) {
-                throw new \Exception(
-                    $this->translator->trans('company.deleted.address.notExists', [':uuid' => $uuid], 'companies'),
-                    Response::HTTP_NOT_FOUND
-                );
+                throw new \Exception($this->translator->trans('company.deleted.address.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
             }
 
             return $deletedAddress;
@@ -272,10 +269,7 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
                 ->getResult();
 
             if (empty($deletedContacts)) {
-                throw new \Exception(
-                    $this->translator->trans('company.deleted.contacts.notExists', [':uuid' => $uuid], 'companies'),
-                    Response::HTTP_NOT_FOUND
-                );
+                throw new \Exception($this->translator->trans('company.deleted.contacts.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
             }
 
             return new ArrayCollection($deletedContacts);

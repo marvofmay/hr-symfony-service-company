@@ -10,7 +10,7 @@ abstract class CompanyNameAbstract
 
     protected function __construct(?string $value)
     {
-        $this->value = $value !== null ? trim($value) : null;
+        $this->value = null !== $value ? trim($value) : null;
     }
 
     abstract public static function fromString(string $value): static;

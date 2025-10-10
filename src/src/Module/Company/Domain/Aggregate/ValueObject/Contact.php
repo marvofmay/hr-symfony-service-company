@@ -26,4 +26,4 @@ final class Contact
     {
         return $this->value;
     }
-} 
+}

@@ -11,7 +11,8 @@ final readonly class ImportCompaniesPreparer
 {
     public function __construct(
         private CompanyReaderInterface $companyReaderRepository,
-    ) {}
+    ) {
+    }
 
     public function prepare(iterable $rows): array
     {

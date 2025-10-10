@@ -27,7 +27,6 @@ class GetRolesTest extends CreateRoleTest
         $this->assertArrayHasKey('items', $responseData['data']);
         $this->assertIsArray($responseData['data']['items']);
 
-
         $found = false;
         $translatedRoleName = $this->messageService->get(sprintf('role.defaultData.name.%s', RoleEnum::ADMIN->value), [], 'roles');
         foreach ($responseData['data']['items'] as $item) {
@@ -37,6 +36,6 @@ class GetRolesTest extends CreateRoleTest
             }
         }
 
-        $this->assertTrue($found, sprintf('Nie znaleziono elementu z name = "%s" w items',  $translatedRoleName));
+        $this->assertTrue($found, sprintf('Nie znaleziono elementu z name = "%s" w items', $translatedRoleName));
     }
 }

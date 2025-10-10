@@ -12,13 +12,13 @@ final class EntityReferenceCache
 {
     private array $cache = [];
 
-    public function __construct(private readonly MessageBusInterface $eventBus,)
+    public function __construct(private readonly MessageBusInterface $eventBus)
     {
     }
 
     public function get(string $className, string $uuid, callable $loader): object
     {
-        $key = $className . ':' . $uuid;
+        $key = $className.':'.$uuid;
         if (!isset($this->cache[$key])) {
             $this->logInFile($className, $uuid);
             $this->cache[$key] = $loader($uuid);
@@ -31,7 +31,7 @@ final class EntityReferenceCache
     {
         $this->eventBus->dispatch(
             new LogFileEvent(
-                $className . ':' . $uuid . ' not exists in cache - query to DB',
+                $className.':'.$uuid.' not exists in cache - query to DB',
                 LogLevel::INFO,
                 'import'
             ));

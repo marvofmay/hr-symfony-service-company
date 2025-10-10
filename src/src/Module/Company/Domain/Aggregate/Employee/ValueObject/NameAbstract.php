@@ -17,7 +17,7 @@ class NameAbstract
 
     private function assertNotEmpty(string $value): void
     {
-        if (trim($value) === '') {
+        if ('' === trim($value)) {
             throw new \InvalidArgumentException('Name cannot be empty.');
         }
     }
@@ -27,9 +27,7 @@ class NameAbstract
         $length = mb_strlen($value);
 
         if ($length < 3 || $length > 50) {
-            throw new \InvalidArgumentException(
-                sprintf('Name must be between 3 and 50 characters, "%s" given (%d chars).', $value, $length)
-            );
+            throw new \InvalidArgumentException(sprintf('Name must be between 3 and 50 characters, "%s" given (%d chars).', $value, $length));
         }
     }
 

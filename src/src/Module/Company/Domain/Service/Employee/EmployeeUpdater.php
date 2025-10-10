@@ -30,20 +30,19 @@ use Doctrine\Common\Collections\Collection;
 final readonly class EmployeeUpdater
 {
     public function __construct(
-        private EmployeeFactory             $employeeFactory,
-        private AddressFactory              $addressFactory,
-        private ContactFactory              $contactFactory,
-        private EmployeeWriterInterface     $employeeWriterRepository,
-        private DepartmentReaderInterface   $departmentReaderRepository,
-        private EmployeeReaderInterface     $employeeReaderRepository,
+        private EmployeeFactory $employeeFactory,
+        private AddressFactory $addressFactory,
+        private ContactFactory $contactFactory,
+        private EmployeeWriterInterface $employeeWriterRepository,
+        private DepartmentReaderInterface $departmentReaderRepository,
+        private EmployeeReaderInterface $employeeReaderRepository,
         private ContractTypeReaderInterface $contractTypeReaderRepository,
-        private PositionReaderInterface     $positionReaderRepository,
-        private RoleReaderInterface         $roleReaderRepository,
-        private ContactWriterInterface      $contactWriterRepository,
-        private AddressWriterInterface      $addressWriterRepository,
-        private EntityReferenceCache        $entityReferenceCache,
-    )
-    {
+        private PositionReaderInterface $positionReaderRepository,
+        private RoleReaderInterface $roleReaderRepository,
+        private ContactWriterInterface $contactWriterRepository,
+        private AddressWriterInterface $addressWriterRepository,
+        private EntityReferenceCache $entityReferenceCache,
+    ) {
     }
 
     public function update(DomainEventInterface $event): void
@@ -69,32 +68,32 @@ final readonly class EmployeeUpdater
         $department = $this->entityReferenceCache->get(
             Department::class,
             $event->departmentUUID->toString(),
-            fn(string $uuid) => $this->departmentReaderRepository->getDepartmentByUUID($uuid)
+            fn (string $uuid) => $this->departmentReaderRepository->getDepartmentByUUID($uuid)
         );
 
         $role = $this->entityReferenceCache->get(
             Role::class,
             $event->roleUUID->toString(),
-            fn(string $uuid) => $this->roleReaderRepository->getRoleByUUID($uuid)
+            fn (string $uuid) => $this->roleReaderRepository->getRoleByUUID($uuid)
         );
 
         $position = $this->entityReferenceCache->get(
             Position::class,
             $event->positionUUID->toString(),
-            fn(string $uuid) => $this->positionReaderRepository->getPositionByUUID($uuid)
+            fn (string $uuid) => $this->positionReaderRepository->getPositionByUUID($uuid)
         );
 
         $contractType = $this->entityReferenceCache->get(
             ContractType::class,
             $event->contractTypeUUID->toString(),
-            fn(string $uuid) => $this->contractTypeReaderRepository->getContractTypeByUUID($uuid)
+            fn (string $uuid) => $this->contractTypeReaderRepository->getContractTypeByUUID($uuid)
         );
 
         $parentEmployee = $event->parentEmployeeUUID?->toString()
             ? $this->entityReferenceCache->get(
                 Employee::class,
                 $event->parentEmployeeUUID->toString(),
-                fn(string $uuid) => $this->employeeReaderRepository->getEmployeeByUUID($uuid)
+                fn (string $uuid) => $this->employeeReaderRepository->getEmployeeByUUID($uuid)
             )
             : null;
 
@@ -105,7 +104,7 @@ final readonly class EmployeeUpdater
 
     private function deleteAddress(?Address $address): void
     {
-        if ($address !== null) {
+        if (null !== $address) {
             $this->addressWriterRepository->deleteAddressInDB($address, Address::HARD_DELETED_AT);
         }
     }
@@ -116,17 +115,16 @@ final readonly class EmployeeUpdater
     }
 
     private function setEmployeeRelations(
-        Employee     $employee,
-        Department   $department,
-        Role         $role,
-        Position     $position,
+        Employee $employee,
+        Department $department,
+        Role $role,
+        Position $position,
         ContractType $contractType,
-        ?Employee    $parentEmployee,
-        Address      $address,
-        array        $contacts,
-        User         $user
-    ): void
-    {
+        ?Employee $parentEmployee,
+        Address $address,
+        array $contacts,
+        User $user,
+    ): void {
         $employee->setDepartment($department);
         $employee->setRole($role);
         $employee->setPosition($position);

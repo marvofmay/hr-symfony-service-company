@@ -13,7 +13,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'command.bus')]
 final readonly class DeleteMultipleContractTypesCommandHandler
 {
-    public function __construct(private ContractTypeMultipleDeleter $roleMultipleDeleter, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private ContractTypeMultipleDeleter $roleMultipleDeleter, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -21,7 +21,7 @@ final readonly class DeleteMultipleContractTypesCommandHandler
     {
         $this->roleMultipleDeleter->multipleDelete($command->contractTypes);
         $this->eventDispatcher->dispatch(new ContractTypeMultipleDeletedEvent(
-            $command->contractTypes->map(fn($contractType) => $contractType->getUUID())->toArray()
+            $command->contractTypes->map(fn ($contractType) => $contractType->getUUID())->toArray()
         ));
     }
 }

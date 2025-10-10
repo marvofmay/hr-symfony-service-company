@@ -23,7 +23,8 @@ class AggregateAbstract
         protected CompanyAggregateReaderInterface $companyAggregateReaderRepository,
         protected DepartmentAggregateReaderInterface $departmentAggregateReaderRepository,
         protected EmployeeAggregateReaderInterface $employeeAggregateReaderRepository,
-    ) {}
+    ) {
+    }
 
     protected function commitEvents(array $events, string $aggregateClass): void
     {

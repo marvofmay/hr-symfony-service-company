@@ -45,12 +45,12 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
 
         $positions = $qb->getQuery()->getResult();
 
-        //$foundUUIDs = array_map(fn (Position $position) => $position->getUUID(), $positions);
-        //$missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
+        // $foundUUIDs = array_map(fn (Position $position) => $position->getUUID(), $positions);
+        // $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
         //
-        //if ($missingUUIDs) {
+        // if ($missingUUIDs) {
         //    throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('position.uuid.notFound', [], 'positions'), implode(', ', $missingUUIDs)));
-        //}
+        // }
 
         return new ArrayCollection($positions);
     }

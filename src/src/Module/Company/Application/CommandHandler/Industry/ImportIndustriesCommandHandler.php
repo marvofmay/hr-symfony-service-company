@@ -21,16 +21,15 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 readonly class ImportIndustriesCommandHandler
 {
     public function __construct(
-        private IndustryReaderInterface  $industryReaderRepository,
-        private IndustryMultipleCreator  $industryMultipleCreator,
-        private ImportReaderInterface    $importReaderRepository,
-        private TranslatorInterface      $translator,
-        private LoggerInterface          $logger,
+        private IndustryReaderInterface $industryReaderRepository,
+        private IndustryMultipleCreator $industryMultipleCreator,
+        private ImportReaderInterface $importReaderRepository,
+        private TranslatorInterface $translator,
+        private LoggerInterface $logger,
         private ImportLogMultipleCreator $importLogMultipleCreator,
-        private UpdateImportAction       $updateImportAction,
+        private UpdateImportAction $updateImportAction,
         private EventDispatcherInterface $eventDispatcher,
-    )
-    {
+    ) {
     }
 
     public function __invoke(ImportIndustriesCommand $command): void
@@ -51,7 +50,7 @@ readonly class ImportIndustriesCommandHandler
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
 
             foreach ($errors as $error) {
-                $this->logger->error($this->translator->trans('industry.import.error', [], 'industries') . ': ' . $error);
+                $this->logger->error($this->translator->trans('industry.import.error', [], 'industries').': '.$error);
             }
         }
     }

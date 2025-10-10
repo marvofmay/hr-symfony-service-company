@@ -14,10 +14,9 @@ final readonly class CreateCompanyAction
 {
     public function __construct(
         private MessageBusInterface $commandBus,
-        private CompanyValidator    $companyValidator,
-        private IndustryValidator   $industryValidator,
-    )
-    {
+        private CompanyValidator $companyValidator,
+        private IndustryValidator $industryValidator,
+    ) {
     }
 
     public function execute(CreateDTO $createDTO): void

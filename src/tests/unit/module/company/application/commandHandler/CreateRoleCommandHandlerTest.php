@@ -31,7 +31,7 @@ class CreateRoleCommandHandlerTest extends TestCase
             ->method('dispatch')
             ->with(
                 $this->callback(
-                    fn(RoleCreatedEvent $event) => $event->getData()[Role::COLUMN_NAME] === $name && $event->getData()[Role::COLUMN_DESCRIPTION] === $description
+                    fn (RoleCreatedEvent $event) => $event->getData()[Role::COLUMN_NAME] === $name && $event->getData()[Role::COLUMN_DESCRIPTION] === $description
                 )
             );
 

@@ -13,15 +13,13 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
-use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ImportIndustriesController extends AbstractController
 {
     public function __construct(
         private readonly ImportIndustriesFacade $importIndustriesFacade,
-        private readonly MessageService $messageService
+        private readonly MessageService $messageService,
     ) {
     }
 

@@ -22,8 +22,7 @@ final readonly class CreateEmployeeAction
         private PositionValidator $positionValidator,
         private ContractTypeValidator $contractTypeValidator,
         private RoleValidator $roleValidator,
-    )
-    {
+    ) {
     }
 
     public function execute(CreateDTO $createDTO): void

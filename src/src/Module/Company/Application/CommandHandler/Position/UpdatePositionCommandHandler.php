@@ -12,7 +12,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class UpdatePositionCommandHandler
 {
-    public function __construct(private PositionUpdater $positionUpdater, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private PositionUpdater $positionUpdater, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -20,8 +20,8 @@ readonly class UpdatePositionCommandHandler
     {
         $this->positionUpdater->update($command);
         $this->eventDispatcher->dispatch(new PositionUpdatedEvent([
-            Position::COLUMN_UUID        => $command->getPosition()->getUUID(),
-            Position::COLUMN_NAME        => $command->getName(),
+            Position::COLUMN_UUID => $command->getPosition()->getUUID(),
+            Position::COLUMN_NAME => $command->getName(),
             Position::COLUMN_DESCRIPTION => $command->getDescription(),
         ]));
     }

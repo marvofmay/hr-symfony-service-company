@@ -17,7 +17,8 @@ abstract class AbstractEventLoggerSubscriber
         protected SerializerInterface $serializer,
         protected LoggerInterface $logger,
         protected Security $security,
-    ) {}
+    ) {
+    }
 
     protected function log(string $eventClass, string $entityClass, mixed $data): void
     {
@@ -25,7 +26,7 @@ abstract class AbstractEventLoggerSubscriber
         $employee = method_exists($user, 'getEmployee') ? $user->getEmployee() : null;
 
         $jsonData = $this->serializer->serialize($data, 'json', [
-            'circular_reference_handler' => fn($object) => method_exists($object, 'getUUID') ? $object->getUUID() : spl_object_id($object),
+            'circular_reference_handler' => fn ($object) => method_exists($object, 'getUUID') ? $object->getUUID() : spl_object_id($object),
         ]);
 
         $this->logger->info('----------------- EVENT LOG -----------------');

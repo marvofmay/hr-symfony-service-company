@@ -134,7 +134,7 @@ class Access
 
     public function getPermissions(): Collection
     {
-        $permissions = $this->accessPermissions->map(fn(RoleAccessPermission $rap) => $rap->getPermission())->toArray();
+        $permissions = $this->accessPermissions->map(fn (RoleAccessPermission $rap) => $rap->getPermission())->toArray();
 
         return new ArrayCollection(array_unique($permissions, SORT_REGULAR));
     }

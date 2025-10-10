@@ -8,14 +8,14 @@ use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\ContractType\ContractTypeListedEvent;
 use App\Module\Company\Application\Query\ContractType\ListContractTypesQuery;
 use App\Module\Company\Domain\Entity\ContractType;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Doctrine\ORM\EntityManagerInterface;
 
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct($entityManager);
     }

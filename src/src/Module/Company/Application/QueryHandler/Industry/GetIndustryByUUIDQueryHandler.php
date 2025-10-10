@@ -13,7 +13,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 final readonly class GetIndustryByUUIDQueryHandler
 {
-    public function __construct(private IndustryReaderInterface $industryReaderRepository, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private IndustryReaderInterface $industryReaderRepository, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -23,7 +23,7 @@ final readonly class GetIndustryByUUIDQueryHandler
         $transformer = new IndustryDataTransformer();
 
         $this->eventDispatcher->dispatch(new IndustryViewedEvent([
-            Industry::COLUMN_UUID => $query->uuid
+            Industry::COLUMN_UUID => $query->uuid,
         ]));
 
         return $transformer->transformToArray($industry);

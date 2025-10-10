@@ -13,7 +13,7 @@ class EmploymentDateAbstract
         $date = \DateTimeImmutable::createFromFormat('Y-m-d', $dateString);
 
         if (!$date || $date->format('Y-m-d') !== $dateString) {
-            throw new \InvalidArgumentException("Invalid date format, expected Y-m-d.");
+            throw new \InvalidArgumentException('Invalid date format, expected Y-m-d.');
         }
 
         $this->date = $date;

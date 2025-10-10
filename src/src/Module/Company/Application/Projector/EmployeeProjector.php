@@ -18,12 +18,11 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 final readonly class EmployeeProjector
 {
     public function __construct(
-        private EmployeeCreator      $employeeCreator,
-        private EmployeeUpdater      $employeeUpdater,
-        private EmployeeDeleter      $employeeDeleter,
-        private EmployeeRestorer     $employeeRestorer,
-    )
-    {
+        private EmployeeCreator $employeeCreator,
+        private EmployeeUpdater $employeeUpdater,
+        private EmployeeDeleter $employeeDeleter,
+        private EmployeeRestorer $employeeRestorer,
+    ) {
     }
 
     #[AsEventListener(event: EmployeeCreatedEvent::class)]

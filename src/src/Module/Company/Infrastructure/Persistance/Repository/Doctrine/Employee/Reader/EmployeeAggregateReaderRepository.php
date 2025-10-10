@@ -22,12 +22,12 @@ final class EmployeeAggregateReaderRepository extends ServiceEntityRepository im
     public function getEmployeeAggregateByUUID(EmployeeUUID $uuid): EmployeeAggregate
     {
         $events = $this->findBy([
-            'aggregateUUID'  => $uuid->toString(),
+            'aggregateUUID' => $uuid->toString(),
             'aggregateClass' => EmployeeAggregate::class,
         ], ['createdAt' => 'ASC']);
 
         if (empty($events)) {
-            throw new \RuntimeException('Aggregate not found: ' . $uuid->toString());
+            throw new \RuntimeException('Aggregate not found: '.$uuid->toString());
         }
 
         $domainEvents = [];

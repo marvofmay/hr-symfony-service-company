@@ -77,6 +77,7 @@ final readonly class ImportDepartmentsFacade
 
             if (ImportStatusEnum::DONE === $import->getStatus()) {
                 $message = $this->messageService->get('department.import.success', [], 'departments');
+
                 return [
                     'success' => true,
                     'message' => $message,

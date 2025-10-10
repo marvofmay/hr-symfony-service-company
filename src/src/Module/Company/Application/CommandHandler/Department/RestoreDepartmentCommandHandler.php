@@ -22,8 +22,7 @@ final readonly class RestoreDepartmentCommandHandler
         private EventStoreCreator $eventStoreCreator,
         private Security $security,
         private SerializerInterface $serializer,
-    )
-    {
+    ) {
     }
 
     public function __invoke(RestoreDepartmentCommand $command): void

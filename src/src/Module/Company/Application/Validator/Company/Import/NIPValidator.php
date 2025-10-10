@@ -13,20 +13,22 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.import_company_validator')]
 class NIPValidator implements ImportRowValidatorInterface
 {
-    public function __construct(private MessageService $messageService) {}
+    public function __construct(private MessageService $messageService)
+    {
+    }
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $nip = (string)$row[ImportCompaniesFromXLSX::COLUMN_NIP] ?? null;
+        $nip = (string) $row[ImportCompaniesFromXLSX::COLUMN_NIP] ?? null;
         if (empty($nip)) {
             return $this->messageService->get('company.nip.required', [], 'companies');
         }
 
-        //$nip = preg_replace('/\D/', '', $nip);
-        //$errorMessage = NIP::validate($nip);
-        //if (null !== $errorMessage) {
+        // $nip = preg_replace('/\D/', '', $nip);
+        // $errorMessage = NIP::validate($nip);
+        // if (null !== $errorMessage) {
         //    return $this->messageService->get($errorMessage, [], 'validators');
-        //}
+        // }
 
         return null;
     }

@@ -20,7 +20,7 @@ readonly class CreateIndustryCommandHandler
     {
         $this->industryCreator->create($command->name, $command->description);
         $this->eventDispatcher->dispatch(new IndustryCreatedEvent([
-            Industry::COLUMN_NAME        => $command->name,
+            Industry::COLUMN_NAME => $command->name,
             Industry::COLUMN_DESCRIPTION => $command->description,
         ]));
     }

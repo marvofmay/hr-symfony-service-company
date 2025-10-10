@@ -17,12 +17,7 @@ final readonly class EmployeeValidator
     public function isEmployeeAlreadyExists(string $email, string $pesel, ?string $uuid = null): void
     {
         if ($this->employeeReaderRepository->isEmployeeAlreadyExists($email, $pesel, $uuid)) {
-            throw new \Exception(
-                $this->translator->trans(
-                    'employee.alreadyExists',
-                    [':email' => $email, ':pesel' => $pesel], 'employees'
-                ), Response::HTTP_CONFLICT
-            );
+            throw new \Exception($this->translator->trans('employee.alreadyExists', [':email' => $email, ':pesel' => $pesel], 'employees'), Response::HTTP_CONFLICT);
         }
     }
 

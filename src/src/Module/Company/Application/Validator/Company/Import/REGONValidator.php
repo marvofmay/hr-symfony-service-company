@@ -13,11 +13,13 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.import_company_validator')]
 class REGONValidator implements ImportRowValidatorInterface
 {
-    public function __construct(private MessageService $messageService) {}
+    public function __construct(private MessageService $messageService)
+    {
+    }
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $regon = (string)$row[ImportCompaniesFromXLSX::COLUMN_REGON] ?? null;
+        $regon = (string) $row[ImportCompaniesFromXLSX::COLUMN_REGON] ?? null;
         if (empty($regon)) {
             return $this->messageService->get('company.regon.required', [], 'companies');
         }

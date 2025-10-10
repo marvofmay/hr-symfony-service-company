@@ -22,8 +22,7 @@ final readonly class DeleteEmployeeCommandHandler
         private EventStoreCreator $eventStoreCreator,
         private Security $security,
         private SerializerInterface $serializer,
-    )
-    {
+    ) {
     }
 
     public function __invoke(DeleteEmployeeCommand $command): void

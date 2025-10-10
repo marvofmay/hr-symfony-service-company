@@ -22,8 +22,8 @@ readonly class CreateRoleAccessCommandHandler
     {
         $this->roleAccessCreator->create($command->getRole(), $command->getAccesses());
         $this->eventDispatcher->dispatch(new RoleAssignedAccessesEvent([
-            'roleUUID'     => $command->getRole()->getUuid(),
-            'accessesUUID' => $command->getAccesses()->map(fn(Access $access) => $access->getUuid())->toArray(),
+            'roleUUID' => $command->getRole()->getUuid(),
+            'accessesUUID' => $command->getAccesses()->map(fn (Access $access) => $access->getUuid())->toArray(),
         ]));
     }
 }

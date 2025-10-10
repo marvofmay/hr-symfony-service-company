@@ -22,10 +22,10 @@ final readonly class ImportEmployeesCommandHandler
 {
     public function __construct(
         private ImportReaderInterface $importReaderRepository,
-        private EventStoreCreator     $eventStoreCreator,
-        private Security              $security,
-        private SerializerInterface   $serializer,
-        private ImporterFactory       $importerFactory,
+        private EventStoreCreator $eventStoreCreator,
+        private Security $security,
+        private SerializerInterface $serializer,
+        private ImporterFactory $importerFactory,
     ) {
     }
 

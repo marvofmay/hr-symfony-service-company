@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 class DeleteMultipleRolesTest extends KernelTestCase
 {
     private ValidatorInterface $validator;
-    private MessageService     $messageService;
+    private MessageService $messageService;
 
     protected function setUp(): void
     {

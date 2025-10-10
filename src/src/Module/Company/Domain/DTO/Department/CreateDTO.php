@@ -130,5 +130,4 @@ class CreateDTO
             return $this->address;
         }
     }
-
 }

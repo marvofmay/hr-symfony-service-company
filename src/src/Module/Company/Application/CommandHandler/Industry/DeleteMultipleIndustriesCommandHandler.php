@@ -12,7 +12,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class DeleteMultipleIndustriesCommandHandler
 {
-    public function __construct(private IndustryMultipleDeleter $industryMultipleDeleter, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private IndustryMultipleDeleter $industryMultipleDeleter, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -20,7 +20,7 @@ readonly class DeleteMultipleIndustriesCommandHandler
     {
         $this->industryMultipleDeleter->multipleDelete($command->industries);
         $this->eventDispatcher->dispatch(new IndustryMultipleDeletedEvent(
-            $command->industries->map(fn(Industry $industry) => $industry->getUUID())->toArray(),
+            $command->industries->map(fn (Industry $industry) => $industry->getUUID())->toArray(),
         ));
     }
 }

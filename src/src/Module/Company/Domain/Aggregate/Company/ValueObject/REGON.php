@@ -13,7 +13,7 @@ final readonly class REGON
     {
         $error = REGONValidator::validate($value);
 
-        if ($error !== null) {
+        if (null !== $error) {
             throw new \Exception($error, Response::HTTP_UNPROCESSABLE_ENTITY);
         }
     }

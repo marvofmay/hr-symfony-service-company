@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\QueryHandler\Position;;
+namespace App\Module\Company\Application\QueryHandler\Position;
 
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\Position\PositionListedEvent;
@@ -15,13 +15,15 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct($entityManager);
     }
+
     public function __invoke(ListPositionsQuery $query): array
     {
         $this->eventDispatcher->dispatch(new PositionListedEvent([$query]));
+
         return $this->handle($query);
     }
 

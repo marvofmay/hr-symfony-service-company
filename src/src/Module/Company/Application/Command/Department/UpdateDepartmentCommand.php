@@ -12,17 +12,16 @@ class UpdateDepartmentCommand implements CommandInterface
 {
     public function __construct(
         public Department $department,
-        public string     $name,
-        public string     $internalCode,
-        public ?string    $description,
-        public bool       $active,
-        public string     $companyUUID,
-        public ?string    $parentDepartmentUUID,
-        public ?array     $phones,
-        public ?array     $emails,
-        public ?array     $websites,
+        public string $name,
+        public string $internalCode,
+        public ?string $description,
+        public bool $active,
+        public string $companyUUID,
+        public ?string $parentDepartmentUUID,
+        public ?array $phones,
+        public ?array $emails,
+        public ?array $websites,
         public AddressDTO $address,
-    )
-    {
+    ) {
     }
 }

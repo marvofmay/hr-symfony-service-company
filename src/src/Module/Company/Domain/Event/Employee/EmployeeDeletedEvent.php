@@ -9,5 +9,7 @@ use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
 
 final readonly class EmployeeDeletedEvent implements DomainEventInterface
 {
-    public function __construct(public EmployeeUUID $uuid) {}
+    public function __construct(public EmployeeUUID $uuid)
+    {
+    }
 }

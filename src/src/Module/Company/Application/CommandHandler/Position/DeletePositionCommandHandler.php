@@ -10,7 +10,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class DeletePositionCommandHandler
 {
-    public function __construct(private PositionDeleter $positionDeleter, private EventDispatcherInterface  $eventDispatcher,)
+    public function __construct(private PositionDeleter $positionDeleter, private EventDispatcherInterface $eventDispatcher)
     {
     }
 

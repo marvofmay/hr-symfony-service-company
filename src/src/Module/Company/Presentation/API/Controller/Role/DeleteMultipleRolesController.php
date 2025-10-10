@@ -23,7 +23,6 @@ final class DeleteMultipleRolesController extends AbstractController
     {
     }
 
-
     #[Route('/api/roles/multiple', name: 'api.roles.delete_multiple', methods: ['DELETE'])]
     public function delete(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO, DeleteMultipleRolesAction $deleteMultipleRolesAction): JsonResponse
     {

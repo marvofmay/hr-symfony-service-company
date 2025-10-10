@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class DeleteDepartmentController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger,  private readonly MessageService $messageService,)
+    public function __construct(private readonly LoggerInterface $logger, private readonly MessageService $messageService)
     {
     }
 

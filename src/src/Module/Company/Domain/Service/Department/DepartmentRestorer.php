@@ -13,8 +13,7 @@ final readonly class DepartmentRestorer
     public function __construct(
         private DepartmentWriterInterface $departmentWriterRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function restore(DomainEventInterface $event): void

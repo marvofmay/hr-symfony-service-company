@@ -47,12 +47,12 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
 
         $departments = $qb->getQuery()->getResult();
 
-        //$foundUUIDs = array_map(fn (Department $department) => $department->getUUID(), $departments);
-        //$missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
+        // $foundUUIDs = array_map(fn (Department $department) => $department->getUUID(), $departments);
+        // $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
         //
-        //if ($missingUUIDs) {
+        // if ($missingUUIDs) {
         //    throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('department.uuid.notFound', [], 'departments'), implode(', ', $missingUUIDs)));
-        //}
+        // }
 
         return new ArrayCollection($departments);
     }
@@ -118,9 +118,9 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
         $filters->disable('soft_delete');
 
         try {
-            $deletedDepartment =  $this->createQueryBuilder(Department::ALIAS)
-                ->where(Department::ALIAS . '.' . Department::COLUMN_UUID . ' = :uuid')
-                ->andWhere(Department::ALIAS . '.' . Department::COLUMN_DELETED_AT . ' IS NOT NULL')
+            $deletedDepartment = $this->createQueryBuilder(Department::ALIAS)
+                ->where(Department::ALIAS.'.'.Department::COLUMN_UUID.' = :uuid')
+                ->andWhere(Department::ALIAS.'.'.Department::COLUMN_DELETED_AT.' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
@@ -144,18 +144,15 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
             $qb = $this->getEntityManager()->createQueryBuilder();
             $deletedAddress = $qb->select(Address::ALIAS)
                 ->from(Address::class, Address::ALIAS)
-                ->join(Address::ALIAS . '.department', Department::ALIAS)
-                ->where(Department::ALIAS . '.uuid = :uuid')
-                ->andWhere(Address::ALIAS . '.deletedAt IS NOT NULL')
+                ->join(Address::ALIAS.'.department', Department::ALIAS)
+                ->where(Department::ALIAS.'.uuid = :uuid')
+                ->andWhere(Address::ALIAS.'.deletedAt IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
 
             if (null === $deletedAddress) {
-                throw new \Exception(
-                    $this->translator->trans('department.deleted.address.notExists', [':uuid' => $uuid], 'departments'),
-                    Response::HTTP_NOT_FOUND
-                );
+                throw new \Exception($this->translator->trans('department.deleted.address.notExists', [':uuid' => $uuid], 'departments'), Response::HTTP_NOT_FOUND);
             }
 
             return $deletedAddress;
@@ -173,18 +170,15 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
             $qb = $this->getEntityManager()->createQueryBuilder();
             $deletedContacts = $qb->select(Contact::ALIAS)
                 ->from(Contact::class, Contact::ALIAS)
-                ->join(Contact::ALIAS . '.' . Contact::RELATION_DEPARTMENT , 'co')
+                ->join(Contact::ALIAS.'.'.Contact::RELATION_DEPARTMENT, 'co')
                 ->where('co.uuid = :uuid')
-                ->andWhere(Contact::ALIAS . '.deletedAt IS NOT NULL')
+                ->andWhere(Contact::ALIAS.'.deletedAt IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getResult();
 
             if (empty($deletedContacts)) {
-                throw new \Exception(
-                    $this->translator->trans('department.deleted.contacts.notExists', [':uuid' => $uuid], 'departments'),
-                    Response::HTTP_NOT_FOUND
-                );
+                throw new \Exception($this->translator->trans('department.deleted.contacts.notExists', [':uuid' => $uuid], 'departments'), Response::HTTP_NOT_FOUND);
             }
 
             return new ArrayCollection($deletedContacts);

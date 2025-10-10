@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class RestoreDepartmentController extends AbstractController
 {
-    public function __construct(private readonly MessageBusInterface $eventBus, private readonly MessageService $messageService,)
+    public function __construct(private readonly MessageBusInterface $eventBus, private readonly MessageService $messageService)
     {
     }
 

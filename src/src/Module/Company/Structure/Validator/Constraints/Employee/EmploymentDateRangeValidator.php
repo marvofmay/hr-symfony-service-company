@@ -10,7 +10,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class EmploymentDateRangeValidator extends ConstraintValidator
 {
-    public function __construct(private readonly TranslatorInterface $translator,)
+    public function __construct(private readonly TranslatorInterface $translator)
     {
     }
 
@@ -20,7 +20,7 @@ class EmploymentDateRangeValidator extends ConstraintValidator
             return;
         }
 
-        if ($value->employmentFrom === null || $value->employmentTo === null) {
+        if (null === $value->employmentFrom || null === $value->employmentTo) {
             return;
         }
 

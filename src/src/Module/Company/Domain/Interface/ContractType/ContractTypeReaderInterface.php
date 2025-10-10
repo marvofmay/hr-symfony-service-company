@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 interface ContractTypeReaderInterface
 {
     public function getContractTypeByUUID(string $uuid): ?ContractType;
+
     public function getContractTypesByUUID(array $selectedUUID): Collection;
 
     public function getContractTypeByName(string $name, ?string $uuid): ?ContractType;

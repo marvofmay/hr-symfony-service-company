@@ -42,8 +42,8 @@ class testItCreatesAndSavesMultipleRoles extends TestCase
                     }
 
                     if (
-                        $role->getName() !== $data[$index][ImportRolesFromXLSX::COLUMN_NAME] ||
-                        $role->getDescription() !== $data[$index][ImportRolesFromXLSX::COLUMN_DESCRIPTION]
+                        $role->getName() !== $data[$index][ImportRolesFromXLSX::COLUMN_NAME]
+                        || $role->getDescription() !== $data[$index][ImportRolesFromXLSX::COLUMN_DESCRIPTION]
                     ) {
                         return false;
                     }

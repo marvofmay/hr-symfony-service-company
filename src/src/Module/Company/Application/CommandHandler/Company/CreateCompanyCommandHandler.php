@@ -31,8 +31,7 @@ final readonly class CreateCompanyCommandHandler
         private Security $security,
         private SerializerInterface $serializer,
         private EventDispatcherInterface $eventDispatcher,
-    )
-    {
+    ) {
     }
 
     public function __invoke(CreateCompanyCommand $command): void

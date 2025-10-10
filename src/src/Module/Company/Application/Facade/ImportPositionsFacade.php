@@ -77,6 +77,7 @@ final readonly class ImportPositionsFacade
 
             if (ImportStatusEnum::DONE === $import->getStatus()) {
                 $message = $this->messageService->get('position.import.success', [], 'positions');
+
                 return [
                     'success' => true,
                     'message' => $message,

@@ -23,40 +23,39 @@ use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 
 class CompanyAggregate extends AggregateRootAbstract
 {
-    private CompanyUUID  $uuid;
+    private CompanyUUID $uuid;
     private ?CompanyUUID $parentCompanyUUID = null;
     private IndustryUUID $industryUUID;
-    private FullName     $fullName;
-    private ?ShortName   $shortName         = null;
+    private FullName $fullName;
+    private ?ShortName $shortName = null;
 
-    private ?string   $internalCode = null;
-    private NIP       $nip;
-    private REGON     $regon;
-    private ?string   $description         = null;
-    private bool      $active              = true;
-    private Address   $address;
-    private ?Phones   $phones              = null;
-    private ?Emails   $emails              = null;
-    private ?Websites $websites            = null;
-    private bool      $deleted             = false;
+    private ?string $internalCode = null;
+    private NIP $nip;
+    private REGON $regon;
+    private ?string $description = null;
+    private bool $active = true;
+    private Address $address;
+    private ?Phones $phones = null;
+    private ?Emails $emails = null;
+    private ?Websites $websites = null;
+    private bool $deleted = false;
 
     public static function create(
-        FullName     $fullName,
-        NIP          $nip,
-        REGON        $regon,
+        FullName $fullName,
+        NIP $nip,
+        REGON $regon,
         IndustryUUID $industryUUID,
-        bool         $active,
-        Address      $address,
-        Phones       $phones,
-        ?ShortName   $shortName = null,
-        ?string      $internalCode = null,
-        ?string      $description = null,
+        bool $active,
+        Address $address,
+        Phones $phones,
+        ?ShortName $shortName = null,
+        ?string $internalCode = null,
+        ?string $description = null,
         ?CompanyUUID $parentCompanyUUID = null,
-        ?Emails      $emails = null,
-        ?Websites    $websites = null,
+        ?Emails $emails = null,
+        ?Websites $websites = null,
         ?CompanyUUID $uuid = null,
-    ): self
-    {
+    ): self {
         $aggregate = new self();
 
         $aggregate->record(new CompanyCreatedEvent(
@@ -80,21 +79,20 @@ class CompanyAggregate extends AggregateRootAbstract
     }
 
     public function update(
-        FullName     $fullName,
-        NIP          $nip,
-        REGON        $regon,
+        FullName $fullName,
+        NIP $nip,
+        REGON $regon,
         IndustryUUID $industryUUID,
-        bool         $active,
-        Address      $address,
-        Phones       $phones,
-        ?ShortName   $shortName = null,
-        ?string      $internalCode = null,
-        ?string      $description = null,
+        bool $active,
+        Address $address,
+        Phones $phones,
+        ?ShortName $shortName = null,
+        ?string $internalCode = null,
+        ?string $description = null,
         ?CompanyUUID $parentCompanyUUID = null,
-        ?Emails      $emails = null,
-        ?Websites    $websites = null,
-    ): self
-    {
+        ?Emails $emails = null,
+        ?Websites $websites = null,
+    ): self {
         if ($this->deleted) {
             throw new \DomainException('Cannot update a deleted company.');
         }

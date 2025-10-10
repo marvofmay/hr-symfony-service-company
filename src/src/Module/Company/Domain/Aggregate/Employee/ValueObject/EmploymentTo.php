@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Aggregate\Employee\ValueObject;
 
@@ -12,11 +12,10 @@ class EmploymentTo extends EmploymentDateAbstract
     {
         $instance = new static($dateString);
 
-        if ($instance->date !== null && $instance->date <= $from->toDateTime()) {
-            throw new \InvalidArgumentException("EmploymentTo must be after EmploymentFrom.");
+        if (null !== $instance->date && $instance->date <= $from->toDateTime()) {
+            throw new \InvalidArgumentException('EmploymentTo must be after EmploymentFrom.');
         }
 
         return $instance;
     }
-
 }

@@ -10,7 +10,7 @@ final class FullName extends CompanyNameAbstract
     {
         $trimmed = trim($value);
 
-        if ($trimmed === '') {
+        if ('' === $trimmed) {
             throw new \InvalidArgumentException('FullName is required.');
         }
 

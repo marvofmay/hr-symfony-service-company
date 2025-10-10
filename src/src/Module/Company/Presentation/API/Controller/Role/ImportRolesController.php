@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class ImportRolesController extends AbstractController
 {
-    public function __construct(private readonly ImportRolesFacade $importRolesFacade, private readonly MessageService $messageService,)
+    public function __construct(private readonly ImportRolesFacade $importRolesFacade, private readonly MessageService $messageService)
     {
     }
 

@@ -12,7 +12,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 readonly class DeleteMultiplePositionsCommandHandler
 {
-    public function __construct(private PositionMultipleDeleter $multipleDeleter, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private PositionMultipleDeleter $multipleDeleter, private EventDispatcherInterface $eventDispatcher)
     {
     }
 
@@ -20,7 +20,7 @@ readonly class DeleteMultiplePositionsCommandHandler
     {
         $this->multipleDeleter->multipleDelete($command->getPositions());
         $this->eventDispatcher->dispatch(new PositionMultipleDeletedEvent(
-            $command->getPositions()->map(fn(Position $position) => $position->getUUID())->toArray(),
+            $command->getPositions()->map(fn (Position $position) => $position->getUUID())->toArray(),
         ));
     }
 }

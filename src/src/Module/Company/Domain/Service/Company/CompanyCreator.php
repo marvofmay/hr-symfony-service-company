@@ -19,15 +19,14 @@ use App\Module\Company\Domain\Service\Factory\ContactFactory;
 class CompanyCreator
 {
     public function __construct(
-        private CompanyFactory          $companyFactory,
-        private AddressFactory          $addressFactory,
-        private ContactFactory          $contactFactory,
-        private CompanyWriterInterface  $companyWriterRepository,
-        private CompanyReaderInterface  $companyReaderRepository,
+        private CompanyFactory $companyFactory,
+        private AddressFactory $addressFactory,
+        private ContactFactory $contactFactory,
+        private CompanyWriterInterface $companyWriterRepository,
+        private CompanyReaderInterface $companyReaderRepository,
         private IndustryReaderInterface $industryReaderRepository,
-        private EntityReferenceCache    $entityReferenceCache,
-    )
-    {
+        private EntityReferenceCache $entityReferenceCache,
+    ) {
     }
 
     public function create(DomainEventInterface $event): void
@@ -39,14 +38,14 @@ class CompanyCreator
         $industry = $this->entityReferenceCache->get(
             Industry::class,
             $event->industryUUID->toString(),
-            fn(string $uuid) => $this->industryReaderRepository->getIndustryByUUID($uuid)
+            fn (string $uuid) => $this->industryReaderRepository->getIndustryByUUID($uuid)
         );
 
         $parentCompany = $event->parentCompanyUUID?->toString()
             ? $this->entityReferenceCache->get(
                 Company::class,
                 $event->parentCompanyUUID->toString(),
-                fn(string $uuid) => $this->companyReaderRepository->getCompanyByUUID($uuid)
+                fn (string $uuid) => $this->companyReaderRepository->getCompanyByUUID($uuid)
             )
             : null;
 

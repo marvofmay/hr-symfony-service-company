@@ -8,7 +8,7 @@ use App\Module\Company\Domain\Entity\Department;
 
 final readonly class RestoreDepartmentCommand
 {
-    public function __construct(private Department $department,)
+    public function __construct(private Department $department)
     {
     }
 

@@ -77,6 +77,7 @@ final readonly class ImportCompaniesFacade
 
             if (ImportStatusEnum::DONE === $import->getStatus()) {
                 $message = $this->messageService->get('company.import.success', [], 'companies');
+
                 return [
                     'success' => true,
                     'message' => $message,

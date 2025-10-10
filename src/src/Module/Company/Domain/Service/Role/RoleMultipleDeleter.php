@@ -9,7 +9,7 @@ use Doctrine\Common\Collections\Collection;
 
 readonly class RoleMultipleDeleter
 {
-    public function __construct(private RoleWriterInterface $roleWriterRepository,)
+    public function __construct(private RoleWriterInterface $roleWriterRepository)
     {
     }
 

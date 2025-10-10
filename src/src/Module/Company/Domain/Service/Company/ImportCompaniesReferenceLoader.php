@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
-use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
+use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 
 final class ImportCompaniesReferenceLoader
 {
     private array $industries = [];
-    private array $companies  = [];
+    private array $companies = [];
 
     public function __construct(
         private readonly IndustryReaderInterface $industryReaderRepository,
-        private readonly CompanyReaderInterface  $companyReaderRepository,
-    )
-    {
+        private readonly CompanyReaderInterface $companyReaderRepository,
+    ) {
     }
 
     public function preload(array $rows): void
@@ -26,10 +25,10 @@ final class ImportCompaniesReferenceLoader
 
         foreach ($rows as $row) {
             if (!empty($row[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID])) {
-                $industryUUIDs[] = (string)$row[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID];
+                $industryUUIDs[] = (string) $row[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID];
             }
             if (!empty($row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP])) {
-                $companyNIPs[] = (string)$row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP];
+                $companyNIPs[] = (string) $row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP];
             }
         }
 

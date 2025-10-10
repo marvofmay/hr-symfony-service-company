@@ -20,33 +20,32 @@ use App\Module\Company\Domain\Event\Department\DepartmentUpdatedEvent;
 
 class DepartmentAggregate extends AggregateRootAbstract
 {
-    private DepartmentUUID  $uuid;
-    private CompanyUUID     $companyUUID;
+    private DepartmentUUID $uuid;
+    private CompanyUUID $companyUUID;
     private ?DepartmentUUID $parentDepartmentUUID = null;
-    private Name            $name;
-    private string          $internalCode;
-    private ?string         $description          = null;
-    private ?bool           $active               = true;
-    private Address         $address;
-    private ?Phones         $phones               = null;
-    private ?Emails         $emails               = null;
-    private ?Websites       $websites             = null;
-    private bool            $deleted              = false;
+    private Name $name;
+    private string $internalCode;
+    private ?string $description = null;
+    private ?bool $active = true;
+    private Address $address;
+    private ?Phones $phones = null;
+    private ?Emails $emails = null;
+    private ?Websites $websites = null;
+    private bool $deleted = false;
 
     public static function create(
-        CompanyUUID     $companyUUID,
-        Name            $name,
-        string          $internalCode,
-        Address         $address,
-        bool            $active = true,
-        ?string         $description = null,
-        ?Phones         $phones = null,
-        ?Emails         $emails = null,
-        ?Websites       $websites = null,
+        CompanyUUID $companyUUID,
+        Name $name,
+        string $internalCode,
+        Address $address,
+        bool $active = true,
+        ?string $description = null,
+        ?Phones $phones = null,
+        ?Emails $emails = null,
+        ?Websites $websites = null,
         ?DepartmentUUID $parentDepartmentUUID = null,
-        ?DepartmentUUID $uuid = null
-    ): self
-    {
+        ?DepartmentUUID $uuid = null,
+    ): self {
         $aggregate = new self();
 
         $aggregate->record(new DepartmentCreatedEvent(
@@ -67,18 +66,17 @@ class DepartmentAggregate extends AggregateRootAbstract
     }
 
     public function update(
-        CompanyUUID     $companyUUID,
-        Name            $name,
-        string          $internalCode,
-        Address         $address,
-        bool            $active,
-        ?string         $description = null,
-        ?Phones         $phones = null,
-        ?Emails         $emails = null,
-        ?Websites       $websites = null,
-        ?DepartmentUUID $parentDepartmentUUID = null
-    ): self
-    {
+        CompanyUUID $companyUUID,
+        Name $name,
+        string $internalCode,
+        Address $address,
+        bool $active,
+        ?string $description = null,
+        ?Phones $phones = null,
+        ?Emails $emails = null,
+        ?Websites $websites = null,
+        ?DepartmentUUID $parentDepartmentUUID = null,
+    ): self {
         if ($this->deleted) {
             throw new \DomainException('Cannot update a deleted department.');
         }

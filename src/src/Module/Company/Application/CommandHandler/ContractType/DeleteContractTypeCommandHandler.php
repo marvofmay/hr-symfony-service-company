@@ -12,7 +12,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'command.bus')]
 final readonly class DeleteContractTypeCommandHandler
 {
-    public function __construct(private ContractTypeDeleter $contractTypeDeleter, private EventDispatcherInterface $eventDispatcher,)
+    public function __construct(private ContractTypeDeleter $contractTypeDeleter, private EventDispatcherInterface $eventDispatcher)
     {
     }
 

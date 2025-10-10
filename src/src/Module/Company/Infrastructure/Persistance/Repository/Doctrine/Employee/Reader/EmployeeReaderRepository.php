@@ -6,7 +6,6 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Empl
 
 use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Address;
-use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\User;
@@ -112,13 +111,13 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
 
     public function getEmployeesByPESEL(array $selectedPESEL): Collection
     {
-        if ($selectedPESEL === []) {
+        if ([] === $selectedPESEL) {
             return new ArrayCollection();
         }
 
         $employees = $this->getEntityManager()
             ->createQuery(
-                'SELECT e FROM ' . Employee::class . ' e WHERE e.pesel IN (:pesels)'
+                'SELECT e FROM '.Employee::class.' e WHERE e.pesel IN (:pesels)'
             )
             ->setParameter('pesels', $selectedPESEL)
             ->getResult();
@@ -137,9 +136,9 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
         $filters->disable('soft_delete');
 
         try {
-            $deletedEmployee =  $this->createQueryBuilder(Employee::ALIAS)
-                ->where(Employee::ALIAS . '.' . Employee::COLUMN_UUID . ' = :uuid')
-                ->andWhere(Employee::ALIAS . '.' . Employee::COLUMN_DELETED_AT . ' IS NOT NULL')
+            $deletedEmployee = $this->createQueryBuilder(Employee::ALIAS)
+                ->where(Employee::ALIAS.'.'.Employee::COLUMN_UUID.' = :uuid')
+                ->andWhere(Employee::ALIAS.'.'.Employee::COLUMN_DELETED_AT.' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
@@ -163,18 +162,15 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
             $qb = $this->getEntityManager()->createQueryBuilder();
             $deletedAddress = $qb->select(Address::ALIAS)
                 ->from(Address::class, Address::ALIAS)
-                ->join(Address::ALIAS . '.' . Address::RELATION_EMPLOYEE, Employee::ALIAS)
-                ->where(Employee::ALIAS  . '.' . Employee::COLUMN_UUID . ' = :uuid')
-                ->andWhere(Address::ALIAS . '.' . Address::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->join(Address::ALIAS.'.'.Address::RELATION_EMPLOYEE, Employee::ALIAS)
+                ->where(Employee::ALIAS.'.'.Employee::COLUMN_UUID.' = :uuid')
+                ->andWhere(Address::ALIAS.'.'.Address::COLUMN_DELETED_AT.' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
 
             if (null === $deletedAddress) {
-                throw new \Exception(
-                    $this->translator->trans('employee.deleted.address.notExists', [':uuid' => $uuid], 'employees'),
-                    Response::HTTP_NOT_FOUND
-                );
+                throw new \Exception($this->translator->trans('employee.deleted.address.notExists', [':uuid' => $uuid], 'employees'), Response::HTTP_NOT_FOUND);
             }
 
             return $deletedAddress;
@@ -192,18 +188,15 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
             $qb = $this->getEntityManager()->createQueryBuilder();
             $deletedContacts = $qb->select(Contact::ALIAS)
                 ->from(Contact::class, Contact::ALIAS)
-                ->join(Contact::ALIAS . '.' . Contact::RELATION_EMPLOYEE, Employee::ALIAS)
-                ->where(Employee::ALIAS . '. ' . Employee::COLUMN_UUID . ' = :uuid')
-                ->andWhere(Contact::ALIAS . '.' . Contact::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->join(Contact::ALIAS.'.'.Contact::RELATION_EMPLOYEE, Employee::ALIAS)
+                ->where(Employee::ALIAS.'. '.Employee::COLUMN_UUID.' = :uuid')
+                ->andWhere(Contact::ALIAS.'.'.Contact::COLUMN_DELETED_AT.' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getResult();
 
             if (empty($deletedContacts)) {
-                throw new \Exception(
-                    $this->translator->trans('company.deleted.contacts.notExists', [':uuid' => $uuid], 'companies'),
-                    Response::HTTP_NOT_FOUND
-                );
+                throw new \Exception($this->translator->trans('company.deleted.contacts.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
             }
 
             return new ArrayCollection($deletedContacts);
@@ -221,22 +214,15 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
             $qb = $this->getEntityManager()->createQueryBuilder();
             $deletedUser = $qb->select(User::ALIAS)
                 ->from(User::class, User::ALIAS)
-                ->join(User::ALIAS . '.' . User::RELATION_EMPLOYEE, Employee::ALIAS)
-                ->where(Employee::ALIAS . '. ' . Employee::COLUMN_UUID . ' = :uuid')
-                ->andWhere(User::ALIAS . '.' . User::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->join(User::ALIAS.'.'.User::RELATION_EMPLOYEE, Employee::ALIAS)
+                ->where(Employee::ALIAS.'. '.Employee::COLUMN_UUID.' = :uuid')
+                ->andWhere(User::ALIAS.'.'.User::COLUMN_DELETED_AT.' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
 
             if (null === $deletedUser) {
-                throw new \Exception(
-                    $this->translator->trans(
-                        'employee.deleted.notExists',
-                        [':uuid' => $uuid],
-                        'employees'
-                    ),
-                    Response::HTTP_NOT_FOUND
-                );
+                throw new \Exception($this->translator->trans('employee.deleted.notExists', [':uuid' => $uuid], 'employees'), Response::HTTP_NOT_FOUND);
             }
 
             return $deletedUser;

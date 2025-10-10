@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Company;
 
 use App\Common\Domain\Interface\DomainEventInterface;
+use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
@@ -29,7 +30,9 @@ final readonly class CompanyUpdater
         private IndustryReaderInterface $industryReader,
         private ContactWriterInterface $contactWriter,
         private AddressWriterInterface $addressWriter,
-    ) {}
+        private EntityReferenceCache $entityReferenceCache,
+    ) {
+    }
 
     public function update(DomainEventInterface $event): void
     {
@@ -66,7 +69,7 @@ final readonly class CompanyUpdater
 
     private function deleteAddress(?Address $address): void
     {
-        if ($address !== null) {
+        if (null !== $address) {
             $this->addressWriter->deleteAddressInDB($address, Address::HARD_DELETED_AT);
         }
     }

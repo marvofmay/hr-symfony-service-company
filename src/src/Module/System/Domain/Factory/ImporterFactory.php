@@ -7,12 +7,7 @@ namespace App\Module\System\Domain\Factory;
 use App\Common\Domain\Interface\XLSXIteratorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
-use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
-use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
-use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
-use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
-use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Service\Company\CompanyAggregateCreator;
 use App\Module\Company\Domain\Service\Company\CompanyAggregateUpdater;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
@@ -37,30 +32,29 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final readonly class ImporterFactory
 {
     public function __construct(
-        private TranslatorInterface            $translator,
-        private CompanyReaderInterface         $companyReaderRepository,
-        private DepartmentReaderInterface      $departmentReaderRepository,
-        private ImportCompaniesPreparer        $importCompaniesPreparer,
-        private CompanyAggregateCreator        $companyAggregateCreator,
-        private CompanyAggregateUpdater        $companyAggregateUpdater,
-        private ImportDepartmentsPreparer      $importDepartmentsPreparer,
-        private DepartmentAggregateCreator     $departmentAggregateCreator,
-        private DepartmentAggregateUpdater     $departmentAggregateUpdater,
-        private EmployeeAggregateCreator       $employeeAggregateCreator,
-        private EmployeeAggregateUpdater       $employeeAggregateUpdater,
-        private ImportEmployeesPreparer        $importEmployeesPreparer,
-        private CacheInterface                 $cache,
-        private UpdateImportAction             $updateImportAction,
-        private ImportLogMultipleCreator       $importLogMultipleCreator,
-        private MessageService                 $messageService,
-        private MessageBusInterface            $eventBus,
+        private TranslatorInterface $translator,
+        private CompanyReaderInterface $companyReaderRepository,
+        private DepartmentReaderInterface $departmentReaderRepository,
+        private ImportCompaniesPreparer $importCompaniesPreparer,
+        private CompanyAggregateCreator $companyAggregateCreator,
+        private CompanyAggregateUpdater $companyAggregateUpdater,
+        private ImportDepartmentsPreparer $importDepartmentsPreparer,
+        private DepartmentAggregateCreator $departmentAggregateCreator,
+        private DepartmentAggregateUpdater $departmentAggregateUpdater,
+        private EmployeeAggregateCreator $employeeAggregateCreator,
+        private EmployeeAggregateUpdater $employeeAggregateUpdater,
+        private ImportEmployeesPreparer $importEmployeesPreparer,
+        private CacheInterface $cache,
+        private UpdateImportAction $updateImportAction,
+        private ImportLogMultipleCreator $importLogMultipleCreator,
+        private MessageService $messageService,
+        private MessageBusInterface $eventBus,
         private ImportCompaniesReferenceLoader $importCompaniesReferenceLoader,
         private ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
-        private iterable                       $importSharedValidators,
-        private iterable                       $importCompaniesValidators,
-        private iterable                       $importEmployeesValidators,
-    )
-    {
+        private iterable $importSharedValidators,
+        private iterable $importCompaniesValidators,
+        private iterable $importEmployeesValidators,
+    ) {
     }
 
     public function getImporter(ImportKindEnum $type, string $filePath, string $fileName): XLSXIteratorInterface

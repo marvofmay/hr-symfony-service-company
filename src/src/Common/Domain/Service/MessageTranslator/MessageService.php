@@ -8,7 +8,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class MessageService
 {
-    public function __construct(private TranslatorInterface $translator) {}
+    public function __construct(private TranslatorInterface $translator)
+    {
+    }
 
     public function get(string $key, array $parameters = [], string $domain = 'messages'): string
     {

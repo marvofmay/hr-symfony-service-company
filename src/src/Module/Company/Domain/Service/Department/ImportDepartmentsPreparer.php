@@ -11,7 +11,8 @@ final readonly class ImportDepartmentsPreparer
 {
     public function __construct(
         private DepartmentReaderInterface $departmentReaderRepository,
-    ) {}
+    ) {
+    }
 
     public function prepare(iterable $rows): array
     {

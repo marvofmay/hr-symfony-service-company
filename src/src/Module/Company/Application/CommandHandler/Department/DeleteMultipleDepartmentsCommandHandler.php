@@ -7,11 +7,8 @@ namespace App\Module\Company\Application\CommandHandler\Department;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Department\DeleteMultipleDepartmentsCommand;
-use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
-use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
-use App\Module\Company\Domain\Event\Company\CompanyMultipleDeletedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentMultipleDeletedEvent;
 use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInterface;
 use Ramsey\Uuid\Uuid;
@@ -24,13 +21,12 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final readonly class DeleteMultipleDepartmentsCommandHandler
 {
     public function __construct(
-        private EventDispatcherInterface           $eventDispatcher,
+        private EventDispatcherInterface $eventDispatcher,
         private DepartmentAggregateReaderInterface $departmentAggregateReaderRepository,
-        private EventStoreCreator                  $eventStoreCreator,
-        private Security                           $security,
-        private SerializerInterface                $serializer,
-    )
-    {
+        private EventStoreCreator $eventStoreCreator,
+        private Security $security,
+        private SerializerInterface $serializer,
+    ) {
     }
 
     public function __invoke(DeleteMultipleDepartmentsCommand $command): void
