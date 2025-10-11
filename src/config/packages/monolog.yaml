@@ -1,6 +1,7 @@
 monolog:
     channels:
-        - deprecation # Deprecations are logged in the dedicated "deprecation" channel when it exists
+        - deprecation
+        - eventLog
         - import
 
 when@test:
@@ -55,9 +56,14 @@ when@dev:
                 channels: ["!event", "!doctrine", "!console"]
             deprecation:
                 type: stream
-                path: "%kernel.logs_dir%/deprecations.log"
+                path: "%kernel.logs_dir%/deprecation.log"
                 level: debug
-                channels: [deprecation]
+                channels: ["deprecation"]
+            eventLog:
+              type: stream
+              path: "%kernel.logs_dir%/event.log"
+              level: debug
+              channels: ["eventLog"]
             import:
                 type: stream
                 path: "%kernel.logs_dir%/import.log"

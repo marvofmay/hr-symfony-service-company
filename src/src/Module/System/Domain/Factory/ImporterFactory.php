@@ -17,6 +17,7 @@ use App\Module\Company\Domain\Service\Department\DepartmentAggregateCreator;
 use App\Module\Company\Domain\Service\Department\DepartmentAggregateUpdater;
 use App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX;
 use App\Module\Company\Domain\Service\Department\ImportDepartmentsPreparer;
+use App\Module\Company\Domain\Service\Department\ImportDepartmentsReferenceLoader;
 use App\Module\Company\Domain\Service\Employee\EmployeeAggregateCreator;
 use App\Module\Company\Domain\Service\Employee\EmployeeAggregateUpdater;
 use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
@@ -50,9 +51,11 @@ final readonly class ImporterFactory
         private MessageService $messageService,
         private MessageBusInterface $eventBus,
         private ImportCompaniesReferenceLoader $importCompaniesReferenceLoader,
+        private ImportDepartmentsReferenceLoader $importDepartmentsReferenceLoader,
         private ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
         private iterable $importSharedValidators,
         private iterable $importCompaniesValidators,
+        private iterable $importDepartmentsValidators,
         private iterable $importEmployeesValidators,
     ) {
     }
@@ -88,6 +91,9 @@ final readonly class ImporterFactory
                 $this->importLogMultipleCreator,
                 $this->messageService,
                 $this->eventBus,
+                $this->importDepartmentsReferenceLoader,
+                $this->importSharedValidators,
+                $this->importDepartmentsValidators,
             ),
             ImportKindEnum::IMPORT_EMPLOYEES => new ImportEmployeesFromXLSX(
                 sprintf('%s/%s', $filePath, $fileName),

@@ -7,4 +7,5 @@ services:
       arguments:
         $importSharedValidators: !tagged_iterator 'app.import_shared_validator'
         $importCompaniesValidators: !tagged_iterator 'app.import_company_validator'
+        $importDepartmentsValidators: !tagged_iterator 'app.import_department_validator'
         $importEmployeesValidators: !tagged_iterator 'app.import_employee_validator'

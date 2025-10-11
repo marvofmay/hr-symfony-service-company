@@ -3,10 +3,6 @@ services:
     autowire: true
     autoconfigure: true
 
-#  App\Module\Company\Domain\Entity\User:
-#    arguments:
-#      $userPasswordHasher: '@security.user_password_hasher'
-
   App\:
     resource: '../../src/'
     exclude:
@@ -38,5 +34,11 @@ services:
     arguments:
       $loggers: !service_locator
         main: '@monolog.logger'
+        eventLog: '@monolog.logger.eventLog'
         import: '@monolog.logger.import'
 
+  App\Module\System\Application\EventSubscriber\GenericEventLoggerSubscriber:
+    arguments:
+      $loggers: !service_locator
+        main: '@monolog.logger'
+        eventLog: '@monolog.logger.eventLog'

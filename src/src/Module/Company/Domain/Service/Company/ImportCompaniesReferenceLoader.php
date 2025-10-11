@@ -49,11 +49,11 @@ final class ImportCompaniesReferenceLoader
         return $this->companies;
     }
 
-    private function mapByUUID(iterable $entities): array
+    private function mapByUUID(iterable $industries): array
     {
         $map = [];
-        foreach ($entities as $entity) {
-            $map[$entity->getUUID()->toString()] = $entity;
+        foreach ($industries as $industry) {
+            $map[$industry->getUUID()->toString()] = $industry;
         }
 
         return $map;

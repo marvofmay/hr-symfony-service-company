@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Department\Reader;
 
-use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Department;
@@ -47,13 +46,6 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
 
         $departments = $qb->getQuery()->getResult();
 
-        // $foundUUIDs = array_map(fn (Department $department) => $department->getUUID(), $departments);
-        // $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
-        //
-        // if ($missingUUIDs) {
-        //    throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('department.uuid.notFound', [], 'departments'), implode(', ', $missingUUIDs)));
-        // }
-
         return new ArrayCollection($departments);
     }
 
@@ -94,6 +86,24 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
 
         return $qb->getQuery()->getOneOrNullResult();
     }
+
+    public function getDepartmentsByInternalCode(array $selectedInternalCode): Collection
+    {
+        if (!$selectedInternalCode) {
+            return new ArrayCollection();
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(Department::ALIAS)
+            ->from(Department::class, Department::ALIAS)
+            ->where(Department::ALIAS.'.'.Department::COLUMN_INTERNAL_CODE.' IN (:internalCodes)')
+            ->setParameter('internalCodes', $selectedInternalCode);
+
+        $departments = $qb->getQuery()->getResult();
+
+        return new ArrayCollection($departments);
+    }
+
 
     public function isDepartmentExistsWithUUID(string $departmentUUID): bool
     {

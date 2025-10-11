@@ -9,6 +9,7 @@ use App\Common\Domain\Interface\EnumInterface;
 enum MonologChanelEnum: string implements EnumInterface
 {
     case MAIN = 'main';
+    case EVENT_LOG = 'eventLog';
     case IMPORT = 'import';
 
     public function label(): string

@@ -25,7 +25,7 @@ class FullNameValidator implements ImportRowValidatorInterface
         }
 
         if (strlen($fullName) < 3) {
-            return $this->messageService->get('company.name.minimumLength', [':qty' => 3], 'companies');
+            return $this->messageService->get('company.fullName.minimumLength', [':qty' => 3], 'companies');
         }
 
         return null;

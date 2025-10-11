@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
+use _PHPStan_ac6dae9b0\Psr\Log\LogLevel;
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\DTO\Role\CreateDTO;
 use App\Module\Company\Presentation\API\Action\Role\CreateRoleAction;
@@ -30,13 +32,12 @@ final class CreateRoleController extends AbstractController
             if (!$this->isGranted(PermissionEnum::CREATE, AccessEnum::ROLE)) {
                 throw new \Exception($this->messageService->get('accessDenied'), Response::HTTP_FORBIDDEN);
             }
-
             $createRoleAction->execute($createDTO);
 
             return new JsonResponse(['message' => $this->messageService->get('role.add.success', [], 'roles')], Response::HTTP_CREATED);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->messageService->get('role.add.error', [], 'roles'), $error->getMessage());
-            $this->eventBus->dispatch(new LogFileEvent($message));
+            $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
 
             return new JsonResponse(['message' => $message], $error->getCode());
         }

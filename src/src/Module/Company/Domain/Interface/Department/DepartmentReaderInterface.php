@@ -19,6 +19,7 @@ interface DepartmentReaderInterface
     public function isDepartmentExistsWithName(string $name, ?string $departmentUUID = null): bool;
 
     public function getDepartmentByInternalCode(string $internalCode, ?string $uuid): ?Department;
+    public function getDepartmentsByInternalCode(array $selectedInternalCode): Collection;
 
     public function isDepartmentExistsWithUUID(string $departmentUUID): bool;
 
