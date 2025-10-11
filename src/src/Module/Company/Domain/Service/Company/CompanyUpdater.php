@@ -9,7 +9,7 @@ use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
-use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Interface\Address\AddressWriterInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyWriterInterface;
@@ -18,6 +18,7 @@ use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use App\Module\Company\Domain\Service\Company\Factory\CompanyFactory;
 use App\Module\Company\Domain\Service\Factory\AddressFactory;
 use App\Module\Company\Domain\Service\Factory\ContactFactory;
+use Doctrine\Common\Collections\Collection;
 
 final readonly class CompanyUpdater
 {
@@ -25,22 +26,26 @@ final readonly class CompanyUpdater
         private CompanyFactory $companyFactory,
         private AddressFactory $addressFactory,
         private ContactFactory $contactFactory,
-        private CompanyWriterInterface $companyWriter,
-        private CompanyReaderInterface $companyReader,
-        private IndustryReaderInterface $industryReader,
-        private ContactWriterInterface $contactWriter,
-        private AddressWriterInterface $addressWriter,
+        private CompanyWriterInterface $companyWriterRepository,
+        private CompanyReaderInterface $companyReaderRepository,
+        private IndustryReaderInterface $industryReaderRepository,
+        private ContactWriterInterface $contactWriterRepository,
+        private AddressWriterInterface $addressWriterRepository,
         private EntityReferenceCache $entityReferenceCache,
     ) {
     }
 
     public function update(DomainEventInterface $event): void
     {
-        $company = $this->companyReader->getCompanyByUUID($event->uuid->toString());
+        $company = $this->companyReaderRepository->getCompanyByUUID($event->uuid->toString());
+
+        $address = $company->getAddress();
+        $contacts = $company->getContacts();
+
         $this->companyFactory->update($company, $event);
 
-        $this->deleteAddress($company->getAddress());
-        $this->deleteContacts($company);
+        $this->deleteAddress($address);
+        $this->deleteContacts($contacts);
 
         $address = $this->addressFactory->create($event->address);
         $company->setAddress($address);
@@ -50,35 +55,50 @@ final readonly class CompanyUpdater
             $company->addContact($contact);
         }
 
-        if ($event->industryUUID) {
-            $industry = $this->industryReader->getIndustryByUUID($event->industryUUID->toString());
-            if ($industry) {
-                $company->setIndustry($industry);
-            }
-        }
+        $industry = $this->entityReferenceCache->get(
+            Industry::class,
+            $event->industryUUID->toString(),
+            fn (string $uuid) => $this->industryReaderRepository->getIndustryByUUID($uuid)
+        );
 
-        if ($event->parentCompanyUUID) {
-            $parent = $this->companyReader->getCompanyByUUID($event->parentCompanyUUID->toString());
-            if ($parent) {
-                $company->setParentCompany($parent);
-            }
-        }
+        $parentCompany = $event->parentCompanyUUID?->toString()
+            ? $this->entityReferenceCache->get(
+                Company::class,
+                $event->parentCompanyUUID->toString(),
+                fn (string $uuid) => $this->companyReaderRepository->getCompanyByUUID($uuid)
+            )
+            : null;
 
-        $this->companyWriter->saveCompanyInDB($company);
+        $this->setCompanyRelations($company, $industry, $parentCompany, $address, $contacts);
+
+        $this->companyWriterRepository->saveCompanyInDB($company);
     }
 
     private function deleteAddress(?Address $address): void
     {
         if (null !== $address) {
-            $this->addressWriter->deleteAddressInDB($address, Address::HARD_DELETED_AT);
+            $this->addressWriterRepository->deleteAddressInDB($address, Address::HARD_DELETED_AT);
         }
     }
 
-    private function deleteContacts(Company $company): void
+    private function deleteContacts(Collection $contacts): void
     {
-        foreach (ContactTypeEnum::communicationTypes() as $type) {
-            $contacts = $company->getContacts($type);
-            $this->contactWriter->deleteContactsInDB($contacts, Contact::HARD_DELETED_AT);
+        $this->contactWriterRepository->deleteContactsInDB($contacts, Contact::HARD_DELETED_AT);
+    }
+
+    private function setCompanyRelations(
+        Company $company,
+        Industry $industry,
+        ?Company $parentCompany,
+        Address $address,
+        array $contacts,
+    ): void {
+        $company->setIndustry($industry);
+        $company->setAddress($address);
+        $company->setParentCompany($parentCompany);
+
+        foreach ($contacts as $contact) {
+            $company->addContact($contact);
         }
     }
 }
