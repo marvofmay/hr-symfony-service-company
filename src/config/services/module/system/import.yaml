@@ -15,3 +15,9 @@ services:
   App\Module\System\Application\QueryHandler\Import\GetImportByFileQueryHandler:
     tags:
       - { name: 'messenger.message_handler', bus: 'query.bus' }
+
+  App\Module\System\Domain\Factory\ImporterFactory:
+    arguments:
+      $importCompaniesValidators: !tagged_iterator 'app.import_company_validator'
+      $importDepartmentsValidators: !tagged_iterator 'app.import_department_validator'
+      $importEmployeesValidators: !tagged_iterator 'app.import_employee_validator'

@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Department;
 
+use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
+use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 
 final readonly class ImportDepartmentsPreparer
 {
     public function __construct(
         private DepartmentReaderInterface $departmentReaderRepository,
+        private EntityReferenceCache $entityReferenceCache,
     ) {
     }
 
@@ -21,8 +24,12 @@ final readonly class ImportDepartmentsPreparer
 
         foreach ($rows as $row) {
             $internalCode = trim((string) $row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_INTERNAL_CODE]);
+            $existingDepartment = $this->entityReferenceCache->get(
+                Department::class,
+                $internalCode,
+                fn (string $nip) => $this->departmentReaderRepository->getDepartmentByInternalCode($internalCode)
+            );
 
-            $existingDepartment = $this->departmentReaderRepository->getDepartmentByInternalCode($internalCode);
             $row[ImportDepartmentsFromXLSX::COLUMN_DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS] = null !== $existingDepartment;
 
             if (!isset($internalCodeMap[$internalCode])) {

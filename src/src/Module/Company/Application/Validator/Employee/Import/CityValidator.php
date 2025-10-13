@@ -6,12 +6,11 @@ namespace App\Module\Company\Application\Validator\Employee\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Common\Shared\Utils\PESELValidator as PESEL;
 use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_employee_validator')]
-class PESELValidator implements ImportRowValidatorInterface
+#[AutoconfigureTag('app.import_shared_validator')]
+class CityValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
     {
@@ -19,14 +18,9 @@ class PESELValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $pesel = (string) $row[ImportEmployeesFromXLSX::COLUMN_PESEL] ?? null;
-        if (null === $pesel) {
-            return $this->messageService->get('employee.pesel.required', [], 'employees');
-        }
-
-        $errorMessage = PESEL::validate($pesel);
-        if (null !== $errorMessage) {
-            return $this->messageService->get($errorMessage, [], 'validators');
+        $city = $row[ImportEmployeesFromXLSX::COLUMN_CITY] ?? null;
+        if (null === $city) {
+            return $this->messageService->get('employee.city.required', [], 'employees');
         }
 
         return null;

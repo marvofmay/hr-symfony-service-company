@@ -6,8 +6,10 @@ namespace App\Module\System\Domain\Factory;
 
 use App\Common\Domain\Interface\XLSXIteratorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
+use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use App\Module\Company\Domain\Service\Company\CompanyAggregateCreator;
 use App\Module\Company\Domain\Service\Company\CompanyAggregateUpdater;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
@@ -27,7 +29,6 @@ use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final readonly class ImporterFactory
@@ -36,6 +37,7 @@ final readonly class ImporterFactory
         private TranslatorInterface $translator,
         private CompanyReaderInterface $companyReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
+        private EmployeeReaderInterface $employeeReaderRepository,
         private ImportCompaniesPreparer $importCompaniesPreparer,
         private CompanyAggregateCreator $companyAggregateCreator,
         private CompanyAggregateUpdater $companyAggregateUpdater,
@@ -45,7 +47,6 @@ final readonly class ImporterFactory
         private EmployeeAggregateCreator $employeeAggregateCreator,
         private EmployeeAggregateUpdater $employeeAggregateUpdater,
         private ImportEmployeesPreparer $importEmployeesPreparer,
-        private CacheInterface $cache,
         private UpdateImportAction $updateImportAction,
         private ImportLogMultipleCreator $importLogMultipleCreator,
         private MessageService $messageService,
@@ -53,10 +54,10 @@ final readonly class ImporterFactory
         private ImportCompaniesReferenceLoader $importCompaniesReferenceLoader,
         private ImportDepartmentsReferenceLoader $importDepartmentsReferenceLoader,
         private ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
-        private iterable $importSharedValidators,
         private iterable $importCompaniesValidators,
         private iterable $importDepartmentsValidators,
         private iterable $importEmployeesValidators,
+        private EntityReferenceCache $entityReferenceCache,
     ) {
     }
 
@@ -75,29 +76,28 @@ final readonly class ImporterFactory
                 $this->messageService,
                 $this->eventBus,
                 $this->importCompaniesReferenceLoader,
-                $this->importSharedValidators,
                 $this->importCompaniesValidators,
+                $this->entityReferenceCache,
             ),
             ImportKindEnum::IMPORT_DEPARTMENTS => new ImportDepartmentsFromXLSX(
                 sprintf('%s/%s', $filePath, $fileName),
                 $this->translator,
-                $this->companyReaderRepository,
                 $this->departmentReaderRepository,
                 $this->departmentAggregateCreator,
                 $this->departmentAggregateUpdater,
                 $this->importDepartmentsPreparer,
-                $this->cache,
                 $this->updateImportAction,
                 $this->importLogMultipleCreator,
                 $this->messageService,
                 $this->eventBus,
                 $this->importDepartmentsReferenceLoader,
-                $this->importSharedValidators,
                 $this->importDepartmentsValidators,
+                $this->entityReferenceCache,
             ),
             ImportKindEnum::IMPORT_EMPLOYEES => new ImportEmployeesFromXLSX(
                 sprintf('%s/%s', $filePath, $fileName),
                 $this->translator,
+                $this->employeeReaderRepository,
                 $this->employeeAggregateCreator,
                 $this->employeeAggregateUpdater,
                 $this->importEmployeesPreparer,
@@ -106,8 +106,8 @@ final readonly class ImporterFactory
                 $this->messageService,
                 $this->eventBus,
                 $this->importEmployeesReferenceLoader,
-                $this->importSharedValidators,
                 $this->importEmployeesValidators,
+                $this->entityReferenceCache,
             ),
             default => throw new \InvalidArgumentException("Unsupported importer type: $type->value"),
         };

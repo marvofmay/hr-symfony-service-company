@@ -6,12 +6,11 @@ namespace App\Module\Company\Application\Validator\Company\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Common\Shared\Utils\NIPValidator as NIP;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_company_validator')]
-class NIPValidator implements ImportRowValidatorInterface
+class CityValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
     {
@@ -19,15 +18,9 @@ class NIPValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $nip = (string) $row[ImportCompaniesFromXLSX::COLUMN_NIP] ?? null;
-        if (empty($nip)) {
-            return $this->messageService->get('company.nip.required', [], 'companies');
-        }
-
-        $nip = preg_replace('/\D/', '', $nip);
-        $errorMessage = NIP::validate($nip);
-        if (null !== $errorMessage) {
-            return $this->messageService->get($errorMessage, [], 'validators');
+        $city = $row[ImportCompaniesFromXLSX::COLUMN_CITY] ?? null;
+        if (null === $city) {
+            return $this->messageService->get('company.city.required', [], 'companies');
         }
 
         return null;

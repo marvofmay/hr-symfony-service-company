@@ -1,7 +1,4 @@
 services:
-    _defaults:
-        autowire: true
-        autoconfigure: true
     #Note handlers
     App\Module\Note\Application\CommandHandler\CreateNoteCommandHandler:
         tags:

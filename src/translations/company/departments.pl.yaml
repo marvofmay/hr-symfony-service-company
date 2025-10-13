@@ -27,6 +27,8 @@ department:
     maximumLength: "Opis - maksymalnie znaków :qty"
   active:
     invalid: "Nieprawidłowa wartość pola active"
+  email:
+    alreadyExists: "Departament o podanym email \":email\" już istnieje"
   add:
     success: "Departament został pomyślnie zapisany"
     error: "Wystąpił błąd - departament nie został dodany"

@@ -35,6 +35,8 @@ company:
   description:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
+  email:
+    alreadyExists: "Firma o podanym email \":email\" już istnieje"
   add:
     success: "Firma została pomyślnie zapisana"
     error: "Wystąpił błąd - firma nie została dodana"

@@ -4,17 +4,34 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Department;
 
+use App\Common\Infrastructure\Cache\EntityReferenceCache;
+use App\Module\Company\Domain\Entity\Department;
+use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 
 final class ImportDepartmentsReferenceLoader
 {
-    private array $companies = [];
-    private array $departments = [];
+    public array $companies = [] {
+        get {
+            return $this->companies;
+        }
+    }
+    public array $departments = [] {
+        get {
+            return $this->departments;
+        }
+    }
+    public array $emailsInternalCodes = [] {
+        get {
+            return $this->emailsInternalCodes;
+        }
+    }
 
     public function __construct(
         private readonly CompanyReaderInterface $companyReaderRepository,
         private readonly DepartmentReaderInterface $departmentReaderRepository,
+        private readonly EntityReferenceCache $entityReferenceCache,
     ) {
     }
 
@@ -22,31 +39,30 @@ final class ImportDepartmentsReferenceLoader
     {
         $companyUUIDs = [];
         $departmentInternalCodes = [];
+        $departmentEmails = [];
 
         foreach ($rows as $row) {
             if (!empty($row[ImportDepartmentsFromXLSX::COLUMN_COMPANY_UUID])) {
                 $companyUUIDs[] = (string) $row[ImportDepartmentsFromXLSX::COLUMN_COMPANY_UUID];
             }
+            if (!empty($row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_INTERNAL_CODE])) {
+                $departmentInternalCodes[] = (string) $row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_INTERNAL_CODE];
+            }
             if (!empty($row[ImportDepartmentsFromXLSX::COLUMN_PARENT_DEPARTMENT_INTERNAL_CODE])) {
                 $departmentInternalCodes[] = (string) $row[ImportDepartmentsFromXLSX::COLUMN_PARENT_DEPARTMENT_INTERNAL_CODE];
+            }
+            if (!empty($row[ImportDepartmentsFromXLSX::COLUMN_EMAIL])) {
+                $departmentEmails[] = (string) $row[ImportDepartmentsFromXLSX::COLUMN_EMAIL];
             }
         }
 
         $companyUUIDs = array_unique($companyUUIDs);
         $departmentInternalCodes = array_unique($departmentInternalCodes);
+        $departmentEmails = array_unique($departmentEmails);
 
         $this->companies = $this->mapByUUID($this->companyReaderRepository->getCompaniesByUUID($companyUUIDs));
         $this->departments = $this->mapByInternalCode($this->departmentReaderRepository->getDepartmentsByInternalCode($departmentInternalCodes));
-    }
-
-    public function getCompanies(): array
-    {
-        return $this->companies;
-    }
-
-    public function getDepartments(): array
-    {
-        return $this->departments;
+        $this->emailsInternalCodes = $this->mapByEmail($this->departmentReaderRepository->getDepartmentsInternalCodeByEmails($departmentEmails));
     }
 
     private function mapByUUID(iterable $companies): array
@@ -54,6 +70,7 @@ final class ImportDepartmentsReferenceLoader
         $map = [];
         foreach ($companies as $company) {
             $map[$company->getUUID()->toString()] = $company;
+            $this->entityReferenceCache->set($company);
         }
 
         return $map;
@@ -64,6 +81,17 @@ final class ImportDepartmentsReferenceLoader
         $map = [];
         foreach ($departments as $department) {
             $map[$department->getInternalCode()] = $department;
+            $this->entityReferenceCache->set($department);
+        }
+
+        return $map;
+    }
+
+    private function mapByEmail(iterable $items): array
+    {
+        $map = [];
+        foreach ($items as $item) {
+            $map[$item[ContactTypeEnum::EMAIL->value]] = $item[Department::COLUMN_INTERNAL_CODE];
         }
 
         return $map;

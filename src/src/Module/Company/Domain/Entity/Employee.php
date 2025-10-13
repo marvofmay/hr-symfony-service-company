@@ -29,7 +29,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'index_pesel', columns: ['pesel'])]
 #[ORM\Index(name: 'index_employment_from', columns: ['employment_from'])]
 #[ORM\Index(name: 'index_employment_to', columns: ['employment_to'])]
-#[ORM\Index(name: 'index_active', columns: ['active'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Employee

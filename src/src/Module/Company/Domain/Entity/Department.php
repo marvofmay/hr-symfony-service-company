@@ -41,6 +41,8 @@ class Department
     public const string RELATION_EMPLOYEES = 'employees';
     public const string RELATION_PARENT_DEPARTMENT = 'parentDepartment';
     public const string RELATION_COMPANY = 'company';
+    public const string RELATION_CONTACTS = 'contacts';
+    public const string RELATION_ADDRESS = 'address';
     public const string ALIAS = 'department';
 
     #[ORM\Id]

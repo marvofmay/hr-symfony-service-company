@@ -19,6 +19,7 @@ interface DepartmentReaderInterface
     public function isDepartmentExistsWithName(string $name, ?string $departmentUUID = null): bool;
 
     public function getDepartmentByInternalCode(string $internalCode, ?string $uuid): ?Department;
+
     public function getDepartmentsByInternalCode(array $selectedInternalCode): Collection;
 
     public function isDepartmentExistsWithUUID(string $departmentUUID): bool;
@@ -30,4 +31,5 @@ interface DepartmentReaderInterface
     public function getDeletedAddressByDepartmentByUUID(string $uuid): ?Address;
 
     public function getDeletedContactsByDepartmentByUUID(string $uuid): Collection;
+    public function getDepartmentsInternalCodeByEmails(array $emails): Collection;
 }

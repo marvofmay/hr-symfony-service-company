@@ -7,6 +7,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Depa
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Department;
+use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -104,7 +105,6 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
         return new ArrayCollection($departments);
     }
 
-
     public function isDepartmentExistsWithUUID(string $departmentUUID): bool
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -195,5 +195,20 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
         } finally {
             $filters->enable('soft_delete');
         }
+    }
+
+    public function getDepartmentsInternalCodeByEmails(array $emails): Collection
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select(Department::ALIAS . '.' . Department::COLUMN_INTERNAL_CODE, Contact::ALIAS . '.' . Contact::COLUMN_DATA . ' AS email')
+            ->from(Department::class, Department::ALIAS)
+            ->join(Department::ALIAS . '.'.  Department::RELATION_CONTACTS, Contact::ALIAS)
+            ->where(Contact::ALIAS. '.'.  Contact::COLUMN_DATA . ' IN (:emails)')
+            ->setParameter('emails', $emails);
+
+        $results = $qb->getQuery()->getArrayResult();
+
+        return new ArrayCollection($results);
     }
 }

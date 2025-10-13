@@ -6,12 +6,12 @@ namespace App\Module\Company\Application\Validator\Employee\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Common\Shared\Utils\PESELValidator as PESEL;
+use App\Common\Shared\Utils\BoolValidator;
 use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_employee_validator')]
-class ParentEmployeePESELValidator implements ImportRowValidatorInterface
+#[AutoconfigureTag('app.import_shared_validator')]
+class ActiveValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
     {
@@ -19,20 +19,11 @@ class ParentEmployeePESELValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $parentEmployeePESEL = $row[ImportEmployeesFromXLSX::COLUMN_PARENT_EMPLOYEE_PESEL] ?? null;
-        if (empty($parentEmployeePESEL)) {
-            return null;
-        }
-
-        $errorMessage = PESEL::validate($parentEmployeePESEL);
+        $active = $row[ImportEmployeesFromXLSX::COLUMN_ACTIVE] ?? false;
+        $errorMessage = BoolValidator::validate($active);
         if (null !== $errorMessage) {
             return $this->messageService->get($errorMessage, [], 'validators');
         }
-
-        // $employeeExists = isset($additionalData['employees'][$parentEmployeePESEL]);
-        // if (!$employeeExists) {
-        //    return $this->messageService->get('employee.pesel.notExists', [':pesel' => $parentEmployeePESEL], 'employee');
-        // }
 
         return null;
     }

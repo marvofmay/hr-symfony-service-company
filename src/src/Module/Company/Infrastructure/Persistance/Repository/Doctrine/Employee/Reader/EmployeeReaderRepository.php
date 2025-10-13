@@ -230,4 +230,19 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
             $filters->enable('soft_delete');
         }
     }
+
+    public function getEmployeesPESELByEmails(array $emails): Collection
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select(Employee::ALIAS . '.' . Employee::COLUMN_PESEL, Contact::ALIAS . '.' . Contact::COLUMN_DATA . ' AS email')
+            ->from(Employee::class, Employee::ALIAS)
+            ->join(Employee::ALIAS . '.'.  Employee::RELATION_CONTACTS, Contact::ALIAS)
+            ->where(Contact::ALIAS. '.'.  Contact::COLUMN_DATA . ' IN (:emails)')
+            ->setParameter('emails', $emails);
+
+        $results = $qb->getQuery()->getArrayResult();
+
+        return new ArrayCollection($results);
+    }
 }

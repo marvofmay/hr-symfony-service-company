@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\Validator\Shared\Import;
+namespace App\Module\Company\Application\Validator\Department\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
+use App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_shared_validator')]
+#[AutoconfigureTag('app.import_department_validator')]
 class PhoneValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
@@ -18,9 +18,9 @@ class PhoneValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $phone = $row[ImportEmployeesFromXLSX::COLUMN_PHONE] ?? null;
+        $phone = $row[ImportDepartmentsFromXLSX::COLUMN_PHONE] ?? null;
         if (null === $phone) {
-            return $this->messageService->get('employee.phone.required', [], 'employees');
+            return $this->messageService->get('department.phone.required', [], 'departments');
         }
 
         return null;

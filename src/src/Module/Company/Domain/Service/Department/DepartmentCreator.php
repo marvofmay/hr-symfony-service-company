@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Department;
 
 use App\Common\Domain\Interface\DomainEventInterface;
+use App\Common\Infrastructure\Cache\EntityReferenceCache;
+use App\Module\Company\Domain\Entity\Address;
+use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentWriterInterface;
@@ -24,6 +28,7 @@ final readonly class DepartmentCreator
         private CompanyReaderInterface $companyReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
         private DepartmentWriterInterface $departmentWriterRepository,
+        private EntityReferenceCache $entityReferenceCache,
     ) {
         $this->contacts = new ArrayCollection();
     }
@@ -33,20 +38,34 @@ final readonly class DepartmentCreator
         $department = $this->departmentFactory->create($event);
         $address = $this->addressFactory->create($event->address);
         $contacts = $this->contactFactory->create($event->phones, $event->emails, $event->websites);
+
+        $company = $this->entityReferenceCache->get(
+            Company::class,
+            $event->companyUUID->toString(),
+            fn (string $uuid) => $this->companyReaderRepository->getCompanyByUUID($uuid)
+        );
+
+        $parentDepartment = $event->parentDepartmentUUID?->toString()
+            ? $this->entityReferenceCache->get(
+                Department::class,
+                $event->parentDepartmentUUID->toString(),
+                fn (string $uuid) => $this->departmentReaderRepository->getDepartmentByUUID($uuid)
+            )
+            : null;
+
+        $this->setDepartmentRelations($department, $company, $parentDepartment, $address, $contacts);
+
+        $this->departmentWriterRepository->saveDepartmentInDB($department);
+    }
+
+    private function setDepartmentRelations(Department $department, Company $company, ?Department $parentDepartment, Address $address, array $contacts): void
+    {
+        $department->setCompany($company);
+        $department->setParentDepartment($parentDepartment);
         $department->setAddress($address);
 
         foreach ($contacts as $contact) {
             $department->addContact($contact);
         }
-
-        $company = $this->companyReaderRepository->getCompanyByUUID($event->companyUUID->toString());
-        $department->setCompany($company);
-
-        if (null !== $event->parentDepartmentUUID) {
-            $parentDepartment = $this->departmentReaderRepository->getDepartmentByUUID($event->parentDepartmentUUID->toString());
-            $department->setParentDepartment($parentDepartment);
-        }
-
-        $this->departmentWriterRepository->saveDepartmentInDB($department);
     }
 }

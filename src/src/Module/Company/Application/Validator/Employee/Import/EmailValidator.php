@@ -29,7 +29,10 @@ class EmailValidator implements ImportRowValidatorInterface
             return $this->messageService->get($errorMessage, [], 'validators');
         }
 
-        // ToDo:: check if employee with an email and a different PESEL alreday exists in the DB
+        $pesel = (string)$row[ImportEmployeesFromXLSX::COLUMN_PESEL] ?? null;
+        if (array_key_exists($email, $additionalData['emailsPESELs']) && $additionalData['emailsPESELs'][$email] !== $pesel) {
+            return $this->messageService->get('employee.email.alreadyExists', [':email' => $email], 'employees');
+        }
 
         return null;
     }

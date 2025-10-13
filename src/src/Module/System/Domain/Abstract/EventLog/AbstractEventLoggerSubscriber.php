@@ -7,7 +7,6 @@ namespace App\Module\System\Domain\Abstract\EventLog;
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Module\System\Domain\Entity\EventLog;
 use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Service\ServiceProviderInterface;
@@ -16,11 +15,10 @@ abstract class AbstractEventLoggerSubscriber
 {
     public function __construct(
         protected EntityManagerInterface $em,
-        protected SerializerInterface    $serializer,
+        protected SerializerInterface $serializer,
         private ServiceProviderInterface $loggers,
-        protected Security               $security,
-    )
-    {
+        protected Security $security,
+    ) {
     }
 
     protected function log(string $eventClass, string $entityClass, mixed $data): void
@@ -29,7 +27,7 @@ abstract class AbstractEventLoggerSubscriber
         $employee = method_exists($user, 'getEmployee') ? $user->getEmployee() : null;
 
         $jsonData = $this->serializer->serialize($data, 'json', [
-            'circular_reference_handler' => fn($object) => method_exists($object, 'getUUID') ? $object->getUUID() : spl_object_id($object),
+            'circular_reference_handler' => fn ($object) => method_exists($object, 'getUUID') ? $object->getUUID() : spl_object_id($object),
         ]);
 
         $logger = $this->loggers->has(MonologChanelEnum::EVENT_LOG->value)

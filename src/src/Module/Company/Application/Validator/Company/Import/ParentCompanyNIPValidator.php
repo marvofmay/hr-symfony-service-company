@@ -30,9 +30,9 @@ class ParentCompanyNIPValidator implements ImportRowValidatorInterface
             return $this->messageService->get($errorMessage, [], 'validators');
         }
 
-        // $companyExists = isset($additionalData['companies'][$parentCompanyNIP]);
+        // $companyExists = array_key_exists($parentCompanyNIP, $additionalData['companies']);
         // if (!$companyExists) {
-        //    return $this->messageService->get('company.nip.notExists', [':nip' => $parentCompanyNIP], 'companies');
+        //   return $this->messageService->get('company.nip.notExists', [':nip' => $parentCompanyNIP], 'companies');
         // }
 
         return null;

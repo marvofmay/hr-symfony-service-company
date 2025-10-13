@@ -86,13 +86,8 @@ final readonly class CompanyUpdater
         $this->contactWriterRepository->deleteContactsInDB($contacts, Contact::HARD_DELETED_AT);
     }
 
-    private function setCompanyRelations(
-        Company $company,
-        Industry $industry,
-        ?Company $parentCompany,
-        Address $address,
-        array $contacts,
-    ): void {
+    private function setCompanyRelations(Company $company, Industry $industry, ?Company $parentCompany, Address $address, array $contacts): void
+    {
         $company->setIndustry($industry);
         $company->setAddress($address);
         $company->setParentCompany($parentCompany);

@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Employee;
 
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Common\XLSX\XLSXIterator;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
+use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Entity\Import;
 use App\Module\System\Domain\Enum\ImportLogKindEnum;
@@ -42,11 +45,11 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
     public const string COLUMN_DYNAMIC_AGGREGATE_UUID = '_aggregate_uuid';
 
     private array $errorMessages = [];
-    private array $validators;
 
     public function __construct(
         private readonly string $filePath,
         private readonly TranslatorInterface $translator,
+        private readonly EmployeeReaderInterface $employeeReaderRepository,
         private readonly EmployeeAggregateCreator $employeeAggregateCreator,
         private readonly EmployeeAggregateUpdater $employeeAggregateUpdater,
         private readonly ImportEmployeesPreparer $importEmployeesPreparer,
@@ -55,29 +58,25 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         private readonly MessageService $messageService,
         private readonly MessageBusInterface $eventBus,
         private readonly ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
-        private readonly iterable $sharedValidators,
         private readonly iterable $employeesValidators,
+        private readonly EntityReferenceCache $entityReferenceCache,
     ) {
         parent::__construct($this->filePath, $this->translator);
-
-        $this->validators = array_merge(
-            iterator_to_array($this->sharedValidators),
-            iterator_to_array($this->employeesValidators)
-        );
     }
 
     public function validateRow(array $row, int $index): array
     {
         $this->importEmployeesReferenceLoader->preload($this->import());
 
-        $departments = $this->importEmployeesReferenceLoader->getDepartments();
-        $positions = $this->importEmployeesReferenceLoader->getPositions();
-        $contractTypes = $this->importEmployeesReferenceLoader->getContractTypes();
-        $roles = $this->importEmployeesReferenceLoader->getRoles();
-        $employees = $this->importEmployeesReferenceLoader->getEmployees();
+        $departments = $this->importEmployeesReferenceLoader->departments;
+        $positions = $this->importEmployeesReferenceLoader->positions;
+        $contractTypes = $this->importEmployeesReferenceLoader->contractTypes;
+        $roles = $this->importEmployeesReferenceLoader->roles;
+        $employees = $this->importEmployeesReferenceLoader->employees;
+        $emailsPESELs = $this->importEmployeesReferenceLoader->emailsPESELs;
 
         $this->errorMessages = [];
-        foreach ($this->validators as $validator) {
+        foreach ($this->employeesValidators as $validator) {
             $error = $validator->validate(
                 $row,
                 [
@@ -86,6 +85,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
                     'contractTypes' => $contractTypes,
                     'roles' => $roles,
                     'employees' => $employees,
+                    'emailsPESELs' => $emailsPESELs,
                 ]
             );
             if (null !== $error) {
@@ -112,10 +112,11 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
             return $peselMap[$parentPESEL];
         }
 
-        $this->importEmployeesReferenceLoader->preload($this->import());
-        $employees = $this->importEmployeesReferenceLoader->getEmployees();
-
-        $existingParentEmployee = $employees[$parentPESEL];
+        $existingParentEmployee = $this->entityReferenceCache->get(
+            Employee::class,
+            $parentPESEL,
+            fn (string $parentPESEL) => $this->employeeReaderRepository->getEmployeeByPESEL($parentPESEL)
+        );
 
         return EmployeeUUID::fromString($existingParentEmployee->getUUID()->toString());
     }
@@ -154,6 +155,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
 
             $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
         }
+        $this->entityReferenceCache->clear();
 
         return $preparedRows;
     }
