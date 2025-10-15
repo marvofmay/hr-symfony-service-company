@@ -1,0 +1,4 @@
+token:
+  expired: "Sesja użytkownika wygasła. Zaloguj się ponownie."
+  invalid: "Nieprawidłowy token. Zaloguj się ponownie."
+Invalid credentials.: 'Błędny login lub hasło.'

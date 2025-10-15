@@ -100,9 +100,11 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function getRoles(): array
     {
         // ToDo:: get Role from relation employee, if employee not null
-        // $this->employee->role
+        if (null === $this->employee) {
+            return [];
+        }
 
-        return [];
+        return [$this->employee->getRole()->getName()];
     }
 
     public function getRolesEntities(): Collection
