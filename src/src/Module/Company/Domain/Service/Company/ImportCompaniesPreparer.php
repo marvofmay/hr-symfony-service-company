@@ -7,6 +7,7 @@ namespace App\Module\Company\Domain\Service\Company;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 
 final readonly class ImportCompaniesPreparer
@@ -23,14 +24,14 @@ final readonly class ImportCompaniesPreparer
         $preparedRows = [];
 
         foreach ($rows as $row) {
-            $nip = trim((string) $row[ImportCompaniesFromXLSX::COLUMN_NIP]);
+            $nip = trim((string) $row[CompanyImportColumnEnum::NIP->value]);
             $existingCompany = $this->entityReferenceCache->get(
                 Company::class,
                 $nip,
                 fn (string $nip) => $this->companyReaderRepository->getCompanyByNIP($nip)
             );
 
-            $row[ImportCompaniesFromXLSX::COLUMN_DYNAMIC_IS_COMPANY_WITH_NIP_ALREADY_EXISTS] = null !== $existingCompany;
+            $row[CompanyImportColumnEnum::DYNAMIC_IS_COMPANY_WITH_NIP_ALREADY_EXISTS->value] = null !== $existingCompany;
 
             if (!isset($nipMap[$nip])) {
                 $nipMap[$nip] = $existingCompany
@@ -38,7 +39,7 @@ final readonly class ImportCompaniesPreparer
                     : CompanyUUID::generate();
             }
 
-            $row[ImportCompaniesFromXLSX::COLUMN_DYNAMIC_AGGREGATE_UUID] = $nipMap[$nip]->toString();
+            $row[CompanyImportColumnEnum::DYNAMIC_AGGREGATE_UUID->value] = $nipMap[$nip]->toString();
             $preparedRows[] = $row;
         }
 

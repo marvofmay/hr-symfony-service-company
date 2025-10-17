@@ -29,11 +29,6 @@ class ParentEmployeePESELValidator implements ImportRowValidatorInterface
             return $this->messageService->get($errorMessage, [], 'validators');
         }
 
-        // $employeeExists = isset($additionalData['employees'][$parentEmployeePESEL]);
-        // if (!$employeeExists) {
-        //    return $this->messageService->get('employee.pesel.notExists', [':pesel' => $parentEmployeePESEL], 'employee');
-        // }
-
         return null;
     }
 }

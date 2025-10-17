@@ -10,6 +10,7 @@ use App\Module\Company\Presentation\API\Action\Company\CreateCompanyAction;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,7 +37,7 @@ class CreateCompanyController extends AbstractController
             return new JsonResponse(['message' => $this->messageService->get('company.add.success', [], 'companies')], Response::HTTP_CREATED);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->messageService->get('company.add.error', [], 'companies'), $error->getMessage());
-            $this->eventBus->dispatch(new LogFileEvent($message));
+            $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR));
 
             return new JsonResponse(['message' => $message], $error->getCode());
         }

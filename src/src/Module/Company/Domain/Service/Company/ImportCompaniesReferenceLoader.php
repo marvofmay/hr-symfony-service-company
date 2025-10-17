@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Company;
 
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
@@ -42,17 +43,17 @@ final class ImportCompaniesReferenceLoader
         $companyEmails = [];
 
         foreach ($rows as $row) {
-            if (!empty($row[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID])) {
-                $industryUUIDs[] = (string) $row[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID];
+            if (!empty($row[CompanyImportColumnEnum::INDUSTRY_UUID->value])) {
+                $industryUUIDs[] = (string) $row[CompanyImportColumnEnum::INDUSTRY_UUID->value];
             }
-            if (!empty($row[ImportCompaniesFromXLSX::COLUMN_NIP])) {
-                $companyNIPs[] = (string) $row[ImportCompaniesFromXLSX::COLUMN_NIP];
+            if (!empty($row[CompanyImportColumnEnum::NIP->value])) {
+                $companyNIPs[] = (string) $row[CompanyImportColumnEnum::NIP->value];
             }
-            if (!empty($row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP])) {
-                $companyNIPs[] = (string) $row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP];
+            if (!empty($row[CompanyImportColumnEnum::PARENT_COMPANY_NIP->value])) {
+                $companyNIPs[] = (string) $row[CompanyImportColumnEnum::PARENT_COMPANY_NIP->value];
             }
-            if (!empty($row[ImportCompaniesFromXLSX::COLUMN_EMAIL])) {
-                $companyEmails[] = (string) $row[ImportCompaniesFromXLSX::COLUMN_EMAIL];
+            if (!empty($row[CompanyImportColumnEnum::EMAIL->value])) {
+                $companyEmails[] = (string) $row[CompanyImportColumnEnum::EMAIL->value];
             }
         }
 

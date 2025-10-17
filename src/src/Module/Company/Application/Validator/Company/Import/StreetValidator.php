@@ -6,7 +6,7 @@ namespace App\Module\Company\Application\Validator\Company\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
+use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_company_validator')]
@@ -18,7 +18,7 @@ class StreetValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $street = $row[ImportCompaniesFromXLSX::COLUMN_STREET] ?? null;
+        $street = $row[CompanyImportColumnEnum::STREET->value] ?? null;
         if (null === $street) {
             return $this->messageService->get('company.street.required', [], 'companies');
         }

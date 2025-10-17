@@ -16,6 +16,7 @@ use App\Module\System\Domain\Enum\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -40,7 +41,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
     private array $errorMessages = [];
 
     public function __construct(
-        private readonly string $filePath,
+        //private readonly string $filePath,
         private readonly TranslatorInterface $translator,
         private readonly DepartmentReaderInterface $departmentReaderRepository,
         private readonly DepartmentAggregateCreator $departmentAggregateCreator,
@@ -51,10 +52,10 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         private readonly MessageService $messageService,
         private readonly MessageBusInterface $eventBus,
         private readonly ImportDepartmentsReferenceLoader $importDepartmentsReferenceLoader,
-        private readonly iterable $departmentsValidators,
+        private readonly iterable $importDepartmentsValidators,
         private readonly EntityReferenceCache $entityReferenceCache,
     ) {
-        parent::__construct($this->filePath, $this->translator);
+        parent::__construct($this->translator);
     }
 
     public function validateRow(array $row, int $index): array
@@ -65,7 +66,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         $emailsInternalCodes = $this->importDepartmentsReferenceLoader->emailsInternalCodes;
 
         $this->errorMessages = [];
-        foreach ($this->departmentsValidators as $validator) {
+        foreach ($this->importDepartmentsValidators as $validator) {
             $error = $validator->validate(
                 $row,
                 [
@@ -119,8 +120,6 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
                     new LogFileEvent($this->messageService->get('department.import.error', [], 'departments').': '.$error)
                 );
             }
-
-            $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
 
             return $this->import();
         } else {

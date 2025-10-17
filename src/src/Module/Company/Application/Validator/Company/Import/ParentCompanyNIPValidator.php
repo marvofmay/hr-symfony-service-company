@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\Validator\Company\Import;
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Shared\Utils\NIPValidator as NIP;
-use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
+use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_company_validator')]
@@ -19,7 +19,7 @@ class ParentCompanyNIPValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $parentCompanyNIP = (string) $row[ImportCompaniesFromXLSX::COLUMN_PARENT_COMPANY_NIP] ?? null;
+        $parentCompanyNIP = (string) $row[CompanyImportColumnEnum::PARENT_COMPANY_NIP->value] ?? null;
         if (empty($parentCompanyNIP)) {
             return null;
         }
@@ -29,11 +29,6 @@ class ParentCompanyNIPValidator implements ImportRowValidatorInterface
         if (null !== $errorMessage) {
             return $this->messageService->get($errorMessage, [], 'validators');
         }
-
-        // $companyExists = array_key_exists($parentCompanyNIP, $additionalData['companies']);
-        // if (!$companyExists) {
-        //   return $this->messageService->get('company.nip.notExists', [':nip' => $parentCompanyNIP], 'companies');
-        // }
 
         return null;
     }

@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\Validator\Company\Import;
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Shared\Utils\WebsiteValidator as Website;
-use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
+use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_company_validator')]
@@ -19,7 +19,7 @@ class WebsiteValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $website = $row[ImportCompaniesFromXLSX::COLUMN_WEBSITE] ?? null;
+        $website = $row[CompanyImportColumnEnum::WEBSITE->value] ?? null;
         if (null === $website) {
             return null;
         }

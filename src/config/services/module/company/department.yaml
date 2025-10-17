@@ -2,3 +2,7 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
+
+    App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX:
+      arguments:
+        $importDepartmentsValidators: !tagged_iterator 'app.import_department_validator'

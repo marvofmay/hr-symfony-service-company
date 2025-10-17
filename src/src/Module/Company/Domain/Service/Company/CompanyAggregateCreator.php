@@ -16,30 +16,31 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
+use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 
 final class CompanyAggregateCreator extends AggregateAbstract
 {
     public function create(array $row, CompanyUUID $uuid, ?CompanyUUID $parentUUID): void
     {
         $companyAggregate = CompanyAggregate::create(
-            FullName::fromString($row[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME]),
-            NIP::fromString((string) $row[ImportCompaniesFromXLSX::COLUMN_NIP]),
-            REGON::fromString((string) $row[ImportCompaniesFromXLSX::COLUMN_REGON]),
-            IndustryUUID::fromString($row[ImportCompaniesFromXLSX::COLUMN_INDUSTRY_UUID]),
-            (bool) $row[ImportCompaniesFromXLSX::COLUMN_ACTIVE],
+            FullName::fromString($row[CompanyImportColumnEnum::COMPANY_FULL_NAME->value]),
+            NIP::fromString((string) $row[CompanyImportColumnEnum::NIP->value]),
+            REGON::fromString((string) $row[CompanyImportColumnEnum::REGON->value]),
+            IndustryUUID::fromString($row[CompanyImportColumnEnum::INDUSTRY_UUID->value]),
+            (bool) $row[CompanyImportColumnEnum::ACTIVE->value],
             new Address(
-                $row[ImportCompaniesFromXLSX::COLUMN_STREET],
-                $row[ImportCompaniesFromXLSX::COLUMN_POSTCODE],
-                $row[ImportCompaniesFromXLSX::COLUMN_CITY],
-                $row[ImportCompaniesFromXLSX::COLUMN_COUNTRY]
+                $row[CompanyImportColumnEnum::STREET->value],
+                $row[CompanyImportColumnEnum::POSTCODE->value],
+                $row[CompanyImportColumnEnum::CITY->value],
+                $row[CompanyImportColumnEnum::COUNTRY->value],
             ),
-            Phones::fromArray([$row[ImportCompaniesFromXLSX::COLUMN_PHONE]]),
-            ShortName::fromString($row[ImportCompaniesFromXLSX::COLUMN_COMPANY_SHORT_NAME]),
-            $row[ImportCompaniesFromXLSX::COLUMN_COMPANY_INTERNAL_CODE],
-            $row[ImportCompaniesFromXLSX::COLUMN_COMPANY_DESCRIPTION],
+            Phones::fromArray([$row[CompanyImportColumnEnum::PHONE->value]]),
+            ShortName::fromString($row[CompanyImportColumnEnum::COMPANY_SHORT_NAME->value]),
+            $row[CompanyImportColumnEnum::COMPANY_INTERNAL_CODE->value],
+            $row[CompanyImportColumnEnum::COMPANY_DESCRIPTION->value],
             $parentUUID,
-            $row[ImportCompaniesFromXLSX::COLUMN_EMAIL] ? Emails::fromArray([$row[ImportCompaniesFromXLSX::COLUMN_EMAIL]]) : null,
-            $row[ImportCompaniesFromXLSX::COLUMN_WEBSITE] ? Websites::fromArray([$row[ImportCompaniesFromXLSX::COLUMN_WEBSITE]]) : null,
+            $row[CompanyImportColumnEnum::EMAIL->value] ? Emails::fromArray([$row[CompanyImportColumnEnum::EMAIL->value]]) : null,
+            $row[CompanyImportColumnEnum::WEBSITE->value] ? Websites::fromArray([$row[CompanyImportColumnEnum::WEBSITE->value]]) : null,
             $uuid
         );
 

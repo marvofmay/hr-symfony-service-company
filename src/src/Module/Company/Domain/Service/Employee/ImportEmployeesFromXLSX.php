@@ -47,7 +47,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
     private array $errorMessages = [];
 
     public function __construct(
-        private readonly string $filePath,
+       // private readonly string $filePath,
         private readonly TranslatorInterface $translator,
         private readonly EmployeeReaderInterface $employeeReaderRepository,
         private readonly EmployeeAggregateCreator $employeeAggregateCreator,
@@ -58,10 +58,10 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         private readonly MessageService $messageService,
         private readonly MessageBusInterface $eventBus,
         private readonly ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
-        private readonly iterable $employeesValidators,
+        private readonly iterable $importEmployeesValidators,
         private readonly EntityReferenceCache $entityReferenceCache,
     ) {
-        parent::__construct($this->filePath, $this->translator);
+        parent::__construct($this->translator);
     }
 
     public function validateRow(array $row, int $index): array
@@ -76,7 +76,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         $emailsPESELs = $this->importEmployeesReferenceLoader->emailsPESELs;
 
         $this->errorMessages = [];
-        foreach ($this->employeesValidators as $validator) {
+        foreach ($this->importEmployeesValidators as $validator) {
             $error = $validator->validate(
                 $row,
                 [
@@ -133,8 +133,6 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
                     new LogFileEvent($this->messageService->get('employee.import.error', [], 'employees').': '.$error)
                 );
             }
-
-            $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
 
             return $this->import();
         } else {

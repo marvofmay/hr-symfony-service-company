@@ -6,6 +6,8 @@ namespace App\Module\Company\Application\Validator\Company\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Company\Domain\Enum\CompanyImportColumn;
+use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
@@ -18,7 +20,7 @@ class FullNameValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $fullName = $row[ImportCompaniesFromXLSX::COLUMN_COMPANY_FULL_NAME] ?? null;
+        $fullName = $row[CompanyImportColumnEnum::COMPANY_FULL_NAME->value] ?? null;
 
         if (empty($fullName)) {
             return $this->messageService->get('company.fullName.required', [], 'companies');
