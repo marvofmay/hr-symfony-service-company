@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Role;
 
 use App\Common\XLSX\XLSXIterator;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
+use App\Module\System\Domain\Enum\ImportKindEnum;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ImportRolesFromXLSX extends XLSXIterator
@@ -14,11 +15,15 @@ class ImportRolesFromXLSX extends XLSXIterator
     public const int COLUMN_DESCRIPTION = 1;
 
     public function __construct(
-        private readonly string $filePath,
         private readonly TranslatorInterface $translator,
         private readonly RoleReaderInterface $roleReaderRepository,
     ) {
-        parent::__construct($this->filePath, $this->translator);
+        parent::__construct($this->translator);
+    }
+
+    public function getType(): string
+    {
+        return ImportKindEnum::IMPORT_ROLES->value;
     }
 
     public function validateRow(array $row, int $index): array

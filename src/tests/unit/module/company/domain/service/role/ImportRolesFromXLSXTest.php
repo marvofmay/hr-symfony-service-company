@@ -73,8 +73,12 @@ class ImportRolesFromXLSXTest extends TestCase
 
     private function getImporter(): ImportRolesFromXLSX
     {
-        return new class('fake/path.xlsx', $this->translator, $this->reader) extends ImportRolesFromXLSX {
+        $importer = new class($this->translator, $this->reader) extends ImportRolesFromXLSX {
             public array $errors = [];
         };
+
+        $importer->setFilePath('fake/path.xlsx');
+
+        return $importer;
     }
 }

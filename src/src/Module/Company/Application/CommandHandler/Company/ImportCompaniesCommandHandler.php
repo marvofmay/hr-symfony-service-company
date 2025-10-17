@@ -33,14 +33,7 @@ final readonly class ImportCompaniesCommandHandler
     {
         $import = $this->importReaderRepository->getImportByUUID($command->getImportUUID());
 
-        // ToDo:: refactor factory by using !tag iterator
-        $importer = $this->importerFactory->getImporter(
-            ImportKindEnum::IMPORT_COMPANIES,
-            //$import->getFile()->getFilePath(),
-            //$import->getFile()->getFileName()
-        );
-
-        // ToDo::
+        $importer = $this->importerFactory->getImporter(ImportKindEnum::IMPORT_COMPANIES);
         $importer->setFilePath(sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()));
 
         $preparedRows = $importer->run($import);

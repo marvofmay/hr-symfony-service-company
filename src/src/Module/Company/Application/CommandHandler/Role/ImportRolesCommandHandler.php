@@ -40,11 +40,8 @@ readonly class ImportRolesCommandHandler
     public function __invoke(ImportRolesCommand $command): void
     {
         $import = $this->importReaderRepository->getImportByUUID($command->getImportUUID());
-        $importer = new ImportRolesFromXLSX(
-            sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()),
-            $this->translator,
-            $this->roleReaderRepository
-        );
+        $importer = new ImportRolesFromXLSX($this->translator, $this->roleReaderRepository);
+        $importer->setFilePath(sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()));
         $errors = $importer->validateBeforeImport();
         if (empty($errors)) {
             $this->roleMultipleCreator->multipleCreate($importer->import());
