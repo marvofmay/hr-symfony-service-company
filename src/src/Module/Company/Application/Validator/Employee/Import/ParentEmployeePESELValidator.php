@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\Validator\Employee\Import;
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Shared\Utils\PESELValidator as PESEL;
-use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
+use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_employee_validator')]
@@ -19,7 +19,7 @@ class ParentEmployeePESELValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $parentEmployeePESEL = $row[ImportEmployeesFromXLSX::COLUMN_PARENT_EMPLOYEE_PESEL] ?? null;
+        $parentEmployeePESEL = $row[EmployeeImportColumnEnum::PARENT_EMPLOYEE_PESEL->value] ?? null;
         if (empty($parentEmployeePESEL)) {
             return null;
         }

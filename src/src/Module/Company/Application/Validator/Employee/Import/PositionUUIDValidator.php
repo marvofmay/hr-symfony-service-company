@@ -6,7 +6,7 @@ namespace App\Module\Company\Application\Validator\Employee\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
+use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_employee_validator')]
@@ -18,7 +18,7 @@ class PositionUUIDValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $positionUUID = $row[ImportEmployeesFromXLSX::COLUMN_POSITION_UUID] ?? null;
+        $positionUUID = $row[EmployeeImportColumnEnum::POSITION_UUID->value] ?? null;
         if (empty($positionUUID)) {
             return $this->messageService->get('employee.positionUUID.required', [], 'employees');
         }

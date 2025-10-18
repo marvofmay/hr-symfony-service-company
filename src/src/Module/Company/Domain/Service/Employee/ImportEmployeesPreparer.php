@@ -7,6 +7,7 @@ namespace App\Module\Company\Domain\Service\Employee;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
 use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 
 final readonly class ImportEmployeesPreparer
@@ -23,14 +24,14 @@ final readonly class ImportEmployeesPreparer
         $preparedRows = [];
 
         foreach ($rows as $row) {
-            $pesel = trim((string) $row[ImportEmployeesFromXLSX::COLUMN_PESEL]);
+            $pesel = trim((string) $row[EmployeeImportColumnEnum::PESEL->value]);
             $existingEmployee = $this->entityReferenceCache->get(
                 Employee::class,
                 $pesel,
                 fn (string $pesel) => $this->employeeReaderRepository->getEmployeeByPESEL($pesel)
             );
 
-            $row[ImportEmployeesFromXLSX::COLUMN_DYNAMIC_IS_EMPLOYEE_WITH_PESEL_ALREADY_EXISTS] = null !== $existingEmployee;
+            $row[EmployeeImportColumnEnum::DYNAMIC_IS_EMPLOYEE_WITH_PESEL_ALREADY_EXISTS->value] = null !== $existingEmployee;
 
             if (!isset($peselMap[$pesel])) {
                 $peselMap[$pesel] = $existingEmployee
@@ -38,7 +39,7 @@ final readonly class ImportEmployeesPreparer
                     : EmployeeUUID::generate();
             }
 
-            $row[ImportEmployeesFromXLSX::COLUMN_DYNAMIC_AGGREGATE_UUID] = $peselMap[$pesel]->toString();
+            $row[EmployeeImportColumnEnum::DYNAMIC_AGGREGATE_UUID->value] = $peselMap[$pesel]->toString();
             $preparedRows[] = $row;
         }
 

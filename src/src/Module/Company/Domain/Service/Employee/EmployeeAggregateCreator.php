@@ -19,33 +19,34 @@ use App\Module\Company\Domain\Aggregate\Employee\ValueObject\RoleUUID;
 use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
+use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 
 final class EmployeeAggregateCreator extends AggregateAbstract
 {
     public function create(array $row, EmployeeUUID $uuid, ?EmployeeUUID $parentUUID): void
     {
         $employeeAggregate = EmployeeAggregate::create(
-            FirstName::fromString($row[ImportEmployeesFromXLSX::COLUMN_FIRST_NAME]),
-            LastName::fromString($row[ImportEmployeesFromXLSX::COLUMN_LAST_NAME]),
-            PESEL::fromString($row[ImportEmployeesFromXLSX::COLUMN_PESEL]),
-            EmploymentFrom::fromString($row[ImportEmployeesFromXLSX::COLUMN_EMPLOYMENT_FROM]),
-            DepartmentUUID::fromString($row[ImportEmployeesFromXLSX::COLUMN_DEPARTMENT_UUID]),
-            PositionUUID::fromString($row[ImportEmployeesFromXLSX::COLUMN_POSITION_UUID]),
-            ContractTypeUUID::fromString($row[ImportEmployeesFromXLSX::COLUMN_CONTACT_TYPE_UUID]),
-            RoleUUID::fromString($row[ImportEmployeesFromXLSX::COLUMN_ROLE_UUID]),
-            Emails::fromArray([$row[ImportEmployeesFromXLSX::COLUMN_EMAIL]]),
+            FirstName::fromString($row[EmployeeImportColumnEnum::FIRST_NAME->value]),
+            LastName::fromString($row[EmployeeImportColumnEnum::LAST_NAME->value]),
+            PESEL::fromString($row[EmployeeImportColumnEnum::PESEL->value]),
+            EmploymentFrom::fromString($row[EmployeeImportColumnEnum::EMPLOYMENT_FROM->value]),
+            DepartmentUUID::fromString($row[EmployeeImportColumnEnum::DEPARTMENT_UUID->value]),
+            PositionUUID::fromString($row[EmployeeImportColumnEnum::POSITION_UUID->value]),
+            ContractTypeUUID::fromString($row[EmployeeImportColumnEnum::CONTACT_TYPE_UUID->value]),
+            RoleUUID::fromString($row[EmployeeImportColumnEnum::ROLE_UUID->value]),
+            Emails::fromArray([$row[EmployeeImportColumnEnum::EMAIL->value]]),
             new Address(
-                $row[ImportEmployeesFromXLSX::COLUMN_STREET],
-                $row[ImportEmployeesFromXLSX::COLUMN_POSTCODE],
-                $row[ImportEmployeesFromXLSX::COLUMN_CITY],
-                $row[ImportEmployeesFromXLSX::COLUMN_COUNTRY]
+                $row[EmployeeImportColumnEnum::STREET->value],
+                $row[EmployeeImportColumnEnum::POSTCODE->value],
+                $row[EmployeeImportColumnEnum::CITY->value],
+                $row[EmployeeImportColumnEnum::COUNTRY->value]
             ),
-            $row[ImportEmployeesFromXLSX::COLUMN_EXTERNAL_UUID],
-            $row[ImportEmployeesFromXLSX::COLUMN_INTERNAL_CODE],
-            (bool) $row[ImportEmployeesFromXLSX::COLUMN_ACTIVE],
-            Phones::fromArray([$row[ImportEmployeesFromXLSX::COLUMN_PHONE]]),
+            $row[EmployeeImportColumnEnum::EXTERNAL_UUID->value],
+            $row[EmployeeImportColumnEnum::INTERNAL_CODE->value],
+            (bool) $row[EmployeeImportColumnEnum::ACTIVE->value],
+            Phones::fromArray([$row[EmployeeImportColumnEnum::PHONE->value]]),
             $parentUUID,
-            $row[ImportEmployeesFromXLSX::COLUMN_EMPLOYMENT_TO] ? EmploymentTo::fromString($row[ImportEmployeesFromXLSX::COLUMN_EMPLOYMENT_TO], EmploymentFrom::fromString($row[ImportEmployeesFromXLSX::COLUMN_EMPLOYMENT_FROM])) : null,
+            $row[EmployeeImportColumnEnum::EMPLOYMENT_TO->value] ? EmploymentTo::fromString($row[EmployeeImportColumnEnum::EMPLOYMENT_TO->value], EmploymentFrom::fromString($row[EmployeeImportColumnEnum::EMPLOYMENT_FROM->value])) : null,
             $uuid
         );
 

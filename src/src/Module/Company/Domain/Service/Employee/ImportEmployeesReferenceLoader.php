@@ -7,6 +7,7 @@ namespace App\Module\Company\Domain\Service\Employee;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
@@ -66,26 +67,26 @@ final class ImportEmployeesReferenceLoader
         $employeeEmails = [];
 
         foreach ($rows as $row) {
-            if (!empty($row[ImportEmployeesFromXLSX::COLUMN_DEPARTMENT_UUID])) {
-                $departmentUUIDs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_DEPARTMENT_UUID];
+            if (!empty($row[EmployeeImportColumnEnum::DEPARTMENT_UUID->value])) {
+                $departmentUUIDs[] = (string) $row[EmployeeImportColumnEnum::DEPARTMENT_UUID->value];
             }
-            if (!empty($row[ImportEmployeesFromXLSX::COLUMN_POSITION_UUID])) {
-                $positionUUIDs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_POSITION_UUID];
+            if (!empty($row[EmployeeImportColumnEnum::POSITION_UUID->value])) {
+                $positionUUIDs[] = (string) $row[EmployeeImportColumnEnum::POSITION_UUID->value];
             }
-            if (!empty($row[ImportEmployeesFromXLSX::COLUMN_ROLE_UUID])) {
-                $roleUUIDs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_ROLE_UUID];
+            if (!empty($row[EmployeeImportColumnEnum::ROLE_UUID->value])) {
+                $roleUUIDs[] = (string) $row[EmployeeImportColumnEnum::ROLE_UUID->value];
             }
-            if (!empty($row[ImportEmployeesFromXLSX::COLUMN_CONTACT_TYPE_UUID])) {
-                $contractTypeUUIDs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_CONTACT_TYPE_UUID];
+            if (!empty($row[EmployeeImportColumnEnum::CONTACT_TYPE_UUID->value])) {
+                $contractTypeUUIDs[] = (string) $row[EmployeeImportColumnEnum::CONTACT_TYPE_UUID->value];
             }
-            if (!empty($row[ImportEmployeesFromXLSX::COLUMN_PESEL])) {
-                $employeePESELs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_PESEL];
+            if (!empty($row[EmployeeImportColumnEnum::PESEL->value])) {
+                $employeePESELs[] = (string) $row[EmployeeImportColumnEnum::PESEL->value];
             }
-            if (!empty($row[ImportEmployeesFromXLSX::COLUMN_PARENT_EMPLOYEE_PESEL])) {
-                $employeePESELs[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_PARENT_EMPLOYEE_PESEL];
+            if (!empty($row[EmployeeImportColumnEnum::PARENT_EMPLOYEE_PESEL->value])) {
+                $employeePESELs[] = (string) $row[EmployeeImportColumnEnum::PARENT_EMPLOYEE_PESEL->value];
             }
-            if (!empty($row[ImportEmployeesFromXLSX::COLUMN_EMAIL])) {
-                $employeeEmails[] = (string) $row[ImportEmployeesFromXLSX::COLUMN_EMAIL];
+            if (!empty($row[EmployeeImportColumnEnum::EMAIL->value])) {
+                $employeeEmails[] = (string) $row[EmployeeImportColumnEnum::EMAIL->value];
             }
         }
 

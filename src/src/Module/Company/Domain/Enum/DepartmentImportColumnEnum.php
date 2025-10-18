@@ -33,7 +33,7 @@ enum DepartmentImportColumnEnum: int
             self::CITY => 'city',
             self::COUNTRY => 'country',
             self::PHONE => 'phone',
-            self::COMPANY_UUID => 'companyUuid',
+            self::COMPANY_UUID => 'companyUUID',
             self::DEPARTMENT_DESCRIPTION => 'departmentDescription',
             self::PARENT_DEPARTMENT_INTERNAL_CODE => 'parentDepartmentInternalCode',
             self::EMAIL => 'email',

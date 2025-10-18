@@ -32,11 +32,9 @@ final readonly class ImportEmployeesCommandHandler
     public function __invoke(ImportEmployeesCommand $command): void
     {
         $import = $this->importReaderRepository->getImportByUUID($command->getImportUUID());
-        $importer = $this->importerFactory->getImporter(
-            ImportKindEnum::IMPORT_EMPLOYEES,
-            $import->getFile()->getFilePath(),
-            $import->getFile()->getFileName()
-        );
+        $importer = $this->importerFactory->getImporter(ImportKindEnum::IMPORT_EMPLOYEES);
+        $importer->setFilePath(sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()));
+
         $preparedRows = $importer->run($import);
 
         $multiEvent = new EmployeeMultipleImportedEvent($preparedRows);

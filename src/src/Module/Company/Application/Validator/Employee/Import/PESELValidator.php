@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\Validator\Employee\Import;
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Shared\Utils\PESELValidator as PESEL;
-use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
+use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_employee_validator')]
@@ -19,7 +19,7 @@ class PESELValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $pesel = (string) $row[ImportEmployeesFromXLSX::COLUMN_PESEL] ?? null;
+        $pesel = (string) $row[EmployeeImportColumnEnum::PESEL->value] ?? null;
         if (null === $pesel) {
             return $this->messageService->get('employee.pesel.required', [], 'employees');
         }

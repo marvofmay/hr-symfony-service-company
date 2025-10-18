@@ -8,7 +8,7 @@ use App\Common\Domain\Enum\DateFormatEnum;
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Shared\Utils\DateFormatValidator;
-use App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX;
+use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_employee_validator')]
@@ -20,7 +20,7 @@ class EmploymentFromValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $employmentFrom = $row[ImportEmployeesFromXLSX::COLUMN_EMPLOYMENT_FROM] ?? null;
+        $employmentFrom = $row[EmployeeImportColumnEnum::EMPLOYMENT_FROM->value] ?? null;
 
         if (empty($employmentFrom)) {
             return $this->messageService->get('employee.employmentFrom.required', [], 'employees');
