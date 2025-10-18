@@ -13,26 +13,27 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
+use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 
 final class DepartmentAggregateCreator extends AggregateAbstract
 {
     public function create(array $row, DepartmentUUID $uuid, ?DepartmentUUID $parentUUID): void
     {
         $departmentAggregate = DepartmentAggregate::create(
-            CompanyUUID::fromString($row[ImportDepartmentsFromXLSX::COLUMN_COMPANY_UUID]),
-            Name::fromString($row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_NAME]),
-            $row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_INTERNAL_CODE],
+            CompanyUUID::fromString($row[DepartmentImportColumnEnum::COMPANY_UUID->value]),
+            Name::fromString($row[DepartmentImportColumnEnum::DEPARTMENT_NAME->value]),
+            $row[DepartmentImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value],
             new Address(
-                $row[ImportDepartmentsFromXLSX::COLUMN_STREET],
-                $row[ImportDepartmentsFromXLSX::COLUMN_POSTCODE],
-                $row[ImportDepartmentsFromXLSX::COLUMN_CITY],
-                $row[ImportDepartmentsFromXLSX::COLUMN_COUNTRY]
+                $row[DepartmentImportColumnEnum::STREET->value],
+                $row[DepartmentImportColumnEnum::POSTCODE->value],
+                $row[DepartmentImportColumnEnum::CITY->value],
+                $row[DepartmentImportColumnEnum::COUNTRY->value]
             ),
-            (bool) $row[ImportDepartmentsFromXLSX::COLUMN_ACTIVE],
-            $row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_DESCRIPTION],
-            Phones::fromArray([$row[ImportDepartmentsFromXLSX::COLUMN_PHONE]]),
-            $row[ImportDepartmentsFromXLSX::COLUMN_EMAIL] ? Emails::fromArray([$row[ImportDepartmentsFromXLSX::COLUMN_EMAIL]]) : null,
-            $row[ImportDepartmentsFromXLSX::COLUMN_WEBSITE] ? Websites::fromArray([$row[ImportDepartmentsFromXLSX::COLUMN_WEBSITE]]) : null,
+            (bool) $row[DepartmentImportColumnEnum::ACTIVE->value],
+            $row[DepartmentImportColumnEnum::DEPARTMENT_DESCRIPTION->value],
+            Phones::fromArray([$row[DepartmentImportColumnEnum::PHONE->value]]),
+            $row[DepartmentImportColumnEnum::EMAIL->value] ? Emails::fromArray([$row[DepartmentImportColumnEnum::EMAIL->value]]) : null,
+            $row[DepartmentImportColumnEnum::WEBSITE->value] ? Websites::fromArray([$row[DepartmentImportColumnEnum::WEBSITE->value]]) : null,
             $parentUUID,
             $uuid
         );

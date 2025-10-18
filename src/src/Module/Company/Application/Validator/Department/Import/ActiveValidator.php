@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\Validator\Department\Import;
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Shared\Utils\BoolValidator;
-use App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX;
+use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_department_validator')]
@@ -19,7 +19,7 @@ class ActiveValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $active = $row[ImportDepartmentsFromXLSX::COLUMN_ACTIVE] ?? false;
+        $active = $row[DepartmentImportColumnEnum::ACTIVE->value] ?? false;
         $errorMessage = BoolValidator::validate($active);
         if (null !== $errorMessage) {
             return $this->messageService->get($errorMessage, [], 'validators');

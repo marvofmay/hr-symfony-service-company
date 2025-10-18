@@ -6,7 +6,7 @@ namespace App\Module\Company\Application\Validator\Department\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX;
+use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.import_department_validator')]
@@ -18,7 +18,7 @@ class PhoneValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $phone = $row[ImportDepartmentsFromXLSX::COLUMN_PHONE] ?? null;
+        $phone = $row[DepartmentImportColumnEnum::PHONE->value] ?? null;
         if (null === $phone) {
             return $this->messageService->get('department.phone.required', [], 'departments');
         }

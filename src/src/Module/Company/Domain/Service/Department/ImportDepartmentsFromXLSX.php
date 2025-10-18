@@ -9,9 +9,11 @@ use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Common\XLSX\XLSXIterator;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Entity\Department;
+use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Entity\Import;
+use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Enum\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
@@ -20,28 +22,12 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
+#[AutoconfigureTag('app.importer')]
 final class ImportDepartmentsFromXLSX extends XLSXIterator
 {
-    public const int    COLUMN_DEPARTMENT_NAME = 0;
-    public const int    COLUMN_DEPARTMENT_INTERNAL_CODE = 1;
-    public const int    COLUMN_STREET = 2;
-    public const int    COLUMN_POSTCODE = 3;
-    public const int    COLUMN_CITY = 4;
-    public const int    COLUMN_COUNTRY = 5;
-    public const int    COLUMN_PHONE = 6;
-    public const int    COLUMN_COMPANY_UUID = 7;
-    public const int    COLUMN_DEPARTMENT_DESCRIPTION = 8;
-    public const int    COLUMN_PARENT_DEPARTMENT_INTERNAL_CODE = 9;
-    public const int    COLUMN_EMAIL = 10;
-    public const int    COLUMN_WEBSITE = 11;
-    public const int    COLUMN_ACTIVE = 12;
-    public const string COLUMN_DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS = '_is_department_already_exists_with_internal_code';
-    public const string COLUMN_DYNAMIC_AGGREGATE_UUID = '_aggregate_uuid';
-
     private array $errorMessages = [];
 
     public function __construct(
-        //private readonly string $filePath,
         private readonly TranslatorInterface $translator,
         private readonly DepartmentReaderInterface $departmentReaderRepository,
         private readonly DepartmentAggregateCreator $departmentAggregateCreator,
@@ -56,6 +42,11 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         private readonly EntityReferenceCache $entityReferenceCache,
     ) {
         parent::__construct($this->translator);
+    }
+
+    public function getType(): string
+    {
+        return ImportKindEnum::IMPORT_DEPARTMENTS->value;
     }
 
     public function validateRow(array $row, int $index): array
@@ -85,7 +76,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
 
     private function resolveParentUUID(array $row, array $internalCodeMap): ?DepartmentUUID
     {
-        $parentRaw = $row[self::COLUMN_PARENT_DEPARTMENT_INTERNAL_CODE] ?? null;
+        $parentRaw = $row[DepartmentImportColumnEnum::PARENT_DEPARTMENT_INTERNAL_CODE->value] ?? null;
         if (null === $parentRaw) {
             return null;
         }
@@ -128,10 +119,10 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
             foreach ($preparedRows as $row) {
                 $parentUUID = $this->resolveParentUUID($row, $internalCodeMap);
 
-                $internalCode = trim((string) $row[self::COLUMN_DEPARTMENT_INTERNAL_CODE]);
+                $internalCode = trim((string) $row[DepartmentImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value]);
                 $uuid = $internalCodeMap[$internalCode];
 
-                if (!$row[ImportDepartmentsFromXLSX::COLUMN_DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS]) {
+                if (!$row[DepartmentImportColumnEnum::DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS->value]) {
                     $this->departmentAggregateCreator->create($row, $uuid, $parentUUID);
                 } else {
                     $this->departmentAggregateUpdater->update($row, $parentUUID);

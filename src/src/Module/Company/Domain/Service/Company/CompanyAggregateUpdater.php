@@ -23,7 +23,7 @@ final class CompanyAggregateUpdater extends AggregateAbstract
     public function update(array $row, ?CompanyUUID $parentUUID): void
     {
         $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID(
-            CompanyUUID::fromString($row['_aggregate_uuid'])
+            CompanyUUID::fromString($row[CompanyImportColumnEnum::DYNAMIC_AGGREGATE_UUID->value]),
         );
 
         $companyAggregate->update(

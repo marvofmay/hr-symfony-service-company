@@ -32,11 +32,10 @@ final readonly class ImportDepartmentsCommandHandler
     public function __invoke(ImportDepartmentsCommand $command): void
     {
         $import = $this->importReaderRepository->getImportByUUID($command->getImportUUID());
-        $importer = $this->importerFactory->getImporter(
-            ImportKindEnum::IMPORT_DEPARTMENTS,
-            $import->getFile()->getFilePath(),
-            $import->getFile()->getFileName()
-        );
+
+        $importer = $this->importerFactory->getImporter(ImportKindEnum::IMPORT_DEPARTMENTS);
+        $importer->setFilePath(sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()));
+
         $preparedRows = $importer->run($import);
 
         $multiEvent = new DepartmentMultipleImportedEvent($preparedRows);

@@ -7,6 +7,7 @@ namespace App\Module\Company\Domain\Service\Department;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 
@@ -42,17 +43,17 @@ final class ImportDepartmentsReferenceLoader
         $departmentEmails = [];
 
         foreach ($rows as $row) {
-            if (!empty($row[ImportDepartmentsFromXLSX::COLUMN_COMPANY_UUID])) {
-                $companyUUIDs[] = (string) $row[ImportDepartmentsFromXLSX::COLUMN_COMPANY_UUID];
+            if (!empty($row[DepartmentImportColumnEnum::COMPANY_UUID->value])) {
+                $companyUUIDs[] = (string) $row[DepartmentImportColumnEnum::COMPANY_UUID->value];
             }
-            if (!empty($row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_INTERNAL_CODE])) {
-                $departmentInternalCodes[] = (string) $row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_INTERNAL_CODE];
+            if (!empty($row[DepartmentImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value])) {
+                $departmentInternalCodes[] = (string) $row[DepartmentImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value];
             }
-            if (!empty($row[ImportDepartmentsFromXLSX::COLUMN_PARENT_DEPARTMENT_INTERNAL_CODE])) {
-                $departmentInternalCodes[] = (string) $row[ImportDepartmentsFromXLSX::COLUMN_PARENT_DEPARTMENT_INTERNAL_CODE];
+            if (!empty($row[DepartmentImportColumnEnum::PARENT_DEPARTMENT_INTERNAL_CODE->value])) {
+                $departmentInternalCodes[] = (string) $row[DepartmentImportColumnEnum::PARENT_DEPARTMENT_INTERNAL_CODE->value];
             }
-            if (!empty($row[ImportDepartmentsFromXLSX::COLUMN_EMAIL])) {
-                $departmentEmails[] = (string) $row[ImportDepartmentsFromXLSX::COLUMN_EMAIL];
+            if (!empty($row[DepartmentImportColumnEnum::EMAIL->value])) {
+                $departmentEmails[] = (string) $row[DepartmentImportColumnEnum::EMAIL->value];
             }
         }
 

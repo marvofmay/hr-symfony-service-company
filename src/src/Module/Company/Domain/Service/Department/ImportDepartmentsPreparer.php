@@ -7,6 +7,7 @@ namespace App\Module\Company\Domain\Service\Department;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Entity\Department;
+use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 
 final readonly class ImportDepartmentsPreparer
@@ -23,14 +24,14 @@ final readonly class ImportDepartmentsPreparer
         $preparedRows = [];
 
         foreach ($rows as $row) {
-            $internalCode = trim((string) $row[ImportDepartmentsFromXLSX::COLUMN_DEPARTMENT_INTERNAL_CODE]);
+            $internalCode = trim((string) $row[DepartmentImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value]);
             $existingDepartment = $this->entityReferenceCache->get(
                 Department::class,
                 $internalCode,
                 fn (string $nip) => $this->departmentReaderRepository->getDepartmentByInternalCode($internalCode)
             );
 
-            $row[ImportDepartmentsFromXLSX::COLUMN_DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS] = null !== $existingDepartment;
+            $row[DepartmentImportColumnEnum::DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS->value] = null !== $existingDepartment;
 
             if (!isset($internalCodeMap[$internalCode])) {
                 $internalCodeMap[$internalCode] = $existingDepartment
@@ -38,7 +39,7 @@ final readonly class ImportDepartmentsPreparer
                     : DepartmentUUID::generate();
             }
 
-            $row[ImportDepartmentsFromXLSX::COLUMN_DYNAMIC_AGGREGATE_UUID] = $internalCodeMap[$internalCode]->toString();
+            $row[DepartmentImportColumnEnum::DYNAMIC_AGGREGATE_UUID->value] = $internalCodeMap[$internalCode]->toString();
             $preparedRows[] = $row;
         }
 
