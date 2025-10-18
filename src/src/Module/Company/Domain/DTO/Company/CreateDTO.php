@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\DTO\Company;
 
 use App\Common\Domain\DTO\AddressDTO;
+use App\Common\Domain\Interface\DataTransferObjectInterface;
 use App\Common\Validator\Constraints\MinMaxLength;
 use App\Common\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class CreateDTO
+class CreateDTO implements DataTransferObjectInterface
 {
     #[NotBlank(message: [
         'text' => 'company.fullName.required',

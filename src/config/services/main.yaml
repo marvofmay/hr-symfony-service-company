@@ -20,10 +20,6 @@ services:
     calls:
       - [ setAnnotationReader, [ "@gedmo.mapping.driver.attribute" ] ]
 
-  App\Common\Domain\Exception\ExceptionListener:
-    tags:
-      - { name: kernel.event_listener, event: kernel.exception }
-
   App\Common\Application\CommandHandler\UploadFileCommandHandler:
     tags:
       - { name: 'messenger.message_handler', bus: 'command.bus' }

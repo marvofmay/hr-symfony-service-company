@@ -19,6 +19,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\TaggedIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -31,11 +32,18 @@ final readonly class CreateCompanyCommandHandler
         private Security $security,
         private SerializerInterface $serializer,
         private EventDispatcherInterface $eventDispatcher,
+        #[TaggedIterator('app.company.create.validator')] private iterable $validators,
     ) {
     }
 
     public function __invoke(CreateCompanyCommand $command): void
     {
+        foreach ($this->validators as $validator) {
+            if ($validator->supports($command)) {
+                $validator->validate($command);
+            }
+        }
+
         $companyAggregate = CompanyAggregate::create(
             FullName::fromString($command->fullName),
             NIP::fromString($command->nip),

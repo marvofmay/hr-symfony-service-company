@@ -40,9 +40,9 @@ interface CompanyReaderInterface
 
     public function getDeletedCompanyByUUID(string $uuid): ?Company;
 
-    public function getDeletedAddressByCompanyByUUID(string $uuid): ?Address;
+    public function getDeletedAddressByCompanyUUID(string $uuid): ?Address;
 
-    public function getDeletedContactsByCompanyByUUID(string $uuid): Collection;
+    public function getDeletedContactsByCompanyUUID(string $uuid): Collection;
 
     public function getCompaniesNIPByEmails(array $emails): Collection;
 }

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsEventListener(event: 'lexik_jwt_authentication.on_jwt_expired', method: 'onJWTExpired')]
-readonly class ExpiredJwtListener
+final class ExpiredJwtListener
 {
     public function __construct(private TranslatorInterface $translator)
     {

@@ -8,7 +8,7 @@ company:
       notExists: "Kontakt firmy o podanym UUID :uuid nie istnieje lub został usunięty"
   uuid:
     notFound: "Firma o podanym UUID nie istnieje"
-    notExists: "Firma o podanym UUID nie istnieje :uuid"
+    notExists: "Firma o podanym UUID :uuid nie istnieje"
     required: "UUID firmy jest wymagane"
   fullName:
     alreadyExists: "Firma o podanej nazwie \":name\"  już istnieje"

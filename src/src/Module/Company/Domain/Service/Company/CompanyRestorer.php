@@ -21,12 +21,12 @@ final readonly class CompanyRestorer
         $company = $this->companyReaderRepository->getDeletedCompanyByUUID($event->uuid->toString());
         $company->setDeletedAt(null);
 
-        $address = $this->companyReaderRepository->getDeletedAddressByCompanyByUUID($event->uuid->toString());
+        $address = $this->companyReaderRepository->getDeletedAddressByCompanyUUID($event->uuid->toString());
         if ($address) {
             $address->setDeletedAt(null);
         }
 
-        $contacts = $this->companyReaderRepository->getDeletedContactsByCompanyByUUID($event->uuid->toString());
+        $contacts = $this->companyReaderRepository->getDeletedContactsByCompanyUUID($event->uuid->toString());
         foreach ($contacts as $contact) {
             $contact->setDeletedAt(null);
         }

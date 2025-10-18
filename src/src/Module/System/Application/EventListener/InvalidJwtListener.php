@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsEventListener(event: 'lexik_jwt_authentication.on_jwt_invalid', method: 'onJWTInvalid')]
-readonly class InvalidJwtListener
+final class InvalidJwtListener
 {
     public function __construct(private TranslatorInterface $translator)
     {

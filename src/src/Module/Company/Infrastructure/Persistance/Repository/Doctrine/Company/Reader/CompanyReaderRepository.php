@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Company\Reader;
 
-use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
@@ -25,12 +24,7 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
 
     public function getCompanyByUUID(string $uuid): Company
     {
-        $company = $this->findOneBy([Company::COLUMN_UUID => $uuid]);
-        if (null === $company) {
-            throw new \Exception($this->translator->trans('company.uuid.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
-        }
-
-        return $company;
+        return $this->findOneBy([Company::COLUMN_UUID => $uuid]);
     }
 
     public function getCompaniesByUUID(array $selectedUUID): Collection
@@ -221,7 +215,7 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         }
     }
 
-    public function getDeletedAddressByCompanyByUUID(string $uuid): ?Address
+    public function getDeletedAddressByCompanyUUID(string $uuid): ?Address
     {
         $filters = $this->getEntityManager()->getFilters();
         $filters->disable('soft_delete');
@@ -247,7 +241,7 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         }
     }
 
-    public function getDeletedContactsByCompanyByUUID(string $uuid): Collection
+    public function getDeletedContactsByCompanyUUID(string $uuid): Collection
     {
         $filters = $this->getEntityManager()->getFilters();
         $filters->disable('soft_delete');
