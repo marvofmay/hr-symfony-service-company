@@ -6,8 +6,10 @@ namespace App\Module\System\Application\CommandHandler\Import;
 
 use App\Module\System\Application\Command\Import\CreateImportCommand;
 use App\Module\System\Domain\Service\Import\ImportCreator;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-readonly class CreateImportCommandHandler
+#[AsMessageHandler(bus: 'command.bus')]
+final readonly class CreateImportCommandHandler
 {
     public function __construct(private ImportCreator $importCreator)
     {

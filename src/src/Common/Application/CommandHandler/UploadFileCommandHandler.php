@@ -7,8 +7,10 @@ namespace App\Common\Application\CommandHandler;
 use App\Common\Application\Command\UploadFileCommand;
 use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Service\UploadFile\UploadFile;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-readonly class UploadFileCommandHandler
+#[AsMessageHandler(bus: 'command.bus')]
+final readonly class UploadFileCommandHandler
 {
     public function __invoke(UploadFileCommand $command): void
     {

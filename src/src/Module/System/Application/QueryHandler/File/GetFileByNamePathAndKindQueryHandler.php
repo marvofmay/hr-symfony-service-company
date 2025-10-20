@@ -7,8 +7,10 @@ namespace App\Module\System\Application\QueryHandler\File;
 use App\Module\System\Application\Query\File\GetFileByNamePathAndKindQuery;
 use App\Module\System\Domain\Entity\File;
 use App\Module\System\Domain\Interface\File\FileReaderInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class GetFileByNamePathAndKindQueryHandler
+#[AsMessageHandler(bus: 'query.bus')]
+final readonly class GetFileByNamePathAndKindQueryHandler
 {
     public function __construct(private FileReaderInterface $fileReaderRepository)
     {

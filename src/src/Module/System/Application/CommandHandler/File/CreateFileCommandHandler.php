@@ -6,8 +6,10 @@ namespace App\Module\System\Application\CommandHandler\File;
 
 use App\Module\System\Application\Command\File\CreateFileCommand;
 use App\Module\System\Domain\Service\File\FileCreator;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-readonly class CreateFileCommandHandler
+#[AsMessageHandler(bus: 'command.bus')]
+final readonly class CreateFileCommandHandler
 {
     public function __construct(private FileCreator $fileCreator)
     {

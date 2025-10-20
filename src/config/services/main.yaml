@@ -20,8 +20,4 @@ services:
     calls:
       - [ setAnnotationReader, [ "@gedmo.mapping.driver.attribute" ] ]
 
-  App\Common\Application\CommandHandler\UploadFileCommandHandler:
-    tags:
-      - { name: 'messenger.message_handler', bus: 'command.bus' }
-
   Symfony\Component\Validator\Validator\ValidatorInterface: '@validator'

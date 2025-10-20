@@ -6,16 +6,17 @@ namespace App\Module\System\Domain\Factory;
 
 use App\Common\Domain\Interface\XLSXIteratorInterface;
 use App\Module\System\Domain\Enum\ImportKindEnum;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class ImporterFactory
 {
     private array $importers;
 
-    public function __construct(iterable $taggedImporters)
+    public function __construct(#[AutowireIterator(tag: 'app.importer')] private readonly iterable $taggedImporters)
     {
         $this->importers = [];
 
-        foreach ($taggedImporters as $importer) {
+        foreach ($this->taggedImporters as $importer) {
             $this->importers[$importer->getType()] = $importer;
         }
     }

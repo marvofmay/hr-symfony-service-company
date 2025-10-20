@@ -7,8 +7,10 @@ namespace App\Module\System\Application\QueryHandler\Import;
 use App\Module\System\Application\Query\Import\GetImportByFileQuery;
 use App\Module\System\Domain\Entity\Import;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-class GetImportByFileQueryHandler
+#[AsMessageHandler(bus: 'query.bus')]
+final readonly class GetImportByFileQueryHandler
 {
     public function __construct(private ImportReaderInterface $importReaderRepository)
     {
