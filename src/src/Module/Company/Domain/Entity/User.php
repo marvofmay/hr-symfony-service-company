@@ -99,9 +99,8 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     public function getRoles(): array
     {
-        // ToDo:: get Role from relation employee, if employee not null
         if (null === $this->employee) {
-            return [];
+            return ['Pracownik techniczny systemu - nie powiązany z pracownikiem firmy'];
         }
 
         return [$this->employee->getRole()->getName()];

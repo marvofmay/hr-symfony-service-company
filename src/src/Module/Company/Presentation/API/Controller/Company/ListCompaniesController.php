@@ -4,38 +4,79 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Company\Application\Query\Company\ListCompaniesQuery;
 use App\Module\Company\Domain\DTO\Company\CompaniesQueryDTO;
-use App\Module\Company\Presentation\API\Action\Company\AskCompaniesAction;
+use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ListCompaniesController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
+    public function __construct(
+        private readonly MessageBusInterface $eventBus,
+        private readonly MessageBusInterface $queryBus,
+        private readonly MessageService      $messageService,
+    )
     {
     }
 
     #[Route('/api/companies', name: 'api.companies.list', methods: ['GET'])]
-    public function list(#[MapQueryString] CompaniesQueryDTO $queryDTO, AskCompaniesAction $askCompaniesAction): Response
+    public function list(#[MapQueryString] CompaniesQueryDTO $queryDTO): Response
     {
         try {
-            if (!$this->isGranted(PermissionEnum::LIST, AccessEnum::COMPANY)) {
-                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
-            }
+            $this->denyAccessUnlessGranted(
+                PermissionEnum::LIST,
+                AccessEnum::COMPANY,
+                $this->messageService->get('accessDenied')
+            );
 
-            return new JsonResponse(['data' => $askCompaniesAction->ask($queryDTO)], Response::HTTP_OK);
-        } catch (\Exception $error) {
-            $message = sprintf('%s. %s', $this->translator->trans('company.list.error', [], 'companies'), $this->translator->trans($error->getMessage()));
-            $this->logger->error($message);
+            $data = $this->dispatchQuery($queryDTO);
 
-            return new JsonResponse(['message' => $message], $error->getCode());
+            return $this->successResponse($data);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse($exception);
         }
+    }
+
+    private function dispatchQuery(CompaniesQueryDTO $queryDTO): array
+    {
+        try {
+            $handledStamp = $this->queryBus->dispatch(new ListCompaniesQuery($queryDTO));
+
+            return $handledStamp->last(HandledStamp::class)->getResult();
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
+    }
+
+    private function successResponse(array $data): JsonResponse
+    {
+        return new JsonResponse(['data' => $data], Response::HTTP_OK);
+    }
+
+    private function errorResponse(\Throwable $exception): JsonResponse
+    {
+        $message = sprintf(
+            '%s. %s',
+            $this->messageService->get('company.list.error', [], 'companies'),
+            $exception->getMessage()
+        );
+
+        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
+
+        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
+
+        return new JsonResponse(['message' => $message], $code);
     }
 }

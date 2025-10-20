@@ -6,12 +6,10 @@ namespace App\Module\Company\Application\Validator\Company\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Domain\Enum\CompanyImportColumn;
 use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
-use App\Module\Company\Domain\Service\Company\ImportCompaniesFromXLSX;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_company_validator')]
+#[AutoconfigureTag('app.company.import.validator')]
 class FullNameValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)

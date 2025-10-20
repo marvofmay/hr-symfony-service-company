@@ -12,7 +12,7 @@ interface CompanyReaderInterface
 {
     public function getCompanyByUUID(string $uuid): Company;
 
-    public function getCompaniesByUUID(array $selectedUUID): Collection;
+    public function getCompaniesByUUID(array $selectedUUIDs): Collection;
 
     public function getCompanyByFullName(string $fullName, ?string $uuid): ?Company;
 

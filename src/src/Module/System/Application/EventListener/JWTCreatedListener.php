@@ -18,9 +18,9 @@ final class JWTCreatedListener
         $payload['employeeUUID'] = $user->getEmployee()?->getUUID();
         $payload['email'] = $user->getEmail();
         $payload['roles'] = $user->getRoles();
-        //$payload['modules'] = ;
-        //$payload['accesses'] = ;
-        //$payload['permissions'] = ;
+        // $payload['modules'] = ;
+        // $payload['accesses'] = ;
+        // $payload['permissions'] = ;
 
         $event->setData($payload);
     }

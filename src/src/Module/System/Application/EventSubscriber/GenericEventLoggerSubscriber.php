@@ -11,6 +11,7 @@ final class GenericEventLoggerSubscriber extends AbstractEventLoggerSubscriber i
 {
     public static function getSubscribedEvents(): array
     {
+        // ToDo:: refactor - use tags - OCP SOLID
         return LoggableEventsProvider::getEvents();
     }
 

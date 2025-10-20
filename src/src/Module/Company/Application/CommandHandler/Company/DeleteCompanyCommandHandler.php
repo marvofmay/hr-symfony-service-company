@@ -2,6 +2,7 @@
 
 namespace App\Module\Company\Application\CommandHandler\Company;
 
+use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Company\DeleteCompanyCommand;
@@ -9,12 +10,13 @@ use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Interface\Company\CompanyAggregateReaderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final readonly class DeleteCompanyCommandHandler
+final class DeleteCompanyCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
@@ -22,15 +24,15 @@ final readonly class DeleteCompanyCommandHandler
         private EventStoreCreator $eventStoreCreator,
         private Security $security,
         private SerializerInterface $serializer,
+        #[AutowireIterator(tag: 'app.company.delete.validator')] protected iterable $validators,
     ) {
     }
 
     public function __invoke(DeleteCompanyCommand $command): void
     {
-        $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID(
-            CompanyUUID::fromString($command->getCompany()->getUUID()->toString())
-        );
+        $this->validate($command);
 
+        $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID(CompanyUUID::fromString($command->companyUUID));
         $companyAggregate->delete();
 
         $events = $companyAggregate->pullEvents();

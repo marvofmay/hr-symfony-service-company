@@ -19,6 +19,7 @@ use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -38,8 +39,8 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         private readonly MessageService $messageService,
         private readonly MessageBusInterface $eventBus,
         private readonly ImportDepartmentsReferenceLoader $importDepartmentsReferenceLoader,
-        private readonly iterable $importDepartmentsValidators,
         private readonly EntityReferenceCache $entityReferenceCache,
+        #[AutowireIterator(tag: 'app.department.import.validator')] private readonly iterable $importDepartmentsValidators,
     ) {
         parent::__construct($this->translator);
     }
@@ -63,7 +64,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
                 [
                     'companies' => $companies,
                     'departments' => $departments,
-                    'emailsInternalCodes' => $emailsInternalCodes
+                    'emailsInternalCodes' => $emailsInternalCodes,
                 ]
             );
             if (null !== $error) {

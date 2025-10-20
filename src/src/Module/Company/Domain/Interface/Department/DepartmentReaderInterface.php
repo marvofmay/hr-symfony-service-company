@@ -31,5 +31,6 @@ interface DepartmentReaderInterface
     public function getDeletedAddressByDepartmentByUUID(string $uuid): ?Address;
 
     public function getDeletedContactsByDepartmentByUUID(string $uuid): Collection;
+
     public function getDepartmentsInternalCodeByEmails(array $emails): Collection;
 }

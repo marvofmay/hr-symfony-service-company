@@ -9,7 +9,7 @@ use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_employee_validator')]
+#[AutoconfigureTag('app.employee.import.validator')]
 class LastNameValidator implements ImportRowValidatorInterface
 {
     public const int MINIMUM_LENGTH = 3;

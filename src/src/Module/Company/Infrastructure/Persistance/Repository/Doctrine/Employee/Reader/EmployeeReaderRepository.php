@@ -235,10 +235,10 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
-        $qb->select(Employee::ALIAS . '.' . Employee::COLUMN_PESEL, Contact::ALIAS . '.' . Contact::COLUMN_DATA . ' AS email')
+        $qb->select(Employee::ALIAS.'.'.Employee::COLUMN_PESEL, Contact::ALIAS.'.'.Contact::COLUMN_DATA.' AS email')
             ->from(Employee::class, Employee::ALIAS)
-            ->join(Employee::ALIAS . '.'.  Employee::RELATION_CONTACTS, Contact::ALIAS)
-            ->where(Contact::ALIAS. '.'.  Contact::COLUMN_DATA . ' IN (:emails)')
+            ->join(Employee::ALIAS.'.'.Employee::RELATION_CONTACTS, Contact::ALIAS)
+            ->where(Contact::ALIAS.'.'.Contact::COLUMN_DATA.' IN (:emails)')
             ->setParameter('emails', $emails);
 
         $results = $qb->getQuery()->getArrayResult();

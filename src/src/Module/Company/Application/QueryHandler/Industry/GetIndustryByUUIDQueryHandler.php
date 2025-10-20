@@ -9,8 +9,10 @@ use App\Module\Company\Application\Query\Industry\GetIndustryByUUIDQuery;
 use App\Module\Company\Application\Transformer\Industry\IndustryDataTransformer;
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+#[AsMessageHandler(bus: 'query.bus')]
 final readonly class GetIndustryByUUIDQueryHandler
 {
     public function __construct(private IndustryReaderInterface $industryReaderRepository, private EventDispatcherInterface $eventDispatcher)

@@ -10,7 +10,7 @@ use App\Common\Shared\Utils\EmailValidator as Email;
 use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_employee_validator')]
+#[AutoconfigureTag('app.employee.import.validator')]
 class EmailValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
@@ -29,7 +29,7 @@ class EmailValidator implements ImportRowValidatorInterface
             return $this->messageService->get($errorMessage, [], 'validators');
         }
 
-        $pesel = (string)$row[EmployeeImportColumnEnum::PESEL->value] ?? null;
+        $pesel = (string) $row[EmployeeImportColumnEnum::PESEL->value] ?? null;
         if (array_key_exists($email, $additionalData['emailsPESELs']) && $additionalData['emailsPESELs'][$email] !== $pesel) {
             return $this->messageService->get('employee.email.alreadyExists', [':email' => $email], 'employees');
         }

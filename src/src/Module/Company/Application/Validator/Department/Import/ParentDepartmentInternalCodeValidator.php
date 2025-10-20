@@ -8,7 +8,7 @@ use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_department_validator')]
+#[AutoconfigureTag('app.department.import.validator')]
 class ParentDepartmentInternalCodeValidator implements ImportRowValidatorInterface
 {
     public function __construct()

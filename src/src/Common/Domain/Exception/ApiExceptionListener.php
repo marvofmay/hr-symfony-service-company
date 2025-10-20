@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\Exception;
 
-use App\Common\Domain\Service\MessageTranslator\MessageService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsEventListener(event: 'kernel.exception', method: 'onKernelException', priority: 255)]
 final readonly class ApiExceptionListener
 {
-    public function __construct(private MessageService $messageService)
+    public function __construct(private TranslatorInterface $translator)
     {
     }
 
@@ -22,24 +22,18 @@ final readonly class ApiExceptionListener
     {
         $exception = $event->getThrowable();
 
-        $status = 500;
-        $message = $this->messageService->get('internalServerError');
+        if ($exception instanceof MethodNotAllowedHttpException) {
+            $response = new JsonResponse([
+                'message' => $this->translator->trans('Niepoprawna metoda HTTP dla tego zasobu. Sprawdź dokumentację API.'),
+            ]);
+            $event->setResponse($response);
+        }
 
         if ($exception instanceof NotFoundHttpException) {
-            $status = 404;
-            $message = $this->messageService->get('endpointNotFound');
+            $response = new JsonResponse([
+                'message' => $this->translator->trans('Endpoint nie został znaleziony lub brakuje wymaganych parametrów.'),
+            ]);
+            $event->setResponse($response);
         }
-
-        if ($exception instanceof MethodNotAllowedHttpException) {
-            $status = 405;
-            $message = $this->messageService->get('methodNotAllowed');
-        }
-
-        $response = new JsonResponse(
-            ['message' => $message],
-            $status
-        );
-
-        $event->setResponse($response);
     }
 }

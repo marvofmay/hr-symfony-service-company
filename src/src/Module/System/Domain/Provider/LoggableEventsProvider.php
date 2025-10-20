@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Provider;
 
+use App\Module\Company\Application\Event\Company\CompanyListedEvent;
+use App\Module\Company\Application\Event\Company\CompanyViewedEvent;
 use App\Module\Company\Application\Event\ContractType\ContractTypeCreatedEvent;
 use App\Module\Company\Application\Event\ContractType\ContractTypeDeletedEvent;
 use App\Module\Company\Application\Event\ContractType\ContractTypeImportedEvent;
@@ -45,11 +47,20 @@ final class LoggableEventsProvider
     private static function getEventClasses(): array
     {
         return array_merge(
+            self::getCompanyEventClasses(),
             self::getRoleEventClasses(),
             self::getIndustryEventClasses(),
             self::getPositionEventClasses(),
             self::getContractTypeEventsClasses()
         );
+    }
+
+    private static function getCompanyEventClasses(): array
+    {
+        return [
+            CompanyViewedEvent::class,
+            CompanyListedEvent::class,
+        ];
     }
 
     private static function getRoleEventClasses(): array

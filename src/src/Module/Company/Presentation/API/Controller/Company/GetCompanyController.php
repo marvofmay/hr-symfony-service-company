@@ -4,23 +4,27 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
-use App\Module\Company\Application\Transformer\Company\CompanyDataTransformer;
-use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
+use App\Common\Domain\Enum\MonologChanelEnum;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Company\Application\Query\Company\GetCompanyByUUIDQuery;
+use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class GetCompanyController extends AbstractController
 {
     public function __construct(
-        private readonly LoggerInterface $logger,
-        private readonly CompanyReaderInterface $companyReaderRepository,
-        private readonly TranslatorInterface $translator,
+        private readonly MessageBusInterface $eventBus,
+        private readonly MessageBusInterface $queryBus,
+        private readonly MessageService $messageService,
     ) {
     }
 
@@ -28,20 +32,48 @@ class GetCompanyController extends AbstractController
     public function get(string $uuid): JsonResponse
     {
         try {
-            if (!$this->isGranted(PermissionEnum::VIEW, AccessEnum::COMPANY)) {
-                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
-            }
+            $this->denyAccessUnlessGranted(
+                PermissionEnum::VIEW,
+                AccessEnum::COMPANY,
+                $this->messageService->get('accessDenied')
+            );
 
-            $company = $this->companyReaderRepository->getCompanyByUUID($uuid);
-            $transformer = new CompanyDataTransformer();
-            $data = $transformer->transformToArray($company);
+            $data = $this->dispatchQuery($uuid);
 
-            return new JsonResponse(['data' => $data], Response::HTTP_OK);
-        } catch (\Exception $error) {
-            $message = sprintf('%s. %s', $this->translator->trans('company.view.error', [], 'companies'), $error->getMessage());
-            $this->logger->error($message);
-
-            return new JsonResponse(['message' => $message], $error->getCode());
+            return $this->successResponse($data);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse($exception);
         }
+    }
+
+    private function dispatchQuery(string $companyUUID): array
+    {
+        try {
+            $handledStamp = $this->queryBus->dispatch(new GetCompanyByUUIDQuery($companyUUID));
+
+            return $handledStamp->last(HandledStamp::class)->getResult();
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
+    }
+
+    private function successResponse(array $data): JsonResponse
+    {
+        return new JsonResponse(['data' => $data], Response::HTTP_OK);
+    }
+
+    private function errorResponse(\Throwable $exception): JsonResponse
+    {
+        $message = sprintf(
+            '%s. %s',
+            $this->messageService->get('company.view.error', [], 'companies'),
+            $exception->getMessage()
+        );
+
+        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
+
+        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
+
+        return new JsonResponse(['message' => $message], $code);
     }
 }

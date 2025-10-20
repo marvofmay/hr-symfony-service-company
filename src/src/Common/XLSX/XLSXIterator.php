@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Common\XLSX;
 
 use App\Common\Domain\Interface\XLSXIteratorInterface;
-use App\Module\System\Domain\Entity\Import;
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,9 +13,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 abstract class XLSXIterator implements XLSXIteratorInterface
 {
     protected ?Worksheet $worksheet = null;
-    protected array      $errors    = [];
-    protected int        $rowIndex  = 2;
-    private string       $filePath  = '';
+    protected array $errors = [];
+    protected int $rowIndex = 2;
+    private string $filePath = '';
 
     public function __construct(private readonly TranslatorInterface $translator)
     {

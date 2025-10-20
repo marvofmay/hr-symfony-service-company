@@ -10,7 +10,7 @@ use App\Common\Shared\Utils\NIPValidator as NIP;
 use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_company_validator')]
+#[AutoconfigureTag('app.company.import.validator')]
 class NIPValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)

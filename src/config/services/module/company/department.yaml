@@ -5,4 +5,4 @@ services:
 
     App\Module\Company\Domain\Service\Department\ImportDepartmentsFromXLSX:
       arguments:
-        $importDepartmentsValidators: !tagged_iterator 'app.import_department_validator'
+        $importDepartmentsValidators: !tagged_iterator 'app.department.import.validator'

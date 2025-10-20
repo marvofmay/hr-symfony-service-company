@@ -25,16 +25,20 @@ class CreateCompanyController extends AbstractController
         private readonly MessageBusInterface $eventBus,
         private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/companies', name: 'api.companies.create', methods: ['POST'])]
-    public function create(#[MapRequestPayload] CreateDTO $dto): JsonResponse
+    public function create(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
         try {
-            $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
-            $this->dispatchCommand($dto);
+            $this->denyAccessUnlessGranted(
+                PermissionEnum::CREATE,
+                AccessEnum::COMPANY,
+                $this->messageService->get('accessDenied')
+            );
+
+            $this->dispatchCommand($createDTO);
 
             return $this->successResponse();
         } catch (\Throwable $exception) {
@@ -42,30 +46,27 @@ class CreateCompanyController extends AbstractController
         }
     }
 
-    private function dispatchCommand(CreateDTO $dto): void
+    private function dispatchCommand(CreateDTO $createDTO): void
     {
-        $command = new CreateCompanyCommand(
-            $dto->fullName,
-            $dto->shortName,
-            $dto->internalCode,
-            $dto->active,
-            $dto->parentCompanyUUID,
-            $dto->nip,
-            $dto->regon,
-            $dto->description,
-            $dto->industryUUID,
-            $dto->phones,
-            $dto->emails,
-            $dto->websites,
-            $dto->address
-        );
-
         try {
-            $this->commandBus->dispatch($command);
+            $this->commandBus->dispatch(new CreateCompanyCommand(
+                $createDTO->fullName,
+                $createDTO->shortName,
+                $createDTO->internalCode,
+                $createDTO->active,
+                $createDTO->parentCompanyUUID,
+                $createDTO->nip,
+                $createDTO->regon,
+                $createDTO->description,
+                $createDTO->industryUUID,
+                $createDTO->phones,
+                $createDTO->emails,
+                $createDTO->websites,
+                $createDTO->address
+            ));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
-
     }
 
     private function successResponse(): JsonResponse
@@ -76,7 +77,7 @@ class CreateCompanyController extends AbstractController
         );
     }
 
-    private function errorResponse(\Throwable $exception): JsonResponse
+    private function errorResponse(\Exception $exception): JsonResponse
     {
         $message = sprintf(
             '%s. %s',

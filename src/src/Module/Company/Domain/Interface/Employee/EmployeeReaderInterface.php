@@ -36,5 +36,6 @@ interface EmployeeReaderInterface
     public function getDeletedContactsByEmployeeByUUID(string $uuid): Collection;
 
     public function getDeletedUserByEmployeeUUID(string $uuid): ?User;
+
     public function getEmployeesPESELByEmails(array $emails): Collection;
 }

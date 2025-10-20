@@ -9,8 +9,10 @@ use App\Module\Company\Application\Query\Position\GetPositionByUUIDQuery;
 use App\Module\Company\Application\Transformer\Position\PositionDataTransformer;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
+use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
+#[AsMessageHandler(bus: 'query.bus')]
 final readonly class GetPositionByUUIDQueryHandler
 {
     public function __construct(private PositionReaderInterface $positionReaderRepository, private EventDispatcherInterface $eventDispatcher)

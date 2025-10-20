@@ -19,6 +19,7 @@ use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -38,8 +39,8 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         private readonly MessageService $messageService,
         private readonly MessageBusInterface $eventBus,
         private readonly ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
-        private readonly iterable $importEmployeesValidators,
         private readonly EntityReferenceCache $entityReferenceCache,
+        #[AutowireIterator(tag: 'app.employee.import.validator')] private readonly iterable $importEmployeesValidators,
     ) {
         parent::__construct($this->translator);
     }

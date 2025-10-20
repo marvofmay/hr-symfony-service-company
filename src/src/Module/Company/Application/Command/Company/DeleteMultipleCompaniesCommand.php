@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Company;
 
-use Doctrine\Common\Collections\Collection;
+use App\Common\Domain\Interface\CommandInterface;
 
-class DeleteMultipleCompaniesCommand
+class DeleteMultipleCompaniesCommand implements CommandInterface
 {
-    public function __construct(public Collection $companies)
+    public function __construct(public array $selectedUUIDs)
     {
     }
 }

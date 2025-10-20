@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Presentation\API\Action\Role\AskRoleAction;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +34,7 @@ final class GetRoleController extends AbstractController
             return new JsonResponse(['data' => $askRoleAction->ask($uuid)], Response::HTTP_OK);
         } catch (\Exception $error) {
             $message = sprintf('%s. %s', $this->messageService->get('role.view.error', [], 'roles'), $error->getMessage());
-            $this->eventBus->dispatch(new LogFileEvent($message));
+            $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
 
             return new JsonResponse(['message' => $message], $error->getCode());
         }

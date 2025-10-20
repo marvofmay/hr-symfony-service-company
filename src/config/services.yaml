@@ -8,6 +8,7 @@ imports:
     - { resource: './services/module/company/industry.yaml' }
     - { resource: './services/module/company/contract_type.yaml' }
     - { resource: './services/module/system/file.yaml' }
+    - { resource: './services/module/system/log.yaml' }
     - { resource: './services/module/system/import.yaml' }
     - { resource: './services/module/system/import_log.yaml' }
     - { resource: './services/module/note/note.yaml' }

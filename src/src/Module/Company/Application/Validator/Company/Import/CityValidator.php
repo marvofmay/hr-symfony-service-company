@@ -9,7 +9,7 @@ use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_company_validator')]
+#[AutoconfigureTag('app.company.import.validator')]
 class CityValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)

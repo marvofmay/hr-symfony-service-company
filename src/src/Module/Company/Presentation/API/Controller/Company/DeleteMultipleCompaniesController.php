@@ -4,40 +4,79 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
+use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Company\Application\Command\Company\DeleteMultipleCompaniesCommand;
 use App\Module\Company\Domain\DTO\Company\DeleteMultipleDTO;
-use App\Module\Company\Presentation\API\Action\Company\DeleteMultipleCompaniesAction;
+use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DeleteMultipleCompaniesController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly MessageBusInterface $eventBus,
+        private readonly MessageService $messageService,
+        private readonly MessageBusInterface $commandBus,
+    ) {
     }
 
     #[Route('/api/companies/multiple', name: 'api.companies.delete_multiple', methods: ['DELETE'])]
-    public function delete(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO, DeleteMultipleCompaniesAction $deleteMultipleCompaniesAction): JsonResponse
+    public function delete(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
     {
         try {
-            if (!$this->isGranted(PermissionEnum::DELETE, AccessEnum::COMPANY)) {
-                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
-            }
+            $this->denyAccessUnlessGranted(
+                PermissionEnum::DELETE,
+                AccessEnum::COMPANY,
+                $this->messageService->get('accessDenied')
+            );
 
-            $deleteMultipleCompaniesAction->execute($deleteMultipleDTO);
+            $this->dispatchCommand($deleteMultipleDTO);
 
-            return new JsonResponse(['message' => $this->translator->trans('company.delete.multiple.success', [], 'companies')], Response::HTTP_OK);
-        } catch (\Exception $error) {
-            $message = sprintf('%s. %s', $this->translator->trans('company.delete.multiple.error', [], 'companies'), $error->getMessage());
-            $this->logger->error($message);
-
-            return new JsonResponse(['message' => $message], $error->getCode());
+            return $this->successResponse();
+        } catch (\Throwable $exception) {
+            return $this->errorResponse($exception);
         }
+    }
+
+    private function dispatchCommand(DeleteMultipleDTO $deleteMultipleDTO): void
+    {
+        try {
+            $this->commandBus->dispatch(
+                new DeleteMultipleCompaniesCommand($deleteMultipleDTO->selectedUUIDs)
+            );
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
+    }
+
+    private function successResponse(): JsonResponse
+    {
+        return new JsonResponse(
+            ['message' => $this->messageService->get('company.multipleDelete.success', [], 'companies')],
+            Response::HTTP_NO_CONTENT
+        );
+    }
+
+    private function errorResponse(\Throwable $exception): JsonResponse
+    {
+        $message = sprintf(
+            '%s. %s',
+            $this->messageService->get('company.multipleDelete.error', [], 'companies'),
+            $exception->getMessage()
+        );
+
+        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR));
+
+        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
+
+        return new JsonResponse(['message' => $message], $code);
     }
 }

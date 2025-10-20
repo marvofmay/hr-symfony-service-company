@@ -27,15 +27,15 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         return $this->findOneBy([Company::COLUMN_UUID => $uuid]);
     }
 
-    public function getCompaniesByUUID(array $selectedUUID): Collection
+    public function getCompaniesByUUID(array $selectedUUIDs): Collection
     {
-        if (empty($selectedUUID)) {
+        if (empty($selectedUUIDs)) {
             return new ArrayCollection();
         }
 
         $companies = $this->getEntityManager()
-            ->createQuery('SELECT c FROM ' . Company::class . ' c WHERE c.' . Company::COLUMN_UUID . ' IN (:uuids)')
-            ->setParameter('uuids', $selectedUUID)
+            ->createQuery('SELECT c FROM '.Company::class.' c WHERE c.'.Company::COLUMN_UUID.' IN (:uuids)')
+            ->setParameter('uuids', $selectedUUIDs)
             ->getResult();
 
         return new ArrayCollection($companies);
@@ -48,7 +48,7 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         }
 
         $companies = $this->getEntityManager()
-            ->createQuery('SELECT c FROM ' . Company::class . ' c WHERE c.' . Company::COLUMN_NIP . ' IN (:nips)')
+            ->createQuery('SELECT c FROM '.Company::class.' c WHERE c.'.Company::COLUMN_NIP.' IN (:nips)')
             ->setParameter('nips', $selectedNIP)
             ->getResult();
 
@@ -60,11 +60,11 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select(Company::ALIAS)
             ->from(Company::class, Company::ALIAS)
-            ->where(Company::ALIAS . '.' . Company::COLUMN_FULL_NAME . ' = :name')
+            ->where(Company::ALIAS.'.'.Company::COLUMN_FULL_NAME.' = :name')
             ->setParameter('name', $fullName);
 
         if (null !== $uuid) {
-            $qb->andWhere(Company::ALIAS . '.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere(Company::ALIAS.'.'.Company::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -76,11 +76,11 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select(Company::ALIAS)
             ->from(Company::class, Company::ALIAS)
-            ->where(Company::ALIAS . '.' . Company::COLUMN_INTERNAL_CODE . ' = :internalCode')
+            ->where(Company::ALIAS.'.'.Company::COLUMN_INTERNAL_CODE.' = :internalCode')
             ->setParameter('internalCode', $internalCode);
 
         if (null !== $uuid) {
-            $qb->andWhere(Company::ALIAS . '.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere(Company::ALIAS.'.'.Company::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -92,11 +92,11 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select(Company::ALIAS)
             ->from(Company::class, Company::ALIAS)
-            ->where(Company::ALIAS . '.' . Company::COLUMN_NIP . ' = :nip')
+            ->where(Company::ALIAS.'.'.Company::COLUMN_NIP.' = :nip')
             ->setParameter('nip', $nip);
 
         if (null !== $uuid) {
-            $qb->andWhere(Company::ALIAS . '.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere(Company::ALIAS.'.'.Company::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -108,11 +108,11 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select(Company::ALIAS)
             ->from(Company::class, Company::ALIAS)
-            ->where(Company::ALIAS . '.' . Company::COLUMN_REGON . ' = :regon')
+            ->where(Company::ALIAS.'.'.Company::COLUMN_REGON.' = :regon')
             ->setParameter('regon', $regon);
 
         if (null !== $uuid) {
-            $qb->andWhere(Company::ALIAS . '.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere(Company::ALIAS.'.'.Company::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -124,11 +124,11 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select(Company::ALIAS)
             ->from(Company::class, Company::ALIAS)
-            ->where(Company::ALIAS . '.' . Company::COLUMN_SHORT_NAME . ' = :name')
+            ->where(Company::ALIAS.'.'.Company::COLUMN_SHORT_NAME.' = :name')
             ->setParameter('name', $shortName);
 
         if (null !== $uuid) {
-            $qb->andWhere(Company::ALIAS . '.' . Company::COLUMN_UUID . ' != :uuid')
+            $qb->andWhere(Company::ALIAS.'.'.Company::COLUMN_UUID.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -160,7 +160,7 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         $qb = $this->getEntityManager()->createQueryBuilder();
         $qb->select(Company::ALIAS)
             ->from(Company::class, Company::ALIAS)
-            ->where(Company::ALIAS . '.' . Company::COLUMN_UUID . ' = :uuid')
+            ->where(Company::ALIAS.'.'.Company::COLUMN_UUID.' = :uuid')
             ->setParameter('uuid', $uuid);
 
         return null !== $qb->getQuery()->getOneOrNullResult();
@@ -199,8 +199,8 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
 
         try {
             $deletedCompany = $this->createQueryBuilder(Company::ALIAS)
-                ->where(Company::ALIAS . '.' . Company::COLUMN_UUID . ' = :uuid')
-                ->andWhere(Company::ALIAS . '.' . Company::COLUMN_DELETED_AT . ' IS NOT NULL')
+                ->where(Company::ALIAS.'.'.Company::COLUMN_UUID.' = :uuid')
+                ->andWhere(Company::ALIAS.'.'.Company::COLUMN_DELETED_AT.' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
@@ -250,9 +250,9 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
             $qb = $this->getEntityManager()->createQueryBuilder();
             $deletedContacts = $qb->select('c')
                 ->from(Contact::class, Company::ALIAS)
-                ->join(Company::ALIAS . '.company', Contact::ALIAS)
-                ->where(Contact::ALIAS . '.' . Company::COLUMN_UUID . '= :uuid')
-                ->andWhere(Company::ALIAS . '.deletedAt IS NOT NULL')
+                ->join(Company::ALIAS.'.company', Contact::ALIAS)
+                ->where(Contact::ALIAS.'.'.Company::COLUMN_UUID.'= :uuid')
+                ->andWhere(Company::ALIAS.'.deletedAt IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getResult();
@@ -267,18 +267,18 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         }
     }
 
-   public function getCompaniesNIPByEmails(array $emails): Collection
-   {
-       $qb = $this->getEntityManager()->createQueryBuilder();
+    public function getCompaniesNIPByEmails(array $emails): Collection
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
-       $qb->select(Company::ALIAS . '.' . Company::COLUMN_NIP, Contact::ALIAS .  '.' . Contact::COLUMN_DATA . ' AS email')
-           ->from(Company::class, Company::ALIAS)
-           ->join(Company::ALIAS. '.' . Company::RELATION_CONTACTS, Contact::ALIAS)
-           ->where(Contact::ALIAS .  '.' . Contact::COLUMN_DATA . ' IN (:emails)')
-           ->setParameter('emails', $emails);
+        $qb->select(Company::ALIAS.'.'.Company::COLUMN_NIP, Contact::ALIAS.'.'.Contact::COLUMN_DATA.' AS email')
+            ->from(Company::class, Company::ALIAS)
+            ->join(Company::ALIAS.'.'.Company::RELATION_CONTACTS, Contact::ALIAS)
+            ->where(Contact::ALIAS.'.'.Contact::COLUMN_DATA.' IN (:emails)')
+            ->setParameter('emails', $emails);
 
-       $results = $qb->getQuery()->getArrayResult();
+        $results = $qb->getQuery()->getArrayResult();
 
-       return new ArrayCollection($results);
-   }
+        return new ArrayCollection($results);
+    }
 }

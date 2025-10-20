@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\CommandHandler\Company;
 
+use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Company\UpdateCompanyCommand;
@@ -20,12 +21,13 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use App\Module\Company\Domain\Interface\Company\CompanyAggregateReaderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final readonly class UpdateCompanyCommandHandler
+final class UpdateCompanyCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
         private EventStoreCreator $eventStoreCreator,
@@ -33,13 +35,16 @@ final readonly class UpdateCompanyCommandHandler
         private SerializerInterface $serializer,
         private EventDispatcherInterface $eventDispatcher,
         private CompanyAggregateReaderInterface $companyAggregateReaderRepository,
+        #[AutowireIterator(tag: 'app.company.update.validator')] protected iterable $validators,
     ) {
     }
 
     public function __invoke(UpdateCompanyCommand $command): void
     {
+        $this->validate($command);
+
         $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID(
-            CompanyUUID::fromString($command->company->getUUID()->toString())
+            CompanyUUID::fromString($command->companyUUID)
         );
 
         $companyAggregate->update(

@@ -25,16 +25,3 @@ services:
       - { name: 'messenger.message_handler', bus: 'command.bus' }
 
   Symfony\Component\Validator\Validator\ValidatorInterface: '@validator'
-
-  App\Module\System\Application\EventHandler\LogFileEventHandler:
-    arguments:
-      $loggers: !service_locator
-        main: '@monolog.logger'
-        eventLog: '@monolog.logger.eventLog'
-        import: '@monolog.logger.import'
-
-  App\Module\System\Application\EventSubscriber\GenericEventLoggerSubscriber:
-    arguments:
-      $loggers: !service_locator
-        main: '@monolog.logger'
-        eventLog: '@monolog.logger.eventLog'

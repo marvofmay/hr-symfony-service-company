@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Company;
 
-use App\Module\Company\Domain\Entity\Company;
+use App\Common\Domain\Interface\CommandInterface;
 
-final readonly class DeleteCompanyCommand
+final readonly class DeleteCompanyCommand implements CommandInterface
 {
-    public function __construct(private Company $company)
+    public function __construct(public string $companyUUID)
     {
-    }
-
-    public function getCompany(): Company
-    {
-        return $this->company;
     }
 }

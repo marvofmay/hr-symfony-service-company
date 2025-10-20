@@ -6,12 +6,11 @@ namespace App\Module\Company\Application\Command\Company;
 
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
-use App\Module\Company\Domain\Entity\Company;
 
 final class UpdateCompanyCommand implements CommandInterface
 {
     public function __construct(
-        public Company $company,
+        public string $companyUUID,
         public string $fullName,
         public ?string $shortName,
         public ?string $internalCode,

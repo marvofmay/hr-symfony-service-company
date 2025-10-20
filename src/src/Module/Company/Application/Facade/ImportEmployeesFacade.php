@@ -8,7 +8,7 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
-use App\Module\Company\Domain\DTO\Company\ImportDTO;
+use App\Module\Company\Domain\DTO\Employee\ImportDTO;
 use App\Module\Company\Presentation\API\Action\Employee\ImportEmployeesAction;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;

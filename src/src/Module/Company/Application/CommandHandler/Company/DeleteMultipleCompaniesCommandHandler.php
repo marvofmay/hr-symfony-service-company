@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\CommandHandler\Company;
 
+use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Company\DeleteMultipleCompaniesCommand;
@@ -13,12 +14,13 @@ use App\Module\Company\Domain\Event\Company\CompanyMultipleDeletedEvent;
 use App\Module\Company\Domain\Interface\Company\CompanyAggregateReaderInterface;
 use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final readonly class DeleteMultipleCompaniesCommandHandler
+final class DeleteMultipleCompaniesCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
         private EventDispatcherInterface $eventDispatcher,
@@ -26,14 +28,17 @@ final readonly class DeleteMultipleCompaniesCommandHandler
         private EventStoreCreator $eventStoreCreator,
         private Security $security,
         private SerializerInterface $serializer,
+        #[AutowireIterator(tag: 'app.company.delete_multiple.validator')] protected iterable $validators,
     ) {
     }
 
     public function __invoke(DeleteMultipleCompaniesCommand $command): void
     {
+        $this->validate($command);
+
         $deletedUUIDs = [];
-        foreach ($command->companies as $company) {
-            $uuid = CompanyUUID::fromString($company->getUUID()->toString());
+        foreach ($command->selectedUUIDs as $uuid) {
+            $uuid = CompanyUUID::fromString($uuid);
             $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID($uuid);
 
             $companyAggregate->delete();

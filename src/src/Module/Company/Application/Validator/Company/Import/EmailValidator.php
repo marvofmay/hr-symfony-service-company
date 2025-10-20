@@ -10,7 +10,7 @@ use App\Common\Shared\Utils\EmailValidator as Email;
 use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_company_validator')]
+#[AutoconfigureTag('app.company.import.validator')]
 class EmailValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
@@ -27,7 +27,7 @@ class EmailValidator implements ImportRowValidatorInterface
             }
         }
 
-        $nip = (string)$row[CompanyImportColumnEnum::NIP->value] ?? null;
+        $nip = (string) $row[CompanyImportColumnEnum::NIP->value] ?? null;
         if (array_key_exists($email, $additionalData['emailsNIPs']) && $additionalData['emailsNIPs'][$email] !== $nip) {
             return $this->messageService->get('company.email.alreadyExists', [':email' => $email], 'companies');
         }

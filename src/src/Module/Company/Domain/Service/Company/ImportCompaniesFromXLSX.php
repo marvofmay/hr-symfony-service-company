@@ -19,6 +19,7 @@ use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -28,20 +29,19 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
     private array $errorMessages = [];
 
     public function __construct(
-        private readonly TranslatorInterface            $translator,
-        private readonly CompanyReaderInterface         $companyReaderRepository,
-        private readonly CompanyAggregateCreator        $companyAggregateCreator,
-        private readonly CompanyAggregateUpdater        $companyAggregateUpdater,
-        private readonly ImportCompaniesPreparer        $importCompaniesPreparer,
-        private readonly UpdateImportAction             $updateImportAction,
-        private readonly ImportLogMultipleCreator       $importLogMultipleCreator,
-        private readonly MessageService                 $messageService,
-        private readonly MessageBusInterface            $eventBus,
+        private readonly TranslatorInterface $translator,
+        private readonly CompanyReaderInterface $companyReaderRepository,
+        private readonly CompanyAggregateCreator $companyAggregateCreator,
+        private readonly CompanyAggregateUpdater $companyAggregateUpdater,
+        private readonly ImportCompaniesPreparer $importCompaniesPreparer,
+        private readonly UpdateImportAction $updateImportAction,
+        private readonly ImportLogMultipleCreator $importLogMultipleCreator,
+        private readonly MessageService $messageService,
+        private readonly MessageBusInterface $eventBus,
         private readonly ImportCompaniesReferenceLoader $importCompaniesReferenceLoader,
-        private readonly iterable                       $importCompaniesValidators,
-        private readonly EntityReferenceCache           $entityReferenceCache,
-    )
-    {
+        private readonly EntityReferenceCache $entityReferenceCache,
+        #[AutowireIterator(tag: 'app.company.import.validator')] private readonly iterable $importCompaniesValidators,
+    ) {
         parent::__construct($this->translator);
     }
 
@@ -63,7 +63,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
                 $row,
                 [
                     'industries' => $industries,
-                    'companies'  => $companies,
+                    'companies' => $companies,
                     'emailsNIPs' => $emailsNIPs,
                 ]
             );
@@ -82,7 +82,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             return null;
         }
 
-        $parentNIP = trim((string)$parentRaw);
+        $parentNIP = trim((string) $parentRaw);
         if ('' === $parentNIP) {
             return null;
         }
@@ -94,7 +94,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         $existingParentCompany = $this->entityReferenceCache->get(
             Company::class,
             $parentNIP,
-            fn(string $parentNIP) => $this->companyReaderRepository->getCompanyByNIP($parentNIP)
+            fn (string $parentNIP) => $this->companyReaderRepository->getCompanyByNIP($parentNIP)
         );
 
         return CompanyUUID::fromString($existingParentCompany->getUUID()->toString());
@@ -109,7 +109,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
-                    new LogFileEvent($this->messageService->get('company.import.error', [], 'companies') . ': ' . $error)
+                    new LogFileEvent($this->messageService->get('company.import.error', [], 'companies').': '.$error)
                 );
             }
 
@@ -120,7 +120,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             foreach ($preparedRows as $row) {
                 $parentUUID = $this->resolveParentUUID($row, $nipMap);
 
-                $nip = trim((string)$row[CompanyImportColumnEnum::NIP->value]);
+                $nip = trim((string) $row[CompanyImportColumnEnum::NIP->value]);
                 $uuid = $nipMap[$nip];
 
                 if (!$row[CompanyImportColumnEnum::DYNAMIC_IS_COMPANY_WITH_NIP_ALREADY_EXISTS->value]) {

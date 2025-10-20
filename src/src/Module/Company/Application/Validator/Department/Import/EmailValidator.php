@@ -10,7 +10,7 @@ use App\Common\Shared\Utils\EmailValidator as Email;
 use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.import_department_validator')]
+#[AutoconfigureTag('app.department.import.validator')]
 class EmailValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
@@ -27,7 +27,7 @@ class EmailValidator implements ImportRowValidatorInterface
             }
         }
 
-        $internalCode = (string)$row[DepartmentImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value] ?? null;
+        $internalCode = (string) $row[DepartmentImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value] ?? null;
         if (array_key_exists($email, $additionalData['emailsInternalCodes']) && $additionalData['emailsInternalCodes'][$email] !== $internalCode) {
             return $this->messageService->get('department.email.alreadyExists', [':email' => $email], 'departments');
         }

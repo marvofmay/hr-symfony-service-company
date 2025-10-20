@@ -74,10 +74,6 @@ abstract class AccessPermissionVoter extends Voter
         }
 
         $role = $employee->getRole();
-        // ToDo:: change in class User, return getRoles() : super_admin to ROLE_SUPER_ADMIN
-        if ('super_admin' === $role->getName()) {
-            return true;
-        }
 
         return $this->roleAccessPermissionChecker->check($this->permission, $this->access, $role);
     }

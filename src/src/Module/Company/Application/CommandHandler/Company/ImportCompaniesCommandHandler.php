@@ -31,7 +31,7 @@ final readonly class ImportCompaniesCommandHandler
 
     public function __invoke(ImportCompaniesCommand $command): void
     {
-        $import = $this->importReaderRepository->getImportByUUID($command->getImportUUID());
+        $import = $this->importReaderRepository->getImportByUUID($command->importUUID);
 
         $importer = $this->importerFactory->getImporter(ImportKindEnum::IMPORT_COMPANIES);
         $importer->setFilePath(sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()));

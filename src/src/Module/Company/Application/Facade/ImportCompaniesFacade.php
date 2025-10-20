@@ -8,8 +8,7 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
-use App\Module\Company\Domain\DTO\Company\ImportDTO;
-use App\Module\Company\Presentation\API\Action\Company\ImportCompaniesAction;
+use App\Module\Company\Application\Command\Company\ImportCompaniesCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
@@ -24,6 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -32,7 +32,6 @@ final readonly class ImportCompaniesFacade
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UploadFileAction $uploadFileAction,
-        private ImportCompaniesAction $importCompaniesAction,
         private CreateFileAction $createFileAction,
         private AskFileAction $askFileAction,
         private CreateImportAction $createImportAction,
@@ -43,6 +42,7 @@ final readonly class ImportCompaniesFacade
         private ParameterBagInterface $params,
         private MessageService $messageService,
         private MessageBusInterface $eventBus,
+        private MessageBusInterface $commandBus,
     ) {
     }
 
@@ -53,7 +53,6 @@ final readonly class ImportCompaniesFacade
             $employee = $this->security->getUser()->getEmployee();
             $uploadFilePath = sprintf('%s/companies', $this->params->get('upload_file_path'));
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
-
             $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
             $errors = $this->validator->validate($uploadFileDTO);
             if (count($errors) > 0) {
@@ -71,7 +70,12 @@ final readonly class ImportCompaniesFacade
             $file = $this->askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
             $this->createImportAction->execute(ImportKindEnum::IMPORT_COMPANIES, ImportStatusEnum::PENDING, $file, $employee);
             $import = $this->askImportAction->ask($file);
-            $this->importCompaniesAction->execute(new ImportDTO($import->getUUID()->toString()));
+
+            try {
+                $this->commandBus->dispatch(new ImportCompaniesCommand($import->getUUID()->toString()));
+            } catch (HandlerFailedException $exception) {
+                throw $exception->getPrevious();
+            }
 
             $this->entityManager->commit();
 

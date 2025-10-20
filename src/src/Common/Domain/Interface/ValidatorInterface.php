@@ -6,7 +6,7 @@ namespace App\Common\Domain\Interface;
 
 interface ValidatorInterface
 {
-    public function supports(CommandInterface $command): bool;
+    public function supports(CommandInterface|QueryInterface $data): bool;
 
-    public function validate(CommandInterface $command, ?string $uuid = null): void;
+    public function validate(CommandInterface|QueryInterface $data): void;
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\Validator\Company;
 
 use App\Common\Domain\Interface\CommandInterface;
+use App\Common\Domain\Interface\QueryInterface;
 use App\Common\Domain\Interface\ValidatorInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
@@ -13,21 +14,22 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('app.company.create.validator')]
 #[AutoconfigureTag('app.company.update.validator')]
-final readonly class CompanyFullNameExistsValidator implements ValidatorInterface
+final readonly class CompanyFullNameAlreadyExistsValidator implements ValidatorInterface
 {
-    public function __construct(private CompanyReaderInterface $companyReaderRepository, private TranslatorInterface $translator,)
+    public function __construct(private CompanyReaderInterface $companyReaderRepository, private TranslatorInterface $translator)
     {
     }
 
-    public function supports(CommandInterface $command): bool
+    public function supports(CommandInterface|QueryInterface $data): bool
     {
         return true;
     }
 
-    public function validate(CommandInterface $command, ?string $uuid = null): void
+    public function validate(CommandInterface|QueryInterface $data): void
     {
-        $fullName = $command->fullName;
-        if ($this->companyReaderRepository->isCompanyExistsWithFullName($fullName, $uuid)) {
+        $companyUUID = $data->companyUUID ?? null;
+        $fullName = $data->fullName;
+        if ($this->companyReaderRepository->isCompanyExistsWithFullName($fullName, $companyUUID)) {
             throw new \Exception($this->translator->trans('company.fullName.alreadyExists', [':name' => $fullName], 'companies'), Response::HTTP_CONFLICT);
         }
     }

@@ -2,6 +2,7 @@ monolog:
     channels:
         - deprecation
         - eventLog
+        - eventStore
         - import
 
 when@test:
@@ -64,6 +65,11 @@ when@dev:
               path: "%kernel.logs_dir%/event.log"
               level: debug
               channels: ["eventLog"]
+            eventStore:
+              type: stream
+              path: "%kernel.logs_dir%/store.log"
+              level: debug
+              channels: ["eventStore"]
             import:
                 type: stream
                 path: "%kernel.logs_dir%/import.log"

@@ -16,7 +16,7 @@ use App\Module\Company\Domain\Service\Company\Factory\CompanyFactory;
 use App\Module\Company\Domain\Service\Factory\AddressFactory;
 use App\Module\Company\Domain\Service\Factory\ContactFactory;
 
-class CompanyCreator
+final readonly class CompanyCreator
 {
     public function __construct(
         private CompanyFactory $companyFactory,

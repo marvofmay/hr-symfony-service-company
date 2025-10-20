@@ -7,7 +7,6 @@ namespace App\Module\System\Domain\Factory;
 use App\Common\Domain\Interface\XLSXIteratorInterface;
 use App\Module\System\Domain\Enum\ImportKindEnum;
 
-
 final class ImporterFactory
 {
     private array $importers;

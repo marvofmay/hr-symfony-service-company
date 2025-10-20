@@ -13,7 +13,6 @@ final readonly class LogFileEvent
         public string $message,
         public string $level = LogLevel::ALERT,
         public MonologChanelEnum $channel = MonologChanelEnum::MAIN,
-    )
-    {
+    ) {
     }
 }

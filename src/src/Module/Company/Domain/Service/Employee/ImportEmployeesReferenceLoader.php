@@ -16,22 +16,22 @@ use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 
 final class ImportEmployeesReferenceLoader
 {
-    public array  $departments = [] {
+    public array $departments = [] {
         get {
             return $this->departments;
         }
     }
-    public array  $positions = [] {
+    public array $positions = [] {
         get {
             return $this->positions;
         }
     }
-    public array  $roles         = [] {
+    public array $roles = [] {
         get {
             return $this->roles;
         }
     }
-    public array $employees     = [] {
+    public array $employees = [] {
         get {
             return $this->employees;
         }
@@ -41,7 +41,7 @@ final class ImportEmployeesReferenceLoader
             return $this->contractTypes;
         }
     }
-    public array $emailsPESELs  = [] {
+    public array $emailsPESELs = [] {
         get {
             return $this->emailsPESELs;
         }

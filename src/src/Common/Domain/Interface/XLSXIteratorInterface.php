@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\Interface;
 
-use App\Module\System\Domain\Entity\Import;
-
 interface XLSXIteratorInterface
 {
     public function loadFile(): void;

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Presentation\API\Action\Department;
 
 use App\Module\Company\Application\Command\Department\ImportDepartmentsCommand;
-use App\Module\Company\Domain\DTO\Company\ImportDTO;
+use App\Module\Company\Domain\DTO\Department\ImportDTO;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 
