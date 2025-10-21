@@ -8,12 +8,14 @@ use App\Common\Domain\Exception\TransformerNotFoundException;
 use App\Module\Company\Application\QueryHandler\Company\ListCompaniesQueryHandler;
 use App\Module\Company\Application\QueryHandler\ContractType\ListContractTypesQueryHandler;
 use App\Module\Company\Application\QueryHandler\Department\ListDepartmentsQueryHandler;
+use App\Module\Company\Application\QueryHandler\Employee\ListEmployeesQueryHandler;
 use App\Module\Company\Application\QueryHandler\Industry\ListIndustriesQueryHandler;
 use App\Module\Company\Application\QueryHandler\Position\ListPositionsQueryHandler;
 use App\Module\Company\Application\QueryHandler\Role\ListRolesQueryHandler;
 use App\Module\Company\Application\Transformer\Company\CompanyDataTransformer;
 use App\Module\Company\Application\Transformer\ContractType\ContractTypeDataTransformer;
 use App\Module\Company\Application\Transformer\Department\DepartmentDataTransformer;
+use App\Module\Company\Application\Transformer\Employee\EmployeeDataTransformer;
 use App\Module\Company\Application\Transformer\Industry\IndustryDataTransformer;
 use App\Module\Company\Application\Transformer\Position\PositionDataTransformer;
 use App\Module\Company\Application\Transformer\Role\RoleDataTransformer;
@@ -27,6 +29,7 @@ class TransformerFactory
         return match ($handlerClass) {
             ListCompaniesQueryHandler::class => new CompanyDataTransformer(),
             ListDepartmentsQueryHandler::class => new DepartmentDataTransformer(),
+            ListEmployeesQueryHandler::class => new EmployeeDataTransformer(),
             ListRolesQueryHandler::class => new RoleDataTransformer(),
             ListIndustriesQueryHandler::class => new IndustryDataTransformer(),
             ListPositionsQueryHandler::class => new PositionDataTransformer(),

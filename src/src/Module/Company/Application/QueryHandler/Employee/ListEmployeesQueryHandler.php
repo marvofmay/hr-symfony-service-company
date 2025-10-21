@@ -24,7 +24,7 @@ final class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
 
     public function getAlias(): string
     {
-        return 'employee';
+        return Employee::ALIAS;
     }
 
     public function getDefaultOrderBy(): string

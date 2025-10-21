@@ -21,8 +21,9 @@ final readonly class CreateRoleCommandHandler
     public function __invoke(CreateRoleCommand $command): void
     {
         $this->roleCreator->create($command->getName(), $command->getDescription());
+
         $this->eventDispatcher->dispatch(new RoleCreatedEvent([
-            Role::COLUMN_NAME => $command->getName(),
+            Role::COLUMN_NAME        => $command->getName(),
             Role::COLUMN_DESCRIPTION => $command->getDescription(),
         ]));
     }

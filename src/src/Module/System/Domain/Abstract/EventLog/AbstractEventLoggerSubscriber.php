@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Abstract\EventLog;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
-use App\Module\System\Domain\Entity\EventLog;
+use App\Module\System\Domain\Interface\EventLog\EventLogCreatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -15,21 +15,38 @@ abstract class AbstractEventLoggerSubscriber
 {
     public function __construct(
         protected EntityManagerInterface $em,
-        protected SerializerInterface $serializer,
+        protected SerializerInterface    $serializer,
         private ServiceProviderInterface $loggers,
-        protected Security $security,
-    ) {
+        protected Security               $security,
+        private EventLogCreatorInterface $eventLogCreator,
+    )
+    {
     }
 
     protected function log(string $eventClass, string $entityClass, mixed $data): void
     {
-        $user = $this->security->getUser();
-        $employee = method_exists($user, 'getEmployee') ? $user->getEmployee() : null;
+        $jsonData = $this->serializeData($data);
+        $employee = $this->getEmployee();
 
-        $jsonData = $this->serializer->serialize($data, 'json', [
-            'circular_reference_handler' => fn ($object) => method_exists($object, 'getUUID') ? $object->getUUID() : spl_object_id($object),
+        $this->logToFile($eventClass, $entityClass, $jsonData, $employee);
+        $this->saveToDatabase($eventClass, $entityClass, $jsonData, $employee);
+    }
+
+    private function serializeData(mixed $data): string
+    {
+        return $this->serializer->serialize($data, 'json', [
+            'circular_reference_handler' => fn($object) => method_exists($object, 'getUUID') ? $object->getUUID() : spl_object_id($object),
         ]);
+    }
 
+    private function getEmployee(): ?object
+    {
+        $user = $this->security->getUser();
+        return method_exists($user, 'getEmployee') ? $user->getEmployee() : null;
+    }
+
+    private function logToFile(string $eventClass, string $entityClass, string $jsonData, ?object $employee): void
+    {
         $logger = $this->loggers->has(MonologChanelEnum::EVENT_LOG->value)
             ? $this->loggers->get(MonologChanelEnum::EVENT_LOG->value)
             : $this->loggers->get(MonologChanelEnum::MAIN->value);
@@ -38,14 +55,17 @@ abstract class AbstractEventLoggerSubscriber
         $logger->info("event: $eventClass");
         $logger->info("entity: $entityClass");
         $logger->info("data: $jsonData");
-        $logger->info(
-            $employee
-                ? "employeeUUID: {$employee->getUUID()}"
-                : "userUUID: {$user->getUUID()}"
-        );
+        $logger->info($employee ? "employeeUUID: {$employee->getUUID()}" : 'no employee');
         $logger->info('---------------------------------------------');
+    }
 
-        $this->em->persist(new EventLog($eventClass, $entityClass, $jsonData, $employee));
-        $this->em->flush();
+    private function saveToDatabase(string $eventClass, string $entityClass, string $jsonData, ?object $employee): void
+    {
+        $this->eventLogCreator->create(
+            eventClass: $eventClass,
+            entityClass: $entityClass,
+            jsonData: $jsonData,
+            employee: $employee
+        );
     }
 }
