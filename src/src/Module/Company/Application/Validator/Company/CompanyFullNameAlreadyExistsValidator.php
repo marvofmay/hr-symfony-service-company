@@ -27,10 +27,14 @@ final readonly class CompanyFullNameAlreadyExistsValidator implements ValidatorI
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
+        if (!property_exists($data, 'fullName')) {
+            return;
+        }
+
         $companyUUID = $data->companyUUID ?? null;
         $fullName = $data->fullName;
         if ($this->companyReaderRepository->isCompanyExistsWithFullName($fullName, $companyUUID)) {
-            throw new \Exception($this->translator->trans('company.fullName.alreadyExists', [':name' => $fullName], 'companies'), Response::HTTP_CONFLICT);
+            throw new \Exception($this->translator->trans('company.fullName.alreadyExists', [':fullName' => $fullName], 'companies'), Response::HTTP_CONFLICT);
         }
     }
 }

@@ -13,7 +13,6 @@ enum MonologChanelEnum: string implements EnumInterface
     case EVENT_STORE = 'eventStore';
     case IMPORT = 'import';
 
-
     public function label(): string
     {
         return $this->value;

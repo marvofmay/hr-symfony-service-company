@@ -23,11 +23,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final class DeleteMultipleCompaniesCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
-        private EventDispatcherInterface $eventDispatcher,
-        private CompanyAggregateReaderInterface $companyAggregateReaderRepository,
-        private EventStoreCreator $eventStoreCreator,
-        private Security $security,
-        private SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly CompanyAggregateReaderInterface $companyAggregateReaderRepository,
+        private readonly EventStoreCreator $eventStoreCreator,
+        private readonly Security $security,
+        private readonly SerializerInterface $serializer,
         #[AutowireIterator(tag: 'app.company.delete_multiple.validator')] protected iterable $validators,
     ) {
     }
@@ -37,10 +37,9 @@ final class DeleteMultipleCompaniesCommandHandler extends CommandHandlerAbstract
         $this->validate($command);
 
         $deletedUUIDs = [];
-        foreach ($command->selectedUUIDs as $uuid) {
-            $uuid = CompanyUUID::fromString($uuid);
+        foreach ($command->selectedUUIDs as $companyUUID) {
+            $uuid = CompanyUUID::fromString($companyUUID);
             $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID($uuid);
-
             $companyAggregate->delete();
 
             $events = $companyAggregate->pullEvents();

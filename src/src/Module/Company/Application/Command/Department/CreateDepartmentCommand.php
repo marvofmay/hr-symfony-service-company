@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\Command\Department;
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
 
-class CreateDepartmentCommand implements CommandInterface
+final readonly class CreateDepartmentCommand implements CommandInterface
 {
     public function __construct(
         public string $name,

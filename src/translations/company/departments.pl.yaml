@@ -1,11 +1,11 @@
 department:
   alreadyExists: "Departament o podanej nazwie \":name\" już istnieje"
   deleted:
-    notExists: "Departament o podanym UUID :uuid nie istnieje lub został usunięty"
+    notExists: "Nie ma usuniętego departamentu o podanym UUID :uuid lub departament nie został usunięty"
     address:
-      notExists: "Adres departamentu o podanym UUID :uuid nie istnieje lub został usunięty"
+      notExists: "Nie ma usuniętego adresu departamentu o podanym UUID :uuid lub adres departamentu nie został usunięty"
     contacts:
-      notExists: "Kontakt departamentu o podanym UUID :uuid nie istnieje lub został usunięty"
+      notExists: "Nie ma usuniętego kontaktu departamentu o podanym UUID :uuid lub kontakt departamentu nie został usunięty"
   uuid:
     notExists: "Departament o podanym UUID nie istnieje :uuid"
     notFound: "Departament o podanym UUID nie istnieje"

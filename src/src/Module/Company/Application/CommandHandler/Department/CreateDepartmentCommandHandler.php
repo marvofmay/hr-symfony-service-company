@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\CommandHandler\Department;
 
+use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Department\CreateDepartmentCommand;
@@ -16,23 +17,27 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final readonly class CreateDepartmentCommandHandler
+final class CreateDepartmentCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
-        private EventStoreCreator $eventStoreCreator,
-        private Security $security,
-        private SerializerInterface $serializer,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly EventStoreCreator $eventStoreCreator,
+        private readonly Security $security,
+        private readonly SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        #[AutowireIterator(tag: 'app.department.create.validator')] protected iterable $validators,
     ) {
     }
 
     public function __invoke(CreateDepartmentCommand $command): void
     {
+        $this->validate($command);
+
         $departmentAggregate = DepartmentAggregate::create(
             CompanyUUID::fromString($command->companyUUID),
             Name::fromString($command->name),

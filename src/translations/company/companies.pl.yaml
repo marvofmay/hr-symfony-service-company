@@ -1,17 +1,17 @@
 company:
   alreadyExists: "Firma o padanym NIP :nip lub REGON :regon już istnieje"
   deleted:
-    notExists: "Firma o podanym UUID :uuid nie istnieje lub nie została usunięta"
+    notExists: "Nie ma usuniętej firmy o podanym UUID :uuid lub firma nie została usunięta"
     address:
-      notExists: "Adres firmy o podanym UUID :uuid nie istnieje lub został usunięty"
+      notExists: "Nie ma usuniętego adresu firmy o podanym UUID :uuid lub adres firmy nie został usunięty"
     contacts:
-      notExists: "Kontakt firmy o podanym UUID :uuid nie istnieje lub został usunięty"
+      notExists: "Nie ma usunietego kontaktu firmy o podanym UUID :uuid lub kontakt firmy nie został usunięty"
   uuid:
     notFound: "Firma o podanym UUID nie istnieje"
     notExists: "Firma o podanym UUID :uuid nie istnieje"
     required: "UUID firmy jest wymagane"
   fullName:
-    alreadyExists: "Firma o podanej nazwie \":name\"  już istnieje"
+    alreadyExists: "Firma o podanej nazwie \":fullName\"  już istnieje"
     required: "Nazwa firmy jest wymagana"
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"

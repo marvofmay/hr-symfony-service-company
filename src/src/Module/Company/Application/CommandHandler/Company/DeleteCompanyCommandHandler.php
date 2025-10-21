@@ -19,11 +19,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final class DeleteCompanyCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
-        private EventDispatcherInterface $eventDispatcher,
-        private CompanyAggregateReaderInterface $companyAggregateReaderRepository,
-        private EventStoreCreator $eventStoreCreator,
-        private Security $security,
-        private SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly CompanyAggregateReaderInterface $companyAggregateReaderRepository,
+        private readonly EventStoreCreator $eventStoreCreator,
+        private readonly Security $security,
+        private readonly SerializerInterface $serializer,
         #[AutowireIterator(tag: 'app.company.delete.validator')] protected iterable $validators,
     ) {
     }

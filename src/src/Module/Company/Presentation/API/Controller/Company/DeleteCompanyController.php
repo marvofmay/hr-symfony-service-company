@@ -58,7 +58,7 @@ class DeleteCompanyController extends AbstractController
     {
         return new JsonResponse(
             ['message' => $this->messageService->get('company.delete.success', [], 'companies')],
-            Response::HTTP_NO_CONTENT
+            Response::HTTP_OK
         );
     }
 

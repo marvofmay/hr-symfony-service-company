@@ -29,10 +29,10 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final class CreateCompanyCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
-        private EventStoreCreator $eventStoreCreator,
-        private Security $security,
-        private SerializerInterface $serializer,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly EventStoreCreator $eventStoreCreator,
+        private readonly Security $security,
+        private readonly SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.company.create.validator')] protected iterable $validators,
     ) {
     }

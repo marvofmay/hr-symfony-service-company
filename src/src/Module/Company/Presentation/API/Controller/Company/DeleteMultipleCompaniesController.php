@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Command\Company\DeleteMultipleCompaniesCommand;
 use App\Module\Company\Domain\DTO\Company\DeleteMultipleDTO;
@@ -73,7 +74,7 @@ class DeleteMultipleCompaniesController extends AbstractController
             $exception->getMessage()
         );
 
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR));
+        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_STORE));
 
         $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
 

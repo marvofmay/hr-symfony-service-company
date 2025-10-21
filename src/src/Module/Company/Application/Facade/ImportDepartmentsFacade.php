@@ -5,6 +5,7 @@ namespace App\Module\Company\Application\Facade;
 use App\Common\Domain\DTO\UploadFileDTO;
 use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Enum\FileKindEnum;
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
@@ -21,6 +22,7 @@ use App\Module\System\Presentation\API\Action\Import\AskImportAction;
 use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
 use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -95,7 +97,7 @@ final readonly class ImportDepartmentsFacade
         } catch (\Exception $error) {
             $this->entityManager->rollback();
             $message = sprintf('%s. %s', $this->messageService->get('department.import.error', [], 'departments'), $this->messageService->get($error->getMessage()));
-            $this->eventBus->dispatch(new LogFileEvent($message));
+            $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::IMPORT));
 
             return [
                 'success' => false,

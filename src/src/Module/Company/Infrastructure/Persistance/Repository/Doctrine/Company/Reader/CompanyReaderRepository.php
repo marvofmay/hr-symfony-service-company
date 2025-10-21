@@ -205,9 +205,6 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
                 ->getQuery()
                 ->getOneOrNullResult();
 
-            if (null === $deletedCompany) {
-                throw new \Exception($this->translator->trans('company.deleted.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
-            }
 
             return $deletedCompany;
         } finally {
@@ -231,9 +228,6 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
                 ->getQuery()
                 ->getOneOrNullResult();
 
-            if (null === $deletedAddress) {
-                throw new \Exception($this->translator->trans('company.deleted.address.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
-            }
 
             return $deletedAddress;
         } finally {
@@ -248,7 +242,7 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
 
         try {
             $qb = $this->getEntityManager()->createQueryBuilder();
-            $deletedContacts = $qb->select('c')
+            $deletedContacts = $qb->select(Company::ALIAS)
                 ->from(Contact::class, Company::ALIAS)
                 ->join(Company::ALIAS.'.company', Contact::ALIAS)
                 ->where(Contact::ALIAS.'.'.Company::COLUMN_UUID.'= :uuid')
@@ -257,9 +251,6 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
                 ->getQuery()
                 ->getResult();
 
-            if (empty($deletedContacts)) {
-                throw new \Exception($this->translator->trans('company.deleted.contacts.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
-            }
 
             return new ArrayCollection($deletedContacts);
         } finally {

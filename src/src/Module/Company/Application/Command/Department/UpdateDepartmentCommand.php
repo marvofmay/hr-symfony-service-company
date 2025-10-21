@@ -6,12 +6,11 @@ namespace App\Module\Company\Application\Command\Department;
 
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
-use App\Module\Company\Domain\Entity\Department;
 
-class UpdateDepartmentCommand implements CommandInterface
+final readonly class UpdateDepartmentCommand implements CommandInterface
 {
     public function __construct(
-        public Department $department,
+        public string $departmentUUID,
         public string $name,
         public string $internalCode,
         public ?string $description,

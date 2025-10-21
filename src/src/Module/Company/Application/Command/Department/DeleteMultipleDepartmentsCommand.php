@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Department;
 
-use Doctrine\Common\Collections\Collection;
+use App\Common\Domain\Interface\CommandInterface;
 
-class DeleteMultipleDepartmentsCommand
+final readonly class DeleteMultipleDepartmentsCommand implements CommandInterface
 {
-    public function __construct(public Collection $departments)
+    public function __construct(public array $selectedUUIDs)
     {
     }
 }

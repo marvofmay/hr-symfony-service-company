@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Department;
 
-use App\Module\Company\Domain\Entity\Department;
+use App\Common\Domain\Interface\CommandInterface;
 
-readonly class DeleteDepartmentCommand
+final readonly class DeleteDepartmentCommand implements CommandInterface
 {
-    public function __construct(private Department $department)
+    public function __construct(public string $departmentUUID)
     {
-    }
-
-    public function getDepartment(): Department
-    {
-        return $this->department;
     }
 }

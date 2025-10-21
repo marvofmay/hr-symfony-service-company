@@ -27,6 +27,10 @@ final readonly class CompanyAlreadyExistsValidator implements ValidatorInterface
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
+        if (!property_exists($data, 'nip') || !property_exists($data, 'regon')) {
+            return;
+        }
+
         $companyUUID = $data->companyUUID ?? null;
         $nip = $data->nip;
         $regon = $data->regon;

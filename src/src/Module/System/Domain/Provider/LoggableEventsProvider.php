@@ -13,6 +13,8 @@ use App\Module\Company\Application\Event\ContractType\ContractTypeListedEvent;
 use App\Module\Company\Application\Event\ContractType\ContractTypeMultipleDeletedEvent;
 use App\Module\Company\Application\Event\ContractType\ContractTypeUpdatedEvent;
 use App\Module\Company\Application\Event\ContractType\ContractTypeViewedEvent;
+use App\Module\Company\Application\Event\Department\DepartmentListedEvent;
+use App\Module\Company\Application\Event\Department\DepartmentViewedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryCreatedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryDeletedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryImportedEvent;
@@ -48,6 +50,7 @@ final class LoggableEventsProvider
     {
         return array_merge(
             self::getCompanyEventClasses(),
+            self::getDepartmentEventClasses(),
             self::getRoleEventClasses(),
             self::getIndustryEventClasses(),
             self::getPositionEventClasses(),
@@ -60,6 +63,14 @@ final class LoggableEventsProvider
         return [
             CompanyViewedEvent::class,
             CompanyListedEvent::class,
+        ];
+    }
+
+    private static function getDepartmentEventClasses(): array
+    {
+        return [
+            DepartmentViewedEvent::class,
+            DepartmentListedEvent::class,
         ];
     }
 

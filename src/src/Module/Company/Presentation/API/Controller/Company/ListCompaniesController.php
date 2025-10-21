@@ -26,9 +26,8 @@ class ListCompaniesController extends AbstractController
     public function __construct(
         private readonly MessageBusInterface $eventBus,
         private readonly MessageBusInterface $queryBus,
-        private readonly MessageService      $messageService,
-    )
-    {
+        private readonly MessageService $messageService,
+    ) {
     }
 
     #[Route('/api/companies', name: 'api.companies.list', methods: ['GET'])]

@@ -26,6 +26,10 @@ final readonly class IndustryExistsValidator
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
+        if (!property_exists($data, 'industryUUID')) {
+            return;
+        }
+
         $industryUUID = $data->industryUUID;
         $industryExists = $this->industryReaderRepository->isIndustryExistsWithUUID($industryUUID);
         if (!$industryExists) {

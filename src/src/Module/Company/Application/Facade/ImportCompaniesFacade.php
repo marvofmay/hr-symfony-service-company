@@ -96,7 +96,7 @@ final readonly class ImportCompaniesFacade
                 'errors' => ImportLogErrorTransformer::map($importLogs),
                 'message' => $message,
             ];
-        } catch (\Exception $error) {
+        } catch (\Throwable $error) {
             $this->entityManager->rollback();
             $message = sprintf('%s. %s', $this->messageService->get('company.import.error', [], 'companies'), $this->messageService->get($error->getMessage()));
             $this->eventBus->dispatch(new LogFileEvent($message));

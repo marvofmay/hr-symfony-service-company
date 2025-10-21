@@ -22,11 +22,15 @@ final readonly class CompanyInternalCodeAlreadyExistsValidator implements Valida
 
     public function supports(CommandInterface|QueryInterface $data): bool
     {
-        return null !== $data->internalCode;
+        return property_exists($data, 'internalCode') && null !== $data->internalCode;
     }
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
+        if (!property_exists($data, 'internalCode')) {
+            return;
+        }
+
         $companyUUID = $data->companyUUID ?? null;
         $companyInternalCode = $data->internalCode;
         if ($this->companyReaderRepository->isCompanyExistsWithInternalCode($companyInternalCode, $companyUUID)) {

@@ -6,14 +6,14 @@ namespace App\Module\Company\Application\Validator\Company;
 
 use App\Common\Domain\Interface\CommandInterface;
 use App\Common\Domain\Interface\QueryInterface;
+use App\Common\Domain\Interface\ValidatorInterface;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AutoconfigureTag('app.company.create.validator')]
-#[AutoconfigureTag('app.company.update.validator')]
-final readonly class ParentCompanyExistsValidator
+#[AutoconfigureTag('app.company.restore.validator')]
+final readonly class CompanyAlreadyDeletedValidator implements ValidatorInterface
 {
     public function __construct(private CompanyReaderInterface $companyReaderRepository, private TranslatorInterface $translator)
     {
@@ -21,19 +21,19 @@ final readonly class ParentCompanyExistsValidator
 
     public function supports(CommandInterface|QueryInterface $data): bool
     {
-        return property_exists($data, 'parentCompanyUUID') && null !== $data->parentCompanyUUID;
+        return true;
     }
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        if (!property_exists($data, 'parentCompanyUUID')) {
+        if (!property_exists($data, 'companyUUID')) {
             return;
         }
 
-        $parentUUID = $data->parentCompanyUUID;
-        $companyExists = $this->companyReaderRepository->isCompanyExistsWithUUID($parentUUID);
-        if ($companyExists) {
-            throw new \Exception($this->translator->trans('company.uuid.notExists', [':uuid' => $parentUUID], 'companies'), Response::HTTP_CONFLICT);
+        $uuid = $data->companyUUID;
+        $companyDeleted = $this->companyReaderRepository->getDeletedCompanyByUUID($uuid);
+        if (null === $companyDeleted) {
+            throw new \Exception($this->translator->trans('company.deleted.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_CONFLICT);
         }
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Command\Company\RestoreCompanyCommand;
 use App\Module\System\Application\Event\LogFileEvent;
@@ -32,7 +33,7 @@ class RestoreCompanyController extends AbstractController
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::RESTORE,
-                AccessEnum::COMPANY,
+                AccessEnum::DEPARTMENT,
                 $this->messageService->get('accessDenied')
             );
 
@@ -69,7 +70,7 @@ class RestoreCompanyController extends AbstractController
             $exception->getMessage()
         );
 
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR));
+        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_STORE));
 
         $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
 
