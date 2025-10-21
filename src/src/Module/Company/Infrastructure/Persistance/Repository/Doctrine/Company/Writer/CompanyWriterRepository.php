@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class CompanyWriterRepository extends ServiceEntityRepository implements CompanyWriterInterface
 {
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Company::class);
     }

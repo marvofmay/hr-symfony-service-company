@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class PositionWriterRepository extends ServiceEntityRepository implements PositionWriterInterface
 {
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Position::class);
     }

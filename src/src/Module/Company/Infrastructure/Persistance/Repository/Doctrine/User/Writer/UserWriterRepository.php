@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class UserWriterRepository extends ServiceEntityRepository implements UserWriterInterface
 {
-    public function __construct(private readonly ManagerRegistry $registry, private EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry, private EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, User::class);
     }

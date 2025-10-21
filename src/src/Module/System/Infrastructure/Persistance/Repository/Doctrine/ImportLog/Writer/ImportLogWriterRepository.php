@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ImportLogWriterRepository extends ServiceEntityRepository implements ImportLogWriterInterface
 {
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ImportLog::class);
     }

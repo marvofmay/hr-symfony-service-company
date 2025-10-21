@@ -11,7 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class ImportWriterRepository extends ServiceEntityRepository implements ImportWriterInterface
 {
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Import::class);
     }

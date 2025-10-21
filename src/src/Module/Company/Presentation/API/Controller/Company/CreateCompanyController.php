@@ -86,7 +86,7 @@ class CreateCompanyController extends AbstractController
             $exception->getMessage()
         );
 
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
+        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_STORE));
 
         $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
 

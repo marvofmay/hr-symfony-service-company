@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class ContactWriterRepository extends ServiceEntityRepository implements ContactWriterInterface
 {
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Contact::class);
     }

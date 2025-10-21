@@ -11,7 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class FileWriterRepository extends ServiceEntityRepository implements FileWriterInterface
 {
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, File::class);
     }

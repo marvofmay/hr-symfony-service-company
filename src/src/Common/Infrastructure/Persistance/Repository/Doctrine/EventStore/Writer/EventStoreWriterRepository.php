@@ -11,7 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class EventStoreWriterRepository extends ServiceEntityRepository implements EventStoreWriterInterface
 {
-    public function __construct(private readonly ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, EventStore::class);
     }

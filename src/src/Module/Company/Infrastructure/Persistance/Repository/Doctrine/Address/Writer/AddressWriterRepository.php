@@ -12,7 +12,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 final class AddressWriterRepository extends ServiceEntityRepository implements AddressWriterInterface
 {
-    public function __construct(private readonly ManagerRegistry $registry, private EntityManagerInterface $entityManager)
+    public function __construct(ManagerRegistry $registry, private EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, Address::class);
     }
