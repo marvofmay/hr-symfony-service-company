@@ -8,7 +8,6 @@ use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Query\Department\ListDepartmentsQuery;
 use App\Module\Company\Domain\DTO\Department\DepartmentsQueryDTO;
-use App\Module\Company\Presentation\API\Action\Department\AskDepartmentsAction;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
@@ -33,7 +32,7 @@ class ListDepartmentsController extends AbstractController
     }
 
     #[Route('/api/departments', name: 'api.departments.list', methods: ['GET'])]
-    public function list(#[MapQueryString] DepartmentsQueryDTO $queryDTO, AskDepartmentsAction $askDepartmentsAction): Response
+    public function list(#[MapQueryString] DepartmentsQueryDTO $queryDTO): Response
     {
         try {
             $this->denyAccessUnlessGranted(

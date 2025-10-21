@@ -9,8 +9,7 @@ use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
-use App\Module\Company\Domain\DTO\Department\ImportDTO;
-use App\Module\Company\Presentation\API\Action\Department\ImportDepartmentsAction;
+use App\Module\Company\Application\Command\Department\ImportDepartmentsCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
@@ -26,6 +25,7 @@ use Psr\Log\LogLevel;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -34,7 +34,6 @@ final readonly class ImportDepartmentsFacade
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UploadFileAction $uploadFileAction,
-        private ImportDepartmentsAction $importDepartmentsAction,
         private CreateFileAction $createFileAction,
         private AskFileAction $askFileAction,
         private CreateImportAction $createImportAction,
@@ -45,6 +44,7 @@ final readonly class ImportDepartmentsFacade
         private ParameterBagInterface $params,
         private MessageService $messageService,
         private MessageBusInterface $eventBus,
+        private MessageBusInterface $commandBus,
     ) {
     }
 
@@ -73,7 +73,12 @@ final readonly class ImportDepartmentsFacade
             $file = $this->askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
             $this->createImportAction->execute(ImportKindEnum::IMPORT_DEPARTMENTS, ImportStatusEnum::PENDING, $file, $employee);
             $import = $this->askImportAction->ask($file);
-            $this->importDepartmentsAction->execute(new ImportDTO($import->getUUID()->toString()));
+
+            try {
+                $this->commandBus->dispatch(new ImportDepartmentsCommand($import->getUUID()->toString()));
+            } catch (HandlerFailedException $exception) {
+                throw $exception->getPrevious();
+            }
 
             $this->entityManager->commit();
 
