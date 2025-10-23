@@ -15,7 +15,7 @@ interface IndustryReaderInterface
 
     public function getIndustryByName(string $name, ?string $uuid): ?Industry;
 
-    public function isIndustryExists(string $name, ?string $uuid = null): bool;
+    public function isIndustryNameAlreadyExists(string $name, ?string $uuid = null): bool;
 
     public function isIndustryExistsWithUUID(string $uuid): bool;
 }

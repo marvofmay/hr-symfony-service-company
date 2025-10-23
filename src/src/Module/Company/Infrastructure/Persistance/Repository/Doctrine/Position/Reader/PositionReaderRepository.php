@@ -4,31 +4,23 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Position\Reader;
 
-use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class PositionReaderRepository extends ServiceEntityRepository implements PositionReaderInterface
 {
-    public function __construct(ManagerRegistry $registry, private TranslatorInterface $translator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Position::class);
     }
 
     public function getPositionByUUID(string $uuid): ?Position
     {
-        $position = $this->findOneBy([Position::COLUMN_UUID => $uuid]);
-        if (null === $position) {
-            throw new \Exception($this->translator->trans('position.uuid.notExists', [':uuid' => $uuid], 'positions'), Response::HTTP_NOT_FOUND);
-        }
-
-        return $position;
+        return $this->findOneBy([Position::COLUMN_UUID => $uuid]);
     }
 
     public function getPositionsByUUID(array $selectedUUID): Collection
@@ -72,7 +64,7 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function isPositionExists(string $name, ?string $uuid = null): bool
+    public function isPositionNameAlreadyExists(string $name, ?string $uuid = null): bool
     {
         return !is_null($this->getPositionByName($name, $uuid));
     }

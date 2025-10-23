@@ -28,7 +28,7 @@ class UniqueContractTypeNameValidator extends ConstraintValidator
         $object = $this->context->getObject();
         $uuid = property_exists($object, 'uuid') ? $object->uuid : null;
 
-        if ($this->contractTypeReaderRepository->isContractTypeExists($value, $uuid)) {
+        if ($this->contractTypeReaderRepository->isContractTypeNameAlreadyExists($value, $uuid)) {
             $this->context->buildViolation($this->translator->trans($constraint->message, [], 'contract_types'))
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();

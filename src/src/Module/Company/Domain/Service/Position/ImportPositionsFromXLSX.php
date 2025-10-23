@@ -60,7 +60,7 @@ class ImportPositionsFromXLSX extends XLSXIterator
 
     private function positionExists(string $positionName): bool
     {
-        return $this->positionReaderRepository->isPositionExists($positionName);
+        return $this->positionReaderRepository->isPositionNameAlreadyExists($positionName);
     }
 
     private function isDepartmentWithUUIDExists(string $departmentUUID): bool

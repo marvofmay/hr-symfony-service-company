@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Company;
 
 use App\Common\Domain\Abstract\CommandHandlerAbstract;
-use App\Common\Domain\Entity\EventStore;
-use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
+use App\Common\Domain\Trait\HandleEventStoreTrait;
 use App\Module\Company\Application\Command\Company\CreateCompanyCommand;
 use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
@@ -20,8 +19,6 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
-use App\Module\System\Application\Event\LogFileEvent;
-use Psr\Log\LogLevel;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -32,6 +29,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'command.bus')]
 final class CreateCompanyCommandHandler extends CommandHandlerAbstract
 {
+    use HandleEventStoreTrait;
+
     public function __construct(
         private readonly EventStoreCreator $eventStoreCreator,
         private readonly Security $security,
@@ -64,30 +63,7 @@ final class CreateCompanyCommandHandler extends CommandHandlerAbstract
 
         $events = $companyAggregate->pullEvents();
         foreach ($events as $event) {
-            $employeeUUID = $this->security->getUser()->getEmployee()?->getUUID();
-            $serializedEvent = $this->serializer->serialize($event, 'json');
-
-            $message = sprintf(
-                "company created ---> uuid: %s, eventClass: %s, aggregateClass: %s, data: %s, employeeUUID: %s",
-                $event->uuid->toString(),
-                $event::class,
-                CompanyAggregate::class,
-                $serializedEvent,
-                $employeeUUID
-            );
-
-            $this->eventStoreCreator->create(
-                new EventStore(
-                    $event->uuid->toString(),
-                    $event::class,
-                    CompanyAggregate::class,
-                    $serializedEvent,
-                    $employeeUUID
-                )
-            );
-
-            $this->eventDispatcher->dispatch($event);
-            $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::INFO, MonologChanelEnum::EVENT_STORE));
+            $this->handleEvent($event, CompanyAggregate::class);
         }
     }
 }

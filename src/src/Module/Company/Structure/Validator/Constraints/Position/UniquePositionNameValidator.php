@@ -28,7 +28,7 @@ class UniquePositionNameValidator extends ConstraintValidator
         $object = $this->context->getObject();
         $uuid = property_exists($object, 'uuid') ? $object->uuid : null;
 
-        if ($this->positionReaderRepository->isPositionExists($value, $uuid)) {
+        if ($this->positionReaderRepository->isPositionNameAlreadyExists($value, $uuid)) {
             $this->context->buildViolation($this->translator->trans($constraint->message, [], 'positions'))
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();

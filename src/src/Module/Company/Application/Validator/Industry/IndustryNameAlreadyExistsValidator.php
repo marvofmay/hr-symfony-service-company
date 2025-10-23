@@ -2,18 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\Validator\Company;
+namespace App\Module\Company\Application\Validator\Industry;
 
 use App\Common\Domain\Interface\CommandInterface;
 use App\Common\Domain\Interface\QueryInterface;
+use App\Common\Domain\Interface\ValidatorInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AutoconfigureTag('app.company.create.validator')]
-#[AutoconfigureTag('app.company.update.validator')]
-final readonly class IndustryExistsValidator
+#[AutoconfigureTag('app.industry.create.validator')]
+#[AutoconfigureTag('app.industry.update.validator')]
+final readonly class IndustryNameAlreadyExistsValidator implements ValidatorInterface
 {
     public function __construct(private IndustryReaderInterface $industryReaderRepository, private TranslatorInterface $translator)
     {
@@ -26,14 +27,14 @@ final readonly class IndustryExistsValidator
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        if (!property_exists($data, 'industryUUID')) {
+        if (!property_exists($data, 'name')) {
             return;
         }
 
-        $industryUUID = $data->industryUUID;
-        $industryExists = $this->industryReaderRepository->isIndustryExistsWithUUID($industryUUID);
-        if (!$industryExists) {
-            throw new \Exception($this->translator->trans('industry.uuid.notExists', [':uuid' => $industryUUID], 'industries'), Response::HTTP_NOT_FOUND);
+        $name = $data->name;
+        $industryUUID = $data->industryUUID ?? null;
+        if ($this->industryReaderRepository->isIndustryNameAlreadyExists($name, $industryUUID)) {
+            throw new \Exception($this->translator->trans('industry.name.alreadyExists', [':name' => $name], 'industries'), Response::HTTP_CONFLICT);
         }
     }
 }

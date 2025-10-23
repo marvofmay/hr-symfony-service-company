@@ -30,11 +30,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final class UpdateCompanyCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
-        private readonly EventStoreCreator                                          $eventStoreCreator,
-        private readonly Security                                                   $security,
-        private readonly SerializerInterface                                        $serializer,
-        private readonly EventDispatcherInterface                                   $eventDispatcher,
-        private readonly CompanyAggregateReaderInterface                            $companyAggregateReaderRepository,
+        private readonly EventStoreCreator $eventStoreCreator,
+        private readonly Security $security,
+        private readonly SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly CompanyAggregateReaderInterface $companyAggregateReaderRepository,
         #[AutowireIterator(tag: 'app.company.update.validator')] protected iterable $validators,
     ) {
     }

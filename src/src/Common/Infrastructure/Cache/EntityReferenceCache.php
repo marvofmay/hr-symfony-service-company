@@ -21,7 +21,7 @@ final class EntityReferenceCache
     {
         $key = $className.':'.$identifier;
         if (!isset($this->cache[$key]) || empty($this->cache[$key])) {
-            $this->logInFile($className, $identifier, 'getCache');
+            $this->logInFile($className, $identifier, 'method getCache');
             $this->cache[$key] = $loader($identifier);
         }
 
@@ -35,7 +35,7 @@ final class EntityReferenceCache
 
         $key = $className.':'.$uuid;
         if (!isset($this->cache[$key])) {
-            $this->logInFile($className, $uuid, 'setCache');
+            $this->logInFile($className, $uuid, 'method setCache');
             $this->cache[$key] = $entity;
         }
     }
@@ -46,7 +46,7 @@ final class EntityReferenceCache
             new LogFileEvent(
                 $className.':'.$uuid.' not exists in cache - '.$additionalInfo,
                 LogLevel::INFO,
-                MonologChanelEnum::IMPORT
+                MonologChanelEnum::LOCAL_CACHE
             ));
     }
 

@@ -28,7 +28,7 @@ class UniqueIndustryNameValidator extends ConstraintValidator
         $object = $this->context->getObject();
         $uuid = property_exists($object, 'uuid') ? $object->uuid : null;
 
-        if ($this->roleReaderRepository->isIndustryExists($value, $uuid)) {
+        if ($this->roleReaderRepository->isIndustryNameAlreadyExists($value, $uuid)) {
             $this->context->buildViolation($this->translator->trans($constraint->message, [], 'industries'))
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();

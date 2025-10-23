@@ -28,7 +28,7 @@ class UniqueRoleNameValidator extends ConstraintValidator
         $object = $this->context->getObject();
         $uuid = property_exists($object, 'uuid') ? $object->uuid : null;
 
-        if ($this->roleReaderRepository->isRoleExists($value, $uuid)) {
+        if ($this->roleReaderRepository->isRoleNameAlreadyExists($value, $uuid)) {
             $this->context->buildViolation($this->translator->trans($constraint->message, [], 'roles'))
                 ->setParameter('{{ value }}', $value)
                 ->addViolation();

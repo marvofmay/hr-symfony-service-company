@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\QueryHandler\Department;
 
 use App\Common\Domain\Interface\QueryInterface;
-use App\Module\Company\Application\Event\Company\CompanyViewedEvent;
 use App\Module\Company\Application\Event\Department\DepartmentViewedEvent;
 use App\Module\Company\Application\Query\Department\GetDepartmentByUUIDQuery;
 use App\Module\Company\Application\Transformer\Department\DepartmentDataTransformer;

@@ -2,16 +2,11 @@
 
 namespace App\Module\Company\Application\Command\Employee;
 
-use App\Module\Company\Domain\Entity\Employee;
+use App\Common\Domain\Interface\CommandInterface;
 
-readonly class DeleteEmployeeCommand
+final readonly class DeleteEmployeeCommand implements CommandInterface
 {
-    public function __construct(private Employee $employee)
+    public function __construct(public string $employeeUUID)
     {
-    }
-
-    public function getEmployee(): Employee
-    {
-        return $this->employee;
     }
 }

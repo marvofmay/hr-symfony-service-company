@@ -23,7 +23,7 @@ final readonly class CreateRoleCommandHandler
         $this->roleCreator->create($command->getName(), $command->getDescription());
 
         $this->eventDispatcher->dispatch(new RoleCreatedEvent([
-            Role::COLUMN_NAME        => $command->getName(),
+            Role::COLUMN_NAME => $command->getName(),
             Role::COLUMN_DESCRIPTION => $command->getDescription(),
         ]));
     }

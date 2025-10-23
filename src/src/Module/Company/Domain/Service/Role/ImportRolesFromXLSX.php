@@ -57,7 +57,7 @@ class ImportRolesFromXLSX extends XLSXIterator
 
     private function roleExists(string $roleName): bool
     {
-        return $this->roleReaderRepository->isRoleExists($roleName);
+        return $this->roleReaderRepository->isRoleNameAlreadyExists($roleName);
     }
 
     private function formatErrorMessage(string $translationKey, array $parameters = []): string

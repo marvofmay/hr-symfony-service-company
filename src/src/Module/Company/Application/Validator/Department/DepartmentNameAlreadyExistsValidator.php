@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('app.department.create.validator')]
+#[AutoconfigureTag('app.department.update.validator')]
 final readonly class DepartmentNameAlreadyExistsValidator implements ValidatorInterface
 {
     public function __construct(private DepartmentReaderInterface $departmentReaderRepository, private TranslatorInterface $translator)
@@ -30,8 +31,8 @@ final readonly class DepartmentNameAlreadyExistsValidator implements ValidatorIn
             return;
         }
 
-        $departmentUUID = $data->departmentUUID ?? null;
         $name = $data->name;
+        $departmentUUID = $data->departmentUUID ?? null;
         if ($this->departmentReaderRepository->isDepartmentExistsWithName($name, $departmentUUID)) {
             throw new \Exception($this->translator->trans('department.name.alreadyExists', [':name' => $name], 'departments'), Response::HTTP_CONFLICT);
         }

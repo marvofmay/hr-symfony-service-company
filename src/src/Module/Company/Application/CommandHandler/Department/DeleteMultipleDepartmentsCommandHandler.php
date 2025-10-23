@@ -7,6 +7,7 @@ namespace App\Module\Company\Application\CommandHandler\Department;
 use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
+use App\Common\Domain\Trait\HandleEventStoreTrait;
 use App\Module\Company\Application\Command\Department\DeleteMultipleDepartmentsCommand;
 use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
@@ -22,12 +23,14 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'command.bus')]
 final class DeleteMultipleDepartmentsCommandHandler extends CommandHandlerAbstract
 {
+    use HandleEventStoreTrait;
+
     public function __construct(
-        private readonly EventDispatcherInterface                                               $eventDispatcher,
-        private readonly DepartmentAggregateReaderInterface                                     $departmentAggregateReaderRepository,
-        private readonly EventStoreCreator                                                      $eventStoreCreator,
-        private readonly Security                                                               $security,
-        private readonly SerializerInterface                                                    $serializer,
+        private readonly DepartmentAggregateReaderInterface $departmentAggregateReaderRepository,
+        private readonly EventStoreCreator $eventStoreCreator,
+        private readonly Security $security,
+        private readonly SerializerInterface $serializer,
+        private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.department.delete_multiple.validator')] protected iterable $validators,
     ) {
     }
@@ -44,31 +47,13 @@ final class DeleteMultipleDepartmentsCommandHandler extends CommandHandlerAbstra
 
             $events = $departmentAggregate->pullEvents();
             foreach ($events as $event) {
-                $this->eventStoreCreator->create(
-                    new EventStore(
-                        $event->uuid->toString(),
-                        $event::class,
-                        DepartmentAggregate::class,
-                        $this->serializer->serialize($event, 'json'),
-                        $this->security->getUser()->getEmployee()?->getUUID(),
-                    )
-                );
-
-                $this->eventDispatcher->dispatch($event);
+                $this->handleEvent($event, DepartmentAggregate::class);
             }
 
             $deletedUUIDs[] = $uuid->toString();
         }
 
         $multiEvent = new DepartmentMultipleDeletedEvent($deletedUUIDs);
-        $this->eventStoreCreator->create(
-            new EventStore(
-                Uuid::uuid4()->toString(),
-                $multiEvent::class,
-                DepartmentAggregate::class,
-                $this->serializer->serialize($multiEvent, 'json'),
-                $this->security->getUser()->getEmployee()?->getUUID(),
-            )
-        );
+        $this->handleEvent($multiEvent, DepartmentAggregate::class);
     }
 }

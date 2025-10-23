@@ -53,7 +53,7 @@ class ImportContractTypesFromXLSX extends XLSXIterator
 
     private function contractTypeExists(string $contractTypeName): bool
     {
-        return $this->contractTypeReaderRepository->isContractTypeExists($contractTypeName);
+        return $this->contractTypeReaderRepository->isContractTypeNameAlreadyExists($contractTypeName);
     }
 
     private function formatErrorMessage(string $translationKey, array $parameters = []): string

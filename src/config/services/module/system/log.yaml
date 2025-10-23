@@ -10,6 +10,7 @@ services:
         eventLog: '@monolog.logger.eventLog'
         eventStore: '@monolog.logger.eventStore'
         import: '@monolog.logger.import'
+        localCache: '@monolog.logger.localCache'
 
   App\Module\System\Application\EventSubscriber\GenericEventLoggerSubscriber:
     arguments:

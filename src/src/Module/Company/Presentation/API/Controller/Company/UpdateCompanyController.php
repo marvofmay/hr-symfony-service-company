@@ -24,10 +24,9 @@ class UpdateCompanyController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $eventBus,
-        private readonly MessageService      $messageService,
+        private readonly MessageService $messageService,
         private readonly MessageBusInterface $commandBus,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/companies/{uuid}', name: 'api.company.update', methods: ['PUT'])]

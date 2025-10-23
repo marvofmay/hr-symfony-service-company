@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Employee;
 
-final readonly class ImportEmployeesCommand
-{
-    public function __construct(private ?string $importUUID)
-    {
-    }
+use App\Common\Domain\Interface\CommandInterface;
 
-    public function getImportUUID(): ?string
+final readonly class ImportEmployeesCommand implements CommandInterface
+{
+    public function __construct(public ?string $importUUID)
     {
-        return $this->importUUID;
     }
 }

@@ -1,5 +1,6 @@
 employee:
   alreadyExists: "Pracownik o podanym PESEL :pesel lub email :email już istnieje"
+  alreadyExistsWithEmailsOrPESEL: "Pracownik o podanym PESEL :pesel lub email :email już istnieje"
   deleted:
     notExists: "Nie ma usuniętego pracownika o podanym UUID :uuid lub pracownik nie został usunięty"
     address:

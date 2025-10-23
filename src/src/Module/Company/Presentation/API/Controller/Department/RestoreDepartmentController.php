@@ -24,8 +24,7 @@ class RestoreDepartmentController extends AbstractController
         private readonly MessageBusInterface $eventBus,
         private readonly MessageService $messageService,
         private readonly MessageBusInterface $commandBus,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/departments/{uuid}/restore', name: 'api.departments.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]

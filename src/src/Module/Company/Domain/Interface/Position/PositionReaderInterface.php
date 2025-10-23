@@ -15,7 +15,7 @@ interface PositionReaderInterface
 
     public function getPositionByName(string $name, ?string $uuid): ?Position;
 
-    public function isPositionExists(string $name, ?string $uuid = null): bool;
+    public function isPositionNameAlreadyExists(string $name, ?string $uuid = null): bool;
 
     public function isPositionWithUUIDExists(string $uuid): bool;
 }

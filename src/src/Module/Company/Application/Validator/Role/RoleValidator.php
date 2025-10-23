@@ -16,7 +16,7 @@ final readonly class RoleValidator
 
     public function isRoleNameAlreadyExists(string $name, ?string $uuid = null): void
     {
-        if ($this->roleReaderRepository->isRoleExists($name, $uuid)) {
+        if ($this->roleReaderRepository->isRoleNameAlreadyExists($name, $uuid)) {
             throw new \Exception($this->translator->trans('role.name.alreadyExists', [':name' => $name], 'roles'), Response::HTTP_CONFLICT);
         }
     }

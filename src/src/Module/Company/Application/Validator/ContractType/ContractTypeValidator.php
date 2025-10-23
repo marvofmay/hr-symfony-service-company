@@ -16,7 +16,7 @@ final readonly class ContractTypeValidator
 
     public function isContractTypeNameAlreadyExists(string $name, ?string $uuid = null): void
     {
-        if ($this->contractTypeReaderRepository->isContractTypeExists($name, $uuid)) {
+        if ($this->contractTypeReaderRepository->isContractTypeNameAlreadyExists($name, $uuid)) {
             throw new \Exception($this->translator->trans('contractType.name.alreadyExists', [':name' => $name], 'contract_types'), Response::HTTP_CONFLICT);
         }
     }

@@ -8,8 +8,7 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
-use App\Module\Company\Domain\DTO\Employee\ImportDTO;
-use App\Module\Company\Presentation\API\Action\Employee\ImportEmployeesAction;
+use App\Module\Company\Application\Command\Employee\ImportEmployeesCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
@@ -24,6 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -32,7 +32,6 @@ final readonly class ImportEmployeesFacade
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UploadFileAction $uploadFileAction,
-        private ImportEmployeesAction $importEmployeesAction,
         private CreateFileAction $createFileAction,
         private AskFileAction $askFileAction,
         private CreateImportAction $createImportAction,
@@ -43,6 +42,7 @@ final readonly class ImportEmployeesFacade
         private ParameterBagInterface $params,
         private MessageService $messageService,
         private MessageBusInterface $eventBus,
+        private MessageBusInterface $commandBus,
     ) {
     }
 
@@ -71,7 +71,12 @@ final readonly class ImportEmployeesFacade
             $file = $this->askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
             $this->createImportAction->execute(ImportKindEnum::IMPORT_EMPLOYEES, ImportStatusEnum::PENDING, $file, $employee);
             $import = $this->askImportAction->ask($file);
-            $this->importEmployeesAction->execute(new ImportDTO($import->getUUID()->toString()));
+
+            try {
+                $this->commandBus->dispatch(new ImportEmployeesCommand($import->getUUID()->toString()));
+            } catch (HandlerFailedException $exception) {
+                throw $exception->getPrevious();
+            }
 
             $this->entityManager->commit();
 

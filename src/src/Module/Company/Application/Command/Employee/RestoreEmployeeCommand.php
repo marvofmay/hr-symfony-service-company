@@ -4,16 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Employee;
 
-use App\Module\Company\Domain\Entity\Employee;
+use App\Common\Domain\Interface\CommandInterface;
 
-final readonly class RestoreEmployeeCommand
+final readonly class RestoreEmployeeCommand implements CommandInterface
 {
-    public function __construct(private Employee $employee)
+    public function __construct(public string $employeeUUID)
     {
-    }
-
-    public function getEmployee(): Employee
-    {
-        return $this->employee;
     }
 }

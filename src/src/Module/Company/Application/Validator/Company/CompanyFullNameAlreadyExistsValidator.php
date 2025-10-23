@@ -31,8 +31,8 @@ final readonly class CompanyFullNameAlreadyExistsValidator implements ValidatorI
             return;
         }
 
-        $companyUUID = $data->companyUUID ?? null;
         $fullName = $data->fullName;
+        $companyUUID = $data->companyUUID ?? null;
         if ($this->companyReaderRepository->isCompanyExistsWithFullName($fullName, $companyUUID)) {
             throw new \Exception($this->translator->trans('company.fullName.alreadyExists', [':fullName' => $fullName], 'companies'), Response::HTTP_CONFLICT);
         }

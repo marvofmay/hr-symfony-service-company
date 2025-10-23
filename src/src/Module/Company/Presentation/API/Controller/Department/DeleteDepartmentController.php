@@ -24,8 +24,7 @@ class DeleteDepartmentController extends AbstractController
         private readonly MessageBusInterface $eventBus,
         private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/departments/{uuid}', name: 'api.departments.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]

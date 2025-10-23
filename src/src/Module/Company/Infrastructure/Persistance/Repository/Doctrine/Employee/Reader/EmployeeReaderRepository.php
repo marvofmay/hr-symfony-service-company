@@ -92,7 +92,7 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
         return !is_null($this->getEmployeeByPESEL($pesel, $uuid));
     }
 
-    public function getEmployeeByPESEL(string $pesel, ?string $employeeUUID = null): ?Employee
+    public function getEmployeeByPESEL(string $pesel, ?string $uuid = null): ?Employee
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -101,9 +101,9 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
             ->where(sprintf('%s.%s = :pesel', Employee::ALIAS, Employee::COLUMN_PESEL))
             ->setParameter('pesel', $pesel);
 
-        if (null !== $employeeUUID) {
+        if (null !== $uuid) {
             $qb->andWhere(sprintf('%s.uuid != :uuid', Employee::ALIAS))
-                ->setParameter('uuid', $employeeUUID);
+                ->setParameter('uuid', $uuid);
         }
 
         return $qb->getQuery()->getOneOrNullResult();
@@ -125,9 +125,21 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
         return new ArrayCollection($employees);
     }
 
-    public function isEmployeeAlreadyExists(string $email, string $pesel, ?string $employeeUUID = null): bool
+    public function isEmployeeAlreadyExistsWithEmailOrPESEL(string $pesel, string $email, ?string $uuid): bool
     {
-        return $this->isEmployeeWithPESELExists($pesel, $employeeUUID) || $this->isEmployeeWithEmailExists($email, $employeeUUID);
+        $qb = $this->createQueryBuilder('e')
+            ->leftJoin('e.contacts', 'c')
+            ->andWhere('e.pesel = :pesel OR (c.type = :type AND c.data = (:email))')
+            ->setParameter('pesel', $pesel)
+            ->setParameter('type', 'email')
+            ->setParameter('email', $email);
+
+        if (null !== $uuid) {
+            $qb->andWhere('e.uuid != :uuid')
+                ->setParameter('uuid', $uuid);
+        }
+
+        return (bool) $qb->getQuery()->getOneOrNullResult();
     }
 
     public function getDeletedEmployeeByUUID(string $uuid): ?Employee

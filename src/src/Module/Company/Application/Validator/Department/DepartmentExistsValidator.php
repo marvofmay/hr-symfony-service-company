@@ -15,6 +15,8 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag('app.department.update.validator')]
 #[AutoconfigureTag('app.department.delete.validator')]
 #[AutoconfigureTag('app.department.query.get.validator')]
+#[AutoconfigureTag('app.employee.create.validator')]
+#[AutoconfigureTag('app.employee.update.validator')]
 final readonly class DepartmentExistsValidator implements ValidatorInterface
 {
     public function __construct(private DepartmentReaderInterface $departmentReaderRepository, private TranslatorInterface $translator)

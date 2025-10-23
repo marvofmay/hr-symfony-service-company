@@ -6,12 +6,11 @@ namespace App\Module\Company\Application\Command\Employee;
 
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
-use App\Module\Company\Domain\Entity\Employee;
 
 class UpdateEmployeeCommand implements CommandInterface
 {
     public function __construct(
-        public Employee $employee,
+        public string $employeeUUID,
         public string $departmentUUID,
         public string $positionUUID,
         public string $contractTypeUUID,

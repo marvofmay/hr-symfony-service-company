@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\Command\Company;
 use App\Common\Domain\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
 
-final class UpdateCompanyCommand implements CommandInterface
+final readonly class UpdateCompanyCommand implements CommandInterface
 {
     public function __construct(
         public string $companyUUID,

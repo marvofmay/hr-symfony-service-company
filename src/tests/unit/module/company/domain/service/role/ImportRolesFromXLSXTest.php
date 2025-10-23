@@ -47,7 +47,7 @@ class ImportRolesFromXLSXTest extends TestCase
     public function testValidateRowReturnsErrorWhenRoleAlreadyExists(): void
     {
         $this->reader
-            ->method('isRoleExists')
+            ->method('isRoleNameAlreadyExists')
             ->willReturn(true);
 
         $importer = $this->getImporter();
@@ -61,7 +61,7 @@ class ImportRolesFromXLSXTest extends TestCase
     public function testValidateRowReturnsEmptyWhenRoleIsValidAndDoesNotExist(): void
     {
         $this->reader
-            ->method('isRoleExists')
+            ->method('isRoleNameAlreadyExists')
             ->willReturn(false);
 
         $importer = $this->getImporter();

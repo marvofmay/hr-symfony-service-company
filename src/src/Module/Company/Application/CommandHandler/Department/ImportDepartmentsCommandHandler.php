@@ -31,7 +31,7 @@ final readonly class ImportDepartmentsCommandHandler
 
     public function __invoke(ImportDepartmentsCommand $command): void
     {
-        $import = $this->importReaderRepository->getImportByUUID($command->getImportUUID());
+        $import = $this->importReaderRepository->getImportByUUID($command->importUUID);
 
         $importer = $this->importerFactory->getImporter(ImportKindEnum::IMPORT_DEPARTMENTS);
         $importer->setFilePath(sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()));

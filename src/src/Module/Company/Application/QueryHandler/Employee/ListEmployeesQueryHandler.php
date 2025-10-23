@@ -5,15 +5,25 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\QueryHandler\Employee;
 
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
+use App\Module\Company\Application\Event\Employee\EmployeeListedEvent;
 use App\Module\Company\Application\Query\Employee\ListEmployeesQuery;
 use App\Module\Company\Domain\Entity\Employee;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
 {
+    public function __construct(public EntityManagerInterface $entityManager, private readonly EventDispatcherInterface $eventDispatcher)
+    {
+        parent::__construct($entityManager);
+    }
+
     public function __invoke(ListEmployeesQuery $query): array
     {
+        $this->eventDispatcher->dispatch(new EmployeeListedEvent([$query]));
+
         return $this->handle($query);
     }
 
@@ -50,20 +60,6 @@ final class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
             Employee::COLUMN_FIRST_NAME,
             Employee::COLUMN_LAST_NAME,
         ];
-    }
-
-    public function transformIncludes(array $items, array $includes): array
-    {
-        $data = array_map(fn ($employee) => $employee->toArray(), $items);
-        foreach (Employee::getRelations() as $relation) {
-            foreach ($data as $key => $employee) {
-                if (!in_array($relation, $includes) || empty($includes)) {
-                    unset($data[$key][$relation]);
-                }
-            }
-        }
-
-        return $data;
     }
 
     public function getRelations(): array

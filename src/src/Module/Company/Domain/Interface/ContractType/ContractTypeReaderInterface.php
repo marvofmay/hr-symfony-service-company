@@ -14,4 +14,6 @@ interface ContractTypeReaderInterface
     public function getContractTypesByUUID(array $selectedUUID): Collection;
 
     public function getContractTypeByName(string $name, ?string $uuid): ?ContractType;
+
+    public function isContractTypeNameAlreadyExists(string $name, ?string $uuid = null): bool;
 }

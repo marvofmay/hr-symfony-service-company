@@ -26,8 +26,7 @@ class DeleteMultipleDepartmentsController extends AbstractController
         private readonly MessageBusInterface $eventBus,
         private readonly MessageService $messageService,
         private readonly MessageBusInterface $commandBus,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/departments/multiple', name: 'api.departments.delete_multiple', methods: ['DELETE'])]

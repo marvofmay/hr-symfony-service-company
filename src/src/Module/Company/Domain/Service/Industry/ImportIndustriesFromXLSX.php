@@ -52,7 +52,7 @@ class ImportIndustriesFromXLSX extends XLSXIterator
 
     private function industryExists(string $industryName): bool
     {
-        return $this->industryReaderRepository->isIndustryExists($industryName);
+        return $this->industryReaderRepository->isIndustryNameAlreadyExists($industryName);
     }
 
     private function formatErrorMessage(string $translationKey, array $parameters = []): string

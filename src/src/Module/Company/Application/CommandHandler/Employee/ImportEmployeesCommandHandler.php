@@ -31,7 +31,7 @@ final readonly class ImportEmployeesCommandHandler
 
     public function __invoke(ImportEmployeesCommand $command): void
     {
-        $import = $this->importReaderRepository->getImportByUUID($command->getImportUUID());
+        $import = $this->importReaderRepository->getImportByUUID($command->importUUID);
         $importer = $this->importerFactory->getImporter(ImportKindEnum::IMPORT_EMPLOYEES);
         $importer->setFilePath(sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()));
 

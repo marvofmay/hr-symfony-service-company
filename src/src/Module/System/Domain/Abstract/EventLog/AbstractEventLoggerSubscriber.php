@@ -15,12 +15,11 @@ abstract class AbstractEventLoggerSubscriber
 {
     public function __construct(
         protected EntityManagerInterface $em,
-        protected SerializerInterface    $serializer,
+        protected SerializerInterface $serializer,
         private ServiceProviderInterface $loggers,
-        protected Security               $security,
+        protected Security $security,
         private EventLogCreatorInterface $eventLogCreator,
-    )
-    {
+    ) {
     }
 
     protected function log(string $eventClass, string $entityClass, mixed $data): void
@@ -35,13 +34,14 @@ abstract class AbstractEventLoggerSubscriber
     private function serializeData(mixed $data): string
     {
         return $this->serializer->serialize($data, 'json', [
-            'circular_reference_handler' => fn($object) => method_exists($object, 'getUUID') ? $object->getUUID() : spl_object_id($object),
+            'circular_reference_handler' => fn ($object) => method_exists($object, 'getUUID') ? $object->getUUID() : spl_object_id($object),
         ]);
     }
 
     private function getEmployee(): ?object
     {
         $user = $this->security->getUser();
+
         return method_exists($user, 'getEmployee') ? $user->getEmployee() : null;
     }
 

@@ -12,6 +12,7 @@ enum MonologChanelEnum: string implements EnumInterface
     case EVENT_LOG = 'eventLog';
     case EVENT_STORE = 'eventStore';
     case IMPORT = 'import';
+    case LOCAL_CACHE = 'localCache';
 
     public function label(): string
     {

@@ -4,38 +4,76 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Employee;
 
-use App\Module\Company\Presentation\API\Action\Employee\DeleteEmployeeAction;
+use App\Common\Domain\Enum\MonologChanelEnum;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Company\Application\Command\Employee\DeleteEmployeeCommand;
+use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 class DeleteEmployeeController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly MessageBusInterface $eventBus,
+        private readonly MessageService $messageService,
+        private readonly MessageBusInterface $commandBus,
+    ) {
     }
 
     #[Route('/api/employees/{uuid}', name: 'api.employees.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
-    public function delete(string $uuid, DeleteEmployeeAction $deleteEmployeeAction): JsonResponse
+    public function delete(string $uuid): JsonResponse
     {
         try {
-            if (!$this->isGranted(PermissionEnum::DELETE, AccessEnum::EMPLOYEE)) {
-                throw new \Exception($this->translator->trans('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
-            }
+            $this->denyAccessUnlessGranted(
+                PermissionEnum::DELETE,
+                AccessEnum::EMPLOYEE,
+                $this->messageService->get('accessDenied')
+            );
 
-            $deleteEmployeeAction->execute($uuid);
+            $this->dispatchCommand($uuid);
 
-            return new JsonResponse(['message' => $this->translator->trans('employee.delete.success', [], 'employees')], Response::HTTP_OK);
-        } catch (\Exception $error) {
-            $message = sprintf('%s. %s', $this->translator->trans('employee.delete.error', [], 'employees'), $error->getMessage());
-            $this->logger->error($message);
-
-            return new JsonResponse(['message' => $message], $error->getCode());
+            return $this->successResponse();
+        } catch (\Throwable $exception) {
+            return $this->errorResponse($exception);
         }
+    }
+
+    private function dispatchCommand(string $uuid): void
+    {
+        try {
+            $this->commandBus->dispatch(new DeleteEmployeeCommand($uuid));
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
+    }
+
+    private function successResponse(): JsonResponse
+    {
+        return new JsonResponse(
+            ['message' => $this->messageService->get('employee.delete.success', [], 'employees')],
+            Response::HTTP_OK
+        );
+    }
+
+    private function errorResponse(\Throwable $exception): JsonResponse
+    {
+        $message = sprintf(
+            '%s. %s',
+            $this->messageService->get('employee.delete.error', [], 'employees'),
+            $exception->getMessage()
+        );
+
+        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_STORE));
+
+        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
+
+        return new JsonResponse(['message' => $message], $code);
     }
 }

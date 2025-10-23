@@ -4,6 +4,7 @@ monolog:
         - eventLog
         - eventStore
         - import
+        - localCache
 
 when@test:
     monolog:
@@ -75,4 +76,9 @@ when@dev:
                 path: "%kernel.logs_dir%/import.log"
                 level: debug
                 channels: ["import"]
+            localCache:
+              type: stream
+              path: "%kernel.logs_dir%/local_cache.log"
+              level: debug
+              channels: ["localCache"]
 

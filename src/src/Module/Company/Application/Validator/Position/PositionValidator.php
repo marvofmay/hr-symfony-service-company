@@ -18,7 +18,7 @@ final readonly class PositionValidator
 
     public function isPositionNameAlreadyExists(string $name, ?string $uuid = null): void
     {
-        if ($this->positionReaderRepository->isPositionExists($name, $uuid)) {
+        if ($this->positionReaderRepository->isPositionNameAlreadyExists($name, $uuid)) {
             throw new \Exception($this->translator->trans('position.name.alreadyExists', [':name' => $name], 'positions'), Response::HTTP_CONFLICT);
         }
     }

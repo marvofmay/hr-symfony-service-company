@@ -25,9 +25,8 @@ class UpdateDepartmentController extends AbstractController
     public function __construct(
         private readonly MessageBusInterface $eventBus,
         private readonly MessageBusInterface $commandBus,
-        private readonly MessageService      $messageService,
-    )
-    {
+        private readonly MessageService $messageService,
+    ) {
     }
 
     #[Route('/api/departments/{uuid}', name: 'api.department.update', methods: ['PUT'])]

@@ -27,8 +27,7 @@ class ListDepartmentsController extends AbstractController
         private readonly MessageBusInterface $eventBus,
         private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/departments', name: 'api.departments.list', methods: ['GET'])]

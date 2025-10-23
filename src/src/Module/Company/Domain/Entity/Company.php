@@ -32,7 +32,6 @@ class Company
     use RelationsEntityTrait;
 
     public const string COLUMN_UUID = 'uuid';
-    public const string COLUMN_COMPANY_UUID = 'companyUuid';
     public const string COLUMN_FULL_NAME = 'fullName';
     public const string COLUMN_SHORT_NAME = 'shortName';
     public const string COLUMN_INTERNAL_CODE = 'internalCode';
@@ -263,23 +262,5 @@ class Company
                 $department->setCompany(null);
             }
         }
-    }
-
-    public function toArray(): array
-    {
-        return [
-            self::COLUMN_UUID => $this->getUuid()->toString(),
-            self::COLUMN_FULL_NAME => $this->getFullName(),
-            self::COLUMN_SHORT_NAME => $this->getShortName(),
-            self::COLUMN_DESCRIPTION => $this->getDescription(),
-            self::COLUMN_NIP => $this->getNip(),
-            self::COLUMN_REGON => $this->getRegon(),
-            self::COLUMN_ACTIVE => $this->getActive(),
-            'quantityDepartments' => $this->getDepartments()->count(),
-            self::RELATION_PARENT_COMPANY => $this->getParentCompany() ? $this->getParentCompany()->toArray() : null,
-            self::COLUMN_CREATED_AT => $this->getCreatedAt(),
-            self::COLUMN_UPDATED_AT => $this->getUpdatedAt(),
-            self::COLUMN_DELETED_AT => $this->getDeletedAt(),
-        ];
     }
 }

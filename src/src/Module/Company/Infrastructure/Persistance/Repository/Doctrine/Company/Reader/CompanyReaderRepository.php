@@ -12,7 +12,6 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class CompanyReaderRepository extends ServiceEntityRepository implements CompanyReaderInterface
@@ -205,7 +204,6 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
                 ->getQuery()
                 ->getOneOrNullResult();
 
-
             return $deletedCompany;
         } finally {
             $filters->enable('soft_delete');
@@ -228,7 +226,6 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
                 ->getQuery()
                 ->getOneOrNullResult();
 
-
             return $deletedAddress;
         } finally {
             $filters->enable('soft_delete');
@@ -250,7 +247,6 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getResult();
-
 
             return new ArrayCollection($deletedContacts);
         } finally {

@@ -4,14 +4,12 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\ContractType\Reader;
 
-use App\Common\Domain\Exception\NotFindByUUIDException;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContractTypeReaderRepository extends ServiceEntityRepository implements ContractTypeReaderInterface
@@ -23,12 +21,7 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
 
     public function getContractTypeByUUID(string $uuid): ?ContractType
     {
-        $contractType = $this->findOneBy([ContractType::COLUMN_UUID => $uuid]);
-        if (null === $contractType) {
-            throw new \Exception($this->translator->trans('contractType.uuid.notExists', [':uuid' => $uuid], 'contract_types'), Response::HTTP_NOT_FOUND);
-        }
-
-        return $contractType;
+        return $this->findOneBy([ContractType::COLUMN_UUID => $uuid]);
     }
 
     public function getContractTypesByUUID(array $selectedUUID): Collection
@@ -76,7 +69,7 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
         return $qb->getQuery()->getOneOrNullResult();
     }
 
-    public function isContractTypeExists(string $name, ?string $uuid = null): bool
+    public function isContractTypeNameAlreadyExists(string $name, ?string $uuid = null): bool
     {
         return !is_null($this->getContractTypeByName($name, $uuid));
     }
