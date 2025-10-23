@@ -2,6 +2,7 @@ doctrine:
   dbal:
     url: '%env(resolve:DATABASE_URL)%'
     server_version: '9.3.0'
+    logging: true
     types:
       uuid: Ramsey\Uuid\Doctrine\UuidType
     # IMPORTANT: You MUST configure your server version,

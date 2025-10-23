@@ -81,4 +81,9 @@ when@dev:
               path: "%kernel.logs_dir%/local_cache.log"
               level: debug
               channels: ["localCache"]
+            doctrine:
+              type: stream
+              path: "%kernel.project_dir%/var/log/doctrine.log"
+              level: debug
+              channels: ["doctrine"]
 
