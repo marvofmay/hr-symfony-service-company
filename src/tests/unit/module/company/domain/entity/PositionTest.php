@@ -13,20 +13,20 @@ class PositionTest extends TestCase
     {
         $position = new Position();
 
-        $position->name = 'Manager';
-        $this->assertSame('Manager', $position->name);
+        $position->setName('Manager');
+        $this->assertSame('Manager', $position->getName());
 
-        $position->description = 'Responsible for managing the team';
-        $this->assertSame('Responsible for managing the team', $position->description);
+        $position->setDescription('Responsible for managing the team');
+        $this->assertSame('Responsible for managing the team', $position->getDescription());
 
         // $position->setActive(true);
-        $this->assertTrue($position->active);
+        $this->assertTrue($position->getActive());
     }
 
     public function testEmployeesCollectionIsEmptyOnInit(): void
     {
         $position = new Position();
-        $this->assertCount(0, $position->employees);
+        $this->assertCount(0, $position->getEmployees());
     }
 
     public function testAddDepartment(): void
@@ -36,7 +36,7 @@ class PositionTest extends TestCase
 
         $position->addDepartment($department);
 
-        $this->assertCount(1, $position->positionDepartments);
+        $this->assertCount(1, $position->getPositionDepartments());
         $this->assertSame($department, $position->getDepartments()->first());
     }
 
@@ -48,11 +48,11 @@ class PositionTest extends TestCase
         $mockPositionDepartment->department = $department;
 
         $position = new Position();
-        $position->positionDepartments->add($mockPositionDepartment);
+        $position->getPositionDepartments()->add($mockPositionDepartment);
 
         $position->addDepartment($department);
-        var_dump(count($position->positionDepartments));
+        var_dump(count($position->getPositionDepartments()));
 
-        $this->assertCount(1, $position->positionDepartments);
+        $this->assertCount(1, $position->getPositionDepartments());
     }
 }

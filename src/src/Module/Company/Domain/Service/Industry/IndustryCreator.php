@@ -7,7 +7,6 @@ namespace App\Module\Company\Domain\Service\Industry;
 use App\Module\Company\Application\Command\Industry\CreateIndustryCommand;
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
-use App\Module\Company\Domain\Service\Industry\Mapper\IndustryDataMapper;
 use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
 use App\Module\System\Domain\Factory\CommandDataMapperFactory;
 

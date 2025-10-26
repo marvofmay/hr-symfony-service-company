@@ -53,9 +53,9 @@ class AddRecordToPositionTableCommand extends Command
             $translatedName = $this->translator->trans(sprintf('position.defaultData.name.%s', $enum->value), [], 'positions');
             if (!in_array($translatedName, $existingNames, true)) {
                 $position = new Position();
-                $position->name = $translatedName;
+                $position->setName($translatedName);
                 // $position->active = true;
-                $position->description = $this->translator->trans(sprintf('position.defaultData.description.%s', $enum->value), [], 'positions');
+                $position->setDescription($this->translator->trans(sprintf('position.defaultData.description.%s', $enum->value), [], 'positions'));
                 $this->entityManager->persist($position);
                 $positionsToPersist[] = $enum->value;
             }
