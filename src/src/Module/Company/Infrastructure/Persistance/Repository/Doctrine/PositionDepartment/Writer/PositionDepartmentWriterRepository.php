@@ -25,7 +25,7 @@ final class PositionDepartmentWriterRepository extends ServiceEntityRepository i
             $this->getEntityManager()->createQueryBuilder()
                 ->delete(PositionDepartment::class, 'pd')
                 ->where('pd.position = :uuid')
-                ->setParameter('uuid', $position->uuid)
+                ->setParameter('uuid', $position->getUUID())
                 ->getQuery()
                 ->execute();
         } else {
@@ -46,7 +46,7 @@ final class PositionDepartmentWriterRepository extends ServiceEntityRepository i
                 ->delete(PositionDepartment::class, 'pd')
                 ->where('pd.position = :positionUUID')
                 ->andWhere('pd.department = :departmentUUID')
-                ->setParameter('positionUUID', $position->uuid)
+                ->setParameter('positionUUID', $position->getUUID())
                 ->setParameter('departmentUUID', $department->getUUID())
                 ->getQuery()
                 ->execute();

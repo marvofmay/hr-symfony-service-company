@@ -17,14 +17,16 @@ class PositionDataTransformer
     public function transformToArray(Position $position, array $includes = []): array
     {
         $data = [
-            PositionEntityFieldEnum::UUID->value => $position->uuid->toString(),
-            PositionEntityFieldEnum::NAME->value => $position->name,
-            PositionEntityFieldEnum::DESCRIPTION->value => $position->description,
-            PositionEntityFieldEnum::ACTIVE->value => $position->active,
+            PositionEntityFieldEnum::UUID->value => $position->getUUID()->toString(),
+            PositionEntityFieldEnum::NAME->value => $position->getName(),
+            PositionEntityFieldEnum::DESCRIPTION->value => $position->getDescription(),
+            PositionEntityFieldEnum::ACTIVE->value => $position->getActive(),
             TimeStampableEntityFieldEnum::CREATED_AT->value => $position->createdAt?->format('Y-m-d H:i:s'),
             TimeStampableEntityFieldEnum::UPDATED_AT->value => $position->updatedAt?->format('Y-m-d H:i:s'),
             TimeStampableEntityFieldEnum::DELETED_AT->value => $position->deletedAt?->format('Y-m-d H:i:s'),
         ];
+
+        $x = Position::getRelations();
 
         foreach ($includes as $relation) {
             if (in_array($relation, Position::getRelations(), true)) {
@@ -38,7 +40,7 @@ class PositionDataTransformer
     private function transformRelation(Position $position, string $relation): ?array
     {
         return match ($relation) {
-            PositionEntityRelationFieldEnum::EMPLOYEES->value => $this->transformEmployees($position->employees),
+            PositionEntityRelationFieldEnum::EMPLOYEES->value => $this->transformEmployees($position->getEmployees()),
             PositionEntityRelationFieldEnum::POSITION_DEPARTMENTS->value => $this->transformDepartments($position->getDepartments()),
             default => null,
         };

@@ -26,7 +26,8 @@ class UploadFile implements UploadFileInterface
     public function __construct(
         private readonly string $uploadDir,
         private readonly FileExtensionEnum $expectedUploadedFileExtension,
-        private ?string $fileName = null, )
+        private ?string $fileName = null,
+    )
     {
     }
 
@@ -85,7 +86,7 @@ class UploadFile implements UploadFileInterface
 
     public function getFileName(): ?string
     {
-        return $this->uploadedFile ? $this->uploadedFile->getFilename() : null;
+        return $this->uploadedFile?->getFilename();
     }
 
     public static function generateUniqueFileName(FileExtensionEnum $fileExtension): string

@@ -4,8 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Industry;
 
-final readonly class CreateIndustryCommand
+use App\Common\Domain\Interface\CommandInterface;
+
+final readonly class CreateIndustryCommand implements CommandInterface
 {
+    public const string NAME = 'name';
+    public const string DESCRIPTION = 'description';
+
     public function __construct(public string $name, public ?string $description)
     {
     }

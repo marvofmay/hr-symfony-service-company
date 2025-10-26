@@ -20,7 +20,7 @@ final readonly class PositionRestorer
     {
         $position->deletedAt = null;
 
-        $positionUUID = $position->uuid->toString();
+        $positionUUID = $position->getUUID()->toString();
         $positonDepartments = $this->positionDepartmentReaderRepository->getDeletedPositionDepartmentsByPositionUUID($positionUUID);
         foreach ($positonDepartments as $positionDepartment) {
             $positionDepartment->deletedAt = null;

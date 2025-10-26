@@ -86,9 +86,9 @@ class EmployeeDataTransformer
     private function transformPosition(Position $position): ?array
     {
         return [
-            PositionEntityFieldEnum::UUID->value => $position->uuid->toString(),
-            PositionEntityFieldEnum::NAME->value => $position->name,
-            PositionEntityFieldEnum::DESCRIPTION->value => $position->description,
+            PositionEntityFieldEnum::UUID->value => $position->getUUID()->toString(),
+            PositionEntityFieldEnum::NAME->value => $position->getName(),
+            PositionEntityFieldEnum::DESCRIPTION->value => $position->getDescription(),
         ];
     }
 

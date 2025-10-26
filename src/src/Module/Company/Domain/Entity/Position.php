@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
+use App\Common\Domain\Interface\MappableEntityInterface;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
@@ -21,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'name', columns: ['name'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
-class Position
+class Position implements MappableEntityInterface
 {
     use TimeStampableTrait;
     use AttributesEntityTrait;
@@ -33,29 +34,89 @@ class Position
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    public UuidInterface $uuid;
+    private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 200)]
     #[Assert\NotBlank]
-    public string $name;
+    private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    public ?string $description = null;
+    private ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
-    public bool $active = true;
+    private bool $active = true;
 
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'position', cascade: ['persist', 'remove'])]
-    public Collection $employees;
+    private Collection $employees;
 
     #[ORM\OneToMany(targetEntity: PositionDepartment::class, mappedBy: 'position', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    public Collection $positionDepartments;
+    private Collection $positionDepartments;
 
     public function __construct()
     {
         $this->employees = new ArrayCollection();
         $this->positionDepartments = new ArrayCollection();
+    }
+
+    public function getUUID(): UuidInterface
+    {
+        return $this->uuid;
+    }
+
+    public function setUUID(UuidInterface $uuid): void
+    {
+        $this->uuid = $uuid;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): void
+    {
+        $this->description = $description;
+    }
+
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
+
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
+    }
+
+    public function setEmployees(Collection $employees): void
+    {
+        $this->employees = $employees;
+    }
+
+    public function getPositionDepartments(): Collection
+    {
+        return $this->positionDepartments;
+    }
+
+    public function setPositionDepartments(Collection $positionDepartments): void
+    {
+        $this->positionDepartments = $positionDepartments;
     }
 
     public function addDepartment(Department $department): void
@@ -72,7 +133,7 @@ class Position
 
     public function getDepartments(): Collection
     {
-        return $this->positionDepartments->map(fn (PositionDepartment $pd) => $pd->department);
+        return $this->positionDepartments->map(fn(PositionDepartment $pd) => $pd->department);
     }
 
     public function removeDepartment(Department $department): void

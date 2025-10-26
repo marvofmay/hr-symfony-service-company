@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
+use App\Common\Domain\Interface\MappableEntityInterface;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
@@ -20,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'industry')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
-class Industry
+class Industry implements MappableEntityInterface
 {
     use TimeStampableTrait;
     use AttributesEntityTrait;

@@ -15,9 +15,9 @@ final class PositionFactory
             ? new Position()
             : $existingPositions[$positionData[PositionImportColumnEnum::POSITION_NAME->value]];
 
-        $position->name = $positionData[PositionImportColumnEnum::POSITION_NAME->value];
-        $position->description = $positionData[PositionImportColumnEnum::POSITION_DESCRIPTION->value];
-        $position->active = (bool) $positionData[PositionImportColumnEnum::ACTIVE->value];
+        $position->setName($positionData[PositionImportColumnEnum::POSITION_NAME->value]);
+        $position->setDescription($positionData[PositionImportColumnEnum::POSITION_DESCRIPTION->value]);
+        $position->setActive((bool) $positionData[PositionImportColumnEnum::ACTIVE->value]);
 
         return $position;
     }

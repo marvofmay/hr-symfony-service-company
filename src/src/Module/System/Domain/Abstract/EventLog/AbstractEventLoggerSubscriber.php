@@ -55,7 +55,7 @@ abstract class AbstractEventLoggerSubscriber
         $logger->info("event: $eventClass");
         $logger->info("entity: $entityClass");
         $logger->info("data: $jsonData");
-        $logger->info($employee ? "employeeUUID: {$employee->getUUID()}" : 'no employee');
+        $logger->info("employeeUUID: " . ($employee ? $employee->getUUID() : 'no employee'));
         $logger->info('---------------------------------------------');
     }
 
