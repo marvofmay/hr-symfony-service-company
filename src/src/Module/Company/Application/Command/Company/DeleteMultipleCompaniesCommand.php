@@ -8,7 +8,9 @@ use App\Common\Domain\Interface\CommandInterface;
 
 final readonly class DeleteMultipleCompaniesCommand implements CommandInterface
 {
-    public function __construct(public array $selectedUUIDs)
+    public const string COMPANIES_UUIDS = 'companiesUUIDs';
+
+    public function __construct(public array $companiesUUIDs)
     {
     }
 }

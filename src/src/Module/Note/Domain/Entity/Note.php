@@ -6,7 +6,7 @@ namespace App\Module\Note\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
 use Doctrine\DBAL\Types\Types;
@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Note
 {
-    use TimestampableTrait;
+    use TimeStampableTrait;
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
@@ -44,7 +44,7 @@ class Note
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'notes')]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     #[Assert\NotNull]
     private Employee $employee;
 
@@ -57,15 +57,6 @@ class Note
 
     #[ORM\Column(type: Types::STRING, length: 20, enumType: NotePriorityEnum::class)]
     private NotePriorityEnum $priority;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private \DateTimeInterface $createdAt;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $deletedAt = null;
 
     public function __construct()
     {

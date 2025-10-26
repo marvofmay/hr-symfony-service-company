@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Company;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Common\XLSX\XLSXIterator;
@@ -18,6 +19,7 @@ use App\Module\System\Domain\Enum\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
+use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -109,7 +111,11 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
-                    new LogFileEvent($this->messageService->get('company.import.error', [], 'companies').': '.$error)
+                    new LogFileEvent(
+                        $this->messageService->get('company.import.error', [], 'companies').': '.$error,
+                        LogLevel::ERROR,
+                        MonologChanelEnum::IMPORT
+                    )
                 );
             }
 

@@ -7,24 +7,22 @@ namespace App\Module\Company\Domain\Service\Position;
 use App\Module\Company\Application\Command\Position\CreatePositionCommand;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
+use App\Module\Company\Domain\Service\Position\Mapper\PositionDataMapper;
 
-readonly class PositionCreator
+final readonly class PositionCreator
 {
-    public function __construct(private PositionWriterInterface $positionWriterRepository)
-    {
+    public function __construct(
+        private PositionWriterInterface $positionWriterRepository,
+        private PositionDataMapper $positionDataMapper,
+        private PositionDepartmentCreator $positionDepartmentCreator,
+    ) {
     }
 
     public function create(CreatePositionCommand $command): void
     {
         $position = new Position();
-        $position->setName($command->name);
-        $position->setDescription($command->description);
-        $position->setActive($command->active);
-
-        foreach ($command->departments as $department) {
-            $position->addDepartment($department);
-        }
-
+        $this->positionDataMapper->map($position, $command);
+        $this->positionDepartmentCreator->createDepartments($position, $command);
         $this->positionWriterRepository->savePositionInDB($position);
     }
 }

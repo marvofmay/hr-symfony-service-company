@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Position\Reader;
 
 use App\Module\Company\Domain\Entity\Position;
+use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,7 +22,7 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
 
     public function getPositionByUUID(string $uuid): ?Position
     {
-        return $this->findOneBy([Position::COLUMN_UUID => $uuid]);
+        return $this->findOneBy([PositionEntityFieldEnum::UUID->value => $uuid]);
     }
 
     public function getPositionsByUUID(array $selectedUUID): Collection
@@ -32,17 +34,10 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(Position::ALIAS)
             ->from(Position::class, Position::ALIAS)
-            ->where(Position::ALIAS.'.'.Position::COLUMN_UUID.' IN (:uuids)')
+            ->where(Position::ALIAS.'.'.PositionEntityFieldEnum::UUID->value.' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID);
 
         $positions = $qb->getQuery()->getResult();
-
-        // $foundUUIDs = array_map(fn (Position $position) => $position->getUUID(), $positions);
-        // $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
-        //
-        // if ($missingUUIDs) {
-        //    throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('position.uuid.notFound', [], 'positions'), implode(', ', $missingUUIDs)));
-        // }
 
         return new ArrayCollection($positions);
     }
@@ -53,11 +48,11 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
 
         $qb->select('p')
             ->from(Position::class, 'p')
-            ->where('p.'.Position::COLUMN_NAME.' = :name')
+            ->where('p.'.PositionEntityFieldEnum::NAME->value.' = :name')
             ->setParameter('name', $name);
 
         if (null !== $uuid) {
-            $qb->andWhere('p.'.Position::COLUMN_UUID.' != :uuid')
+            $qb->andWhere('p.'.PositionEntityFieldEnum::UUID->value.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -71,6 +66,42 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
 
     public function isPositionWithUUIDExists(string $uuid): bool
     {
-        return null !== $this->findOneBy([Position::COLUMN_UUID => $uuid]);
+        return null !== $this->findOneBy([PositionEntityFieldEnum::UUID->value => $uuid]);
+    }
+
+    public function getDeletedPositionByUUID(string $uuid): ?Position
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $deletedCompany = $this->createQueryBuilder(Position::ALIAS)
+                ->where(Position::ALIAS.'.'.PositionEntityFieldEnum::UUID->value.' = :uuid')
+                ->andWhere(Position::ALIAS.'.'.TimeStampableEntityFieldEnum::DELETED_AT->value.' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            return $deletedCompany;
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+
+    public function getPositionsByNames(array $names): Collection
+    {
+        if (!$names) {
+            return new ArrayCollection();
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(Position::ALIAS)
+            ->from(Position::class, Position::ALIAS)
+            ->where(Position::ALIAS.'.'.PositionEntityFieldEnum::NAME->value.' IN (:names)')
+            ->setParameter('names', $names);
+
+        $positions = $qb->getQuery()->getResult();
+
+        return new ArrayCollection($positions);
     }
 }

@@ -16,9 +16,9 @@ class RoleDataTransformer
             Role::COLUMN_UUID => $role->getUUID()->toString(),
             Role::COLUMN_NAME => $role->getName(),
             Role::COLUMN_DESCRIPTION => $role->getDescription(),
-            Role::COLUMN_CREATED_AT => $role->getCreatedAt()?->format('Y-m-d H:i:s'),
-            Role::COLUMN_UPDATED_AT => $role->getUpdatedAt()?->format('Y-m-d H:i:s'),
-            Role::COLUMN_DELETED_AT => $role->getDeletedAt()?->format('Y-m-d H:i:s'),
+            Role::COLUMN_CREATED_AT => $role->createdAt?->format('Y-m-d H:i:s'),
+            Role::COLUMN_UPDATED_AT => $role->updatedAt?->format('Y-m-d H:i:s'),
+            Role::COLUMN_DELETED_AT => $role->deletedAt?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {

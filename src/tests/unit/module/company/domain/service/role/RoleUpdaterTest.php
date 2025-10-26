@@ -28,7 +28,7 @@ class RoleUpdaterTest extends TestCase
             ->method('saveRoleInDB')
             ->with(
                 $this->callback(
-                    fn (Role $updatedRole) => $updatedRole->getName() === $name && $updatedRole->getDescription() === $description && $updatedRole->getUpdatedAt() instanceof \DateTimeInterface
+                    fn (Role $updatedRole) => $updatedRole->getName() === $name && $updatedRole->getDescription() === $description && $updatedRole->updatedAt instanceof \DateTimeInterface
                 )
             );
 

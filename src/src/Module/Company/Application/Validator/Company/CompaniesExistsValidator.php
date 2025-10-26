@@ -26,7 +26,7 @@ final readonly class CompaniesExistsValidator implements ValidatorInterface
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        $uuids = $data->selectedUUIDs ?? [];
+        $uuids = $data->companiesUUIDs ?? [];
 
         if (empty($uuids)) {
             return;

@@ -16,4 +16,6 @@ interface PositionWriterInterface
     public function deletePositionInDB(Position $position): void;
 
     public function deleteMultiplePositionsInDB(Collection $positions): void;
+
+    public function restorePositionInDB(Position $position): void;
 }

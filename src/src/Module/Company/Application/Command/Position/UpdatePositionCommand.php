@@ -4,41 +4,22 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Position;
 
-use App\Module\Company\Domain\Entity\Position;
+use App\Common\Domain\Interface\CommandInterface;
 
-final readonly class UpdatePositionCommand
+final readonly class UpdatePositionCommand implements CommandInterface
 {
+    public const string POSITION_UUID = 'positionUUID';
+    public const string NAME = 'name';
+    public const string DESCRIPTION = 'description';
+    public const string ACTIVE = 'active';
+    public const string DEPARTMENTS_UUIDS = 'departmentsUUIDs';
+
     public function __construct(
-        private string $name,
-        private ?string $description,
-        private ?bool $active,
-        private ?array $departmentsUUID,
-        private Position $position,
+        public string $positionUUID,
+        public string $name,
+        public ?string $description,
+        public ?bool $active,
+        public ?array $departmentsUUIDs,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getActive(): ?bool
-    {
-        return $this->active;
-    }
-
-    public function getDepartmentsUUID(): ?array
-    {
-        return $this->departmentsUUID;
-    }
-
-    public function getPosition(): Position
-    {
-        return $this->position;
     }
 }

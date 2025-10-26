@@ -17,9 +17,9 @@ class ContractTypeDataTransformer
             ContractType::COLUMN_NAME => $contractType->getName(),
             ContractType::COLUMN_ACTIVE => $contractType->getActive(),
             ContractType::COLUMN_DESCRIPTION => $contractType->getDescription(),
-            ContractType::COLUMN_CREATED_AT => $contractType->getCreatedAt()?->format('Y-m-d H:i:s'),
-            ContractType::COLUMN_UPDATED_AT => $contractType->getUpdatedAt()?->format('Y-m-d H:i:s'),
-            ContractType::COLUMN_DELETED_AT => $contractType->getDeletedAt()?->format('Y-m-d H:i:s'),
+            ContractType::COLUMN_CREATED_AT => $contractType->createdAt?->format('Y-m-d H:i:s'),
+            ContractType::COLUMN_UPDATED_AT => $contractType->updatedAt?->format('Y-m-d H:i:s'),
+            ContractType::COLUMN_DELETED_AT => $contractType->deletedAt?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {

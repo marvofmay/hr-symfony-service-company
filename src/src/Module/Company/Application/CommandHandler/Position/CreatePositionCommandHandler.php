@@ -4,25 +4,32 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\CommandHandler\Position;
 
+use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Module\Company\Application\Command\Position\CreatePositionCommand;
 use App\Module\Company\Application\Event\Position\PositionCreatedEvent;
-use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Service\Position\PositionCreator;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-readonly class CreatePositionCommandHandler
+final class CreatePositionCommandHandler extends CommandHandlerAbstract
 {
-    public function __construct(private PositionCreator $positionCreator, private EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        private readonly PositionCreator $positionCreator,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        #[AutowireIterator(tag: 'app.position.create.validator')] protected iterable $validators,
+    ) {
     }
 
     public function __invoke(CreatePositionCommand $command): void
     {
+        $this->validate($command);
+
         $this->positionCreator->create($command);
         $this->eventDispatcher->dispatch(new PositionCreatedEvent([
-            Position::COLUMN_NAME => $command->name,
-            Position::COLUMN_DESCRIPTION => $command->description,
-            Position::COLUMN_ACTIVE => $command->active,
+            CreatePositionCommand::NAME => $command->name,
+            CreatePositionCommand::DESCRIPTION => $command->description,
+            CreatePositionCommand::ACTIVE => $command->active,
+            CreatePositionCommand::DEPARTMENTS_UUIDS => $command->departmentsUUIDs,
         ]));
     }
 }

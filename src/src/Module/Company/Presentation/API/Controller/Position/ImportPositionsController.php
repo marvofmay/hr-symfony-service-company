@@ -21,15 +21,20 @@ final class ImportPositionsController extends AbstractController
     {
     }
 
-    #[Route('/api/positions/import', name: 'import', methods: ['POST'])]
+    #[Route('/api/positions/import', name: 'api.positions.import', methods: ['POST'])]
     public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::POSITION)) {
-            throw new \Exception($this->messageService->get('accessDenied', [], 'messages'), Response::HTTP_FORBIDDEN);
-        }
+        $this->denyAccessUnlessGranted(
+            PermissionEnum::IMPORT,
+            AccessEnum::POSITION,
+            $this->messageService->get('accessDenied')
+        );
 
         if (!$file) {
-            return new JsonResponse(['message' => $this->messageService->get('position.import.file.required', [], 'positions')], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse(
+                ['message' => $this->messageService->get('position.import.file.required', [], 'positions')],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
         $result = $this->importPositionsFacade->handle($file);

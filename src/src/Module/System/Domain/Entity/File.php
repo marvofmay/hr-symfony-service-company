@@ -7,7 +7,7 @@ namespace App\Module\System\Domain\Entity;
 use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Trait\AttributesEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\Company\Domain\Entity\Employee;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +21,7 @@ use Ramsey\Uuid\UuidInterface;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class File
 {
-    use TimestampableTrait;
+    use TimeStampableTrait;
     use AttributesEntityTrait;
 
     public const COLUMN_UUID = 'uuid';

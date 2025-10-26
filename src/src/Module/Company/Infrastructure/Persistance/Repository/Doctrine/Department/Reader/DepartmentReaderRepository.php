@@ -22,6 +22,11 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
         parent::__construct($registry, Department::class);
     }
 
+    public function getDepartments(): Collection
+    {
+        return new ArrayCollection($this->findAll());
+    }
+
     public function getDepartmentByUUID(string $uuid): Department
     {
         $department = $this->findOneBy([Department::COLUMN_UUID => $uuid]);

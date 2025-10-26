@@ -5,26 +5,22 @@ doctrine:
     logging: true
     types:
       uuid: Ramsey\Uuid\Doctrine\UuidType
-    # IMPORTANT: You MUST configure your server version,
-    # either here or in the DATABASE_URL env var (see .env file)
-    #server_version: '15'
-
     profiling_collect_backtrace: '%kernel.debug%'
     use_savepoints: true
 
   orm:
-    controller_resolver:
-      auto_mapping: false
+    auto_mapping: true
+    enable_lazy_ghost_objects: true
+    auto_generate_proxy_classes: false # natywne lazy objects zamiast starych proxy
+    report_fields_where_declared: true
+    validate_xml_mapping: true
+    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
+
     filters:
       soft_delete:
         class: Gedmo\SoftDeleteable\Filter\SoftDeleteableFilter
         enabled: true
-    auto_generate_proxy_classes: true
-    enable_lazy_ghost_objects: true
-    report_fields_where_declared: true
-    validate_xml_mapping: true
-    naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-    auto_mapping: true
+
     mappings:
       company:
         is_bundle: false
@@ -49,19 +45,18 @@ doctrine:
         type: attribute
         dir: '%kernel.project_dir%/src/Common/Domain/Entity'
         prefix: 'App\Common\Domain\Entity'
-        alias: System
+        alias: Common
 
 when@test:
   doctrine:
     dbal:
-      # "TEST_TOKEN" is typically set by ParaTest
       dbname_suffix: '_test%env(default::TEST_TOKEN)%'
 
 when@prod:
   doctrine:
     orm:
       auto_generate_proxy_classes: false
-      proxy_dir: '%kernel.build_dir%/doctrine/orm/Proxies'
+      enable_lazy_ghost_objects: true
       query_cache_driver:
         type: pool
         pool: doctrine.system_cache_pool

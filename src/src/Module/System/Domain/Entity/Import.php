@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Enum\ImportStatusEnum;
@@ -23,7 +23,7 @@ use Ramsey\Uuid\UuidInterface;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Import
 {
-    use TimestampableTrait;
+    use TimeStampableTrait;
     use AttributesEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
@@ -68,7 +68,7 @@ class Import
     private ?ImportReport $report;
 
     #[ORM\OneToOne(targetEntity: File::class, inversedBy: 'import')]
-    #[ORM\JoinColumn(name: 'file_uuid', referencedColumnName: 'uuid', unique: true, nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'file_uuid', referencedColumnName: 'uuid', unique: true, onDelete: 'CASCADE')]
     private File $file;
 
     public function __construct()

@@ -51,7 +51,7 @@ class DeleteMultipleCompaniesController extends AbstractController
     {
         try {
             $this->commandBus->dispatch(
-                new DeleteMultipleCompaniesCommand($deleteMultipleDTO->selectedUUIDs)
+                new DeleteMultipleCompaniesCommand($deleteMultipleDTO->companiesUUIDs)
             );
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();

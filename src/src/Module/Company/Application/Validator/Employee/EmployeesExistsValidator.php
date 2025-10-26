@@ -26,7 +26,7 @@ final readonly class EmployeesExistsValidator implements ValidatorInterface
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        $uuids = $data->selectedUUIDs ?? [];
+        $uuids = $data->employeesUUIDS ?? [];
 
         if (empty($uuids)) {
             return;

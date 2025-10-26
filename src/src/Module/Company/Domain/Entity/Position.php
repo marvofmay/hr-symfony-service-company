@@ -6,7 +6,7 @@ namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\TimeStampableTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -18,47 +18,39 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'position')]
+#[ORM\Index(name: 'name', columns: ['name'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Position
 {
-    use TimestampableTrait;
+    use TimeStampableTrait;
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const COLUMN_UUID = 'uuid';
-    public const COLUMN_NAME = 'name';
-    public const COLUMN_DESCRIPTION = 'description';
-    public const COLUMN_ACTIVE = 'active';
-    public const COLUMN_CREATED_AT = 'createdAt';
-    public const COLUMN_UPDATED_AT = 'updatedAt';
-    public const COLUMN_DELETED_AT = 'deletedAt';
-    public const string RELATION_EMPLOYEES = 'employees';
-    public const string RELATION_DEPARTMENTS = 'positionDepartments';
     public const string ALIAS = 'position';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface $uuid;
+    public UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 200)]
     #[Assert\NotBlank]
-    private string $name;
+    public string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
+    public ?string $description = null;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
-    private bool $active;
+    public bool $active = true;
 
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'position', cascade: ['persist', 'remove'])]
-    private Collection $employees;
+    public Collection $employees;
 
     #[ORM\OneToMany(targetEntity: PositionDepartment::class, mappedBy: 'position', cascade: ['persist', 'remove'], orphanRemoval: true)]
-    private Collection $positionDepartments;
+    public Collection $positionDepartments;
 
     public function __construct()
     {
@@ -66,55 +58,10 @@ class Position
         $this->positionDepartments = new ArrayCollection();
     }
 
-    public function getUUID(): UuidInterface
-    {
-        return $this->{self::COLUMN_UUID};
-    }
-
-    public function getName(): string
-    {
-        return $this->{self::COLUMN_NAME};
-    }
-
-    public function setName(string $name): void
-    {
-        $this->{self::COLUMN_NAME} = $name;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->{self::COLUMN_DESCRIPTION};
-    }
-
-    public function setDescription(?string $description): void
-    {
-        $this->{self::COLUMN_DESCRIPTION} = $description;
-    }
-
-    public function getActive(): bool
-    {
-        return $this->{self::COLUMN_ACTIVE};
-    }
-
-    public function setActive(bool $active): void
-    {
-        $this->{self::COLUMN_ACTIVE} = $active;
-    }
-
-    public function getEmployees(): Collection
-    {
-        return $this->employees;
-    }
-
-    public function getPositionDepartments(): Collection
-    {
-        return $this->positionDepartments;
-    }
-
     public function addDepartment(Department $department): void
     {
         foreach ($this->positionDepartments as $positionDepartment) {
-            if ($positionDepartment->getDepartment() === $department) {
+            if ($positionDepartment->department === $department) {
                 return;
             }
         }
@@ -125,16 +72,14 @@ class Position
 
     public function getDepartments(): Collection
     {
-        return $this->positionDepartments->map(fn (PositionDepartment $pd) => $pd->getDepartment());
+        return $this->positionDepartments->map(fn (PositionDepartment $pd) => $pd->department);
     }
 
     public function removeDepartment(Department $department): void
     {
         foreach ($this->positionDepartments as $key => $positionDepartment) {
-            if ($positionDepartment->getDepartment() === $department) {
+            if ($positionDepartment->department === $department) {
                 $this->positionDepartments->remove($key);
-                $positionDepartment->setPosition(null);
-                $positionDepartment->setDepartment(null);
                 break;
             }
         }

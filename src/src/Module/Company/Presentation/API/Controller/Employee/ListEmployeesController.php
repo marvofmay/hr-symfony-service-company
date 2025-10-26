@@ -27,8 +27,7 @@ class ListEmployeesController extends AbstractController
         private readonly MessageBusInterface $eventBus,
         private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/employees', name: 'api.employees.list', methods: ['GET'])]

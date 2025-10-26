@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Position;
 
-use Doctrine\Common\Collections\Collection;
+use App\Common\Domain\Interface\CommandInterface;
 
-class DeleteMultiplePositionsCommand
+final readonly class DeleteMultiplePositionsCommand implements CommandInterface
 {
-    public function __construct(private readonly Collection $positions)
-    {
-    }
+    public const string POSITIONS_UUIDS = 'positionsUUIDs';
 
-    public function getPositions(): Collection
+    public function __construct(public array $positionsUUIDs)
     {
-        return $this->positions;
     }
 }

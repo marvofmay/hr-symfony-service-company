@@ -12,6 +12,7 @@ use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInte
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -26,6 +27,7 @@ final class DeleteDepartmentCommandHandler extends CommandHandlerAbstract
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.department.delete.validator')] protected iterable $validators,
     ) {
     }

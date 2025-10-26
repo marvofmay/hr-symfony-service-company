@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Entity;
 
-use App\Common\Domain\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\Company\Domain\Entity\Employee;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,45 +19,29 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
 class EventLog
 {
-    use TimestampableTrait;
+    use TimeStampableTrait;
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface $uuid {
-        get {
-            return $this->uuid;
-        }
-    }
+    public UuidInterface $uuid;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
-    private string $event {
-        get {
-            return $this->event;
-        }
-    }
+    public string $event;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
-    private string $entity {
-        get {
-            return $this->entity;
-        }
-    }
+    public string $entity;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $data {
-        get {
-            return $this->data;
-        }
-    }
+    public ?string $data;
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'eventLogs')]
     #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     #[Assert\NotNull]
-    private ?Employee $employee;
+    public ?Employee $employee;
 
     public function __construct(string $event, string $entity, ?string $data = null, ?Employee $employee = null)
     {

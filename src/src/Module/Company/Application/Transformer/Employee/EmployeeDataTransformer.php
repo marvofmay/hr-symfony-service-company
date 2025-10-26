@@ -10,6 +10,7 @@ use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
 
 class EmployeeDataTransformer
 {
@@ -23,9 +24,9 @@ class EmployeeDataTransformer
             Employee::COLUMN_EMPLOYMENT_FROM => $employee->getEmploymentFrom(),
             Employee::COLUMN_EMPLOYMENT_TO => $employee->getEmploymentTo(),
             Employee::COLUMN_ACTIVE => $employee->getActive(),
-            Employee::COLUMN_CREATED_AT => $employee->getCreatedAt()?->format('Y-m-d H:i:s'),
-            Employee::COLUMN_UPDATED_AT => $employee->getUpdatedAt()?->format('Y-m-d H:i:s'),
-            Employee::COLUMN_DELETED_AT => $employee->getDeletedAt()?->format('Y-m-d H:i:s'),
+            Employee::COLUMN_CREATED_AT => $employee->createdAt?->format('Y-m-d H:i:s'),
+            Employee::COLUMN_UPDATED_AT => $employee->updatedAt?->format('Y-m-d H:i:s'),
+            Employee::COLUMN_DELETED_AT => $employee->deletedAt?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {
@@ -85,9 +86,9 @@ class EmployeeDataTransformer
     private function transformPosition(Position $position): ?array
     {
         return [
-            Position::COLUMN_UUID => $position->getUUID()->toString(),
-            Position::COLUMN_NAME => $position->getName(),
-            Position::COLUMN_DESCRIPTION => $position->getDescription(),
+            PositionEntityFieldEnum::UUID->value => $position->uuid->toString(),
+            PositionEntityFieldEnum::NAME->value => $position->name,
+            PositionEntityFieldEnum::DESCRIPTION->value => $position->description,
         ];
     }
 

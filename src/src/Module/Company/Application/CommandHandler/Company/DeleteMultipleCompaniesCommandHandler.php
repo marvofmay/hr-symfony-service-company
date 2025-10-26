@@ -40,7 +40,7 @@ final class DeleteMultipleCompaniesCommandHandler extends CommandHandlerAbstract
         $this->validate($command);
 
         $deletedUUIDs = [];
-        foreach ($command->selectedUUIDs as $companyUUID) {
+        foreach ($command->companiesUUIDs as $companyUUID) {
             $uuid = CompanyUUID::fromString($companyUUID);
             $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID($uuid);
             $companyAggregate->delete();

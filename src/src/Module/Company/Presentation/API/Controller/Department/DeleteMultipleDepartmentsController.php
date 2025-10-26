@@ -51,7 +51,7 @@ class DeleteMultipleDepartmentsController extends AbstractController
     {
         try {
             $this->commandBus->dispatch(
-                new DeleteMultipleDepartmentsCommand($deleteMultipleDTO->selectedUUIDs)
+                new DeleteMultipleDepartmentsCommand($deleteMultipleDTO->departmentsUUIDs)
             );
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();

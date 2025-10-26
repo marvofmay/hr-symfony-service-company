@@ -8,6 +8,8 @@ use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\Position\PositionListedEvent;
 use App\Module\Company\Application\Query\Position\ListPositionsQuery;
 use App\Module\Company\Domain\Entity\Position;
+use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -15,7 +17,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(protected EntityManagerInterface $entityManager, private readonly EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct($entityManager);
     }
@@ -39,25 +41,25 @@ final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
 
     public function getDefaultOrderBy(): string
     {
-        return Position::COLUMN_CREATED_AT;
+        return TimeStampableEntityFieldEnum::CREATED_AT->value;
     }
 
     public function getAllowedFilters(): array
     {
         return [
-            Position::COLUMN_NAME,
-            Position::COLUMN_DESCRIPTION,
-            Position::COLUMN_CREATED_AT,
-            Position::COLUMN_UPDATED_AT,
-            Position::COLUMN_DELETED_AT,
+            PositionEntityFieldEnum::NAME->value,
+            PositionEntityFieldEnum::DESCRIPTION->value,
+            TimeStampableEntityFieldEnum::CREATED_AT->value,
+            TimeStampableEntityFieldEnum::UPDATED_AT->value,
+            TimeStampableEntityFieldEnum::DELETED_AT->value,
         ];
     }
 
     public function getPhraseSearchColumns(): array
     {
         return [
-            Position::COLUMN_NAME,
-            Position::COLUMN_DESCRIPTION,
+            PositionEntityFieldEnum::NAME->value,
+            PositionEntityFieldEnum::DESCRIPTION->value,
         ];
     }
 

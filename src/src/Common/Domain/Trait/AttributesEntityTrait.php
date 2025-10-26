@@ -9,7 +9,7 @@ trait AttributesEntityTrait
     public static function getAttributes(): array
     {
         $reflectionClass = new \ReflectionClass(static::class);
-        $properties = $reflectionClass->getProperties(\ReflectionProperty::IS_PRIVATE);
+        $properties = $reflectionClass->getProperties();
 
         $attributes = [];
         foreach ($properties as $property) {

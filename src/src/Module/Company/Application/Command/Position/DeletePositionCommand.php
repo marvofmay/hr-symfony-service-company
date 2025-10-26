@@ -2,16 +2,13 @@
 
 namespace App\Module\Company\Application\Command\Position;
 
-use App\Module\Company\Domain\Entity\Position;
+use App\Common\Domain\Interface\CommandInterface;
 
-readonly class DeletePositionCommand
+final readonly class DeletePositionCommand implements CommandInterface
 {
-    public function __construct(private Position $position)
-    {
-    }
+    public const string POSITION_UUID = 'positionUUID';
 
-    public function getPosition(): Position
+    public function __construct(public string $positionUUID)
     {
-        return $this->position;
     }
 }

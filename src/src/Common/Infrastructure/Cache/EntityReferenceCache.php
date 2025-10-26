@@ -31,7 +31,7 @@ final class EntityReferenceCache
     public function set(object $entity): void
     {
         $className = get_class($entity);
-        $uuid = $entity->getUuid()->toString();
+        $uuid = $entity->uuid->toString();
 
         $key = $className.':'.$uuid;
         if (!isset($this->cache[$key])) {
@@ -52,6 +52,6 @@ final class EntityReferenceCache
 
     public function clear(): void
     {
-        unset($this->cache);
+        $this->cache = [];
     }
 }

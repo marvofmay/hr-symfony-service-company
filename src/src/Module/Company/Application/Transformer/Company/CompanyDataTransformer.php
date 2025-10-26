@@ -24,9 +24,9 @@ class CompanyDataTransformer
             Company::COLUMN_REGON => $company->getREGON(),
             Company::COLUMN_DESCRIPTION => $company->getDescription(),
             Company::COLUMN_ACTIVE => $company->getActive(),
-            Company::COLUMN_CREATED_AT => $company->getCreatedAt()?->format('Y-m-d H:i:s'),
-            Company::COLUMN_UPDATED_AT => $company->getUpdatedAt()?->format('Y-m-d H:i:s'),
-            Company::COLUMN_DELETED_AT => $company->getDeletedAt()?->format('Y-m-d H:i:s'),
+            Company::COLUMN_CREATED_AT => $company->createdAt?->format('Y-m-d H:i:s'),
+            Company::COLUMN_UPDATED_AT => $company->updatedAt?->format('Y-m-d H:i:s'),
+            Company::COLUMN_DELETED_AT => $company->deletedAt?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {

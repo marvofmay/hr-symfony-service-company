@@ -6,10 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\Employee;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Application\Command\Company\DeleteMultipleCompaniesCommand;
 use App\Module\Company\Application\Command\Employee\DeleteMultipleEmployeesCommand;
 use App\Module\Company\Domain\DTO\Employee\DeleteMultipleDTO;
-use App\Module\Company\Presentation\API\Action\Employee\DeleteMultipleEmployeesAction;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
@@ -28,12 +26,11 @@ class DeleteMultipleEmployeesController extends AbstractController
         private readonly MessageBusInterface $eventBus,
         private readonly MessageService $messageService,
         private readonly MessageBusInterface $commandBus,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/employees/multiple', name: 'api.employees.delete_multiple', methods: ['DELETE'])]
-    public function delete(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO, DeleteMultipleEmployeesAction $deleteMultipleEmployeesAction): JsonResponse
+    public function delete(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(
@@ -54,7 +51,7 @@ class DeleteMultipleEmployeesController extends AbstractController
     {
         try {
             $this->commandBus->dispatch(
-                new DeleteMultipleEmployeesCommand($deleteMultipleDTO->selectedUUIDs)
+                new DeleteMultipleEmployeesCommand($deleteMultipleDTO->employeesUUIDs)
             );
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();

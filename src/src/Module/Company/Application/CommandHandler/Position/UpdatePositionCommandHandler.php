@@ -4,25 +4,32 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\CommandHandler\Position;
 
+use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Module\Company\Application\Command\Position\UpdatePositionCommand;
 use App\Module\Company\Application\Event\Position\PositionUpdatedEvent;
-use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Service\Position\PositionUpdater;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-readonly class UpdatePositionCommandHandler
+final class UpdatePositionCommandHandler extends CommandHandlerAbstract
 {
-    public function __construct(private PositionUpdater $positionUpdater, private EventDispatcherInterface $eventDispatcher)
-    {
+    public function __construct(
+        private readonly PositionUpdater $positionUpdater,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        #[AutowireIterator(tag: 'app.position.update.validator')] protected iterable $validators,
+    ) {
     }
 
     public function __invoke(UpdatePositionCommand $command): void
     {
+        $this->validate($command);
+
         $this->positionUpdater->update($command);
         $this->eventDispatcher->dispatch(new PositionUpdatedEvent([
-            Position::COLUMN_UUID => $command->getPosition()->getUUID(),
-            Position::COLUMN_NAME => $command->getName(),
-            Position::COLUMN_DESCRIPTION => $command->getDescription(),
+            UpdatePositionCommand::POSITION_UUID => $command->positionUUID,
+            UpdatePositionCommand::NAME => $command->name,
+            UpdatePositionCommand::DESCRIPTION => $command->description,
+            UpdatePositionCommand::DEPARTMENTS_UUIDS => $command->departmentsUUIDs,
         ]));
     }
 }

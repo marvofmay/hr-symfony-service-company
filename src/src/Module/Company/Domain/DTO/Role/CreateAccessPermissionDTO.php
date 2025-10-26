@@ -16,8 +16,8 @@ class CreateAccessPermissionDTO
         'domain' => 'roles',
     ])]
     #[Assert\All([
-        new Assert\Collection([
-            'fields' => [
+        new Assert\Collection(
+            fields: [
                 'uuid' => [
                     new NotBlank(message: ['text' => 'access.uuid.required', 'domain' => 'accesses']),
                     new Assert\Uuid(),
@@ -31,8 +31,8 @@ class CreateAccessPermissionDTO
                     ]),
                 ],
             ],
-            'allowExtraFields' => false,
-        ]),
+            allowExtraFields: false,
+        ),
     ])]
     public array $accesses = [];
 

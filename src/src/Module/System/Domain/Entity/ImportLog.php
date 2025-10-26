@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\System\Domain\Enum\ImportLogKindEnum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,7 +19,7 @@ use Ramsey\Uuid\UuidInterface;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class ImportLog
 {
-    use TimestampableTrait;
+    use TimeStampableTrait;
     use AttributesEntityTrait;
 
     public const COLUMN_UUID = 'uuid';
@@ -38,7 +38,7 @@ class ImportLog
     private UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Import::class, inversedBy: 'importLogs')]
-    #[ORM\JoinColumn(name: 'import_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'import_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private Import $import;
 
     #[ORM\Column(type: 'string', enumType: ImportLogKindEnum::class)]

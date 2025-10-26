@@ -8,8 +8,7 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
-use App\Module\Company\Domain\DTO\Position\ImportDTO;
-use App\Module\Company\Presentation\API\Action\Position\ImportPositionsAction;
+use App\Module\Company\Application\Command\Position\ImportPositionsCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
@@ -24,6 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -32,7 +32,6 @@ final readonly class ImportPositionsFacade
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UploadFileAction $uploadFileAction,
-        private ImportPositionsAction $importPositionsAction,
         private CreateFileAction $createFileAction,
         private AskFileAction $askFileAction,
         private CreateImportAction $createImportAction,
@@ -43,6 +42,7 @@ final readonly class ImportPositionsFacade
         private ParameterBagInterface $params,
         private MessageService $messageService,
         private MessageBusInterface $eventBus,
+        private MessageBusInterface $commandBus,
     ) {
     }
 
@@ -55,6 +55,7 @@ final readonly class ImportPositionsFacade
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
 
             $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
+
             $errors = $this->validator->validate($uploadFileDTO);
             if (count($errors) > 0) {
                 $message = $this->messageService->get('position.import.error', [], 'positions');
@@ -71,7 +72,12 @@ final readonly class ImportPositionsFacade
             $file = $this->askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
             $this->createImportAction->execute(ImportKindEnum::IMPORT_ROLES, ImportStatusEnum::PENDING, $file, $employee);
             $import = $this->askImportAction->ask($file);
-            $this->importPositionsAction->execute(new ImportDTO($import->getUUID()->toString()));
+
+            try {
+                $this->commandBus->dispatch(new ImportPositionsCommand($import->getUUID()->toString()));
+            } catch (HandlerFailedException $exception) {
+                throw $exception->getPrevious();
+            }
 
             $this->entityManager->commit();
 
@@ -92,7 +98,7 @@ final readonly class ImportPositionsFacade
                 'errors' => ImportLogErrorTransformer::map($importLogs),
                 'message' => $message,
             ];
-        } catch (\Exception $error) {
+        } catch (\Throwable $error) {
             $this->entityManager->rollback();
             $message = sprintf('%s. %s', $this->messageService->get('position.import.error', [], 'positions'), $this->messageService->get($error->getMessage()));
             $this->eventBus->dispatch(new LogFileEvent($message));

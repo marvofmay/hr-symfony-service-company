@@ -1,12 +1,13 @@
-app_api_doc:
-    resource: './routes/api/nelmio'
-    type: directory
+#app_api_doc:
+#    resource: './routes/api/nelmio'
+#    type: directory
 app_api_auth:
     resource: './routes/api/auth'
     type: directory
-app_api_company:
-    resource: './routes/api/company'
-    type: directory
-app_api_note:
-    resource: './routes/api/note'
-    type: directory
+app_api:
+    #resource: './routes/api/company'
+    resource: ../src/Module/Company/Presentation/API/Controller/
+    type: attribute
+#app_api_note:
+#    resource: './routes/api/note'
+#    type: directory

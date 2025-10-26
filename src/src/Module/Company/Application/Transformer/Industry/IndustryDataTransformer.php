@@ -16,9 +16,9 @@ class IndustryDataTransformer
             Industry::COLUMN_UUID => $industry->getUUID()->toString(),
             Industry::COLUMN_NAME => $industry->getName(),
             Industry::COLUMN_DESCRIPTION => $industry->getDescription(),
-            Industry::COLUMN_CREATED_AT => $industry->getCreatedAt()?->format('Y-m-d H:i:s'),
-            Industry::COLUMN_UPDATED_AT => $industry->getUpdatedAt()?->format('Y-m-d H:i:s'),
-            Industry::COLUMN_DELETED_AT => $industry->getDeletedAt()?->format('Y-m-d H:i:s'),
+            Industry::COLUMN_CREATED_AT => $industry->createdAt?->format('Y-m-d H:i:s'),
+            Industry::COLUMN_UPDATED_AT => $industry->updatedAt?->format('Y-m-d H:i:s'),
+            Industry::COLUMN_DELETED_AT => $industry->deletedAt?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {

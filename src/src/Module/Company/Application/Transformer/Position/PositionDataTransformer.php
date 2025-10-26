@@ -7,6 +7,9 @@ namespace App\Module\Company\Application\Transformer\Position;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Position;
+use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
+use App\Module\Company\Domain\Enum\Position\PositionEntityRelationFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
 class PositionDataTransformer
@@ -14,13 +17,13 @@ class PositionDataTransformer
     public function transformToArray(Position $position, array $includes = []): array
     {
         $data = [
-            Position::COLUMN_UUID => $position->getUUID()->toString(),
-            Position::COLUMN_NAME => $position->getName(),
-            Position::COLUMN_DESCRIPTION => $position->getDescription(),
-            Position::COLUMN_ACTIVE => $position->getActive(),
-            Position::COLUMN_CREATED_AT => $position->getCreatedAt()?->format('Y-m-d H:i:s'),
-            Position::COLUMN_UPDATED_AT => $position->getUpdatedAt()?->format('Y-m-d H:i:s'),
-            Position::COLUMN_DELETED_AT => $position->getDeletedAt()?->format('Y-m-d H:i:s'),
+            PositionEntityFieldEnum::UUID->value => $position->uuid->toString(),
+            PositionEntityFieldEnum::NAME->value => $position->name,
+            PositionEntityFieldEnum::DESCRIPTION->value => $position->description,
+            PositionEntityFieldEnum::ACTIVE->value => $position->active,
+            TimeStampableEntityFieldEnum::CREATED_AT->value => $position->createdAt?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::UPDATED_AT->value => $position->updatedAt?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::DELETED_AT->value => $position->deletedAt?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {
@@ -35,8 +38,8 @@ class PositionDataTransformer
     private function transformRelation(Position $position, string $relation): ?array
     {
         return match ($relation) {
-            Position::RELATION_EMPLOYEES => $this->transformEmployees($position->getEmployees()),
-            Position::RELATION_DEPARTMENTS => $this->transformDepartments($position->getDepartments()),
+            PositionEntityRelationFieldEnum::EMPLOYEES->value => $this->transformEmployees($position->employees),
+            PositionEntityRelationFieldEnum::POSITION_DEPARTMENTS->value => $this->transformDepartments($position->getDepartments()),
             default => null,
         };
     }

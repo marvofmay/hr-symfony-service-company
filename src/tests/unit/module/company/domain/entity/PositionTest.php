@@ -13,20 +13,20 @@ class PositionTest extends TestCase
     {
         $position = new Position();
 
-        $position->setName('Manager');
-        $this->assertSame('Manager', $position->getName());
+        $position->name = 'Manager';
+        $this->assertSame('Manager', $position->name);
 
-        $position->setDescription('Responsible for managing the team');
-        $this->assertSame('Responsible for managing the team', $position->getDescription());
+        $position->description = 'Responsible for managing the team';
+        $this->assertSame('Responsible for managing the team', $position->description);
 
-        $position->setActive(true);
-        $this->assertTrue($position->getActive());
+        // $position->setActive(true);
+        $this->assertTrue($position->active);
     }
 
     public function testEmployeesCollectionIsEmptyOnInit(): void
     {
         $position = new Position();
-        $this->assertCount(0, $position->getEmployees());
+        $this->assertCount(0, $position->employees);
     }
 
     public function testAddDepartment(): void
@@ -36,7 +36,7 @@ class PositionTest extends TestCase
 
         $position->addDepartment($department);
 
-        $this->assertCount(1, $position->getPositionDepartments());
+        $this->assertCount(1, $position->positionDepartments);
         $this->assertSame($department, $position->getDepartments()->first());
     }
 
@@ -45,13 +45,14 @@ class PositionTest extends TestCase
         $department = $this->createMock(Department::class);
 
         $mockPositionDepartment = $this->createMock(PositionDepartment::class);
-        $mockPositionDepartment->method('getDepartment')->willReturn($department);
+        $mockPositionDepartment->department = $department;
 
         $position = new Position();
-        $position->getPositionDepartments()->add($mockPositionDepartment);
+        $position->positionDepartments->add($mockPositionDepartment);
 
         $position->addDepartment($department);
+        var_dump(count($position->positionDepartments));
 
-        $this->assertCount(1, $position->getPositionDepartments());
+        $this->assertCount(1, $position->positionDepartments);
     }
 }

@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('app.department.delete_multiple.validator')]
+#[AutoconfigureTag('app.position.create.validator')]
+#[AutoconfigureTag('app.position.update.validator')]
 final readonly class DepartmentsExistsValidator implements ValidatorInterface
 {
     public function __construct(private DepartmentReaderInterface $departmentReaderRepository, private TranslatorInterface $translator)
@@ -26,7 +28,7 @@ final readonly class DepartmentsExistsValidator implements ValidatorInterface
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        $uuids = $data->selectedUUIDs ?? [];
+        $uuids = $data->departmentsUUIDs ?? [];
 
         if (empty($uuids)) {
             return;
@@ -34,7 +36,7 @@ final readonly class DepartmentsExistsValidator implements ValidatorInterface
 
         $foundDepartments = $this->departmentReaderRepository
             ->getDepartmentsByUUID($uuids)
-            ->map(fn ($company) => $company->getUUID())
+            ->map(fn ($department) => $department->getUUID())
             ->toArray();
 
         $missing = array_diff($uuids, $foundDepartments);

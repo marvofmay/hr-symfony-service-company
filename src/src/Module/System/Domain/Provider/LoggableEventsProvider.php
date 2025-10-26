@@ -29,6 +29,7 @@ use App\Module\Company\Application\Event\Position\PositionDeletedEvent;
 use App\Module\Company\Application\Event\Position\PositionImportedEvent;
 use App\Module\Company\Application\Event\Position\PositionListedEvent;
 use App\Module\Company\Application\Event\Position\PositionMultipleDeletedEvent;
+use App\Module\Company\Application\Event\Position\PositionRestoredEvent;
 use App\Module\Company\Application\Event\Position\PositionUpdatedEvent;
 use App\Module\Company\Application\Event\Position\PositionViewedEvent;
 use App\Module\Company\Application\Event\Role\RoleAssignedAccessesEvent;
@@ -119,6 +120,7 @@ final class LoggableEventsProvider
             PositionCreatedEvent::class,
             PositionUpdatedEvent::class,
             PositionDeletedEvent::class,
+            PositionRestoredEvent::class,
             PositionViewedEvent::class,
             PositionListedEvent::class,
             PositionMultipleDeletedEvent::class,

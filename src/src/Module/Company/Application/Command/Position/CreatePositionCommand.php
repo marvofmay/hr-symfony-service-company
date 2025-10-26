@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Position;
 
-use Doctrine\Common\Collections\Collection;
+use App\Common\Domain\Interface\CommandInterface;
 
-final class CreatePositionCommand
+final readonly class CreatePositionCommand implements CommandInterface
 {
-    public function __construct(public string $name, public ?string $description, public ?bool $active, public Collection $departments)
+    public const string NAME = 'name';
+    public const string DESCRIPTION = 'description';
+    public const string ACTIVE = 'active';
+    public const string DEPARTMENTS_UUIDS = 'departmentsUUIDs';
+
+    public function __construct(public string $name, public ?string $description, public ?bool $active, public array $departmentsUUIDs)
     {
     }
 }

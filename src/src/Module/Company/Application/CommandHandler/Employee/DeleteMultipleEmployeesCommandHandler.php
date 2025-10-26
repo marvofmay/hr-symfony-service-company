@@ -19,9 +19,10 @@ use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final class DeleteMultipleEmployeesCommandHandler  extends CommandHandlerAbstract
+final class DeleteMultipleEmployeesCommandHandler extends CommandHandlerAbstract
 {
     use HandleEventStoreTrait;
+
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly EmployeeAggregateReaderInterface $employeeAggregateReaderRepository,
@@ -37,7 +38,7 @@ final class DeleteMultipleEmployeesCommandHandler  extends CommandHandlerAbstrac
         $this->validate($command);
 
         $deletedUUIDs = [];
-        foreach ($command->selectedUUIDs as $employeeUUID) {
+        foreach ($command->employeesUUIDs as $employeeUUID) {
             $uuid = EmployeeUUID::fromString($employeeUUID);
             $employeeAggregate = $this->employeeAggregateReaderRepository->getEmployeeAggregateByUUID($uuid);
 

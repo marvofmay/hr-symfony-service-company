@@ -19,12 +19,12 @@ final readonly class EmployeeRestorer
     public function restore(DomainEventInterface $event): void
     {
         $employee = $this->employeeReaderRepository->getDeletedEmployeeByUUID($event->uuid->toString());
-        $employee->setDeletedAt(null);
+        $employee->deletedAt = null;
         // $employee->setUpdatedAt($now);
 
         $address = $this->employeeReaderRepository->getDeletedAddressByEmployeeByUUID($event->uuid->toString());
         if ($address) {
-            $address->setDeletedAt(null);
+            $address->deletedAt = null;
         }
 
         $contacts = $this->employeeReaderRepository->getDeletedContactsByEmployeeByUUID($event->uuid->toString());
@@ -34,7 +34,7 @@ final readonly class EmployeeRestorer
 
         $user = $this->employeeReaderRepository->getDeletedUserByEmployeeUUID($event->uuid->toString());
         if ($user) {
-            $user->setDeletedAt(null);
+            $user->deletedAt = null;
         }
 
         $this->employeeWriterRepository->saveEmployeeInDB($employee);

@@ -8,7 +8,7 @@ use App\Common\Domain\Interface\CommandInterface;
 
 final readonly class DeleteMultipleDepartmentsCommand implements CommandInterface
 {
-    public function __construct(public array $selectedUUIDs)
+    public function __construct(public array $departmentsUUIDs)
     {
     }
 }

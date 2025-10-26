@@ -35,7 +35,7 @@ final readonly class ImportCompaniesPreparer
 
             if (!isset($nipMap[$nip])) {
                 $nipMap[$nip] = $existingCompany
-                    ? CompanyUUID::fromString($existingCompany->getUUID()->toString())
+                    ? CompanyUUID::fromString($existingCompany->uuid->toString())
                     : CompanyUUID::generate();
             }
 

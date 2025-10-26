@@ -6,7 +6,6 @@ namespace App\Module\Company\Presentation\API\Controller\Employee;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Application\Command\Company\RestoreCompanyCommand;
 use App\Module\Company\Application\Command\Employee\RestoreEmployeeCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
@@ -24,9 +23,8 @@ class RestoreEmployeeController extends AbstractController
     public function __construct(
         private readonly MessageBusInterface $eventBus,
         private readonly MessageService $messageService,
-        private readonly MessageBusInterface $commandBus,        
-    )
-    {
+        private readonly MessageBusInterface $commandBus,
+    ) {
     }
 
     #[Route('/api/employees/{uuid}/restore', name: 'api.employees.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]

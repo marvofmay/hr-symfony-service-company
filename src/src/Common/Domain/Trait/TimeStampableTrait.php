@@ -6,16 +6,16 @@ namespace App\Common\Domain\Trait;
 
 use Doctrine\ORM\Mapping as ORM;
 
-trait TimestampableTrait
+trait TimeStampableTrait
 {
     #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private \DateTimeInterface $createdAt;
+    public \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: 'datetime', nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private ?\DateTimeInterface $updatedAt = null;
+    public ?\DateTimeInterface $updatedAt = null;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
-    private ?\DateTimeInterface $deletedAt = null;
+    public ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\PrePersist]
     public function setCreatedAt(): void

@@ -42,7 +42,7 @@ class DeleteMultipleRolesTest extends KernelTestCase
         $violations = $this->validator->validate($dto);
         $this->assertGreaterThan(0, count($violations));
 
-        $this->assertSame($this->messageService->get('role.delete.multiple.selectedRequired', [], 'roles'), $violations[0]->getMessage());
+        $this->assertSame($this->messageService->get('role.delete.multiple.selectedUUIDsRequired', [], 'roles'), $violations[0]->getMessage());
     }
 
     public function testInvalidUuidInList(): void

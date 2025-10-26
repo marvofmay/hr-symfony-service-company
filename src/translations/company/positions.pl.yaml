@@ -20,6 +20,9 @@ position:
     multiple:
       success: "Stanowiska zostały pomyślnie usunięte"
       error: "Wystąpił błąd - stanowiska nie zostały usunięte"
+  restore:
+    success: "Stanowisko zostało pomyślnie przywrócone"
+    error: "Wystąpił błąd - stanowisko nie zostało przywrócone"
   import:
     success: "Stanowiska zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - stanowiska nie zostały zaimportowane"
@@ -29,6 +32,8 @@ position:
     error: "Wystapił błąd przy pobieraniu wybranego stanowiska"
   list:
     error: "Wystapił błąd przy pobieraniu listy stanowisk"
+  deleted:
+    notExists: "Stanowisko o uuid :uuid nie zostało usunięte lub nie istnieje"
   defaultData:
     name:
       web_apps_director: "Dyrektor ds. aplikacji webowych"

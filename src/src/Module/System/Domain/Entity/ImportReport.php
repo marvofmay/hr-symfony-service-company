@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\TimeStampableTrait;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -18,7 +18,7 @@ use Ramsey\Uuid\UuidInterface;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class ImportReport
 {
-    use TimestampableTrait;
+    use TimeStampableTrait;
     use AttributesEntityTrait;
 
     #[ORM\Id]
@@ -28,7 +28,7 @@ class ImportReport
     private UuidInterface $uuid;
 
     #[ORM\OneToOne(targetEntity: Import::class, inversedBy: 'report')]
-    #[ORM\JoinColumn(name: 'import_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'import_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private Import $import;
 
     #[ORM\Column(type: Types::INTEGER)]

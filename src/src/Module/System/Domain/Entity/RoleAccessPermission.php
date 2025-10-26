@@ -6,7 +6,7 @@ namespace App\Module\System\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\Company\Domain\Entity\Role;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -17,7 +17,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
 class RoleAccessPermission
 {
-    use TimestampableTrait;
+    use TimeStampableTrait;
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
@@ -27,17 +27,17 @@ class RoleAccessPermission
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'accessPermissions')]
-    #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private Role $role;
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Access::class)]
-    #[ORM\JoinColumn(name: 'access_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'access_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private Access $access;
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Permission::class)]
-    #[ORM\JoinColumn(name: 'permission_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'permission_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private Permission $permission;
 
     public function __construct(Role $role, Access $access, Permission $permission)

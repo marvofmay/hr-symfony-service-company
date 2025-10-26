@@ -6,7 +6,7 @@ namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
-use App\Common\Domain\Trait\TimestampableTrait;
+use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
 use App\Module\Note\Domain\Entity\Note;
 use App\Module\System\Domain\Entity\EventLog;
@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Employee
 {
-    use TimestampableTrait;
+    use TimeStampableTrait;
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
@@ -77,23 +77,23 @@ class Employee
     private ?string $externalUUID = null;
 
     #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'employees')]
-    #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private ?Department $department;
 
     #[ORM\ManyToOne(targetEntity: Employee::class)]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private ?Employee $parentEmployee = null;
 
     #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'employees')]
-    #[ORM\JoinColumn(name: 'position_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'position_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private Position $position;
 
     #[ORM\ManyToOne(targetEntity: ContractType::class, inversedBy: 'employees')]
-    #[ORM\JoinColumn(name: 'contract_type_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'contract_type_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private ContractType $contractType;
 
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'employees')]
-    #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private Role $role;
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
@@ -119,15 +119,6 @@ class Employee
 
     #[ORM\Column(type: Types::BOOLEAN)]
     private bool $active = false;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private \DateTimeInterface $createdAt;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $updatedAt = null;
-
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
     private ?User $user = null;

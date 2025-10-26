@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\Trait;
 
-use _PHPStan_ac6dae9b0\Psr\Log\LogLevel;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\System\Application\Event\LogFileEvent;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\SerializerInterface;

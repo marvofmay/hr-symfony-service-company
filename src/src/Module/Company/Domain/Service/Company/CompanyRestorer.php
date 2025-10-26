@@ -19,16 +19,16 @@ final readonly class CompanyRestorer
     public function restore(DomainEventInterface $event): void
     {
         $company = $this->companyReaderRepository->getDeletedCompanyByUUID($event->uuid->toString());
-        $company->setDeletedAt(null);
+        $company->deletedAt = null;
 
         $address = $this->companyReaderRepository->getDeletedAddressByCompanyUUID($event->uuid->toString());
         if ($address) {
-            $address->setDeletedAt(null);
+            $address->deletedAt = null;
         }
 
         $contacts = $this->companyReaderRepository->getDeletedContactsByCompanyUUID($event->uuid->toString());
         foreach ($contacts as $contact) {
-            $contact->setDeletedAt(null);
+            $contact->deletedAt = null;
         }
 
         $this->companyWriterRepository->saveCompanyInDB($company);

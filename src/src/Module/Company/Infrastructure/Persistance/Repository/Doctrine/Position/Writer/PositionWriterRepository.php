@@ -52,4 +52,15 @@ final class PositionWriterRepository extends ServiceEntityRepository implements 
         }
         $this->getEntityManager()->flush();
     }
+
+    public function restorePositionInDB(Position $position): void
+    {
+        $position->deletedAt = null;
+        foreach ($position->positionDepartments as $positionDepartment) {
+            $positionDepartment->deletedAt = null;
+        }
+
+        $this->getEntityManager()->persist($position);
+        $this->getEntityManager()->flush();
+    }
 }

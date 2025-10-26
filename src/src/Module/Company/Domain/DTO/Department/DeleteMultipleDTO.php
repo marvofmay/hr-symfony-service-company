@@ -8,13 +8,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class DeleteMultipleDTO
 {
-    #[Assert\NotBlank(message: 'department.delete.selectedRequired')]
+    #[Assert\NotBlank(message: 'department.delete.multiple.selectedUUIDsRequired')]
     #[Assert\All([
         new Assert\Uuid(message: 'department.delete.invalidUUID'),
     ])]
-    public array $selectedUUIDs = [] {
+    public array $departmentsUUIDs = [] {
         get {
-            return $this->selectedUUIDs;
+            return $this->departmentsUUIDs;
         }
     }
 }

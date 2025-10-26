@@ -19,6 +19,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -32,6 +33,7 @@ final class CreateDepartmentCommandHandler extends CommandHandlerAbstract
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.department.create.validator')] protected iterable $validators,
     ) {
     }

@@ -33,7 +33,7 @@ class RestoreCompanyController extends AbstractController
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::RESTORE,
-                AccessEnum::DEPARTMENT,
+                AccessEnum::COMPANY,
                 $this->messageService->get('accessDenied')
             );
 

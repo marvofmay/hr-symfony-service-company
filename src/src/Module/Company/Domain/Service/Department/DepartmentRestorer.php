@@ -19,11 +19,11 @@ final readonly class DepartmentRestorer
     public function restore(DomainEventInterface $event): void
     {
         $department = $this->departmentReaderRepository->getDeletedDepartmentByUUID($event->uuid->toString());
-        $department->setDeletedAt(null);
+        $department->deletedAt = null;
 
         $address = $this->departmentReaderRepository->getDeletedAddressByDepartmentByUUID($event->uuid->toString());
         if ($address) {
-            $address->setDeletedAt(null);
+            $address->deletedAt = null;
         }
 
         $contacts = $this->departmentReaderRepository->getDeletedContactsByDepartmentByUUID($event->uuid->toString());

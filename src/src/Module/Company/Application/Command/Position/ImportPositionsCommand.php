@@ -6,12 +6,9 @@ namespace App\Module\Company\Application\Command\Position;
 
 class ImportPositionsCommand
 {
-    public function __construct(private string $importUUID)
-    {
-    }
+    public const string IMPORT_UUID = 'importUUID';
 
-    public function getImportUUID(): string
+    public function __construct(public string $importUUID)
     {
-        return $this->importUUID;
     }
 }
