@@ -7,7 +7,6 @@ namespace App\Module\Company\Presentation\API\Controller\Industry;
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Command\Industry\CreateIndustryCommand;
-use App\Module\Company\Application\Command\Position\CreatePositionCommand;
 use App\Module\Company\Domain\DTO\Industry\CreateDTO;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
