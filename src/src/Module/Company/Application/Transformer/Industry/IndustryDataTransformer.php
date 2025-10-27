@@ -6,6 +6,9 @@ namespace App\Module\Company\Application\Transformer\Industry;
 
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Enum\Industry\IndustryEntityFieldEnum;
+use App\Module\Company\Domain\Enum\Industry\IndustryEntityRelationFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
 class IndustryDataTransformer
@@ -13,12 +16,12 @@ class IndustryDataTransformer
     public function transformToArray(Industry $industry, array $includes = []): array
     {
         $data = [
-            Industry::COLUMN_UUID => $industry->getUUID()->toString(),
-            Industry::COLUMN_NAME => $industry->getName(),
-            Industry::COLUMN_DESCRIPTION => $industry->getDescription(),
-            Industry::COLUMN_CREATED_AT => $industry->createdAt?->format('Y-m-d H:i:s'),
-            Industry::COLUMN_UPDATED_AT => $industry->updatedAt?->format('Y-m-d H:i:s'),
-            Industry::COLUMN_DELETED_AT => $industry->deletedAt?->format('Y-m-d H:i:s'),
+            IndustryEntityFieldEnum::UUID->value => $industry->getUUID()->toString(),
+            IndustryEntityFieldEnum::NAME->value => $industry->getName(),
+            IndustryEntityFieldEnum::DESCRIPTION->value => $industry->getDescription(),
+            TimeStampableEntityFieldEnum::CREATED_AT->value => $industry->createdAt?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::UPDATED_AT->value => $industry->updatedAt?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::DELETED_AT->value => $industry->deletedAt?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {
@@ -33,7 +36,7 @@ class IndustryDataTransformer
     private function transformRelation(Industry $industry, string $relation): ?array
     {
         return match ($relation) {
-            Industry::RELATION_COMPANIES => $this->transformCompanies($industry->getCompanies()),
+            IndustryEntityRelationFieldEnum::COMPANIES->value => $this->transformCompanies($industry->getCompanies()),
             default => null,
         };
     }

@@ -22,7 +22,7 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
 
     public function getIndustryByUUID(string $uuid): ?Industry
     {
-        return $this->findOneBy([Industry::COLUMN_UUID => $uuid]);
+        return $this->findOneBy([IndustryEntityFieldEnum::UUID->value => $uuid]);
     }
 
     public function getIndustriesByUUID(array $selectedUUID): Collection
@@ -34,7 +34,7 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(Industry::ALIAS)
             ->from(Industry::class, Industry::ALIAS)
-            ->where(Industry::ALIAS.'.'.Industry::COLUMN_UUID.' IN (:uuids)')
+            ->where(Industry::ALIAS.'.'.IndustryEntityFieldEnum::UUID->value.' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID);
 
         $industries = $qb->getQuery()->getResult();
@@ -47,11 +47,11 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('i')
             ->from(Industry::class, 'i')
-            ->where('i.'.Industry::COLUMN_NAME.' = :name')
+            ->where('i.'.IndustryEntityFieldEnum::NAME->value.' = :name')
             ->setParameter('name', $name);
 
         if (null !== $uuid) {
-            $qb->andWhere('i.'.Industry::COLUMN_UUID.' != :uuid')
+            $qb->andWhere('i.'.IndustryEntityFieldEnum::UUID->value.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 

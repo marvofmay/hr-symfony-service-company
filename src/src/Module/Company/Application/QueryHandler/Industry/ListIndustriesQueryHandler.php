@@ -8,6 +8,8 @@ use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\Industry\IndustryListedEvent;
 use App\Module\Company\Application\Query\Industry\ListIndustriesQuery;
 use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Enum\Industry\IndustryEntityFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -39,25 +41,25 @@ final class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
 
     public function getDefaultOrderBy(): string
     {
-        return Industry::COLUMN_CREATED_AT;
+        return TimeStampableEntityFieldEnum::CREATED_AT->value;
     }
 
     public function getAllowedFilters(): array
     {
         return [
-            Industry::COLUMN_NAME,
-            Industry::COLUMN_DESCRIPTION,
-            Industry::COLUMN_CREATED_AT,
-            Industry::COLUMN_UPDATED_AT,
-            Industry::COLUMN_DELETED_AT,
+            IndustryEntityFieldEnum::NAME->value,
+            IndustryEntityFieldEnum::DESCRIPTION->value,
+            TimestampableEntityFieldEnum::CREATED_AT->value,
+            TimeStampableEntityFieldEnum::UPDATED_AT->value,
+            TimestampableEntityFieldEnum::DELETED_AT->value,
         ];
     }
 
     public function getPhraseSearchColumns(): array
     {
         return [
-            Industry::COLUMN_NAME,
-            Industry::COLUMN_DESCRIPTION,
+            IndustryEntityFieldEnum::NAME->value,
+            IndustryEntityFieldEnum::DESCRIPTION->value,
         ];
     }
 

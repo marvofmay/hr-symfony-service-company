@@ -10,6 +10,7 @@ use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Enum\Industry\IndustryEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
 class CompanyDataTransformer
@@ -50,7 +51,7 @@ class CompanyDataTransformer
         };
     }
 
-    private function transformDepartments(Collection $departments): ?array
+    private function transformDepartments(?Collection $departments): ?array
     {
         if (null === $departments || $departments->isEmpty()) {
             return null;
@@ -91,9 +92,9 @@ class CompanyDataTransformer
         }
 
         return [
-            Industry::COLUMN_UUID => $industry->getUUID()->toString(),
-            Industry::COLUMN_NAME => $industry->getName(),
-            Industry::COLUMN_DESCRIPTION => $industry->getDescription(),
+            IndustryEntityFieldEnum::UUID->value => $industry->getUUID()->toString(),
+            IndustryEntityFieldEnum::NAME->value => $industry->getName(),
+            IndustryEntityFieldEnum::DESCRIPTION->value => $industry->getDescription(),
         ];
     }
 
@@ -127,7 +128,7 @@ class CompanyDataTransformer
         ];
     }
 
-    private function transformContacts(Collection $contacts): ?array
+    private function transformContacts(?Collection $contacts): ?array
     {
         if (null === $contacts || $contacts->isEmpty()) {
             return null;

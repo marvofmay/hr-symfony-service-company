@@ -8,7 +8,7 @@ use App\Common\Domain\Interface\QueryInterface;
 use App\Module\Company\Application\Event\Industry\IndustryViewedEvent;
 use App\Module\Company\Application\Query\Industry\GetIndustryByUUIDQuery;
 use App\Module\Company\Application\Transformer\Industry\IndustryDataTransformer;
-use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Enum\Industry\IndustryEntityFieldEnum;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -33,7 +33,7 @@ final readonly class GetIndustryByUUIDQueryHandler
         $transformer = new IndustryDataTransformer();
 
         $this->eventDispatcher->dispatch(new IndustryViewedEvent([
-            Industry::COLUMN_UUID => $query->industryUUID,
+            IndustryEntityFieldEnum::UUID->value => $query->industryUUID,
         ]));
 
         return $transformer->transformToArray($industry);
