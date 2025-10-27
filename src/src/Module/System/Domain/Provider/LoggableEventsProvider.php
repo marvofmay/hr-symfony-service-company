@@ -108,11 +108,11 @@ final class LoggableEventsProvider
             IndustryCreatedEvent::class,
             IndustryUpdatedEvent::class,
             IndustryDeletedEvent::class,
+            IndustryRestoredEvent::class,
             IndustryViewedEvent::class,
             IndustryListedEvent::class,
             IndustryMultipleDeletedEvent::class,
             IndustryImportedEvent::class,
-            IndustryRestoredEvent::class,
         ];
     }
 

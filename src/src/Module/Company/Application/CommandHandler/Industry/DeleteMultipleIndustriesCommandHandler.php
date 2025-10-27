@@ -4,23 +4,34 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\CommandHandler\Industry;
 
+use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Module\Company\Application\Command\Industry\DeleteMultipleIndustriesCommand;
 use App\Module\Company\Application\Event\Industry\IndustryMultipleDeletedEvent;
-use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use App\Module\Company\Domain\Service\Industry\IndustryMultipleDeleter;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-readonly class DeleteMultipleIndustriesCommandHandler
+final class DeleteMultipleIndustriesCommandHandler extends CommandHandlerAbstract
 {
-    public function __construct(private IndustryMultipleDeleter $industryMultipleDeleter, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        private readonly IndustryReaderInterface $industryReaderRepository,
+        private readonly IndustryMultipleDeleter $industryMultipleDeleter,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        #[AutowireIterator(tag: 'app.industry.delete_multiple.validator')] protected iterable $validators,
+    )
     {
     }
 
     public function __invoke(DeleteMultipleIndustriesCommand $command): void
     {
-        $this->industryMultipleDeleter->multipleDelete($command->industries);
-        $this->eventDispatcher->dispatch(new IndustryMultipleDeletedEvent(
-            $command->industries->map(fn (Industry $industry) => $industry->getUUID())->toArray(),
-        ));
+        $this->validate($command);
+
+        $industries = $this->industryReaderRepository->getIndustriesByUUID($command->industriesUUIDs);
+        $this->industryMultipleDeleter->multipleDelete($industries);
+
+        $this->eventDispatcher->dispatch(new IndustryMultipleDeletedEvent([
+            DeleteMultipleIndustriesCommand::INDUSTRIES_UUIDS => $command->industriesUUIDs,
+        ]));
     }
 }

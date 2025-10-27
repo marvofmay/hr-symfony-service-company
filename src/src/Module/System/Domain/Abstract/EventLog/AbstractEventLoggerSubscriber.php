@@ -7,6 +7,7 @@ namespace App\Module\System\Domain\Abstract\EventLog;
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Module\System\Domain\Interface\EventLog\EventLogCreatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Service\ServiceProviderInterface;
@@ -16,9 +17,10 @@ abstract class AbstractEventLoggerSubscriber
     public function __construct(
         protected EntityManagerInterface $em,
         protected SerializerInterface $serializer,
-        private ServiceProviderInterface $loggers,
+        private readonly ServiceProviderInterface $loggers,
         protected Security $security,
-        private EventLogCreatorInterface $eventLogCreator,
+        private readonly EventLogCreatorInterface $eventLogCreator,
+        protected readonly EventDispatcherInterface $dispatcher
     ) {
     }
 
@@ -55,7 +57,7 @@ abstract class AbstractEventLoggerSubscriber
         $logger->info("event: $eventClass");
         $logger->info("entity: $entityClass");
         $logger->info("data: $jsonData");
-        $logger->info("employeeUUID: " . ($employee ? $employee->getUUID() : 'no employee'));
+        $logger->info($employee ? "employeeUUID: " . $employee->getUUID() : 'userUUID: ' . $this->security->getUser()->getUUID());
         $logger->info('---------------------------------------------');
     }
 

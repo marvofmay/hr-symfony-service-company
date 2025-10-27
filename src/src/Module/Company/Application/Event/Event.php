@@ -8,7 +8,7 @@ use App\Module\System\Domain\Interface\EventLog\LoggableEventInterface;
 
 abstract class Event implements LoggableEventInterface
 {
-    public function __construct(public readonly array $data)
+    public function __construct(public readonly array $data = [])
     {
     }
 

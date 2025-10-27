@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Query\Industry;
 
-final readonly class GetIndustryByUUIDQuery
+use App\Common\Domain\Interface\QueryInterface;
+
+final readonly class GetIndustryByUUIDQuery implements QueryInterface
 {
-    public function __construct(public string $uuid)
+    public const string INDUSTRY_UUID = 'industryUUID';
+
+    public function __construct(public string $industryUUID)
     {
     }
 }

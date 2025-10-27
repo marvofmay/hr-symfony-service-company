@@ -51,6 +51,8 @@ class IndustryDataTransformer
                 Company::COLUMN_SHORT_NAME => $company->getShortName(),
                 Company::COLUMN_DESCRIPTION => $company->getDescription(),
                 Company::COLUMN_NIP => $company->getNIP(),
+                Company::COLUMN_REGON => $company->getRegon(),
+                Company::COLUMN_INTERNAL_CODE => $company->getInternalCode(),
             ],
             $companies->toArray()
         );

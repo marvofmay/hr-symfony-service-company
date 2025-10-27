@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Industry;
 
-use Doctrine\Common\Collections\Collection;
+use App\Common\Domain\Interface\CommandInterface;
 
-class DeleteMultipleIndustriesCommand
+class DeleteMultipleIndustriesCommand implements CommandInterface
 {
-    public function __construct(public Collection $industries)
+    public const string INDUSTRIES_UUIDS = 'industriesUUIDs';
+
+    public function __construct(public array $industriesUUIDs)
     {
     }
 }

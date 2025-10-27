@@ -27,8 +27,8 @@ final class DeleteMultiplePositionsCommandHandler extends CommandHandlerAbstract
         $this->validate($command);
 
         $positions = $this->positionReaderRepository->getPositionsByUUID($command->positionsUUIDs);
-
         $this->multipleDeleter->multipleDelete($positions);
+
         $this->eventDispatcher->dispatch(new PositionMultipleDeletedEvent([
             DeleteMultiplePositionsCommand::POSITIONS_UUIDS => $command->positionsUUIDs,
         ]));
