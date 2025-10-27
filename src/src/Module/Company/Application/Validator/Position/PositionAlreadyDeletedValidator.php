@@ -27,11 +27,11 @@ final readonly class PositionAlreadyDeletedValidator implements ValidatorInterfa
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        if (!property_exists($data, DeletePositionCommand::POSITION_UUID)) {
+        if (!property_exists($data, 'positionUUID')) {
             return;
         }
 
-        $positionUUID = $data->{DeletePositionCommand::POSITION_UUID};
+        $positionUUID = $data->positionUUID;
         $positionDeleted = $this->positionReaderRepository->getDeletedPositionByUUID($positionUUID);
         if (null === $positionDeleted) {
             throw new \Exception($this->translator->trans('position.deleted.notExists', [':uuid' => $positionUUID], 'positions'), Response::HTTP_CONFLICT);

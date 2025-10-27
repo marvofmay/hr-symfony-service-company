@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Industry\Reader;
 
 use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Enum\Industry\IndustryEntityFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -65,4 +67,24 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
     {
         return null !== $this->findOneBy(['uuid' => $uuid]);
     }
+
+    public function getDeletedIndustryByUUID(string $uuid): ?Industry
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            $deletedIndustry = $this->createQueryBuilder(Industry::ALIAS)
+                ->where(Industry::ALIAS.'.'.IndustryEntityFieldEnum::UUID->value.' = :uuid')
+                ->andWhere(Industry::ALIAS.'.'.TimeStampableEntityFieldEnum::DELETED_AT->value.' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+
+            return $deletedIndustry;
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+
 }

@@ -18,4 +18,5 @@ interface IndustryReaderInterface
     public function isIndustryNameAlreadyExists(string $name, ?string $uuid = null): bool;
 
     public function isIndustryExistsWithUUID(string $uuid): bool;
+    public function getDeletedIndustryByUUID(string $uuid): ?Industry;
 }

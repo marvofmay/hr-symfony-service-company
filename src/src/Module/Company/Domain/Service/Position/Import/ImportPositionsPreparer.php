@@ -30,7 +30,7 @@ final readonly class ImportPositionsPreparer
                 fn (string $name) => $this->positionReaderRepository->getPositionByName($name)
             );
 
-            $row[PositionImportColumnEnum::DYNAMIC_IS_POSITION_WITH_NAME_CODE_ALREADY_EXISTS->value] = null !== $existingPosition;
+            $row[PositionImportColumnEnum::DYNAMIC_IS_POSITION_WITH_NAME_ALREADY_EXISTS->value] = null !== $existingPosition;
 
             if (!isset($positionNameMap[$name])) {
                 $positionNameMap[$name] = $existingPosition ? $existingPosition->uuid->toString() : null;

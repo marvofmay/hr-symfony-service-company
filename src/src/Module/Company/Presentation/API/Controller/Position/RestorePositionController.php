@@ -33,7 +33,7 @@ class RestorePositionController extends AbstractController
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::RESTORE,
-                AccessEnum::DEPARTMENT,
+                AccessEnum::POSITION,
                 $this->messageService->get('accessDenied')
             );
 

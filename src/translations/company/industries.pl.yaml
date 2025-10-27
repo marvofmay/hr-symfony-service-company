@@ -20,11 +20,16 @@ industry:
     multiple:
       error: "Wystąpił błąd - branże nie zostały usunięte"
       success: "Branże zostały pomyślnie usunięte"
+  restore:
+    success: "Branża została pomyślnie przywrócona"
+    error: "Wystąpił błąd - branża nie została przywrócona"
   import:
     success: "Branże zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - branże nie zostały zaimportowane"
     file:
       required: "Plik importu branż jest wymagany"
+  deleted:
+    notExists: "Branża o uuid :uuid nie jest usunięta lub nie istnieje"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej branży"
   list:

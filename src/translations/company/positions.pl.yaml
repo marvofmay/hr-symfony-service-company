@@ -33,7 +33,7 @@ position:
   list:
     error: "Wystapił błąd przy pobieraniu listy stanowisk"
   deleted:
-    notExists: "Stanowisko o uuid :uuid nie zostało usunięte lub nie istnieje"
+    notExists: "Stanowisko o uuid :uuid nie jest usunięte lub nie istnieje"
   defaultData:
     name:
       web_apps_director: "Dyrektor ds. aplikacji webowych"

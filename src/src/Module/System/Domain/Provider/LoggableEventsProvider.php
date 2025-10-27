@@ -22,6 +22,7 @@ use App\Module\Company\Application\Event\Industry\IndustryDeletedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryImportedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryListedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryMultipleDeletedEvent;
+use App\Module\Company\Application\Event\Industry\IndustryRestoredEvent;
 use App\Module\Company\Application\Event\Industry\IndustryUpdatedEvent;
 use App\Module\Company\Application\Event\Industry\IndustryViewedEvent;
 use App\Module\Company\Application\Event\Position\PositionCreatedEvent;
@@ -111,6 +112,7 @@ final class LoggableEventsProvider
             IndustryListedEvent::class,
             IndustryMultipleDeletedEvent::class,
             IndustryImportedEvent::class,
+            IndustryRestoredEvent::class,
         ];
     }
 

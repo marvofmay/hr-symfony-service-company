@@ -2,23 +2,34 @@
 
 namespace App\Module\Company\Application\CommandHandler\Industry;
 
+use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Module\Company\Application\Command\Industry\DeleteIndustryCommand;
 use App\Module\Company\Application\Event\Industry\IndustryDeletedEvent;
-use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use App\Module\Company\Domain\Service\Industry\IndustryDeleter;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-readonly class DeleteIndustryCommandHandler
+final class DeleteIndustryCommandHandler extends CommandHandlerAbstract
 {
-    public function __construct(private IndustryDeleter $industryDeleter, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        private readonly IndustryDeleter $industryDeleter,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly IndustryReaderInterface $industryReaderRepository,
+        #[AutowireIterator(tag: 'app.industry.delete.validator')] protected iterable $validators,
+    )
     {
     }
 
     public function __invoke(DeleteIndustryCommand $command): void
     {
-        $this->industryDeleter->delete($command->getIndustry());
+        $this->validate($command);
+
+        $industry = $this->industryReaderRepository->getIndustryByUUID($command->industryUUID);
+
+        $this->industryDeleter->delete($industry);
         $this->eventDispatcher->dispatch(new IndustryDeletedEvent([
-            Industry::COLUMN_UUID => $command->getIndustry()->getUUID(),
+            DeleteIndustryCommand::INDUSTRY_UUID => $command->industryUUID,
         ]));
     }
 }

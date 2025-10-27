@@ -6,7 +6,7 @@ namespace App\Module\Company\Presentation\API\Controller\Industry;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Application\Command\Industry\DeleteIndustryCommand;
+use App\Module\Company\Application\Command\Industry\RestoreIndustryCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
@@ -18,21 +18,21 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class DeleteIndustryController extends AbstractController
+class RestoreIndustryController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $eventBus,
-        private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
+        private readonly MessageBusInterface $commandBus,
     ) {
     }
 
-    #[Route('/api/industries/{uuid}', name: 'api.industries.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
-    public function delete(string $uuid): JsonResponse
+    #[Route('/api/industries/{uuid}/restore', name: 'api.industry.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
+    public function restore(string $uuid): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(
-                PermissionEnum::DELETE,
+                PermissionEnum::RESTORE,
                 AccessEnum::INDUSTRY,
                 $this->messageService->get('accessDenied')
             );
@@ -48,7 +48,7 @@ final class DeleteIndustryController extends AbstractController
     private function dispatchCommand(string $uuid): void
     {
         try {
-            $this->commandBus->dispatch(new DeleteIndustryCommand($uuid));
+            $this->commandBus->dispatch(new RestoreIndustryCommand($uuid));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
@@ -57,7 +57,7 @@ final class DeleteIndustryController extends AbstractController
     private function successResponse(): JsonResponse
     {
         return new JsonResponse(
-            ['message' => $this->messageService->get('industry.delete.success', [], 'industries')],
+            ['message' => $this->messageService->get('industry.restore.success', [], 'industries')],
             Response::HTTP_OK
         );
     }
@@ -66,7 +66,7 @@ final class DeleteIndustryController extends AbstractController
     {
         $message = sprintf(
             '%s. %s',
-            $this->messageService->get('industry.delete.error', [], 'industries'),
+            $this->messageService->get('industry.restore.error', [], 'industries'),
             $exception->getMessage()
         );
 

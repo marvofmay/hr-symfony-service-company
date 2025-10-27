@@ -48,7 +48,7 @@ final readonly class PositionAlreadyAssignedToDepartmentsValidator implements Va
         }
 
         if (count($existingDepartments) > 0) {
-            throw new \Exception($this->translator->trans('position.departments.alreadyExists', [':name' => $position->name, ':departments' => implode(',', $existingDepartments)], 'positions'), Response::HTTP_CONFLICT);
+            throw new \Exception($this->translator->trans('position.departments.alreadyExists', [':name' => $position->getName(), ':departments' => implode(',', $existingDepartments)], 'positions'), Response::HTTP_CONFLICT);
         }
     }
 }
