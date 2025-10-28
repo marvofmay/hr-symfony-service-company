@@ -18,12 +18,12 @@ final readonly class PositionRestorer
 
     public function restore(Position $position): void
     {
-        $position->deletedAt = null;
+        $position->setDeletedAt(null);
 
         $positionUUID = $position->getUUID()->toString();
         $positonDepartments = $this->positionDepartmentReaderRepository->getDeletedPositionDepartmentsByPositionUUID($positionUUID);
         foreach ($positonDepartments as $positionDepartment) {
-            $positionDepartment->deletedAt = null;
+            $positionDepartment->setDeletedAt(null);
         }
 
         $this->positionWriterRepository->savePositionInDB($position);

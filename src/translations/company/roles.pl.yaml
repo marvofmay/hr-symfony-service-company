@@ -27,6 +27,11 @@ role:
     multiple:
       success: "Role zostały pomyślnie usunięte"
       error: "Wystąpił błąd - role nie zostały usunięte"
+  restore:
+    success: "Rola została pomyślnie przywrócona"
+    error: "Wystąpił błąd - rola nie została przywrócona"
+  deleted:
+    notExists: "Rola o uuid :uuid nie jest usunięta lub nie istnieje"
   import:
     success: "Role zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - role nie zostały zaimportowane"

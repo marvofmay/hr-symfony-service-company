@@ -74,14 +74,12 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         $filters->disable('soft_delete');
 
         try {
-            $deletedIndustry = $this->createQueryBuilder(Industry::ALIAS)
+            return $this->createQueryBuilder(Industry::ALIAS)
                 ->where(Industry::ALIAS.'.'.IndustryEntityFieldEnum::UUID->value.' = :uuid')
                 ->andWhere(Industry::ALIAS.'.'.TimeStampableEntityFieldEnum::DELETED_AT->value.' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
-
-            return $deletedIndustry;
         } finally {
             $filters->enable('soft_delete');
         }

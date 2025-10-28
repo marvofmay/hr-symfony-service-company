@@ -40,6 +40,7 @@ use App\Module\Company\Application\Event\Role\RoleDeletedEvent;
 use App\Module\Company\Application\Event\Role\RoleImportedEvent;
 use App\Module\Company\Application\Event\Role\RoleListedEvent;
 use App\Module\Company\Application\Event\Role\RoleMultipleDeletedEvent;
+use App\Module\Company\Application\Event\Role\RoleRestoredEvent;
 use App\Module\Company\Application\Event\Role\RoleUpdatedEvent;
 use App\Module\Company\Application\Event\Role\RoleViewedEvent;
 
@@ -96,6 +97,7 @@ final class LoggableEventsProvider
             RoleCreatedEvent::class,
             RoleUpdatedEvent::class,
             RoleDeletedEvent::class,
+            RoleRestoredEvent::class,
             RoleViewedEvent::class,
             RoleListedEvent::class,
             RoleMultipleDeletedEvent::class,

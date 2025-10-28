@@ -6,6 +6,7 @@ namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -72,5 +73,22 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
     public function isRoleWithUUIDExists(string $uuid): bool
     {
         return null !== $this->findOneBy([RoleEntityFieldEnum::UUID->value => $uuid]);
+    }
+
+    public function getDeletedRoleByUUID(string $uuid): ?Role
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            return  $this->createQueryBuilder(Role::ALIAS)
+                ->where(Role::ALIAS.'.'.RoleEntityFieldEnum::UUID->value.' = :uuid')
+                ->andWhere(Role::ALIAS.'.'.TimeStampableEntityFieldEnum::DELETED_AT->value.' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } finally {
+            $filters->enable('soft_delete');
+        }
     }
 }

@@ -18,4 +18,5 @@ interface RoleReaderInterface
     public function isRoleNameAlreadyExists(string $name, ?string $uuid = null): bool;
 
     public function isRoleWithUUIDExists(string $uuid): bool;
+    public function getDeletedRoleByUUID(string $uuid): ?Role;
 }

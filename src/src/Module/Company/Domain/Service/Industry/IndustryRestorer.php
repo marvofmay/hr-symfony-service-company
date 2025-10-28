@@ -15,7 +15,7 @@ final readonly class IndustryRestorer
 
     public function restore(Industry $industry): void
     {
-        $industry->deletedAt = null;
+        $industry->setDeletedAt(null);
         $this->industryWriterRepository->saveIndustryInDB($industry);
     }
 }

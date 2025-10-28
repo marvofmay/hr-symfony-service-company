@@ -75,14 +75,12 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
         $filters->disable('soft_delete');
 
         try {
-            $deletedPosition = $this->createQueryBuilder(Position::ALIAS)
+            return $this->createQueryBuilder(Position::ALIAS)
                 ->where(Position::ALIAS.'.'.PositionEntityFieldEnum::UUID->value.' = :uuid')
                 ->andWhere(Position::ALIAS.'.'.TimeStampableEntityFieldEnum::DELETED_AT->value.' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
-
-            return $deletedPosition;
         } finally {
             $filters->enable('soft_delete');
         }
