@@ -25,8 +25,8 @@ class EmployeeDataTransformer
             Employee::COLUMN_EMPLOYMENT_TO => $employee->getEmploymentTo(),
             Employee::COLUMN_ACTIVE => $employee->getActive(),
             Employee::COLUMN_CREATED_AT => $employee->createdAt?->format('Y-m-d H:i:s'),
-            Employee::COLUMN_UPDATED_AT => $employee->updatedAt?->format('Y-m-d H:i:s'),
-            Employee::COLUMN_DELETED_AT => $employee->deletedAt?->format('Y-m-d H:i:s'),
+            Employee::COLUMN_UPDATED_AT => $employee->getUpdatedAt()?->format('Y-m-d H:i:s'),
+            Employee::COLUMN_DELETED_AT => $employee->getDeletedAt()?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {

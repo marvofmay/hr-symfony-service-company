@@ -16,26 +16,36 @@ class GetRoleByUUIDQueryHandlerTest extends TestCase
 {
     public function testInvokeCallsRepositoryDispatchesEventAndReturnsTransformedData(): void
     {
-        $uuid = 'some-uuid';
+        $uuid = '123e4567-e89b-12d3-a456-426614174000';
+        $query = new GetRoleByUUIDQuery($uuid);
 
-        $roleMock = $this->getMockBuilder(Role::class)
-            ->onlyMethods(['getName', 'getDescription'])
-            ->getMock();
-        $roleReaderMock = $this->createMock(RoleReaderInterface::class);
-        $eventDispatcherMock = $this->createMock(EventDispatcherInterface::class);
+        $roleMock = $this->createMock(Role::class);
+        $roleReader = $this->createMock(RoleReaderInterface::class);
+        $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 
-        $roleReaderMock->expects($this->once())
+        $roleReader
+            ->expects($this->once())
             ->method('getRoleByUUID')
             ->with($uuid)
             ->willReturn($roleMock);
 
-        $eventDispatcherMock->expects($this->once())
+        $eventDispatcher
+            ->expects($this->once())
             ->method('dispatch')
-            ->with($this->callback(fn ($event) => $event instanceof RoleViewedEvent && $event->getData()[Role::COLUMN_UUID] === $uuid));
+            ->with($this->callback(
+                fn (RoleViewedEvent $event) =>
+                    $event->getData()[GetRoleByUUIDQuery::ROLE_UUID] === $uuid
+            ));
 
-        $handler = new GetRoleByUUIDQueryHandler($roleReaderMock, $eventDispatcherMock);
+        $validators = [];
 
-        $result = $handler(new GetRoleByUUIDQuery($uuid));
+        $handler = new GetRoleByUUIDQueryHandler(
+            $roleReader,
+            $eventDispatcher,
+            $validators
+        );
+
+        $result = $handler($query);
 
         $this->assertIsArray($result);
     }

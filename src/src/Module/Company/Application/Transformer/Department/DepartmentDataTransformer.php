@@ -19,8 +19,8 @@ class DepartmentDataTransformer
             Department::COLUMN_DESCRIPTION => $department->getDescription(),
             Department::COLUMN_ACTIVE => $department->getActive(),
             Department::COLUMN_CREATED_AT => $department->createdAt?->format('Y-m-d H:i:s'),
-            Department::COLUMN_UPDATED_AT => $department->updatedAt?->format('Y-m-d H:i:s'),
-            Department::COLUMN_DELETED_AT => $department->deletedAt?->format('Y-m-d H:i:s'),
+            Department::COLUMN_UPDATED_AT => $department->getUpdatedAt()?->format('Y-m-d H:i:s'),
+            Department::COLUMN_DELETED_AT => $department->getDeletedAt()?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {

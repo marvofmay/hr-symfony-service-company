@@ -152,7 +152,7 @@ class File
             self::COLUMN_FILE_NAME => $this->fileName,
             self::COLUMN_FILE_PATH => $this->filePath,
             self::COLUMN_DESCRIPTION => $this->description,
-            self::COLUMN_CREATED_AT => $this->createdAt->format('Y-m-d H:i:s'),
+            self::COLUMN_CREATED_AT => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             self::COLUMN_UPDATED_AT => $this->updatedAt->format('Y-m-d H:i:s'),
             self::COLUMN_DELETED_AT => $this->deletedAt->format('Y-m-d H:i:s'),
         ];

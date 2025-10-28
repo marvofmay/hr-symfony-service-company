@@ -20,8 +20,8 @@ class IndustryDataTransformer
             IndustryEntityFieldEnum::NAME->value => $industry->getName(),
             IndustryEntityFieldEnum::DESCRIPTION->value => $industry->getDescription(),
             TimeStampableEntityFieldEnum::CREATED_AT->value => $industry->createdAt?->format('Y-m-d H:i:s'),
-            TimeStampableEntityFieldEnum::UPDATED_AT->value => $industry->updatedAt?->format('Y-m-d H:i:s'),
-            TimeStampableEntityFieldEnum::DELETED_AT->value => $industry->deletedAt?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::UPDATED_AT->value => $industry->getUpdatedAt()?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::DELETED_AT->value => $industry->getDeletedAt()?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {

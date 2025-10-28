@@ -17,8 +17,8 @@ class NoteDataTransformer
             Note::COLUMN_CONTENT => $note->getContent(),
             Note::COLUMN_PRIORITY => $note->getPriority(),
             Note::COLUMN_CREATED_AT => $note->createdAt?->format('Y-m-d H:i:s'),
-            Note::COLUMN_UPDATED_AT => $note->updatedAt?->format('Y-m-d H:i:s'),
-            Note::COLUMN_DELETED_AT => $note->deletedAt?->format('Y-m-d H:i:s'),
+            Note::COLUMN_UPDATED_AT => $note->getUpdatedAt()?->format('Y-m-d H:i:s'),
+            Note::COLUMN_DELETED_AT => $note->getDeletedAt()?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {
@@ -45,8 +45,8 @@ class NoteDataTransformer
             Employee::COLUMN_FIRST_NAME => $employee->getFirstName(),
             Employee::COLUMN_LAST_NAME => $employee->getLastName(),
             Employee::COLUMN_CREATED_AT => $employee->createdAt?->format('Y-m-d H:i:s'),
-            Employee::COLUMN_UPDATED_AT => $employee->updatedAt?->format('Y-m-d H:i:s'),
-            Employee::COLUMN_DELETED_AT => $employee->deletedAt?->format('Y-m-d H:i:s'),
+            Employee::COLUMN_UPDATED_AT => $employee->getUpdatedAt()?->format('Y-m-d H:i:s'),
+            Employee::COLUMN_DELETED_AT => $employee->getDeletedAt()?->format('Y-m-d H:i:s'),
         ];
     }
 }

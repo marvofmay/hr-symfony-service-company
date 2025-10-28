@@ -28,7 +28,7 @@ class GetDepartmentController extends AbstractController
     ) {
     }
 
-    #[Route('/api/departments/{uuid}', name: 'api.departments.get', methods: ['GET'])]
+    #[Route('/api/departments/{uuid}', name: 'api.departments.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function get(string $uuid): JsonResponse
     {
         try {

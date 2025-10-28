@@ -28,7 +28,7 @@ class GetEmployeeController extends AbstractController
     ) {
     }
 
-    #[Route('/api/employees/{uuid}', name: 'api.employees.get', methods: ['GET'])]
+    #[Route('/api/employees/{uuid}', name: 'api.employees.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function get(string $uuid): JsonResponse
     {
         try {

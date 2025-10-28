@@ -21,9 +21,9 @@ class PositionDataTransformer
             PositionEntityFieldEnum::NAME->value => $position->getName(),
             PositionEntityFieldEnum::DESCRIPTION->value => $position->getDescription(),
             PositionEntityFieldEnum::ACTIVE->value => $position->getActive(),
-            TimeStampableEntityFieldEnum::CREATED_AT->value => $position->createdAt?->format('Y-m-d H:i:s'),
-            TimeStampableEntityFieldEnum::UPDATED_AT->value => $position->updatedAt?->format('Y-m-d H:i:s'),
-            TimeStampableEntityFieldEnum::DELETED_AT->value => $position->deletedAt?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::CREATED_AT->value => $position->getCreatedAt()->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::UPDATED_AT->value => $position->getUpdatedAt()?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::DELETED_AT->value => $position->getDeletedAt()?->format('Y-m-d H:i:s'),
         ];
 
         $x = Position::getRelations();

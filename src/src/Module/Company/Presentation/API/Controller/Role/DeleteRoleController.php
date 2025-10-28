@@ -6,9 +6,7 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Application\Command\Position\DeletePositionCommand;
 use App\Module\Company\Application\Command\Role\DeleteRoleCommand;
-use App\Module\Company\Presentation\API\Action\Role\DeleteRoleAction;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;

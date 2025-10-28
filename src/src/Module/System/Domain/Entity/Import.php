@@ -203,7 +203,7 @@ class Import
             Import::RELATION_FILE => $this->file->toArray(),
             Import::COLUMN_STARTED_AT => $this->startedAt->format('Y-m-d H:i:s'),
             Import::COLUMN_STOPPED_AT => $this->stoppedAt->format('Y-m-d H:i:s'),
-            Import::COLUMN_CREATED_AT => $this->createdAt->format('Y-m-d H:i:s'),
+            Import::COLUMN_CREATED_AT => $this->getCreatedAt()->format('Y-m-d H:i:s'),
             Import::COLUMN_UPDATED_AT => $this->updatedAt->format('Y-m-d H:i:s'),
             Import::COLUMN_DELETED_AT => $this->deletedAt->format('Y-m-d H:i:s'),
         ];

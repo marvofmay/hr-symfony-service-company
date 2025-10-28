@@ -28,7 +28,7 @@ class GetIndustryController extends AbstractController
     ) {
     }
 
-    #[Route('/api/industries/{uuid}', name: 'api.industries.get', methods: ['GET'])]
+    #[Route('/api/industries/{uuid}', name: 'api.industries.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function get(string $uuid): JsonResponse
     {
         try {
