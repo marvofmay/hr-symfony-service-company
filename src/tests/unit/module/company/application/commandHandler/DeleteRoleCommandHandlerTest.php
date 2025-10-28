@@ -20,7 +20,10 @@ class DeleteRoleCommandHandlerTest extends TestCase
         $uuid = '123e4567-e89b-12d3-a456-426614174000';
         $command = new DeleteRoleCommand($uuid);
 
-        $role = $this->createMock(Role::class);
+        $role = new Role();
+        $role->setName('Test');
+        $role->setDescription('To delete');
+        $role->setCreatedAt();
 
         $roleReader = $this->createMock(RoleReaderInterface::class);
         $roleReader
@@ -52,6 +55,7 @@ class DeleteRoleCommandHandlerTest extends TestCase
             $eventDispatcher,
             $validators
         );
+
         $handler($command);
 
         $this->assertTrue(true);

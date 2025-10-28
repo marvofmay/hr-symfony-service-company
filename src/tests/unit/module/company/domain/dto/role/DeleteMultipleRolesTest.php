@@ -25,7 +25,7 @@ class DeleteMultipleRolesTest extends KernelTestCase
     public function testValidUuidList(): void
     {
         $dto = new DeleteMultipleDTO();
-        $dto->selectedUUID = [
+        $dto->rolesUUIDs = [
             '8a1f1b4a-0c12-4b7d-91f7-25b25a1354b1',
             '123e4567-e89b-12d3-a456-426614174000',
         ];
@@ -37,7 +37,7 @@ class DeleteMultipleRolesTest extends KernelTestCase
     public function testEmptyUuidList(): void
     {
         $dto = new DeleteMultipleDTO();
-        $dto->selectedUUID = [];
+        $dto->rolesUUIDs = [];
 
         $violations = $this->validator->validate($dto);
         $this->assertGreaterThan(0, count($violations));
@@ -48,7 +48,7 @@ class DeleteMultipleRolesTest extends KernelTestCase
     public function testInvalidUuidInList(): void
     {
         $dto = new DeleteMultipleDTO();
-        $dto->selectedUUID = [
+        $dto->rolesUUIDs = [
             'not-a-uuid',
             '12345',
         ];

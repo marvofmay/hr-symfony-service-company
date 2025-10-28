@@ -8,6 +8,7 @@ use App\Module\Company\Application\Event\Role\RoleViewedEvent;
 use App\Module\Company\Application\Query\Role\GetRoleByUUIDQuery;
 use App\Module\Company\Application\QueryHandler\Role\GetRoleByUUIDQueryHandler;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -19,7 +20,11 @@ class GetRoleByUUIDQueryHandlerTest extends TestCase
         $uuid = '123e4567-e89b-12d3-a456-426614174000';
         $query = new GetRoleByUUIDQuery($uuid);
 
-        $roleMock = $this->createMock(Role::class);
+        $role = new Role();
+        $role->setName('Test Role');
+        $role->setDescription('Some description');
+        $role->setCreatedAt();
+
         $roleReader = $this->createMock(RoleReaderInterface::class);
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
 
@@ -27,7 +32,7 @@ class GetRoleByUUIDQueryHandlerTest extends TestCase
             ->expects($this->once())
             ->method('getRoleByUUID')
             ->with($uuid)
-            ->willReturn($roleMock);
+            ->willReturn($role);
 
         $eventDispatcher
             ->expects($this->once())
@@ -48,5 +53,7 @@ class GetRoleByUUIDQueryHandlerTest extends TestCase
         $result = $handler($query);
 
         $this->assertIsArray($result);
+        $this->assertSame('Test Role', $result[RoleEntityFieldEnum::NAME->value]);
+        $this->assertSame('Some description', $result[RoleEntityFieldEnum::DESCRIPTION->value]);
     }
 }

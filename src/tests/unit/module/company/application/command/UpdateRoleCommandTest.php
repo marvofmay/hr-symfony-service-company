@@ -2,35 +2,37 @@
 
 declare(strict_types=1);
 
-namespace App\tests\integration\module\company\application\command;
+namespace App\tests\unit\module\company\application\command;
 
 use App\Module\Company\Application\Command\Role\UpdateRoleCommand;
-use App\Module\Company\Domain\Entity\Role;
 use PHPUnit\Framework\TestCase;
+use Ramsey\Uuid\Uuid;
 
 class UpdateRoleCommandTest extends TestCase
 {
-    public function testItStoresAndReturnsNameDescriptionAndRole(): void
+    public function testItStoresAndReturnsNameDescriptionAndUUID(): void
     {
+        $uuid = Uuid::uuid4()->toString();
         $name = 'Moderator';
         $description = 'Opis ....';
 
-        $roleMock = $this->createMock(Role::class);
+        $command = new UpdateRoleCommand($uuid, $name, $description);
 
-        $command = new UpdateRoleCommand($roleMock->getUUID()->toString(), $name, $description);
-
+        $this->assertSame($uuid, $command->roleUUID);
         $this->assertSame($name, $command->name);
         $this->assertSame($description, $command->description);
     }
 
     public function testItAllowsNullDescription(): void
     {
+        $uuid = Uuid::uuid4()->toString();
         $name = 'Użytkownik';
-        $roleMock = $this->createMock(Role::class);
 
-        $command = new UpdateRoleCommand($roleMock->getUUID()->toString(), $name, null);
+        $command = new UpdateRoleCommand($uuid, $name, null);
 
+        $this->assertSame($uuid, $command->roleUUID);
         $this->assertSame($name, $command->name);
         $this->assertNull($command->description);
     }
+
 }
