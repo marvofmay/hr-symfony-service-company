@@ -24,7 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag('app.importer')]
 class ImportIndustriesFromXLSX extends XLSXIterator
 {
-    private array $errorMessages = [];
     private array $industries = [];
 
     public function __construct(
@@ -49,7 +48,7 @@ class ImportIndustriesFromXLSX extends XLSXIterator
 
     public function validateRow(array $row, int $index): array
     {
-        $this->errorMessages = [];
+        $errorMessages = [];
         
         foreach ($this->importIndustriesValidators as $validator) {
             $error = $validator->validate(
@@ -59,11 +58,11 @@ class ImportIndustriesFromXLSX extends XLSXIterator
                 ]
             );
             if (null !== $error) {
-                $this->errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
+                $errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
             }
         }
 
-        return $this->errorMessages;
+        return $errorMessages;
     }
 
     public function run(Import $import): array

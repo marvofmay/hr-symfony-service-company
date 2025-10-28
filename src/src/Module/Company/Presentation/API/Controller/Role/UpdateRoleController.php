@@ -8,7 +8,6 @@ use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Command\Role\UpdateRoleCommand;
 use App\Module\Company\Domain\DTO\Role\UpdateDTO;
-use App\Module\Company\Presentation\API\Action\Role\UpdateRoleAction;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
@@ -31,12 +30,12 @@ final class UpdateRoleController extends AbstractController
     }
 
     #[Route('/api/roles/{uuid}', name: 'api.roles.update', methods: ['PUT'])]
-    public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO, UpdateRoleAction $updateRoleAction): Response
+    public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): Response
     {
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::UPDATE,
-                AccessEnum::POSITION,
+                AccessEnum::ROLE,
                 $this->messageService->get('accessDenied')
             );
             $this->dispatchCommand($uuid, $updateDTO);
