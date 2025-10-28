@@ -87,4 +87,20 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         }
     }
 
+    public function getIndustriesByNames(array $names): Collection
+    {
+        if (!$names) {
+            return new ArrayCollection();
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(Industry::ALIAS)
+            ->from(Industry::class, Industry::ALIAS)
+            ->where(Industry::ALIAS.'.'.IndustryEntityFieldEnum::NAME->value.' IN (:names)')
+            ->setParameter('names', $names);
+
+        $industries = $qb->getQuery()->getResult();
+
+        return new ArrayCollection($industries);
+    }
 }

@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Industry;
 
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
+use App\Module\Company\Domain\Service\Industry\Import\ImportIndustriesFromXLSX;
 use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class IndustryMultipleCreator

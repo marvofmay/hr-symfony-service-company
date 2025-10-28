@@ -23,15 +23,20 @@ final class ImportIndustriesController extends AbstractController
     ) {
     }
 
-    #[Route('/api/industries/import', name: 'import', methods: ['POST'])]
+    #[Route('/api/industries/import', name: 'app.industries.import', methods: ['POST'])]
     public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::INDUSTRY)) {
-            throw new \Exception($this->messageService->get('accessDenied'), Response::HTTP_FORBIDDEN);
-        }
+        $this->denyAccessUnlessGranted(
+            PermissionEnum::IMPORT,
+            AccessEnum::INDUSTRY,
+            $this->messageService->get('accessDenied')
+        );
 
         if (!$file) {
-            return new JsonResponse(['message' => $this->messageService->get('industry.import.file.required', [], 'industries')], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse(
+                ['message' => $this->messageService->get('industry.import.file.required', [], 'industries')],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
         $result = $this->importIndustriesFacade->handle($file);

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Position\Import;
 
-use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Enum\Position\PositionImportColumnEnum;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
@@ -25,7 +24,6 @@ final class ImportPositionsReferenceLoader
     public function __construct(
         private readonly DepartmentReaderInterface $departmentReaderRepository,
         private readonly PositionReaderInterface $positionReaderRepository,
-        private readonly EntityReferenceCache $entityReferenceCache,
     ) {
     }
 
@@ -54,8 +52,7 @@ final class ImportPositionsReferenceLoader
     {
         $map = [];
         foreach ($positions as $position) {
-            $map[trim($position->name)] = $position;
-            $this->entityReferenceCache->set($position);
+            $map[trim($position->getName())] = $position;
         }
 
         return $map;
@@ -66,7 +63,6 @@ final class ImportPositionsReferenceLoader
         $map = [];
         foreach ($departments as $department) {
             $map[trim($department->getInternalCode())] = $department;
-            $this->entityReferenceCache->set($department);
         }
 
         return $map;

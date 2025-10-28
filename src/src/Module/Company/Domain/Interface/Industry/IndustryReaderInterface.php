@@ -19,4 +19,5 @@ interface IndustryReaderInterface
 
     public function isIndustryExistsWithUUID(string $uuid): bool;
     public function getDeletedIndustryByUUID(string $uuid): ?Industry;
+    public function getIndustriesByNames(array $names): Collection;
 }

@@ -70,7 +70,7 @@ final readonly class ImportPositionsFacade
             $this->uploadFileAction->execute($uploadFileDTO);
             $this->createFileAction->execute($fileName, $uploadFilePath, $employee);
             $file = $this->askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
-            $this->createImportAction->execute(ImportKindEnum::IMPORT_ROLES, ImportStatusEnum::PENDING, $file, $employee);
+            $this->createImportAction->execute(ImportKindEnum::IMPORT_POSITIONS, ImportStatusEnum::PENDING, $file, $employee);
             $import = $this->askImportAction->ask($file);
 
             try {

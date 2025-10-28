@@ -31,9 +31,9 @@ final class EntityReferenceCache
     public function set(object $entity): void
     {
         $className = get_class($entity);
-        $uuid = $entity->uuid->toString();
-
+        $uuid = $entity->getUUID()->toString();
         $key = $className.':'.$uuid;
+
         if (!isset($this->cache[$key])) {
             $this->logInFile($className, $uuid, 'method setCache');
             $this->cache[$key] = $entity;

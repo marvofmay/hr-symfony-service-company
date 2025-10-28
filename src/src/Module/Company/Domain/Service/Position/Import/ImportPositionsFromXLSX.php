@@ -131,7 +131,12 @@ class ImportPositionsFromXLSX extends XLSXIterator
             [, $positionNameMap] = $this->importPositionsPreparer->prepare($this->import());
 
             $groupPositions = $this->groupPositions();
-            $this->positionsImporter->save($positionNameMap, $groupPositions, $this->positions, $this->departments);
+            $this->positionsImporter->save(
+                positionNameMap: $positionNameMap,
+                groupPositions: $groupPositions,
+                existingPositions: $this->positions,
+                existingDepartments: $this->departments
+            );
 
             $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
         }

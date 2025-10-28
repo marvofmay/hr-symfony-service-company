@@ -9,11 +9,11 @@ use App\Module\Company\Domain\Enum\Position\PositionImportColumnEnum;
 
 final class PositionFactory
 {
-    public function createOrUpdatePosition(?string $uuid, array $existingPositions, array $positionData): Position
+    public function createOrUpdatePosition(array $existingPositions, array $positionData): Position
     {
-        $position = null === $uuid
-            ? new Position()
-            : $existingPositions[$positionData[PositionImportColumnEnum::POSITION_NAME->value]];
+        $position = array_key_exists($positionData[PositionImportColumnEnum::POSITION_NAME->value], $existingPositions)
+            ? $existingPositions[$positionData[PositionImportColumnEnum::POSITION_NAME->value]]
+            : new Position();
 
         $position->setName($positionData[PositionImportColumnEnum::POSITION_NAME->value]);
         $position->setDescription($positionData[PositionImportColumnEnum::POSITION_DESCRIPTION->value]);

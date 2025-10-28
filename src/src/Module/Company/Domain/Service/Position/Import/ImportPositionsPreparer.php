@@ -33,7 +33,7 @@ final readonly class ImportPositionsPreparer
             $row[PositionImportColumnEnum::DYNAMIC_IS_POSITION_WITH_NAME_ALREADY_EXISTS->value] = null !== $existingPosition;
 
             if (!isset($positionNameMap[$name])) {
-                $positionNameMap[$name] = $existingPosition ? $existingPosition->uuid->toString() : null;
+                $positionNameMap[$name] = $existingPosition ? $existingPosition->getUUID()->toString() : null;
             }
 
             $row[PositionImportColumnEnum::DYNAMIC_POSITION_UUID->value] = $positionNameMap[$name];
