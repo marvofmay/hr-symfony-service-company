@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
 use App\Module\System\Application\Console\DefaultData\Data\RoleEnum;
 use App\Module\System\Domain\Entity\Access;
 use Doctrine\ORM\EntityManagerInterface;
@@ -42,7 +43,7 @@ class AddRecordToRoleTableCommand extends Command
         $output->writeln('Checking and updating Roles table...');
         $roleRepository = $this->entityManager->getRepository(Role::class);
         $existingRoles = $roleRepository->createQueryBuilder(Role::ALIAS)
-            ->select(Role::ALIAS.'.'.Role::COLUMN_NAME)
+            ->select(Role::ALIAS.'.'.RoleEntityFieldEnum::NAME->value)
             ->getQuery()
             ->getArrayResult();
 

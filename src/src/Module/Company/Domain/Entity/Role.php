@@ -8,6 +8,7 @@ use App\Common\Domain\Interface\MappableEntityInterface;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
+use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\Permission;
 use App\Module\System\Domain\Entity\RoleAccess;
@@ -32,13 +33,6 @@ class Role  implements MappableEntityInterface
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const COLUMN_UUID = 'uuid';
-    public const COLUMN_NAME = 'name';
-    public const COLUMN_DESCRIPTION = 'description';
-    public const COLUMN_CREATED_AT = 'createdAt';
-    public const COLUMN_UPDATED_AT = 'updatedAt';
-    public const COLUMN_DELETED_AT = 'deletedAt';
-    public const RELATION_EMPLOYEES = 'employees';
     public const ALIAS = 'role';
 
     #[ORM\Id]
@@ -75,32 +69,32 @@ class Role  implements MappableEntityInterface
 
     public function getUUID(): UuidInterface
     {
-        return $this->{self::COLUMN_UUID};
+        return $this->{RoleEntityFieldEnum::UUID->value};
     }
 
     public function setUuid(UuidInterface $uuid): void
     {
-        $this->{self::COLUMN_UUID} = $uuid;
+        $this->{RoleEntityFieldEnum::UUID->value} = $uuid;
     }
 
     public function getName(): string
     {
-        return $this->{self::COLUMN_NAME};
+        return $this->{RoleEntityFieldEnum::NAME->value};
     }
 
     public function setName(string $name): void
     {
-        $this->{self::COLUMN_NAME} = $name;
+        $this->{RoleEntityFieldEnum::NAME->value} = $name;
     }
 
     public function getDescription(): ?string
     {
-        return $this->{self::COLUMN_DESCRIPTION};
+        return $this->{RoleEntityFieldEnum::DESCRIPTION->value};
     }
 
     public function setDescription(?string $description): void
     {
-        $this->{self::COLUMN_DESCRIPTION} = $description;
+        $this->{RoleEntityFieldEnum::DESCRIPTION->value} = $description;
     }
 
     public function getEmployees(): Collection

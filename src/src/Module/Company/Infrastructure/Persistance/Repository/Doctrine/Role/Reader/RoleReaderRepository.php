@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role\Reader;
 
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -20,7 +21,7 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
 
     public function getRoleByUUID(string $uuid): ?Role
     {
-        return $this->findOneBy([Role::COLUMN_UUID => $uuid]);
+        return $this->findOneBy([RoleEntityFieldEnum::UUID->value => $uuid]);
     }
 
     public function getRolesByUUID(array $selectedUUID): Collection
@@ -32,7 +33,7 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('r')
             ->from(Role::class, 'r')
-            ->where('r.'.Role::COLUMN_UUID.' IN (:uuids)')
+            ->where('r.'.RoleEntityFieldEnum::UUID->value.' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID);
 
         $roles = $qb->getQuery()->getResult();
@@ -52,11 +53,11 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('r')
             ->from(Role::class, 'r')
-            ->where('r.'.Role::COLUMN_NAME.' = :name')
+            ->where('r.'.RoleEntityFieldEnum::NAME->value.' = :name')
             ->setParameter('name', $name);
 
         if ($uuid) {
-            $qb->andWhere('r.'.Role::COLUMN_UUID.' != :uuid')
+            $qb->andWhere('r.'.RoleEntityFieldEnum::UUID->value.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -70,6 +71,6 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
 
     public function isRoleWithUUIDExists(string $uuid): bool
     {
-        return null !== $this->findOneBy([Role::COLUMN_UUID => $uuid]);
+        return null !== $this->findOneBy([RoleEntityFieldEnum::UUID->value => $uuid]);
     }
 }

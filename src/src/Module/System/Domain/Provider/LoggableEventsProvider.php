@@ -45,6 +45,7 @@ use App\Module\Company\Application\Event\Role\RoleViewedEvent;
 
 final class LoggableEventsProvider
 {
+    // ToDo:: refactor - SOLID OCP - maybe use compiler pass
     public static function getEvents(): array
     {
         return array_fill_keys(self::getEventClasses(), 'onLoggableEvent');

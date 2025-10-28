@@ -11,6 +11,7 @@ use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
+use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
 
 class EmployeeDataTransformer
 {
@@ -95,9 +96,9 @@ class EmployeeDataTransformer
     private function transformRole(Role $role): ?array
     {
         return [
-            Role::COLUMN_UUID => $role->getUUID()->toString(),
-            Role::COLUMN_NAME => $role->getName(),
-            Role::COLUMN_DESCRIPTION => $role->getDescription(),
+            RoleEntityFieldEnum::UUID->value => $role->getUUID()->toString(),
+            RoleEntityFieldEnum::NAME->value => $role->getName(),
+            RoleEntityFieldEnum::DESCRIPTION->value => $role->getDescription(),
         ];
     }
 

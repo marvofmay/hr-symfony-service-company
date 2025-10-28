@@ -8,6 +8,8 @@ use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\Role\RoleListedEvent;
 use App\Module\Company\Application\Query\Role\ListRolesQuery;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -15,7 +17,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListRolesQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(public EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(public EntityManagerInterface $entityManager, private readonly EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct($entityManager);
     }
@@ -39,25 +41,25 @@ final class ListRolesQueryHandler extends ListQueryHandlerAbstract
 
     public function getDefaultOrderBy(): string
     {
-        return Role::COLUMN_CREATED_AT;
+        return TimeStampableEntityFieldEnum::CREATED_AT->value;
     }
 
     public function getAllowedFilters(): array
     {
         return [
-            Role::COLUMN_NAME,
-            Role::COLUMN_DESCRIPTION,
-            Role::COLUMN_CREATED_AT,
-            Role::COLUMN_UPDATED_AT,
-            Role::COLUMN_DELETED_AT,
+            RoleEntityFieldEnum::NAME->value,
+            RoleEntityFieldEnum::DESCRIPTION->value,
+            TimeStampableEntityFieldEnum::CREATED_AT->value,
+            TimeStampableEntityFieldEnum::UPDATED_AT->value,
+            TimeStampableEntityFieldEnum::UPDATED_AT->value,
         ];
     }
 
     public function getPhraseSearchColumns(): array
     {
         return [
-            Role::COLUMN_NAME,
-            Role::COLUMN_DESCRIPTION,
+            RoleEntityFieldEnum::NAME->value,
+            RoleEntityFieldEnum::DESCRIPTION->value,
         ];
     }
 

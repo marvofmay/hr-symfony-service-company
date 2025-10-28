@@ -6,6 +6,9 @@ namespace App\Module\Company\Application\Transformer\Role;
 
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
+use App\Module\Company\Domain\Enum\Role\RoleEntityRelationFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
 class RoleDataTransformer
@@ -13,12 +16,12 @@ class RoleDataTransformer
     public function transformToArray(Role $role, array $includes = []): array
     {
         $data = [
-            Role::COLUMN_UUID => $role->getUUID()->toString(),
-            Role::COLUMN_NAME => $role->getName(),
-            Role::COLUMN_DESCRIPTION => $role->getDescription(),
-            Role::COLUMN_CREATED_AT => $role->getCreatedAt()->format('Y-m-d H:i:s'),
-            Role::COLUMN_UPDATED_AT => $role->getUpdatedAt()?->format('Y-m-d H:i:s'),
-            Role::COLUMN_DELETED_AT => $role->getDeletedAt()?->format('Y-m-d H:i:s'),
+            RoleEntityFieldEnum::UUID->value => $role->getUUID()->toString(),
+            RoleEntityFieldEnum::NAME->value => $role->getName(),
+            RoleEntityFieldEnum::DESCRIPTION->value => $role->getDescription(),
+            TimeStampableEntityFieldEnum::CREATED_AT->value => $role->getCreatedAt()->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::UPDATED_AT->value => $role->getUpdatedAt()?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::DELETED_AT->value => $role->getDeletedAt()?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {
@@ -33,7 +36,7 @@ class RoleDataTransformer
     private function transformRelation(Role $role, string $relation): ?array
     {
         return match ($relation) {
-            Role::RELATION_EMPLOYEES => $this->transformEmployees($role->getEmployees()),
+            RoleEntityRelationFieldEnum::EMPLOYEES->value => $this->transformEmployees($role->getEmployees()),
             default => null,
         };
     }
