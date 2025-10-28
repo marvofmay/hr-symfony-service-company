@@ -34,7 +34,7 @@ final readonly class RolesExistsValidator implements ValidatorInterface
 
         $foundRoles = $this->roleReaderRepository
             ->getRolesByUUID($uuids)
-            ->map(fn ($role) => $role->uuid)
+            ->map(fn ($role) => $role->getUUID())
             ->toArray();
 
         $missing = array_diff($uuids, $foundRoles);

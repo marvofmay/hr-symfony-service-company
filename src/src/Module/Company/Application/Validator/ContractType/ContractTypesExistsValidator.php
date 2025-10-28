@@ -34,7 +34,7 @@ final readonly class ContractTypesExistsValidator implements ValidatorInterface
 
         $foundContractTypes = $this->contractTypeReaderRepository
             ->getContractTypesByUUID($uuids)
-            ->map(fn ($contractType) => $contractType->uuid)
+            ->map(fn ($contractType) => $contractType->getUUID())
             ->toArray();
 
         $missing = array_diff($uuids, $foundContractTypes);

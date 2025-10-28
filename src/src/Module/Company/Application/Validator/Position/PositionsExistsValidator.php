@@ -34,7 +34,7 @@ final readonly class PositionsExistsValidator implements ValidatorInterface
 
         $foundPositions = $this->positionReaderRepository
             ->getPositionsByUUID($uuids)
-            ->map(fn ($position) => $position->uuid)
+            ->map(fn ($position) => $position->getUUID())
             ->toArray();
 
         $missing = array_diff($uuids, $foundPositions);

@@ -34,7 +34,7 @@ final readonly class IndustriesExistsValidator implements ValidatorInterface
 
         $foundIndustries = $this->industryReaderRepository
             ->getIndustriesByUUID($uuids)
-            ->map(fn ($industry) => $industry->uuid)
+            ->map(fn ($industry) => $industry->getUUID())
             ->toArray();
 
         $missing = array_diff($uuids, $foundIndustries);
