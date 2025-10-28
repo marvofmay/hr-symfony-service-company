@@ -4,29 +4,18 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Role;
 
-use App\Module\Company\Domain\Entity\Role;
+use App\Common\Domain\Interface\CommandInterface;
 
-final readonly class UpdateRoleCommand
+final readonly class UpdateRoleCommand implements CommandInterface
 {
+    public const string ROLE_UUID = 'roleUUID';
+    public const string ROLE_NAME = 'name';
+    public const string ROLE_DESCRIPTION = 'description';
+
     public function __construct(
-        private string $name,
-        private ?string $description,
-        private Role $role,
+        public string $roleUUID,
+        public string $name,
+        public ?string $description,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getRole(): Role
-    {
-        return $this->role;
     }
 }

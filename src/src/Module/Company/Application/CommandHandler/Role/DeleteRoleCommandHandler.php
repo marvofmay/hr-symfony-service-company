@@ -12,7 +12,10 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'command.bus')]
 readonly class DeleteRoleCommandHandler
 {
-    public function __construct(private RoleDeleterInterface $roleDeleter, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        private RoleDeleterInterface $roleDeleter,
+        private EventDispatcherInterface $eventDispatcher,
+    )
     {
     }
 

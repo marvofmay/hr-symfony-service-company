@@ -35,7 +35,7 @@ class UpdateRoleCommandHandlerTest extends FunctionalTestBase
         $newRoleName = $roleName.' updated';
         $newRoleDescription = $roleDescription.' updated';
 
-        $command = new UpdateRoleCommand($newRoleName, $newRoleDescription, $role);
+        $command = new UpdateRoleCommand($role->getUUID()->toString(), $newRoleName, $newRoleDescription);
         $handler($command);
 
         $role = $repoReader->getRoleByUuid($role->getUUID()->toString());

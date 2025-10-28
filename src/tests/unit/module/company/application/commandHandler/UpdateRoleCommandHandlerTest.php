@@ -22,25 +22,33 @@ class UpdateRoleCommandHandlerTest extends TestCase
         $role = $this->createMock(Role::class);
         $role->method('getUUID')->willReturn($uuid);
 
-        $command = new UpdateRoleCommand($name, $description, $role);
+        $command = new UpdateRoleCommand($role->getUUID()->toString(), $name, $description);
 
         $roleUpdater = $this->createMock(RoleUpdaterInterface::class);
         $roleUpdater
             ->expects($this->once())
             ->method('update')
-            ->with($role, $name, $description);
+            ->with($command);
 
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
         $eventDispatcher
             ->expects($this->once())
             ->method('dispatch')
-            ->with($this->callback(
-                fn (RoleUpdatedEvent $event) => $event->getData()[Role::COLUMN_UUID] === $uuid
-                    && $event->getData()[Role::COLUMN_NAME] === $name
-                    && $event->getData()[Role::COLUMN_DESCRIPTION] === $description
-            ));
+            ->with($this->callback(function ($event) use ($uuid, $name, $description) {
+                if (!$event instanceof RoleUpdatedEvent) {
+                    return false;
+                }
 
-        $handler = new UpdateRoleCommandHandler($roleUpdater, $eventDispatcher);
+                $data = $event->getData();
+
+                return $data[UpdateRoleCommand::ROLE_UUID] === $uuid->toString()
+                    && $data[UpdateRoleCommand::ROLE_NAME] === $name
+                    && $data[UpdateRoleCommand::ROLE_DESCRIPTION] === $description;
+            }));
+
+        $validators = [];
+
+        $handler = new UpdateRoleCommandHandler($roleUpdater, $eventDispatcher, $validators);
 
         $handler($command);
     }

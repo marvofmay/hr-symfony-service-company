@@ -26,9 +26,9 @@ final class CreatePositionCommandHandler extends CommandHandlerAbstract
 
         $this->positionCreator->create($command);
         $this->eventDispatcher->dispatch(new PositionCreatedEvent([
-            CreatePositionCommand::NAME => $command->name,
-            CreatePositionCommand::DESCRIPTION => $command->description,
-            CreatePositionCommand::ACTIVE => $command->active,
+            CreatePositionCommand::POSITION_NAME => $command->name,
+            CreatePositionCommand::POSITION_DESCRIPTION => $command->description,
+            CreatePositionCommand::POSITION_ACTIVE => $command->active,
             CreatePositionCommand::DEPARTMENTS_UUIDS => $command->departmentsUUIDs,
         ]));
     }

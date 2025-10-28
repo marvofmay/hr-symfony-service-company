@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Role;
 
-final readonly class CreateRoleCommand
+use App\Common\Domain\Interface\CommandInterface;
+
+final readonly class CreateRoleCommand implements CommandInterface
 {
-    public function __construct(private string $name, private ?string $description)
-    {
-    }
+    public const string ROLE_NAME = 'name';
+    public const string ROLE_DESCRIPTION = 'description';
 
-    public function getName(): string
+    public function __construct(public string $name, public ?string $description)
     {
-        return $this->name;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
     }
 }

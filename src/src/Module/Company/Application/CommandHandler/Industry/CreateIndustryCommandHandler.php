@@ -27,8 +27,8 @@ final class CreateIndustryCommandHandler extends CommandHandlerAbstract
 
         $this->industryCreator->create($command);
         $this->eventDispatcher->dispatch(new IndustryCreatedEvent([
-            CreateIndustryCommand::NAME => $command->name,
-            CreateIndustryCommand::DESCRIPTION => $command->description,
+            CreateIndustryCommand::INDUSTRY_NAME => $command->name,
+            CreateIndustryCommand::INDUSTRY_DESCRIPTION => $command->description,
         ]));
     }
 }

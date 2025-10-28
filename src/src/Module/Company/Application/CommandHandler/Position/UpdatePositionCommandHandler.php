@@ -27,8 +27,9 @@ final class UpdatePositionCommandHandler extends CommandHandlerAbstract
         $this->positionUpdater->update($command);
         $this->eventDispatcher->dispatch(new PositionUpdatedEvent([
             UpdatePositionCommand::POSITION_UUID => $command->positionUUID,
-            UpdatePositionCommand::NAME => $command->name,
-            UpdatePositionCommand::DESCRIPTION => $command->description,
+            UpdatePositionCommand::POSITION_NAME => $command->name,
+            UpdatePositionCommand::POSITION_DESCRIPTION => $command->description,
+            UpdatePositionCommand::POSITION_ACTIVE => $command->active,
             UpdatePositionCommand::DEPARTMENTS_UUIDS => $command->departmentsUUIDs,
         ]));
     }

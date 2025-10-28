@@ -17,11 +17,10 @@ class UpdateRoleCommandTest extends TestCase
 
         $roleMock = $this->createMock(Role::class);
 
-        $command = new UpdateRoleCommand($name, $description, $roleMock);
+        $command = new UpdateRoleCommand($roleMock->getUUID()->toString(), $name, $description);
 
-        $this->assertSame($name, $command->getName());
-        $this->assertSame($description, $command->getDescription());
-        $this->assertSame($roleMock, $command->getRole());
+        $this->assertSame($name, $command->name);
+        $this->assertSame($description, $command->description);
     }
 
     public function testItAllowsNullDescription(): void
@@ -29,10 +28,9 @@ class UpdateRoleCommandTest extends TestCase
         $name = 'Użytkownik';
         $roleMock = $this->createMock(Role::class);
 
-        $command = new UpdateRoleCommand($name, null, $roleMock);
+        $command = new UpdateRoleCommand($roleMock->getUUID()->toString(), $name, null);
 
-        $this->assertSame($name, $command->getName());
-        $this->assertNull($command->getDescription());
-        $this->assertSame($roleMock, $command->getRole());
+        $this->assertSame($name, $command->name);
+        $this->assertNull($command->description);
     }
 }
