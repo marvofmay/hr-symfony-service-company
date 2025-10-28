@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Role;
 
-use Doctrine\Common\Collections\Collection;
+use App\Common\Domain\Interface\CommandInterface;
 
-final readonly class DeleteMultipleRolesCommand
+final readonly class DeleteMultipleRolesCommand implements CommandInterface
 {
-    public function __construct(public Collection $roles)
+    public const string ROLES_UUIDS = 'rolesUUIDs';
+    public function __construct(public array $rolesUUIDs)
     {
     }
 }

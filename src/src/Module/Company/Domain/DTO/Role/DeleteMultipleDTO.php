@@ -12,9 +12,9 @@ final class DeleteMultipleDTO
     #[Assert\All([
         new Assert\Uuid(message: 'role.delete.invalidUUID'),
     ])]
-    public array $selectedUUID = [] {
+    public array $rolesUUIDs = [] {
         get {
-            return $this->selectedUUID;
+            return $this->rolesUUIDs;
         }
     }
 }

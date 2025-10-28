@@ -33,7 +33,7 @@ class Role  implements MappableEntityInterface
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const ALIAS = 'role';
+    public const string ALIAS = 'role';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
