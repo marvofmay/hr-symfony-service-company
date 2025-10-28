@@ -2,16 +2,13 @@
 
 namespace App\Module\Company\Application\Command\Role;
 
-use App\Module\Company\Domain\Entity\Role;
+use App\Common\Domain\Interface\CommandInterface;
 
-final readonly class DeleteRoleCommand
+final readonly class DeleteRoleCommand implements CommandInterface
 {
-    public function __construct(private Role $role)
-    {
-    }
+    public const string ROLE_UUID = 'roleUUID';
 
-    public function getRole(): Role
+    public function __construct(public string $roleUUID)
     {
-        return $this->role;
     }
 }

@@ -3,17 +3,18 @@
 namespace App\tests\unit\module\company\application\command;
 
 use App\Module\Company\Application\Command\Role\DeleteRoleCommand;
-use App\Module\Company\Domain\Entity\Role;
 use PHPUnit\Framework\TestCase;
 
-class DeleteRoleCommandTest extends TestCase
+final class DeleteRoleCommandTest extends TestCase
 {
-    public function testItReturnsTheRole(): void
+    public function testItStoresRoleUUID(): void
     {
-        $roleMock = $this->createMock(Role::class);
+        $uuid = '123e4567-e89b-12d3-a456-426614174000';
 
-        $command = new DeleteRoleCommand($roleMock);
+        $command = new DeleteRoleCommand($uuid);
 
-        $this->assertSame($roleMock, $command->getRole());
+        $this->assertSame($uuid, $command->roleUUID);
+        $this->assertTrue(defined(DeleteRoleCommand::class . '::ROLE_UUID'));
+        $this->assertSame('roleUUID', DeleteRoleCommand::ROLE_UUID);
     }
 }

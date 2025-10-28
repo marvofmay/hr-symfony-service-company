@@ -9,35 +9,51 @@ use App\Module\Company\Application\CommandHandler\Role\DeleteRoleCommandHandler;
 use App\Module\Company\Application\Event\Role\RoleDeletedEvent;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleDeleterInterface;
+use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DeleteRoleCommandHandlerTest extends TestCase
 {
     public function testItDeletesRoleAndDispatchesEvent(): void
     {
-        $uuid = Uuid::fromString('123e4567-e89b-12d3-a456-426614174000');
+        $uuid = '123e4567-e89b-12d3-a456-426614174000';
+        $command = new DeleteRoleCommand($uuid);
 
         $role = $this->createMock(Role::class);
-        $role->expects($this->once())
-            ->method('getUUID')
-            ->willReturn($uuid);
 
-        $command = new DeleteRoleCommand($role);
+        $roleReader = $this->createMock(RoleReaderInterface::class);
+        $roleReader
+            ->expects($this->once())
+            ->method('getRoleByUUID')
+            ->with($uuid)
+            ->willReturn($role);
 
         $roleDeleter = $this->createMock(RoleDeleterInterface::class);
-        $roleDeleter->expects($this->once())
+        $roleDeleter
+            ->expects($this->once())
             ->method('delete')
             ->with($role);
 
         $eventDispatcher = $this->createMock(EventDispatcherInterface::class);
-        $eventDispatcher->expects($this->once())
+        $eventDispatcher
+            ->expects($this->once())
             ->method('dispatch')
-            ->with($this->callback(fn (RoleDeletedEvent $event) => $event->getData()[Role::COLUMN_UUID] === $uuid));
+            ->with($this->callback(
+                fn (RoleDeletedEvent $event) =>
+                    $event->getData()[DeleteRoleCommand::ROLE_UUID] === $uuid
+            ));
 
-        $handler = new DeleteRoleCommandHandler($roleDeleter, $eventDispatcher);
+        $validators = [];
 
+        $handler = new DeleteRoleCommandHandler(
+            $roleReader,
+            $roleDeleter,
+            $eventDispatcher,
+            $validators
+        );
         $handler($command);
+
+        $this->assertTrue(true);
     }
 }
