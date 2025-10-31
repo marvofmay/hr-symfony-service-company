@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Industry\Import;
 
+use App\Module\Company\Domain\Enum\Industry\IndustryImportColumnEnum;
 use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
@@ -20,7 +21,11 @@ final class IndustriesImporter
     public function save(array $preparedRows, array $existingIndustries): void
     {
         foreach ($preparedRows as $preparedRow) {
-            $industry = $this->industryFactory->createOrUpdateIndustry(preparedRow: $preparedRow, existingIndustries: $existingIndustries);
+            if (array_key_exists($preparedRow[IndustryImportColumnEnum::INDUSTRY_NAME->value], $existingIndustries)) {
+                $industry = $this->industryFactory->update(industryData: $preparedRow, existingIndustries: $existingIndustries);
+            } else {
+                $industry = $this->industryFactory->create(industryData: $preparedRow);
+            }
             $this->industries[] = $industry;
         }
 

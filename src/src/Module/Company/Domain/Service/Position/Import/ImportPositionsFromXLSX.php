@@ -88,7 +88,7 @@ class ImportPositionsFromXLSX extends XLSXIterator
                 $groupedPositions[$key] = [
                     PositionImportColumnEnum::POSITION_NAME->value => $name,
                     PositionImportColumnEnum::POSITION_DESCRIPTION->value => $description,
-                    PositionImportColumnEnum::ACTIVE->value => $active,
+                    PositionImportColumnEnum::POSITION_ACTIVE->value => $active,
                     PositionImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value => [],
                 ];
             }
@@ -128,9 +128,9 @@ class ImportPositionsFromXLSX extends XLSXIterator
                 );
             }
         } else {
-            [, $positionNameMap] = $this->importPositionsPreparer->prepare($this->import());
-
+            [, $positionNameMap] = $this->importPositionsPreparer->prepare($this->import(), $this->positions);
             $groupPositions = $this->groupPositions();
+
             $this->positionsImporter->save(
                 positionNameMap: $positionNameMap,
                 groupPositions: $groupPositions,

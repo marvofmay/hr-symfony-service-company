@@ -6,7 +6,7 @@ namespace App\tests\unit\module\company\domain\service\role;
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
-use App\Module\Company\Domain\Service\Role\ImportRolesFromXLSX;
+use App\Module\Company\Domain\Service\Role\Import\ImportRolesFromXLSX;
 use App\Module\Company\Domain\Service\Role\RoleMultipleCreator;
 use Doctrine\Common\Collections\Collection;
 use PHPUnit\Framework\TestCase;

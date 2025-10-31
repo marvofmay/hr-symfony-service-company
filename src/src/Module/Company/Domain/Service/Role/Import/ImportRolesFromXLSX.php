@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Domain\Service\Industry\Import;
+namespace App\Module\Company\Domain\Service\Role\Import;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
@@ -22,9 +22,12 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('app.importer')]
-class ImportIndustriesFromXLSX extends XLSXIterator
+class ImportRolesFromXLSX extends XLSXIterator
 {
-    private array $industries = [];
+    public const int COLUMN_NAME = 0;
+    public const int COLUMN_DESCRIPTION = 1;
+
+    private array $roles = [];
 
     public function __construct(
         private readonly TranslatorInterface $translator,
@@ -32,29 +35,29 @@ class ImportIndustriesFromXLSX extends XLSXIterator
         private readonly UpdateImportAction $updateImportAction,
         private readonly MessageService $messageService,
         private readonly MessageBusInterface $eventBus,
-        private readonly ImportIndustriesReferenceLoader $importIndustriesReferenceLoader,
+        private readonly ImportRolesReferenceLoader $importRolesReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
-        private readonly ImportIndustriesPreparer $importIndustriesPreparer,
-        private readonly IndustriesImporter $industriesImporter,
-        #[AutowireIterator(tag: 'app.industry.import.validator')] private readonly iterable $importIndustriesValidators,
+        private readonly ImportRolesPreparer $importRolesPreparer,
+        private readonly RolesImporter $rolesImporter,
+        #[AutowireIterator(tag: 'app.role.import.validator')] private readonly iterable $importRolesValidators,
     ) {
         parent::__construct($this->translator);
     }
 
     public function getType(): string
     {
-        return ImportKindEnum::IMPORT_INDUSTRIES->value;
+        return ImportKindEnum::IMPORT_ROLES->value;
     }
 
     public function validateRow(array $row, int $index): array
     {
         $errorMessages = [];
-        
-        foreach ($this->importIndustriesValidators as $validator) {
+
+        foreach ($this->importRolesValidators as $validator) {
             $error = $validator->validate(
                 $row,
                 [
-                    'industries' => $this->industries,
+                    'roles' => $this->roles,
                 ]
             );
             if (null !== $error) {
@@ -67,8 +70,8 @@ class ImportIndustriesFromXLSX extends XLSXIterator
 
     public function run(Import $import): array
     {
-        $this->importIndustriesReferenceLoader->preload($this->import());
-        $this->industries = $this->importIndustriesReferenceLoader->industries;
+        $this->importRolesReferenceLoader->preload($this->import());
+        $this->roles = $this->importRolesReferenceLoader->roles;
 
         $errors = $this->validateBeforeImport();
         if (!empty($errors)) {
@@ -77,15 +80,15 @@ class ImportIndustriesFromXLSX extends XLSXIterator
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
                     new LogFileEvent(
-                        $this->messageService->get('industry.import.error', [], 'positions').': '.$error,
+                        $this->messageService->get('role.import.error', [], 'positions').': '.$error,
                         LogLevel::ERROR,
                         MonologChanelEnum::IMPORT
                     )
                 );
             }
         } else {
-            $preparedRows = $this->importIndustriesPreparer->prepare($this->import(), $this->industries);
-            $this->industriesImporter->save(preparedRows: $preparedRows, existingIndustries: $this->industries);
+            $preparedRows = $this->importRolesPreparer->prepare($this->import(), $this->roles);
+            $this->rolesImporter->save(preparedRows: $preparedRows, existingRoles: $this->roles);
 
             $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
         }

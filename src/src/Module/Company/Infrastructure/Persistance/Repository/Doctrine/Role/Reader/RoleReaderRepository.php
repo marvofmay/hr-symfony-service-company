@@ -91,4 +91,21 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
             $filters->enable('soft_delete');
         }
     }
+
+    public function getRolesByNames(array $names): Collection
+    {
+        if (!$names) {
+            return new ArrayCollection();
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(Role::ALIAS)
+            ->from(Role::class, Role::ALIAS)
+            ->where(Role::ALIAS.'.'.RoleEntityFieldEnum::NAME->value.' IN (:names)')
+            ->setParameter('names', $names);
+
+        $roles = $qb->getQuery()->getResult();
+
+        return new ArrayCollection($roles);
+    }
 }

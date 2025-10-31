@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\Role;
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
+use App\Module\Company\Domain\Service\Role\Import\ImportRolesFromXLSX;
 use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class RoleMultipleCreator

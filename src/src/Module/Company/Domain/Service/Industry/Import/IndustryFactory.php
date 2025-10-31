@@ -9,15 +9,28 @@ use App\Module\Company\Domain\Enum\Industry\IndustryImportColumnEnum;
 
 final class IndustryFactory
 {
-    public function createOrUpdateIndustry(array $preparedRow, array $existingIndustries): Industry
+    public function create(array $industryData): Industry
     {
-        $industry = $preparedRow[IndustryImportColumnEnum::DYNAMIC_IS_INDUSTRY_WITH_NAME_ALREADY_EXISTS->value]
-            ? $existingIndustries[$preparedRow[IndustryImportColumnEnum::INDUSTRY_NAME->value]]
-            : new Industry();
-
-        $industry->setName($preparedRow[IndustryImportColumnEnum::INDUSTRY_NAME->value]);
-        $industry->setDescription($preparedRow[IndustryImportColumnEnum::INDUSTRY_DESCRIPTION->value]);
+        $industry = new Industry();
+        $this->fillData($industry, $industryData);
 
         return $industry;
+    }
+
+    public function update(array $industryData, array $existingIndustries): Industry
+    {
+        $industry = $existingIndustries[$industryData[IndustryImportColumnEnum::INDUSTRY_NAME->value]];
+        $this->fillData($industry, $industryData);
+
+        return $industry;
+    }
+
+    private function fillData(Industry $industry, array $industryData): void
+    {
+        $name = $industryData[IndustryImportColumnEnum::INDUSTRY_NAME->value] ?? null;
+        $description = $industryData[IndustryImportColumnEnum::INDUSTRY_DESCRIPTION->value] ?? null;
+
+        $industry->setName($name);
+        $industry->setDescription($description);
     }
 }

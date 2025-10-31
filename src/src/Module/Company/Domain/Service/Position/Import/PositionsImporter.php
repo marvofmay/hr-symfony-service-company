@@ -23,7 +23,11 @@ final class PositionsImporter
     public function save(array $positionNameMap, array $groupPositions, array $existingPositions, array $existingDepartments): void
     {
         foreach ($positionNameMap as $name => $uuid) {
-            $position = $this->positionFactory->createOrUpdatePosition($existingPositions, $groupPositions[$name]);
+            if (null !== $uuid) {
+                $position = $this->positionFactory->update(positionData: $groupPositions[$name], existingPositions: $existingPositions);
+            } else {
+                $position = $this->positionFactory->create(positionData: $groupPositions[$name]);
+            }
 
             $this->departmentSynchronizer->syncDepartments(
                 $position,
