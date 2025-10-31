@@ -12,12 +12,6 @@ role:
   add:
     success: "Rola została pomyślnie dodana"
     error: "Wystąpił błąd - rola nie została dodana"
-    access:
-      success: "Dostępy dla roli zostały pomyślnie dodane"
-      error: "Wystąpił błąd - dostępy dla roli nie zostały dodane"
-    permission:
-      success: "Uprawnienia dla roli zostały pomyślnie dodane"
-      error: "Wystąpił błąd - uprawnienia dla roli nie zostały dodane"
   update:
     success: "Rola została pomyślnie zaktualizowana"
     error: "Wystąpił błąd - rola nie została zaktualizowana"
@@ -37,6 +31,13 @@ role:
     error: "Wystąpił błąd - role nie zostały zaimportowane"
     file:
       required: "Plik importu ról jest wymagany"
+  assign:
+    access:
+      success: "Dostępy dla roli zostały pomyślnie dodane"
+      error: "Wystąpił błąd - dostępy dla roli nie zostały dodane"
+    permission:
+      success: "Uprawnienia dla roli zostały pomyślnie dodane"
+      error: "Wystąpił błąd - uprawnienia dla roli nie zostały dodane"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej roli"
   list:

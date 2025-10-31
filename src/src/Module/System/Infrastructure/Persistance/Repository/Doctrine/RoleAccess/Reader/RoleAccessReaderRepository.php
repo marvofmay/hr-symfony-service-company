@@ -7,11 +7,12 @@ namespace App\Module\System\Infrastructure\Persistance\Repository\Doctrine\RoleA
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\RoleAccess;
-use App\Module\System\Domain\Interface\RoleAccess\RoleAccessInterface;
+use App\Module\System\Domain\Enum\RoleAccess\RoleAccessEntityRelationFieldEnum;
+use App\Module\System\Domain\Interface\RoleAccess\RoleAccessReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RoleAccessRepository extends ServiceEntityRepository implements RoleAccessInterface
+class RoleAccessReaderRepository extends ServiceEntityRepository implements RoleAccessReaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -21,8 +22,8 @@ class RoleAccessRepository extends ServiceEntityRepository implements RoleAccess
     public function isRoleHasAccess(Access $access, Role $role): bool
     {
         return null !== $this->findOneBy([
-            RoleAccess::RELATION_ACCESS => $access,
-            RoleAccess::RELATION_ROLE => $role,
+            RoleAccessEntityRelationFieldEnum::ACCESS->value => $access,
+            RoleAccessEntityRelationFieldEnum::ROLE->value => $role,
         ]);
     }
 }

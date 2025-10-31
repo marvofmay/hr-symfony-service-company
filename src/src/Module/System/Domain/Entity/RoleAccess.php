@@ -21,8 +21,7 @@ class RoleAccess
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const RELATION_ROLE = 'role';
-    public const RELATION_ACCESS = 'access';
+    public const string ALIAS = 'role_access';
 
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'roleAccesses')]

@@ -6,8 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Application\Command\Role\UpdateRoleCommand;
-use App\Module\Company\Domain\DTO\Role\UpdateDTO;
+use App\Module\Company\Application\Command\Role\AssignAccessesCommand;
+use App\Module\Company\Domain\DTO\Role\AssignAccessDTO;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\AccessEnum;
 use App\Module\System\Domain\Enum\PermissionEnum;
@@ -20,7 +20,7 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-final class UpdateRoleController extends AbstractController
+final class AssignAccessController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $eventBus,
@@ -29,16 +29,18 @@ final class UpdateRoleController extends AbstractController
     ) {
     }
 
-    #[Route('/api/roles/{uuid}', name: 'api.roles.update', methods: ['PUT'])]
-    public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): Response
+    #[Route('/api/roles/{uuid}/accesses', name: 'api.roles.accesses.assign', methods: ['POST'])]
+    public function assign(string $uuid, #[MapRequestPayload] AssignAccessDTO $assignAccessDTO): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(
-                PermissionEnum::UPDATE,
+                PermissionEnum::ASSIGN_ACCESS_TO_ROLE,
                 AccessEnum::ROLE,
                 $this->messageService->get('accessDenied')
             );
-            $this->dispatchCommand($uuid, $updateDTO);
+
+            $this->dispatchCommand($uuid, $assignAccessDTO);
+            
 
             return $this->successResponse();
         } catch (\Throwable $exception) {
@@ -46,14 +48,13 @@ final class UpdateRoleController extends AbstractController
         }
     }
 
-    private function dispatchCommand(string $roleUUID, UpdateDTO $updateDTO): void
+    private function dispatchCommand(string $roleUUID, AssignAccessDTO $assignAccessDTO): void
     {
         try {
             $this->commandBus->dispatch(
-                new UpdateRoleCommand(
-                    roleUUID: $roleUUID,
-                    name: $updateDTO->name,
-                    description: $updateDTO->description,
+                new AssignAccessesCommand(
+                    roleUUID: $roleUUID, 
+                    accessesUUIDs: $assignAccessDTO->accessesUUIDs
                 )
             );
         } catch (HandlerFailedException $exception) {
@@ -64,8 +65,8 @@ final class UpdateRoleController extends AbstractController
     private function successResponse(): JsonResponse
     {
         return new JsonResponse(
-            ['message' => $this->messageService->get('role.update.success', [], 'roles')],
-            Response::HTTP_OK
+            ['message' => $this->messageService->get('role.assign.access.success', [], 'roles')],
+            Response::HTTP_CREATED
         );
     }
 
@@ -73,7 +74,7 @@ final class UpdateRoleController extends AbstractController
     {
         $message = sprintf(
             '%s. %s',
-            $this->messageService->get('role.update.error', [], 'roles'),
+            $this->messageService->get('role.assign.access.error', [], 'roles'),
             $exception->getMessage()
         );
 

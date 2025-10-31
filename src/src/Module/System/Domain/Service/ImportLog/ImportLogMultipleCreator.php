@@ -10,7 +10,7 @@ use App\Module\System\Domain\Enum\ImportLogKindEnum;
 use App\Module\System\Domain\Interface\ImportLog\ImportLogWriterInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-readonly class ImportLogMultipleCreator
+final readonly class ImportLogMultipleCreator
 {
     public function __construct(private ImportLogWriterInterface $importLogWriterRepository)
     {

@@ -187,9 +187,6 @@ class Import
     {
         if ($this->importLogs->contains($importLog)) {
             $this->importLogs->removeElement($importLog);
-            if ($importLog->getImport() === $this) {
-                $importLog->setImport(null);
-            }
         }
     }
 

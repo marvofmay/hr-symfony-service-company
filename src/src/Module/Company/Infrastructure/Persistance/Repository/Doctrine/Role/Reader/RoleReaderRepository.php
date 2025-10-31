@@ -39,13 +39,6 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
 
         $roles = $qb->getQuery()->getResult();
 
-        // $foundUUIDs = array_map(fn (Role $role) => $role->getUUID(), $roles);
-        // $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
-        //
-        // if ($missingUUIDs) {
-        //    throw new NotFindByUUIDException(sprintf('%s : %s', $this->translator->trans('role.uuid.notFound', [], 'roles'), implode(', ', $missingUUIDs)));
-        // }
-
         return new ArrayCollection($roles);
     }
 

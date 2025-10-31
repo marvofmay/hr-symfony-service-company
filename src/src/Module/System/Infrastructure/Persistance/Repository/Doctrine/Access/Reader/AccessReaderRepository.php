@@ -19,6 +19,11 @@ class AccessReaderRepository extends ServiceEntityRepository implements AccessRe
         parent::__construct($registry, Access::class);
     }
 
+    public function getAccesses(): Collection
+    {
+        return new ArrayCollection($this->findAll());
+    }
+
     public function getAccessByUUID(string $uuid): ?Access
     {
         return $this->findOneBy([Access::COLUMN_UUID => $uuid]);

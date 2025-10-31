@@ -7,7 +7,7 @@ namespace App\Module\System\Domain\Interface\RoleAccess;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\System\Domain\Entity\Access;
 
-interface RoleAccessInterface
+interface RoleAccessReaderInterface
 {
     public function isRoleHasAccess(Access $access, Role $role): bool;
 }

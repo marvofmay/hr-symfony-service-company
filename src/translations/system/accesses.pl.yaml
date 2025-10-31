@@ -25,6 +25,6 @@ access:
   task: #moduleName
     task:
       description: "Dostęp do zadań."
-  notExists: "Dostęp o podanym UUID nie istnieje :uuid"
   uuid:
     required: "Wymagane UUID dostępu"
+    notExists: "Dostęp o podanym UUID :uuid nie istnieje"

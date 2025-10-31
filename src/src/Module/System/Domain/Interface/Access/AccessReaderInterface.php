@@ -10,6 +10,7 @@ use Doctrine\Common\Collections\Collection;
 
 interface AccessReaderInterface
 {
+    public function getAccesses(): Collection;
     public function getAccessByUUID(string $uuid): ?Access;
 
     public function getAccessesByUUID(array $uuids): Collection;

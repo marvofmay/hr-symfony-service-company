@@ -129,6 +129,11 @@ class Role  implements MappableEntityInterface
         }
     }
 
+    public function removeAccesses(): void
+    {
+        $this->roleAccesses->clear();
+    }
+
     public function addAccessPermission(Access $access, Permission $permission): void
     {
         $relation = new RoleAccessPermission($this, $access, $permission);
