@@ -6,10 +6,10 @@ use App\Common\Domain\Enum\DeleteTypeEnum;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\System\Domain\Interface\RoleAccess\RoleAccessWriterInterface;
 
-final class AccessSynchronizer
+final readonly class AccessSynchronizer
 {
     public function __construct(
-        private readonly RoleAccessWriterInterface $roleAccessWriterRepository,
+        private RoleAccessWriterInterface $roleAccessWriterRepository,
     ) {}
 
     public function syncAccesses(Role $role, array $payloadAccessUUIDs, array $existingAccesses): void
@@ -27,7 +27,7 @@ final class AccessSynchronizer
 
             $role->removeAccess($currentAccess);
 
-            $this->roleAccessWriterRepository->deleteRoleAccessByRoleAndAccessInDB(
+            $this->roleAccessWriterRepository->deleteRoleAccessInDB(
                 $role,
                 $currentAccess,
                 DeleteTypeEnum::HARD_DELETE

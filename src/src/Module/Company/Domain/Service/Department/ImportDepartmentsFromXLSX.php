@@ -26,7 +26,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag('app.importer')]
 final class ImportDepartmentsFromXLSX extends XLSXIterator
 {
-    private array $errorMessages = [];
 
     public function __construct(
         private readonly TranslatorInterface $translator,
@@ -57,7 +56,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         $departments = $this->importDepartmentsReferenceLoader->departments;
         $emailsInternalCodes = $this->importDepartmentsReferenceLoader->emailsInternalCodes;
 
-        $this->errorMessages = [];
+        $errorMessages = [];
         foreach ($this->importDepartmentsValidators as $validator) {
             $error = $validator->validate(
                 $row,
@@ -68,11 +67,11 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
                 ]
             );
             if (null !== $error) {
-                $this->errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
+                $errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
             }
         }
 
-        return $this->errorMessages;
+        return $errorMessages;
     }
 
     private function resolveParentUUID(array $row, array $internalCodeMap): ?DepartmentUUID

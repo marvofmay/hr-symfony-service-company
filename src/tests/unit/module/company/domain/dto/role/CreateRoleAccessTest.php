@@ -3,7 +3,7 @@
 namespace App\tests\unit\module\company\domain\dto\role;
 
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Domain\DTO\Role\AssignAccessDTO;
+use App\Module\Company\Domain\DTO\Role\AssignAccessesDTO;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -22,7 +22,7 @@ class CreateRoleAccessTest extends KernelTestCase
 
     public function testAccessUUIDCanBeBlank(): void
     {
-        $dto = new AssignAccessDTO();
+        $dto = new AssignAccessesDTO();
         $dto->accessesUUIDs = [];
 
         $violations = $this->validator->validate($dto);
@@ -32,7 +32,7 @@ class CreateRoleAccessTest extends KernelTestCase
 
     public function testAccessUUIDMustContainValidUUIDs(): void
     {
-        $dto = new AssignAccessDTO();
+        $dto = new AssignAccessesDTO();
         $dto->accessesUUIDs = ['invalid-uuid'];
 
         $violations = $this->validator->validate($dto);

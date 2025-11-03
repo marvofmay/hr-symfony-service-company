@@ -10,5 +10,6 @@ use App\Module\System\Domain\Entity\Access;
 
 interface RoleAccessWriterInterface
 {
-    public function deleteRoleAccessByRoleAndAccessInDB(Role $role, Access $access, DeleteTypeEnum $deleteTypeEnum = DeleteTypeEnum::SOFT_DELETE): void;
+    public function deleteRoleAccessInDB(Role $role, Access $access, DeleteTypeEnum $deleteTypeEnum = DeleteTypeEnum::SOFT_DELETE): void;
+    public function deleteRoleAccessesByRoleInDB(Role $role, DeleteTypeEnum $deleteTypeEnum = DeleteTypeEnum::SOFT_DELETE): void;
 }

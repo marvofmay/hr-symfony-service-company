@@ -29,7 +29,7 @@ class AccessReaderRepository extends ServiceEntityRepository implements AccessRe
         return $this->findOneBy([Access::COLUMN_UUID => $uuid]);
     }
 
-    public function getAccessesByUUID(array $uuids): Collection
+    public function getAccessesByUUIDs(array $uuids): Collection
     {
         $results = $this->findBy([Access::COLUMN_UUID => $uuids]);
 

@@ -6,12 +6,11 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Application\Command\Position\DeleteMultiplePositionsCommand;
 use App\Module\Company\Application\Command\Role\DeleteMultipleRolesCommand;
 use App\Module\Company\Domain\DTO\Role\DeleteMultipleDTO;
 use App\Module\System\Application\Event\LogFileEvent;
-use App\Module\System\Domain\Enum\AccessEnum;
-use App\Module\System\Domain\Enum\PermissionEnum;
+use App\Module\System\Domain\Enum\Access\AccessEnum;
+use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

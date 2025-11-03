@@ -8,13 +8,13 @@ use App\Module\Company\Domain\Entity\Role;
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\Permission;
 use App\Module\System\Domain\Entity\RoleAccessPermission;
-use App\Module\System\Domain\Interface\RoleAccessPermission\RoleAccessPermissionInterface;
+use App\Module\System\Domain\Interface\RoleAccessPermission\RoleAccessPermissionReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
-class RoleAccessPermissionRepository extends ServiceEntityRepository implements RoleAccessPermissionInterface
+class RoleAccessPermissionReaderRepository extends ServiceEntityRepository implements RoleAccessPermissionReaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {

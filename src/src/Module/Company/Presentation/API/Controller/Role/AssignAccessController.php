@@ -7,10 +7,10 @@ namespace App\Module\Company\Presentation\API\Controller\Role;
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Command\Role\AssignAccessesCommand;
-use App\Module\Company\Domain\DTO\Role\AssignAccessDTO;
+use App\Module\Company\Domain\DTO\Role\AssignAccessesDTO;
 use App\Module\System\Application\Event\LogFileEvent;
-use App\Module\System\Domain\Enum\AccessEnum;
-use App\Module\System\Domain\Enum\PermissionEnum;
+use App\Module\System\Domain\Enum\Access\AccessEnum;
+use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,7 +30,7 @@ final class AssignAccessController extends AbstractController
     }
 
     #[Route('/api/roles/{uuid}/accesses', name: 'api.roles.accesses.assign', methods: ['POST'])]
-    public function assign(string $uuid, #[MapRequestPayload] AssignAccessDTO $assignAccessDTO): JsonResponse
+    public function assign(string $uuid, #[MapRequestPayload] AssignAccessesDTO $assignAccessesDTO): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(
@@ -39,7 +39,7 @@ final class AssignAccessController extends AbstractController
                 $this->messageService->get('accessDenied')
             );
 
-            $this->dispatchCommand($uuid, $assignAccessDTO);
+            $this->dispatchCommand($uuid, $assignAccessesDTO);
             
 
             return $this->successResponse();
@@ -48,7 +48,7 @@ final class AssignAccessController extends AbstractController
         }
     }
 
-    private function dispatchCommand(string $roleUUID, AssignAccessDTO $assignAccessDTO): void
+    private function dispatchCommand(string $roleUUID, AssignAccessesDTO $assignAccessDTO): void
     {
         try {
             $this->commandBus->dispatch(

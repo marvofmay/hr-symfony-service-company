@@ -6,8 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\Company;
 
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Facade\ImportCompaniesFacade;
-use App\Module\System\Domain\Enum\AccessEnum;
-use App\Module\System\Domain\Enum\PermissionEnum;
+use App\Module\System\Domain\Enum\Access\AccessEnum;
+use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;

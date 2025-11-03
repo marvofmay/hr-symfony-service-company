@@ -107,6 +107,11 @@ class Role  implements MappableEntityInterface
         return $this->roleAccesses;
     }
 
+    public function getAccesses(): Collection
+    {
+        return $this->getRoleAccesses()->map(fn (RoleAccess $ra) => $ra->getAccess());
+    }
+
     public function addAccess(Access $access): void
     {
         foreach ($this->roleAccesses as $roleAccess) {
@@ -140,8 +145,16 @@ class Role  implements MappableEntityInterface
         $this->accessPermissions->add($relation);
     }
 
-    public function getAccesses(): Collection
+    public function removeAccessPermission(Access $access, Permission $permission): void
     {
-        return $this->getRoleAccesses()->map(fn (RoleAccess $ra) => $ra->getAccess());
+        foreach ($this->accessPermissions as $relation) {
+            if (
+                $relation->getAccess() === $access &&
+                $relation->getPermission() === $permission
+            ) {
+                $this->accessPermissions->removeElement($relation);
+                break;
+            }
+        }
     }
 }

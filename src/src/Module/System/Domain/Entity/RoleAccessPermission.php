@@ -25,6 +25,8 @@ class RoleAccessPermission
     public const RELATION_ACCESS = 'access';
     public const RELATION_PERMISSION = 'permission';
 
+    public const string ALIAS = 'role_access_permission';
+
     #[ORM\Id]
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'accessPermissions')]
     #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]

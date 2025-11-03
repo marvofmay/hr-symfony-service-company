@@ -15,6 +15,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag('app.role.update.validator')]
 #[AutoconfigureTag('app.role.delete.validator')]
 #[AutoconfigureTag('app.role.assignAccesses.validator')]
+#[AutoconfigureTag('app.role.assignPermissions.validator')]
 #[AutoconfigureTag('app.role.query.get.validator')]
 #[AutoconfigureTag('app.employee.create.validator')]
 #[AutoconfigureTag('app.employee.update.validator')]

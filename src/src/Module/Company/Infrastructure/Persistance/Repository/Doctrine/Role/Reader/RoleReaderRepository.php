@@ -25,33 +25,29 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
         return $this->findOneBy([RoleEntityFieldEnum::UUID->value => $uuid]);
     }
 
-    public function getRolesByUUID(array $selectedUUID): Collection
+    public function getRolesByUUIDs(array $uuids): Collection
     {
-        if (!$selectedUUID) {
-            return new ArrayCollection();
-        }
-
-        $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('r')
-            ->from(Role::class, 'r')
-            ->where('r.'.RoleEntityFieldEnum::UUID->value.' IN (:uuids)')
-            ->setParameter('uuids', $selectedUUID);
-
-        $roles = $qb->getQuery()->getResult();
-
-        return new ArrayCollection($roles);
+        return new ArrayCollection(
+            empty($uuids)
+                ? []
+                : $this->createQueryBuilder(Role::ALIAS)
+                ->where(Role::ALIAS.'.' . RoleEntityFieldEnum::UUID->value . ' IN (:uuids)')
+                ->setParameter('uuids', $uuids)
+                ->getQuery()
+                ->getResult()
+        );
     }
 
     public function getRoleByName(string $name, ?string $uuid = null): ?Role
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('r')
-            ->from(Role::class, 'r')
-            ->where('r.'.RoleEntityFieldEnum::NAME->value.' = :name')
+            ->select(Role::ALIAS)
+            ->from(Role::class, Role::ALIAS)
+            ->where(Role::ALIAS. '.' . RoleEntityFieldEnum::NAME->value . ' = :name')
             ->setParameter('name', $name);
 
         if ($uuid) {
-            $qb->andWhere('r.'.RoleEntityFieldEnum::UUID->value.' != :uuid')
+            $qb->andWhere(Role::ALIAS.'.' . RoleEntityFieldEnum::UUID->value . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -74,9 +70,9 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
         $filters->disable('soft_delete');
 
         try {
-            return  $this->createQueryBuilder(Role::ALIAS)
-                ->where(Role::ALIAS.'.'.RoleEntityFieldEnum::UUID->value.' = :uuid')
-                ->andWhere(Role::ALIAS.'.'.TimeStampableEntityFieldEnum::DELETED_AT->value.' IS NOT NULL')
+            return $this->createQueryBuilder(Role::ALIAS)
+                ->where(Role::ALIAS . '.' . RoleEntityFieldEnum::UUID->value . ' = :uuid')
+                ->andWhere(Role::ALIAS . '.' . TimeStampableEntityFieldEnum::DELETED_AT->value . ' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
@@ -94,7 +90,7 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(Role::ALIAS)
             ->from(Role::class, Role::ALIAS)
-            ->where(Role::ALIAS.'.'.RoleEntityFieldEnum::NAME->value.' IN (:names)')
+            ->where(Role::ALIAS . '.' . RoleEntityFieldEnum::NAME->value . ' IN (:names)')
             ->setParameter('names', $names);
 
         $roles = $qb->getQuery()->getResult();

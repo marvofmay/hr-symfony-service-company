@@ -6,7 +6,7 @@ namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\Module;
-use App\Module\System\Domain\Enum\AccessEnum;
+use App\Module\System\Domain\Enum\Access\AccessEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

@@ -7,6 +7,7 @@ namespace App\Module\System\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
+use App\Module\System\Domain\Enum\Permission\PermissionEntityFieldEnum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -24,14 +25,7 @@ class Permission
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const string COLUMN_UUID = 'uuid';
-    public const string COLUMN_NAME = 'name';
-    public const string COLUMN_DESCRIPTION = 'description';
-    public const string COLUMN_ACTIVE = 'active';
-    public const string COLUMN_CREATED_AT = 'createdAt';
-    public const string COLUMN_UPDATED_AT = 'updatedAt';
-    public const string COLUMN_DELETED_AT = 'deletedAt';
-    public const string ALIAS = 'access';
+    public const string ALIAS = 'permission';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
@@ -52,36 +46,36 @@ class Permission
 
     public function getUUID(): UuidInterface
     {
-        return $this->{self::COLUMN_UUID};
+        return $this->{PermissionEntityFieldEnum::UUID->value};
     }
 
     public function getName(): string
     {
-        return $this->{self::COLUMN_NAME};
+        return $this->{PermissionEntityFieldEnum::NAME->value};
     }
 
     public function setName(string $name): void
     {
-        $this->{self::COLUMN_NAME} = $name;
+        $this->{PermissionEntityFieldEnum::NAME->value} = $name;
     }
 
     public function getDescription(): ?string
     {
-        return $this->{self::COLUMN_DESCRIPTION};
+        return $this->{PermissionEntityFieldEnum::DESCRIPTION->value};
     }
 
     public function setDescription(?string $description): void
     {
-        $this->{self::COLUMN_DESCRIPTION} = $description;
+        $this->{PermissionEntityFieldEnum::DESCRIPTION->value} = $description;
     }
 
     public function getActive(): bool
     {
-        return $this->{self::COLUMN_ACTIVE};
+        return $this->{PermissionEntityFieldEnum::ACTIVE->value};
     }
 
     public function setActive(bool $active): void
     {
-        $this->{self::COLUMN_ACTIVE} = $active;
+        $this->{PermissionEntityFieldEnum::ACTIVE->value} = $active;
     }
 }

@@ -9,7 +9,7 @@ use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\Permission;
 use Doctrine\Common\Collections\Collection;
 
-interface RoleAccessPermissionInterface
+interface RoleAccessPermissionReaderInterface
 {
     public function isRoleHasAccessAndPermission(Permission $permission, Access $access, Role $role): bool;
 

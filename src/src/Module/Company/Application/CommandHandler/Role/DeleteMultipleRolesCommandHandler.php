@@ -29,7 +29,7 @@ final class DeleteMultipleRolesCommandHandler extends CommandHandlerAbstract
     {
         $this->validate($command);
 
-        $roles = $this->roleReaderRepository->getRolesByUUID($command->rolesUUIDs);
+        $roles = $this->roleReaderRepository->getRolesByUUIDs($command->rolesUUIDs);
         $this->roleMultipleDeleter->multipleDelete($roles);
 
         $this->eventDispatcher->dispatch(new RoleMultipleDeletedEvent([

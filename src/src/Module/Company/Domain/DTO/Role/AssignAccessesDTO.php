@@ -6,7 +6,7 @@ namespace App\Module\Company\Domain\DTO\Role;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-class AssignAccessDTO
+class AssignAccessesDTO
 {
     #[Assert\All([
         new Assert\Uuid(message: 'uuid.invalid'),

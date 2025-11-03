@@ -18,25 +18,12 @@ final readonly class RoleAccessUpdater
 
     public function updateAccesses(Role $role, AssignAccessesCommand $command): void
     {
-        $accesses = $this->accessReaderRepository->getAccesses()->toArray();
-
         $existingAccesses = [];
-        $payloadAccessesUUIDs = [];
-
+        $accesses = $this->accessReaderRepository->getAccesses()->toArray();
         foreach ($accesses as $access) {
             $existingAccesses[$access->getUUID()->toString()] = $access;
         }
 
-        foreach ($existingAccesses as $existingAccess) {
-            if (in_array($existingAccess->getUUID()->toString(), $command->accessesUUIDs, true)) {
-                $payloadAccessesUUIDs[] = $existingAccess->getUUID()->toString();
-            }
-        }
-
-        $this->accessSynchronizer->syncAccesses(
-            $role,
-            $payloadAccessesUUIDs,
-            $existingAccesses
-        );
+        $this->accessSynchronizer->syncAccesses($role, $command->accessesUUIDs, $existingAccesses);
     }
 }

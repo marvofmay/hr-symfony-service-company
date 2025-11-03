@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace App\Module\System\Application\Console\DefaultData;
 
 use App\Module\System\Domain\Entity\Permission;
-use App\Module\System\Domain\Enum\PermissionEnum;
+use App\Module\System\Domain\Enum\Permission\PermissionEntityFieldEnum;
+use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -42,11 +43,11 @@ class AddRecordToPermissionTableCommand extends Command
 
         $permissionRepository = $this->entityManager->getRepository(Permission::class);
         $existingPermissions = $permissionRepository->createQueryBuilder(Permission::ALIAS)
-            ->select(Permission::ALIAS.'.'.Permission::COLUMN_NAME)
+            ->select(Permission::ALIAS.'.'.PermissionEntityFieldEnum::NAME->value)
             ->getQuery()
             ->getArrayResult();
 
-        $existingPermissionNames = array_column($existingPermissions, Permission::COLUMN_NAME);
+        $existingPermissionNames = array_column($existingPermissions, PermissionEntityFieldEnum::NAME->value);
 
         $permissionsToPersist = [];
 

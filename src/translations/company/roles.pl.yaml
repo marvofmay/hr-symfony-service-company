@@ -33,11 +33,13 @@ role:
       required: "Plik importu ról jest wymagany"
   assign:
     access:
-      success: "Dostępy dla roli zostały pomyślnie dodane"
-      error: "Wystąpił błąd - dostępy dla roli nie zostały dodane"
+      success: "Dostępy dla roli zostały pomyślnie zaktualizowane"
+      error: "Wystąpił błąd - dostępy dla roli nie zostały zaktualizowane"
     permission:
-      success: "Uprawnienia dla roli zostały pomyślnie dodane"
-      error: "Wystąpił błąd - uprawnienia dla roli nie zostały dodane"
+      success: "Uprawnienia dla roli zostały pomyślnie zaktualizowane"
+      error: "Wystąpił błąd - uprawnienia dla roli nie zostały zaktualizowane"
+  access:
+    notAssigned: "Dostępy o uuid :accesses nie są przypisane do roli :role"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej roli"
   list:

@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Interface\Permission;
 
 use App\Module\System\Domain\Entity\Permission;
+use Doctrine\Common\Collections\Collection;
 
 interface PermissionReaderInterface
 {
+    public function getPermissions(): Collection;
     public function getPermissionByUUID(string $uuid): ?Permission;
 
     public function getPermissionByName(string $name): ?Permission;
@@ -17,4 +19,5 @@ interface PermissionReaderInterface
     public function isPermissionWithNameExists(string $name): bool;
 
     public function isPermissionActive(string $uuid): bool;
+    public function getPermissionsByUUIDs(array $uuids): Collection;
 }

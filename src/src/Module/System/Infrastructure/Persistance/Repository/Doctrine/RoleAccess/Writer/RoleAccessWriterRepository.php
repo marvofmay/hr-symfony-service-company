@@ -20,7 +20,7 @@ class RoleAccessWriterRepository extends ServiceEntityRepository implements Role
         parent::__construct($registry, RoleAccess::class);
     }
 
-    public function deleteRoleAccessByRoleAndAccessInDB(Role $role, Access $access, DeleteTypeEnum $deleteTypeEnum = DeleteTypeEnum::SOFT_DELETE): void
+    public function deleteRoleAccessInDB(Role $role, Access $access, DeleteTypeEnum $deleteTypeEnum = DeleteTypeEnum::SOFT_DELETE): void
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
@@ -39,6 +39,27 @@ class RoleAccessWriterRepository extends ServiceEntityRepository implements Role
                 ->andWhere(RoleAccess::ALIAS . '.' . RoleAccessEntityRelationFieldEnum::ACCESS->value . ' = :accessUUID')
                 ->setParameter('roleUUID', $role->getUUID())
                 ->setParameter('accessUUID', $access->getUUID())
+                ->setParameter('now', new \DateTimeImmutable())
+                ->getQuery()
+                ->execute();
+        }
+    }
+
+    public function deleteRoleAccessesByRoleInDB(Role $role, DeleteTypeEnum $deleteTypeEnum = DeleteTypeEnum::SOFT_DELETE): void
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        if (DeleteTypeEnum::HARD_DELETE === $deleteTypeEnum) {
+            $qb->delete(RoleAccess::class, RoleAccess::ALIAS)
+                ->where(RoleAccess::ALIAS . '.' . RoleAccessEntityRelationFieldEnum::ROLE->value . ' = :roleUUID')
+                ->setParameter('roleUUID', $role->getUUID())
+                ->getQuery()
+                ->execute();
+        } else {
+            $qb->update(RoleAccess::class, RoleAccess::ALIAS)
+                ->set(RoleAccess::ALIAS . '.deletedAt', ':now')
+                ->where(RoleAccess::ALIAS . '.' . RoleAccessEntityRelationFieldEnum::ROLE->value . ' = :roleUUID')
+                ->setParameter('roleUUID', $role->getUUID())
                 ->setParameter('now', new \DateTimeImmutable())
                 ->getQuery()
                 ->execute();

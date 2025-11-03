@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role\Writer;
 
-use App\Common\Domain\Enum\DeleteTypeEnum;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
-use App\Module\System\Domain\Entity\RoleAccess;
-use App\Module\System\Domain\Enum\RoleAccess\RoleAccessEntityRelationFieldEnum;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
@@ -51,26 +48,5 @@ final class RoleWriterRepository extends ServiceEntityRepository implements Role
         }
 
         $this->getEntityManager()->flush();
-    }
-
-    public function deleteRoleAccessesByRoleInDB(Role $role, DeleteTypeEnum $deleteTypeEnum = DeleteTypeEnum::SOFT_DELETE): void
-    {
-        $qb = $this->getEntityManager()->createQueryBuilder();
-
-        if (DeleteTypeEnum::HARD_DELETE === $deleteTypeEnum) {
-            $qb->delete(RoleAccess::class, RoleAccess::ALIAS)
-                ->where(RoleAccess::ALIAS . '.' . RoleAccessEntityRelationFieldEnum::ROLE->value . ' = :roleUUID')
-                ->setParameter('roleUUID', $role->getUUID())
-                ->getQuery()
-                ->execute();
-        } else {
-            $qb->update(RoleAccess::class, RoleAccess::ALIAS)
-                ->set(RoleAccess::ALIAS . '.deletedAt', ':now')
-                ->where(RoleAccess::ALIAS . '.' . RoleAccessEntityRelationFieldEnum::ROLE->value . ' = :roleUUID')
-                ->setParameter('roleUUID', $role->getUUID())
-                ->setParameter('now', new \DateTimeImmutable())
-                ->getQuery()
-                ->execute();
-        }
     }
 }

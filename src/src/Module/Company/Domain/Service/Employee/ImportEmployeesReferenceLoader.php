@@ -99,7 +99,7 @@ final class ImportEmployeesReferenceLoader
 
         $this->departments = $this->mapByUUID($this->departmentReaderRepository->getDepartmentsByUUID($departmentUUIDs));
         $this->positions = $this->mapByUUID($this->positionReaderRepository->getPositionsByUUID($positionUUIDs));
-        $this->roles = $this->mapByUUID($this->roleReaderRepository->getRolesByUUID($roleUUIDs));
+        $this->roles = $this->mapByUUID($this->roleReaderRepository->getRolesByUUIDs($roleUUIDs));
         $this->contractTypes = $this->mapByUUID($this->contractTypeReaderRepository->getContractTypesByUUID($contractTypeUUIDs));
         $this->employees = $this->mapByPESEL($this->employeeReaderRepository->getEmployeesByPESEL($employeePESELs));
         $this->emailsPESELs = $this->mapByEmail($this->employeeReaderRepository->getEmployeesPESELByEmails($employeeEmails));

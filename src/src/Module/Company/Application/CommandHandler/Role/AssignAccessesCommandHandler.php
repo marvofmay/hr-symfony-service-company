@@ -7,7 +7,7 @@ namespace App\Module\Company\Application\CommandHandler\Role;
 use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Module\Company\Application\Command\Role\AssignAccessesCommand;
 use App\Module\Company\Application\Event\Role\RoleAssignedAccessesEvent;
-use App\Module\Company\Domain\Service\Role\RoleAccessCreator;
+use App\Module\Company\Domain\Service\Role\RoleAccessAssigner;
 use App\Module\Company\Domain\Service\Role\RoleAccessDeleter;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -17,7 +17,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 final class AssignAccessesCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
-        private readonly RoleAccessCreator $roleAccessCreator,
+        private readonly RoleAccessAssigner $roleAccessAssigner,
         private readonly RoleAccessDeleter $roleAccessDeleter,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.role.assignAccesses.validator')] protected iterable $validators,
@@ -29,7 +29,7 @@ final class AssignAccessesCommandHandler extends CommandHandlerAbstract
         $this->validate($command);
 
         if (!empty($command->accessesUUIDs)) {
-            $this->roleAccessCreator->create($command);
+            $this->roleAccessAssigner->assign($command);
         } else {
             $this->roleAccessDeleter->delete($command);
         }

@@ -13,7 +13,7 @@ interface AccessReaderInterface
     public function getAccesses(): Collection;
     public function getAccessByUUID(string $uuid): ?Access;
 
-    public function getAccessesByUUID(array $uuids): Collection;
+    public function getAccessesByUUIDs(array $uuids): Collection;
 
     public function getAccessByNameAndModuleUUID(string $name, Module $module): ?Access;
 
