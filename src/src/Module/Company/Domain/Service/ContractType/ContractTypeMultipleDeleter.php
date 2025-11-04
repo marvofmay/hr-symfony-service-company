@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\ContractType;
 
+use App\Module\Company\Domain\Interface\ContractType\ContractTypeMultipleDeleterInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
 use Doctrine\Common\Collections\Collection;
 
-readonly class ContractTypeMultipleDeleter
+readonly class ContractTypeMultipleDeleter implements ContractTypeMultipleDeleterInterface
 {
     public function __construct(private ContractTypeWriterInterface $contractTypeWriterRepository)
     {

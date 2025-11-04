@@ -12,10 +12,10 @@ class DeleteMultipleDTO
     #[Assert\All([
         new Assert\Uuid(message: 'contractType.delete.invalidUUID'),
     ])]
-    public array $selectedUUID = [];
+    public array $contractTypesUUIDs = [];
 
     public function getSelectedUUID(): array
     {
-        return $this->selectedUUID;
+        return $this->contractTypesUUIDs;
     }
 }

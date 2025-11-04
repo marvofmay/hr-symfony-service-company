@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\ContractType;
 
-use Doctrine\Common\Collections\Collection;
+use App\Common\Domain\Interface\CommandInterface;
 
-class DeleteMultipleContractTypesCommand
+class DeleteMultipleContractTypesCommand implements CommandInterface
 {
-    public function __construct(public Collection $contractTypes)
+    public const string CONTRACT_TYPES_UUIDS = 'contactTypesUUIDs';
+
+    public function __construct(public array $contractTypesUUIDs)
     {
     }
 }

@@ -25,9 +25,9 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
         return $this->findOneBy([ContractType::COLUMN_UUID => $uuid]);
     }
 
-    public function getContractTypesByUUID(array $selectedUUID): Collection
+    public function getContractTypesByUUIDs(array $contractTypesUUIDs): Collection
     {
-        if (!$selectedUUID) {
+        if (!$contractTypesUUIDs) {
             return new ArrayCollection();
         }
 
@@ -35,7 +35,7 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
             ->select(ContractType::ALIAS)
             ->from(ContractType::class, ContractType::ALIAS)
             ->where(ContractType::ALIAS.'.'.ContractType::COLUMN_UUID.' IN (:uuids)')
-            ->setParameter('uuids', $selectedUUID);
+            ->setParameter('uuids', $contractTypesUUIDs);
 
         $contractTypes = $qb->getQuery()->getResult();
 

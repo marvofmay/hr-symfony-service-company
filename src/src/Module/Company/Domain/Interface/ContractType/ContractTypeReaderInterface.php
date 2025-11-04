@@ -11,7 +11,7 @@ interface ContractTypeReaderInterface
 {
     public function getContractTypeByUUID(string $uuid): ?ContractType;
 
-    public function getContractTypesByUUID(array $selectedUUID): Collection;
+    public function getContractTypesByUUIDs(array $contractTypesUUIDs): Collection;
 
     public function getContractTypeByName(string $name, ?string $uuid): ?ContractType;
 
