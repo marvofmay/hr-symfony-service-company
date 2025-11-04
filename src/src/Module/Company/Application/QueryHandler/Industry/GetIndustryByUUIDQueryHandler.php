@@ -39,7 +39,7 @@ final readonly class GetIndustryByUUIDQueryHandler
         return $transformer->transformToArray($industry);
     }
 
-    protected function validate(QueryInterface $query): void
+    private function validate(QueryInterface $query): void
     {
         foreach ($this->validators as $validator) {
             if (method_exists($validator, 'supports') && $validator->supports($query)) {

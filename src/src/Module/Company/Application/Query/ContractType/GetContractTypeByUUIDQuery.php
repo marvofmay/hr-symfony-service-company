@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Query\ContractType;
 
-final readonly class GetContractTypeByUUIDQuery
+use App\Common\Domain\Interface\QueryInterface;
+
+final readonly class GetContractTypeByUUIDQuery implements QueryInterface
 {
-    public function __construct(public string $uuid)
+    public const string CONTRACT_TYPE_UUID = 'contractTypeUUID';
+    public function __construct(public string $contractTypeUUID)
     {
     }
 }
