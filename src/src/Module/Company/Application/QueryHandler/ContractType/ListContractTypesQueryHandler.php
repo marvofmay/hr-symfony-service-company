@@ -8,6 +8,8 @@ use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\ContractType\ContractTypeListedEvent;
 use App\Module\Company\Application\Query\ContractType\ListContractTypesQuery;
 use App\Module\Company\Domain\Entity\ContractType;
+use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -15,7 +17,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(protected EntityManagerInterface $entityManager, private readonly EventDispatcherInterface $eventDispatcher)
     {
         parent::__construct($entityManager);
     }
@@ -39,26 +41,26 @@ final class ListContractTypesQueryHandler extends ListQueryHandlerAbstract
 
     public function getDefaultOrderBy(): string
     {
-        return ContractType::COLUMN_CREATED_AT;
+        return TimeStampableEntityFieldEnum::CREATED_AT->value;
     }
 
     public function getAllowedFilters(): array
     {
         return [
-            ContractType::COLUMN_NAME,
-            ContractType::COLUMN_DESCRIPTION,
-            ContractType::COLUMN_ACTIVE,
-            ContractType::COLUMN_CREATED_AT,
-            ContractType::COLUMN_UPDATED_AT,
-            ContractType::COLUMN_DELETED_AT,
+            ContractTypeEntityFieldEnum::NAME->value,
+            ContractTypeEntityFieldEnum::DESCRIPTION->value,
+            ContractTypeEntityFieldEnum::ACTIVE->value,
+            TimeStampableEntityFieldEnum::CREATED_AT->value,
+            TimeStampableEntityFieldEnum::UPDATED_AT->value,
+            TimeStampableEntityFieldEnum::DELETED_AT->value,
         ];
     }
 
     public function getPhraseSearchColumns(): array
     {
         return [
-            ContractType::COLUMN_NAME,
-            ContractType::COLUMN_DESCRIPTION,
+            ContractTypeEntityFieldEnum::NAME->value,
+            ContractTypeEntityFieldEnum::DESCRIPTION->value,
         ];
     }
 
