@@ -6,7 +6,7 @@ namespace App\Module\Company\Presentation\API\Controller\ContractType;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Application\Command\ContractType\DeleteContractTypeCommand;
+use App\Module\Company\Application\Command\ContractType\RestoreContractTypeCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
@@ -18,21 +18,21 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class DeleteContractTypeController extends AbstractController
+class RestoreContractTypeController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $eventBus,
-        private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
+        private readonly MessageBusInterface $commandBus,
     ) {
     }
 
-    #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
-    public function delete(string $uuid): JsonResponse
+    #[Route('/api/contract_types/{uuid}/restore', name: 'api.contract_types.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
+    public function restore(string $uuid): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(
-                PermissionEnum::DELETE,
+                PermissionEnum::RESTORE,
                 AccessEnum::CONTRACT_TYPE,
                 $this->messageService->get('accessDenied')
             );
@@ -48,7 +48,7 @@ class DeleteContractTypeController extends AbstractController
     private function dispatchCommand(string $uuid): void
     {
         try {
-            $this->commandBus->dispatch(new DeleteContractTypeCommand($uuid));
+            $this->commandBus->dispatch(new RestoreContractTypeCommand($uuid));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
@@ -57,7 +57,7 @@ class DeleteContractTypeController extends AbstractController
     private function successResponse(): JsonResponse
     {
         return new JsonResponse(
-            ['message' => $this->messageService->get('contractType.delete.success', [], 'contract_types')],
+            ['message' => $this->messageService->get('contractType.restore.success', [], 'contract_types')],
             Response::HTTP_OK
         );
     }
@@ -66,7 +66,7 @@ class DeleteContractTypeController extends AbstractController
     {
         $message = sprintf(
             '%s. %s',
-            $this->messageService->get('contractType.delete.error', [], 'contract_types'),
+            $this->messageService->get('contractType.restore.error', [], 'contract_types'),
             $exception->getMessage()
         );
 

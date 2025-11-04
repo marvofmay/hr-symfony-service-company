@@ -18,7 +18,7 @@ final class UpdateContractTypeCommandHandler extends CommandHandlerAbstract
     public function __construct(
         private readonly ContractTypeUpdater $contractTypeUpdater,
         private readonly EventDispatcherInterface $eventDispatcher,
-        #[AutowireIterator(tag: 'app.contractType.update.validator')] protected iterable $validators,
+        #[AutowireIterator(tag: 'app.contract_type.update.validator')] protected iterable $validators,
     )
     {
     }

@@ -6,11 +6,12 @@ namespace App\Module\Company\Domain\Service\ContractType;
 
 use App\Module\Company\Application\Command\ContractType\UpdateContractTypeCommand;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
+use App\Module\Company\Domain\Interface\ContractType\ContractTypeUpdaterInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
 use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
 use App\Module\System\Domain\Factory\CommandDataMapperFactory;
 
-final readonly class ContractTypeUpdater
+final readonly class ContractTypeUpdater implements ContractTypeUpdaterInterface
 {
     public function __construct(
         private ContractTypeReaderInterface $contractTypeReaderRepository,

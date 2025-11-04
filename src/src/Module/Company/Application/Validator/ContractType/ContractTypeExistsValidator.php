@@ -12,9 +12,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AutoconfigureTag('app.contractType.update.validator')]
-#[AutoconfigureTag('app.contractType.delete.validator')]
-#[AutoconfigureTag('app.contractType.query.get.validator')]
+#[AutoconfigureTag('app.contract_type.update.validator')]
+#[AutoconfigureTag('app.contract_type.delete.validator')]
+#[AutoconfigureTag('app.contract_type.query.get.validator')]
 #[AutoconfigureTag('app.employee.create.validator')]
 #[AutoconfigureTag('app.employee.update.validator')]
 final readonly class ContractTypeExistsValidator implements ValidatorInterface

@@ -18,7 +18,7 @@ final class CreateContractTypeCommandHandler extends CommandHandlerAbstract
     public function __construct(
         private readonly ContractTypeCreator $contractTypeCreator,
         private readonly EventDispatcherInterface $eventDispatcher,
-        #[AutowireIterator(tag: 'app.contractType.create.validator')] protected iterable $validators,
+        #[AutowireIterator(tag: 'app.contract_type.create.validator')] protected iterable $validators,
     ) {
     }
 

@@ -12,8 +12,8 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AutoconfigureTag('app.contractType.create.validator')]
-#[AutoconfigureTag('app.contractType.update.validator')]
+#[AutoconfigureTag('app.contract_type.create.validator')]
+#[AutoconfigureTag('app.contract_type.update.validator')]
 final readonly class ContractTypeNameAlreadyExistsValidator implements ValidatorInterface
 {
     public function __construct(

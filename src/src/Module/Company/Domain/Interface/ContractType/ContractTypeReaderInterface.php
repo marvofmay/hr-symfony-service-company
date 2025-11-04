@@ -16,4 +16,7 @@ interface ContractTypeReaderInterface
     public function getContractTypeByName(string $name, ?string $uuid): ?ContractType;
 
     public function isContractTypeNameAlreadyExists(string $name, ?string $uuid = null): bool;
+    public function isContractTypeWithUUIDExists(string $uuid): bool;
+    public function getDeletedContractTypeByUUID(string $uuid): ?ContractType;
+    public function getContractTypesByNames(array $names): Collection;
 }

@@ -5,16 +5,17 @@ declare(strict_types=1);
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\ContractType\Reader;
 
 use App\Module\Company\Domain\Entity\ContractType;
+use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class ContractTypeReaderRepository extends ServiceEntityRepository implements ContractTypeReaderInterface
 {
-    public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, ContractType::class);
     }
@@ -37,18 +38,6 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
             ->setParameter('uuids', $selectedUUID);
 
         $contractTypes = $qb->getQuery()->getResult();
-
-        // $foundUUIDs = array_map(fn(ContractType $contractType) => $contractType->getUUID(), $contractTypes);
-        // $missingUUIDs = array_diff($selectedUUID, $foundUUIDs);
-        //
-        // if ($missingUUIDs) {
-        //    throw new NotFindByUUIDException(
-        //        sprintf(
-        //            '%s : %s',
-        //            $this->translator->trans('contractType.uuid.notFound', [], 'contract_types'),
-        //            implode(', ', $missingUUIDs)
-        //        ));
-        // }
 
         return new ArrayCollection($contractTypes);
     }
@@ -77,5 +66,38 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
     public function isContractTypeWithUUIDExists(string $uuid): bool
     {
         return null !== $this->findOneBy(['uuid' => $uuid]);
+    }
+
+    public function getDeletedContractTypeByUUID(string $uuid): ?ContractType
+    {
+        $filters = $this->getEntityManager()->getFilters();
+        $filters->disable('soft_delete');
+
+        try {
+            return $this->createQueryBuilder(ContractType::ALIAS)
+                ->where(ContractType::ALIAS.'.'.ContractTypeEntityFieldEnum::UUID->value.' = :uuid')
+                ->andWhere(ContractType::ALIAS.'.'.TimeStampableEntityFieldEnum::DELETED_AT->value.' IS NOT NULL')
+                ->setParameter('uuid', $uuid)
+                ->getQuery()
+                ->getOneOrNullResult();
+        } finally {
+            $filters->enable('soft_delete');
+        }
+    }
+    public function getContractTypesByNames(array $names): Collection
+    {
+        if (!$names) {
+            return new ArrayCollection();
+        }
+
+        $qb = $this->getEntityManager()->createQueryBuilder()
+            ->select(ContractType::ALIAS)
+            ->from(ContractType::class, ContractType::ALIAS)
+            ->where(ContractType::ALIAS.'.'.ContractTypeEntityFieldEnum::NAME->value.' IN (:names)')
+            ->setParameter('names', $names);
+
+        $contractTypes = $qb->getQuery()->getResult();
+
+        return new ArrayCollection($contractTypes);
     }
 }

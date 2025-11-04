@@ -6,11 +6,12 @@ namespace App\Module\Company\Domain\Service\ContractType;
 
 use App\Module\Company\Application\Command\ContractType\CreateContractTypeCommand;
 use App\Module\Company\Domain\Entity\ContractType;
+use App\Module\Company\Domain\Interface\ContractType\ContractTypeCreatorInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
 use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
 use App\Module\System\Domain\Factory\CommandDataMapperFactory;
 
-readonly class ContractTypeCreator
+readonly class ContractTypeCreator implements ContractTypeCreatorInterface
 {
     public function __construct(
         private ContractTypeWriterInterface $contractTypeWriterRepository,

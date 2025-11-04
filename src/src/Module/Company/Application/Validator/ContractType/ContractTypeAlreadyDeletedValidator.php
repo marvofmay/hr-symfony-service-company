@@ -12,8 +12,8 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AutoconfigureTag('app.contract_type.delete_multiple.validator')]
-final readonly class ContractTypesExistsValidator implements ValidatorInterface
+#[AutoconfigureTag('app.contract_type.restore.validator')]
+final readonly class ContractTypeAlreadyDeletedValidator implements ValidatorInterface
 {
     public function __construct(private ContractTypeReaderInterface $contractTypeReaderRepository, private TranslatorInterface $translator)
     {
@@ -26,26 +26,14 @@ final readonly class ContractTypesExistsValidator implements ValidatorInterface
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        $uuids = $data->contractTypesUUIDs ?? [];
-
-        if (empty($uuids)) {
+        if (!property_exists($data, 'contractTypeUUID')) {
             return;
         }
 
-        $foundContractTypes = $this->contractTypeReaderRepository
-            ->getContractTypesByUUID($uuids)
-            ->map(fn ($contractType) => $contractType->getUUID())
-            ->toArray();
-
-        $missing = array_diff($uuids, $foundContractTypes);
-
-        if (!empty($missing)) {
-            $translatedErrors = array_map(
-                fn (string $uuid) => $this->translator->trans('contractType.uuid.notExists', [':uuid' => $uuid], 'contract_types'),
-                $missing
-            );
-
-            throw new \Exception(implode(', ', $translatedErrors), Response::HTTP_NOT_FOUND);
+        $contractTypeUUID = $data->contractTypeUUID;
+        $contractTypeDeleted = $this->contractTypeReaderRepository->getDeletedContractTypeByUUID($contractTypeUUID);
+        if (null === $contractTypeDeleted) {
+            throw new \Exception($this->translator->trans('contractType.deleted.notExists', [':uuid' => $contractTypeUUID], 'contract_types'), Response::HTTP_CONFLICT);
         }
     }
 }

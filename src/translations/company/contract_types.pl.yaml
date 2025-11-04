@@ -19,6 +19,11 @@ contractType:
     error: "Wystąpił błąd - forma zatrudnienia nie została usunięta"
     multiple:
       success: "Formy zatrudnienia zostały pomyślnie usunięte"
+  restore:
+    success: "Forma zatrudnienia została pomyślnie przywrócona"
+    error: "Wystąpił błąd - Forma zatrudnienia nie została przywrócona"
+  deleted:
+    notExists: "Forma zatrudnienia o uuid :uuid nie jest usunięta lub nie istnieje"
   import:
     success: "Formy zatrudnienia zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - formy zatrudnieia nie zostały zaimportowane"
