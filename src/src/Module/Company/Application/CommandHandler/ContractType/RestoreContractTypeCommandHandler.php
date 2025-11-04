@@ -27,7 +27,9 @@ final class RestoreContractTypeCommandHandler extends CommandHandlerAbstract
         $this->validate($command);
 
         $contractType = $this->contractTypeReaderRepository->getDeletedContractTypeByUUID($command->contractTypeUUID);
+
         $this->contractTypeRestorer->restore($contractType);
+
         $this->eventDispatcher->dispatch(new IndustryRestoredEvent([
             RestoreContractTypeCommand::CONTRACT_TYPE_UUID => $command->contractTypeUUID,
         ]));

@@ -4,27 +4,24 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\ContractType;
 
-use App\Module\Company\Application\Command\ContractType\CreateContractTypeCommand;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeCreatorInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
-use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
-use App\Module\System\Domain\Factory\CommandDataMapperFactory;
 
 readonly class ContractTypeCreator implements ContractTypeCreatorInterface
 {
-    public function __construct(
-        private ContractTypeWriterInterface $contractTypeWriterRepository,
-        private CommandDataMapperFactory $commandDataMapperFactory,
-    )
+    public function __construct(private ContractTypeWriterInterface $contractTypeWriterRepository)
     {
     }
 
-    public function create(CreateContractTypeCommand $command): void
+    public function create(string $name, ?string $description, ?bool $active = null): void
     {
         $contractType = new ContractType();
-        $mapper = $this->commandDataMapperFactory->getMapper(CommandDataMapperKindEnum::COMMAND_MAPPER_CONTRACT_TYPE);
-        $mapper->map($contractType, $command);
+        $contractType->setName($name);
+        $contractType->setDescription($description);
+        if ($active !== null) {
+            $contractType->setActive($active);
+        }
 
         $this->contractTypeWriterRepository->saveContractTypeInDB($contractType);
     }

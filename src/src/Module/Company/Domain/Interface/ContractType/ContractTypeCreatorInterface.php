@@ -2,9 +2,7 @@
 
 namespace App\Module\Company\Domain\Interface\ContractType;
 
-use App\Module\Company\Application\Command\ContractType\CreateContractTypeCommand;
-
 interface ContractTypeCreatorInterface
 {
-    public function create(CreateContractTypeCommand $command): void;
+    public function create(string $name, ?string $description, ?bool $active = null): void;
 }

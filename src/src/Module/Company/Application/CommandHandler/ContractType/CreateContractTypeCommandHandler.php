@@ -26,7 +26,11 @@ final class CreateContractTypeCommandHandler extends CommandHandlerAbstract
     {
         $this->validate($command);
 
-        $this->contractTypeCreator->create($command);
+        $this->contractTypeCreator->create(
+            name: $command->name,
+            description: $command->description,
+            active: $command->active
+        );
 
         $this->eventDispatcher->dispatch(new ContractTypeCreatedEvent([
             CreateContractTypeCommand::CONTRACT_TYPE_NAME        => $command->name,

@@ -2,9 +2,9 @@
 
 namespace App\Module\Company\Domain\Interface\ContractType;
 
-use App\Module\Company\Application\Command\ContractType\UpdateContractTypeCommand;
+use App\Module\Company\Domain\Entity\ContractType;
 
 interface ContractTypeUpdaterInterface
 {
-    public function update(UpdateContractTypeCommand $command): void;
+    public function update(ContractType $contractType, string $name, ?string $description, bool $active): void;
 }
