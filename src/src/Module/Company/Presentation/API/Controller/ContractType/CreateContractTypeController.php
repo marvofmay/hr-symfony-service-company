@@ -52,9 +52,9 @@ class CreateContractTypeController extends AbstractController
         try {
             $this->commandBus->dispatch(
                 new CreateContractTypeCommand(
-                    $createDTO->name,
-                    $createDTO->description,
-                    $createDTO->active
+                    name: $createDTO->name,
+                    description: $createDTO->description,
+                    active: $createDTO->active
                 )
             );
         } catch (HandlerFailedException $exception) {

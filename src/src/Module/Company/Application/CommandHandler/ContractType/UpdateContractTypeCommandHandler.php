@@ -4,28 +4,36 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\CommandHandler\ContractType;
 
+use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Module\Company\Application\Command\ContractType\UpdateContractTypeCommand;
 use App\Module\Company\Application\Event\ContractType\ContractTypeUpdatedEvent;
-use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Service\ContractType\ContractTypeUpdater;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final readonly class UpdateContractTypeCommandHandler
+final class UpdateContractTypeCommandHandler extends CommandHandlerAbstract
 {
-    public function __construct(private ContractTypeUpdater $contractTypeUpdater, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        private readonly ContractTypeUpdater $contractTypeUpdater,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        #[AutowireIterator(tag: 'app.contractType.update.validator')] protected iterable $validators,
+    )
     {
     }
 
     public function __invoke(UpdateContractTypeCommand $command): void
     {
-        $this->contractTypeUpdater->update($command->getContractType(), $command->getName(), $command->getDescription(), $command->getActive());
+        $this->validate($command);
+
+        $this->contractTypeUpdater->update($command);
+
         $this->eventDispatcher->dispatch(new ContractTypeUpdatedEvent([
-            ContractType::COLUMN_UUID => $command->getContractType()->getUUID(),
-            ContractType::COLUMN_NAME => $command->getName(),
-            ContractType::COLUMN_DESCRIPTION => $command->getDescription(),
-            ContractType::COLUMN_ACTIVE => $command->getActive(),
+            UpdateContractTypeCommand::CONTRACT_TYPE_UUID => $command->contractTypeUUID,
+            UpdateContractTypeCommand::CONTRACT_TYPE_NAME => $command->name,
+            UpdateContractTypeCommand::CONTRACT_TYPE_DESCRIPTION => $command->description,
+            UpdateContractTypeCommand::CONTRACT_TYPE_ACTIVE => $command->active,
         ]));
     }
 }

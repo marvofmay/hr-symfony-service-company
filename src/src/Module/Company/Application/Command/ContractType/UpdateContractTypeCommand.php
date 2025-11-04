@@ -4,35 +4,20 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\ContractType;
 
-use App\Module\Company\Domain\Entity\ContractType;
+use App\Common\Domain\Interface\CommandInterface;
 
-class UpdateContractTypeCommand
+final readonly class UpdateContractTypeCommand implements CommandInterface
 {
+    public const string CONTRACT_TYPE_UUID        = 'contractTypeUUID';
+    public const string CONTRACT_TYPE_NAME        = 'contractTypeName';
+    public const string CONTRACT_TYPE_DESCRIPTION = 'contractTypeDescription';
+    public const string CONTRACT_TYPE_ACTIVE      = 'contractTypeActive';
+
     public function __construct(
-        private readonly string $name,
-        private readonly ?string $description,
-        private readonly ?bool $active,
-        private readonly ContractType $contractType,
+        public string $contractTypeUUID,
+        public string $name,
+        public ?string $description,
+        public ?bool $active,
     ) {
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function getActive(): ?bool
-    {
-        return $this->active;
-    }
-
-    public function getContractType(): ContractType
-    {
-        return $this->contractType;
     }
 }

@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Factory;
 
+use App\Common\Domain\Interface\CommandDataMapperFactoryInterface;
 use App\Common\Domain\Interface\CommandDataMapperInterface;
 use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
-use App\Module\System\Domain\Interface\CommandDataMapperFactoryInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class CommandDataMapperFactory implements CommandDataMapperFactoryInterface

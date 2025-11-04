@@ -4,20 +4,28 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\ContractType;
 
-use App\Module\Company\Domain\Entity\ContractType;
+use App\Module\Company\Application\Command\ContractType\UpdateContractTypeCommand;
+use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
+use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
+use App\Module\System\Domain\Factory\CommandDataMapperFactory;
 
-readonly class ContractTypeUpdater
+final readonly class ContractTypeUpdater
 {
-    public function __construct(private ContractTypeWriterInterface $contractTypeWriterRepository)
+    public function __construct(
+        private ContractTypeReaderInterface $contractTypeReaderRepository,
+        private ContractTypeWriterInterface $contractTypeWriterRepository,
+        private CommandDataMapperFactory $commandDataMapperFactory,
+    )
     {
     }
 
-    public function update(ContractType $contractType, string $name, ?string $description, ?bool $active): void
+    public function update(UpdateContractTypeCommand $command): void
     {
-        $contractType->setName($name);
-        $contractType->setDescription($description);
-        $contractType->setActive($active);
+        $contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($command->contractTypeUUID);
+
+        $mapper = $this->commandDataMapperFactory->getMapper(CommandDataMapperKindEnum::COMMAND_MAPPER_CONTRACT_TYPE);
+        $mapper->map($contractType, $command);
 
         $this->contractTypeWriterRepository->saveContractTypeInDB($contractType);
     }

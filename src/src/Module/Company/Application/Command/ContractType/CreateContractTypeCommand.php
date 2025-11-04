@@ -6,7 +6,7 @@ namespace App\Module\Company\Application\Command\ContractType;
 
 use App\Common\Domain\Interface\CommandInterface;
 
-class CreateContractTypeCommand implements CommandInterface
+final readonly class CreateContractTypeCommand implements CommandInterface
 {
     public const string CONTRACT_TYPE_NAME = 'name';
     public const string CONTRACT_TYPE_DESCRIPTION = 'description';

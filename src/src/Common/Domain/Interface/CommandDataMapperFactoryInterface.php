@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Module\System\Domain\Interface;
+namespace App\Common\Domain\Interface;
 
-use App\Common\Domain\Interface\CommandDataMapperInterface;
 use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
 
 interface CommandDataMapperFactoryInterface

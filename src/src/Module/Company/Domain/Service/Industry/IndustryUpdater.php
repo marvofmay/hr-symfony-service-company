@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
 use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
 use App\Module\System\Domain\Factory\CommandDataMapperFactory;
 
-readonly class IndustryUpdater
+final readonly class IndustryUpdater
 {
     public function __construct(
         private IndustryReaderInterface $industryReaderRepository,
@@ -23,8 +23,10 @@ readonly class IndustryUpdater
     public function update(UpdateIndustryCommand $command): void
     {
         $industry = $this->industryReaderRepository->getIndustryByUUID($command->industryUUID);
+
         $mapper = $this->commandDataMapperFactory->getMapper(CommandDataMapperKindEnum::COMMAND_MAPPER_INDUSTRY);
         $mapper->map($industry, $command);
+
         $this->industryWriterRepository->saveIndustryInDB($industry);
     }
 }

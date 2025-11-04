@@ -26,14 +26,7 @@ class UpdateContractTypeAction
             $contractType = $this->contractTypeReaderRepository->getContractTypeByUUID($uuid);
             $this->contractTypeValidator->isContractTypeNameAlreadyExists($updateDTO->name, $uuid);
 
-            $this->commandBus->dispatch(
-                new UpdateContractTypeCommand(
-                    $updateDTO->name,
-                    $updateDTO->description,
-                    $updateDTO->active,
-                    $contractType
-                )
-            );
+
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
