@@ -6,7 +6,7 @@ namespace App\Common\Domain\Abstract;
 
 use App\Common\Domain\Interface\CommandInterface;
 
-class CommandHandlerAbstract
+abstract class CommandHandlerAbstract
 {
     protected iterable $validators = [];
 

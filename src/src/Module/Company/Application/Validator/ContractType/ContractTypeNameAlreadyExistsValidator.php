@@ -16,7 +16,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag('app.contractType.update.validator')]
 final readonly class ContractTypeNameAlreadyExistsValidator implements ValidatorInterface
 {
-    public function __construct(private ContractTypeReaderInterface $contractTypeReaderRepository, private TranslatorInterface $translator)
+    public function __construct(
+        private ContractTypeReaderInterface $contractTypeReaderRepository,
+        private TranslatorInterface $translator
+    )
     {
     }
 

@@ -6,16 +6,16 @@ namespace App\Module\System\Domain\Factory;
 
 use App\Common\Domain\Interface\CommandDataMapperInterface;
 use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
+use App\Module\System\Domain\Interface\CommandDataMapperFactoryInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
-final class CommandDataMapperFactory
+final class CommandDataMapperFactory implements CommandDataMapperFactoryInterface
 {
     private array $mappers;
 
     public function __construct(#[AutowireIterator(tag: 'app.command.mapper')] private readonly iterable $taggedMappers)
     {
         $this->mappers = [];
-
         foreach ($this->taggedMappers as $mapper) {
             $this->mappers[$mapper->getType()] = $mapper;
         }

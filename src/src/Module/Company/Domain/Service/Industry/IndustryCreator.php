@@ -24,6 +24,7 @@ readonly class IndustryCreator
         $industry = new Industry();
         $mapper = $this->commandDataMapperFactory->getMapper(CommandDataMapperKindEnum::COMMAND_MAPPER_INDUSTRY);
         $mapper->map($industry, $command);
+
         $this->industryWriterRepository->saveIndustryInDB($industry);
     }
 }

@@ -11,6 +11,7 @@ enum CommandDataMapperKindEnum: string implements EnumInterface
     case COMMAND_MAPPER_INDUSTRY = 'command_mapper_industry';
     case COMMAND_MAPPER_POSITION = 'command_mapper_position';
     case COMMAND_MAPPER_ROLE = 'command_mapper_role';
+    case COMMAND_MAPPER_CONTRACT_TYPE = 'command_mapper_contract_type';
 
     public function label(): string
     {
@@ -18,6 +19,7 @@ enum CommandDataMapperKindEnum: string implements EnumInterface
             self::COMMAND_MAPPER_INDUSTRY => 'commandMapperIndustry',
             self::COMMAND_MAPPER_POSITION => 'commandMapperPosition',
             self::COMMAND_MAPPER_ROLE => 'commandMapperRole',
+            self::COMMAND_MAPPER_CONTRACT_TYPE => 'commandMapperContractType',
         };
     }
 
