@@ -4,22 +4,22 @@ namespace App\Module\Company\Domain\Service\Role;
 
 use App\Common\Domain\Enum\DeleteTypeEnum;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Interface\Role\AccessSynchronizerInterface;
 use App\Module\System\Domain\Interface\RoleAccess\RoleAccessWriterInterface;
 
-final readonly class AccessSynchronizer
+final readonly class AccessSynchronizer implements AccessSynchronizerInterface
 {
     public function __construct(
         private RoleAccessWriterInterface $roleAccessWriterRepository,
     ) {}
 
-    public function syncAccesses(Role $role, array $payloadAccessUUIDs, array $existingAccesses): void
+    public function syncAccesses(Role $role, array $accessUUIDs, array $existingAccesses): void
     {
-        $remainingUUIDs = $payloadAccessUUIDs;
         foreach ($role->getAccesses() as $currentAccess) {
             $uuid = $currentAccess->getUUID()->toString();
-            if (in_array($uuid, $remainingUUIDs, true)) {
-                $remainingUUIDs = array_values(array_filter(
-                    $remainingUUIDs,
+            if (in_array($uuid, $accessUUIDs, true)) {
+                $accessUUIDs = array_values(array_filter(
+                    $accessUUIDs,
                     fn (string $code) => $code !== $uuid
                 ));
                 continue;
@@ -28,15 +28,15 @@ final readonly class AccessSynchronizer
             $role->removeAccess($currentAccess);
 
             $this->roleAccessWriterRepository->deleteRoleAccessInDB(
-                $role,
-                $currentAccess,
-                DeleteTypeEnum::HARD_DELETE
+                role: $role,
+                access: $currentAccess,
+                deleteTypeEnum: DeleteTypeEnum::HARD_DELETE
             );
         }
 
         $accessesToAdd = array_intersect_key(
             $existingAccesses,
-            array_flip($remainingUUIDs)
+            array_flip($accessUUIDs)
         );
 
         foreach ($accessesToAdd as $access) {

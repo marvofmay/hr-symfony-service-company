@@ -25,6 +25,11 @@ final readonly class RoleAccessPermissionUpdater implements RoleAccessPermission
             $existingPermissions[$permission->getUUID()->toString()] = $permission;
         }
 
-        $this->accessPermissionSynchronizer->syncAccessPermissions($role, $access, $permissionsUUIDs, $existingPermissions);
+        $this->accessPermissionSynchronizer->syncAccessPermissions(
+            role: $role,
+            access: $access,
+            payloadPermissionsUUIDs: $permissionsUUIDs,
+            existingPermissions: $existingPermissions
+        );
     }
 }

@@ -5,22 +5,18 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Role;
 
 use App\Common\Domain\Enum\DeleteTypeEnum;
-use App\Module\Company\Application\Command\Role\AssignAccessesCommand;
-use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
+use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Interface\Role\RoleAccessDeleterInterface;
 use App\Module\System\Domain\Interface\RoleAccess\RoleAccessWriterInterface;
 
-final readonly class RoleAccessDeleter
+final readonly class RoleAccessDeleter implements RoleAccessDeleterInterface
 {
-    public function __construct(
-        private RoleReaderInterface $roleReaderRepository,
-        private RoleAccessWriterInterface $roleAccessWriterRepository,
-    )
+    public function __construct(private RoleAccessWriterInterface $roleAccessWriterRepository)
     {
     }
 
-    public function delete(AssignAccessesCommand $command): void
+    public function delete(Role $role): void
     {
-        $role = $this->roleReaderRepository->getRoleByUUID($command->roleUUID);
-        $this->roleAccessWriterRepository->deleteRoleAccessesByRoleInDB($role, DeleteTypeEnum::HARD_DELETE);
+        $this->roleAccessWriterRepository->deleteRoleAccessesByRoleInDB(role: $role, deleteTypeEnum: DeleteTypeEnum::HARD_DELETE);
     }
 }

@@ -24,13 +24,13 @@ final readonly class AccessPermissionSynchronizer
                 continue;
             }
 
-            $role->removeAccessPermission($access, $currentPermission);
+            $role->removeAccessPermission(access: $access, permission: $currentPermission);
 
             $this->roleAccessPermissionWriterRepository->deleteRoleAccessPermissionsInDB(
-                $role,
-                $access,
-                $currentPermission,
-                DeleteTypeEnum::HARD_DELETE
+                role: $role,
+                access: $access,
+                permission: $currentPermission,
+                deleteTypeEnum: DeleteTypeEnum::HARD_DELETE
             );
         }
 
@@ -40,7 +40,7 @@ final readonly class AccessPermissionSynchronizer
         );
 
         foreach ($permissionsToAdd as $permission) {
-            $role->addAccessPermission($access, $permission);
+            $role->addAccessPermission(access: $access, permission: $permission);
         }
     }
 }
