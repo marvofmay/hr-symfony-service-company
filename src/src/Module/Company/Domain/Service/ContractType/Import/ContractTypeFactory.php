@@ -29,7 +29,7 @@ final class ContractTypeFactory
     {
         $name = $contractTypeData[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? null;
         $description = $contractTypeData[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? null;
-        $active = (bool)$contractTypeData[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? true;
+        $active = (bool)$contractTypeData[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value] ?? false;
 
         $contractType->setName($name);
         $contractType->setDescription($description);
