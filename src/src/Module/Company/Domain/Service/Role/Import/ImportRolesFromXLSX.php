@@ -87,7 +87,7 @@ class ImportRolesFromXLSX extends XLSXIterator
                 );
             }
         } else {
-            $preparedRows = $this->importRolesPreparer->prepare($this->import(), $this->roles);
+            $preparedRows = $this->importRolesPreparer->prepare(rows: $this->import(), existingRoles: $this->roles);
             $this->rolesImporter->save(preparedRows: $preparedRows, existingRoles: $this->roles);
 
             $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
