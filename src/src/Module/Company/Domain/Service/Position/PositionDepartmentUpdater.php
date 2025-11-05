@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Position;
 
-use App\Module\Company\Application\Command\Position\UpdatePositionCommand;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 
@@ -16,7 +15,7 @@ final readonly class PositionDepartmentUpdater
     ) {
     }
 
-    public function updateDepartments(Position $position, UpdatePositionCommand $command): void
+    public function updateDepartments(Position $position, array $departmentsUUIDs = []): void
     {
         $departments = $this->departmentReaderRepository->getDepartments()->toArray();
 
@@ -28,7 +27,7 @@ final readonly class PositionDepartmentUpdater
         }
 
         foreach ($existingDepartments as $existingDepartment) {
-            if (in_array($existingDepartment->getUUID()->toString(), $command->departmentsUUIDs, true)) {
+            if (in_array($existingDepartment->getUUID()->toString(), $departmentsUUIDs, true)) {
                 $payloadInternalCodes[] = $existingDepartment->getInternalCode();
             }
         }

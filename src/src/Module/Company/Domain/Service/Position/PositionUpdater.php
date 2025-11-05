@@ -4,28 +4,28 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Position;
 
-use App\Module\Company\Application\Command\Position\UpdatePositionCommand;
-use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
+use App\Module\Company\Domain\Entity\Position;
+use App\Module\Company\Domain\Interface\Position\PositionUpdaterInterface;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
-use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
-use App\Module\System\Domain\Factory\CommandDataMapperFactory;
 
-final readonly class PositionUpdater
+final readonly class PositionUpdater implements PositionUpdaterInterface
 {
     public function __construct(
-        private PositionReaderInterface $positionReaderRepository,
         private PositionWriterInterface $positionWriterRepository,
-        private CommandDataMapperFactory $commandDataMapperFactory,
         private PositionDepartmentUpdater $positionDepartmentUpdater,
     ) {
     }
 
-    public function update(UpdatePositionCommand $command): void
+    public function update(Position $position, string $name, ?string $description = null, bool $active = false, array $departmentsUUIDs = []): void
     {
-        $position = $this->positionReaderRepository->getPositionByUUID($command->positionUUID);
-        $mapper = $this->commandDataMapperFactory->getMapper(CommandDataMapperKindEnum::COMMAND_MAPPER_POSITION);
-        $mapper->map($position, $command);
-        $this->positionDepartmentUpdater->updateDepartments($position, $command);
+        $position->setName($position->getName());
+        if (null !== $description) {
+            $position->setDescription($position->getDescription());
+        }
+        $position->setActive($active);
+
+        $this->positionDepartmentUpdater->updateDepartments($position, $departmentsUUIDs);
+
         $this->positionWriterRepository->savePositionInDB($position);
     }
 }

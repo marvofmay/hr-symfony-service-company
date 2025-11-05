@@ -34,7 +34,7 @@ trait ContractTypeDTOTrait
     #[Assert\Type(
         type: 'bool',
     )]
-    public bool $active = true {
+    public bool $active = false {
         get {
             return $this->active;
         }
