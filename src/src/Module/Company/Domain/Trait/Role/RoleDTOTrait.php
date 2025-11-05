@@ -13,7 +13,7 @@ trait RoleDTOTrait
         'text' => 'role.name.required',
         'domain' => 'roles',
     ])]
-    #[MinMaxLength(min: 3, max: 50, message: [
+    #[MinMaxLength(min: 3, max: 100, message: [
         'tooShort' => 'role.name.minimumLength',
         'tooLong' => 'role.name.maximumLength',
         'domain' => 'roles',

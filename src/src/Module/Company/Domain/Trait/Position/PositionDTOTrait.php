@@ -14,7 +14,7 @@ trait PositionDTOTrait
         'text' => 'position.name.required',
         'domain' => 'positions',
     ])]
-    #[MinMaxLength(min: 3, max: 200, message: [
+    #[MinMaxLength(min: 3, max: 100, message: [
         'tooShort' => 'position.name.minimumLength',
         'tooLong' => 'position.name.maximumLength',
         'domain' => 'positions',

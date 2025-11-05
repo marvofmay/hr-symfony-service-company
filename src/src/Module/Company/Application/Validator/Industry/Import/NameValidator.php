@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 class NameValidator implements ImportRowValidatorInterface
 {
     public const int MINIMUM_LENGTH = 3;
+    public const int MAXIMUM_LENGTH = 100;
 
     public function __construct(private readonly MessageService $messageService)
     {
@@ -28,6 +29,9 @@ class NameValidator implements ImportRowValidatorInterface
 
         if (strlen($name) < self::MINIMUM_LENGTH) {
             return $this->messageService->get('industry.name.minimumLength', [':qty' => self::MINIMUM_LENGTH], 'industries');
+        }
+        if (strlen($name) > self::MAXIMUM_LENGTH) {
+            return $this->messageService->get('industry.name.maximumLength', [':qty' => self::MAXIMUM_LENGTH], 'industries');
         }
 
         return null;

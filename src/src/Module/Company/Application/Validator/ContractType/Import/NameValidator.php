@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\Validator\Role\Import;
+namespace App\Module\Company\Application\Validator\ContractType\Import;
 
 use App\Common\Domain\Interface\ImportRowValidatorInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Company\Domain\Enum\Role\RoleImportColumnEnum;
+use App\Module\Company\Domain\Enum\ContractType\ContractTypeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.role.import.validator')]
+#[AutoconfigureTag('app.contract_type.import.validator')]
 class NameValidator implements ImportRowValidatorInterface
 {
     public const int MINIMUM_LENGTH = 3;
@@ -21,17 +21,17 @@ class NameValidator implements ImportRowValidatorInterface
 
     public function validate(array $row, array $additionalData = []): ?string
     {
-        $name = $row[RoleImportColumnEnum::ROLE_NAME->value] ?? null;
+        $name = $row[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? null;
 
         if (empty($name)) {
-            return $this->messageService->get('role.name.required', [], 'roles');
+            return $this->messageService->get('contractType.name.required', [], 'contract_types');
         }
 
         if (strlen($name) < self::MINIMUM_LENGTH) {
-            return $this->messageService->get('role.name.minimumLength', [':qty' => self::MINIMUM_LENGTH], 'roles');
+            return $this->messageService->get('contractType.name.minimumLength', [':qty' => self::MINIMUM_LENGTH], 'contract_types');
         }
         if (strlen($name) > self::MAXIMUM_LENGTH) {
-            return $this->messageService->get('role.name.maximumLength', [':qty' => self::MAXIMUM_LENGTH], 'roles');
+            return $this->messageService->get('contractType.name.maximumLength', [':qty' => self::MAXIMUM_LENGTH], 'contract_types');
         }
 
         return null;

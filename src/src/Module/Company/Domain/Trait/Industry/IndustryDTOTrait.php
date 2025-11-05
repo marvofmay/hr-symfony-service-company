@@ -13,7 +13,7 @@ trait IndustryDTOTrait
         'text' => 'industry.name.required',
         'domain' => 'industries',
     ])]
-    #[MinMaxLength(min: 3, max: 50, message: [
+    #[MinMaxLength(min: 3, max: 100, message: [
         'tooShort' => 'industry.name.minimumLength',
         'tooLong' => 'industry.name.maximumLength',
         'domain' => 'industries',
