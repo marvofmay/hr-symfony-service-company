@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Position\Import;
 
 use App\Module\Company\Domain\Enum\Position\PositionImportColumnEnum;
+use App\Module\Company\Domain\Interface\Position\Import\PositionsImporterInterface;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 use App\Module\Company\Domain\Service\Position\DepartmentSynchronizer;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class PositionsImporter
+final class PositionsImporter implements PositionsImporterInterface
 {
     private array $positions = [];
 

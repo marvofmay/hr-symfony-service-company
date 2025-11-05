@@ -6,9 +6,10 @@ namespace App\Module\Company\Domain\Service\Position\Import;
 
 use App\Module\Company\Domain\Enum\Position\PositionImportColumnEnum;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
+use App\Module\Company\Domain\Interface\Position\Import\ImportPositionsReferenceLoaderInterface;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 
-final class ImportPositionsReferenceLoader
+final class ImportPositionsReferenceLoader implements ImportPositionsReferenceLoaderInterface
 {
     public array $positions = [] {
         get {
@@ -48,7 +49,7 @@ final class ImportPositionsReferenceLoader
         $this->departments = $this->mapByInternalCode($this->departmentReaderRepository->getDepartmentsByInternalCode($departmentInternalCodes));
     }
 
-    private function mapByName(iterable $positions): array
+    public function mapByName(iterable $positions): array
     {
         $map = [];
         foreach ($positions as $position) {
@@ -58,7 +59,7 @@ final class ImportPositionsReferenceLoader
         return $map;
     }
 
-    private function mapByInternalCode(iterable $departments): array
+    public function mapByInternalCode(iterable $departments): array
     {
         $map = [];
         foreach ($departments as $department) {
