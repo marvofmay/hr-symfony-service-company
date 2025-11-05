@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'name', columns: ['name'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
-class Position implements MappableEntityInterface
+class Position
 {
     use TimeStampableTrait;
     use AttributesEntityTrait;

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Entity;
 
-use App\Common\Domain\Interface\MappableEntityInterface;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
@@ -28,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Index(name: 'name', columns: ['name'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: false)]
-class Role  implements MappableEntityInterface
+class Role
 {
     use TimeStampableTrait;
     use AttributesEntityTrait;
