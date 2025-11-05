@@ -24,7 +24,10 @@ class CreateRoleCommandHandlerTest extends TestCase
         $roleCreator
             ->expects($this->once())
             ->method('create')
-            ->with($this->equalTo($command));
+            ->with(
+                $this->equalTo($command->name),
+                $this->equalTo($command->description)
+            );
 
         $eventDispatcher
             ->expects($this->once())
@@ -36,7 +39,6 @@ class CreateRoleCommandHandlerTest extends TestCase
                         && $data[CreateRoleCommand::ROLE_DESCRIPTION] === $description;
                 })
             );
-
 
         $validators = [];
 

@@ -29,7 +29,6 @@ final class CreateRoleController extends AbstractController
     ) {
     }
 
-
     #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {

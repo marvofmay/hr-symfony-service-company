@@ -6,12 +6,11 @@ namespace App\tests\unit\module\company\domain\service\role;
 
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
-use App\Module\Company\Domain\Service\Role\RoleAccessCreator;
 use App\Module\System\Domain\Entity\Access;
 use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
-class RoleAccessCreatorTest extends TestCase
+class RoleAccessAssignerTest extends TestCase
 {
     // ToDo:: repair test
     public function testCreateAddsAccessesAndSavesRole(): void

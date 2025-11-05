@@ -58,11 +58,11 @@ class CreateRoleTest extends KernelTestCase
     public function testNameIsTooLong(): void
     {
         $dto = new CreateDTO();
-        $dto->name = str_repeat('x', 60);
+        $dto->name = str_repeat('x', 120);
 
         $errors = $this->validator->validate($dto);
 
         $this->assertGreaterThan(0, count($errors));
-        $this->assertSame($this->messageService->get('role.name.maximumLength', [':qty' => 50], 'roles'), $errors[0]->getMessage());
+        $this->assertSame($this->messageService->get('role.name.maximumLength', [':qty' => 100], 'roles'), $errors[0]->getMessage());
     }
 }

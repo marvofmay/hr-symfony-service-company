@@ -27,7 +27,7 @@ final class CreateRoleCommandHandler extends CommandHandlerAbstract
     {
         $this->validate($command);
 
-        $this->roleCreator->create($command);
+        $this->roleCreator->create(name: $command->name, description: $command->description);
 
         $this->eventDispatcher->dispatch(new RoleCreatedEvent([
             CreateRoleCommand::ROLE_NAME => $command->name,

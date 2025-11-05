@@ -10,7 +10,6 @@ use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 use App\Module\Company\Domain\Service\Role\RoleCreator;
 use App\Module\System\Domain\Enum\CommandDataMapperKindEnum;
-use App\Module\System\Domain\Factory\CommandDataMapperFactory;
 use PHPUnit\Framework\TestCase;
 
 final class RoleCreatorTest extends TestCase
@@ -27,20 +26,7 @@ final class RoleCreatorTest extends TestCase
                 $role->getDescription() === 'User ...'
             ));
 
-
-        $mapper = $this->createMock(CommandDataMapperInterface::class);
-        $mapper->method('getType')->willReturn(CommandDataMapperKindEnum::COMMAND_MAPPER_ROLE->value);
-        $mapper->expects($this->once())
-            ->method('map')
-            ->with($this->isInstanceOf(Role::class), $command)
-            ->willReturnCallback(function (Role $role, CreateRoleCommand $cmd) {
-                $role->setName($cmd->name);
-                $role->setDescription($cmd->description);
-            });
-
-        $factory = new CommandDataMapperFactory([$mapper]);
-
-        $creator = new RoleCreator($writer, $factory);
-        $creator->create($command);
+        $creator = new RoleCreator($writer);
+        $creator->create($command->name, $command->description);
     }
 }

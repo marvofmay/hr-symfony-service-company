@@ -58,11 +58,11 @@ class UpdateRoleTest extends KernelTestCase
     public function testTooLongName(): void
     {
         $dto = new UpdateDTO();
-        $dto->name = str_repeat('A', 51);
+        $dto->name = str_repeat('A', 120);
 
         $violations = $this->validator->validate($dto);
         $this->assertGreaterThan(0, count($violations));
 
-        $this->assertSame($this->messageService->get('role.name.maximumLength', [':qty' => 50], 'roles'), $violations[0]->getMessage());
+        $this->assertSame($this->messageService->get('role.name.maximumLength', [':qty' => 100], 'roles'), $violations[0]->getMessage());
     }
 }
