@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Position;
 
+use App\Module\Company\Domain\Interface\Position\PositionMultipleDeleterInterface;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 use Doctrine\Common\Collections\Collection;
 
-readonly class PositionMultipleDeleter
+final readonly class PositionMultipleDeleter implements PositionMultipleDeleterInterface
 {
     public function __construct(private PositionWriterInterface $positionWriterRepository)
     {

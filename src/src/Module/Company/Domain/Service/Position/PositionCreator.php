@@ -25,7 +25,9 @@ final readonly class PositionCreator implements PositionCreatorInterface
         }
         $position->setActive($active);
 
-        $this->positionDepartmentCreator->createDepartments($position, $departmentsUUIDs);
+        if ([] !== $departmentsUUIDs) {
+            $this->positionDepartmentCreator->createDepartments($position, $departmentsUUIDs);
+        }
 
         $this->positionWriterRepository->savePositionInDB($position);
     }

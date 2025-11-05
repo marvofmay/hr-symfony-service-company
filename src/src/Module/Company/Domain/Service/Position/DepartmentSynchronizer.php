@@ -6,9 +6,10 @@ namespace App\Module\Company\Domain\Service\Position;
 
 use App\Common\Domain\Enum\DeleteTypeEnum;
 use App\Module\Company\Domain\Entity\Position;
+use App\Module\Company\Domain\Interface\Position\DepartmentSynchronizerInterface;
 use App\Module\Company\Domain\Interface\PositionDepartment\PositionDepartmentWriterInterface;
 
-final readonly class DepartmentSynchronizer
+final readonly class DepartmentSynchronizer implements DepartmentSynchronizerInterface
 {
     public function __construct(
         private PositionDepartmentWriterInterface $positionDepartmentWriter,

@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Position;
 
 use App\Module\Company\Domain\Entity\Position;
+use App\Module\Company\Domain\Interface\Position\PositionRestorerInterface;
 use App\Module\Company\Domain\Interface\Position\PositionWriterInterface;
 use App\Module\Company\Domain\Interface\PositionDepartment\PositionDepartmentReaderInterface;
 
-final readonly class PositionRestorer
+final readonly class PositionRestorer implements PositionRestorerInterface
 {
     public function __construct(
         private PositionDepartmentReaderInterface $positionDepartmentReaderRepository,

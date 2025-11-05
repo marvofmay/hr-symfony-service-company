@@ -24,7 +24,9 @@ final readonly class PositionUpdater implements PositionUpdaterInterface
         }
         $position->setActive($active);
 
-        $this->positionDepartmentUpdater->updateDepartments($position, $departmentsUUIDs);
+        if ([] !== $departmentsUUIDs) {
+            $this->positionDepartmentUpdater->updateDepartments($position, $departmentsUUIDs);
+        }
 
         $this->positionWriterRepository->savePositionInDB($position);
     }

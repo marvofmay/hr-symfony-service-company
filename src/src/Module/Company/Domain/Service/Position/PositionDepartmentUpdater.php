@@ -6,8 +6,9 @@ namespace App\Module\Company\Domain\Service\Position;
 
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
+use App\Module\Company\Domain\Interface\Position\PositionDepartmentUpdaterInterface;
 
-final readonly class PositionDepartmentUpdater
+final readonly class PositionDepartmentUpdater implements PositionDepartmentUpdaterInterface
 {
     public function __construct(
         private DepartmentReaderInterface $departmentReaderRepository,
