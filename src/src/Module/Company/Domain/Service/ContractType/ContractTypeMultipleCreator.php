@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Service\ContractType;
 
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
+use App\Module\Company\Domain\Service\ContractType\Import\ImportContractTypesFromXLSX;
 use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class ContractTypeMultipleCreator

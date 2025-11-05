@@ -8,8 +8,7 @@ use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
 use App\Common\Presentation\Action\UploadFileAction;
-use App\Module\Company\Domain\DTO\ContractType\ImportDTO;
-use App\Module\Company\Presentation\API\Action\ContractType\ImportContractTypesAction;
+use App\Module\Company\Application\Command\ContractType\ImportContractTypesCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
@@ -24,6 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -32,7 +32,6 @@ final readonly class ImportContractTypesFacade
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UploadFileAction $uploadFileAction,
-        private ImportContractTypesAction $importContractTypesAction,
         private CreateFileAction $createFileAction,
         private AskFileAction $askFileAction,
         private CreateImportAction $createImportAction,
@@ -43,6 +42,7 @@ final readonly class ImportContractTypesFacade
         private ParameterBagInterface $params,
         private MessageService $messageService,
         private MessageBusInterface $eventBus,
+        private MessageBusInterface $commandBus,
     ) {
     }
 
@@ -55,9 +55,10 @@ final readonly class ImportContractTypesFacade
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
 
             $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
+
             $errors = $this->validator->validate($uploadFileDTO);
             if (count($errors) > 0) {
-                $message = $this->messageService->get('contractType.import.error', [], 'contract_types');
+                $message = $this->messageService->get('contract_type.import.error', [], 'contract_types');
 
                 return [
                     'success' => false,
@@ -69,9 +70,14 @@ final readonly class ImportContractTypesFacade
             $this->uploadFileAction->execute($uploadFileDTO);
             $this->createFileAction->execute($fileName, $uploadFilePath, $employee);
             $file = $this->askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
-            $this->createImportAction->execute(ImportKindEnum::IMPORT_ROLES, ImportStatusEnum::PENDING, $file, $employee);
+            $this->createImportAction->execute(ImportKindEnum::IMPORT_CONTRACT_TYPES, ImportStatusEnum::PENDING, $file, $employee);
             $import = $this->askImportAction->ask($file);
-            $this->importContractTypesAction->execute(new ImportDTO($import->getUUID()->toString()));
+
+            try {
+                $this->commandBus->dispatch(new ImportContractTypesCommand($import->getUUID()->toString()));
+            } catch (HandlerFailedException $exception) {
+                throw $exception->getPrevious();
+            }
 
             $this->entityManager->commit();
 
@@ -92,7 +98,7 @@ final readonly class ImportContractTypesFacade
                 'errors' => ImportLogErrorTransformer::map($importLogs),
                 'message' => $message,
             ];
-        } catch (\Exception $error) {
+        } catch (\Throwable $error) {
             $this->entityManager->rollback();
             $message = sprintf('%s. %s', $this->messageService->get('contractType.import.error', [], 'contract_types'), $this->messageService->get($error->getMessage()));
             $this->eventBus->dispatch(new LogFileEvent($message));

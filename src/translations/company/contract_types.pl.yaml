@@ -27,6 +27,8 @@ contractType:
   import:
     success: "Formy zatrudnienia zostały pomyślnie zaimportowane"
     error: "Wystąpił błąd - formy zatrudnieia nie zostały zaimportowane"
+    file:
+      required: "Plik importu form zatrudnienia jest wymagany"
   view:
     error: "Wystapił błąd przy pobieraniu wybranej formy zatrudnienia"
   list:

@@ -10,6 +10,7 @@ use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
 use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
 use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
 
@@ -105,9 +106,9 @@ class EmployeeDataTransformer
     private function transformContractType(ContractType $contractType): ?array
     {
         return [
-            ContractType::COLUMN_UUID => $contractType->getUUID()->toString(),
-            ContractType::COLUMN_NAME => $contractType->getName(),
-            ContractType::COLUMN_DESCRIPTION => $contractType->getDescription(),
+            ContractTypeEntityFieldEnum::UUID->value => $contractType->getUUID()->toString(),
+            ContractTypeEntityFieldEnum::NAME->value => $contractType->getName(),
+            ContractTypeEntityFieldEnum::DESCRIPTION->value => $contractType->getDescription(),
         ];
     }
 }

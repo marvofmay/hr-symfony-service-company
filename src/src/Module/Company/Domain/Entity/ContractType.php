@@ -8,6 +8,8 @@ use App\Common\Domain\Interface\MappableEntityInterface;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
+use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
+use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityRelationFieldEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -19,6 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'contract_type')]
+#[ORM\Index(name: 'name', columns: ['name'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class ContractType implements MappableEntityInterface
@@ -27,14 +30,6 @@ class ContractType implements MappableEntityInterface
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const COLUMN_UUID = 'uuid';
-    public const COLUMN_NAME = 'name';
-    public const COLUMN_DESCRIPTION = 'description';
-    public const COLUMN_ACTIVE = 'active';
-    public const COLUMN_CREATED_AT = 'createdAt';
-    public const COLUMN_UPDATED_AT = 'updatedAt';
-    public const COLUMN_DELETED_AT = 'deletedAt';
-    public const string RELATION_EMPLOYEES = 'employees';
     public const string ALIAS = 'contractType';
 
     #[ORM\Id]
@@ -43,7 +38,7 @@ class ContractType implements MappableEntityInterface
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: Types::STRING, length: 200)]
+    #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
     #[Assert\NotBlank]
     private string $name;
 
@@ -64,41 +59,41 @@ class ContractType implements MappableEntityInterface
 
     public function getUUID(): UuidInterface
     {
-        return $this->{self::COLUMN_UUID};
+        return $this->{ContractTypeEntityFieldEnum::UUID->value};
     }
 
     public function getName(): string
     {
-        return $this->{self::COLUMN_NAME};
+        return $this->{ContractTypeEntityFieldEnum::NAME->value};
     }
 
     public function setName(string $name): void
     {
-        $this->{self::COLUMN_NAME} = $name;
+        $this->{ContractTypeEntityFieldEnum::NAME->value} = $name;
     }
 
     public function getDescription(): ?string
     {
-        return $this->{self::COLUMN_DESCRIPTION};
+        return $this->{ContractTypeEntityFieldEnum::DESCRIPTION->value};
     }
 
     public function setDescription(?string $description): void
     {
-        $this->{self::COLUMN_DESCRIPTION} = $description;
+        $this->{ContractTypeEntityFieldEnum::DESCRIPTION->value} = $description;
     }
 
     public function getActive(): bool
     {
-        return $this->{self::COLUMN_ACTIVE};
+        return $this->{ContractTypeEntityFieldEnum::ACTIVE->value};
     }
 
     public function setActive(bool $active): void
     {
-        $this->{self::COLUMN_ACTIVE} = $active;
+        $this->{ContractTypeEntityFieldEnum::ACTIVE->value} = $active;
     }
 
     public function getEmployees(): Collection
     {
-        return $this->employees;
+        return $this->{ContractTypeEntityRelationFieldEnum::EMPLOYEES->value};
     }
 }

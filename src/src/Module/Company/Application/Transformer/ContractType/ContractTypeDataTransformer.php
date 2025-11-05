@@ -6,6 +6,9 @@ namespace App\Module\Company\Application\Transformer\ContractType;
 
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
+use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityRelationFieldEnum;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
 class ContractTypeDataTransformer
@@ -13,13 +16,13 @@ class ContractTypeDataTransformer
     public function transformToArray(ContractType $contractType, array $includes = []): array
     {
         $data = [
-            ContractType::COLUMN_UUID => $contractType->getUUID()->toString(),
-            ContractType::COLUMN_NAME => $contractType->getName(),
-            ContractType::COLUMN_ACTIVE => $contractType->getActive(),
-            ContractType::COLUMN_DESCRIPTION => $contractType->getDescription(),
-            ContractType::COLUMN_CREATED_AT => $contractType->createdAt?->format('Y-m-d H:i:s'),
-            ContractType::COLUMN_UPDATED_AT => $contractType->getUpdatedAt()?->format('Y-m-d H:i:s'),
-            ContractType::COLUMN_DELETED_AT => $contractType->getDeletedAt()?->format('Y-m-d H:i:s'),
+            ContractTypeEntityFieldEnum::UUID->value => $contractType->getUUID()->toString(),
+            ContractTypeEntityFieldEnum::NAME->value => $contractType->getName(),
+            ContractTypeEntityFieldEnum::DESCRIPTION->value => $contractType->getDescription(),
+            ContractTypeEntityFieldEnum::ACTIVE->value => $contractType->getActive(),
+            TimeStampableEntityFieldEnum::CREATED_AT->value => $contractType->createdAt?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::UPDATED_AT->value => $contractType->getUpdatedAt()?->format('Y-m-d H:i:s'),
+            TimeStampableEntityFieldEnum::DELETED_AT->value => $contractType->getDeletedAt()?->format('Y-m-d H:i:s'),
         ];
 
         foreach ($includes as $relation) {
@@ -34,7 +37,7 @@ class ContractTypeDataTransformer
     private function transformRelation(ContractType $contractType, string $relation): ?array
     {
         return match ($relation) {
-            ContractType::RELATION_EMPLOYEES => $this->transformEmployees($contractType->getEmployees()),
+            ContractTypeEntityRelationFieldEnum::EMPLOYEES->value => $this->transformEmployees($contractType->getEmployees()),
             default => null,
         };
     }

@@ -22,7 +22,7 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
 
     public function getContractTypeByUUID(string $uuid): ?ContractType
     {
-        return $this->findOneBy([ContractType::COLUMN_UUID => $uuid]);
+        return $this->findOneBy([ContractTypeEntityFieldEnum::UUID->value => $uuid]);
     }
 
     public function getContractTypesByUUIDs(array $contractTypesUUIDs): Collection
@@ -34,7 +34,7 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(ContractType::ALIAS)
             ->from(ContractType::class, ContractType::ALIAS)
-            ->where(ContractType::ALIAS.'.'.ContractType::COLUMN_UUID.' IN (:uuids)')
+            ->where(ContractType::ALIAS.'.'.ContractTypeEntityFieldEnum::UUID->value.' IN (:uuids)')
             ->setParameter('uuids', $contractTypesUUIDs);
 
         $contractTypes = $qb->getQuery()->getResult();
@@ -45,13 +45,13 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
     public function getContractTypeByName(string $name, ?string $uuid = null): ?ContractType
     {
         $qb = $this->getEntityManager()->createQueryBuilder()
-            ->select('ct')
-            ->from(ContractType::class, 'ct')
-            ->where('ct.'.ContractType::COLUMN_NAME.' = :name')
+            ->select(ContractType::ALIAS)
+            ->from(ContractType::class, ContractType::ALIAS)
+            ->where(ContractType::ALIAS.'.'.ContractTypeEntityFieldEnum::NAME->value.' = :name')
             ->setParameter('name', $name);
 
         if ($uuid) {
-            $qb->andWhere('ct.'.ContractType::COLUMN_UUID.' != :uuid')
+            $qb->andWhere(ContractType::ALIAS.'.'.ContractTypeEntityFieldEnum::UUID->value.' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 

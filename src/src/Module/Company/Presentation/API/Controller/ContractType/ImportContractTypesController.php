@@ -23,19 +23,20 @@ class ImportContractTypesController extends AbstractController
     ) {
     }
 
-    #[Route('/api/contract_types/import', name: 'import', methods: ['POST'])]
+    #[Route('/api/contract_types/import', name: 'app.contract_types.import', methods: ['POST'])]
     public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::CONTRACT_TYPE)) {
-            return new JsonResponse([
-                'message' => $this->messageService->get('accessDenied'),
-            ], Response::HTTP_FORBIDDEN);
-        }
+        $this->denyAccessUnlessGranted(
+            PermissionEnum::IMPORT,
+            AccessEnum::CONTRACT_TYPE,
+            $this->messageService->get('accessDenied')
+        );
 
         if (!$file) {
-            return new JsonResponse([
-                'message' => $this->messageService->get('role.import.file.required', [], 'contract_types'),
-            ], Response::HTTP_UNPROCESSABLE_ENTITY);
+            return new JsonResponse(
+                ['message' => $this->messageService->get('contractType.import.file.required', [], 'contract_types')],
+                Response::HTTP_UNPROCESSABLE_ENTITY
+            );
         }
 
         $result = $this->importContractTypesFacade->handle($file);

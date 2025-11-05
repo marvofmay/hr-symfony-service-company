@@ -36,7 +36,7 @@ class Position implements MappableEntityInterface
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: Types::STRING, length: 200)]
+    #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
     #[Assert\NotBlank]
     private string $name;
 

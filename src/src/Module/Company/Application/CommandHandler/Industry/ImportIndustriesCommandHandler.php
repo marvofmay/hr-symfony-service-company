@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Industry;
 
 use App\Module\Company\Application\Command\Industry\ImportIndustriesCommand;
-use App\Module\Company\Application\Command\Position\ImportPositionsCommand;
 use App\Module\Company\Application\Event\Industry\IndustryImportedEvent;
 use App\Module\System\Domain\Enum\ImportKindEnum;
 use App\Module\System\Domain\Factory\ImporterFactory;
@@ -31,7 +30,7 @@ readonly class ImportIndustriesCommandHandler
         $preparedRows = $importer->run($import);
 
         $this->eventDispatcher->dispatch(new IndustryImportedEvent([
-            ImportPositionsCommand::IMPORT_UUID => json_encode($preparedRows, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
+            ImportIndustriesCommand::IMPORT_UUID => json_encode($preparedRows, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE),
         ]));
     }
 }
