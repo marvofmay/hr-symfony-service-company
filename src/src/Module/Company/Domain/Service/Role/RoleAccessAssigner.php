@@ -21,7 +21,7 @@ final readonly class RoleAccessAssigner
     public function assign(AssignAccessesCommand $command): void
     {
         $role = $this->roleReaderRepository->getRoleByUUID($command->roleUUID);
-        $this->roleAccessUpdater->updateAccesses($role, $command);
+        $this->roleAccessUpdater->updateAccesses($role, $command->accessesUUIDs);
 
         $this->roleWriterRepository->saveRoleInDB($role);
     }

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Role;
 
-use App\Module\Company\Application\Command\Role\AssignAccessesCommand;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\System\Domain\Interface\Access\AccessReaderInterface;
 
@@ -16,7 +15,7 @@ final readonly class RoleAccessUpdater
     ) {
     }
 
-    public function updateAccesses(Role $role, AssignAccessesCommand $command): void
+    public function updateAccesses(Role $role, array $accessesUUIDs): void
     {
         $existingAccesses = [];
         $accesses = $this->accessReaderRepository->getAccesses()->toArray();
@@ -24,6 +23,6 @@ final readonly class RoleAccessUpdater
             $existingAccesses[$access->getUUID()->toString()] = $access;
         }
 
-        $this->accessSynchronizer->syncAccesses($role, $command->accessesUUIDs, $existingAccesses);
+        $this->accessSynchronizer->syncAccesses($role, $accessesUUIDs, $existingAccesses);
     }
 }
