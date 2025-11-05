@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\tests\unit\module\company\domain\service\role;
 
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\Role\RoleImportColumnEnum;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
-use App\Module\Company\Domain\Service\Role\Import\ImportRolesFromXLSX;
 use App\Module\Company\Domain\Service\Role\RoleMultipleCreator;
 use Doctrine\Common\Collections\Collection;
 use PHPUnit\Framework\TestCase;
@@ -17,12 +17,12 @@ class testItCreatesAndSavesMultipleRoles extends TestCase
     {
         $data = [
             [
-                ImportRolesFromXLSX::COLUMN_NAME => 'Admin',
-                ImportRolesFromXLSX::COLUMN_DESCRIPTION => 'Administrator role',
+                RoleImportColumnEnum::ROLE_NAME->value => 'Admin',
+                RoleImportColumnEnum::ROLE_DESCRIPTION->value => 'Administrator role',
             ],
             [
-                ImportRolesFromXLSX::COLUMN_NAME => 'User',
-                ImportRolesFromXLSX::COLUMN_DESCRIPTION => 'User role',
+                RoleImportColumnEnum::ROLE_NAME->value => 'User',
+                RoleImportColumnEnum::ROLE_DESCRIPTION->value => 'User role',
             ],
         ];
 
@@ -42,8 +42,8 @@ class testItCreatesAndSavesMultipleRoles extends TestCase
                     }
 
                     if (
-                        $role->getName() !== $data[$index][ImportRolesFromXLSX::COLUMN_NAME]
-                        || $role->getDescription() !== $data[$index][ImportRolesFromXLSX::COLUMN_DESCRIPTION]
+                        $role->getName() !== $data[$index][RoleImportColumnEnum::ROLE_NAME->value]
+                        || $role->getDescription() !== $data[$index][RoleImportColumnEnum::ROLE_DESCRIPTION->value]
                     ) {
                         return false;
                     }

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Role;
 
 use App\Module\Company\Domain\Entity\Role;
+use App\Module\Company\Domain\Enum\Role\RoleImportColumnEnum;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
-use App\Module\Company\Domain\Service\Role\Import\ImportRolesFromXLSX;
 use Doctrine\Common\Collections\ArrayCollection;
 
 readonly class RoleMultipleCreator
@@ -20,8 +20,8 @@ readonly class RoleMultipleCreator
         $roles = new ArrayCollection();
         foreach ($data as $item) {
             $role = new Role();
-            $role->setName($item[ImportRolesFromXLSX::COLUMN_NAME]);
-            $role->setDescription($item[ImportRolesFromXLSX::COLUMN_DESCRIPTION]);
+            $role->setName($item[RoleImportColumnEnum::ROLE_NAME->value]);
+            $role->setDescription($item[RoleImportColumnEnum::ROLE_DESCRIPTION->value]);
 
             $roles[] = $role;
         }

@@ -24,9 +24,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag('app.importer')]
 class ImportRolesFromXLSX extends XLSXIterator
 {
-    public const int COLUMN_NAME = 0;
-    public const int COLUMN_DESCRIPTION = 1;
-
     private array $roles = [];
 
     public function __construct(

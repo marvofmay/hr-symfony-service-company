@@ -58,7 +58,7 @@ class Industry implements MappableEntityInterface
         return $this->{IndustryEntityFieldEnum::UUID->value};
     }
 
-    public function setUuid(UuidInterface $uuid): void
+    public function setUUID(UuidInterface $uuid): void
     {
         $this->{IndustryEntityFieldEnum::UUID->value} = $uuid;
     }

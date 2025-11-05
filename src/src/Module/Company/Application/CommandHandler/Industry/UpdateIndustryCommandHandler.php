@@ -7,6 +7,7 @@ namespace App\Module\Company\Application\CommandHandler\Industry;
 use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Module\Company\Application\Command\Industry\UpdateIndustryCommand;
 use App\Module\Company\Application\Event\Industry\IndustryUpdatedEvent;
+use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use App\Module\Company\Domain\Service\Industry\IndustryUpdater;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -14,6 +15,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final class UpdateIndustryCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
+        private readonly IndustryReaderInterface $industryReaderRepository,
         private readonly IndustryUpdater $industryUpdater,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.industry.update.validator')] protected iterable $validators,
@@ -24,7 +26,8 @@ final class UpdateIndustryCommandHandler extends CommandHandlerAbstract
     {
         $this->validate($command);
 
-        $this->industryUpdater->update($command);
+        $industry = $this->industryReaderRepository->getIndustryByUUID($command->industryUUID);
+        $this->industryUpdater->update(industry: $industry, name: $command->name, description: $command->description);
 
         $this->eventDispatcher->dispatch(new IndustryUpdatedEvent([
             UpdateIndustryCommand::INDUSTRY_UUID        => $command->industryUUID,
