@@ -9,15 +9,11 @@ class ContractTypeTest extends TestCase
 {
     public function testItSetsAndGetsProperties(): void
     {
-        $contractType = new ContractType();
-
-        $contractType->setName('Umowa o pracę');
-        $contractType->setDescription('Pełny etat');
-        $contractType->setActive(true);
+        $contractType = ContractType::create('Umowa o pracę', 'Pełny etat', true);
 
         $this->assertSame('Umowa o pracę', $contractType->getName());
         $this->assertSame('Pełny etat', $contractType->getDescription());
-        $this->assertTrue($contractType->getActive());
+        $this->assertTrue($contractType->isActive());
         $this->assertCount(0, $contractType->getEmployees());
     }
 }

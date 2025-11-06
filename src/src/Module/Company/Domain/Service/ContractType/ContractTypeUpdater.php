@@ -14,12 +14,16 @@ final readonly class ContractTypeUpdater implements ContractTypeUpdaterInterface
     {
     }
 
-    public function update(ContractType $contractType, string $name, ?string $description, ?bool $active = null): void
+    public function update(ContractType $contractType, string $name, ?string $description, bool $active = false): void
     {
-        $contractType->setName($name);
-        $contractType->setDescription($description);
-        if ($active !== null) {
-            $contractType->setActive($active);
+        $contractType->rename($name);
+        if (null !== $description) {
+            $contractType->updateDescription($description);
+        }
+        if ($active) {
+            $contractType->activate();
+        } else {
+            $contractType->deactivate();
         }
 
         $this->contractTypeWriterRepository->saveContractTypeInDB($contractType);

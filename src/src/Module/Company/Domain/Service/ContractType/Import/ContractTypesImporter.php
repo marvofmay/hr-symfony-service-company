@@ -23,9 +23,10 @@ final class ContractTypesImporter implements ContractTypesImporterInterface
     {
         foreach ($preparedRows as $preparedRow) {
             if (array_key_exists($preparedRow[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value], $existingContractTypes)) {
-                $contractType = $this->contractTypeFactory->update(contractTypeData: $preparedRow, existingContractTypes: $existingContractTypes);
+                $contractType = $existingContractTypes[$preparedRow[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value]];
+                $contractType = $this->contractTypeFactory->update(contractType: $contractType, data: $preparedRow);
             } else {
-                $contractType = $this->contractTypeFactory->create(contractTypeData: $preparedRow);
+                $contractType = $this->contractTypeFactory->create(data: $preparedRow);
             }
             $this->contractTypes[] = $contractType;
         }

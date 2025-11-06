@@ -7,14 +7,12 @@ namespace App\Module\Company\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
-use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityRelationFieldEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -33,8 +31,6 @@ class ContractType
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
@@ -42,7 +38,7 @@ class ContractType
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
+    private ?string $description;
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
     #[Assert\NotBlank]
@@ -51,48 +47,68 @@ class ContractType
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'contractType', cascade: ['persist', 'remove'])]
     private Collection $employees;
 
-    public function __construct()
+    private function __construct(UuidInterface $uuid, string $name, ?string $description = null, bool $active = false)
     {
+        $this->uuid = $uuid;
+        $this->name = $name;
+        $this->description = $description;
+        $this->active = $active;
+
         $this->employees = new ArrayCollection();
+    }
+
+    public static function create(string $name, ?string $description = null, bool $active = false): self
+    {
+        return new self(Uuid::uuid7(), $name, $description, $active);
+    }
+
+
+    public function rename(string $newName): void
+    {
+        if ($this->name === $newName) {
+            return;
+        }
+
+        $this->name = $newName;
+    }
+
+    public function updateDescription(?string $newDescription): void
+    {
+        $this->description = $newDescription;
+    }
+
+    public function activate(): void
+    {
+        $this->active = true;
+    }
+
+    public function deactivate(): void
+    {
+        $this->active = false;
     }
 
     public function getUUID(): UuidInterface
     {
-        return $this->{ContractTypeEntityFieldEnum::UUID->value};
+        return $this->uuid;
     }
 
     public function getName(): string
     {
-        return $this->{ContractTypeEntityFieldEnum::NAME->value};
-    }
-
-    public function setName(string $name): void
-    {
-        $this->{ContractTypeEntityFieldEnum::NAME->value} = $name;
+        return $this->name;
     }
 
     public function getDescription(): ?string
     {
-        return $this->{ContractTypeEntityFieldEnum::DESCRIPTION->value};
+        return $this->description;
     }
 
-    public function setDescription(?string $description): void
+    public function isActive(): bool
     {
-        $this->{ContractTypeEntityFieldEnum::DESCRIPTION->value} = $description;
-    }
-
-    public function getActive(): bool
-    {
-        return $this->{ContractTypeEntityFieldEnum::ACTIVE->value};
-    }
-
-    public function setActive(bool $active): void
-    {
-        $this->{ContractTypeEntityFieldEnum::ACTIVE->value} = $active;
+        return $this->active;
     }
 
     public function getEmployees(): Collection
     {
-        return $this->{ContractTypeEntityRelationFieldEnum::EMPLOYEES->value};
+        return $this->employees;
     }
 }

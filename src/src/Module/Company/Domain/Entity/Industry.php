@@ -50,6 +50,7 @@ class Industry
         $this->uuid = $uuid;
         $this->name = $name;
         $this->description = $description;
+
         $this->companies = new ArrayCollection();
     }
 

@@ -14,14 +14,9 @@ readonly class ContractTypeCreator implements ContractTypeCreatorInterface
     {
     }
 
-    public function create(string $name, ?string $description, ?bool $active = null): void
+    public function create(string $name, ?string $description, bool $active = false): void
     {
-        $contractType = new ContractType();
-        $contractType->setName($name);
-        $contractType->setDescription($description);
-        if ($active !== null) {
-            $contractType->setActive($active);
-        }
+        $contractType = ContractType::create($name, $description, $active);
 
         $this->contractTypeWriterRepository->saveContractTypeInDB($contractType);
     }

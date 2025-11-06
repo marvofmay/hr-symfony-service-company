@@ -9,30 +9,31 @@ use App\Module\Company\Domain\Enum\ContractType\ContractTypeImportColumnEnum;
 
 final class ContractTypeFactory
 {
-    public function create(array $contractTypeData): ContractType
+    public function create(array $data): ContractType
     {
-        $contractType = new ContractType();
-        $this->fillData($contractType, $contractTypeData);
-
-        return $contractType;
+        return ContractType::create(
+            $data[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? null,
+            $data[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? null,
+            (bool)$data[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value] ?? false
+        );
     }
 
-    public function update(array $contractTypeData, array $existingContractTypes): ContractType
+    public function update(ContractType $contractType, array $data): ContractType
     {
-        $contractType = $existingContractTypes[$contractTypeData[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value]];
-        $this->fillData($contractType, $contractTypeData);
+        $name = $data[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? null;
+        $description = $data[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? null;
+        $active = (bool)$data[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value] ?? false;
+
+        $contractType->rename($name);
+        if (null !== $description) {
+            $contractType->updateDescription($description);
+        }
+        if ($active) {
+            $contractType->activate();
+        } else {
+            $contractType->deactivate();
+        }
 
         return $contractType;
-    }
-
-    private function fillData(ContractType $contractType, array $contractTypeData): void
-    {
-        $name = $contractTypeData[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? null;
-        $description = $contractTypeData[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? null;
-        $active = (bool)$contractTypeData[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value] ?? false;
-
-        $contractType->setName($name);
-        $contractType->setDescription($description);
-        $contractType->setActive($active);
     }
 }
