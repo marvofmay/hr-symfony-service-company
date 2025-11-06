@@ -23,9 +23,10 @@ final class IndustriesImporter implements IndustriesImporterInterface
     {
         foreach ($preparedRows as $preparedRow) {
             if (array_key_exists($preparedRow[IndustryImportColumnEnum::INDUSTRY_NAME->value], $existingIndustries)) {
-                $industry = $this->industryFactory->update(industryData: $preparedRow, existingIndustries: $existingIndustries);
+                $industryToUpdate = $existingIndustries[$preparedRow[IndustryImportColumnEnum::INDUSTRY_NAME->value]];
+                $industry = $this->industryFactory->update(industry: $industryToUpdate, data: $preparedRow);
             } else {
-                $industry = $this->industryFactory->create(industryData: $preparedRow);
+                $industry = $this->industryFactory->create(data: $preparedRow);
             }
             $this->industries[] = $industry;
         }

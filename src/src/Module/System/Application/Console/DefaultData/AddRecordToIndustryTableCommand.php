@@ -52,9 +52,7 @@ class AddRecordToIndustryTableCommand extends Command
         foreach (IndustryEnum::cases() as $enum) {
             $translatedName = $this->translator->trans(sprintf('industry.defaultData.name.%s', $enum->value), [], 'industries');
             if (!in_array($translatedName, $existingNames, true)) {
-                $industry = new Industry();
-                $industry->setName($translatedName);
-                $industry->setDescription($this->translator->trans(sprintf('industry.defaultData.description.%s', $enum->value), [], 'industries'));
+                $industry = Industry::create($translatedName, $this->translator->trans(sprintf('industry.defaultData.description.%s', $enum->value), [], 'industries'));
                 $this->entityManager->persist($industry);
                 $industriesToPersist[] = $enum->value;
             }

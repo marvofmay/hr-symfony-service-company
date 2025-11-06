@@ -16,9 +16,9 @@ final readonly class IndustryUpdater implements IndustryUpdaterInterface
 
     public function update(Industry $industry, string $name, ?string $description = null): void
     {
-        $industry->setName($name);
+        $industry->rename($name);
         if (null !== $description) {
-            $industry->setDescription($description);
+            $industry->updateDescription($description);
         }
 
         $this->industryWriterRepository->saveIndustryInDB($industry);

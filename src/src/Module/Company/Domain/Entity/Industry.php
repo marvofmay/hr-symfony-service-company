@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -33,8 +33,6 @@ class Industry
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
@@ -42,14 +40,23 @@ class Industry
     private string $name;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $description = null;
+    private ?string $description;
 
     #[ORM\OneToMany(targetEntity: Company::class, mappedBy: 'industry')]
     private Collection $companies;
 
-    public function __construct()
+    private function __construct(UuidInterface $uuid, string $name, ?string $description = null)
     {
+        $this->uuid = $uuid;
+        $this->name = $name;
+        $this->description = $description;
         $this->companies = new ArrayCollection();
+    }
+
+
+    public static function create(string $name, ?string $description = null): self
+    {
+        return new self(Uuid::uuid7(), $name, $description);
     }
 
     public function getUUID(): UuidInterface
@@ -57,19 +64,9 @@ class Industry
         return $this->{IndustryEntityFieldEnum::UUID->value};
     }
 
-    public function setUUID(UuidInterface $uuid): void
-    {
-        $this->{IndustryEntityFieldEnum::UUID->value} = $uuid;
-    }
-
     public function getName(): string
     {
         return $this->{IndustryEntityFieldEnum::NAME->value};
-    }
-
-    public function setName(string $name): void
-    {
-        $this->{IndustryEntityFieldEnum::NAME->value} = $name;
     }
 
     public function getDescription(): ?string
@@ -77,13 +74,23 @@ class Industry
         return $this->{IndustryEntityFieldEnum::DESCRIPTION->value};
     }
 
-    public function setDescription(?string $description): void
-    {
-        $this->{IndustryEntityFieldEnum::DESCRIPTION->value} = $description;
-    }
-
     public function getCompanies(): Collection
     {
         return $this->{IndustryEntityRelationFieldEnum::COMPANIES->value};
+    }
+
+
+    public function rename(string $newName): void
+    {
+        if ($newName === $this->name) {
+            return;
+        }
+
+        $this->name = $newName;
+    }
+
+    public function updateDescription(?string $description): void
+    {
+        $this->description = $description;
     }
 }
