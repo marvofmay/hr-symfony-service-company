@@ -12,17 +12,17 @@ final class ContractTypeFactory
     public function create(array $data): ContractType
     {
         return ContractType::create(
-            $data[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? null,
+            trim($data[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? ''),
             $data[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? null,
-            (bool)$data[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value] ?? false
+            (bool)$data[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value]
         );
     }
 
     public function update(ContractType $contractType, array $data): ContractType
     {
-        $name = $data[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? null;
+        $name = trim($data[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? '');
         $description = $data[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? null;
-        $active = (bool)$data[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value] ?? false;
+        $active = (bool)$data[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value];
 
         $contractType->rename($name);
         if (null !== $description) {
