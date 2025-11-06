@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -18,6 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'user')]
+#[ORM\Index(name: 'email', columns: ['email'])]
 #[ORM\UniqueConstraint(name: 'unique_email', columns: ['email'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
@@ -43,21 +44,19 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: 'uuid', nullable: true)]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank]
     private ?UuidInterface $employee_uuid = null;
 
-    #[ORM\Column(type: Types::STRING, length: 255, unique: true)]
-    #[Assert\NotBlank()]
-    #[Assert\Email()]
+    #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
+    #[Assert\NotBlank]
+    #[Assert\Email]
     private string $email;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
-    #[Assert\NotBlank()]
+    #[Assert\NotBlank]
     private string $password;
 
     #[ORM\OneToOne(targetEntity: Employee::class, inversedBy: 'user', cascade: ['remove'])]
@@ -68,12 +67,21 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     {
     }
 
+    public static function create(string $email): self
+    {
+        $self = new self();
+        $self->uuid = Uuid::uuid7();
+        $self->email = $email;
+
+        return $self;
+    }
+
     public function getUUID(): UuidInterface
     {
         return $this->{self::COLUMN_UUID};
     }
 
-    public function getEmployeeUuid(): ?string
+    public function getEmployeeUUID(): ?string
     {
         return $this->{self::COLUMN_EMPLOYEE_UUID};
     }
@@ -102,10 +110,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         return $this->{self::RELATION_ROLES};
     }
 
-    public function setEmployeeUuid(?string $employeeUuid): void
-    {
-        $this->{self::COLUMN_EMPLOYEE_UUID} = $employeeUuid;
-    }
 
     public function setEmail(string $email): void
     {
@@ -117,10 +121,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         $this->{self::COLUMN_PASSWORD} = $hashedPassword;
     }
 
-    public function getSalt(): ?string
-    {
-        return null;
-    }
+
 
     #[\Deprecated]
     public function eraseCredentials(): void
