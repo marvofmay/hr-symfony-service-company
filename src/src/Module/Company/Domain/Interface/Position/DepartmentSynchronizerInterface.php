@@ -8,5 +8,5 @@ use App\Module\Company\Domain\Entity\Position;
 
 interface DepartmentSynchronizerInterface
 {
-    public function syncDepartments(Position $position, array $payloadInternalCodes, array $existingDepartments): void;
+    public function syncDepartments(Position $position, array $internalCodes, array $existingDepartments): void;
 }

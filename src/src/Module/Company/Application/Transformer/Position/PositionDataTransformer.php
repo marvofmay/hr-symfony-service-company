@@ -20,7 +20,7 @@ class PositionDataTransformer
             PositionEntityFieldEnum::UUID->value => $position->getUUID()->toString(),
             PositionEntityFieldEnum::NAME->value => $position->getName(),
             PositionEntityFieldEnum::DESCRIPTION->value => $position->getDescription(),
-            PositionEntityFieldEnum::ACTIVE->value => $position->getActive(),
+            PositionEntityFieldEnum::ACTIVE->value => $position->isActive(),
             TimeStampableEntityFieldEnum::CREATED_AT->value => $position->getCreatedAt()->format('Y-m-d H:i:s'),
             TimeStampableEntityFieldEnum::UPDATED_AT->value => $position->getUpdatedAt()?->format('Y-m-d H:i:s'),
             TimeStampableEntityFieldEnum::DELETED_AT->value => $position->getDeletedAt()?->format('Y-m-d H:i:s'),

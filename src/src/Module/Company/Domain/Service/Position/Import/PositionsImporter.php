@@ -25,15 +25,16 @@ final class PositionsImporter implements PositionsImporterInterface
     {
         foreach ($positionNameMap as $name => $uuid) {
             if (null !== $uuid) {
-                $position = $this->positionFactory->update(positionData: $groupPositions[$name], existingPositions: $existingPositions);
+                $position = $existingPositions[$name];
+                $position = $this->positionFactory->update(position: $position, data: $groupPositions[$name]);
             } else {
-                $position = $this->positionFactory->create(positionData: $groupPositions[$name]);
+                $position = $this->positionFactory->create(data: $groupPositions[$name]);
             }
 
             $this->departmentSynchronizer->syncDepartments(
-                $position,
-                $groupPositions[$name][PositionImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value],
-                $existingDepartments
+                position: $position,
+                internalCodes: $groupPositions[$name][PositionImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value],
+                existingDepartments: $existingDepartments
             );
 
             $this->positions[] = $position;

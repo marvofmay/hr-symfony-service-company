@@ -16,9 +16,9 @@ final readonly class DepartmentSynchronizer implements DepartmentSynchronizerInt
     ) {
     }
 
-    public function syncDepartments(Position $position, array $payloadInternalCodes, array $existingDepartments): void
+    public function syncDepartments(Position $position, array $internalCodes, array $existingDepartments): void
     {
-        $remainingCodes = $payloadInternalCodes;
+        $remainingCodes = $internalCodes;
 
         foreach ($position->getDepartments() as $currentDepartment) {
             if (in_array($currentDepartment->getInternalCode(), $remainingCodes, true)) {

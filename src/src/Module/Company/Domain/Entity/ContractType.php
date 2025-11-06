@@ -40,7 +40,7 @@ class ContractType
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description;
 
-    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => true])]
+    #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     #[Assert\NotBlank]
     private bool $active;
 

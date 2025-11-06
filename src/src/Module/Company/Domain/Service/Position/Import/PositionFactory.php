@@ -9,30 +9,29 @@ use App\Module\Company\Domain\Enum\Position\PositionImportColumnEnum;
 
 final class PositionFactory
 {
-    public function create(array $positionData): Position
+    public function create(array $data): Position
     {
-        $position = new Position();
-        $this->fillData($position, $positionData);
-
-        return $position;
+        return Position::create(
+            trim($data[PositionImportColumnEnum::POSITION_NAME->value]) ?? '',
+            $data[PositionImportColumnEnum::POSITION_DESCRIPTION->value] ?? null,
+            (bool)$data[PositionImportColumnEnum::POSITION_ACTIVE->value] ?? false,
+        );
     }
 
-    public function update(array $positionData, array $existingPositions): Position
+    public function update(Position $position, array $data): Position
     {
-        $position = $existingPositions[$positionData[PositionImportColumnEnum::POSITION_NAME->value]];
-        $this->fillData($position, $positionData);
+        $name = trim($data[PositionImportColumnEnum::POSITION_NAME->value]) ?? '';
+        $description = $data[PositionImportColumnEnum::POSITION_DESCRIPTION->value] ?? null;
+        $active = (bool)$data[PositionImportColumnEnum::POSITION_DESCRIPTION->value];
+        
+        $position->rename($name);
+        $position->updateDescription($description);
+        if ($active) {
+            $position->activate();
+        } else {
+            $position->deactivate();
+        }
 
         return $position;
-    }
-
-    private function fillData(Position $position, array $positionData): void
-    {
-        $name = $positionData[PositionImportColumnEnum::POSITION_NAME->value] ?? null;
-        $description = $positionData[PositionImportColumnEnum::POSITION_DESCRIPTION->value] ?? null;
-        $active = $positionData[PositionImportColumnEnum::POSITION_ACTIVE->value] ?? false;
-
-        $position->setName($name);
-        $position->setDescription($description);
-        $position->setActive($active);
     }
 }

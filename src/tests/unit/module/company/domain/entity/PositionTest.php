@@ -11,28 +11,22 @@ class PositionTest extends TestCase
 {
     public function testSettersAndGetters(): void
     {
-        $position = new Position();
-
-        $position->setName('Manager');
+        $position = Position::create('Manager', 'Responsible for managing the team', true);
         $this->assertSame('Manager', $position->getName());
-
-        $position->setDescription('Responsible for managing the team');
         $this->assertSame('Responsible for managing the team', $position->getDescription());
-
-        // $position->setActive(true);
-        $this->assertTrue($position->getActive());
+        $this->assertTrue($position->isActive());
     }
 
     public function testEmployeesCollectionIsEmptyOnInit(): void
     {
-        $position = new Position();
+        $position = Position::create('Manager', 'Responsible for managing the team', true);
         $this->assertCount(0, $position->getEmployees());
     }
 
     public function testAddDepartment(): void
     {
         $department = $this->createMock(Department::class);
-        $position = new Position();
+        $position = Position::create('Manager', 'Responsible for managing the team', true);
 
         $position->addDepartment($department);
 
@@ -47,7 +41,7 @@ class PositionTest extends TestCase
         $mockPositionDepartment = $this->createMock(PositionDepartment::class);
         $mockPositionDepartment->department = $department;
 
-        $position = new Position();
+        $position = Position::create('Manager', 'Responsible for managing the team', true);
         $position->getPositionDepartments()->add($mockPositionDepartment);
 
         $position->addDepartment($department);

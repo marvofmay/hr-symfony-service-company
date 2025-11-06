@@ -16,10 +16,10 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsCommand(name: 'app:add-record-to-position-table')]
 class AddRecordToPositionTableCommand extends Command
 {
-    private const string DESCRIPTION = 'Add missing records to Position table';
-    private const string HELP = 'This command ensures that all TechnologyPositionEnum values exist in the Position table';
-    private const string SUCCESS_MESSAGE = 'Position table has been updated successfully!';
-    private const string INFO_ADDED_MESSAGE = 'Added missing positions';
+    private const string DESCRIPTION           = 'Add missing records to Position table';
+    private const string HELP                  = 'This command ensures that all TechnologyPositionEnum values exist in the Position table';
+    private const string SUCCESS_MESSAGE       = 'Position table has been updated successfully!';
+    private const string INFO_ADDED_MESSAGE    = 'Added missing positions';
     private const string INFO_NO_ADDED_MESSAGE = 'No new positions to add';
 
     public function __construct(
@@ -42,7 +42,7 @@ class AddRecordToPositionTableCommand extends Command
         $positionRepository = $this->entityManager->getRepository(Position::class);
 
         $existingPositions = $positionRepository->createQueryBuilder(Position::ALIAS)
-            ->select(Position::ALIAS.'.name')
+            ->select(Position::ALIAS . '.name')
             ->getQuery()
             ->getArrayResult();
 
@@ -52,10 +52,10 @@ class AddRecordToPositionTableCommand extends Command
         foreach (PositionEnum::cases() as $enum) {
             $translatedName = $this->translator->trans(sprintf('position.defaultData.name.%s', $enum->value), [], 'positions');
             if (!in_array($translatedName, $existingNames, true)) {
-                $position = new Position();
-                $position->setName($translatedName);
-                // $position->active = true;
-                $position->setDescription($this->translator->trans(sprintf('position.defaultData.description.%s', $enum->value), [], 'positions'));
+                $position = Position::create(
+                    $translatedName,
+                    $this->translator->trans(sprintf('position.defaultData.description.%s', $enum->value), [], 'positions')
+                );
                 $this->entityManager->persist($position);
                 $positionsToPersist[] = $enum->value;
             }

@@ -18,12 +18,7 @@ final readonly class PositionCreator implements PositionCreatorInterface
 
     public function create(string $name, ?string $description = null, bool $active = false, array $departmentsUUIDs = []): void
     {
-        $position = new Position();
-        $position->setName($name);
-        if (null !== $description) {
-            $position->setDescription($description);
-        }
-        $position->setActive($active);
+        $position = Position::create($name, $description, $active);
 
         if ([] !== $departmentsUUIDs) {
             $this->positionDepartmentCreator->createDepartments($position, $departmentsUUIDs);
