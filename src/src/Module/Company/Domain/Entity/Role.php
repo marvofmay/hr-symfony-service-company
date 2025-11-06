@@ -54,7 +54,7 @@ class Role
     #[ORM\OneToMany(targetEntity: RoleAccessPermission::class, mappedBy: 'role', cascade: ['persist', 'remove'])]
     private Collection $accessPermissions;
 
-    public function __construct()
+    private function __construct()
     {
         $this->employees = new ArrayCollection();
         $this->roleAccesses = new ArrayCollection();
@@ -64,7 +64,7 @@ class Role
     public static function create(string $name, ?string $description = null): self
     {
         $self = new self();
-        $self->uuid = Uuid::uuid7();
+        $self->uuid = Uuid::uuid4();
         $self->name = $name;
         $self->description = $description;
 

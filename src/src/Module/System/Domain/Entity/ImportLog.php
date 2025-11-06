@@ -6,7 +6,7 @@ namespace App\Module\System\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\System\Domain\Enum\ImportLogKindEnum;
+use App\Module\System\Domain\Enum\Import\ImportLogKindEnum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;

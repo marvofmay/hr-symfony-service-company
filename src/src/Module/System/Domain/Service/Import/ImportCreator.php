@@ -7,8 +7,8 @@ namespace App\Module\System\Domain\Service\Import;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\System\Domain\Entity\File;
 use App\Module\System\Domain\Entity\Import;
-use App\Module\System\Domain\Enum\ImportKindEnum;
-use App\Module\System\Domain\Enum\ImportStatusEnum;
+use App\Module\System\Domain\Enum\Import\ImportKindEnum;
+use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Interface\Import\ImportWriterInterface;
 
 readonly class ImportCreator

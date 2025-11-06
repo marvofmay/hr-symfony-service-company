@@ -6,7 +6,7 @@ namespace App\Module\System\Presentation\API\Action\Import;
 
 use App\Module\System\Application\Command\Import\UpdateImportCommand;
 use App\Module\System\Domain\Entity\Import;
-use App\Module\System\Domain\Enum\ImportStatusEnum;
+use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class UpdateImportAction

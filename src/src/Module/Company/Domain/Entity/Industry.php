@@ -54,7 +54,7 @@ class Industry
     public static function create(string $name, ?string $description = null): self
     {
         $self = new self();
-        $self->uuid = Uuid::uuid7();
+        $self->uuid = Uuid::uuid4();
         $self->name = $name;
         $self->description = $description;
 

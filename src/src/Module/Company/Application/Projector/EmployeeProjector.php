@@ -9,6 +9,7 @@ use App\Module\Company\Domain\Event\Employee\EmployeeDeletedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeMultipleImportedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeRestoredEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
+use App\Module\Company\Domain\Service\Email\EmailService;
 use App\Module\Company\Domain\Service\Employee\EmployeeCreator;
 use App\Module\Company\Domain\Service\Employee\EmployeeDeleter;
 use App\Module\Company\Domain\Service\Employee\EmployeeRestorer;
@@ -22,6 +23,7 @@ final readonly class EmployeeProjector
         private EmployeeUpdater $employeeUpdater,
         private EmployeeDeleter $employeeDeleter,
         private EmployeeRestorer $employeeRestorer,
+        private EmailService $emailService,
     ) {
     }
 
@@ -29,6 +31,19 @@ final readonly class EmployeeProjector
     public function onEmployeeCreated(EmployeeCreatedEvent $event): void
     {
         $this->employeeCreator->create($event);
+
+        $this->emailService->sendEmail(
+            sender: null,
+            recipients: $event->emails->toArray(),
+            subject: sprintf('Witaj w firmie %s!', $event->firstName->getValue()),
+            message: '',
+            templateName: 'emails/welcome.html.twig',
+            attachments: [],
+            context: [
+                'firstName' => $event->firstName->getValue(),
+                'login' => $event->emails->toArray()[0],
+            ],
+        );
     }
 
     #[AsEventListener(event: EmployeeUpdatedEvent::class)]

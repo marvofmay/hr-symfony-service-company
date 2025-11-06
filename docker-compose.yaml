@@ -109,6 +109,20 @@ services:
 #    volumes:
 #      - ./src:/var/www/html
 
+  worker-send-email:
+    container_name: worker-send-email
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: [ "php", "bin/console", "messenger:consume", "send_email", "--verbose", "--no-interaction" ]
+    depends_on:
+      - rabbitmq
+      - service-company
+    environment:
+      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+    volumes:
+      - ./src:/var/www/html
+
   redis:
     image: redis:alpine
     container_name: redis

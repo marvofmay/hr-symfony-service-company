@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Factory;
 
 use App\Common\Domain\Interface\XLSXIteratorInterface;
-use App\Module\System\Domain\Enum\ImportKindEnum;
+use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final class ImporterFactory

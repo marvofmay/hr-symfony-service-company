@@ -6,7 +6,7 @@ namespace App\Module\System\Domain\Service\ImportLog;
 
 use App\Module\System\Domain\Entity\Import;
 use App\Module\System\Domain\Entity\ImportLog;
-use App\Module\System\Domain\Enum\ImportLogKindEnum;
+use App\Module\System\Domain\Enum\Import\ImportLogKindEnum;
 use App\Module\System\Domain\Interface\ImportLog\ImportLogWriterInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 

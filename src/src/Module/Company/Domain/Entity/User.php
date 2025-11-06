@@ -70,7 +70,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public static function create(string $email): self
     {
         $self = new self();
-        $self->uuid = Uuid::uuid7();
+        $self->uuid = Uuid::uuid4();
         $self->email = $email;
 
         return $self;

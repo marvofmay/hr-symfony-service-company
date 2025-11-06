@@ -62,6 +62,10 @@ class File
     #[ORM\OneToOne(targetEntity: Import::class, mappedBy: 'file')]
     private ?Import $import = null;
 
+    #[ORM\ManyToOne(targetEntity: Email::class, inversedBy: 'attachments')]
+    #[ORM\JoinColumn(name: 'email_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    private ?Email $email = null;
+
     public function getUUID(): UuidInterface
     {
         return $this->uuid;
@@ -143,6 +147,16 @@ class File
     public function setImport(?Import $import): void
     {
         $this->import = $import;
+    }
+
+    public function getEmail(): ?Email
+    {
+        return $this->email;
+    }
+
+    public function setEmail(?Email $email): void
+    {
+        $this->email = $email;
     }
 
     public function toArray(): array

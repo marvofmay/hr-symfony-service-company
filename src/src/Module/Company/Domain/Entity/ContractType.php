@@ -55,7 +55,7 @@ class ContractType
     public static function create(string $name, ?string $description = null, bool $active = false): self
     {
         $self = new self();
-        $self->uuid = Uuid::uuid7();
+        $self->uuid = Uuid::uuid4();
         $self->name = $name;
         $self->description = $description;
         $self->active = $active;

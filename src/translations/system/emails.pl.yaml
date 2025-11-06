@@ -1,0 +1,6 @@
+email:
+  uuid:
+    notFound: "Nie znaleziono email'a o uuid :uuid"
+  send:
+    failed: "Błąd przy wysyłce emaila o uuid :uuid - błąd :errorMessage"
+    success: "Email o uuid :uuid został poprawnie wysłany"

@@ -9,7 +9,7 @@ use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Company\ImportCompaniesCommand;
 use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Event\Company\CompanyMultipleImportedEvent;
-use App\Module\System\Domain\Enum\ImportKindEnum;
+use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Factory\ImporterFactory;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use Ramsey\Uuid\Uuid;
