@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Role\Import;
 
 use App\Module\Company\Domain\Enum\Role\RoleImportColumnEnum;
+use App\Module\Company\Domain\Interface\Role\Import\RolesImporterInterface;
 use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class RolesImporter
+final class RolesImporter implements RolesImporterInterface
 {
     private array $roles = [];
 

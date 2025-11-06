@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Industry\Import;
 
 use App\Module\Company\Domain\Enum\Industry\IndustryImportColumnEnum;
+use App\Module\Company\Domain\Interface\Industry\Importer\ImportIndustriesReferenceLoaderInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 
-final class ImportIndustriesReferenceLoader
+final class ImportIndustriesReferenceLoader implements ImportIndustriesReferenceLoaderInterface
 {
     public array $industries = [] {
         get {
@@ -34,7 +35,7 @@ final class ImportIndustriesReferenceLoader
         $this->industries = $this->mapByName($this->industryReaderRepository->getIndustriesByNames($industryNames));
     }
 
-    private function mapByName(iterable $industries): array
+    public function mapByName(iterable $industries): array
     {
         $map = [];
         foreach ($industries as $industry) {

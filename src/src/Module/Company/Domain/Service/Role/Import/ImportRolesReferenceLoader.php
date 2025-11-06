@@ -34,7 +34,7 @@ final class ImportRolesReferenceLoader
         $this->roles = $this->mapByName($this->roleReaderRepository->getRolesByNames($roleNames));
     }
 
-    private function mapByName(iterable $roles): array
+    public function mapByName(iterable $roles): array
     {
         $map = [];
         foreach ($roles as $role) {

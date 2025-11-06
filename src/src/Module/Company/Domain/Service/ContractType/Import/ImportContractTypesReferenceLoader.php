@@ -6,8 +6,9 @@ namespace App\Module\Company\Domain\Service\ContractType\Import;
 
 use App\Module\Company\Domain\Enum\ContractType\ContractTypeImportColumnEnum;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
+use App\Module\Company\Domain\Interface\ContractType\Importer\ImportContractTypesReferenceLoaderInterface;
 
-final class ImportContractTypesReferenceLoader
+final class ImportContractTypesReferenceLoader implements ImportContractTypesReferenceLoaderInterface
 {
     public array $contractTypes = [] {
         get {
@@ -34,7 +35,7 @@ final class ImportContractTypesReferenceLoader
         $this->contractTypes = $this->mapByName($this->contractTypeReaderRepository->getContractTypesByNames($contractTypeNames));
     }
 
-    private function mapByName(iterable $contractTypes): array
+    public function mapByName(iterable $contractTypes): array
     {
         $map = [];
         foreach ($contractTypes as $contractType) {

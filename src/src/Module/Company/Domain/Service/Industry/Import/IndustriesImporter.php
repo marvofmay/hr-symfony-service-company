@@ -5,10 +5,11 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Industry\Import;
 
 use App\Module\Company\Domain\Enum\Industry\IndustryImportColumnEnum;
+use App\Module\Company\Domain\Interface\Industry\Importer\IndustriesImporterInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class IndustriesImporter
+final class IndustriesImporter implements IndustriesImporterInterface
 {
     private array $industries = [];
 

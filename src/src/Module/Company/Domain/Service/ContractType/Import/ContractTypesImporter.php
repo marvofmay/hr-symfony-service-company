@@ -6,9 +6,10 @@ namespace App\Module\Company\Domain\Service\ContractType\Import;
 
 use App\Module\Company\Domain\Enum\ContractType\ContractTypeImportColumnEnum;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface;
+use App\Module\Company\Domain\Interface\ContractType\Importer\ContractTypesImporterInterface;
 use Doctrine\Common\Collections\ArrayCollection;
 
-final class ContractTypesImporter
+final class ContractTypesImporter implements ContractTypesImporterInterface
 {
     private array $contractTypes = [];
 

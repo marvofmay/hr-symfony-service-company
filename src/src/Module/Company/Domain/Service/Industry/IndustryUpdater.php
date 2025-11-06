@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace App\Module\Company\Domain\Service\Industry;
 
 use App\Module\Company\Domain\Entity\Industry;
+use App\Module\Company\Domain\Interface\Industry\IndustryUpdaterInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryWriterInterface;
 
-final readonly class IndustryUpdater
+final readonly class IndustryUpdater implements IndustryUpdaterInterface
 {
     public function __construct(private IndustryWriterInterface $industryWriterRepository)
     {
