@@ -16,9 +16,7 @@ final class RoleUpdaterTest extends TestCase
         $name = 'Updated Name';
         $description = 'Updated Description';
 
-        $role = new Role();
-        $role->setName('Old Name');
-        $role->setDescription('Old Description');
+        $role = Role::create('Old Name','Old Description');
 
         $writer = $this->createMock(RoleWriterInterface::class);
         $writer->expects($this->once())

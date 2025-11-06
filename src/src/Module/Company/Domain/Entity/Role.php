@@ -17,7 +17,6 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -37,8 +36,6 @@ class Role
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
@@ -59,12 +56,29 @@ class Role
 
     public function __construct()
     {
-        $this->uuid = Uuid::uuid4();
-        $this->createdAt = new \DateTime();
-
         $this->employees = new ArrayCollection();
         $this->roleAccesses = new ArrayCollection();
         $this->accessPermissions = new ArrayCollection();
+    }
+
+    public static function create(string $name, ?string $description = null): self
+    {
+        $self = new self();
+        $self->uuid = Uuid::uuid7();
+        $self->name = $name;
+        $self->description = $description;
+
+        return $self;
+    }
+
+    public function rename(string $newName): void
+    {
+        $this->name = $newName;
+    }
+
+    public function updateDescription(?string $description): void
+    {
+        $this->description = $description;
     }
 
     public function getUUID(): UuidInterface
@@ -72,29 +86,14 @@ class Role
         return $this->{RoleEntityFieldEnum::UUID->value};
     }
 
-    public function setUuid(UuidInterface $uuid): void
-    {
-        $this->{RoleEntityFieldEnum::UUID->value} = $uuid;
-    }
-
     public function getName(): string
     {
         return $this->{RoleEntityFieldEnum::NAME->value};
     }
 
-    public function setName(string $name): void
-    {
-        $this->{RoleEntityFieldEnum::NAME->value} = $name;
-    }
-
     public function getDescription(): ?string
     {
         return $this->{RoleEntityFieldEnum::DESCRIPTION->value};
-    }
-
-    public function setDescription(?string $description): void
-    {
-        $this->{RoleEntityFieldEnum::DESCRIPTION->value} = $description;
     }
 
     public function getEmployees(): Collection

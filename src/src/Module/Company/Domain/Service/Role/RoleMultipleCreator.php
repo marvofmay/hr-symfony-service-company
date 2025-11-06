@@ -19,10 +19,7 @@ readonly class RoleMultipleCreator
     {
         $roles = new ArrayCollection();
         foreach ($data as $item) {
-            $role = new Role();
-            $role->setName($item[RoleImportColumnEnum::ROLE_NAME->value]);
-            $role->setDescription($item[RoleImportColumnEnum::ROLE_DESCRIPTION->value]);
-
+            $role = Role::create(trim($item[RoleImportColumnEnum::ROLE_NAME->value] ?? ''), $item[RoleImportColumnEnum::ROLE_DESCRIPTION->value]);
             $roles[] = $role;
         }
 

@@ -16,9 +16,9 @@ final readonly class RoleUpdater implements RoleUpdaterInterface
 
     public function update(Role $role, string $name, ?string $description = null): void
     {
-        $role->setName($name);
+        $role->rename($name);
         if (null !== $description) {
-            $role->setDescription($description);
+            $role->updateDescription($description);
         }
 
         $this->roleWriterRepository->saveRoleInDB($role);

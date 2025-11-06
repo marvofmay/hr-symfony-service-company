@@ -54,9 +54,7 @@ class AddRecordToRoleTableCommand extends Command
             $roleName = $roleEnum->value;
             $translatedName = $this->translator->trans(sprintf('role.defaultData.name.%s', $roleName), [], 'roles');
             if (!in_array($translatedName, $existingRolesNames, true)) {
-                $role = new Role();
-                $role->setName($translatedName);
-                $role->setDescription($this->translator->trans(sprintf('role.defaultData.description.%s', $roleName), [], 'roles'));
+                $role = Role::create($translatedName, $this->translator->trans(sprintf('role.defaultData.description.%s', $roleName), [], 'roles'));
                 $this->entityManager->persist($role);
                 $rolesToPersist[] = $roleEnum->value;
             }

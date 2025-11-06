@@ -16,12 +16,7 @@ final readonly class RoleCreator implements RoleCreatorInterface
 
     public function create(string $name, ?string $description = null): void
     {
-        $role = new Role();
-        $role->setName($name);
-        if (null !== $description) {
-            $role->setDescription($description);
-        }
-
+        $role = Role::create(trim($name), $description);
         $this->roleWriterRepository->saveRoleInDB($role);
     }
 }

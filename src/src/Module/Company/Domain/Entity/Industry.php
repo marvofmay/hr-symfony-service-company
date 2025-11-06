@@ -45,19 +45,20 @@ class Industry
     #[ORM\OneToMany(targetEntity: Company::class, mappedBy: 'industry')]
     private Collection $companies;
 
-    private function __construct(UuidInterface $uuid, string $name, ?string $description = null)
+    private function __construct()
     {
-        $this->uuid = $uuid;
-        $this->name = $name;
-        $this->description = $description;
-
         $this->companies = new ArrayCollection();
     }
 
 
     public static function create(string $name, ?string $description = null): self
     {
-        return new self(Uuid::uuid7(), $name, $description);
+        $self = new self();
+        $self->uuid = Uuid::uuid7();
+        $self->name = $name;
+        $self->description = $description;
+
+        return $self;
     }
 
     public function getUUID(): UuidInterface

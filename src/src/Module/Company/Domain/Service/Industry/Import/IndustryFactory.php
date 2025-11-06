@@ -13,7 +13,7 @@ final class IndustryFactory
     {
         return Industry::create(
             trim((string)($data[IndustryImportColumnEnum::INDUSTRY_NAME->value] ?? '')),
-            $data[IndustryImportColumnEnum::INDUSTRY_DESCRIPTION->value] ?? null
+            trim($data[IndustryImportColumnEnum::INDUSTRY_DESCRIPTION->value] ?? null)
         );
     }
 
@@ -23,7 +23,9 @@ final class IndustryFactory
         $description = $data[IndustryImportColumnEnum::INDUSTRY_DESCRIPTION->value] ?? null;
 
         $industry->rename($name);
-        $industry->updateDescription($description);
+        if (null !== $description) {
+            $industry->updateDescription(trim($description));
+        }
 
         return $industry;
     }

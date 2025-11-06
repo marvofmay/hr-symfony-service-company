@@ -13,7 +13,7 @@ class RoleDeleterTest extends TestCase
 {
     public function testItDeletesRole(): void
     {
-        $role = new Role();
+        $role = Role::create('Some role', 'Some role description');
 
         $writer = $this->createMock(RoleWriterInterface::class);
         $writer

@@ -20,9 +20,7 @@ class GetRoleByUUIDQueryHandlerTest extends TestCase
         $uuid = '123e4567-e89b-12d3-a456-426614174000';
         $query = new GetRoleByUUIDQuery($uuid);
 
-        $role = new Role();
-        $role->setName('Test Role');
-        $role->setDescription('Some description');
+        $role = Role::create('Test Role','Some description');
         $role->setCreatedAt();
 
         $roleReader = $this->createMock(RoleReaderInterface::class);

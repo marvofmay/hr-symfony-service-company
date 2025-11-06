@@ -21,7 +21,7 @@ class UpdateRoleCommandHandlerTest extends TestCase
 
         $command = new UpdateRoleCommand($uuid, $name, $description);
 
-        $role = new Role();
+        $role = Role::create($name, $description);
         $roleReader = $this->createMock(RoleReaderInterface::class);
         $roleReader->expects($this->once())
             ->method('getRoleByUUID')

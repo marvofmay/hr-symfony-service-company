@@ -44,7 +44,7 @@ class Position
 
     #[ORM\Column(type: Types::BOOLEAN, options: ['default' => false])]
     #[Assert\NotBlank]
-    private bool $active;
+    private bool $active = false;
 
     #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'position', cascade: ['persist', 'remove'])]
     private Collection $employees;
@@ -52,20 +52,21 @@ class Position
     #[ORM\OneToMany(targetEntity: PositionDepartment::class, mappedBy: 'position', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $positionDepartments;
 
-    private function __construct(UuidInterface $uuid, string $name, ?string $description = null, bool $active = false)
+    private function __construct()
     {
-        $this->uuid = Uuid::uuid7();
-        $this->name = $name;
-        $this->description = $description;
-        $this->active = $active;
-
         $this->employees = new ArrayCollection();
         $this->positionDepartments = new ArrayCollection();
     }
 
     public static function create(string $name, ?string $description = null, bool $active = false): self
     {
-        return new self(Uuid::uuid7(), $name, $description, $active);
+        $self = new self();
+        $self->uuid = Uuid::uuid7();
+        $self->name = $name;
+        $self->description = $description;
+        $self->active = $active;
+
+        return $self;
     }
 
     public function getUUID(): UuidInterface

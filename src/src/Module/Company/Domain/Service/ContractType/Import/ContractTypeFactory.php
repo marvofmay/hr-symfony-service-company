@@ -13,7 +13,7 @@ final class ContractTypeFactory
     {
         return ContractType::create(
             trim($data[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? ''),
-            $data[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? null,
+            trim($data[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? null),
             (bool)$data[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value]
         );
     }
@@ -26,7 +26,7 @@ final class ContractTypeFactory
 
         $contractType->rename($name);
         if (null !== $description) {
-            $contractType->updateDescription($description);
+            $contractType->updateDescription(trim($description));
         }
         if ($active) {
             $contractType->activate();

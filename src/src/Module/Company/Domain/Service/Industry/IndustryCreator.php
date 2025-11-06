@@ -16,7 +16,7 @@ final readonly class IndustryCreator implements IndustryCreatorInterface
 
     public function create(string $name, ?string $description = null): void
     {
-        $industry = Industry::create($name, $description);
+        $industry = Industry::create(trim($name), $description);
 
         $this->industryWriterRepository->saveIndustryInDB($industry);
     }

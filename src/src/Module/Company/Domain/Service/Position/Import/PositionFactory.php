@@ -12,8 +12,8 @@ final class PositionFactory
     public function create(array $data): Position
     {
         return Position::create(
-            trim($data[PositionImportColumnEnum::POSITION_NAME->value]) ?? '',
-            $data[PositionImportColumnEnum::POSITION_DESCRIPTION->value] ?? null,
+            trim($data[PositionImportColumnEnum::POSITION_NAME->value] ?? ''),
+            trim($data[PositionImportColumnEnum::POSITION_DESCRIPTION->value] ?? null),
             (bool)$data[PositionImportColumnEnum::POSITION_ACTIVE->value],
         );
     }
@@ -23,9 +23,9 @@ final class PositionFactory
         $name = trim($data[PositionImportColumnEnum::POSITION_NAME->value]) ?? '';
         $description = $data[PositionImportColumnEnum::POSITION_DESCRIPTION->value] ?? null;
         $active = (bool)$data[PositionImportColumnEnum::POSITION_DESCRIPTION->value];
-        
+
         $position->rename($name);
-        $position->updateDescription($description);
+        $position->updateDescription(trim($description));
         if ($active) {
             $position->activate();
         } else {

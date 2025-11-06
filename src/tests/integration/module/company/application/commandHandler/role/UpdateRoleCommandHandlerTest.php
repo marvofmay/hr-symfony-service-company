@@ -26,9 +26,7 @@ class UpdateRoleCommandHandlerTest extends FunctionalTestBase
         $roleName = 'Menadżer';
         $roleDescription = $roleName.' ...';
 
-        $role = new Role();
-        $role->setName($roleName);
-        $role->setDescription($roleDescription);
+        $role = Role::create($roleName, $roleDescription);
 
         $repoWriter->saveRoleInDB($role);
 

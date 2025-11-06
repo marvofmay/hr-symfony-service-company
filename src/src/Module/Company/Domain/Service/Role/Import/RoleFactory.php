@@ -11,26 +11,19 @@ final class RoleFactory
 {
     public function create(array $roleData): Role
     {
-        $role = new Role();
-        $this->fillData($role, $roleData);
-
-        return $role;
+        return Role::create(
+            trim($roleData[RoleImportColumnEnum::ROLE_NAME->value] ?? ''),
+            trim($roleData[RoleImportColumnEnum::ROLE_DESCRIPTION->value] ?? null)
+        );
     }
 
-    public function update(array $roleData, array $existingRoles): Role
+    public function update(Role $role, array $roleData): Role
     {
-        $role = $existingRoles[$roleData[RoleImportColumnEnum::ROLE_NAME->value]];
-        $this->fillData($role, $roleData);
+        $role->rename(trim($roleData[RoleImportColumnEnum::ROLE_NAME->value] ?? ''));
+        if (null !== $roleData[RoleImportColumnEnum::ROLE_DESCRIPTION->value]) {
+            $role->updateDescription(trim($roleData[RoleImportColumnEnum::ROLE_DESCRIPTION->value]));
+        }
 
         return $role;
-    }
-
-    private function fillData(Role $role, array $roleData): void
-    {
-        $name = $roleData[RoleImportColumnEnum::ROLE_NAME->value] ?? null;
-        $description = $roleData[RoleImportColumnEnum::ROLE_DESCRIPTION->value] ?? null;
-
-        $role->setName($name);
-        $role->setDescription($description);
     }
 }

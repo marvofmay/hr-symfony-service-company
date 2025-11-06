@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace App\tests\unit\module\company\domain\entity;
 
 use App\Module\Company\Domain\Entity\Role;
-use PHPUnit\Framework\TestCase;
-use Ramsey\Uuid\Guid\Guid;
-use Ramsey\Uuid\UuidInterface;
+use PHPUnit\Framework\TestCase;;
 
 class RoleTest extends TestCase
 {
@@ -15,23 +13,18 @@ class RoleTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->role = new Role();
+        $this->role = Role::create('New role', 'New role description');
     }
 
     public function testGettersAndSetters(): void
     {
-        $uuid = Guid::uuid4();
-        $this->role->setUuid($uuid);
-        $this->role->setName('Administrator');
-        $this->role->setDescription('Admin role');
         $createdAt = new \DateTime();
         $this->role->setCreatedAt();
         $this->role->setUpdatedAt();
         $this->role->setDeletedAt($createdAt);
 
-        $this->assertEquals($uuid, $this->role->getUuid());
-        $this->assertEquals('Administrator', $this->role->getName());
-        $this->assertEquals('Admin role', $this->role->getDescription());
+        $this->assertEquals('New role', $this->role->getName());
+        $this->assertEquals('New role description', $this->role->getDescription());
         $this->assertEquals($createdAt, $this->role->getDeletedAt());
     }
 
@@ -47,11 +40,4 @@ class RoleTest extends TestCase
         $this->assertContains('deletedAt', $attributes);
     }
 
-    public function testUuidValidation(): void
-    {
-        $uuid = Guid::uuid4();
-        $this->role->setUuid($uuid);
-
-        $this->assertInstanceOf(UuidInterface::class, $this->role->getUuid());
-    }
 }
