@@ -14,6 +14,10 @@ readonly class UUIDAbstract implements UUIDValueObjectInterface
 
     private function __construct(UuidInterface $uuid)
     {
+        if (!preg_match('/^[0-9a-fA-F\-]{36}$/', $uuid->toString())) {
+            throw new \InvalidArgumentException('Invalid UserId UUID');
+        }
+
         $this->uuid = $uuid;
     }
 

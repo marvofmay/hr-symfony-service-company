@@ -1,9 +1,12 @@
 #app_api_doc:
 #    resource: './routes/api/nelmio'
 #    type: directory
-app_api_auth:
+app_api_auth_login:
     resource: './routes/api/auth'
     type: directory
+app_api_auth_logout:
+  resource: ../src/Module/System/Presentation/API/Controller/Auth
+  type: attribute
 app_api:
     #resource: './routes/api/company'
     resource: ../src/Module/Company/Presentation/API/Controller/

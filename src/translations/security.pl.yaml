@@ -1,4 +1,19 @@
 token:
   expired: "Sesja użytkownika wygasła. Zaloguj się ponownie."
   invalid: "Nieprawidłowy token. Zaloguj się ponownie."
-Invalid credentials.: 'Błędny login lub hasło.'
+  param:
+    missing: "Nie znaleziono parametru - token"
+Invalid credentials.: 'Błędny login lub hasło :('
+logout:
+  success: "Wylogowanie zakończone sukcesem."
+  error: "Wylogowanie zakończone błedem."
+tokenUUID:
+  param:
+    missing: "Nie znalezino parametru - tokenUUID."
+userUUID:
+  param:
+    missing: "Nie znalezino parametru - userUUID."
+user:
+  notFound: "Nie znaleziono zalogowanego użytkownika."
+  logout:
+    alreadyExists: "Użytkownik już się wylogował."

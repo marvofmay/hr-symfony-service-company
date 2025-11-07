@@ -43,6 +43,9 @@ use App\Module\Company\Application\Event\Role\RoleMultipleDeletedEvent;
 use App\Module\Company\Application\Event\Role\RoleRestoredEvent;
 use App\Module\Company\Application\Event\Role\RoleUpdatedEvent;
 use App\Module\Company\Application\Event\Role\RoleViewedEvent;
+use App\Module\System\Application\Event\Auth\TokenExpiredEvent;
+use App\Module\System\Application\Event\Auth\UserLoginEvent;
+use App\Module\System\Application\Event\Auth\UserLogoutEvent;
 
 final class LoggableEventsProvider
 {
@@ -61,7 +64,8 @@ final class LoggableEventsProvider
             self::getRoleEventClasses(),
             self::getIndustryEventClasses(),
             self::getPositionEventClasses(),
-            self::getContractTypeEventsClasses()
+            self::getContractTypeEventsClasses(),
+            self::getAuthEventClasses()
         );
     }
 
@@ -143,6 +147,15 @@ final class LoggableEventsProvider
             ContractTypeListedEvent::class,
             ContractTypeMultipleDeletedEvent::class,
             ContractTypeImportedEvent::class,
+        ];
+    }
+
+    private static function getAuthEventClasses(): array
+    {
+        return [
+            UserLoginEvent::class,
+            UserLogoutEvent::class,
+            TokenExpiredEvent::class,
         ];
     }
 }

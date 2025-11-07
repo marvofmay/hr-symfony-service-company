@@ -43,6 +43,9 @@ abstract class AbstractEventLoggerSubscriber
     private function getEmployee(): ?object
     {
         $user = $this->security->getUser();
+        if (null === $user) {
+            return null;
+        }
 
         return method_exists($user, 'getEmployee') ? $user->getEmployee() : null;
     }
@@ -57,7 +60,7 @@ abstract class AbstractEventLoggerSubscriber
         $logger->info("event: $eventClass");
         $logger->info("entity: $entityClass");
         $logger->info("data: $jsonData");
-        $logger->info($employee ? "employeeUUID: " . $employee->getUUID() : 'userUUID: ' . $this->security->getUser()->getUUID());
+        $logger->info($employee ? "employeeUUID: " . $employee->getUUID() : 'userUUID: ' . $this->security->getUser()?->getUUID());
         $logger->info('---------------------------------------------');
     }
 
