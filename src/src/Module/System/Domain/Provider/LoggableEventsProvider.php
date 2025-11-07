@@ -41,6 +41,7 @@ use App\Module\Company\Application\Event\Role\RoleImportedEvent;
 use App\Module\Company\Application\Event\Role\RoleListedEvent;
 use App\Module\Company\Application\Event\Role\RoleMultipleDeletedEvent;
 use App\Module\Company\Application\Event\Role\RoleRestoredEvent;
+use App\Module\Company\Application\Event\Role\RolesPDFCreatedEvent;
 use App\Module\Company\Application\Event\Role\RoleUpdatedEvent;
 use App\Module\Company\Application\Event\Role\RoleViewedEvent;
 use App\Module\System\Application\Event\Auth\TokenExpiredEvent;
@@ -106,6 +107,7 @@ final class LoggableEventsProvider
             RoleListedEvent::class,
             RoleMultipleDeletedEvent::class,
             RoleImportedEvent::class,
+            RolesPDFCreatedEvent::class,
         ];
     }
 

@@ -38,6 +38,9 @@ role:
     permission:
       success: "Uprawnienia dla roli zostały pomyślnie zaktualizowane"
       error: "Wystąpił błąd - uprawnienia dla roli nie zostały zaktualizowane"
+  pdf:
+    success: "Pomyślnie utworzono plik PDF"
+    error: "Błąd przy tworzeniu pdf"
   access:
     notAssigned: "Dostępy o uuid :accesses nie są przypisane do roli :role"
   view:

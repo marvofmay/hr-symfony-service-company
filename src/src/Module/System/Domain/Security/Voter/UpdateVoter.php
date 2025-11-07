@@ -4,7 +4,7 @@ namespace App\Module\System\Domain\Security\Voter;
 
 final class UpdateVoter extends AccessPermissionVoter
 {
-    public const UPDATE = 'update';
+    public const string UPDATE = 'update';
 
     protected function getAttributeName(): string
     {

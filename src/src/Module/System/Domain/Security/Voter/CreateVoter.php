@@ -4,7 +4,7 @@ namespace App\Module\System\Domain\Security\Voter;
 
 final class CreateVoter extends AccessPermissionVoter
 {
-    public const CREATE = 'create';
+    public const string CREATE = 'create';
 
     protected function getAttributeName(): string
     {

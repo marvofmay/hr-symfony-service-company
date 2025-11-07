@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Module\System\Domain\Security\Voter;
 
 use App\Module\Company\Domain\Entity\Employee;

@@ -2,12 +2,12 @@
 
 namespace App\Module\System\Domain\Security\Voter;
 
-final class ViewVoter extends AccessPermissionVoter
+final class PDFVoter extends AccessPermissionVoter
 {
-    public const string VIEW = 'view';
+    public const string PDF = 'pdf';
 
     protected function getAttributeName(): string
     {
-        return self::VIEW;
+        return self::PDF;
     }
 }

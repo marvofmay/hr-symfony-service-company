@@ -4,7 +4,7 @@ namespace App\Module\System\Domain\Security\Voter;
 
 final class ImportVoter extends AccessPermissionVoter
 {
-    public const IMPORT = 'import';
+    public const string IMPORT = 'import';
 
     protected function getAttributeName(): string
     {

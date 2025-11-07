@@ -54,6 +54,7 @@
         "doctrine/doctrine-bundle": "^2.18",
         "doctrine/doctrine-migrations-bundle": "^3.5.0",
         "doctrine/orm": "3.6.x-dev",
+        "dompdf/dompdf": "^3.1",
         "fakerphp/faker": "^1.24.1",
         "gedmo/doctrine-extensions": "^3.21",
         "lexik/jwt-authentication-bundle": "^3.1.1",
