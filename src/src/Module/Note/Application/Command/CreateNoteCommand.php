@@ -4,11 +4,16 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Application\Command;
 
+use App\Common\Domain\Interface\CommandInterface;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
 
-class CreateNoteCommand
+final readonly class CreateNoteCommand implements CommandInterface
 {
-    public function __construct(public ?string $title, public ?string $content, public NotePriorityEnum $priority)
+    public const string TITLE   = 'title';
+    public const string CONTENT  = 'content';
+    public const string PRIORITY = 'priority';
+
+    public function __construct(public string $title, public ?string $content, public ?NotePriorityEnum $priority)
     {
     }
 }

@@ -20,9 +20,9 @@ class UpdateNoteAction
         $this->commandBus->dispatch(
             new UpdateNoteCommand(
                 $updateDTO->getUUID(),
-                $updateDTO->getTitle(),
-                $updateDTO->getContent(),
-                $updateDTO->getPriority(),
+                $updateDTO->title,
+                $updateDTO->content,
+                $updateDTO->priority,
                 $this->noteReaderRepository->getNoteByUUID($updateDTO->getUUID())
             )
         );

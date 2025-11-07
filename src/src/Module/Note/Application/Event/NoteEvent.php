@@ -2,14 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Module\System\Application\Event\Auth;
+namespace App\Module\Note\Application\Event;
 
+use App\Module\Note\Domain\Entity\Note;
 use App\Module\System\Application\Event\Event;
 
-class AuthEvent extends Event
+class NoteEvent extends Event
 {
     public function getEntityClass(): string
     {
-        return AuthEvent::class;
+        return Note::class;
     }
 }

@@ -8,11 +8,14 @@ use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Note\Domain\Enum\NoteEntityFieldEnum;
+use App\Module\Note\Domain\Enum\NoteEntityRelationFieldEnum;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -26,85 +29,64 @@ class Note
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const string COLUMN_UUID = 'uuid';
-    public const string COLUMN_EMPLOYEE_UUID = 'employee_uuid';
-    public const string COLUMN_TITLE = 'title';
-    public const string COLUMN_CONTENT = 'content';
-    public const string COLUMN_PRIORITY = 'priority';
-    public const string COLUMN_CREATED_AT = 'createdAt';
-    public const string COLUMN_UPDATED_AT = 'updatedAt';
-    public const string COLUMN_DELETED_AT = 'deletedAt';
-    public const string RELATION_EMPLOYEE = 'employee';
     public const string ALIAS = 'note';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface $uuid;
+    public UuidInterface $uuid;
 
     #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'notes')]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
-    #[Assert\NotNull]
-    private Employee $employee;
+    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    private ?Employee $employee;
 
     #[ORM\Column(type: Types::STRING, length: 100)]
     #[Assert\NotBlank]
     private string $title;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $content = null;
+    private ?string $content;
 
     #[ORM\Column(type: Types::STRING, length: 20, enumType: NotePriorityEnum::class)]
     private NotePriorityEnum $priority;
 
-    public function __construct()
+    public static function create(string $title, ?string $content = null, NotePriorityEnum $priority = NotePriorityEnum::LOW, ?Employee $employee = null): self
     {
-        $this->createdAt = new \DateTime();
+        $self = new self();
+        $self->{NoteEntityFieldEnum::UUID->value} = Uuid::uuid4();
+        $self->{NoteEntityFieldEnum::TITLE->value} = $title;
+        $self->{NoteEntityFieldEnum::CONTENT->value} = $content;
+        $self->{NoteEntityFieldEnum::PRIORITY->value} = $priority;
+        $self->{NoteEntityRelationFieldEnum::EMPLOYEE->value} = $employee;
+
+        return $self;
     }
 
     public function getUUID(): UuidInterface
     {
-        return $this->uuid;
+        return $this->{NoteEntityFieldEnum::UUID->value};
     }
 
-    public function getEmployee(): Employee
+    public function getEmployee(): ?Employee
     {
-        return $this->employee;
+        return $this->{NoteEntityRelationFieldEnum::EMPLOYEE->value};
     }
 
     public function getTitle(): string
     {
-        return $this->title;
+        return $this->{NoteEntityFieldEnum::TITLE->value};
     }
 
     public function getContent(): ?string
     {
-        return $this->content;
+        return $this->{NoteEntityFieldEnum::CONTENT->value};
     }
 
     public function getPriority(): NotePriorityEnum
     {
-        return $this->priority;
+        return $this->{NoteEntityFieldEnum::PRIORITY->value};
     }
 
-    public function setEmployee(Employee $employee): void
-    {
-        $this->employee = $employee;
-    }
 
-    public function setTitle(string $title): void
-    {
-        $this->title = $title;
-    }
-
-    public function setContent(?string $content): void
-    {
-        $this->content = $content;
-    }
-
-    public function setPriority(NotePriorityEnum $priority): void
-    {
-        $this->priority = $priority;
-    }
 }

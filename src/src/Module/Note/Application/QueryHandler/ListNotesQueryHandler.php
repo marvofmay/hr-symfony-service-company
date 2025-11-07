@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Module\Note\Application\QueryHandler;
 
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
+use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Note\Application\Query\ListNotesQuery;
 use App\Module\Note\Domain\Entity\Note;
+use App\Module\Note\Domain\Enum\NoteEntityFieldEnum;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler(bus: 'query.bus')]
@@ -29,27 +31,27 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
 
     public function getDefaultOrderBy(): string
     {
-        return Note::COLUMN_CREATED_AT;
+        return TimeStampableEntityFieldEnum::CREATED_AT->value;
     }
 
     public function getAllowedFilters(): array
     {
         return [
-            Note::COLUMN_TITLE,
-            Note::COLUMN_CONTENT,
-            Note::COLUMN_PRIORITY,
-            Note::COLUMN_CREATED_AT,
-            Note::COLUMN_UPDATED_AT,
-            Note::COLUMN_DELETED_AT,
+            NoteEntityFieldEnum::TITLE->value,
+            NoteEntityFieldEnum::CONTENT->value,
+            NoteEntityFieldEnum::PRIORITY->value,
+            TimeStampableEntityFieldEnum::CREATED_AT->value,
+            TimeStampableEntityFieldEnum::UPDATED_AT->value,
+            TimeStampableEntityFieldEnum::DELETED_AT->value,
         ];
     }
 
     public function getPhraseSearchColumns(): array
     {
         return [
-            Note::COLUMN_TITLE,
-            Note::COLUMN_CONTENT,
-            Note::COLUMN_PRIORITY,
+            NoteEntityFieldEnum::TITLE->value,
+            NoteEntityFieldEnum::CONTENT->value,
+            NoteEntityFieldEnum::PRIORITY->value,
         ];
     }
 

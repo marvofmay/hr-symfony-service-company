@@ -15,6 +15,6 @@ readonly class NoteDeleter
 
     public function delete(Note $note): void
     {
-        $this->noteWriterRepository->deleteNoteInDB($note);
+        $this->noteWriterRepository->delete($note);
     }
 }

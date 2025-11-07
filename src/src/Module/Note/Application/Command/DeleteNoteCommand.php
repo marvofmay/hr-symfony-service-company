@@ -1,17 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Module\Note\Application\Command;
 
-use App\Module\Note\Domain\Entity\Note;
+use App\Common\Domain\Interface\CommandInterface;
 
-readonly class DeleteNoteCommand
+final readonly class DeleteNoteCommand implements CommandInterface
 {
-    public function __construct(private Note $note)
-    {
-    }
+    public const string NOTE_UUID = 'noteUUID';
 
-    public function getNote(): Note
+    public function __construct(public string $noteUUID)
     {
-        return $this->note;
     }
 }

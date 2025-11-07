@@ -16,10 +16,8 @@ readonly class NoteUpdater
 
     public function update(Note $note, ?string $title, ?string $content, NotePriorityEnum $priority): void
     {
-        $note->setTitle($title);
-        $note->setContent($content);
-        $note->setPriority($priority);
 
-        $this->noteWriterRepository->saveNoteInDB($note);
+
+        $this->noteWriterRepository->save($note);
     }
 }

@@ -18,10 +18,18 @@ trait TitleContentPriorityTrait
         'tooLong' => 'note.title.maximumLength',
         'domain' => 'notes',
     ])]
-    public string $title = '';
+    public string $title = '' {
+        get {
+            return $this->title;
+        }
+    }
 
     #[Assert\Type('string', message: 'validator.invalidType')]
-    public ?string $content = null;
+    public ?string $content = null {
+        get {
+            return $this->content;
+        }
+    }
 
     #[Assert\Type(
         type: NotePriorityEnum::class,
@@ -31,20 +39,10 @@ trait TitleContentPriorityTrait
         'text' => 'note.priority.required',
         'domain' => 'notes',
     ])]
-    public ?NotePriorityEnum $priority = null;
-
-    public function getTitle(): string
-    {
-        return $this->title;
+    public ?NotePriorityEnum $priority = NotePriorityEnum::LOW {
+        get {
+            return $this->priority;
+        }
     }
 
-    public function getContent(): ?string
-    {
-        return $this->content;
-    }
-
-    public function getPriority(): NotePriorityEnum
-    {
-        return $this->priority;
-    }
 }

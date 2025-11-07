@@ -8,9 +8,8 @@ app_api_auth_logout:
   resource: ../src/Module/System/Presentation/API/Controller/Auth
   type: attribute
 app_api:
-    #resource: './routes/api/company'
     resource: ../src/Module/Company/Presentation/API/Controller/
     type: attribute
-#app_api_note:
-#    resource: './routes/api/note'
-#    type: directory
+app_api_note:
+    resource: ../src/Module/Note/Presentation/API/Controller/
+    type: attribute

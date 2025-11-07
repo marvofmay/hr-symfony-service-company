@@ -1,25 +1,25 @@
 note:
   uuid:
-    notFound: "Notatka o podanym UUID nie istnieje"
+    notFound: "Notatka o podanym UUID nie istnieje."
   title:
-    priorityIsRequired: "Ważność notatki jest wymagana"
+    priorityIsRequired: "Ważność notatki jest wymagana."
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
   priority:
-    required: 'Wybierz priorytet'
-    invalid_Type: 'Nieprawidłowy priorytet'
+    required: 'Wybierz priorytet.'
+    invalid_Type: 'Nieprawidłowy priorytet.'
   add:
-    success: "Notatka została pomyślnie dodana"
-    error: "Wystąpił błąd - notatka nie została dodana"
+    success: "Notatka została pomyślnie dodana."
+    error: "Wystąpił błąd - notatka nie została dodana."
   update:
-    success: "Notatka została pomyślnie zaktualizowana"
-    error: "Wystąpił błąd - notatka nie została zaktualizowana"
+    success: "Notatka została pomyślnie zaktualizowana."
+    error: "Wystąpił błąd - notatka nie została zaktualizowana."
   delete:
-    success: "Notatka została pomyślnie usunięta"
-    error: "Wystąpił błąd - notatka nie została usunięta"
+    success: "Notatka została pomyślnie usunięta."
+    error: "Wystąpił błąd - notatka nie została usunięta."
   view:
-    error: "Wystapił błąd przy pobieraniu wybranej notatki"
+    error: "Wystapił błąd przy pobieraniu wybranej notatki."
   list:
-    error: "Wystapił błąd przy pobieraniu listy notatek"
+    error: "Wystapił błąd przy pobieraniu listy notatek."
   employeeUUID:
-    required: "Wymagny UUID pracownika"
+    required: "Wymagny UUID pracownika."

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Application\Event;
+namespace App\Module\System\Application\Event;
 
 use App\Module\System\Domain\Interface\EventLog\LoggableEventInterface;
 

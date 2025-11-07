@@ -4,27 +4,22 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Domain\Service;
 
-use App\Module\Note\Application\Command\CreateNoteCommand;
+use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Note\Domain\Entity\Note;
+use App\Module\Note\Domain\Enum\NotePriorityEnum;
+use App\Module\Note\Domain\Interface\NoteCreatorInterface;
 use App\Module\Note\Domain\Interface\NoteWriterInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 
-readonly class NoteCreator
+final readonly class NoteCreator implements NoteCreatorInterface
 {
-    public function __construct(private NoteWriterInterface $noteWriterRepository, private Security $security)
+    public function __construct(private NoteWriterInterface $noteWriterRepository)
     {
     }
 
-    public function create(CreateNoteCommand $command): void
+    public function create(string $title, ?string $content = null, NotePriorityEnum $priority = NotePriorityEnum::LOW, ?Employee $employee = null): void
     {
-        $employee = $this->security->getUser()->getEmployee();
+        $note = Note::create($title, $content, $priority, $employee);
 
-        $note = new Note();
-        $note->setEmployee($employee);
-        $note->setTitle($command->title);
-        $note->setContent($command->content);
-        $note->setPriority($command->priority);
-
-        $this->noteWriterRepository->saveNoteInDB($note);
+        $this->noteWriterRepository->save($note);
     }
 }

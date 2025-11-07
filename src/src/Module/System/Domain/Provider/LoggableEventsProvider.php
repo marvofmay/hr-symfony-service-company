@@ -44,6 +44,7 @@ use App\Module\Company\Application\Event\Role\RoleRestoredEvent;
 use App\Module\Company\Application\Event\Role\RolesPDFCreatedEvent;
 use App\Module\Company\Application\Event\Role\RoleUpdatedEvent;
 use App\Module\Company\Application\Event\Role\RoleViewedEvent;
+use App\Module\Note\Application\Event\NoteCreatedEvent;
 use App\Module\System\Application\Event\Auth\TokenExpiredEvent;
 use App\Module\System\Application\Event\Auth\UserLoginEvent;
 use App\Module\System\Application\Event\Auth\UserLogoutEvent;
@@ -66,7 +67,8 @@ final class LoggableEventsProvider
             self::getIndustryEventClasses(),
             self::getPositionEventClasses(),
             self::getContractTypeEventsClasses(),
-            self::getAuthEventClasses()
+            self::getAuthEventClasses(),
+            self::getNoteEventClasses(),
         );
     }
 
@@ -158,6 +160,17 @@ final class LoggableEventsProvider
             UserLoginEvent::class,
             UserLogoutEvent::class,
             TokenExpiredEvent::class,
+        ];
+    }
+
+    private static function getNoteEventClasses(): array
+    {
+        return [
+            NoteCreatedEvent::class,
+            //NoteUpdatedEvent::class,
+            //NoteDeletedEvent::class,
+            //NoteViewedEvent::class,
+            //NoteListedEvent::class,
         ];
     }
 }

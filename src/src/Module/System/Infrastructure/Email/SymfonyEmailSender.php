@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Infrastructure\Email;
+namespace App\Module\System\Infrastructure\Email;
 
 use App\Module\Company\Domain\Interface\Email\EmailSenderInterface;
 use App\Module\System\Domain\Entity\Email;
