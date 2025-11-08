@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista notatek</title>
+</head>
+<body style="font-family: 'DejaVu Sans', sans-serif; font-size: 14px; color: #333; background-color: #f9f9f9; padding: 20px;">
+<div style="background-color: #ffffff; padding: 20px; border-radius: 8px; max-width: 600px; margin: 0 auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+    <div style="text-align: right; margin-bottom: 20px;">
+        <img
+                src="{{ baseUrl ~ asset('hr-app-logo.png', 'images') }}"
+                alt="Logo"
+                width="80"
+                style="display: inline-block;"
+        />
+    </div>
+
+    <h3>Lista wybranych notatek</h3>
+    {% for note in notes %}
+        {% set color =
+            note.priority.value == 'high' ? 'red' :
+            (note.priority.value == 'medium' ? 'orange' : 'black')
+        %}
+
+        <h5 style="color: {{ color }};"><u>{{ note.title }}</u></h5>
+        <div style="font-size: 12px;">{{ note.content }}</div>
+    {% endfor %}
+</div>
+</body>
+</html>

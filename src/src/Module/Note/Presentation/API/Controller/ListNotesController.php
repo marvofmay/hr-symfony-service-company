@@ -21,7 +21,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Attribute\Route;
 
-
 class ListNotesController extends AbstractController
 {
     public function __construct(

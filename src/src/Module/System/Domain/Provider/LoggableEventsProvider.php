@@ -47,6 +47,8 @@ use App\Module\Company\Application\Event\Role\RoleViewedEvent;
 use App\Module\Note\Application\Event\NoteCreatedEvent;
 use App\Module\Note\Application\Event\NoteDeletedEvent;
 use App\Module\Note\Application\Event\NoteListedEvent;
+use App\Module\Note\Application\Event\NotePDFCreatedEvent;
+use App\Module\Note\Application\Event\NotesPDFCreatedEvent;
 use App\Module\Note\Application\Event\NoteUpdatedEvent;
 use App\Module\Note\Application\Event\NoteViewedEvent;
 use App\Module\System\Application\Event\Auth\TokenExpiredEvent;
@@ -175,6 +177,8 @@ final class LoggableEventsProvider
             NoteDeletedEvent::class,
             NoteViewedEvent::class,
             NoteListedEvent::class,
+            //NotePDFCreatedEvent::class,
+            NotesPDFCreatedEvent::class,
         ];
     }
 }

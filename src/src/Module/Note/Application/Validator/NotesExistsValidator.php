@@ -13,10 +13,8 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AutoconfigureTag('app.note.update.validator')]
-#[AutoconfigureTag('app.note.delete.validator')]
-#[AutoconfigureTag('app.note.query.get.validator')]
-final readonly class NoteExistsValidator implements ValidatorInterface
+#[AutoconfigureTag('app.notes.pdf.query.get.validator')]
+final readonly class NotesExistsValidator implements ValidatorInterface
 {
     public function __construct(
         private NoteReaderInterface $noteReaderRepository,
@@ -33,15 +31,27 @@ final readonly class NoteExistsValidator implements ValidatorInterface
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        if (!property_exists($data, 'noteUUID')) {
+        $uuids = $data->notesUUIDs ?? [];
+        $employee = $this->security->getUser()->getEmployee();
+
+        if (empty($uuids)) {
             return;
         }
 
-        $employee = $this->security->getUser()->getEmployee();
-        $noteUUID = $data->noteUUID;
-        $noteExists = $this->noteReaderRepository->isNoteWithUUIDAndEmployeeExists($noteUUID, $employee);
-        if (!$noteExists) {
-            throw new \Exception($this->translator->trans('note.uuid.notExists', [':uuid' => $noteUUID], 'notes'), Response::HTTP_CONFLICT);
+        $foundNotes = $this->noteReaderRepository
+            ->getNotesByUUIDsAndEmployee($uuids, $employee)
+            ->map(fn ($note) => $note->getUUID())
+            ->toArray();
+
+        $missing = array_diff($uuids, $foundNotes);
+
+        if (!empty($missing)) {
+            $translatedErrors = array_map(
+                fn (string $uuid) => $this->translator->trans('note.uuid.notExists', [':uuid' => $uuid], 'notes'),
+                $missing
+            );
+
+            throw new \Exception(implode(', ', $translatedErrors), Response::HTTP_NOT_FOUND);
         }
     }
 }

@@ -4,77 +4,74 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Presentation\API\Controller;
 
-use Psr\Log\LogLevel;
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\Note\Application\Command\CreateNoteCommand;
-use App\Module\Note\Domain\DTO\CreateDTO;
+use App\Module\Note\Application\Query\GetNotesPDFQuery;
+use App\Module\Note\Domain\DTO\NotesPDFQueryDTO;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CreateNoteController extends AbstractController
+final class NotesPDFController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $eventBus,
-        private readonly MessageBusInterface $commandBus,
+        private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
     ) {
     }
 
-    #[Route('/api/employees/notes', name: 'api.employees.notes.create', methods: ['POST'])]
-    public function create(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
+    #[Route('/api/employees/notes/pdf', name: 'api.employees.notes.pdf', methods: ['GET'])]
+    public function pdf(#[MapQueryString] NotesPDFQueryDTO $notesPDFQueryDTO): Response
     {
         try {
             $this->denyAccessUnlessGranted(
-                PermissionEnum::CREATE,
+                PermissionEnum::PDF,
                 AccessEnum::NOTE,
                 $this->messageService->get('accessDenied')
             );
 
-            $this->dispatchCommand($createDTO);
+            $pdf = $this->dispatchQuery($notesPDFQueryDTO);
 
-            return $this->successResponse();
+            return $this->successResponse($pdf);
         } catch (\Throwable $exception) {
             return $this->errorResponse($exception);
         }
     }
 
-    private function dispatchCommand(CreateDTO $createDTO): void
+    private function dispatchQuery(NotesPDFQueryDTO $notesPDFQueryDTO): string
     {
         try {
-            $this->commandBus->dispatch(
-                new CreateNoteCommand(
-                    title: $createDTO->title,
-                    content: $createDTO->content,
-                    priority: $createDTO->priority,
-                )
-            );
+            $handledStamp = $this->queryBus->dispatch(new GetNotesPDFQuery($notesPDFQueryDTO->uuids));
+
+            return $handledStamp->last(HandledStamp::class)->getResult();
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
     }
 
-    private function successResponse(): JsonResponse
+    private function successResponse(string $pdf): Response
     {
-        return new JsonResponse(
-            ['message' => $this->messageService->get('note.add.success', [], 'notes')],
-            Response::HTTP_CREATED
-        );
+        return new Response($pdf, Response::HTTP_OK, [
+            'Content-Type' => 'application/pdf',
+            'Content-Disposition' => 'inline; filename="notes.pdf"',
+        ]);
     }
 
     private function errorResponse(\Throwable $exception): JsonResponse
     {
         $message = sprintf(
             '%s. %s',
-            $this->messageService->get('note.add.error', [], 'notes'),
+            $this->messageService->get('note.pdf.error', [], 'notes'),
             $exception->getMessage()
         );
 

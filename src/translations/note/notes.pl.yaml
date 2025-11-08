@@ -1,6 +1,6 @@
 note:
   uuid:
-    notFound: "Notatka o podanym UUID :uuid nie istnieje lub nie jest Twoja."
+    notExists: "Notatka o podanym UUID :uuid nie istnieje lub nie jest Twoja."
   title:
     priorityIsRequired: "Ważność notatki jest wymagana."
     minimumLength: "Minimalnie znaków :qty"

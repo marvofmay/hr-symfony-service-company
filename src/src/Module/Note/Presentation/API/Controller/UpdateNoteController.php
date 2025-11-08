@@ -20,7 +20,6 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-
 class UpdateNoteController extends AbstractController
 {
     public function __construct(
@@ -30,7 +29,7 @@ class UpdateNoteController extends AbstractController
     ) {
     }
 
-    #[Route('/api/employees/notes/{uuid}', name: 'api.employees.notes', methods: ['PUT'])]
+    #[Route('/api/employees/notes/{uuid}', name: 'api.employees.notes.update', methods: ['PUT'])]
     public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): Response
     {
         try {
