@@ -7,11 +7,14 @@ namespace App\Common\Application\QueryHandler;
 use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Domain\Interface\ListQueryHandlerInterface;
 use App\Common\Domain\Interface\ListQueryInterface;
+use App\Common\Domain\Interface\QueryInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\QueryBuilder;
 
 abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
 {
+    protected iterable $validators = [];
+
     public function __construct(protected EntityManagerInterface $entityManager)
     {
     }
@@ -30,6 +33,9 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
     {
         $queryBuilder = $this->createBaseQueryBuilder();
         $queryBuilder = $this->setFilters($queryBuilder, $query->getFilters());
+
+        $x= $queryBuilder->getQuery()->getSQL();
+
         $totalItems = (clone $queryBuilder)->select("COUNT({$this->getAlias()}.uuid)")->getQuery()->getSingleScalarResult();
         foreach ($query->getIncludes() as $relation) {
             if (in_array($relation, $this->getRelations(), true)) {
@@ -39,7 +45,7 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
         }
 
         $orderByField = $query->getOrderBy() ?? $this->getDefaultOrderBy();
-        if (false === strpos($orderByField, '.')) {
+        if (!str_contains($orderByField, '.')) {
             $orderByField = "{$this->getAlias()}.$orderByField";
         }
 
@@ -71,11 +77,32 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
         $allowedFilters = $this->getAllowedFilters();
 
         foreach ($filters as $fieldName => $fieldValue) {
-            if (is_null($fieldValue) || !in_array($fieldName, $allowedFilters, true)) {
+            if (!in_array($fieldName, $allowedFilters, true)) {
                 continue;
             }
-            $queryBuilder->andWhere($queryBuilder->expr()->like("$alias.$fieldName", ':fieldValue'))
-                ->setParameter('fieldValue', "%$fieldValue%");
+
+            // przypadek: filtr po relacji "employee"
+            if ($fieldName === 'employee') {
+                if ($fieldValue === 'null' || $fieldValue === null) {
+                    $queryBuilder->andWhere("$alias.employee IS NULL");
+                } else {
+                    if (!in_array('employee', $queryBuilder->getAllAliases(), true)) {
+                        $queryBuilder->leftJoin("$alias.employee", 'employee');
+                    }
+
+                    $queryBuilder
+                        ->andWhere('employee.uuid = :employeeUuid')
+                        ->setParameter('employeeUuid', $fieldValue);
+                }
+
+                continue;
+            }
+
+            if (!is_null($fieldValue)) {
+                $queryBuilder
+                    ->andWhere($queryBuilder->expr()->like("$alias.$fieldName", ':'.$fieldName))
+                    ->setParameter($fieldName, "%$fieldValue%");
+            }
         }
 
         if (array_key_exists('deleted', $filters)) {
@@ -128,5 +155,14 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
         return method_exists($transformer, 'transformToArray')
             ? $transformer->transformToArray($item, $includes)
             : throw new \RuntimeException('Transformer does not implement transformToArray method.');
+    }
+
+    protected function validate(QueryInterface $query): void
+    {
+        foreach ($this->validators as $validator) {
+            if (method_exists($validator, 'supports') && $validator->supports($query)) {
+                $validator->validate($query);
+            }
+        }
     }
 }

@@ -88,5 +88,30 @@ class Note
         return $this->{NoteEntityFieldEnum::PRIORITY->value};
     }
 
+    public function changeTitle(string $title): void
+    {
+        if ($title === $this->{NoteEntityFieldEnum::TITLE->value}) {
+            return;
+        }
 
+        $this->{NoteEntityFieldEnum::TITLE->value} = $title;
+    }
+
+    public function changeContent(string $content): void
+    {
+        if ($content === $this->{NoteEntityFieldEnum::CONTENT->value}) {
+            return;
+        }
+
+        $this->{NoteEntityFieldEnum::CONTENT->value} = $content;
+    }
+
+    public function changePriority(NotePriorityEnum $priority): void
+    {
+        if ($priority === $this->{NoteEntityFieldEnum::PRIORITY->value}) {
+            return;
+        }
+
+        $this->{NoteEntityFieldEnum::PRIORITY->value} = $priority;
+    }
 }

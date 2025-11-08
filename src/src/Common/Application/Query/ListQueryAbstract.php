@@ -25,6 +25,7 @@ abstract class ListQueryAbstract implements ListQueryInterface
         $this->orderDirection = $this->queryDTO->sortDirection;
         $this->offset = ($this->page - 1) * $this->limit;
 
+        $y = $this->getAttributes();
         $this->filters = array_filter(
             (array) $this->queryDTO,
             fn ($key) => in_array($key, $this->getAttributes()),
@@ -83,5 +84,10 @@ abstract class ListQueryAbstract implements ListQueryInterface
     public function getIncludes(): array
     {
         return $this->includes;
+    }
+
+    public function getQueryDTO(): QueryDTOInterface
+    {
+        return $this->queryDTO;
     }
 }

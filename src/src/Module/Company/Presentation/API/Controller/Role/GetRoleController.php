@@ -27,6 +27,7 @@ final class GetRoleController extends AbstractController
         private readonly MessageService $messageService,
     ) {
     }
+
     #[Route('/api/roles/{uuid}', name: 'api.roles.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function get(string $uuid): JsonResponse
     {

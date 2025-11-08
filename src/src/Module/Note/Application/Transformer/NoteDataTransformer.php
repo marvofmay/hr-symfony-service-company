@@ -36,7 +36,7 @@ class NoteDataTransformer
     private function transformRelation(Note $note, string $relation): ?array
     {
         return match ($relation) {
-            NoteEntityRelationFieldEnum::EMPLOYEE->value => $this->transformEmployee($note->getEmployee()),
+            NoteEntityRelationFieldEnum::EMPLOYEE->value => $note->getEmployee() ? $this->transformEmployee($note->getEmployee()) : [],
             default => null,
         };
     }

@@ -20,7 +20,6 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[Route('/api/employees/notes', name: 'api.employees.notes')]
 class CreateNoteController extends AbstractController
 {
     public function __construct(
@@ -30,7 +29,7 @@ class CreateNoteController extends AbstractController
     ) {
     }
 
-    #[Route('', name: 'create', methods: ['POST'])]
+    #[Route('/api/employees/notes', name: 'api.employees.notes', methods: ['POST'])]
     public function create(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
         try {

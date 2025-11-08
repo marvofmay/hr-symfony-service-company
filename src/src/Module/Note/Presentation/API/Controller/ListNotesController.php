@@ -4,39 +4,79 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Presentation\API\Controller;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Module\Note\Application\Query\ListNotesQuery;
 use App\Module\Note\Domain\DTO\NotesQueryDTO;
-use App\Module\Note\Presentation\API\Action\AskNotesAction;
-use Psr\Log\LoggerInterface;
+use App\Module\System\Application\Event\LogFileEvent;
+use App\Module\System\Domain\Enum\Access\AccessEnum;
+use App\Module\System\Domain\Enum\Permission\PermissionEnum;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
+
 
 class ListNotesController extends AbstractController
 {
-    public function __construct(private readonly LoggerInterface $logger, private readonly TranslatorInterface $translator)
-    {
+    public function __construct(
+        private readonly MessageBusInterface $eventBus,
+        private readonly MessageBusInterface $queryBus,
+        private readonly MessageService $messageService,
+    ) {
     }
 
-    #[Route('/api/notes', name: 'api.notes.list', methods: ['GET'])]
-    public function list(#[MapQueryString] NotesQueryDTO $queryDTO, AskNotesAction $askNotesAction): Response
+    #[Route('/api/employees/notes', name: 'api.employees.notes.list', methods: ['GET'])]
+    public function list(#[MapQueryString] NotesQueryDTO $queryDTO): Response
     {
         try {
-            return new JsonResponse(['data' => $askNotesAction->ask($queryDTO)], Response::HTTP_OK);
-        } catch (\Exception $error) {
-            $this->logger->error(
-                sprintf('%s: %s', $this->translator->trans('note.list.error', [], 'notes'), $error->getMessage())
+            $this->denyAccessUnlessGranted(
+                PermissionEnum::LIST,
+                AccessEnum::NOTE,
+                $this->messageService->get('accessDenied')
             );
 
-            return new JsonResponse(
-                [
-                    'data' => [],
-                    'message' => $this->translator->trans('note.list.error', [], 'notes'),
-                ],
-                Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            $data = $this->dispatchQuery($queryDTO);
+
+            return $this->successResponse($data);
+        } catch (\Throwable $exception) {
+            return $this->errorResponse($exception);
         }
+    }
+
+    private function dispatchQuery(NotesQueryDTO $queryDTO): array
+    {
+        try {
+            $handledStamp = $this->queryBus->dispatch(new ListNotesQuery($queryDTO));
+
+            return $handledStamp->last(HandledStamp::class)->getResult();
+        } catch (HandlerFailedException $exception) {
+            throw $exception->getPrevious();
+        }
+    }
+
+    private function successResponse(array $data): JsonResponse
+    {
+        return new JsonResponse(['data' => $data], Response::HTTP_OK);
+    }
+
+    private function errorResponse(\Throwable $exception): JsonResponse
+    {
+        $message = sprintf(
+            '%s %s',
+            $this->messageService->get('note.list.error', [], 'notes'),
+            $exception->getMessage()
+        );
+
+        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
+
+        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
+
+        return new JsonResponse(['message' => $message], $code);
     }
 }

@@ -39,7 +39,7 @@ trait TitleContentPriorityTrait
         'text' => 'note.priority.required',
         'domain' => 'notes',
     ])]
-    public ?NotePriorityEnum $priority = NotePriorityEnum::LOW {
+    public NotePriorityEnum $priority = NotePriorityEnum::LOW {
         get {
             return $this->priority;
         }

@@ -23,4 +23,5 @@ interface ListQueryInterface
     public function getFilters(): array;
 
     public function getIncludes(): array;
+    public function getQueryDTO(): QueryDTOInterface;
 }

@@ -8,7 +8,7 @@ use App\Common\Domain\Interface\CommandInterface;
 
 final readonly class DeleteNoteCommand implements CommandInterface
 {
-    public const string NOTE_UUID = 'noteUUID';
+    public const string UUID = 'noteUUID';
 
     public function __construct(public string $noteUUID)
     {

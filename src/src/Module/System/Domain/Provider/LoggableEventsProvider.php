@@ -45,6 +45,10 @@ use App\Module\Company\Application\Event\Role\RolesPDFCreatedEvent;
 use App\Module\Company\Application\Event\Role\RoleUpdatedEvent;
 use App\Module\Company\Application\Event\Role\RoleViewedEvent;
 use App\Module\Note\Application\Event\NoteCreatedEvent;
+use App\Module\Note\Application\Event\NoteDeletedEvent;
+use App\Module\Note\Application\Event\NoteListedEvent;
+use App\Module\Note\Application\Event\NoteUpdatedEvent;
+use App\Module\Note\Application\Event\NoteViewedEvent;
 use App\Module\System\Application\Event\Auth\TokenExpiredEvent;
 use App\Module\System\Application\Event\Auth\UserLoginEvent;
 use App\Module\System\Application\Event\Auth\UserLogoutEvent;
@@ -167,10 +171,10 @@ final class LoggableEventsProvider
     {
         return [
             NoteCreatedEvent::class,
-            //NoteUpdatedEvent::class,
-            //NoteDeletedEvent::class,
-            //NoteViewedEvent::class,
-            //NoteListedEvent::class,
+            NoteUpdatedEvent::class,
+            NoteDeletedEvent::class,
+            NoteViewedEvent::class,
+            NoteListedEvent::class,
         ];
     }
 }

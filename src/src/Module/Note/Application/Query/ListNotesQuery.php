@@ -6,9 +6,10 @@ namespace App\Module\Note\Application\Query;
 
 use App\Common\Application\Query\ListQueryAbstract;
 use App\Common\Domain\Interface\QueryDTOInterface;
+use App\Common\Domain\Interface\QueryInterface;
 use App\Module\Note\Domain\Entity\Note;
 
-class ListNotesQuery extends ListQueryAbstract
+class ListNotesQuery extends ListQueryAbstract implements QueryInterface
 {
     public function __construct(protected QueryDTOInterface $queryDTO)
     {
