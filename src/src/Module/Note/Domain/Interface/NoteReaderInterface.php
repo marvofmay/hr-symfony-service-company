@@ -12,6 +12,7 @@ interface NoteReaderInterface
 {
     public function getNoteByUUID(string $uuid): ?Note;
     public function getNotesByUUIDsAndEmployee(array $uuids, ?Employee $employee): Collection;
+    public function getNoteByUUIDAndEmployee(string $uuid, ?Employee $employee): ?Note;
 
     public function isNoteWithUUIDExists(string $uuid): bool;
     public function isNoteWithUUIDAndEmployeeExists(string $uuid, ?Employee $employee): bool;

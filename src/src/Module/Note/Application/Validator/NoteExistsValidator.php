@@ -16,6 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag('app.note.update.validator')]
 #[AutoconfigureTag('app.note.delete.validator')]
 #[AutoconfigureTag('app.note.query.get.validator')]
+#[AutoconfigureTag('app.note.pdf.query.get.validator')]
 final readonly class NoteExistsValidator implements ValidatorInterface
 {
     public function __construct(
