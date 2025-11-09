@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Transformer\ContractType;
 
+use App\Common\Domain\Interface\DataTransformerInterface;
+use App\Module\Company\Application\QueryHandler\ContractType\ListContractTypesQueryHandler;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
@@ -11,15 +13,20 @@ use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityRelationFieldE
 use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
-class ContractTypeDataTransformer
+class ContractTypeDataTransformer implements DataTransformerInterface
 {
+    public static function supports(): string
+    {
+        return ListContractTypesQueryHandler::class;
+    }
+
     public function transformToArray(ContractType $contractType, array $includes = []): array
     {
         $data = [
             ContractTypeEntityFieldEnum::UUID->value => $contractType->getUUID()->toString(),
             ContractTypeEntityFieldEnum::NAME->value => $contractType->getName(),
             ContractTypeEntityFieldEnum::DESCRIPTION->value => $contractType->getDescription(),
-            ContractTypeEntityFieldEnum::ACTIVE->value => $contractType->getActive(),
+            ContractTypeEntityFieldEnum::ACTIVE->value => $contractType->isActive(),
             TimeStampableEntityFieldEnum::CREATED_AT->value => $contractType->createdAt?->format('Y-m-d H:i:s'),
             TimeStampableEntityFieldEnum::UPDATED_AT->value => $contractType->getUpdatedAt()?->format('Y-m-d H:i:s'),
             TimeStampableEntityFieldEnum::DELETED_AT->value => $contractType->getDeletedAt()?->format('Y-m-d H:i:s'),

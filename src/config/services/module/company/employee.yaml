@@ -2,7 +2,3 @@ services:
     _defaults:
         autowire: true
         autoconfigure: true
-
-    App\Module\Company\Domain\Service\Employee\ImportEmployeesFromXLSX:
-      arguments:
-        $importEmployeesValidators: !tagged_iterator 'app.employee.import.validator'

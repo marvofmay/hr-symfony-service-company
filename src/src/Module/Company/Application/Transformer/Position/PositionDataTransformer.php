@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Transformer\Position;
 
+use App\Common\Domain\Interface\DataTransformerInterface;
+use App\Module\Company\Application\QueryHandler\Position\ListPositionsQueryHandler;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Position;
@@ -12,8 +14,13 @@ use App\Module\Company\Domain\Enum\Position\PositionEntityRelationFieldEnum;
 use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
-class PositionDataTransformer
+class PositionDataTransformer implements DataTransformerInterface
 {
+    public static function supports(): string
+    {
+        return ListPositionsQueryHandler::class;
+    }
+
     public function transformToArray(Position $position, array $includes = []): array
     {
         $data = [

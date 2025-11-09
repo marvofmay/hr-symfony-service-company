@@ -4,16 +4,31 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\QueryHandler\Department;
 
+use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
+use App\Module\Company\Application\Event\Department\DepartmentListedEvent;
 use App\Module\Company\Application\Query\Department\ListDepartmentsQuery;
 use App\Module\Company\Domain\Entity\Department;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListDepartmentsQueryHandler extends ListQueryHandlerAbstract
 {
+    public function __construct(
+        public EntityManagerInterface $entityManager,
+        protected TransformerFactory $transformerFactory,
+        private readonly EventDispatcherInterface $eventDispatcher
+    )
+    {
+        parent::__construct($entityManager, $transformerFactory);
+    }
+
     public function __invoke(ListDepartmentsQuery $query): array
     {
+        $this->eventDispatcher->dispatch(new DepartmentListedEvent([$query]));
+
         return $this->handle($query);
     }
 

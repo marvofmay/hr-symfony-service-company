@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Transformer\Company;
 
+use App\Common\Domain\Interface\DataTransformerInterface;
+use App\Module\Company\Application\QueryHandler\Company\ListCompaniesQueryHandler;
 use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
@@ -13,8 +15,13 @@ use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Enum\Industry\IndustryEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
-class CompanyDataTransformer
+class CompanyDataTransformer  implements DataTransformerInterface
 {
+    public static function supports(): string
+    {
+        return ListCompaniesQueryHandler::class;
+    }
+
     public function transformToArray(Company $company, array $includes = []): array
     {
         $data = [

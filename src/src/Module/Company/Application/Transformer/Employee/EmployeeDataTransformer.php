@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Transformer\Employee;
 
+use App\Common\Domain\Interface\DataTransformerInterface;
+use App\Module\Company\Application\QueryHandler\Employee\ListEmployeesQueryHandler;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Entity\Department;
@@ -14,8 +16,13 @@ use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
 use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
 use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
 
-class EmployeeDataTransformer
+class EmployeeDataTransformer implements DataTransformerInterface
 {
+    public static function supports(): string
+    {
+        return ListEmployeesQueryHandler::class;
+    }
+
     public function transformToArray(Employee $employee, array $includes = []): array
     {
         $data = [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\QueryHandler\Role;
 
+use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\Role\RoleListedEvent;
 use App\Module\Company\Application\Query\Role\ListRolesQuery;
@@ -19,10 +20,11 @@ final class ListRolesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __construct(
         public EntityManagerInterface $entityManager,
+        protected TransformerFactory $transformerFactory,
         private readonly EventDispatcherInterface $eventDispatcher
     )
     {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $transformerFactory);
     }
 
     public function __invoke(ListRolesQuery $query): array

@@ -15,7 +15,10 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
 {
     protected iterable $validators = [];
 
-    public function __construct(protected EntityManagerInterface $entityManager)
+    public function __construct(
+        protected EntityManagerInterface $entityManager,
+        protected TransformerFactory $transformerFactory,
+    )
     {
     }
 
@@ -151,7 +154,8 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
 
     public function getTransformer(): object
     {
-        return TransformerFactory::createForHandler(static::class);
+        //return TransformerFactory::createForHandler(static::class);
+        return $this->transformerFactory->createForHandler(static::class);
     }
 
     public function transformIncludes(array $items, array $includes): array

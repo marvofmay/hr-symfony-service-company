@@ -4,13 +4,20 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Transformer\Department;
 
+use App\Common\Domain\Interface\DataTransformerInterface;
+use App\Module\Company\Application\QueryHandler\Department\ListDepartmentsQueryHandler;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use Doctrine\Common\Collections\Collection;
 
-class DepartmentDataTransformer
+class DepartmentDataTransformer implements DataTransformerInterface
 {
+    public static function supports(): string
+    {
+        return ListDepartmentsQueryHandler::class;
+    }
+
     public function transformToArray(Department $department, array $includes = []): array
     {
         $data = [

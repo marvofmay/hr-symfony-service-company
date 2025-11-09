@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\QueryHandler\Position;
 
+use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\Position\PositionListedEvent;
 use App\Module\Company\Application\Query\Position\ListPositionsQuery;
@@ -17,9 +18,13 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(protected EntityManagerInterface $entityManager, private readonly EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        protected EntityManagerInterface $entityManager,
+        protected TransformerFactory $transformerFactory,
+        private readonly EventDispatcherInterface $eventDispatcher
+    )
     {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $transformerFactory);
     }
 
     public function __invoke(ListPositionsQuery $query): array

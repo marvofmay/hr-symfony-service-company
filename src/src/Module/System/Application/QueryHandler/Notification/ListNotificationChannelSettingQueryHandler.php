@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\System\Application\QueryHandler\Notification;
 
+use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\System\Application\Event\Notification\NotificationChannelSettingsListedEvent;
@@ -19,10 +20,11 @@ final class ListNotificationChannelSettingQueryHandler extends ListQueryHandlerA
 {
     public function __construct(
         public EntityManagerInterface $entityManager,
+        protected TransformerFactory $transformerFactory,
         private readonly EventDispatcherInterface $eventDispatcher
     )
     {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $transformerFactory);
     }
 
     public function __invoke(ListNotificationChannelSettingQuery $query): array

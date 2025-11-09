@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\QueryHandler\Industry;
 
+use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Application\Event\Industry\IndustryListedEvent;
 use App\Module\Company\Application\Query\Industry\ListIndustriesQuery;
@@ -17,9 +18,13 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'query.bus')]
 final class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
 {
-    public function __construct(protected EntityManagerInterface $entityManager, private EventDispatcherInterface $eventDispatcher)
+    public function __construct(
+        protected EntityManagerInterface $entityManager,
+        protected TransformerFactory $transformerFactory,
+        private EventDispatcherInterface $eventDispatcher
+    )
     {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $transformerFactory);
     }
 
     public function __invoke(ListIndustriesQuery $query): array

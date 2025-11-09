@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Application\QueryHandler;
 
+use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Note\Application\Event\NoteListedEvent;
@@ -21,11 +22,12 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
 {
     public function __construct(
         protected EntityManagerInterface $entityManager,
+        protected TransformerFactory $transformerFactory,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.note.query.list.validator')] protected iterable $validators,
     )
     {
-        parent::__construct($entityManager);
+        parent::__construct($entityManager, $transformerFactory);
     }
 
     public function __invoke(ListNotesQuery $query): array

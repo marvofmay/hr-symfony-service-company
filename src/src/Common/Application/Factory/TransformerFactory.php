@@ -5,41 +5,26 @@ declare(strict_types=1);
 namespace App\Common\Application\Factory;
 
 use App\Common\Domain\Exception\TransformerNotFoundException;
-use App\Module\Company\Application\QueryHandler\Company\ListCompaniesQueryHandler;
-use App\Module\Company\Application\QueryHandler\ContractType\ListContractTypesQueryHandler;
-use App\Module\Company\Application\QueryHandler\Department\ListDepartmentsQueryHandler;
-use App\Module\Company\Application\QueryHandler\Employee\ListEmployeesQueryHandler;
-use App\Module\Company\Application\QueryHandler\Industry\ListIndustriesQueryHandler;
-use App\Module\Company\Application\QueryHandler\Position\ListPositionsQueryHandler;
-use App\Module\Company\Application\QueryHandler\Role\ListRolesQueryHandler;
-use App\Module\Company\Application\Transformer\Company\CompanyDataTransformer;
-use App\Module\Company\Application\Transformer\ContractType\ContractTypeDataTransformer;
-use App\Module\Company\Application\Transformer\Department\DepartmentDataTransformer;
-use App\Module\Company\Application\Transformer\Employee\EmployeeDataTransformer;
-use App\Module\Company\Application\Transformer\Industry\IndustryDataTransformer;
-use App\Module\Company\Application\Transformer\Position\PositionDataTransformer;
-use App\Module\Company\Application\Transformer\Role\RoleDataTransformer;
-use App\Module\Note\Application\QueryHandler\ListNotesQueryHandler;
-use App\Module\Note\Application\Transformer\NoteDataTransformer;
-use App\Module\System\Application\QueryHandler\Notification\ListNotificationChannelSettingQueryHandler;
-use App\Module\System\Application\Transformer\Notification\NotificationChannelSettingDataTransformer;
+use App\Common\Domain\Interface\DataTransformerInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 class TransformerFactory
 {
-    // ToDo:: refactor - use tags - SOLID OCP
-    public static function createForHandler(string $handlerClass): object
+    private array $transformers = [];
+
+    public function __construct(#[AutowireIterator(tag: 'app.data_transformer')] private readonly iterable $taggedTransformers)
     {
-        return match ($handlerClass) {
-            ListCompaniesQueryHandler::class => new CompanyDataTransformer(),
-            ListDepartmentsQueryHandler::class => new DepartmentDataTransformer(),
-            ListEmployeesQueryHandler::class => new EmployeeDataTransformer(),
-            ListRolesQueryHandler::class => new RoleDataTransformer(),
-            ListIndustriesQueryHandler::class => new IndustryDataTransformer(),
-            ListPositionsQueryHandler::class => new PositionDataTransformer(),
-            ListContractTypesQueryHandler::class => new ContractTypeDataTransformer(),
-            ListNotesQueryHandler::class => new NoteDataTransformer(),
-            ListNotificationChannelSettingQueryHandler::class => new NotificationChannelSettingDataTransformer(),
-            default => throw new TransformerNotFoundException("No transformer found for handler: {$handlerClass}"),
-        };
+        foreach ($this->taggedTransformers as $taggedTransformer) {
+            $this->transformers[$taggedTransformer::supports()] = $taggedTransformer;
+        }
+    }
+
+    public function createForHandler(string $handlerClass): DataTransformerInterface
+    {
+        if (!isset($this->transformers[$handlerClass])) {
+            throw new TransformerNotFoundException("No transformer found for handler: {$handlerClass}");
+        }
+
+        return $this->transformers[$handlerClass];
     }
 }

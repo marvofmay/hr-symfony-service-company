@@ -4,14 +4,21 @@ declare(strict_types=1);
 
 namespace App\Module\Note\Application\Transformer;
 
+use App\Common\Domain\Interface\DataTransformerInterface;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
+use App\Module\Note\Application\QueryHandler\ListNotesQueryHandler;
 use App\Module\Note\Domain\Entity\Note;
 use App\Module\Note\Domain\Enum\NoteEntityFieldEnum;
 use App\Module\Note\Domain\Enum\NoteEntityRelationFieldEnum;
 
-class NoteDataTransformer
+class NoteDataTransformer implements DataTransformerInterface
 {
+    public static function supports(): string
+    {
+        return ListNotesQueryHandler::class;
+    }
+
     public function transformToArray(Note $note, array $includes = []): array
     {
         $data = [
