@@ -19,16 +19,17 @@ final class UpdateNotificationChannelSettingsCommandHandler extends CommandHandl
         private readonly NotificationChannelSettingUpdater $notificationChannelSettingUpdater,
         private readonly NotificationChannelSettingReaderInterface $notificationChannelSettingReader,
         private readonly EventDispatcherInterface $eventDispatcher,
-    ) {}
+    ) {
+    }
 
     public function __invoke(UpdateNotificationChannelSettingsCommand $command): void
     {
         $currentNotificationChannels = $this->notificationChannelSettingReader->getAll();
         foreach ($currentNotificationChannels as $notificationChannel) {
-            if(in_array($notificationChannel->getChannel()->value, $command->channels, true)) {
-               $this->notificationChannelSettingUpdater->update($notificationChannel);
+            if (in_array($notificationChannel->getChannel()->value, $command->channels, true)) {
+                $this->notificationChannelSettingUpdater->update($notificationChannel);
             } else {
-               $this->notificationChannelSettingUpdater->update($notificationChannel, false);
+                $this->notificationChannelSettingUpdater->update($notificationChannel, false);
             }
         }
 

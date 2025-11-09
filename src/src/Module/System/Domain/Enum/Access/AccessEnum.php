@@ -18,6 +18,7 @@ enum AccessEnum: string implements EnumInterface
     case CONTRACT_TYPE = ModuleEnum::COMPANY->value . '.contractType';
     case IMPORT = ModuleEnum::COMPANY->value . '.import';
     case NOTIFICATION = ModuleEnum::SYSTEM->value . '.notification';
+    case NOTIFICATION_CHANNEL = ModuleEnum::SYSTEM->value . '.notification_channel';
     case ACCESS = ModuleEnum::SYSTEM->value . '.access';
     case PERMISSION = ModuleEnum::SYSTEM->value . '.permission';
     case NOTE = ModuleEnum::NOTE->value . '.note';

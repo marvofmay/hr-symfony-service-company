@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Entity;
 
+use App\Common\Domain\Trait\AttributesEntityTrait;
+use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\System\Domain\Enum\Notification\NotificationChannelEnum;
 use Doctrine\ORM\Mapping as ORM;
@@ -16,6 +18,8 @@ use Gedmo\Mapping\Annotation as Gedmo;
 class NotificationChannelSetting
 {
     use TimeStampableTrait;
+    use AttributesEntityTrait;
+    use RelationsEntityTrait;
 
     public const string ALIAS = 'notification_channel_setting';
 

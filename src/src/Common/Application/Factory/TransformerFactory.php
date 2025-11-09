@@ -21,10 +21,12 @@ use App\Module\Company\Application\Transformer\Position\PositionDataTransformer;
 use App\Module\Company\Application\Transformer\Role\RoleDataTransformer;
 use App\Module\Note\Application\QueryHandler\ListNotesQueryHandler;
 use App\Module\Note\Application\Transformer\NoteDataTransformer;
+use App\Module\System\Application\QueryHandler\Notification\ListNotificationChannelSettingQueryHandler;
+use App\Module\System\Application\Transformer\Notification\NotificationChannelSettingDataTransformer;
 
 class TransformerFactory
 {
-    // ToDo:: refactor - use tags
+    // ToDo:: refactor - use tags - SOLID OCP
     public static function createForHandler(string $handlerClass): object
     {
         return match ($handlerClass) {
@@ -36,6 +38,7 @@ class TransformerFactory
             ListPositionsQueryHandler::class => new PositionDataTransformer(),
             ListContractTypesQueryHandler::class => new ContractTypeDataTransformer(),
             ListNotesQueryHandler::class => new NoteDataTransformer(),
+            ListNotificationChannelSettingQueryHandler::class => new NotificationChannelSettingDataTransformer(),
             default => throw new TransformerNotFoundException("No transformer found for handler: {$handlerClass}"),
         };
     }

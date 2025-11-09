@@ -6,69 +6,69 @@ namespace App\Module\System\Presentation\API\Controller\Notification;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
-use App\Module\System\Application\Command\Notification\UpdateNotificationChannelSettingsCommand;
 use App\Module\System\Application\Event\LogFileEvent;
-use App\Module\System\Domain\DTO\Notification\UpdateNotificationChannelSettingDTO;
+use App\Module\System\Application\Query\Notification\ListNotificationChannelSettingQuery;
+use App\Module\System\Domain\DTO\Notification\ListNotificationChannelSettingQueryDTO;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
+use Symfony\Component\Routing\Attribute\Route;
 
-class UpdateSettingsNotificationChannelsController extends AbstractController
+final class ListNotificationChannelSettingsController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $eventBus,
-        private readonly MessageBusInterface $commandBus,
+        private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
     ) {
     }
 
-    #[Route('/api/settings/notification-channels', name: 'api.settings.notification-channels.update', methods: ['PUT'])]
-    public function create(#[MapRequestPayload] UpdateNotificationChannelSettingDTO $dto): JsonResponse
+    #[Route('/api/settings/notification-channels', name: 'api.settings.notification-channels.list', methods: ['GET'])]
+    public function list(#[MapQueryString] ListNotificationChannelSettingQueryDTO $dto): Response
     {
         try {
             $this->denyAccessUnlessGranted(
-                PermissionEnum::SETTINGS,
+                PermissionEnum::LIST,
                 AccessEnum::NOTIFICATION_CHANNEL,
                 $this->messageService->get('accessDenied')
             );
 
-            $this->dispatchCommand($dto);
+            $data = $this->dispatchQuery($dto);
 
-            return $this->successResponse();
+            return $this->successResponse($data);
         } catch (\Throwable $exception) {
             return $this->errorResponse($exception);
         }
     }
 
-    private function dispatchCommand(UpdateNotificationChannelSettingDTO $dto): void
+    private function dispatchQuery(ListNotificationChannelSettingQueryDTO $dto): array
     {
         try {
-            $this->commandBus->dispatch(new UpdateNotificationChannelSettingsCommand(channels: $dto->channels));
+            $handledStamp = $this->queryBus->dispatch(new ListNotificationChannelSettingQuery($dto));
+
+            return $handledStamp->last(HandledStamp::class)->getResult();
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
     }
 
-    private function successResponse(): JsonResponse
+    private function successResponse(array $data): JsonResponse
     {
-        return new JsonResponse(
-            ['message' => $this->messageService->get('notification.channels.update.success', [], 'notifications')],
-            Response::HTTP_CREATED
-        );
+        return new JsonResponse(['data' => $data], Response::HTTP_OK);
     }
 
     private function errorResponse(\Throwable $exception): JsonResponse
     {
         $message = sprintf(
             '%s. %s',
-            $this->messageService->get('notification.channels.update.error', [], 'notifications'),
+            $this->messageService->get('notification.channels.list.error', [], 'notifications'),
             $exception->getMessage()
         );
 

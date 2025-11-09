@@ -34,30 +34,41 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
         $queryBuilder = $this->createBaseQueryBuilder();
         $queryBuilder = $this->setFilters($queryBuilder, $query->getFilters());
 
-        $x= $queryBuilder->getQuery()->getSQL();
+        $entityClass = $queryBuilder->getRootEntities()[0];
+        $metadata = $this->entityManager->getClassMetadata($entityClass);
+        $identifierField = $metadata->getSingleIdentifierFieldName();
 
-        $totalItems = (clone $queryBuilder)->select("COUNT({$this->getAlias()}.uuid)")->getQuery()->getSingleScalarResult();
+        $totalItems = (clone $queryBuilder)
+            ->resetDQLPart('orderBy')
+            ->select(sprintf('COUNT(%s.%s)', $this->getAlias(), $identifierField))
+            ->getQuery()
+            ->getSingleScalarResult();
+
+
         foreach ($query->getIncludes() as $relation) {
             if (in_array($relation, $this->getRelations(), true)) {
-                $queryBuilder->leftJoin("{$this->getAlias()}.$relation", $relation)
+                $queryBuilder
+                    ->leftJoin(sprintf('%s.%s', $this->getAlias(), $relation), $relation)
                     ->addSelect($relation);
             }
         }
 
+
         $orderByField = $query->getOrderBy() ?? $this->getDefaultOrderBy();
         if (!str_contains($orderByField, '.')) {
-            $orderByField = "{$this->getAlias()}.$orderByField";
+            $orderByField = sprintf('%s.%s', $this->getAlias(), $orderByField);
         }
 
-        $queryBuilder->orderBy($orderByField, $query->getOrderDirection());
         $queryBuilder
+            ->orderBy($orderByField, $query->getOrderDirection())
             ->setMaxResults($query->getLimit())
             ->setFirstResult($query->getOffset());
+
 
         $items = $queryBuilder->getQuery()->getResult();
 
         return [
-            'total' => $totalItems,
+            'total' => (int) $totalItems,
             'page' => $query->getPage(),
             'limit' => $query->getLimit(),
             'items' => $this->transformIncludes($items, $query->getIncludes()),
