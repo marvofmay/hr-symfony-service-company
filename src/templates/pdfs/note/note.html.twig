@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pl">
+    <head>
+        <meta charset="UTF-8">
+        <title>Notatka</title>
+    </head>
+    <body style="font-family: 'DejaVu Sans', sans-serif; font-size: 14px; color: #333; background-color: #f9f9f9; padding: 20px;">
+        <div style="background-color: #ffffff; padding: 20px; border-radius: 8px; max-width: 600px; margin: 0 auto; border: 1px solid #eee;">
+            <div style="width: 100%; border-bottom: 1px solid #ddd; padding-bottom: 8px; margin-bottom: 15px;">
+                <div style="display: inline-block; vertical-align: top;">
+                    <h3 style="margin: 0;">Notatka</h3>
+                </div>
+                <div style="display: inline-block; float: right;">
+                    <img
+                            src="{{ baseUrl ~ asset('hr-app-logo.png', 'images') }}"
+                            alt="Logo"
+                            width="80"
+                            style="display: block; margin-top: 0;"
+                    />
+                </div>
+                <div style="clear: both;"></div>
+            </div>
+
+            {% set color =
+                note.priority.value == 'high' ? 'red' :
+                (note.priority.value == 'medium' ? 'orange' : 'black') %}
+
+            <h5 style="color: {{ color }}; margin-top: 10px;"><u>{{ note.title }}</u></h5>
+            <div style="font-size: 12px; line-height: 1.5;">{{ note.content }}</div>
+
+        </div>
+    </body>
+</html>

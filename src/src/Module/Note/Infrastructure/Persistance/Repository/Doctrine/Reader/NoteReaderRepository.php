@@ -14,6 +14,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
+/**
+ * @extends ServiceEntityRepository<Note>
+ */
 final class NoteReaderRepository extends ServiceEntityRepository implements NoteReaderInterface
 {
     public function __construct(ManagerRegistry $registry)
@@ -24,6 +27,14 @@ final class NoteReaderRepository extends ServiceEntityRepository implements Note
     public function getNoteByUUID(string $uuid): ?Note
     {
         return $this->findOneBy([NoteEntityFieldEnum::UUID->value => $uuid]);
+    }
+
+    public function getNoteByUUIDAndEmployee(string $uuid, ?Employee $employee): ?Note
+    {
+        return $this->findOneBy([
+                NoteEntityFieldEnum::UUID->value             => $uuid,
+                NoteEntityRelationFieldEnum::EMPLOYEE->value => $employee,
+            ]);
     }
 
     public function getNotesByUUIDsAndEmployee(array $uuids, ?Employee $employee): Collection
