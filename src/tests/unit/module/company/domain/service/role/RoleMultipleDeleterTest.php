@@ -23,7 +23,7 @@ class RoleMultipleDeleterTest extends TestCase
 
         $writer
             ->expects($this->once())
-            ->method('deleteMultipleRolesInDB')
+            ->method('deleteMultipleRoles')
             ->with($this->equalTo($roles));
 
         $deleter = new RoleMultipleDeleter($writer);

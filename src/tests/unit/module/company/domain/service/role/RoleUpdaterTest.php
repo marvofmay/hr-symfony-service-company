@@ -20,7 +20,7 @@ final class RoleUpdaterTest extends TestCase
 
         $writer = $this->createMock(RoleWriterInterface::class);
         $writer->expects($this->once())
-            ->method('saveRoleInDB')
+            ->method('saveRole')
             ->with($this->callback(fn(Role $r) =>
                 $r->getName() === $name &&
                 $r->getDescription() === $description

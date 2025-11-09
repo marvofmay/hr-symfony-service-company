@@ -18,6 +18,7 @@ enum PermissionEnum: string implements EnumInterface
     case PDF = 'pdf';
     case ASSIGN_PERMISSION_TO_ACCESS_ROLE = 'assign_permission_to_access_role';
     case ASSIGN_ACCESS_TO_ROLE = 'assign_access_to_role';
+    case SETTINGS = 'settings';
 
     public function label(): string
     {

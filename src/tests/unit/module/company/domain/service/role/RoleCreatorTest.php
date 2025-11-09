@@ -20,7 +20,7 @@ final class RoleCreatorTest extends TestCase
 
         $writer = $this->createMock(RoleWriterInterface::class);
         $writer->expects($this->once())
-            ->method('saveRoleInDB')
+            ->method('saveRole')
             ->with($this->callback(fn(Role $role) =>
                 $role->getName() === 'User' &&
                 $role->getDescription() === 'User ...'

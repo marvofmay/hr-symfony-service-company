@@ -17,7 +17,7 @@ enum AccessEnum: string implements EnumInterface
     case POSITION = ModuleEnum::COMPANY->value . '.position';
     case CONTRACT_TYPE = ModuleEnum::COMPANY->value . '.contractType';
     case IMPORT = ModuleEnum::COMPANY->value . '.import';
-    case SETTING = ModuleEnum::SYSTEM->value . '.setting';
+    case NOTIFICATION = ModuleEnum::SYSTEM->value . '.notification';
     case ACCESS = ModuleEnum::SYSTEM->value . '.access';
     case PERMISSION = ModuleEnum::SYSTEM->value . '.permission';
     case NOTE = ModuleEnum::NOTE->value . '.note';
@@ -33,7 +33,7 @@ enum AccessEnum: string implements EnumInterface
             self::POSITION => 'Position',
             self::CONTRACT_TYPE => 'Contract Type',
             self::IMPORT => 'Import',
-            self::SETTING => 'Setting',
+            self::NOTIFICATION => 'Notification',
             self::ACCESS => 'Access',
             self::PERMISSION => 'Permission',
             self::NOTE => 'Note',
@@ -42,6 +42,6 @@ enum AccessEnum: string implements EnumInterface
 
     public static function values(): array
     {
-        return array_column(self::cases(), 'value');
+        return array_map(fn(self $case) => $case->value, self::cases());
     }
 }

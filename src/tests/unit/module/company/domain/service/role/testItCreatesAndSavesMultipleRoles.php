@@ -30,7 +30,7 @@ class testItCreatesAndSavesMultipleRoles extends TestCase
 
         $writer
             ->expects($this->once())
-            ->method('saveRolesInDB')
+            ->method('saveRoles')
             ->with($this->callback(function (Collection $roles) use ($data) {
                 if (count($roles) !== count($data)) {
                     return false;

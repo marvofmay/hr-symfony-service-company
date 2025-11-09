@@ -21,6 +21,6 @@ final readonly class RoleAccessAssigner implements RoleAccessAssignerInterface
     {
         $this->roleAccessUpdater->updateAccesses(role: $role, accessesUUIDs: $accessesUUIDs);
 
-        $this->roleWriterRepository->saveRoleInDB($role);
+        $this->roleWriterRepository->saveRole($role);
     }
 }

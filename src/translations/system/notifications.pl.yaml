@@ -1,0 +1,9 @@
+notification:
+  channel:
+    internal: "wewnętrzne (systemowe)"
+    sms: "sms'em"
+    email: "email'em"
+  channels:
+    update:
+      error: "Aktualizacja kanałów powiadomień zakończona niepowodzeniem."
+      success: "Aktualizacja kanałów powiadomień zakończona sukcesem."

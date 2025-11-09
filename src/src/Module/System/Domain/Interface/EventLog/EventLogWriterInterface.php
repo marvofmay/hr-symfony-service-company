@@ -8,5 +8,5 @@ use App\Module\System\Domain\Entity\EventLog;
 
 interface EventLogWriterInterface
 {
-    public function saveEventLogInDB(EventLog $eventLog): void;
+    public function saveEventLog(EventLog $eventLog): void;
 }

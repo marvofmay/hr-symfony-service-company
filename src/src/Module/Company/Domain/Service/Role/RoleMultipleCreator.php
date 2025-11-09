@@ -23,6 +23,6 @@ readonly class RoleMultipleCreator
             $roles[] = $role;
         }
 
-        $this->roleWriterRepository->saveRolesInDB($roles);
+        $this->roleWriterRepository->saveRoles($roles);
     }
 }

@@ -17,8 +17,8 @@ access:
     import:
       description: "Dostęp do importów."
   system: #moduleName
-    setting:
-      description: "Dostęp do ustawień."
+    notification:
+      description: "Dostęp do powiadomień."
   note: #moduleName
     note:
       description: "Dostęp do notatek pracownika."

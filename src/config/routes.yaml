@@ -5,7 +5,7 @@ app_api_auth_login:
     resource: './routes/api/auth'
     type: directory
 app_api_auth_logout:
-  resource: ../src/Module/System/Presentation/API/Controller/Auth
+  resource: ../src/Module/System/Presentation/API/Controller/
   type: attribute
 app_api:
     resource: ../src/Module/Company/Presentation/API/Controller/

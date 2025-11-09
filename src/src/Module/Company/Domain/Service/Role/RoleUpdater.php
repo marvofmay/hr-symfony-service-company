@@ -21,6 +21,6 @@ final readonly class RoleUpdater implements RoleUpdaterInterface
             $role->updateDescription($description);
         }
 
-        $this->roleWriterRepository->saveRoleInDB($role);
+        $this->roleWriterRepository->saveRole($role);
     }
 }

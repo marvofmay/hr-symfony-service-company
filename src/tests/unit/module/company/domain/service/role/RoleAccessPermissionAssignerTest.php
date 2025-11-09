@@ -27,7 +27,7 @@ class RoleAccessPermissionAssignerTest extends TestCase
             ->with($role, $access, $permissionsUUIDs);
 
         $writer->expects($this->once())
-            ->method('saveRoleInDB')
+            ->method('saveRole')
             ->with($role);
 
         $assigner = new RoleAccessPermissionAssigner($writer, $updater);

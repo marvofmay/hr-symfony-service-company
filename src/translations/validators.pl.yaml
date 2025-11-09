@@ -33,3 +33,7 @@ import:
 errors:
   occurred: "Wystąpiły błędy"
 invalidUUID: "Nieprawidłowy format UUID"
+notification:
+  channel:
+    invalidChoice: "Nieprawidłowy typ kanału powiadomień"
+    required: "Wymagany kanał powiadomień."

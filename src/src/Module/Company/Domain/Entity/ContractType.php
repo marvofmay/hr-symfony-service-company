@@ -27,7 +27,7 @@ class ContractType
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
-    public const string ALIAS = 'contractType';
+    public const string ALIAS = 'contract_type';
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]

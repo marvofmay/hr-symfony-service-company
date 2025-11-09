@@ -36,7 +36,7 @@ class Address
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
 
-    public const ALIAS = 'address';
+    public const string ALIAS = 'address';
 
     public const RELATION_COMPANY = 'company';
     public const RELATION_DEPARTMENT = 'department';

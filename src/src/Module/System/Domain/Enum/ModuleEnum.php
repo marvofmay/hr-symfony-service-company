@@ -11,7 +11,7 @@ enum ModuleEnum: string implements EnumInterface
     case SYSTEM = 'system';
     case COMPANY = 'company';
     case NOTE = 'note';
-    case TASK = 'task';
+    case DOCUMENT = 'document';
 
     public function label(): string
     {
@@ -19,11 +19,12 @@ enum ModuleEnum: string implements EnumInterface
             self::SYSTEM => self::SYSTEM->value,
             self::COMPANY => self::COMPANY->value,
             self::NOTE => self::NOTE->value,
+            self::DOCUMENT => self::DOCUMENT->value,
         };
     }
 
     public static function values(): array
     {
-        return array_column(self::cases(), 'value');
+        return array_map(fn(self $case) => $case->value, self::cases());
     }
 }

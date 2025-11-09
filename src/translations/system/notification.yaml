@@ -1,5 +1,0 @@
-notification:
-  channel:
-    internal: "wewnętrzne (systemowe)"
-    sms: "sms'em"
-    email: "email'em"

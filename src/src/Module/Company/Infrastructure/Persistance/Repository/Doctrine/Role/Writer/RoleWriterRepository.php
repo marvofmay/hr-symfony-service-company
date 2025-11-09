@@ -17,13 +17,13 @@ final class RoleWriterRepository extends ServiceEntityRepository implements Role
         parent::__construct($registry, Role::class);
     }
 
-    public function saveRoleInDB(Role $role): void
+    public function saveRole(Role $role): void
     {
         $this->getEntityManager()->persist($role);
         $this->getEntityManager()->flush();
     }
 
-    public function saveRolesInDB(Collection $roles): void
+    public function saveRoles(Collection $roles): void
     {
         foreach ($roles as $role) {
             $this->getEntityManager()->persist($role);
@@ -31,13 +31,13 @@ final class RoleWriterRepository extends ServiceEntityRepository implements Role
         $this->getEntityManager()->flush();
     }
 
-    public function deleteRoleInDB(Role $role): void
+    public function deleteRole(Role $role): void
     {
         $this->getEntityManager()->remove($role);
         $this->getEntityManager()->flush();
     }
 
-    public function deleteMultipleRolesInDB(Collection $roles): void
+    public function deleteMultipleRoles(Collection $roles): void
     {
         if (empty($roles)) {
             return;

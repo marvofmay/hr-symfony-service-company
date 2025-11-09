@@ -21,7 +21,7 @@ final class ImportRolesController extends AbstractController
     {
     }
 
-    #[Route('/api/roles/import', name: 'import', methods: ['POST'])]
+    #[Route('/api/roles/import', name: 'api.roles.import', methods: ['POST'])]
     public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
         if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::ROLE)) {

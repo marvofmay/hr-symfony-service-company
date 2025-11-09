@@ -27,6 +27,7 @@ class InitializeSystemDefaultDataCommand extends Command
             return Command::FAILURE;
         }
 
+        // ToDo:: refactor commands - use services and repositories instead hard coded query
         $commands = [
             'app:add-record-to-user-table',
             'app:add-record-to-module-table',
@@ -36,6 +37,7 @@ class InitializeSystemDefaultDataCommand extends Command
             'app:add-record-to-industry-table',
             'app:add-record-to-contract-type-table',
             'app:add-record-to-position-table',
+            'app:add-record-to-notification-channel-setting-table',
         ];
 
         $output->writeln('***********************************************************');

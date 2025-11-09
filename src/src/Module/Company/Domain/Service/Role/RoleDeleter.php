@@ -16,6 +16,6 @@ final readonly class RoleDeleter implements RoleDeleterInterface
 
     public function delete(Role $role): void
     {
-        $this->roleWriterRepository->deleteRoleInDB($role);
+        $this->roleWriterRepository->deleteRole($role);
     }
 }

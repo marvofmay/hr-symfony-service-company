@@ -19,7 +19,7 @@ class RoleAccessAssignerTest extends TestCase
         //
         //$roleWriterMock
         //    ->expects($this->once())
-        //    ->method('saveRoleInDB')
+        //    ->method('saveRole')
         //    ->with($this->isInstanceOf(Role::class));
         //
         //$service = new RoleAccessCreator($roleWriterMock);

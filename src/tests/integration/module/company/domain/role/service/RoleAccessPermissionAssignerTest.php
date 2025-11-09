@@ -66,7 +66,7 @@ final class RoleAccessPermissionAssignerTest extends TestCase
             ->with($access, $perm2);
 
         $roleWriter->expects($this->once())
-            ->method('saveRoleInDB')
+            ->method('saveRole')
             ->with($role);
 
         $synchronizer = new AccessPermissionSynchronizer($roleAccessPermissionWriter);

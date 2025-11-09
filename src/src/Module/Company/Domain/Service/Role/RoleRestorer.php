@@ -16,6 +16,6 @@ final readonly class RoleRestorer implements RoleRestorerInterface
     public function restore(Role $role): void
     {
         $role->setDeletedAt(null);
-        $this->roleWriterRepository->saveRoleInDB($role);
+        $this->roleWriterRepository->saveRole($role);
     }
 }

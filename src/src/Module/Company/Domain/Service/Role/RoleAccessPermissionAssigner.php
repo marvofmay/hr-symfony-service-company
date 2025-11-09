@@ -21,6 +21,6 @@ readonly class RoleAccessPermissionAssigner implements RoleAccessPermissionAssig
     public function assign(Role $role, Access $access, array $permissionsUUIDs): void
     {
         $this->roleAccessPermissionUpdater->updateAccessesPermission(role: $role, access: $access, permissionsUUIDs: $permissionsUUIDs);
-        $this->roleWriterRepository->saveRoleInDB($role);
+        $this->roleWriterRepository->saveRole($role);
     }
 }

@@ -44,5 +44,4 @@ trait TitleContentPriorityTrait
             return $this->priority;
         }
     }
-
 }

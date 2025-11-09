@@ -25,4 +25,10 @@ enum NotificationChannelEnum: string implements EnumInterface
     {
         return array_map(fn(self $case) => $case->value, self::cases());
     }
+
+    public const array VALUES = [
+        self::INTERNAL->value,
+        self::EMAIL->value,
+        self::SMS->value,
+    ];
 }

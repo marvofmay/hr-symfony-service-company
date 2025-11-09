@@ -16,7 +16,7 @@ class EventLogWriterRepository extends ServiceEntityRepository implements EventL
         parent::__construct($registry, EventLog::class);
     }
 
-    public function saveEventLogInDB(EventLog $eventLog): void
+    public function saveEventLog(EventLog $eventLog): void
     {
         $this->getEntityManager()->persist($eventLog);
         $this->getEntityManager()->flush();

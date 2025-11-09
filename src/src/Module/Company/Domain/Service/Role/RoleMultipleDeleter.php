@@ -16,6 +16,6 @@ readonly class RoleMultipleDeleter implements RoleMultipleDeleterInterface
 
     public function multipleDelete(Collection $roles): void
     {
-        $this->roleWriterRepository->deleteMultipleRolesInDB($roles);
+        $this->roleWriterRepository->deleteMultipleRoles($roles);
     }
 }

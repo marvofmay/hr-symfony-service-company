@@ -17,6 +17,6 @@ final readonly class EventLogCreator implements EventLogCreatorInterface
 
     public function create(string $eventClass, string $entityClass, string $jsonData, ?Employee $employee): void
     {
-        $this->eventLogWriterRepository->saveEventLogInDB(new EventLog($eventClass, $entityClass, $jsonData, $employee));
+        $this->eventLogWriterRepository->saveEventLog(new EventLog($eventClass, $entityClass, $jsonData, $employee));
     }
 }

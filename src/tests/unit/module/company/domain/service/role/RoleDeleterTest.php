@@ -18,7 +18,7 @@ class RoleDeleterTest extends TestCase
         $writer = $this->createMock(RoleWriterInterface::class);
         $writer
             ->expects($this->once())
-            ->method('deleteRoleInDB')
+            ->method('deleteRole')
             ->with($role);
 
         $deleter = new RoleDeleter($writer);

@@ -31,6 +31,6 @@ final class RolesImporter implements RolesImporterInterface
             $this->roles[] = $role;
         }
 
-        $this->roleWriterRepository->saveRolesInDB(new ArrayCollection($this->roles));
+        $this->roleWriterRepository->saveRoles(new ArrayCollection($this->roles));
     }
 }
