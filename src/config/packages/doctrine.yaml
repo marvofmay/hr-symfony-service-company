@@ -40,6 +40,12 @@ doctrine:
         dir: '%kernel.project_dir%/src/Module/System/Domain/Entity'
         prefix: 'App\Module\System\Domain\Entity'
         alias: System
+      system_notification:
+        is_bundle: false
+        type: attribute
+        dir: '%kernel.project_dir%/src/Module/System/Notification/Domain/Entity'
+        prefix: 'App\Module\System\Notification\Domain\Entity'
+        alias: System_notification
       common:
         is_bundle: false
         type: attribute

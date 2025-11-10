@@ -35,5 +35,5 @@ errors:
 invalidUUID: "Nieprawidłowy format UUID"
 notification:
   channel:
-    invalidChoice: "Nieprawidłowy typ kanału powiadomień"
+    invalidChoice: ":Nieprawidłowy typ kanału powiadomień"
     required: "Wymagany kanał powiadomień."

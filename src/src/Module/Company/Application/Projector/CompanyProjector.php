@@ -6,7 +6,7 @@ namespace App\Module\Company\Application\Projector;
 
 use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
-use App\Module\Company\Domain\Event\Company\CompanyMultipleImportedEvent;
+use App\Module\Company\Domain\Event\Company\CompanyImportedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyRestoredEvent;
 use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
 use App\Module\Company\Domain\Service\Company\CompanyCreator;
@@ -49,8 +49,8 @@ final readonly class CompanyProjector
         $this->companyRestorer->restore($event);
     }
 
-    #[AsEventListener(event: CompanyMultipleImportedEvent::class)]
-    public function onCompanyMultipleImported(CompanyMultipleImportedEvent $event): void
+    #[AsEventListener(event: CompanyImportedEvent::class)]
+    public function onCompanyMultipleImported(CompanyImportedEvent $event): void
     {
         // ToDo:: save notification about DONE import - immediately
         // ToDo:: if notification for import companies is turned on by employee in employee settings

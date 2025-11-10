@@ -8,7 +8,7 @@ use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Company\ImportCompaniesCommand;
 use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
-use App\Module\Company\Domain\Event\Company\CompanyMultipleImportedEvent;
+use App\Module\Company\Domain\Event\Company\CompanyImportedEvent;
 use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Factory\ImporterFactory;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
@@ -38,7 +38,7 @@ final readonly class ImportCompaniesCommandHandler
 
         $preparedRows = $importer->run($import);
 
-        $multiEvent = new CompanyMultipleImportedEvent($preparedRows);
+        $multiEvent = new CompanyImportedEvent($preparedRows);
         $this->eventStoreCreator->create(
             new EventStore(
                 Uuid::uuid4()->toString(),

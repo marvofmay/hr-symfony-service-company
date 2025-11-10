@@ -4,8 +4,11 @@
 app_api_auth_login:
     resource: './routes/api/auth'
     type: directory
-app_api_auth_logout:
+app_api_system:
   resource: ../src/Module/System/Presentation/API/Controller/
+  type: attribute
+app_api_system_notification:
+  resource: ../src/Module/System/Notification/Presentation/API/Controller/
   type: attribute
 app_api:
     resource: ../src/Module/Company/Presentation/API/Controller/

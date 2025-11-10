@@ -3,7 +3,9 @@ notification:
     internal: "wewnętrzne (systemowe)"
     sms: "sms'em"
     email: "email'em"
+    invalidChoice: ":invalidChannel - nie ma takiego kanału powiadomień"
   channels:
+    notFound: "Nie znaleziono żadnych kanałów powiadomień."
     update:
       error: "Aktualizacja kanałów powiadomień zakończona niepowodzeniem."
       success: "Aktualizacja kanałów powiadomień zakończona sukcesem."

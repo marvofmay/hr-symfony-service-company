@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\System\Application\Console\DefaultData;
 
-use App\Module\System\Application\Event\Notification\NotificationChannelSettingsCreatedEvent;
-use App\Module\System\Domain\Enum\Notification\NotificationChannelEnum;
-use App\Module\System\Domain\Interface\Notification\NotificationChannelSettingReaderInterface;
-use App\Module\System\Domain\Service\Notification\NotificationChannelSettingCreator;
+use App\Module\System\Notification\Application\Event\NotificationChannelSettingsCreatedEvent;
+use App\Module\System\Notification\Domain\Factory\NotificationChannelFactory;
+use App\Module\System\Notification\Domain\Interface\NotificationChannelSettingReaderInterface;
+use App\Module\System\Notification\Domain\Service\NotificationChannelSettingCreator;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -26,7 +26,8 @@ final class AddRecordToNotificationChannelSettingTableCommand extends Command
     public function __construct(
         private readonly NotificationChannelSettingReaderInterface $notificationChannelSettingReader,
         private readonly NotificationChannelSettingCreator $notificationChannelSettingCreator,
-        private readonly EventDispatcherInterface $eventDispatcher
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly NotificationChannelFactory $notificationChannelFactory,
     ) {
         parent::__construct();
     }
@@ -42,23 +43,24 @@ final class AddRecordToNotificationChannelSettingTableCommand extends Command
     {
         $output->writeln('Checking and updating "notification_channel_setting" table...');
         $existingChannelValues = array_map(
-            fn($setting) => $setting->getChannel()->value,
+            fn($setting) => $setting->getChannelCode(),
             $this->notificationChannelSettingReader->getAll()->toArray()
         );
 
-        $channelsToPersist = [];
-        foreach (NotificationChannelEnum::cases() as $enum) {
-            if (!in_array($enum->value, $existingChannelValues, true)) {
-                $this->notificationChannelSettingCreator->create($enum);
+        $channelCodesToPersist = [];
+        $channels = $this->notificationChannelFactory->all();
+        foreach ($channels as $channel) {
+            if (!in_array($channel->getCode(), $existingChannelValues, true)) {
+                $this->notificationChannelSettingCreator->create($channel);
                 $this->eventDispatcher->dispatch(new NotificationChannelSettingsCreatedEvent([
-                    'channel' => $enum->value,
+                    'channelCode' => $channel->getCode(),
                 ]));
-                $channelsToPersist[] = $enum->value;
+                $channelCodesToPersist[] = $channel->getCode();
             }
         }
 
-        if (!empty($channelsToPersist)) {
-            $output->writeln(sprintf('<info>%s: %s.</info>', self::INFO_ADDED_MESSAGE, implode(', ', $channelsToPersist)));
+        if (!empty($channelCodesToPersist)) {
+            $output->writeln(sprintf('<info>%s: %s.</info>', self::INFO_ADDED_MESSAGE, implode(', ', $channelCodesToPersist)));
             $output->writeln(sprintf('<info>%s</info>', self::SUCCESS_MESSAGE));
         } else {
             $output->writeln(sprintf('<info>%s</info>', self::INFO_NO_ADDED_MESSAGE));
