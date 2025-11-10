@@ -7,6 +7,7 @@ namespace App\Module\System\Notification\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
+use App\Module\System\Notification\Domain\Interface\Event\NotificationEventInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -24,5 +25,39 @@ class NotificationEventSetting
 
     #[ORM\Id]
     #[ORM\Column(type: "string", length: 250)]
-    private string $notificationEvent;
+    private string $eventName;
+
+    #[ORM\Column(type: "boolean")]
+    private bool $enabled;
+
+    private function __construct(NotificationEventInterface $event, bool $enabled)
+    {
+        $this->eventName = $event->getName();
+        $this->enabled = $enabled;
+    }
+
+    public static function create(NotificationEventInterface $event, bool $enabled = false): self
+    {
+        return new self($event, $enabled);
+    }
+
+    public function enable(): void
+    {
+        $this->enabled = true;
+    }
+
+    public function disable(): void
+    {
+        $this->enabled = false;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
+    }
+
+    public function getEventName(): string
+    {
+        return $this->eventName;
+    }
 }

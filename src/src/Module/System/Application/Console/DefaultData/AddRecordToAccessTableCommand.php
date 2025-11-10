@@ -89,7 +89,7 @@ class AddRecordToAccessTableCommand extends Command
             $output->writeln(sprintf('<info>%s: %s.</info>', self::INFO_ADDED_MESSAGE, implode(', ', $accessesToPersist)));
             $output->writeln(sprintf('<info>%s</info>', self::SUCCESS_MESSAGE));
         } else {
-            $output->writeln(sprintf('<info>%s</info>', self::INFO_NO_ADDED_MESSAGE));
+            $output->writeln(sprintf('<comment>%s</comment>', self::INFO_NO_ADDED_MESSAGE));
         }
 
         return Command::SUCCESS;

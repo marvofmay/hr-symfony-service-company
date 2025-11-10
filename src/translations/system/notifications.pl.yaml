@@ -9,3 +9,14 @@ notification:
     update:
       error: "Aktualizacja kanałów powiadomień zakończona niepowodzeniem."
       success: "Aktualizacja kanałów powiadomień zakończona sukcesem."
+    list:
+      error: "Błąd przy pobieraniu listy kanałów powiadomień."
+  event:
+    invalidChoice: ":invalidEvent - nie ma takiego zdarzenia wywołującego powiadomienie"
+  events:
+    notFound: "Nie znaleziono żadnych zdarzeń wywołujacych powiadomienia."
+    update:
+      error: "Aktualizacja zdarzeń wywołujących powiadomienia zakończona niepowodzeniem."
+      success: "Aktualizacja zdarzeń wywołujących powiadomienia zakończona sukcesem."
+    list:
+      error: "Błąd przy pobieraniu listy zdarzeń wywołujących powiadomienia."

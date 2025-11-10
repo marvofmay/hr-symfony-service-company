@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\System\Notification\Domain\Channel;
 
-use App\Module\System\Notification\Domain\Interface\NotificationChannelInterface;
+use App\Module\System\Notification\Domain\Interface\Channel\NotificationChannelInterface;
 
 class InternalNotificationChannel implements NotificationChannelInterface
 {

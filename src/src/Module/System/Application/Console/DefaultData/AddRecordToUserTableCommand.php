@@ -53,7 +53,7 @@ class AddRecordToUserTableCommand extends Command
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $output->writeln(sprintf('<info>%s</info>', self::SUCCESS_MESSAGE));
+        $output->writeln(sprintf('<comment>%s</comment>', self::SUCCESS_MESSAGE));
 
         return Command::SUCCESS;
     }

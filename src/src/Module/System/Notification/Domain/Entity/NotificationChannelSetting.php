@@ -7,7 +7,7 @@ namespace App\Module\System\Notification\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\System\Notification\Domain\Interface\NotificationChannelInterface;
+use App\Module\System\Notification\Domain\Interface\Channel\NotificationChannelInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
