@@ -6,7 +6,7 @@ namespace App\Module\System\Notification\Application\Command\Channel;
 
 use App\Common\Domain\Interface\CommandInterface;
 
-class UpdateNotificationChannelSettingsCommand implements CommandInterface
+final readonly class UpdateNotificationChannelSettingsCommand implements CommandInterface
 {
     public const string CHANNEL_CODES = 'channelCodes';
 

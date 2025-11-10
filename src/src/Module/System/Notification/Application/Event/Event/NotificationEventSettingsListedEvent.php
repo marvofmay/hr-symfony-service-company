@@ -6,6 +6,6 @@ namespace App\Module\System\Notification\Application\Event\Event;
 
 use App\Module\System\Notification\Application\Event\Channel\NotificationChannelSettingsEvent;
 
-final class NotificationEventUpdatedEvent extends NotificationChannelSettingsEvent
+final class NotificationEventSettingsListedEvent extends NotificationChannelSettingsEvent
 {
 }

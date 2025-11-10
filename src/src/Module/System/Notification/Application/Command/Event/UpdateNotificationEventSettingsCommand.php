@@ -6,7 +6,7 @@ namespace App\Module\System\Notification\Application\Command\Event;
 
 use App\Common\Domain\Interface\CommandInterface;
 
-class UpdateNotificationEventSettingsCommand implements CommandInterface
+final readonly class UpdateNotificationEventSettingsCommand implements CommandInterface
 {
     public const string EVENT_NAMES = 'eventNames';
 

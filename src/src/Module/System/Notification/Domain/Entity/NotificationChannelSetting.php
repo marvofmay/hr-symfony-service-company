@@ -30,15 +30,18 @@ class NotificationChannelSetting
     #[ORM\Column(type: "boolean")]
     private bool $enabled;
 
-    private function __construct(NotificationChannelInterface $channel, bool $enabled)
+    private function __construct()
     {
-        $this->channelCode = $channel->getCode();
-        $this->enabled = $enabled;
+
     }
 
     public static function create(NotificationChannelInterface $channel, bool $enabled = false): self
     {
-        return new self($channel, $enabled);
+        $self = new self();
+        $self->channelCode = $channel->getCode();
+        $self->enabled = $enabled;
+
+        return $self;
     }
 
     public function enable(): void

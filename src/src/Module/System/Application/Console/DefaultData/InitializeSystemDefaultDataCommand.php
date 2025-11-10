@@ -38,7 +38,8 @@ class InitializeSystemDefaultDataCommand extends Command
             'app:add-record-to-contract-type-table',
             'app:add-record-to-position-table',
             'app:add-record-to-notification-channel-setting-table',
-            'app:add-record-to-notification-event-setting-table'
+            'app:add-record-to-notification-event-setting-table',
+            'app:add-record-to-notification-template-setting-table'
         ];
 
         $output->writeln('***********************************************************');

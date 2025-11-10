@@ -7,7 +7,7 @@ namespace App\Module\System\Notification\Application\QueryHandler\Event;
 use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
-use App\Module\System\Notification\Application\Event\Event\NotificationEventListedEvent;
+use App\Module\System\Notification\Application\Event\Event\NotificationEventSettingsListedEvent;
 use App\Module\System\Notification\Application\Query\Event\ListNotificationEventSettingQuery;
 use App\Module\System\Notification\Domain\Entity\NotificationEventSetting;
 use App\Module\System\Notification\Domain\Enum\NotificationEventSettingEntityFieldEnum;
@@ -29,7 +29,7 @@ final class ListNotificationEventSettingQueryHandler extends ListQueryHandlerAbs
 
     public function __invoke(ListNotificationEventSettingQuery $query): array
     {
-        $this->eventDispatcher->dispatch(new NotificationEventListedEvent([$query]));
+        $this->eventDispatcher->dispatch(new NotificationEventSettingsListedEvent([$query]));
 
         return $this->handle($query);
     }

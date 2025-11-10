@@ -7,7 +7,7 @@ namespace App\Module\System\Notification\Application\CommandHandler\Event;
 use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\System\Notification\Application\Command\Event\UpdateNotificationEventSettingsCommand;
-use App\Module\System\Notification\Application\Event\Channel\NotificationChannelSettingsUpdatedEvent;
+use App\Module\System\Notification\Application\Event\Event\NotificationEventSettingsUpdatedEvent;
 use App\Module\System\Notification\Domain\Interface\Event\NotificationEventSettingReaderInterface;
 use App\Module\System\Notification\Domain\Service\Event\NotificationEventSettingUpdater;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,7 +39,7 @@ final class UpdateNotificationEventSettingsCommandHandler extends CommandHandler
             }
         }
 
-        $this->eventDispatcher->dispatch(new NotificationChannelSettingsUpdatedEvent([
+        $this->eventDispatcher->dispatch(new NotificationEventSettingsUpdatedEvent([
             UpdateNotificationEventSettingsCommand::EVENT_NAMES => $command->eventNames,
         ]));
     }

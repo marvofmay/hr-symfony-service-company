@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\System\Notification\Application\Console;
 
-use App\Module\System\Notification\Application\Event\Channel\NotificationChannelSettingsCreatedEvent;
+use App\Module\System\Notification\Application\Event\Event\NotificationEventSettingsCreatedEvent;
 use App\Module\System\Notification\Domain\Factory\NotificationEventFactory;
 use App\Module\System\Notification\Domain\Interface\Event\NotificationEventSettingReaderInterface;
 use App\Module\System\Notification\Domain\Service\Event\NotificationEventSettingCreator;
@@ -52,7 +52,7 @@ final class AddRecordToNotificationEventSettingTableCommand extends Command
         foreach ($events as $event) {
             if (!in_array($event->getName(), $existingEventValues, true)) {
                 $this->notificationEventSettingCreator->create($event);
-                $this->eventDispatcher->dispatch(new NotificationChannelSettingsCreatedEvent([
+                $this->eventDispatcher->dispatch(new NotificationEventSettingsCreatedEvent([
                     'eventName' => $event->getName(),
                 ]));
                 $eventNamesToPersist[] = $event->getName();

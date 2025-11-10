@@ -11,10 +11,10 @@ final readonly class NotificationEventFactory
 {
     public function __construct(#[AutowireIterator(tag: 'app.notification.event')] private iterable $events,) {}
 
-    public function getEvent(string $code): ?NotificationEventInterface
+    public function getEvent(string $name): ?NotificationEventInterface
     {
         foreach ($this->events as $event) {
-            if ($event->getCode() === $code) {
+            if ($event->getName() === $name) {
                 return $event;
             }
         }

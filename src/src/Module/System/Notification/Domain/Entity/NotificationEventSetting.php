@@ -30,15 +30,17 @@ class NotificationEventSetting
     #[ORM\Column(type: "boolean")]
     private bool $enabled;
 
-    private function __construct(NotificationEventInterface $event, bool $enabled)
+    private function __construct()
     {
-        $this->eventName = $event->getName();
-        $this->enabled = $enabled;
     }
 
     public static function create(NotificationEventInterface $event, bool $enabled = false): self
     {
-        return new self($event, $enabled);
+        $self =  new self();
+        $self->eventName = $event->getName();
+        $self->enabled = $enabled;
+
+        return $self;
     }
 
     public function enable(): void
