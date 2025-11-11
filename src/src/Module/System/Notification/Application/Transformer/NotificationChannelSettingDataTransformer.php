@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\System\Notification\Application\Transformer;
 
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Common\Domain\Interface\DataTransformerInterface;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\System\Notification\Application\QueryHandler\Channel\ListNotificationChannelSettingQueryHandler;
 use App\Module\System\Notification\Domain\Entity\NotificationChannelSetting;
 use App\Module\System\Notification\Domain\Enum\NotificationChannelSettingEntityFieldEnum;

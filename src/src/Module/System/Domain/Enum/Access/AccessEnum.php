@@ -20,6 +20,7 @@ enum AccessEnum: string implements EnumInterface
     case NOTIFICATION = ModuleEnum::SYSTEM->value . '.notification';
     case NOTIFICATION_CHANNEL = ModuleEnum::SYSTEM->value . '.notification_channel';
     case NOTIFICATION_EVENT = ModuleEnum::SYSTEM->value . '.notification_event';
+    case NOTIFICATION_TEMPLATE = ModuleEnum::SYSTEM->value . '.notification_template';
     case ACCESS = ModuleEnum::SYSTEM->value . '.access';
     case PERMISSION = ModuleEnum::SYSTEM->value . '.permission';
     case NOTE = ModuleEnum::NOTE->value . '.note';

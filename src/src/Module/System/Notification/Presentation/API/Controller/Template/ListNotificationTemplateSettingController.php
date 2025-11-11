@@ -2,73 +2,73 @@
 
 declare(strict_types=1);
 
-namespace App\Module\System\Notification\Presentation\API\Controller\Event;
+namespace App\Module\System\Notification\Presentation\API\Controller\Template;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use App\Module\System\Notification\Application\Command\Event\UpdateNotificationEventSettingsCommand;
-use App\Module\System\Notification\Domain\DTO\Event\UpdateNotificationEventSettingDTO;
+use App\Module\System\Notification\Application\Query\Template\ListNotificationTemplateSettingQuery;
+use App\Module\System\Notification\Domain\DTO\Template\ListNotificationTemplateSettingQueryDTO;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
+use Symfony\Component\Routing\Attribute\Route;
 
-class UpdateNotificationEventSettingController extends AbstractController
+final class ListNotificationTemplateSettingController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $eventBus,
-        private readonly MessageBusInterface $commandBus,
+        private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
     ) {
     }
 
-    #[Route('/api/settings/notification-events', name: 'api.settings.notification-events.update', methods: ['PUT'])]
-    public function create(#[MapRequestPayload] UpdateNotificationEventSettingDTO $dto): JsonResponse
+    #[Route('/api/settings/notification-templates', name: 'api.settings.notification-templates.list', methods: ['GET'])]
+    public function list(#[MapQueryString] ListNotificationTemplateSettingQueryDTO $dto): Response
     {
         try {
             $this->denyAccessUnlessGranted(
-                PermissionEnum::SETTINGS,
-                AccessEnum::NOTIFICATION_EVENT,
+                PermissionEnum::LIST,
+                AccessEnum::NOTIFICATION_TEMPLATE,
                 $this->messageService->get('accessDenied')
             );
 
-            $this->dispatchCommand($dto);
+            $data = $this->dispatchQuery($dto);
 
-            return $this->successResponse();
+            return $this->successResponse($data);
         } catch (\Throwable $exception) {
             return $this->errorResponse($exception);
         }
     }
 
-    private function dispatchCommand(UpdateNotificationEventSettingDTO $dto): void
+    private function dispatchQuery(ListNotificationTemplateSettingQueryDTO $dto): array
     {
         try {
-            $this->commandBus->dispatch(new UpdateNotificationEventSettingsCommand(eventNames: $dto->eventNames));
+            $handledStamp = $this->queryBus->dispatch(new ListNotificationTemplateSettingQuery($dto));
+
+            return $handledStamp->last(HandledStamp::class)->getResult();
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
     }
 
-    private function successResponse(): JsonResponse
+    private function successResponse(array $data): JsonResponse
     {
-        return new JsonResponse(
-            ['message' => $this->messageService->get('notification.events.update.success', [], 'notifications')],
-            Response::HTTP_CREATED
-        );
+        return new JsonResponse(['data' => $data], Response::HTTP_OK);
     }
 
     private function errorResponse(\Throwable $exception): JsonResponse
     {
         $message = sprintf(
-            '%s %s',
-            $this->messageService->get('notification.events.update.error', [], 'notifications'),
+            '%s. %s',
+            $this->messageService->get('notification.templates.list.error', [], 'notifications'),
             $exception->getMessage()
         );
 

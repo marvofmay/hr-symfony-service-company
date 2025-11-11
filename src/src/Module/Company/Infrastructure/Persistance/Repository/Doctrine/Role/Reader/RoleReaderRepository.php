@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Role\Reader;
 
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;

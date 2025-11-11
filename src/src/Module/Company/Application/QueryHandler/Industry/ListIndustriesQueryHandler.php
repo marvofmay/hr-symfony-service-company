@@ -6,11 +6,11 @@ namespace App\Module\Company\Application\QueryHandler\Industry;
 
 use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Application\Event\Industry\IndustryListedEvent;
 use App\Module\Company\Application\Query\Industry\ListIndustriesQuery;
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Enum\Industry\IndustryEntityFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

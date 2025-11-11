@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Module\System\Notification\Application\Transformer;
 
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Common\Domain\Interface\DataTransformerInterface;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\System\Notification\Application\QueryHandler\Template\ListNotificationTemplateSettingQueryHandler;
 use App\Module\System\Notification\Domain\Entity\NotificationTemplateSetting;
 use App\Module\System\Notification\Domain\Enum\NotificationTemplateSettingEntityFieldEnum;
@@ -21,8 +21,8 @@ class NotificationTemplateSettingDataTransformer implements DataTransformerInter
     public function transformToArray(NotificationTemplateSetting $notificationTemplateSetting): array
     {
         return [
-            NotificationTemplateSettingEntityFieldEnum::EVENT_NANE->value => $notificationTemplateSetting->getEventName(),
-            NotificationTemplateSettingEntityFieldEnum::CHANNEL_CODE->value => $notificationTemplateSetting->getChannelCode(),
+            NotificationTemplateSettingEntityFieldEnum::EVENT_NANE->value => $notificationTemplateSetting->getEvent()->getEventName(),
+            NotificationTemplateSettingEntityFieldEnum::CHANNEL_CODE->value => $notificationTemplateSetting->getChannel()->getChannelCode(),
             NotificationTemplateSettingEntityFieldEnum::TITLE->value => $notificationTemplateSetting->getTitle(),
             NotificationTemplateSettingEntityFieldEnum::CONTENT->value => $notificationTemplateSetting->getContent(),
             NotificationTemplateSettingEntityFieldEnum::IS_DEFAULT->value => $notificationTemplateSetting->isDefault(),

@@ -6,11 +6,11 @@ namespace App\Module\Company\Application\QueryHandler\ContractType;
 
 use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Application\Event\ContractType\ContractTypeListedEvent;
 use App\Module\Company\Application\Query\ContractType\ListContractTypesQuery;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

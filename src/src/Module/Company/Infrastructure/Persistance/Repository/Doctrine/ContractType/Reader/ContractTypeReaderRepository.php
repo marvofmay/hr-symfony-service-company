@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\ContractType\Reader;
 
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;

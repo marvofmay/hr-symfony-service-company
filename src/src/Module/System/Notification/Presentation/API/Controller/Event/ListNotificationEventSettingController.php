@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Module\System\Notification\Presentation\API\Controller\Channel;
+namespace App\Module\System\Notification\Presentation\API\Controller\Event;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use App\Module\System\Notification\Application\Query\Channel\ListNotificationChannelSettingQuery;
-use App\Module\System\Notification\Domain\DTO\Channels\ListNotificationChannelSettingQueryDTO;
+use App\Module\System\Notification\Application\Query\Event\ListNotificationEventSettingQuery;
+use App\Module\System\Notification\Domain\DTO\Event\ListNotificationEventSettingQueryDTO;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,7 +21,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class ListNotificationChannelSettingsController extends AbstractController
+final class ListNotificationEventSettingController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $eventBus,
@@ -30,13 +30,13 @@ final class ListNotificationChannelSettingsController extends AbstractController
     ) {
     }
 
-    #[Route('/api/settings/notification-channels', name: 'api.settings.notification-channels.list', methods: ['GET'])]
-    public function list(#[MapQueryString] ListNotificationChannelSettingQueryDTO $dto): Response
+    #[Route('/api/settings/notification-events', name: 'api.settings.notification-events.list', methods: ['GET'])]
+    public function list(#[MapQueryString] ListNotificationEventSettingQueryDTO $dto): Response
     {
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::LIST,
-                AccessEnum::NOTIFICATION_CHANNEL,
+                AccessEnum::NOTIFICATION_EVENT,
                 $this->messageService->get('accessDenied')
             );
 
@@ -48,10 +48,10 @@ final class ListNotificationChannelSettingsController extends AbstractController
         }
     }
 
-    private function dispatchQuery(ListNotificationChannelSettingQueryDTO $dto): array
+    private function dispatchQuery(ListNotificationEventSettingQueryDTO $dto): array
     {
         try {
-            $handledStamp = $this->queryBus->dispatch(new ListNotificationChannelSettingQuery($dto));
+            $handledStamp = $this->queryBus->dispatch(new ListNotificationEventSettingQuery($dto));
 
             return $handledStamp->last(HandledStamp::class)->getResult();
         } catch (HandlerFailedException $exception) {
@@ -68,7 +68,7 @@ final class ListNotificationChannelSettingsController extends AbstractController
     {
         $message = sprintf(
             '%s. %s',
-            $this->messageService->get('notification.channels.list.error', [], 'notifications'),
+            $this->messageService->get('notification.events.list.error', [], 'notifications'),
             $exception->getMessage()
         );
 

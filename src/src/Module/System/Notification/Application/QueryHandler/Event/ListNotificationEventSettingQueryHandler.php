@@ -6,7 +6,7 @@ namespace App\Module\System\Notification\Application\QueryHandler\Event;
 
 use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\System\Notification\Application\Event\Event\NotificationEventSettingsListedEvent;
 use App\Module\System\Notification\Application\Query\Event\ListNotificationEventSettingQuery;
 use App\Module\System\Notification\Domain\Entity\NotificationEventSetting;

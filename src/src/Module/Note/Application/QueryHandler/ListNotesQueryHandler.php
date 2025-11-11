@@ -6,7 +6,7 @@ namespace App\Module\Note\Application\QueryHandler;
 
 use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Note\Application\Event\NoteListedEvent;
 use App\Module\Note\Application\Query\ListNotesQuery;
 use App\Module\Note\Domain\Entity\Note;

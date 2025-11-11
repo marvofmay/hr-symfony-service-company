@@ -8,9 +8,9 @@ use App\Module\System\Notification\Application\Event\Template\NotificationTempla
 use App\Module\System\Notification\Domain\Enum\NotificationChannelSettingEntityFieldEnum;
 use App\Module\System\Notification\Domain\Enum\NotificationEventSettingEntityFieldEnum;
 use App\Module\System\Notification\Domain\Enum\NotificationTemplateSettingEntityFieldEnum;
-use App\Module\System\Notification\Domain\Factory\NotificationChannelFactory;
-use App\Module\System\Notification\Domain\Factory\NotificationEventFactory;
 use App\Module\System\Notification\Domain\Factory\NotificationTemplateFactory;
+use App\Module\System\Notification\Domain\Interface\Channel\NotificationChannelSettingReaderInterface;
+use App\Module\System\Notification\Domain\Interface\Event\NotificationEventSettingReaderInterface;
 use App\Module\System\Notification\Domain\Interface\Template\NotificationTemplateSettingReaderInterface;
 use App\Module\System\Notification\Domain\Service\Template\NotificationTemplateSettingCreator;
 use Psr\EventDispatcher\EventDispatcherInterface;
@@ -29,12 +29,12 @@ final class AddRecordToNotificationTemplateSettingTableCommand extends Command
     private const string INFO_NO_ADDED_MESSAGE = 'No new notification templates to add';
 
     public function __construct(
-        private readonly NotificationTemplateSettingReaderInterface $notificationTemplateSettingReader,
+        private readonly NotificationTemplateSettingReaderInterface $notificationTemplateSettingReaderRepository,
+        private readonly NotificationEventSettingReaderInterface $notificationEventSettingReaderRepository,
+        private readonly NotificationChannelSettingReaderInterface $notificationChannelSettingReaderRepository,
         private readonly NotificationTemplateSettingCreator $notificationTemplateSettingCreator,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly NotificationTemplateFactory $notificationTemplateFactory,
-        private readonly NotificationChannelFactory $notificationChannelFactory,
-        private readonly NotificationEventFactory $notificationEventFactory,
     ) {
         parent::__construct();
     }
@@ -57,21 +57,34 @@ final class AddRecordToNotificationTemplateSettingTableCommand extends Command
                 $setting->getChannelCode(),
                 $setting->isDefault() ? 'default' : 'custom'
             ),
-            $this->notificationTemplateSettingReader->getAll()->toArray()
+            $this->notificationTemplateSettingReaderRepository->getAll()->toArray()
         );
 
         $existingTemplateValues = array_flip($existingTemplateValues);
         $templateCodesToPersist = [];
 
-        $events = $this->notificationEventFactory->all();
-        $channels = $this->notificationChannelFactory->all();
+
+        $events = $this->notificationEventSettingReaderRepository->getAll();
+        $uniqueEvents = [];
+        foreach ($events as $event) {
+            $uniqueEvents[$event->getEventName()] = $event;
+        }
+        $uniqueEvents = array_values($uniqueEvents);
+
+        $channels = $this->notificationChannelSettingReaderRepository->getAll();
+        $uniqueChannels = [];
+        foreach ($channels as $channel) {
+            $uniqueChannels[$channel->getChannelCode()] = $channel;
+        }
+        $uniqueChannels = array_values($uniqueChannels);
+
         $templates = $this->notificationTemplateFactory->all();
 
-        foreach ($events as $event) {
-            foreach ($channels as $channel) {
+        foreach ($uniqueEvents as $event) {
+            foreach ($uniqueChannels as $channel) {
                 foreach ($templates as $template) {
                     $scope = $template->isDefault() ? 'default' : 'custom';
-                    $key = sprintf('%s|%s|%s', $event->getName(), $channel->getCode(), $scope);
+                    $key = sprintf('%s|%s|%s', $event->getEventName(), $channel->getChannelCode(), $scope);
 
                     if (isset($existingTemplateValues[$key])) {
                         continue;
@@ -87,8 +100,8 @@ final class AddRecordToNotificationTemplateSettingTableCommand extends Command
                     );
 
                     $this->eventDispatcher->dispatch(new NotificationTemplateSettingCreatedEvent([
-                        NotificationEventSettingEntityFieldEnum::EVENT_NAME->value => $event->getName(),
-                        NotificationChannelSettingEntityFieldEnum::CHANNEL_CODE->value => $channel->getCode(),
+                        NotificationEventSettingEntityFieldEnum::EVENT_NAME->value => $event->getEventName(),
+                        NotificationChannelSettingEntityFieldEnum::CHANNEL_CODE->value => $channel->getChannelCode(),
                         NotificationTemplateSettingEntityFieldEnum::TITLE->value => $template->getTitle(),
                         NotificationTemplateSettingEntityFieldEnum::CONTENT->value => $template->getContent(),
                         NotificationTemplateSettingEntityFieldEnum::IS_DEFAULT->value => $template->isDefault(),

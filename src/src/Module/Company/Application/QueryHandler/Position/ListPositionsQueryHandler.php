@@ -6,11 +6,11 @@ namespace App\Module\Company\Application\QueryHandler\Position;
 
 use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Application\Event\Position\PositionListedEvent;
 use App\Module\Company\Application\Query\Position\ListPositionsQuery;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

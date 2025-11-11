@@ -7,8 +7,6 @@ namespace App\Module\System\Notification\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\System\Notification\Domain\Interface\Channel\NotificationChannelInterface;
-use App\Module\System\Notification\Domain\Interface\Event\NotificationEventInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,11 +30,13 @@ class NotificationTemplateSetting
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: "string", length: 255)]
-    private string $eventName;
+    #[ORM\ManyToOne(targetEntity: NotificationEventSetting::class)]
+    #[ORM\JoinColumn(name: 'event_name', referencedColumnName: 'event_name', nullable: false, onDelete: 'CASCADE')]
+    private NotificationEventSetting $event;
 
-    #[ORM\Column(type: "string", length: 50)]
-    private string $channelCode;
+    #[ORM\ManyToOne(targetEntity: NotificationChannelSetting::class)]
+    #[ORM\JoinColumn(name: 'channel_code', referencedColumnName: 'channel_code', nullable: false, onDelete: 'CASCADE')]
+    private NotificationChannelSetting $channel;
 
     #[ORM\Column(type: "string", length: 255)]
     private string $title;
@@ -53,18 +53,17 @@ class NotificationTemplateSetting
     private function __construct() {}
 
     public static function create(
-        NotificationEventInterface $event,
-        NotificationChannelInterface $channel,
+        NotificationEventSetting $event,
+        NotificationChannelSetting $channel,
         string $title,
         string $content,
         bool $isDefault,
         bool $isActive
-    ): self
-    {
+    ): self {
         $self = new self();
         $self->uuid = Uuid::uuid4();
-        $self->eventName = $event->getName();
-        $self->channelCode = $channel->getCode();
+        $self->event = $event;
+        $self->channel = $channel;
         $self->title = $title;
         $self->content = $content;
         $self->isDefault = $isDefault;
@@ -78,14 +77,14 @@ class NotificationTemplateSetting
         return $this->uuid;
     }
 
-    public function getEventName(): string
+    public function getEvent(): NotificationEventSetting
     {
-        return $this->eventName;
+        return $this->event;
     }
 
-    public function getChannelCode(): string
+    public function getChannel(): NotificationChannelSetting
     {
-        return $this->channelCode;
+        return $this->channel;
     }
 
     public function getTitle(): string
@@ -105,5 +104,47 @@ class NotificationTemplateSetting
     public function isActive(): bool
     {
         return $this->isActive;
+    }
+
+    public function changeTitle(string $title): void
+    {
+        if (strtolower($this->title) === strtolower(trim($title))) {
+            return;
+        }
+
+        $this->title = $title;
+    }
+
+    public function changeContent(string $content): void
+    {
+        $this->content = $content;
+    }
+
+    public function markAsDefault(): void
+    {
+        $this->isDefault = true;
+    }
+
+    public function markAsCustom(): void
+    {
+        $this->isDefault = false;
+    }
+
+    public function activate(): void
+    {
+        if ($this->isActive) {
+            return;
+        }
+
+        $this->isActive = true;
+    }
+
+    public function deactivate(): void
+    {
+        if (!$this->isActive) {
+            return;
+        }
+
+        $this->isActive = false;
     }
 }

@@ -12,15 +12,15 @@ final readonly class UpdateNotificationTemplateSettingCommand implements Command
     public const string CHANNEL_CODE = 'channelCode';
     public const string TITLE = 'title';
     public const string CONTENT = 'content';
-    public const string IS_DEFAULT = 'isDefault';
-    public const string IS_ACTIVE = 'isActive';
+    public const string SEARCH_DEFAULT = 'searchDefault';
+    public const string MARK_AS_ACTIVE = 'markAsActive';
 
     public function __construct(
         public string $eventName,
         public string $channelCode,
         public string $title,
         public string $content,
-        public bool $isDefault = false,
-        public bool $isActive = false,
+        public bool $searchDefault = false,
+        public bool $markAsActive = false,
     ) {}
 }

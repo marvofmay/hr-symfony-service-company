@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Transformer\Role;
 
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Common\Domain\Interface\DataTransformerInterface;
 use App\Module\Company\Application\QueryHandler\Role\ListRolesQueryHandler;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
 use App\Module\Company\Domain\Enum\Role\RoleEntityRelationFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
 class RoleDataTransformer implements DataTransformerInterface

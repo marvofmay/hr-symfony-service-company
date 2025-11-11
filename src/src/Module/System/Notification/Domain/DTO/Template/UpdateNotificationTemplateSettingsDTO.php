@@ -22,6 +22,6 @@ class UpdateNotificationTemplateSettingsDTO
     #[Assert\Length(max: 500)]
     public string $content;
 
-    public bool $isDefault = false;
-    public bool $isActive = false;
+    public bool $searchDefault = false;
+    public bool $markAsActive = false;
 }

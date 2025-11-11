@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Position\Reader;
 
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;

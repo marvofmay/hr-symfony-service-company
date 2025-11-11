@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Transformer\Industry;
 
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Common\Domain\Interface\DataTransformerInterface;
 use App\Module\Company\Application\QueryHandler\Industry\ListIndustriesQueryHandler;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Enum\Industry\IndustryEntityFieldEnum;
 use App\Module\Company\Domain\Enum\Industry\IndustryEntityRelationFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
 class IndustryDataTransformer implements DataTransformerInterface

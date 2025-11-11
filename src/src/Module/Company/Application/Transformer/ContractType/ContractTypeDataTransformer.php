@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Transformer\ContractType;
 
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Common\Domain\Interface\DataTransformerInterface;
 use App\Module\Company\Application\QueryHandler\ContractType\ListContractTypesQueryHandler;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
 use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityRelationFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
 class ContractTypeDataTransformer implements DataTransformerInterface

@@ -6,11 +6,11 @@ namespace App\Module\Company\Application\QueryHandler\Role;
 
 use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
+use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Module\Company\Application\Event\Role\RoleListedEvent;
 use App\Module\Company\Application\Query\Role\ListRolesQuery;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
-use App\Module\Company\Domain\Enum\TimeStampableEntityFieldEnum;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

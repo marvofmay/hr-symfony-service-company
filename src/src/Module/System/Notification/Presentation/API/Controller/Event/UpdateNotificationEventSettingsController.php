@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace App\Module\System\Notification\Presentation\API\Controller\Channel;
+namespace App\Module\System\Notification\Presentation\API\Controller\Event;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use App\Module\System\Notification\Application\Command\Channel\UpdateNotificationChannelSettingsCommand;
-use App\Module\System\Notification\Domain\DTO\Channels\UpdateNotificationChannelSettingDTO;
+use App\Module\System\Notification\Application\Command\Event\UpdateNotificationEventSettingsCommand;
+use App\Module\System\Notification\Domain\DTO\Event\UpdateNotificationEventSettingDTO;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,7 +20,7 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class UpdateSettingsNotificationChannelsController extends AbstractController
+class UpdateNotificationEventSettingsController extends AbstractController
 {
     public function __construct(
         private readonly MessageBusInterface $eventBus,
@@ -29,13 +29,13 @@ class UpdateSettingsNotificationChannelsController extends AbstractController
     ) {
     }
 
-    #[Route('/api/settings/notification-channels', name: 'api.settings.notification-channels.update', methods: ['PUT'])]
-    public function create(#[MapRequestPayload] UpdateNotificationChannelSettingDTO $dto): JsonResponse
+    #[Route('/api/settings/notification-events', name: 'api.settings.notification-events.update', methods: ['PUT'])]
+    public function create(#[MapRequestPayload] UpdateNotificationEventSettingDTO $dto): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::SETTINGS,
-                AccessEnum::NOTIFICATION_CHANNEL,
+                AccessEnum::NOTIFICATION_EVENT,
                 $this->messageService->get('accessDenied')
             );
 
@@ -47,10 +47,10 @@ class UpdateSettingsNotificationChannelsController extends AbstractController
         }
     }
 
-    private function dispatchCommand(UpdateNotificationChannelSettingDTO $dto): void
+    private function dispatchCommand(UpdateNotificationEventSettingDTO $dto): void
     {
         try {
-            $this->commandBus->dispatch(new UpdateNotificationChannelSettingsCommand(channelCodes: $dto->channelCodes));
+            $this->commandBus->dispatch(new UpdateNotificationEventSettingsCommand(eventNames: $dto->eventNames));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
@@ -59,7 +59,7 @@ class UpdateSettingsNotificationChannelsController extends AbstractController
     private function successResponse(): JsonResponse
     {
         return new JsonResponse(
-            ['message' => $this->messageService->get('notification.channels.update.success', [], 'notifications')],
+            ['message' => $this->messageService->get('notification.events.update.success', [], 'notifications')],
             Response::HTTP_CREATED
         );
     }
@@ -68,7 +68,7 @@ class UpdateSettingsNotificationChannelsController extends AbstractController
     {
         $message = sprintf(
             '%s %s',
-            $this->messageService->get('notification.channels.update.error', [], 'notifications'),
+            $this->messageService->get('notification.events.update.error', [], 'notifications'),
             $exception->getMessage()
         );
 

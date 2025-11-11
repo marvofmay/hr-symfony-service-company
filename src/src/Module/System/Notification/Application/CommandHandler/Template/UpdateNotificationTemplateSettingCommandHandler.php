@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Module\System\Notification\Application\CommandHandler\Template;
 
 use App\Common\Domain\Abstract\CommandHandlerAbstract;
-use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\System\Notification\Application\Command\Template\UpdateNotificationTemplateSettingCommand;
 use App\Module\System\Notification\Application\Event\Template\NotificationTemplateSettingUpdatedEvent;
 use App\Module\System\Notification\Domain\Interface\Template\NotificationTemplateSettingReaderInterface;
@@ -20,19 +19,32 @@ final class UpdateNotificationTemplateSettingCommandHandler extends CommandHandl
         private readonly NotificationTemplateSettingUpdater $notificationTemplateSettingUpdater,
         private readonly NotificationTemplateSettingReaderInterface $notificationTemplateSettingReader,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly MessageService $messageService,
     ) {
     }
 
     public function __invoke(UpdateNotificationTemplateSettingCommand $command): void
     {
+        $notificationTemplateSetting = $this->notificationTemplateSettingReader->getByEventNameChannelCodeAndDefault(
+            $command->eventName,
+            $command->channelCode,
+            $command->searchDefault
+        );
+
+        $this->notificationTemplateSettingUpdater->update(
+            notificationTemplateSetting: $notificationTemplateSetting,
+            title: $command->title,
+            content: $command->content,
+            searchDefault: $command->searchDefault,
+            markAsActive: $command->markAsActive,
+        );
+
         $this->eventDispatcher->dispatch(new NotificationTemplateSettingUpdatedEvent([
             UpdateNotificationTemplateSettingCommand::EVENT_NAME => $command->eventName,
             UpdateNotificationTemplateSettingCommand::CHANNEL_CODE => $command->channelCode,
             UpdateNotificationTemplateSettingCommand::TITLE => $command->title,
             UpdateNotificationTemplateSettingCommand::CONTENT => $command->content,
-            UpdateNotificationTemplateSettingCommand::IS_DEFAULT => $command->isDefault,
-            UpdateNotificationTemplateSettingCommand::IS_ACTIVE => $command->isActive,
+            UpdateNotificationTemplateSettingCommand::SEARCH_DEFAULT => $command->searchDefault,
+            UpdateNotificationTemplateSettingCommand::MARK_AS_ACTIVE => $command->markAsActive,
         ]));
     }
 }

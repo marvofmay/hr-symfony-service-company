@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\System\Notification\Domain\Service\Template;
 
+use App\Module\System\Notification\Domain\Entity\NotificationChannelSetting;
+use App\Module\System\Notification\Domain\Entity\NotificationEventSetting;
 use App\Module\System\Notification\Domain\Entity\NotificationTemplateSetting;
-use App\Module\System\Notification\Domain\Interface\Channel\NotificationChannelInterface;
-use App\Module\System\Notification\Domain\Interface\Event\NotificationEventInterface;
 use App\Module\System\Notification\Domain\Interface\Template\NotificationTemplateSettingCreatorInterface;
 use App\Module\System\Notification\Domain\Interface\Template\NotificationTemplateSettingWriterInterface;
 
@@ -17,8 +17,8 @@ final readonly class NotificationTemplateSettingCreator implements NotificationT
     }
 
     public function create(
-        NotificationEventInterface $event,
-        NotificationChannelInterface $channel,
+        NotificationEventSetting $event,
+        NotificationChannelSetting $channel,
         string $title,
         string $content,
         bool $isDefault,
