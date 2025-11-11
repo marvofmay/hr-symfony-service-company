@@ -47,6 +47,9 @@ class NotificationTemplateSetting
     #[ORM\Column(type: "boolean", options: ["default" => false])]
     private bool $isDefault;
 
+    #[ORM\Column(type: "boolean", options: ["default" => false])]
+    private bool $isActive;
+
     private function __construct() {}
 
     public static function create(
@@ -54,7 +57,8 @@ class NotificationTemplateSetting
         NotificationChannelInterface $channel,
         string $title,
         string $content,
-        bool $isDefault
+        bool $isDefault,
+        bool $isActive
     ): self
     {
         $self = new self();
@@ -64,6 +68,7 @@ class NotificationTemplateSetting
         $self->title = $title;
         $self->content = $content;
         $self->isDefault = $isDefault;
+        $self->isActive = $isActive;
 
         return $self;
     }
@@ -96,5 +101,9 @@ class NotificationTemplateSetting
     public function isDefault(): bool
     {
         return $this->isDefault;
+    }
+    public function isActive(): bool
+    {
+        return $this->isActive;
     }
 }

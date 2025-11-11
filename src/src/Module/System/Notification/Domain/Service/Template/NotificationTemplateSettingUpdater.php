@@ -22,7 +22,8 @@ final readonly class NotificationTemplateSettingUpdater implements NotificationT
         NotificationChannelInterface $channel,
         string $title,
         string $content,
-        bool $isDefault
+        bool $isDefault,
+        bool $isActive
     ): void
     {
         //$notificationTemplateSetting->updateTitle($title);

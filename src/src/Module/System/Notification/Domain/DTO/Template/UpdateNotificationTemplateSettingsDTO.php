@@ -23,4 +23,5 @@ class UpdateNotificationTemplateSettingsDTO
     public string $content;
 
     public bool $isDefault = false;
+    public bool $isActive = false;
 }

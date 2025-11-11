@@ -14,6 +14,7 @@ interface NotificationTemplateSettingCreatorInterface
         NotificationChannelInterface $channel,
         string $title,
         string $content,
-        bool $isDefault
+        bool $isDefault,
+        bool $isActive,
     ): void;
 }

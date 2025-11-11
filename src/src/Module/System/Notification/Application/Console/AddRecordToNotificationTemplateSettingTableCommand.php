@@ -83,6 +83,7 @@ final class AddRecordToNotificationTemplateSettingTableCommand extends Command
                         $template->getTitle(),
                         $template->getContent(),
                         $template->isDefault(),
+                        $template->isDefault()
                     );
 
                     $this->eventDispatcher->dispatch(new NotificationTemplateSettingCreatedEvent([
@@ -91,6 +92,7 @@ final class AddRecordToNotificationTemplateSettingTableCommand extends Command
                         NotificationTemplateSettingEntityFieldEnum::TITLE->value => $template->getTitle(),
                         NotificationTemplateSettingEntityFieldEnum::CONTENT->value => $template->getContent(),
                         NotificationTemplateSettingEntityFieldEnum::IS_DEFAULT->value => $template->isDefault(),
+                        NotificationTemplateSettingEntityFieldEnum::IS_ACTIVE->value => $template->isDefault(),
                     ]));
 
                     $templateCodesToPersist[] = $key;

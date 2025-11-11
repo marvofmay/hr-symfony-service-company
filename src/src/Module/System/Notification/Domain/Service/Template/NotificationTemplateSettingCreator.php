@@ -16,9 +16,16 @@ final readonly class NotificationTemplateSettingCreator implements NotificationT
     {
     }
 
-    public function create(NotificationEventInterface $event, NotificationChannelInterface $channel, string $title, string $content, bool $isDefault): void
+    public function create(
+        NotificationEventInterface $event,
+        NotificationChannelInterface $channel,
+        string $title,
+        string $content,
+        bool $isDefault,
+        bool $isActive
+    ): void
     {
-        $notificationTemplateSetting = NotificationTemplateSetting::create($event, $channel, $title, $content, $isDefault);
+        $notificationTemplateSetting = NotificationTemplateSetting::create($event, $channel, $title, $content, $isDefault, $isActive);
         $this->notificationTemplateSettingWriter->save($notificationTemplateSetting);
     }
 }

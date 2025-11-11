@@ -57,6 +57,7 @@ final class ListNotificationTemplateSettingQueryHandler extends ListQueryHandler
             NotificationTemplateSettingEntityFieldEnum::TITLE->value,
             NotificationTemplateSettingEntityFieldEnum::CONTENT->value,
             NotificationTemplateSettingEntityFieldEnum::IS_DEFAULT->value,
+            NotificationTemplateSettingEntityFieldEnum::IS_ACTIVE->value,
             TimeStampableEntityFieldEnum::CREATED_AT->value,
             TimeStampableEntityFieldEnum::UPDATED_AT->value,
             TimeStampableEntityFieldEnum::UPDATED_AT->value,
@@ -71,6 +72,7 @@ final class ListNotificationTemplateSettingQueryHandler extends ListQueryHandler
             NotificationTemplateSettingEntityFieldEnum::TITLE->value,
             NotificationTemplateSettingEntityFieldEnum::CONTENT->value,
             NotificationTemplateSettingEntityFieldEnum::IS_DEFAULT->value,
+            NotificationTemplateSettingEntityFieldEnum::IS_ACTIVE->value,
         ];
     }
 

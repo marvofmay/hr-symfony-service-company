@@ -13,6 +13,7 @@ final readonly class UpdateNotificationTemplateSettingCommand implements Command
     public const string TITLE = 'title';
     public const string CONTENT = 'content';
     public const string IS_DEFAULT = 'isDefault';
+    public const string IS_ACTIVE = 'isActive';
 
     public function __construct(
         public string $eventName,
@@ -20,5 +21,6 @@ final readonly class UpdateNotificationTemplateSettingCommand implements Command
         public string $title,
         public string $content,
         public bool $isDefault = false,
+        public bool $isActive = false,
     ) {}
 }

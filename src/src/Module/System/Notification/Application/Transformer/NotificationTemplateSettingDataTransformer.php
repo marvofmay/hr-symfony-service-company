@@ -26,6 +26,7 @@ class NotificationTemplateSettingDataTransformer implements DataTransformerInter
             NotificationTemplateSettingEntityFieldEnum::TITLE->value => $notificationTemplateSetting->getTitle(),
             NotificationTemplateSettingEntityFieldEnum::CONTENT->value => $notificationTemplateSetting->getContent(),
             NotificationTemplateSettingEntityFieldEnum::IS_DEFAULT->value => $notificationTemplateSetting->isDefault(),
+            NotificationTemplateSettingEntityFieldEnum::IS_ACTIVE->value => $notificationTemplateSetting->isActive(),
             TimeStampableEntityFieldEnum::CREATED_AT->value => $notificationTemplateSetting->createdAt->format('Y-m-d H:i:s'),
             TimeStampableEntityFieldEnum::UPDATED_AT->value => $notificationTemplateSetting->updatedAt?->format('Y-m-d H:i:s'),
             TimeStampableEntityFieldEnum::DELETED_AT->value => $notificationTemplateSetting->deletedAt?->format('Y-m-d H:i:s'),

@@ -12,4 +12,5 @@ enum NotificationTemplateSettingEntityFieldEnum: string
     case TITLE = 'title';
     case CONTENT = 'content';
     case IS_DEFAULT = 'isDefault';
+    case IS_ACTIVE = 'isActive';
 }

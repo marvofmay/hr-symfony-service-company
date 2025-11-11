@@ -32,6 +32,7 @@ final class UpdateNotificationTemplateSettingCommandHandler extends CommandHandl
             UpdateNotificationTemplateSettingCommand::TITLE => $command->title,
             UpdateNotificationTemplateSettingCommand::CONTENT => $command->content,
             UpdateNotificationTemplateSettingCommand::IS_DEFAULT => $command->isDefault,
+            UpdateNotificationTemplateSettingCommand::IS_ACTIVE => $command->isActive,
         ]));
     }
 }
