@@ -9,11 +9,12 @@ use App\Module\System\Application\Command\Import\CreateImportCommand;
 use App\Module\System\Domain\Entity\File;
 use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-readonly class CreateImportAction
+final readonly class CreateImportAction
 {
-    public function __construct(private MessageBusInterface $commandBus)
+    public function __construct(#[Autowire(service: 'command.bus')] private MessageBusInterface $commandBus)
     {
     }
 

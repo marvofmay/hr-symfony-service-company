@@ -13,6 +13,13 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(name: 'app:initialize-system-default-data')]
 class InitializeSystemDefaultDataCommand extends Command
 {
+
+    //public function __construct(
+    //    #[TaggedIterator('app.command.initialize-system-default-data')] private readonly iterable $commands
+    //) {
+    //    parent::__construct();
+    //}
+
     protected function configure(): void
     {
         $this->setDescription('Executes all default initialization commands: modules, accesses, permissions, roles.');
@@ -27,7 +34,7 @@ class InitializeSystemDefaultDataCommand extends Command
             return Command::FAILURE;
         }
 
-        // ToDo:: refactor commands - use services and repositories instead hard coded query
+
         $commands = [
             'app:add-record-to-user-table',
             'app:add-record-to-module-table',
@@ -43,6 +50,21 @@ class InitializeSystemDefaultDataCommand extends Command
         ];
 
         $output->writeln('***********************************************************');
+
+        // ToDo:: refactor commands - use services and repositories instead hard coded query
+        //foreach ($this->commands as $command) {
+        //    $output->writeln('');
+        //    $output->writeln('--------------------------------------------------------------');
+        //    $output->writeln(sprintf('<info>Executing: %s</info>', $command->getName()));
+        //
+        //    $result = $command->run($input, $output);
+        //    if (Command::SUCCESS !== $result) {
+        //        $output->writeln(sprintf('<error>Error during %s</error>', $command->getName()));
+        //        return $result;
+        //    }
+        //    $output->writeln('--------------------------------------------------------------');
+        //}
+
         foreach ($commands as $commandName) {
             $output->writeln('--------------------------------------------------------------');
             $output->writeln("<info>Command execution: $commandName</info>");

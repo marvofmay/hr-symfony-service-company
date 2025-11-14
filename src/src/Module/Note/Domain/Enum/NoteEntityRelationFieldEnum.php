@@ -6,5 +6,5 @@ namespace App\Module\Note\Domain\Enum;
 
 enum NoteEntityRelationFieldEnum: string
 {
-    case EMPLOYEE = 'employee';
+    case USER = 'user';
 }

@@ -8,10 +8,6 @@ use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\Company\Domain\Enum\ContactTypeEnum;
-use App\Module\Note\Domain\Entity\Note;
-use App\Module\System\Domain\Entity\EventLog;
-use App\Module\System\Domain\Entity\File;
-use App\Module\System\Domain\Entity\Import;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -23,12 +19,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'employee')]
-#[ORM\Index(name: 'index_external_uuid', columns: ['external_uuid'])]
-#[ORM\Index(name: 'index_first_name', columns: ['first_name'])]
-#[ORM\Index(name: 'index_last_name', columns: ['last_name'])]
-#[ORM\Index(name: 'index_pesel', columns: ['pesel'])]
-#[ORM\Index(name: 'index_employment_from', columns: ['employment_from'])]
-#[ORM\Index(name: 'index_employment_to', columns: ['employment_to'])]
+#[ORM\Index(name: 'external_uuid', columns: ['external_uuid'])]
+#[ORM\Index(name: 'first_name', columns: ['first_name'])]
+#[ORM\Index(name: 'last_name', columns: ['last_name'])]
+#[ORM\Index(name: 'pesel', columns: ['pesel'])]
+#[ORM\Index(name: 'employment_from', columns: ['employment_from'])]
+#[ORM\Index(name: 'employment_to', columns: ['employment_to'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Employee
@@ -123,31 +119,15 @@ class Employee
     #[ORM\OneToOne(targetEntity: User::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
-    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    private Collection $notes;
-
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
     private Collection $contacts;
 
     #[ORM\OneToOne(targetEntity: Address::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
     private ?Address $address = null;
 
-    #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    private Collection $files;
-
-    #[ORM\OneToMany(targetEntity: Import::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    private Collection $imports;
-
-    #[ORM\OneToMany(targetEntity: EventLog::class, mappedBy: 'employee', cascade: ['persist', 'remove'])]
-    private Collection $eventLogs;
-
     public function __construct()
     {
-        $this->notes = new ArrayCollection();
         $this->contacts = new ArrayCollection();
-        $this->imports = new ArrayCollection();
-        $this->files = new ArrayCollection();
-        $this->eventLogs = new ArrayCollection();
     }
 
     public function getUUID(): UuidInterface
@@ -329,18 +309,5 @@ class Employee
     {
         $this->address = $address;
         $address->setEmployee($this);
-    }
-
-    public function getFiles(): Collection
-    {
-        return $this->files;
-    }
-
-    public function addFile(File $file): void
-    {
-        if (!$this->files->contains($file)) {
-            $this->files[] = $file;
-            $file->setEmployee($this);
-        }
     }
 }

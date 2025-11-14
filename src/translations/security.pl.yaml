@@ -16,4 +16,4 @@ userUUID:
 user:
   notFound: "Nie znaleziono zalogowanego użytkownika."
   logout:
-    alreadyExists: "Użytkownik już się wylogował."
+    alreadyExists: "Użytkownik już się wylogował :("

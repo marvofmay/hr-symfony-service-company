@@ -61,7 +61,6 @@ abstract class FunctionalTestBase extends WebTestCase
         $data = json_decode($response->getContent(), true);
 
         $token = $data['token'] ?? null;
-
         if (!$response->isSuccessful() || !$token) {
             throw new \RuntimeException('Nie udało się zalogować użytkownika testowego.');
         }

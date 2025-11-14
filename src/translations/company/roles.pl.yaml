@@ -1,66 +1,66 @@
 role:
   uuid:
-    notFound: "Rola o podanym UUID nie istnieje"
+    notFound: "Rola o podanym UUID nie istnieje."
     notExists: "Rola o podanym UUID nie istnieje :uuid"
-    required: "Wymagane UUID roli"
+    required: "Wymagane UUID roli."
   name:
-    alreadyExists: "Rola o nazwie \":name\" już istnieje"
-    required: "Nazwa roli jest wymagana"
+    alreadyExists: "Rola o nazwie \":name\" już istnieje."
+    required: "Nazwa roli jest wymagana."
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    expectedUniqueRoleNameConstraint: "Oczekiwano unikalnej nazwy roli"
+    expectedUniqueRoleNameConstraint: "Oczekiwano unikalnej nazwy roli."
   add:
-    success: "Rola została pomyślnie dodana"
-    error: "Wystąpił błąd - rola nie została dodana"
+    success: "Rola została pomyślnie dodana."
+    error: "Wystąpił błąd - rola nie została dodana."
   update:
-    success: "Rola została pomyślnie zaktualizowana"
-    error: "Wystąpił błąd - rola nie została zaktualizowana"
+    success: "Rola została pomyślnie zaktualizowana."
+    error: "Wystąpił błąd - rola nie została zaktualizowana."
   delete:
-    success: "Rola została pomyślnie usunięta"
-    error: "Wystąpił błąd - rola nie została usunięta"
+    success: "Rola została pomyślnie usunięta."
+    error: "Wystąpił błąd - rola nie została usunięta."
     multiple:
-      success: "Role zostały pomyślnie usunięte"
-      error: "Wystąpił błąd - role nie zostały usunięte"
+      success: "Role zostały pomyślnie usunięte."
+      error: "Wystąpił błąd - role nie zostały usunięte."
   restore:
-    success: "Rola została pomyślnie przywrócona"
-    error: "Wystąpił błąd - rola nie została przywrócona"
+    success: "Rola została pomyślnie przywrócona."
+    error: "Wystąpił błąd - rola nie została przywrócona."
   deleted:
-    notExists: "Rola o uuid :uuid nie jest usunięta lub nie istnieje"
+    notExists: "Rola o uuid :uuid nie jest usunięta lub nie istnieje."
   import:
-    success: "Role zostały pomyślnie zaimportowane"
-    error: "Wystąpił błąd - role nie zostały zaimportowane"
+    success: "Role zostały pomyślnie zaimportowane."
+    error: "Wystąpił błąd - role nie zostały zaimportowane."
     file:
-      required: "Plik importu ról jest wymagany"
+      required: "Plik importu ról jest wymagany."
   assign:
     access:
-      success: "Dostępy dla roli zostały pomyślnie zaktualizowane"
-      error: "Wystąpił błąd - dostępy dla roli nie zostały zaktualizowane"
+      success: "Dostępy dla roli zostały pomyślnie zaktualizowane."
+      error: "Wystąpił błąd - dostępy dla roli nie zostały zaktualizowane."
     permission:
-      success: "Uprawnienia dla roli zostały pomyślnie zaktualizowane"
-      error: "Wystąpił błąd - uprawnienia dla roli nie zostały zaktualizowane"
+      success: "Uprawnienia dla roli zostały pomyślnie zaktualizowane."
+      error: "Wystąpił błąd - uprawnienia dla roli nie zostały zaktualizowane."
   pdf:
-    success: "Pomyślnie utworzono plik PDF"
-    error: "Błąd przy tworzeniu pdf"
+    success: "Pomyślnie utworzono plik PDF."
+    error: "Błąd przy tworzeniu pdf."
   access:
     notAssigned: "Dostępy o uuid :accesses nie są przypisane do roli :role"
   view:
-    error: "Wystapił błąd przy pobieraniu wybranej roli"
+    error: "Wystapił błąd przy pobieraniu wybranej roli."
   list:
-    error: "Wystapił błąd przy pobieraniu listy ról"
+    error: "Wystapił błąd przy pobieraniu listy ról."
   file:
-    fileNotExists: "Plik nie istnieje"
-    chooseFile: "Wskaż plik"
+    fileNotExists: "Plik nie istnieje."
+    chooseFile: "Wskaż plik."
   defaultData:
     name:
       super_admin: "Superadministrator"
       admin: "Administrator"
       employee: "Pracownik"
     description:
-      super_admin: "Pełny dostęp do systemu, zarządzanie wszystkimi modułami i użytkownikami"
-      admin: "Zarządza systemem i użytkownikami, ale z ograniczeniami względem superadministratora"
-      employee: "Użytkownik z podstawowym dostępem do funkcjonalności systemu"
+      super_admin: "Pełny dostęp do systemu, zarządzanie wszystkimi modułami i użytkownikami."
+      admin: "Zarządza systemem i użytkownikami, ale z ograniczeniami względem superadministratora."
+      employee: "Użytkownik z podstawowym dostępem do funkcjonalności systemu."
   accesses:
-    alreadyExists: "Dostęp: \":accesses\", dla roli \":name\" już istnieje"
+    alreadyExists: "Dostęp: \":accesses\", dla roli \":name\" już istnieje."
     permissions:
       alreadyExists: "Uprawnienia dla dostępu i roli już istnieją :items"
 

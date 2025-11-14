@@ -18,11 +18,11 @@ final readonly class PositionUpdater implements PositionUpdaterInterface
 
     public function update(Position $position, string $name, ?string $description = null, bool $active = false, array $departmentsUUIDs = []): void
     {
-        $position->setName($position->getName());
+        $position->rename($name);
         if (null !== $description) {
-            $position->setDescription($position->getDescription());
+            $position->updateDescription($description);
         }
-        $position->setActive($active);
+        $active ? $position->activate() : $position->deactivate();
 
         if ([] !== $departmentsUUIDs) {
             $this->positionDepartmentUpdater->updateDepartments($position, $departmentsUUIDs);

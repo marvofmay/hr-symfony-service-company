@@ -20,20 +20,21 @@ trait HandleEventStoreTrait
     private readonly Security $security;
     private readonly SerializerInterface $serializer;
     private readonly EventDispatcherInterface $eventDispatcher;
-    private readonly MessageBusInterface $eventBus;
+    #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus;
 
     private function handleEvent(object $event, string $aggregateClass): void
     {
-        $employeeUUID = $this->security->getUser()->getEmployee()?->getUUID();
+        $user = $this->security->getUser();
+        $userUUID = $user->getUuid();
         $serializedEvent = $this->serializer->serialize($event, 'json');
 
         $message = sprintf(
-            'uuid: %s, eventClass: %s, aggregateClass: %s, data: %s, employeeUUID: %s',
+            'uuid: %s, eventClass: %s, aggregateClass: %s, data: %s, userUUID: %s',
             $event->uuid->toString(),
             $event::class,
             $aggregateClass,
             $serializedEvent,
-            $employeeUUID
+            $userUUID
         );
 
         $this->eventStoreCreator->create(
@@ -42,7 +43,7 @@ trait HandleEventStoreTrait
                 $event::class,
                 $aggregateClass,
                 $serializedEvent,
-                $employeeUUID
+                $user
             )
         );
 

@@ -7,12 +7,13 @@ namespace App\Module\System\Presentation\API\Action\File;
 use App\Common\Domain\Enum\FileKindEnum;
 use App\Module\System\Application\Query\File\GetFileByNamePathAndKindQuery;
 use App\Module\System\Domain\Entity\File;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 final class AskFileAction
 {
-    public function __construct(private MessageBusInterface $queryBus)
+    public function __construct(#[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus)
     {
     }
 

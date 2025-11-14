@@ -12,6 +12,7 @@ use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Interface\Email\EmailReaderInterface;
 use App\Module\System\Domain\Interface\Email\EmailWriterInterface;
 use Psr\Log\LogLevel;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -22,8 +23,8 @@ final readonly class SendEmailCommandHandler
         private EmailWriterInterface $emailWriterRepository,
         private EmailReaderInterface $emailReaderRepository,
         private EmailSenderInterface $emailSender,
-        private MessageBusInterface $eventBus,
         private MessageService $messageService,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
     ) {}
 
     public function __invoke(SendEmailCommand $command): void

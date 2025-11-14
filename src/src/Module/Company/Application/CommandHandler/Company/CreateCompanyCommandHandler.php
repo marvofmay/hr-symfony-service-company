@@ -36,7 +36,7 @@ final class CreateCompanyCommandHandler extends CommandHandlerAbstract
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.company.create.validator')] protected iterable $validators,
     ) {
     }

@@ -16,6 +16,7 @@ use Ramsey\Uuid\Uuid;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
 final readonly class ImportCompaniesCommandHandler
@@ -26,6 +27,7 @@ final readonly class ImportCompaniesCommandHandler
         private Security $security,
         private SerializerInterface $serializer,
         private ImporterFactory $importerFactory,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -38,15 +40,17 @@ final readonly class ImportCompaniesCommandHandler
 
         $preparedRows = $importer->run($import);
 
-        $multiEvent = new CompanyImportedEvent($preparedRows);
+        $multiEvent = new CompanyImportedEvent($preparedRows, $command->importUUID);
         $this->eventStoreCreator->create(
             new EventStore(
                 Uuid::uuid4()->toString(),
                 $multiEvent::class,
                 CompanyAggregate::class,
                 $this->serializer->serialize($multiEvent, 'json'),
-                $this->security->getUser()?->getEmployee()?->getUUID(),
+                $this->security->getUser(),
             )
         );
+
+        $this->eventDispatcher->dispatch($multiEvent);
     }
 }

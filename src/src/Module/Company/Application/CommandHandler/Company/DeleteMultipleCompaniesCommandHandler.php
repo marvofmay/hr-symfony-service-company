@@ -30,7 +30,7 @@ final class DeleteMultipleCompaniesCommandHandler extends CommandHandlerAbstract
         private readonly EventStoreCreator $eventStoreCreator,
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.company.delete_multiple.validator')] protected iterable $validators,
     ) {
     }

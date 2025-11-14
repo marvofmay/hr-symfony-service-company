@@ -11,4 +11,5 @@ interface NotificationTemplateSettingReaderInterface
 {
     public function getAll(): Collection;
     public function getByEventNameChannelCodeAndDefault(string $eventName, string $channelCode, bool $searchDefault): ?NotificationTemplateSetting;
+    public function getActiveByEventName(string $eventName): Collection;
 }

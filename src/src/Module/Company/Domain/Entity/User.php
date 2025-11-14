@@ -6,6 +6,12 @@ namespace App\Module\Company\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
+use App\Module\Note\Domain\Entity\Note;
+use App\Module\System\Domain\Entity\Email;
+use App\Module\System\Domain\Entity\EventLog;
+use App\Module\System\Domain\Entity\File;
+use App\Module\System\Domain\Entity\Import;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -63,8 +69,29 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     private ?Employee $employee = null;
 
+    #[ORM\OneToMany(targetEntity: EventLog::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private Collection $eventLogs;
+
+    #[ORM\OneToMany(targetEntity: File::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private Collection $files;
+
+    #[ORM\OneToMany(targetEntity: Import::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private Collection $imports;
+
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
+    private Collection $notes;
+
+    #[ORM\OneToMany(targetEntity: Email::class, mappedBy: 'sender')]
+    private Collection $sentEmails;
+
+
     public function __construct()
     {
+        $this->imports = new ArrayCollection();
+        $this->files = new ArrayCollection();
+        $this->eventLogs = new ArrayCollection();
+        $this->notes = new ArrayCollection();
+        $this->sentEmails = new ArrayCollection();
     }
 
     public static function create(string $email): self
@@ -99,7 +126,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     public function getRoles(): array
     {
         if (null === $this->employee) {
-            return ['Pracownik techniczny systemu - nie powiązany z pracownikiem firmy'];
+            return ['Pracownik techniczny systemu HRApp - nie powiązany z pracownikiem firmy'];
         }
 
         return [$this->employee->getRole()->getName()];
@@ -121,8 +148,6 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         $this->{self::COLUMN_PASSWORD} = $hashedPassword;
     }
 
-
-
     #[\Deprecated]
     public function eraseCredentials(): void
     {
@@ -143,6 +168,14 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         $this->employee = $employee;
         if ($employee->getUser() !== $this) {
             $employee->setUser($this);
+        }
+    }
+
+    public function addFile(File $file): void
+    {
+        if (!$this->files->contains($file)) {
+            $this->files[] = $file;
+            $file->setUser($this);
         }
     }
 }

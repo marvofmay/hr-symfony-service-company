@@ -25,10 +25,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AutoconfigureTag('app.importer')]
+#[AutoconfigureTag(name: 'app.importer')]
 final class ImportCompaniesFromXLSX extends XLSXIterator
 {
-    private array $errorMessages = [];
 
     public function __construct(
         private readonly TranslatorInterface $translator,
@@ -39,7 +38,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         private readonly UpdateImportAction $updateImportAction,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly MessageService $messageService,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         private readonly ImportCompaniesReferenceLoader $importCompaniesReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         #[AutowireIterator(tag: 'app.company.import.validator')] private readonly iterable $importCompaniesValidators,
@@ -59,7 +58,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         $companies = $this->importCompaniesReferenceLoader->companies;
         $emailsNIPs = $this->importCompaniesReferenceLoader->emailsNIPs;
 
-        $this->errorMessages = [];
+        $errorMessages = [];
         foreach ($this->importCompaniesValidators as $validator) {
             $error = $validator->validate(
                 $row,
@@ -70,11 +69,11 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
                 ]
             );
             if (null !== $error) {
-                $this->errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
+                $errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
             }
         }
 
-        return $this->errorMessages;
+        return $errorMessages;
     }
 
     private function resolveParentUUID(array $row, array $nipMap): ?CompanyUUID

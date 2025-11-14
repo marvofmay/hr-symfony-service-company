@@ -11,5 +11,5 @@ class NotesQueryDTO extends QueryDTOAbstract
     public ?string $title = null;
     public ?string $content = null;
     public ?string $priority = null;
-    public ?string $employee = null;
+    public ?string $user = null;
 }

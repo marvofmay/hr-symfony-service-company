@@ -7,7 +7,7 @@ namespace App\Module\Note\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Entity\User;
 use App\Module\Note\Domain\Enum\NoteEntityFieldEnum;
 use App\Module\Note\Domain\Enum\NoteEntityRelationFieldEnum;
 use App\Module\Note\Domain\Enum\NotePriorityEnum;
@@ -17,6 +17,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -37,9 +38,9 @@ class Note
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     public UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'notes')]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    private ?Employee $employee;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'notes')]
+    #[ORM\JoinColumn(name: 'user_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    private UserInterface $user;
 
     #[ORM\Column(type: Types::STRING, length: 100)]
     #[Assert\NotBlank]
@@ -51,14 +52,14 @@ class Note
     #[ORM\Column(type: Types::STRING, length: 20, enumType: NotePriorityEnum::class)]
     private NotePriorityEnum $priority;
 
-    public static function create(string $title, ?string $content = null, NotePriorityEnum $priority = NotePriorityEnum::LOW, ?Employee $employee = null): self
+    public static function create(UserInterface $user, string $title, ?string $content = null, NotePriorityEnum $priority = NotePriorityEnum::LOW): self
     {
         $self = new self();
         $self->{NoteEntityFieldEnum::UUID->value} = Uuid::uuid4();
         $self->{NoteEntityFieldEnum::TITLE->value} = $title;
         $self->{NoteEntityFieldEnum::CONTENT->value} = $content;
         $self->{NoteEntityFieldEnum::PRIORITY->value} = $priority;
-        $self->{NoteEntityRelationFieldEnum::EMPLOYEE->value} = $employee;
+        $self->{NoteEntityRelationFieldEnum::USER->value} = $user;
 
         return $self;
     }
@@ -68,9 +69,9 @@ class Note
         return $this->{NoteEntityFieldEnum::UUID->value};
     }
 
-    public function getEmployee(): ?Employee
+    public function getUser(): UserInterface
     {
-        return $this->{NoteEntityRelationFieldEnum::EMPLOYEE->value};
+        return $this->{NoteEntityRelationFieldEnum::USER->value};
     }
 
     public function getTitle(): string

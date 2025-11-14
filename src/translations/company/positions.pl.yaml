@@ -1,39 +1,39 @@
 position:
   uuid:
-    notFound: "Stanowisko o podanym UUID nie istnieje"
+    notFound: "Stanowisko o podanym UUID nie istnieje."
     notExists: "Stanowisko o podanym UUID nie istnieje :uuid"
   name:
-    alreadyExists: "Stanowisko o nazwie \":name\" już istnieje"
-    required: "Nazwa stanowiska jest wymagana"
+    alreadyExists: "Stanowisko o nazwie \":name\" już istnieje."
+    required: "Nazwa stanowiska jest wymagana."
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    expectedUniquePositionNameConstraint: "Oczekiwano unikalnej nazwy stanowiska"
+    expectedUniquePositionNameConstraint: "Oczekiwano unikalnej nazwy stanowiska."
   add:
-    success: "Stanowisko zostało pomyślnie dodane"
-    error: "Wystąpił błąd - stanowisko nie zostało dodane"
+    success: "Stanowisko zostało pomyślnie dodane."
+    error: "Wystąpił błąd - stanowisko nie zostało dodane."
   update:
-    success: "Stanowisko zostało pomyślnie zaktualizowane"
-    error: "Wystąpił błąd - stanowisko nie zostało zaktualizowane"
+    success: "Stanowisko zostało pomyślnie zaktualizowane."
+    error: "Wystąpił błąd - stanowisko nie zostało zaktualizowane."
   delete:
-    success: "Stanowisko zostało pomyślnie usunięte"
-    error: "Wystąpił błąd - stanowisko nie zostało usunięte"
+    success: "Stanowisko zostało pomyślnie usunięte."
+    error: "Wystąpił błąd - stanowisko nie zostało usunięte."
     multiple:
-      success: "Stanowiska zostały pomyślnie usunięte"
-      error: "Wystąpił błąd - stanowiska nie zostały usunięte"
+      success: "Stanowiska zostały pomyślnie usunięte."
+      error: "Wystąpił błąd - stanowiska nie zostały usunięte."
   restore:
-    success: "Stanowisko zostało pomyślnie przywrócone"
-    error: "Wystąpił błąd - stanowisko nie zostało przywrócone"
+    success: "Stanowisko zostało pomyślnie przywrócone."
+    error: "Wystąpił błąd - stanowisko nie zostało przywrócone."
   import:
-    success: "Stanowiska zostały pomyślnie zaimportowane"
-    error: "Wystąpił błąd - stanowiska nie zostały zaimportowane"
+    success: "Stanowiska zostały pomyślnie zaimportowane."
+    error: "Wystąpił błąd - stanowiska nie zostały zaimportowane."
     file:
-      required: "Plik importu stanowisk jest wymagany"
+      required: "Plik importu stanowisk jest wymagany."
   view:
-    error: "Wystapił błąd przy pobieraniu wybranego stanowiska"
+    error: "Wystapił błąd przy pobieraniu wybranego stanowiska."
   list:
-    error: "Wystapił błąd przy pobieraniu listy stanowisk"
+    error: "Wystapił błąd przy pobieraniu listy stanowisk."
   deleted:
-    notExists: "Stanowisko o uuid :uuid nie jest usunięte lub nie istnieje"
+    notExists: "Stanowisko o uuid :uuid nie jest usunięte lub nie istnieje."
   defaultData:
     name:
       web_apps_director: "Dyrektor ds. aplikacji webowych"
@@ -60,4 +60,4 @@ position:
       graphic_designer: "Projektuje materiały graficzne i interfejsy."
       customer_support_agent: "Pomaga klientom, odpowiada na pytania i rozwiązuje problemy."
   departments:
-    alreadyExists: "Stanowisko o nazwie \":name\" już jest przypisane do departamentu: \":departments\""
+    alreadyExists: "Stanowisko o nazwie \":name\" już jest przypisane do departamentu: \":departments\"."

@@ -13,6 +13,7 @@ use App\Module\System\Notification\Application\Query\Template\ListNotificationTe
 use App\Module\System\Notification\Domain\DTO\Template\ListNotificationTemplateSettingQueryDTO;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
@@ -24,8 +25,8 @@ use Symfony\Component\Routing\Attribute\Route;
 final class ListNotificationTemplateSettingController extends AbstractController
 {
     public function __construct(
-        private readonly MessageBusInterface $eventBus,
-        private readonly MessageBusInterface $queryBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
     ) {
     }

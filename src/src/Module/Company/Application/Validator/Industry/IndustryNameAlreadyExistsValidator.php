@@ -33,7 +33,8 @@ final readonly class IndustryNameAlreadyExistsValidator implements ValidatorInte
 
         $name = $data->name;
         $industryUUID = $data->industryUUID ?? null;
-        if ($this->industryReaderRepository->isIndustryNameAlreadyExists($name, $industryUUID)) {
+        $industry = $this->industryReaderRepository->isIndustryNameAlreadyExists($name, $industryUUID);
+        if ($industry) {
             throw new \Exception($this->translator->trans('industry.name.alreadyExists', [':name' => $name], 'industries'), Response::HTTP_CONFLICT);
         }
     }

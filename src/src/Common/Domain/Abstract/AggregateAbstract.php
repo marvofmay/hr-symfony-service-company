@@ -35,7 +35,7 @@ class AggregateAbstract
                     $event::class,
                     $aggregateClass,
                     $this->serializer->serialize($event, 'json'),
-                    $this->security->getUser()?->getEmployee()?->getUUID(),
+                    $this->security->getUser(),
                 )
             );
 

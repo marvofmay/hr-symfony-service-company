@@ -35,7 +35,7 @@ final class UpdateDepartmentCommandHandler extends CommandHandlerAbstract
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.department.update.validator')] protected iterable $validators,
     ) {
     }

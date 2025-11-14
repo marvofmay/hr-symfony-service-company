@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Interface\EventLog;
 
-use App\Module\Company\Domain\Entity\Employee;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 interface EventLogCreatorInterface
 {
-    public function create(string $eventClass, string $entityClass, string $jsonData, ?Employee $employee): void;
+    public function create(string $eventClass, string $entityClass, string $jsonData, ?UserInterface $user): void;
 }

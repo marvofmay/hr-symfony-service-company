@@ -34,7 +34,7 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(Industry::ALIAS)
             ->from(Industry::class, Industry::ALIAS)
-            ->where(Industry::ALIAS.'.'.IndustryEntityFieldEnum::UUID->value.' IN (:uuids)')
+            ->where(Industry::ALIAS . '.' . IndustryEntityFieldEnum::UUID->value . ' IN (:uuids)')
             ->setParameter('uuids', $selectedUUID);
 
         $industries = $qb->getQuery()->getResult();
@@ -47,11 +47,11 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select('i')
             ->from(Industry::class, 'i')
-            ->where('i.'.IndustryEntityFieldEnum::NAME->value.' = :name')
+            ->where('i.' . IndustryEntityFieldEnum::NAME->value . ' = :name')
             ->setParameter('name', $name);
 
         if (null !== $uuid) {
-            $qb->andWhere('i.'.IndustryEntityFieldEnum::UUID->value.' != :uuid')
+            $qb->andWhere('i.' . IndustryEntityFieldEnum::UUID->value . ' != :uuid')
                 ->setParameter('uuid', $uuid);
         }
 
@@ -75,8 +75,8 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
 
         try {
             return $this->createQueryBuilder(Industry::ALIAS)
-                ->where(Industry::ALIAS.'.'.IndustryEntityFieldEnum::UUID->value.' = :uuid')
-                ->andWhere(Industry::ALIAS.'.'.TimeStampableEntityFieldEnum::DELETED_AT->value.' IS NOT NULL')
+                ->where(Industry::ALIAS . '.' . IndustryEntityFieldEnum::UUID->value . ' = :uuid')
+                ->andWhere(Industry::ALIAS . '.' . TimeStampableEntityFieldEnum::DELETED_AT->value . ' IS NOT NULL')
                 ->setParameter('uuid', $uuid)
                 ->getQuery()
                 ->getOneOrNullResult();
@@ -94,7 +94,7 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
         $qb = $this->getEntityManager()->createQueryBuilder()
             ->select(Industry::ALIAS)
             ->from(Industry::class, Industry::ALIAS)
-            ->where(Industry::ALIAS.'.'.IndustryEntityFieldEnum::NAME->value.' IN (:names)')
+            ->where(Industry::ALIAS . '.' . IndustryEntityFieldEnum::NAME->value . ' IN (:names)')
             ->setParameter('names', $names);
 
         $industries = $qb->getQuery()->getResult();

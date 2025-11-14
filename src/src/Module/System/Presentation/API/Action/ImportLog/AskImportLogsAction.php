@@ -7,12 +7,13 @@ namespace App\Module\System\Presentation\API\Action\ImportLog;
 use App\Module\System\Application\Query\ImportLog\GetImportLogsByImportQuery;
 use App\Module\System\Domain\Entity\Import;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
 final readonly class AskImportLogsAction
 {
-    public function __construct(private MessageBusInterface $queryBus)
+    public function __construct(#[Autowire(service: 'query.bus')] private MessageBusInterface $queryBus)
     {
     }
 

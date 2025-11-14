@@ -49,4 +49,19 @@ class NotificationTemplateSettingReaderRepository extends ServiceEntityRepositor
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function getActiveByEventName(string $eventName): Collection
+    {
+        return new ArrayCollection($this->createQueryBuilder(NotificationTemplateSetting::ALIAS)
+            ->join(NotificationTemplateSetting::ALIAS . '.' . NotificationTemplateSettingEntityRelationFieldEnum::EVENT->value, NotificationEventSetting::ALIAS)
+            ->join(NotificationTemplateSetting::ALIAS. '.' . NotificationTemplateSettingEntityRelationFieldEnum::CHANNEL->value, NotificationChannelSetting::ALIAS)
+            ->where(NotificationEventSetting::ALIAS. '.' . NotificationEventSettingEntityFieldEnum::EVENT_NAME->value . ' = :eventName')
+            ->andWhere(NotificationTemplateSetting::ALIAS. '.'. NotificationTemplateSettingEntityFieldEnum::IS_ACTIVE->value .' = :isActive')
+            ->setParameters(new ArrayCollection([
+                new Parameter('eventName', $eventName),
+                new Parameter('isActive', true),
+            ]))
+            ->getQuery()
+            ->getResult());
+    }
 }

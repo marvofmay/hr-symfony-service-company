@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Module\System\Domain\Service\EventLog;
 
-use App\Module\Company\Domain\Entity\Employee;
 use App\Module\System\Domain\Entity\EventLog;
 use App\Module\System\Domain\Interface\EventLog\EventLogCreatorInterface;
 use App\Module\System\Domain\Interface\EventLog\EventLogWriterInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 final readonly class EventLogCreator implements EventLogCreatorInterface
 {
@@ -15,8 +15,9 @@ final readonly class EventLogCreator implements EventLogCreatorInterface
     {
     }
 
-    public function create(string $eventClass, string $entityClass, string $jsonData, ?Employee $employee): void
+    public function create(string $eventClass, string $entityClass, string $jsonData, ?UserInterface $user): void
     {
-        $this->eventLogWriterRepository->saveEventLog(new EventLog($eventClass, $entityClass, $jsonData, $employee));
+        $eventLog = EventLog::create($eventClass, $entityClass, $jsonData, $user);
+        $this->eventLogWriterRepository->saveEventLog($eventLog);
     }
 }

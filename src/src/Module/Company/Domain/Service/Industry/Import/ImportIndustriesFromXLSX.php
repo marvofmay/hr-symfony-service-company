@@ -31,7 +31,7 @@ class ImportIndustriesFromXLSX extends XLSXIterator
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly UpdateImportAction $updateImportAction,
         private readonly MessageService $messageService,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         private readonly ImportIndustriesReferenceLoader $importIndustriesReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         private readonly ImportIndustriesPreparer $importIndustriesPreparer,

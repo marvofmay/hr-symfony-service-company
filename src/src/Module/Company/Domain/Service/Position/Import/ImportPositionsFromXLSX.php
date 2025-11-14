@@ -33,7 +33,7 @@ class ImportPositionsFromXLSX extends XLSXIterator
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly UpdateImportAction $updateImportAction,
         private readonly MessageService $messageService,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         private readonly ImportPositionsReferenceLoader $importPositionsReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         private readonly ImportPositionsPreparer $importPositionsPreparer,

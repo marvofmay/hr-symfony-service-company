@@ -25,12 +25,12 @@ final class CreateNoteCommandHandler extends CommandHandlerAbstract
 
     public function __invoke(CreateNoteCommand $command): void
     {
-        $employee = $this->security->getUser()->getEmployee();
+        $user = $this->security->getUser();
         $this->noteCreator->create(
+            user: $user,
             title: $command->title,
             content: $command->content,
             priority: $command->priority,
-            employee: $employee,
         );
 
         $this->eventDispatcher->dispatch(new NoteCreatedEvent([

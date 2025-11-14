@@ -18,8 +18,7 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
     public function __construct(
         protected EntityManagerInterface $entityManager,
         protected TransformerFactory $transformerFactory,
-    )
-    {
+    ) {
     }
 
     abstract public function getEntityClass(): string;
@@ -71,8 +70,8 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
         $items = $queryBuilder->getQuery()->getResult();
 
         return [
-            'total' => (int) $totalItems,
-            'page' => $query->getPage(),
+            'total' => (int)$totalItems,
+            'page'  => $query->getPage(),
             'limit' => $query->getLimit(),
             'items' => $this->transformIncludes($items, $query->getIncludes()),
         ];
@@ -95,26 +94,19 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
                 continue;
             }
 
-            // przypadek: filtr po relacji "employee"
-            if ($fieldName === 'employee') {
-                if ($fieldValue === 'null' || $fieldValue === null) {
-                    $queryBuilder->andWhere("$alias.employee IS NULL");
-                } else {
-                    if (!in_array('employee', $queryBuilder->getAllAliases(), true)) {
-                        $queryBuilder->leftJoin("$alias.employee", 'employee');
-                    }
-
+            if ($fieldName === 'user') {
+                if (!in_array('user', $queryBuilder->getAllAliases(), true)) {
+                    $queryBuilder->leftJoin("$alias.user", 'user');
                     $queryBuilder
-                        ->andWhere('employee.uuid = :employeeUuid')
-                        ->setParameter('employeeUuid', $fieldValue);
+                        ->andWhere('user.uuid = :userUUID')
+                        ->setParameter('userUUID', $fieldValue);
                 }
-
                 continue;
             }
 
             if (!is_null($fieldValue)) {
                 $queryBuilder
-                    ->andWhere($queryBuilder->expr()->like("$alias.$fieldName", ':'.$fieldName))
+                    ->andWhere($queryBuilder->expr()->like("$alias.$fieldName", ':' . $fieldName))
                     ->setParameter($fieldName, "%$fieldValue%");
             }
         }
@@ -145,7 +137,7 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
 
             if (!empty($orConditions)) {
                 $queryBuilder->andWhere(call_user_func_array([$expr, 'orX'], $orConditions))
-                    ->setParameter('searchPhrase', '%'.strtolower($filters['phrase']).'%');
+                    ->setParameter('searchPhrase', '%' . strtolower($filters['phrase']) . '%');
             }
         }
 
@@ -162,7 +154,7 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
     {
         $transformer = $this->getTransformer();
 
-        return array_map(fn ($item) => $this->transformItem($transformer, $item, $includes), $items);
+        return array_map(fn($item) => $this->transformItem($transformer, $item, $includes), $items);
     }
 
     public function transformItem($transformer, $item, array $includes): array

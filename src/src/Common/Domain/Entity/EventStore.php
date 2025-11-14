@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\Entity;
 
-use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'event_store')]
-#[ORM\Index(name: 'idx_aggregate_uuid', columns: ['aggregate_uuid'])]
-#[ORM\Index(name: 'idx_aggregate_type', columns: ['aggregate_type'])]
-#[ORM\Index(name: 'idx_employee_uuid', columns: ['employee_uuid'])]
+#[ORM\Index(name: 'aggregate_uuid', columns: ['aggregate_uuid'])]
+#[ORM\Index(name: 'aggregate_type', columns: ['aggregate_type'])]
+#[ORM\Index(name: 'user_uuid', columns: ['user_uuid'])]
 class EventStore
 {
     #[ORM\Id]
@@ -37,26 +38,26 @@ class EventStore
     #[ORM\Column(name: 'created_at', type: 'datetime_immutable')]
     private \DateTimeImmutable $createdAt;
 
-    #[ORM\ManyToOne(targetEntity: Employee::class)]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true)]
-    private ?Employee $employee = null;
+    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\JoinColumn(name: 'user_uuid', referencedColumnName: 'uuid', nullable: true)]
+    private UserInterface $user;
 
     public function __construct(
         string $aggregateUUID,
         string $aggregateType,
         string $aggregateClass,
         string $payload,
-        ?Employee $employee = null,
+        UserInterface $user,
     ) {
         $this->aggregateUUID = $aggregateUUID;
         $this->aggregateType = $aggregateType;
         $this->aggregateClass = $aggregateClass;
         $this->payload = $payload;
-        $this->employee = $employee;
+        $this->user = $user;
         $this->createdAt = new \DateTimeImmutable();
     }
 
-    public function getUuid(): UuidInterface
+    public function getUUID(): UuidInterface
     {
         return $this->uuid;
     }

@@ -44,7 +44,7 @@ final readonly class ImportEmployeesCommandHandler
                 $multiEvent::class,
                 EmployeeAggregate::class,
                 $this->serializer->serialize($multiEvent, 'json'),
-                $this->security->getUser()?->getEmployee()?->getUUID(),
+                $this->security->getUser(),
             )
         );
     }

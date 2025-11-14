@@ -13,7 +13,7 @@ final class EntityReferenceCache
 {
     private array $cache = [];
 
-    public function __construct(private readonly MessageBusInterface $eventBus)
+    public function __construct(#[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus)
     {
     }
 

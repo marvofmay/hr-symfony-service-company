@@ -12,4 +12,5 @@ return [
     Symfony\Bundle\TwigBundle\TwigBundle::class => ['all' => true],
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle::class => ['dev' => true, 'test' => true],
+    Symfony\Bundle\MercureBundle\MercureBundle::class => ['all' => true],
 ];

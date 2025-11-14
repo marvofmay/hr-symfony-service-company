@@ -1,0 +1,3 @@
+user:
+  uuid:
+    notExists: "Nie użytkownika o uuid :uuid"

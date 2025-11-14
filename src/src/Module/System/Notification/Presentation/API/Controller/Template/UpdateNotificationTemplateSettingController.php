@@ -13,6 +13,7 @@ use App\Module\System\Notification\Application\Command\Template\UpdateNotificati
 use App\Module\System\Notification\Domain\DTO\Template\UpdateNotificationTemplateSettingsDTO;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -23,8 +24,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class UpdateNotificationTemplateSettingController extends AbstractController
 {
     public function __construct(
-        private readonly MessageBusInterface $eventBus,
-        private readonly MessageBusInterface $commandBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
     ) {
     }

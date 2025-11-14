@@ -41,7 +41,7 @@ final class UpdateEmployeeCommandHandler extends CommandHandlerAbstract
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly EmployeeAggregateReaderInterface $employeeAggregateReaderRepository,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.employee.create.validator')] protected iterable $validators,
     ) {
     }

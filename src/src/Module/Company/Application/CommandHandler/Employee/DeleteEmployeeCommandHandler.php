@@ -27,7 +27,7 @@ final class DeleteEmployeeCommandHandler extends CommandHandlerAbstract
         private readonly EventStoreCreator $eventStoreCreator,
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.employee.delete.validator')] protected iterable $validators,
     ) {
     }

@@ -30,7 +30,7 @@ final class DeleteMultipleDepartmentsCommandHandler extends CommandHandlerAbstra
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.department.delete_multiple.validator')] protected iterable $validators,
     ) {
     }

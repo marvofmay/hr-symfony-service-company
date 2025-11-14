@@ -39,7 +39,7 @@ final class CreateEmployeeCommandHandler extends CommandHandlerAbstract
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.employee.create.validator')] protected iterable $validators,
     ) {
     }

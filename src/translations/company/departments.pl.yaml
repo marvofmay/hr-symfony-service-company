@@ -21,7 +21,7 @@ department:
     maximumLength: "Maksymalnie znaków :qty"
     required: "Kod wewnętrzny departamentu jest wymagany"
     alreadyExists: "Departament o podanym kodzie wewnętrznym \":internalCode\" już istnieje"
-    notExists: "Departament o podanym kodzie wewnętrznym :intenalCode nie istnieje lub został usunięty"
+    notExists: "Departament o podanym kodzie wewnętrznym :internalCode nie istnieje lub został usunięty"
   description:
     minimumLength: "Opis - minimalnie znaków :qty"
     maximumLength: "Opis - maksymalnie znaków :qty"

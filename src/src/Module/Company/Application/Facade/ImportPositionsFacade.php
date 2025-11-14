@@ -2,47 +2,47 @@
 
 namespace App\Module\Company\Application\Facade;
 
+use _PHPStan_6597ef616\Psr\Log\LogLevel;
+use App\Common\Application\Command\UploadFileCommand;
 use App\Common\Domain\DTO\UploadFileDTO;
 use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Enum\FileKindEnum;
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Service\UploadFile\UploadFile;
-use App\Common\Presentation\Action\UploadFileAction;
 use App\Module\Company\Application\Command\Position\ImportPositionsCommand;
+use App\Module\System\Application\Command\File\CreateFileCommand;
+use App\Module\System\Application\Command\Import\CreateImportCommand;
 use App\Module\System\Application\Event\LogFileEvent;
+use App\Module\System\Application\Query\File\GetFileByNamePathAndKindQuery;
+use App\Module\System\Application\Query\Import\GetImportByFileQuery;
+use App\Module\System\Application\Query\ImportLog\GetImportLogsByImportQuery;
 use App\Module\System\Application\Transformer\File\UploadFileErrorTransformer;
 use App\Module\System\Application\Transformer\ImportLog\ImportLogErrorTransformer;
+use App\Module\System\Domain\Entity\File;
 use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
-use App\Module\System\Presentation\API\Action\File\AskFileAction;
-use App\Module\System\Presentation\API\Action\File\CreateFileAction;
-use App\Module\System\Presentation\API\Action\Import\AskImportAction;
-use App\Module\System\Presentation\API\Action\Import\CreateImportAction;
-use App\Module\System\Presentation\API\Action\ImportLog\AskImportLogsAction;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final readonly class ImportPositionsFacade
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private UploadFileAction $uploadFileAction,
-        private CreateFileAction $createFileAction,
-        private AskFileAction $askFileAction,
-        private CreateImportAction $createImportAction,
-        private AskImportAction $askImportAction,
-        private AskImportLogsAction $askImportLogsAction,
         private ValidatorInterface $validator,
         private Security $security,
         private ParameterBagInterface $params,
         private MessageService $messageService,
-        private MessageBusInterface $eventBus,
-        private MessageBusInterface $commandBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
+        #[Autowire(service: 'command.bus')] private MessageBusInterface $commandBus,
+        #[Autowire(service: 'query.bus')] private MessageBusInterface $queryBus,
     ) {
     }
 
@@ -50,7 +50,7 @@ final readonly class ImportPositionsFacade
     {
         $this->entityManager->beginTransaction();
         try {
-            $employee = $this->security->getUser()->getEmployee();
+            $user = $this->security->getUser();
             $uploadFilePath = sprintf('%s/positions', $this->params->get('upload_file_path'));
             $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
 
@@ -67,13 +67,14 @@ final readonly class ImportPositionsFacade
                 ];
             }
 
-            $this->uploadFileAction->execute($uploadFileDTO);
-            $this->createFileAction->execute($fileName, $uploadFilePath, $employee);
-            $file = $this->askFileAction->ask($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX);
-            $this->createImportAction->execute(ImportKindEnum::IMPORT_POSITIONS, ImportStatusEnum::PENDING, $file, $employee);
-            $import = $this->askImportAction->ask($file);
-
             try {
+                $this->commandBus->dispatch(new UploadFileCommand(file: $uploadFileDTO->file, uploadFilePath: $uploadFileDTO->uploadFilePath, uploadFileName: $uploadFileDTO->uploadFileName));
+                $this->commandBus->dispatch(new CreateFileCommand(File::create(fileName: $fileName, filePath: $uploadFilePath, fileExtension: FileExtensionEnum::XLSX, fileKind: FileKindEnum::IMPORT_XLSX, user: $user)));
+                $handleStamp = $this->queryBus->dispatch(new GetFileByNamePathAndKindQuery(fileName: $fileName, filePath: $uploadFilePath, fileKind: FileKindEnum::IMPORT_XLSX));
+                $file = $handleStamp->last(HandledStamp::class)->getResult();
+                $this->commandBus->dispatch(new CreateImportCommand(kindEnum: ImportKindEnum::IMPORT_POSITIONS, statusEnum: ImportStatusEnum::PENDING, file: $file, user: $user));
+                $handleStamp = $this->queryBus->dispatch(new GetImportByFileQuery($file));
+                $import = $handleStamp->last(HandledStamp::class)->getResult();
                 $this->commandBus->dispatch(new ImportPositionsCommand($import->getUUID()->toString()));
             } catch (HandlerFailedException $exception) {
                 throw $exception->getPrevious();
@@ -90,7 +91,8 @@ final readonly class ImportPositionsFacade
                 ];
             }
 
-            $importLogs = $this->askImportLogsAction->ask($import);
+            $handleStamp = $this->queryBus->dispatch(new GetImportLogsByImportQuery($import));
+            $importLogs =  $handleStamp->last(HandledStamp::class)->getResult();
             $message = $this->messageService->get('position.import.error', [], 'positions');
 
             return [
@@ -100,8 +102,8 @@ final readonly class ImportPositionsFacade
             ];
         } catch (\Throwable $error) {
             $this->entityManager->rollback();
-            $message = sprintf('%s. %s', $this->messageService->get('position.import.error', [], 'positions'), $this->messageService->get($error->getMessage()));
-            $this->eventBus->dispatch(new LogFileEvent($message));
+            $message = sprintf('%s %s', $this->messageService->get('position.import.error', [], 'positions'), $this->messageService->get($error->getMessage()));
+            $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::IMPORT));
 
             return [
                 'success' => false,

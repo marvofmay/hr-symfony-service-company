@@ -29,10 +29,9 @@ final class GetNotePDFQueryHandler extends GetQueryHandlerAbstract
     {
         $this->validate($query);
 
-        $employee = $this->security->getUser()->getEmployee();
-
+        $user = $this->security->getUser();
         $noteUUID = $query->noteUUID;
-        $note = $this->noteReaderRepository->getNoteByUUIDAndEmployee($noteUUID, $employee);
+        $note = $this->noteReaderRepository->getNoteByUUIDAndUser($noteUUID, $user);
 
         $this->eventDispatcher->dispatch(new NotePDFCreatedEvent([
             GetNotePDFQuery::NOTE_UUID => $noteUUID,

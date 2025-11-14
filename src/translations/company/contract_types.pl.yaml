@@ -1,43 +1,44 @@
 contractType:
   uuid:
-    notFound: "Forma zatrudnienia o podanym UUID nie istnieje"
+    notFound: "Forma zatrudnienia o podanym UUID nie istnieje."
     notExists: "Forma zatrudnienia o podanym UUID nie istnieje :uuid"
   name:
-    alreadyExists: "Forma zatrudnienia o nazwie \":name\" już istnieje"
-    required: "Nazwa formy zatrudnienia jest wymagana"
+    alreadyExists: "Forma zatrudnienia o nazwie \":name\" już istnieje."
+    required: "Nazwa formy zatrudnienia jest wymagana."
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    expectedUniqueContractTypeNameConstraint: "Oczekiwano unikalnej nazwy formy zatrudnienia"
+    expectedUniqueContractTypeNameConstraint: "Oczekiwano unikalnej nazwy formy zatrudnienia."
   add:
-    success: "Forma zatrudnienia została pomyślnie dodana"
-    error: "Wystąpił błąd - forma zatrudnienia nie została dodana"
+    success: "Forma zatrudnienia została pomyślnie dodana."
+    error: "Wystąpił błąd - forma zatrudnienia nie została dodana."
   update:
-    success: "Forma zatrudnienia została pomyślnie zaktualizowana"
-    error: "Wystąpił błąd - forma zatrudnienia nie została zaktualizowana"
+    success: "Forma zatrudnienia została pomyślnie zaktualizowana."
+    error: "Wystąpił błąd - forma zatrudnienia nie została zaktualizowana."
   delete:
-    success: "Forma zatrudnienia została pomyślnie usunięta"
-    error: "Wystąpił błąd - forma zatrudnienia nie została usunięta"
+    success: "Forma zatrudnienia została pomyślnie usunięta."
+    error: "Wystąpił błąd - forma zatrudnienia nie została usunięta."
     multiple:
-      success: "Formy zatrudnienia zostały pomyślnie usunięte"
+      success: "Formy zatrudnienia zostały pomyślnie usunięte."
+      error: "Wystąpił błąd w trakcie usuwania form zatrudnienia."
   restore:
-    success: "Forma zatrudnienia została pomyślnie przywrócona"
-    error: "Wystąpił błąd - Forma zatrudnienia nie została przywrócona"
+    success: "Forma zatrudnienia została pomyślnie przywrócona."
+    error: "Wystąpił błąd - Forma zatrudnienia nie została przywrócona."
   deleted:
-    notExists: "Forma zatrudnienia o uuid :uuid nie jest usunięta lub nie istnieje"
+    notExists: "Forma zatrudnienia o uuid :uuid nie jest usunięta lub nie istnieje."
   import:
-    success: "Formy zatrudnienia zostały pomyślnie zaimportowane"
-    error: "Wystąpił błąd - formy zatrudnieia nie zostały zaimportowane"
+    success: "Formy zatrudnienia zostały pomyślnie zaimportowane."
+    error: "Wystąpił błąd - formy zatrudnieia nie zostały zaimportowane."
     file:
-      required: "Plik importu form zatrudnienia jest wymagany"
+      required: "Plik importu form zatrudnienia jest wymagany."
   view:
-    error: "Wystapił błąd przy pobieraniu wybranej formy zatrudnienia"
+    error: "Wystapił błąd przy pobieraniu wybranej formy zatrudnienia."
   list:
-    error: "Wystapił błąd przy pobieraniu listy form zatrudnienia"
+    error: "Wystapił błąd przy pobieraniu listy form zatrudnienia."
   file:
-    fileNotExists: "Plik nie istnieje"
+    fileNotExists: "Plik nie istnieje."
   defaultData:
     name:
-      employment: "Umowa o pracę"
+      employment: "Umowa o pracę."
       b2b: "Kontrakt B2B"
       internship: "Staż"
       contractor: "Umowa z wykonawcą"

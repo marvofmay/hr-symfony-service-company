@@ -6,7 +6,7 @@ namespace App\Module\System\Domain\Interface\EventLog;
 
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
-#[AutoconfigureTag('app.loggable.event')]
+#[AutoconfigureTag(name: 'app.loggable.event')]
 interface LoggableEventInterface
 {
     public function getEntityClass(): string;

@@ -22,8 +22,9 @@ final class RolesImporter implements RolesImporterInterface
     public function save(array $preparedRows, array $existingRoles): void
     {
         foreach ($preparedRows as $preparedRow) {
-            if (array_key_exists($preparedRow[RoleImportColumnEnum::ROLE_NAME->value], $existingRoles)) {
-                $role = $this->roleFactory->update(roleData: $preparedRow, existingRoles: $existingRoles);
+            $roleName = $preparedRow[RoleImportColumnEnum::ROLE_NAME->value];
+            if (array_key_exists($roleName, $existingRoles)) {
+                $role = $this->roleFactory->update(role: $existingRoles[$roleName], roleData: $preparedRow);
             } else {
                 $role = $this->roleFactory->create(roleData: $preparedRow);
             }

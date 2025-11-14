@@ -17,7 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportEmployeesController extends AbstractController
 {
-    public function __construct(private readonly ImportEmployeesFacade $importEmployeesFacade, private readonly MessageService $messageService)
+    public function __construct(
+        private readonly ImportEmployeesFacade $importEmployeesFacade,
+        private readonly MessageService $messageService
+    )
     {
     }
 

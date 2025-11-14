@@ -45,7 +45,7 @@ final readonly class ImportDepartmentsCommandHandler
                 $multiEvent::class,
                 DepartmentAggregate::class,
                 $this->serializer->serialize($multiEvent, 'json'),
-                $this->security->getUser()?->getEmployee()?->getUUID(),
+                $this->security->getUser()->getUUID(),
             )
         );
     }

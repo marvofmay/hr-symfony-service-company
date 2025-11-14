@@ -8,6 +8,7 @@ use App\Module\System\Application\Command\Email\SendEmailCommand;
 use App\Module\System\Domain\Entity\Email;
 use App\Module\System\Domain\Interface\Email\EmailWriterInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment as Twig;
 
 final readonly class EmailService
@@ -15,12 +16,12 @@ final readonly class EmailService
     public function __construct(
         private EmailWriterInterface $emailWriterRepository,
         private Twig $twig,
-        private MessageBusInterface $commandBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         private string $projectDir
     ) {}
 
     public function sendEmail(
-        ?string $sender,
+        UserInterface $sender,
         array $recipients,
         string $subject,
         string $message = '',
@@ -42,10 +43,10 @@ final readonly class EmailService
         $email = Email::create(
             subject: $subject,
             recipients: $recipients,
+            sender: $sender,
             message: $message,
             templateName: $templateName,
             templateBody: $templateBody,
-            sender: $sender,
         );
 
         if (null !== $templateBody) {

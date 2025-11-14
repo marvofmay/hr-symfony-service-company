@@ -12,6 +12,7 @@ use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -21,9 +22,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class RestorePositionController extends AbstractController
 {
     public function __construct(
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-        private readonly MessageBusInterface $commandBus,
     ) {
     }
 
@@ -65,7 +66,7 @@ class RestorePositionController extends AbstractController
     private function errorResponse(\Throwable $exception): JsonResponse
     {
         $message = sprintf(
-            '%s. %s',
+            '%s %s',
             $this->messageService->get('position.restore.error', [], 'positions'),
             $exception->getMessage()
         );

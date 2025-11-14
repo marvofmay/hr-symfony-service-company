@@ -10,7 +10,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class UploadFileAction
 {
-    public function __construct(private MessageBusInterface $commandBus)
+    public function __construct(#[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus)
     {
     }
 

@@ -58,7 +58,14 @@ final readonly class ExpiredJwtListener
         $expiresAt = isset($payload['exp']) ? new \DateTime()->setTimestamp((int)$payload['exp']) : null;
 
         if ($this->blacklist->isRevoked($tokenUUID)) {
-            throw new \Exception($this->messageService->get('user.logout.alreadyExists', [], 'security'), Response::HTTP_BAD_REQUEST);
+            $response = new JsonResponse([
+                'code' => Response::HTTP_BAD_REQUEST,
+                'message' => $this->messageService->get('user.logout.alreadyExists', [], 'security'),
+            ], Response::HTTP_BAD_REQUEST);
+
+            $event->setResponse($response);
+
+            return;
         }
 
         $this->blacklist->revoke(user: $user, tokenUUID: $tokenUUID, expiresAt: $expiresAt);

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Note\Presentation\API\Controller;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
-use App\Common\Domain\Service\MessageTranslator\MessageService;;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Note\Application\Command\UpdateNoteCommand;
 use App\Module\Note\Domain\DTO\UpdateDTO;
 use App\Module\System\Application\Event\LogFileEvent;
@@ -13,6 +13,7 @@ use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -23,8 +24,8 @@ use Symfony\Component\Routing\Annotation\Route;
 class UpdateNoteController extends AbstractController
 {
     public function __construct(
-        private readonly MessageBusInterface $eventBus,
-        private readonly MessageBusInterface $commandBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
     ) {
     }

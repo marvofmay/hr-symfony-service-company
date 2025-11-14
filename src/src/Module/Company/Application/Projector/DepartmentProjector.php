@@ -6,7 +6,6 @@ namespace App\Module\Company\Application\Projector;
 
 use App\Module\Company\Domain\Event\Department\DepartmentCreatedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentDeletedEvent;
-use App\Module\Company\Domain\Event\Department\DepartmentImportedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentRestoredEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentUpdatedEvent;
 use App\Module\Company\Domain\Service\Department\DepartmentCreator;
@@ -47,12 +46,5 @@ final readonly class DepartmentProjector
     public function onDepartmentRestored(DepartmentRestoredEvent $event): void
     {
         $this->departmentRestorer->restore($event);
-    }
-
-    #[AsEventListener(event: DepartmentImportedEvent::class)]
-    public function onDepartmentMultipleImported(DepartmentImportedEvent $event): void
-    {
-        // ToDo: save notification about DONE import - immediately
-        // ToDo: if notification for import departments is turned on by employee in employee settings
     }
 }

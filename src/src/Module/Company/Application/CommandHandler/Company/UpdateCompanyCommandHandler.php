@@ -7,6 +7,7 @@ namespace App\Module\Company\Application\CommandHandler\Company;
 use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
+use App\Common\Domain\Trait\HandleEventStoreTrait;
 use App\Module\Company\Application\Command\Company\UpdateCompanyCommand;
 use App\Module\Company\Domain\Aggregate\Company\CompanyAggregate;
 use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
@@ -29,6 +30,8 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[AsMessageHandler(bus: 'command.bus')]
 final class UpdateCompanyCommandHandler extends CommandHandlerAbstract
 {
+    use HandleEventStoreTrait;
+
     public function __construct(
         private readonly EventStoreCreator $eventStoreCreator,
         private readonly Security $security,
@@ -65,17 +68,7 @@ final class UpdateCompanyCommandHandler extends CommandHandlerAbstract
 
         $events = $companyAggregate->pullEvents();
         foreach ($events as $event) {
-            $this->eventStoreCreator->create(
-                new EventStore(
-                    $event->uuid->toString(),
-                    $event::class,
-                    CompanyAggregate::class,
-                    $this->serializer->serialize($event, 'json'),
-                    $this->security->getUser()->getEmployee()?->getUUID(),
-                )
-            );
-
-            $this->eventDispatcher->dispatch($event);
+            $this->handleEvent($event, CompanyAggregate::class);
         }
     }
 }

@@ -12,8 +12,8 @@ final class RoleFactory
     public function create(array $roleData): Role
     {
         return Role::create(
-            trim($roleData[RoleImportColumnEnum::ROLE_NAME->value] ?? ''),
-            trim($roleData[RoleImportColumnEnum::ROLE_DESCRIPTION->value] ?? null)
+            name: trim($roleData[RoleImportColumnEnum::ROLE_NAME->value] ?? ''),
+            description: trim($roleData[RoleImportColumnEnum::ROLE_DESCRIPTION->value] ?? null)
         );
     }
 

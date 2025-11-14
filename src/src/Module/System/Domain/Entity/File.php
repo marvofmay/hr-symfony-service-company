@@ -8,12 +8,13 @@ use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'file')]
@@ -36,8 +37,6 @@ class File
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 150)]
@@ -55,9 +54,9 @@ class File
     #[ORM\Column(type: Types::STRING, enumType: FileKindEnum::class)]
     private FileKindEnum $kind;
 
-    #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'files')]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    private ?Employee $employee = null;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'files')]
+    #[ORM\JoinColumn(name: 'user_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    private UserInterface $user;
 
     #[ORM\OneToOne(targetEntity: Import::class, mappedBy: 'file')]
     private ?Import $import = null;
@@ -65,6 +64,21 @@ class File
     #[ORM\ManyToOne(targetEntity: Email::class, inversedBy: 'attachments')]
     #[ORM\JoinColumn(name: 'email_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     private ?Email $email = null;
+
+    private function __construct() {}
+
+    public static function create(string $fileName, string $filePath, $fileExtension, $fileKind, UserInterface $user): self
+    {
+        $self = new self();
+        $self->uuid = Uuid::uuid4();
+        $self->fileName = $fileName;
+        $self->filePath = $filePath;
+        $self->extension = $fileExtension;
+        $self->kind = $fileKind;
+        $self->user = $user;
+
+        return $self;
+    }
 
     public function getUUID(): UuidInterface
     {
@@ -129,14 +143,14 @@ class File
         $this->kind = $kind;
     }
 
-    public function getEmployee(): ?Employee
+    public function getUser(): UserInterface
     {
-        return $this->employee;
+        return $this->user;
     }
 
-    public function setEmployee(?Employee $employee): void
+    public function setUser(UserInterface $user): void
     {
-        $this->employee = $employee;
+        $this->user = $user;
     }
 
     public function getImport(): ?Import

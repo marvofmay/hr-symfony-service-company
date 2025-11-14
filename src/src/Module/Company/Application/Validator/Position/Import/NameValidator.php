@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Enum\Position\PositionImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.position.import.validator')]
-class NameValidator implements ImportRowValidatorInterface
+final readonly class NameValidator implements ImportRowValidatorInterface
 {
     public const int MINIMUM_LENGTH = 3;
     public const int MAXIMUM_LENGTH = 100;

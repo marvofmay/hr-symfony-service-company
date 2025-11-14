@@ -38,9 +38,9 @@ final readonly class NoteExistsValidator implements ValidatorInterface
             return;
         }
 
-        $employee = $this->security->getUser()->getEmployee();
+        $user = $this->security->getUser();
         $noteUUID = $data->noteUUID;
-        $noteExists = $this->noteReaderRepository->isNoteWithUUIDAndEmployeeExists($noteUUID, $employee);
+        $noteExists = $this->noteReaderRepository->isNoteWithUUIDAndUserExists($noteUUID, $user);
         if (!$noteExists) {
             throw new \Exception($this->translator->trans('note.uuid.notExists', [':uuid' => $noteUUID], 'notes'), Response::HTTP_CONFLICT);
         }

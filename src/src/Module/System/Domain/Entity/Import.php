@@ -6,7 +6,7 @@ namespace App\Module\System\Domain\Entity;
 
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Entity\User;
 use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -16,9 +16,14 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'import')]
+#[ORM\Index(name: 'kind', columns: ['kind'])]
+#[ORM\Index(name: 'status', columns: ['status'])]
+#[ORM\Index(name: 'file_uuid', columns: ['file_uuid'])]
+#[ORM\Index(name: 'user_uuid', columns: ['user_uuid'])]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class Import
@@ -35,7 +40,7 @@ class Import
     public const COLUMN_CREATED_AT = 'createdAt';
     public const COLUMN_UPDATED_AT = 'updatedAt';
     public const COLUMN_DELETED_AT = 'deletedAt';
-    public const RELATION_EMPLOYEE = 'employe';
+    public const RELATION_USER = 'user';
     public const RELATION_FILE = 'file';
     public const RELATION_LOGS = 'logs';
 
@@ -45,9 +50,9 @@ class Import
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'imports')]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
-    private ?Employee $employee;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'imports')]
+    #[ORM\JoinColumn(name: 'user_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    private UserInterface $user;
 
     #[ORM\Column(type: 'string', enumType: ImportKindEnum::class)]
     private ImportKindEnum $kind;
@@ -71,9 +76,26 @@ class Import
     #[ORM\JoinColumn(name: 'file_uuid', referencedColumnName: 'uuid', unique: true, onDelete: 'CASCADE')]
     private File $file;
 
-    public function __construct()
+    private function __construct()
     {
         $this->importLogs = new ArrayCollection();
+    }
+
+    public static function create(ImportKindEnum $kindEnum, ImportStatusEnum $statusEnum, File $file, UserInterface $user): self
+    {
+        $self = new self();
+        $self->kind = $kindEnum;
+
+        match ($statusEnum) {
+            ImportStatusEnum::PENDING => $self->markAsPending(),
+            ImportStatusEnum::FAILED => $self->markAsFailed(),
+            ImportStatusEnum::DONE => $self->markAsDone(),
+        };
+
+        $self->user = $user;
+        $self->file = $file;
+
+        return $self;
     }
 
     public function getUUID(): UuidInterface
@@ -129,14 +151,14 @@ class Import
         $this->file = $file;
     }
 
-    public function getEmployee(): ?Employee
+    public function getUser(): UserInterface
     {
-        return $this->employee;
+        return $this->user;
     }
 
-    public function setEmployee(?Employee $employee): void
+    public function setUser(UserInterface $user): void
     {
-        $this->employee = $employee;
+        $this->user = $user;
     }
 
     public function getReport(): ?ImportReport

@@ -63,7 +63,7 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
             TimeStampableEntityFieldEnum::CREATED_AT->value,
             TimeStampableEntityFieldEnum::UPDATED_AT->value,
             TimeStampableEntityFieldEnum::DELETED_AT->value,
-            NoteEntityRelationFieldEnum::EMPLOYEE->value
+            NoteEntityRelationFieldEnum::USER->value
         ];
     }
 

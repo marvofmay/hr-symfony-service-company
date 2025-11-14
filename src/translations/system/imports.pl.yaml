@@ -1,0 +1,5 @@
+import:
+  status:
+    done: "ukończony"
+    pending: "w trakcie"
+    failed: "nie udany"

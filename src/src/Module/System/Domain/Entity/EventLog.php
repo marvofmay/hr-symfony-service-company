@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Entity;
 
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Entity\User;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -23,31 +24,37 @@ class EventLog
 
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
-    #[ORM\GeneratedValue(strategy: 'CUSTOM')]
-    #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    public UuidInterface $uuid;
+    private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
-    public string $event;
+    private string $event;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Assert\NotBlank]
-    public string $entity;
+    private string $entity;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    public ?string $data;
+    private ?string $data;
 
-    #[ORM\ManyToOne(targetEntity: Employee::class, inversedBy: 'eventLogs')]
-    #[ORM\JoinColumn(name: 'employee_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'eventLogs')]
+    #[ORM\JoinColumn(name: 'user_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     #[Assert\NotNull]
-    public ?Employee $employee;
+    private ?UserInterface $user;
 
-    public function __construct(string $event, string $entity, ?string $data = null, ?Employee $employee = null)
+    private function __construct()
     {
-        $this->event = $event;
-        $this->entity = $entity;
-        $this->data = $data;
-        $this->employee = $employee;
+    }
+
+    public static function create(string $event, string $entity, ?string $data = null, ?UserInterface $user): self
+    {
+        $self = new self();
+        $self->uuid = Uuid::uuid4();
+        $self->event = $event;
+        $self->entity = $entity;
+        $self->data = $data;
+        $self->user = $user;
+
+        return $self;
     }
 }

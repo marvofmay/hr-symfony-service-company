@@ -6,7 +6,6 @@ namespace App\Module\Company\Application\Projector;
 
 use App\Module\Company\Domain\Event\Employee\EmployeeCreatedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeDeletedEvent;
-use App\Module\Company\Domain\Event\Employee\EmployeeImportedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeRestoredEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
 use App\Module\Company\Domain\Service\Email\EmailService;
@@ -14,6 +13,7 @@ use App\Module\Company\Domain\Service\Employee\EmployeeCreator;
 use App\Module\Company\Domain\Service\Employee\EmployeeDeleter;
 use App\Module\Company\Domain\Service\Employee\EmployeeRestorer;
 use App\Module\Company\Domain\Service\Employee\EmployeeUpdater;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 final readonly class EmployeeProjector
@@ -24,6 +24,7 @@ final readonly class EmployeeProjector
         private EmployeeDeleter $employeeDeleter,
         private EmployeeRestorer $employeeRestorer,
         private EmailService $emailService,
+        private Security $security,
     ) {
     }
 
@@ -33,7 +34,7 @@ final readonly class EmployeeProjector
         $this->employeeCreator->create($event);
 
         $this->emailService->sendEmail(
-            sender: null,
+            sender: $this->security->getUser(),
             recipients: $event->emails->toArray(),
             subject: sprintf('Witaj w firmie %s!', $event->firstName->getValue()),
             message: '',
@@ -62,12 +63,5 @@ final readonly class EmployeeProjector
     public function onEmployeeRestored(EmployeeRestoredEvent $event): void
     {
         $this->employeeRestorer->restore($event);
-    }
-
-    #[AsEventListener(event: EmployeeImportedEvent::class)]
-    public function onEmployeeMultipleImported(EmployeeImportedEvent $event): void
-    {
-        // ToDo: save notification about DONE import - immediately
-        // ToDo: if notification for import employees is turned on by employee in employee settings
     }
 }

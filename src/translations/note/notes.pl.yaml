@@ -21,8 +21,8 @@ note:
     error: "Wystapił błąd przy pobieraniu wybranej notatki."
   list:
     error: "Wystapił błąd przy pobieraniu listy notatek."
-    employee:
+    user:
       forbidden: "Nie masz uprawnień do przeglądania notatek innych niż Twoje."
-      required: "Należy wskazać pracownika"
-  employeeUUID:
-    required: "Wymagny UUID pracownika."
+      required: "Należy wskazać użytkownika"
+  userUUID:
+    required: "Wymagny UUID użytkownika."

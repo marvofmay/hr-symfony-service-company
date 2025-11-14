@@ -32,14 +32,14 @@ final readonly class NotesExistsValidator implements ValidatorInterface
     public function validate(CommandInterface|QueryInterface $data): void
     {
         $uuids = $data->notesUUIDs ?? [];
-        $employee = $this->security->getUser()->getEmployee();
+        $user = $this->security->getUser();
 
         if (empty($uuids)) {
             return;
         }
 
         $foundNotes = $this->noteReaderRepository
-            ->getNotesByUUIDsAndEmployee($uuids, $employee)
+            ->getNotesByUUIDsAndUser($uuids, $user)
             ->map(fn ($note) => $note->getUUID())
             ->toArray();
 

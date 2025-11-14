@@ -8,6 +8,7 @@ use App\Module\System\Domain\Interface\EventLog\LoggableEventInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\Service\ServiceProviderInterface;
 
@@ -19,7 +20,7 @@ final readonly class GenericEventLoggerSubscriber
         private ServiceProviderInterface $loggers,
         protected Security $security,
         private EventLogCreatorInterface $eventLogCreator,
-        protected EventDispatcherInterface $dispatcher
+        protected EventDispatcherInterface $dispatcher,
     ) {
     }
 
@@ -31,10 +32,10 @@ final readonly class GenericEventLoggerSubscriber
     protected function log(string $eventClass, string $entityClass, mixed $data): void
     {
         $jsonData = $this->serializeData($data);
-        $employee = $this->getEmployee();
+        $user = $this->security->getUser();
 
-        $this->logToFile($eventClass, $entityClass, $jsonData, $employee);
-        $this->saveToDatabase($eventClass, $entityClass, $jsonData, $employee);
+        $this->logToFile($eventClass, $entityClass, $jsonData, $user);
+        $this->saveToDatabase($eventClass, $entityClass, $jsonData, $user);
     }
 
     private function serializeData(mixed $data): string
@@ -44,17 +45,7 @@ final readonly class GenericEventLoggerSubscriber
         ]);
     }
 
-    private function getEmployee(): ?object
-    {
-        $user = $this->security->getUser();
-        if (null === $user) {
-            return null;
-        }
-
-        return method_exists($user, 'getEmployee') ? $user->getEmployee() : null;
-    }
-
-    private function logToFile(string $eventClass, string $entityClass, string $jsonData, ?object $employee): void
+    private function logToFile(string $eventClass, string $entityClass, string $jsonData, ?UserInterface $user): void
     {
         $logger = $this->loggers->has(MonologChanelEnum::EVENT_LOG->value)
             ? $this->loggers->get(MonologChanelEnum::EVENT_LOG->value)
@@ -64,17 +55,17 @@ final readonly class GenericEventLoggerSubscriber
         $logger->info("event: $eventClass");
         $logger->info("entity: $entityClass");
         $logger->info("data: $jsonData");
-        $logger->info($employee ? "employeeUUID: " . $employee->getUUID() : 'userUUID: ' . $this->security->getUser()?->getUUID());
+        $logger->info('userUUID: ' . $user?->getUUID());
         $logger->info('---------------------------------------------');
     }
 
-    private function saveToDatabase(string $eventClass, string $entityClass, string $jsonData, ?object $employee): void
+    private function saveToDatabase(string $eventClass, string $entityClass, string $jsonData, ?UserInterface $user): void
     {
         $this->eventLogCreator->create(
             eventClass: $eventClass,
             entityClass: $entityClass,
             jsonData: $jsonData,
-            employee: $employee
+            user: $user
         );
     }
 }

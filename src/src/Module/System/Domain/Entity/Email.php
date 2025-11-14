@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\System\Domain\Entity;
 
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\Company\Domain\Entity\Employee;
+use App\Module\Company\Domain\Entity\User;
 use App\Module\System\Domain\Enum\Email\EmailStatusEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
@@ -30,9 +31,9 @@ class Email
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: Employee::class)]
+    #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'sender_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'SET NULL')]
-    private ?Employee $sender;
+    private UuidInterface $sender;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotBlank]
@@ -69,19 +70,19 @@ class Email
     private function __construct(
         string $subject,
         array $recipients,
+        UuidInterface $sender,
         string $message = '',
         ?string $templateName = null,
         ?string $renderedTemplate = null,
         ?array $context = null,
-        ?Employee $sender = null
     ) {
         $this->uuid = Uuid::uuid4();
         $this->subject = trim($subject);
         $this->recipients = $recipients;
+        $this->sender = $sender;
         $this->message = trim($message);
         $this->templateName = $templateName;
         $this->renderedTemplate = $renderedTemplate;
-        $this->sender = $sender;
         $this->attachments = new ArrayCollection();
         $this->status = EmailStatusEnum::PENDING;
         $this->context = $context;
@@ -91,11 +92,11 @@ class Email
     public static function create(
         string $subject,
         array $recipients,
+        UserInterface $sender,
         string $message = '',
         ?string $templateName = null,
         ?string $templateBody = null ,
         ?array $context = null,
-        ?Employee $sender = null
     ): self
     {
         if (empty($subject)) {
@@ -187,7 +188,7 @@ class Email
         return $this->recipients;
     }
 
-    public function getSender(): ?Employee
+    public function getSender(): UuidInterface
     {
         return $this->sender;
     }

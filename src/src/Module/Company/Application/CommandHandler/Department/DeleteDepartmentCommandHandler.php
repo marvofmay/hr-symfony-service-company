@@ -27,7 +27,7 @@ final class DeleteDepartmentCommandHandler extends CommandHandlerAbstract
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.department.delete.validator')] protected iterable $validators,
     ) {
     }

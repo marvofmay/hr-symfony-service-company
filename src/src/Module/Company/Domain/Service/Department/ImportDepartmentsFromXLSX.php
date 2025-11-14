@@ -23,7 +23,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AutoconfigureTag('app.importer')]
+#[AutoconfigureTag(name: 'app.importer')]
 final class ImportDepartmentsFromXLSX extends XLSXIterator
 {
 
@@ -36,7 +36,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         private readonly UpdateImportAction $updateImportAction,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly MessageService $messageService,
-        private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         private readonly ImportDepartmentsReferenceLoader $importDepartmentsReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         #[AutowireIterator(tag: 'app.department.import.validator')] private readonly iterable $importDepartmentsValidators,

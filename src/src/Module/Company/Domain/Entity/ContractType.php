@@ -33,7 +33,7 @@ class ContractType
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidInterface $uuid;
 
-    #[ORM\Column(type: Types::STRING, length: 100, unique: true)]
+    #[ORM\Column(type: Types::STRING, length: 100)]
     #[Assert\NotBlank]
     private string $name;
 
