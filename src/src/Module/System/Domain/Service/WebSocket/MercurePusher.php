@@ -16,7 +16,7 @@ class MercurePusher implements WebSocketPusherInterface
     public function pushToUser(UuidInterface $userUUID, string $event, array $payload): void
     {
         $update = new Update(
-            topics: ['user.'.$userUUID->toString()],
+            topics: ['user.'.$userUUID],
             data: json_encode([
                 'event' => $event,
                 'payload' => $payload,

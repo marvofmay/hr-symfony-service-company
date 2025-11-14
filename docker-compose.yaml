@@ -142,17 +142,3 @@ services:
     ports:
       - "8025:8025" # UI dostępne pod http://localhost:8025
       - "1025:1025" # SMTP
-
-  mercure:
-    image: dunglas/mercure
-    restart: unless-stopped
-    environment:
-      SERVER_NAME: ':80'
-      MERCURE_PUBLISHER_JWT_KEY: /etc/mercure/private.pem
-      MERCURE_SUBSCRIBER_JWT_KEY: /etc/mercure/public.pem
-      MERCURE_EXTRA_DIRECTIVES: |
-        cors_origins http://localhost:3000
-    volumes:
-      - ./config/jwt:/etc/mercure
-    ports:
-      - "3001:80"
