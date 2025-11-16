@@ -2,9 +2,7 @@ volumes:
   mysql-data-service-company:
     driver: local
   mercure_data:
-    driver: local
   mercure_config:
-    driver: local
   redis-data:
 
 services:
@@ -142,3 +140,17 @@ services:
     ports:
       - "8025:8025" # UI dostępne pod http://localhost:8025
       - "1025:1025" # SMTP
+
+  mercure:
+    image: dunglas/mercure
+    container_name: mercure
+    environment:
+      SERVER_NAME: ':3001'
+      MERCURE_PUBLISHER_JWT_KEY: "kL3x9v2D8fP6tR1qB7wZ0mS4nV8yX5aQqwerty"
+      MERCURE_SUBSCRIBER_JWT_KEY: "kL3x9v2D8fP6tR1qB7wZ0mS4nV8yX5aQqwerty"
+      MERCURE_JWT_ALG: "HS256"
+      MERCURE_EXTRA_DIRECTIVES: |
+        cors_origins http://localhost:3000
+        anonymous
+    ports:
+      - "3001:3001"

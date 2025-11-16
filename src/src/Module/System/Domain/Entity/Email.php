@@ -33,7 +33,7 @@ class Email
 
     #[ORM\ManyToOne(targetEntity: User::class)]
     #[ORM\JoinColumn(name: 'sender_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'SET NULL')]
-    private UuidInterface $sender;
+    private ?UserInterface $sender;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotBlank]
@@ -70,7 +70,7 @@ class Email
     private function __construct(
         string $subject,
         array $recipients,
-        UuidInterface $sender,
+        ?UserInterface $sender = null,
         string $message = '',
         ?string $templateName = null,
         ?string $renderedTemplate = null,
@@ -92,7 +92,7 @@ class Email
     public static function create(
         string $subject,
         array $recipients,
-        UserInterface $sender,
+        ?UserInterface $sender = null,
         string $message = '',
         ?string $templateName = null,
         ?string $templateBody = null ,
@@ -114,11 +114,11 @@ class Email
         return new self(
             subject: $subject,
             recipients: $recipients,
+            sender: $sender,
             message: $message,
             templateName: $templateName,
             renderedTemplate: $templateBody,
-            context: $context,
-            sender: $sender
+            context: $context
         );
     }
 
@@ -188,7 +188,7 @@ class Email
         return $this->recipients;
     }
 
-    public function getSender(): UuidInterface
+    public function getSender(): ?UserInterface
     {
         return $this->sender;
     }

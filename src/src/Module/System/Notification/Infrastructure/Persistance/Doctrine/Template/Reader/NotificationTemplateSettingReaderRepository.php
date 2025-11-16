@@ -57,9 +57,11 @@ class NotificationTemplateSettingReaderRepository extends ServiceEntityRepositor
             ->join(NotificationTemplateSetting::ALIAS. '.' . NotificationTemplateSettingEntityRelationFieldEnum::CHANNEL->value, NotificationChannelSetting::ALIAS)
             ->where(NotificationEventSetting::ALIAS. '.' . NotificationEventSettingEntityFieldEnum::EVENT_NAME->value . ' = :eventName')
             ->andWhere(NotificationTemplateSetting::ALIAS. '.'. NotificationTemplateSettingEntityFieldEnum::IS_ACTIVE->value .' = :isActive')
+            ->andWhere(NotificationChannelSetting::ALIAS. '.'. NotificationChannelSettingEntityFieldEnum::ENABLED->value .' = :isEnabled')
             ->setParameters(new ArrayCollection([
                 new Parameter('eventName', $eventName),
                 new Parameter('isActive', true),
+                new Parameter('isEnabled', true),
             ]))
             ->getQuery()
             ->getResult());

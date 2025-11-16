@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<body style="font-family: Arial, sans-serif; color: #333; background-color: #f9f9f9; padding: 20px;">
+<div style="background-color: #ffffff; padding: 20px; border-radius: 8px; max-width: 600px; margin: 0 auto; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+    <div style="display: flex; justify-content: flex-end;">
+        <img
+                src="{{ logoCid }}"
+                alt="Logo"
+                width="80"
+                style="margin-bottom: 20px;"
+        />
+    </div>
+
+    <h1 style="font-size: 22px; color: #222;"Powiadomienie</h1>
+    <p style="font-size: 16px; line-height: 1.5;">
+    {{ content | raw }}
+    </p>
+</div>
+</body>
+</html>

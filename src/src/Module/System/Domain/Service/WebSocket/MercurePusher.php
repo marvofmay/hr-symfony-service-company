@@ -9,18 +9,18 @@ use Ramsey\Uuid\UuidInterface;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 
-class MercurePusher implements WebSocketPusherInterface
+final readonly class MercurePusher implements WebSocketPusherInterface
 {
     public function __construct(private HubInterface $hub) {}
 
     public function pushToUser(UuidInterface $userUUID, string $event, array $payload): void
     {
         $update = new Update(
-            topics: ['user.'.$userUUID],
+            topics: ['user.'. $userUUID],
             data: json_encode([
                 'event' => $event,
                 'payload' => $payload,
-            ])
+            ]),
         );
 
         $this->hub->publish($update);

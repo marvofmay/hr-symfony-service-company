@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.notification.channel')]
 interface NotificationChannelInterface
 {
+    public static function getChanelCode(): string;
     public function getCode(): string;
 
     public function getLabel(): string;

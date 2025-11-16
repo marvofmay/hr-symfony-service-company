@@ -3,3 +3,7 @@ import:
     done: "ukończony"
     pending: "w trakcie"
     failed: "nie udany"
+  kind:
+    company: "firm"
+    department: "działów"
+    employee: "pracowników"

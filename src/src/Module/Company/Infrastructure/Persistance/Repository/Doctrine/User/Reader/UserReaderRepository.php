@@ -21,4 +21,22 @@ final class UserReaderRepository extends ServiceEntityRepository implements User
     {
         return $this->findOneBy(['uuid' => $userUUID]);
     }
+
+    public function getUsersEmailsByUUIDs(array $userUUIDs): array
+    {
+        if (empty($userUUIDs)) {
+            return [];
+        }
+
+        $qb = $this->createQueryBuilder('u')
+            ->select('u.email')
+            ->where('u.uuid IN (:uuids)')
+            ->setParameter('uuids', $userUUIDs);
+
+        $results = $qb->getQuery()->getResult();
+
+        $emails = array_column($results, 'email');
+
+        return array_values(array_unique($emails));
+    }
 }

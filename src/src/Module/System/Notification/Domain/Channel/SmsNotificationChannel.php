@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\System\Notification\Domain\Channel;
 
-use App\Module\System\Notification\Domain\Interface\Channel\NotificationChannelInterface;
+use App\Module\System\Notification\Domain\Abstract\NotificationChannelAbstract;
 
-class SmsNotificationChannel implements NotificationChannelInterface
+class SmsNotificationChannel extends NotificationChannelAbstract
 {
     public function getCode(): string
     {

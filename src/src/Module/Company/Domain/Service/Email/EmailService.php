@@ -7,6 +7,7 @@ namespace App\Module\Company\Domain\Service\Email;
 use App\Module\System\Application\Command\Email\SendEmailCommand;
 use App\Module\System\Domain\Entity\Email;
 use App\Module\System\Domain\Interface\Email\EmailWriterInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment as Twig;
@@ -16,14 +17,14 @@ final readonly class EmailService
     public function __construct(
         private EmailWriterInterface $emailWriterRepository,
         private Twig $twig,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
+        #[Autowire(service: 'command.bus')] private MessageBusInterface $commandBus,
         private string $projectDir
     ) {}
 
     public function sendEmail(
-        UserInterface $sender,
         array $recipients,
         string $subject,
+        ?UserInterface $sender = null,
         string $message = '',
         ?string $templateName = null,
         array $attachments = [],

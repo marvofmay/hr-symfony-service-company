@@ -2,8 +2,8 @@
 
 namespace App;
 
-use App\Module\Note\Infrastructure\DI\LoggableEventsPass;
-use App\Module\Note\Infrastructure\DI\NotifiableEventsPass;
+use App\Common\Infrastructure\DI\LoggableEventsPass;
+use App\Common\Infrastructure\DI\NotifiableEventsPass;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel as BaseKernel;

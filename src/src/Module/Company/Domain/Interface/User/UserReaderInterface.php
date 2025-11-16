@@ -9,4 +9,5 @@ use App\Module\Company\Domain\Entity\User;
 interface UserReaderInterface
 {
     public function getUserByUUID(string $userUUID): ?User;
+    public function getUsersEmailsByUUIDs(array $userUUIDs): array;
 }

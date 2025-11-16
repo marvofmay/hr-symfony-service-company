@@ -34,12 +34,10 @@ final readonly class EmployeeProjector
         $this->employeeCreator->create($event);
 
         $this->emailService->sendEmail(
-            sender: $this->security->getUser(),
             recipients: $event->emails->toArray(),
             subject: sprintf('Witaj w firmie %s!', $event->firstName->getValue()),
-            message: '',
+            sender: $this->security->getUser(),
             templateName: 'emails/welcome.html.twig',
-            attachments: [],
             context: [
                 'firstName' => $event->firstName->getValue(),
                 'login' => $event->emails->toArray()[0],
