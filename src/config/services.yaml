@@ -12,4 +12,5 @@ imports:
     - { resource: './services/module/system/import.yaml' }
     - { resource: './services/module/system/import_log.yaml' }
     - { resource: './services/module/system/email.yaml' }
+    - { resource: './services/module/system/sms.yaml' }
     - { resource: './services/module/note/note.yaml' }

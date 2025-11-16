@@ -1,0 +1,15 @@
+parameters:
+  twilio_sid: '%env(TWILIO_SID)%'
+  twilio_token: '%env(TWILIO_TOKEN)%'
+  twilio_from: '%env(TWILIO_FROM)%'
+
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  App\Module\System\Infrastructure\Sms\TwilioSmsSender:
+    arguments:
+      $sid: '%twilio_sid%'
+      $token: '%twilio_token%'
+      $from: '%twilio_from%'
