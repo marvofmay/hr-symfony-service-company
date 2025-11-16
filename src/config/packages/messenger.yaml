@@ -31,17 +31,17 @@ framework:
                     exchange:
                         name: 'employee_xlsx_import'
                         type: direct
-#            send_email:
-#              dsn: '%env(MESSENGER_TRANSPORT_DSN)%/send_email'
-#              options:
-#                exchange:
-#                  name: 'send_email'
-#                  type: direct
+            send_email:
+              dsn: '%env(MESSENGER_TRANSPORT_DSN)%/send_email'
+              options:
+                exchange:
+                  name: 'send_email'
+                  type: direct
         routing:
-            #'App\Module\Company\Application\Command\Company\ImportCompaniesCommand': company_xlsx_import
+            'App\Module\Company\Application\Command\Company\ImportCompaniesCommand': company_xlsx_import
             #'App\Module\Company\Application\Command\Department\ImportDepartmentsCommand': department_xlsx_import
             #'App\Module\Company\Application\Command\Employee\ImportEmployeesCommand': employee_xlsx_import
-            #'App\Module\System\Application\Command\Email\SendEmailCommand': send_email
+            'App\Module\System\Application\Command\Email\SendEmailCommand': send_email
 
 # when@test:
 #    framework:
