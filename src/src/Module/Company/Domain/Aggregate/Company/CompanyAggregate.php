@@ -20,6 +20,7 @@ use App\Module\Company\Domain\Event\Company\CompanyCreatedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyDeletedEvent;
 use App\Module\Company\Domain\Event\Company\CompanyRestoredEvent;
 use App\Module\Company\Domain\Event\Company\CompanyUpdatedEvent;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 class CompanyAggregate extends AggregateRootAbstract
 {
@@ -39,6 +40,7 @@ class CompanyAggregate extends AggregateRootAbstract
     private ?Emails $emails = null;
     private ?Websites $websites = null;
     private bool $deleted = false;
+    private UserUUID $loggedUserUUID;
 
     public static function create(
         FullName $fullName,
@@ -48,6 +50,7 @@ class CompanyAggregate extends AggregateRootAbstract
         bool $active,
         Address $address,
         Phones $phones,
+        UserUUID $loggedUserUUID,
         ?ShortName $shortName = null,
         ?string $internalCode = null,
         ?string $description = null,
@@ -67,6 +70,7 @@ class CompanyAggregate extends AggregateRootAbstract
             $active,
             $address,
             $phones,
+            $loggedUserUUID,
             $shortName,
             $internalCode,
             $description,
@@ -152,6 +156,7 @@ class CompanyAggregate extends AggregateRootAbstract
             $this->phones = $event->phones;
             $this->emails = $event->emails;
             $this->websites = $event->websites;
+            $this->loggedUserUUID = $event->loggedUserUUID;
         }
 
         if ($event instanceof CompanyDeletedEvent) {

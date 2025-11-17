@@ -18,11 +18,14 @@ use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
+use App\Module\System\Domain\ValueObject\UserUUID;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag(name: 'app.importer')]
@@ -38,10 +41,10 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         private readonly UpdateImportAction $updateImportAction,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly MessageService $messageService,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         private readonly ImportCompaniesReferenceLoader $importCompaniesReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         #[AutowireIterator(tag: 'app.company.import.validator')] private readonly iterable $importCompaniesValidators,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
     ) {
         parent::__construct($this->translator);
     }
@@ -101,7 +104,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         return CompanyUUID::fromString($existingParentCompany->getUUID()->toString());
     }
 
-    public function run(Import $import): array
+    public function run(Import $import, UserInterface $loggedUser): array
     {
         $errors = $this->validateBeforeImport();
 
@@ -122,6 +125,9 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         } else {
             [$preparedRows, $nipMap] = $this->importCompaniesPreparer->prepare($this->import());
 
+            $loggedUserUUID = $loggedUser->getUUID()->toString();
+            $loggedUserUUID = UserUUID::fromString($loggedUserUUID);
+
             foreach ($preparedRows as $row) {
                 $parentUUID = $this->resolveParentUUID($row, $nipMap);
 
@@ -129,7 +135,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
                 $uuid = $nipMap[$nip];
 
                 if (!$row[CompanyImportColumnEnum::DYNAMIC_IS_COMPANY_WITH_NIP_ALREADY_EXISTS->value]) {
-                    $this->companyAggregateCreator->create($row, $uuid, $parentUUID);
+                    $this->companyAggregateCreator->create($row, $uuid, $parentUUID, $loggedUserUUID);
                 } else {
                     $this->companyAggregateUpdater->update($row, $parentUUID);
                 }

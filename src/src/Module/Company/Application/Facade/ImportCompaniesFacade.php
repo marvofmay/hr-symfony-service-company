@@ -35,79 +35,65 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 final readonly class ImportCompaniesFacade
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
         private ValidatorInterface $validator,
         private Security $security,
         private ParameterBagInterface $params,
-        private MessageService $messageService,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         #[Autowire(service: 'command.bus')] private MessageBusInterface $commandBus,
         #[Autowire(service: 'query.bus')] private MessageBusInterface $queryBus,
     ) {
     }
 
-    public function handle(UploadedFile $file): array
+    public function enqueue(UploadedFile $file): void
     {
-        $this->entityManager->beginTransaction();
-        try {
-            $user = $this->security->getUser();
-            $uploadFilePath = sprintf('%s/companies', $this->params->get('upload_file_path'));
-            $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
-            $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
-            $errors = $this->validator->validate($uploadFileDTO);
-            if (count($errors) > 0) {
-                $message = $this->messageService->get('company.import.error', [], 'companies');
+        $user = $this->security->getUser();
+        $uploadFilePath = sprintf('%s/companies', $this->params->get('upload_file_path'));
 
-                return [
-                    'success' => false,
-                    'errors'  => UploadFileErrorTransformer::map($errors),
-                    'message' => $message,
-                ];
-            }
+        $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
+        $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
 
-            try {
-                $this->commandBus->dispatch(new UploadFileCommand(file: $uploadFileDTO->file, uploadFilePath: $uploadFileDTO->uploadFilePath, uploadFileName: $uploadFileDTO->uploadFileName));
-                $this->commandBus->dispatch(new CreateFileCommand(File::create(fileName: $fileName, filePath: $uploadFilePath, fileExtension: FileExtensionEnum::XLSX, fileKind: FileKindEnum::IMPORT_XLSX, user: $user)));
-                $handleStamp = $this->queryBus->dispatch(new GetFileByNamePathAndKindQuery(fileName: $fileName, filePath: $uploadFilePath, fileKind: FileKindEnum::IMPORT_XLSX));
-                $file = $handleStamp->last(HandledStamp::class)->getResult();
-                $this->commandBus->dispatch(new CreateImportCommand(kindEnum: ImportKindEnum::IMPORT_COMPANIES, statusEnum: ImportStatusEnum::PENDING, file: $file, user: $user));
-                $handleStamp = $this->queryBus->dispatch(new GetImportByFileQuery($file));
-                $import = $handleStamp->last(HandledStamp::class)->getResult();
-                $this->commandBus->dispatch(new ImportCompaniesCommand($import->getUUID()->toString()));
-            } catch (HandlerFailedException $exception) {
-                throw $exception->getPrevious();
-            }
+        $errors = $this->validator->validate($uploadFileDTO);
 
-            $this->entityManager->commit();
-
-            if (ImportStatusEnum::DONE === $import->getStatus()) {
-                $message = $this->messageService->get('company.import.success', [], 'companies');
-
-                return [
-                    'success' => true,
-                    'message' => $message,
-                ];
-            }
-
-            $handleStamp = $this->queryBus->dispatch(new GetImportLogsByImportQuery($import));
-            $importLogs =  $handleStamp->last(HandledStamp::class)->getResult();
-            $message = $this->messageService->get('company.import.error', [], 'companies');
-
-            return [
-                'success' => false,
-                'errors'  => ImportLogErrorTransformer::map($importLogs),
-                'message' => $message,
-            ];
-        } catch (\Throwable $error) {
-            $this->entityManager->rollback();
-            $message = sprintf('%s %s', $this->messageService->get('company.import.error', [], 'companies'), $this->messageService->get($error->getMessage()));
-            $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::IMPORT));
-
-            return [
-                'success' => false,
-                'message' => $message,
-                'errors'  => [],
-            ];
+        if (count($errors) > 0) {
+            throw new \DomainException("Invalid file");
         }
+
+        $this->commandBus->dispatch(new UploadFileCommand($uploadFileDTO->file, $uploadFileDTO->uploadFilePath, $uploadFileDTO->uploadFileName));
+
+        $this->commandBus->dispatch(
+            new CreateFileCommand(
+                File::create(
+                    fileName: $fileName,
+                    filePath: $uploadFilePath,
+                    fileExtension: FileExtensionEnum::XLSX,
+                    fileKind: FileKindEnum::IMPORT_XLSX,
+                    user: $user
+                )
+            )
+        );
+
+        $fileEntity = $this->queryBus
+            ->dispatch(new GetFileByNamePathAndKindQuery($fileName, $uploadFilePath, FileKindEnum::IMPORT_XLSX))
+            ->last(HandledStamp::class)->getResult();
+
+        $this->commandBus->dispatch(
+            new CreateImportCommand(
+                kindEnum: ImportKindEnum::IMPORT_COMPANIES,
+                statusEnum: ImportStatusEnum::PENDING,
+                file: $fileEntity,
+                user: $user
+            )
+        );
+
+        $import = $this->queryBus
+            ->dispatch(new GetImportByFileQuery($fileEntity))
+            ->last(HandledStamp::class)->getResult();
+
+
+        $this->commandBus->dispatch(
+            new ImportCompaniesCommand(
+                importUUID: $import->getUUID()->toString(),
+                loggedUserUUID: $user->getUUID()->toString()
+            )
+        );
     }
 }

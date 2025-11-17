@@ -19,6 +19,7 @@ use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -26,8 +27,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag(name: 'app.importer')]
 final class ImportEmployeesFromXLSX extends XLSXIterator
 {
-    private array $errorMessages = [];
-
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly EmployeeReaderInterface $employeeReaderRepository,
@@ -37,7 +36,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         private readonly UpdateImportAction $updateImportAction,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly MessageService $messageService,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         private readonly ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         #[AutowireIterator(tag: 'app.employee.import.validator')] private readonly iterable $importEmployeesValidators,
@@ -61,7 +60,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         $employees = $this->importEmployeesReferenceLoader->employees;
         $emailsPESELs = $this->importEmployeesReferenceLoader->emailsPESELs;
 
-        $this->errorMessages = [];
+        $errorMessages = [];
         foreach ($this->importEmployeesValidators as $validator) {
             $error = $validator->validate(
                 $row,
@@ -75,11 +74,11 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
                 ]
             );
             if (null !== $error) {
-                $this->errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
+                $errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
             }
         }
 
-        return $this->errorMessages;
+        return $errorMessages;
     }
 
     private function resolveParentUUID(array $row, array $peselMap): ?EmployeeUUID

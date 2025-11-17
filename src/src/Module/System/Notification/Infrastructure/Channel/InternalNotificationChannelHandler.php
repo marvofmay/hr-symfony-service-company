@@ -38,13 +38,15 @@ final readonly class InternalNotificationChannelHandler implements NotificationC
                 'event'          => $eventName,
             ];
 
-            $this->websocketPusher->pushToUser(
-                userUUID: $this->security->getUser()->getUUID(),
-                event: $eventName,
-                payload: $message
-            );
+            foreach ($recipientUUIDs as $recipientUUID) {
+                $this->websocketPusher->pushToUser(
+                    userUUID: $recipientUUID,
+                    event: $eventName,
+                    payload: $message
+                );
+            }
         } catch (\Throwable $e) {
-            $this->logger->error('RealTime notification failed', ['exception' => $e,]);
+            $this->logger->error('RealTime notification failed :(', ['exception' => $e,]);
         }
     }
 }

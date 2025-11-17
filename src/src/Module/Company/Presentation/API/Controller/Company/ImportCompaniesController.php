@@ -17,7 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportCompaniesController extends AbstractController
 {
-    public function __construct(private readonly ImportCompaniesFacade $importCompaniesFacade, private readonly MessageService $messageService)
+    public function __construct(
+        private readonly ImportCompaniesFacade $importCompaniesFacade,
+        private readonly MessageService $messageService
+    )
     {
     }
 
@@ -37,13 +40,11 @@ class ImportCompaniesController extends AbstractController
             );
         }
 
-        $result = $this->importCompaniesFacade->handle($file);
+        $this->importCompaniesFacade->enqueue($file);
 
-        $responseData = ['message' => $result['message']];
-        if (!empty($result['errors'])) {
-            $responseData['errors'] = $result['errors'];
-        }
-
-        return new JsonResponse($responseData, $result['success'] ? Response::HTTP_CREATED : Response::HTTP_UNPROCESSABLE_ENTITY);
+        return new JsonResponse([
+            'success' => true,
+            'message' => $this->messageService->get('company.import.enqueued', [], 'companies'),
+        ], Response::HTTP_ACCEPTED);
     }
 }
