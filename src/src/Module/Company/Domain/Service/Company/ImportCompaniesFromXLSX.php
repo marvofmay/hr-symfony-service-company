@@ -137,7 +137,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
                 if (!$row[CompanyImportColumnEnum::DYNAMIC_IS_COMPANY_WITH_NIP_ALREADY_EXISTS->value]) {
                     $this->companyAggregateCreator->create($row, $uuid, $parentUUID, $loggedUserUUID);
                 } else {
-                    $this->companyAggregateUpdater->update($row, $parentUUID);
+                    $this->companyAggregateUpdater->update($row, $parentUUID, $loggedUserUUID);
                 }
             }
             $this->updateImportAction->execute($import, ImportStatusEnum::DONE);

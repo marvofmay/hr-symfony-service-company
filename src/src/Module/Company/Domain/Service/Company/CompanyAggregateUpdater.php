@@ -17,10 +17,11 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 final class CompanyAggregateUpdater extends AggregateAbstract
 {
-    public function update(array $row, ?CompanyUUID $parentUUID): void
+    public function update(array $row, ?CompanyUUID $parentUUID, UserUUID $loggedUserUUID): void
     {
         $companyAggregate = $this->companyAggregateReaderRepository->getCompanyAggregateByUUID(
             CompanyUUID::fromString($row[CompanyImportColumnEnum::DYNAMIC_AGGREGATE_UUID->value]),
@@ -39,6 +40,7 @@ final class CompanyAggregateUpdater extends AggregateAbstract
                 $row[CompanyImportColumnEnum::COUNTRY->value]
             ),
             Phones::fromArray([$row[CompanyImportColumnEnum::PHONE->value]]),
+            $loggedUserUUID,
             ShortName::fromString($row[CompanyImportColumnEnum::COMPANY_SHORT_NAME->value]),
             $row[CompanyImportColumnEnum::COMPANY_INTERNAL_CODE->value],
             $row[CompanyImportColumnEnum::COMPANY_DESCRIPTION->value],
