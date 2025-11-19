@@ -51,6 +51,9 @@ final class UpdateEmployeeCommandHandler extends CommandHandlerAbstract
     {
         $this->validate($command);
 
+        $user = $this->security->getUser();
+        $loggedUserUUID = $user->getUuid()->toString();
+
         $employeeAggregate = $this->employeeAggregateReaderRepository->getEmployeeAggregateByUUID(
             EmployeeUUID::fromString($command->employeeUUID)
         );

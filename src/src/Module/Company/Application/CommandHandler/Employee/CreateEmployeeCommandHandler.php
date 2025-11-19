@@ -22,6 +22,7 @@ use App\Module\Company\Domain\Aggregate\Employee\ValueObject\RoleUUID;
 use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
+use App\Module\System\Domain\ValueObject\UserUUID;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
@@ -63,7 +64,7 @@ final class CreateEmployeeCommandHandler extends CommandHandlerAbstract
             RoleUUID::fromString($command->roleUUID),
             Emails::fromArray([$command->email]),
             Address::fromDTO($command->address),
-            $loggedUserUUID,
+            UserUUID::fromString($loggedUserUUID),
             $command->externalUUID,
             $command->internalCode,
             $command->active,

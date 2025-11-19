@@ -16,6 +16,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
+use App\Module\System\Domain\ValueObject\UserUUID;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
@@ -51,7 +52,7 @@ final class CreateDepartmentCommandHandler extends CommandHandlerAbstract
             Name::fromString($command->name),
             $command->internalCode,
             Address::fromDTO($command->address),
-            $loggedUserUUID,
+            UserUUID::fromString($loggedUserUUID),
             $command->active,
             $command->description,
             $command->phones ? Phones::fromArray($command->phones) : null,

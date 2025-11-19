@@ -1,72 +1,72 @@
 department:
-  alreadyExists: "Departament o podanej nazwie \":name\" już istnieje"
+  alreadyExists: "Departament o podanej nazwie \":name\" już istnieje."
   deleted:
-    notExists: "Nie ma usuniętego departamentu o podanym UUID :uuid lub departament nie został usunięty"
+    notExists: "Nie ma usuniętego departamentu o podanym UUID :uuid lub departament nie został usunięty."
     address:
-      notExists: "Nie ma usuniętego adresu departamentu o podanym UUID :uuid lub adres departamentu nie został usunięty"
+      notExists: "Nie ma usuniętego adresu departamentu o podanym UUID :uuid lub adres departamentu nie został usunięty."
     contacts:
-      notExists: "Nie ma usuniętego kontaktu departamentu o podanym UUID :uuid lub kontakt departamentu nie został usunięty"
+      notExists: "Nie ma usuniętego kontaktu departamentu o podanym UUID :uuid lub kontakt departamentu nie został usunięty."
   uuid:
     notExists: "Departament o podanym UUID nie istnieje :uuid"
-    notFound: "Departament o podanym UUID nie istnieje"
-    required: "UUID departamentu jest wymagane"
+    notFound: "Departament o podanym UUID nie istnieje."
+    required: "UUID departamentu jest wymagane."
   name:
-    alreadyExists: "Departament o podanej nazwie już istnieje"
-    required: "Nazwa departamentu jest wymagana"
+    alreadyExists: "Departament o podanej nazwie już istnieje."
+    required: "Nazwa departamentu jest wymagana."
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    expectedUniqueDepartmentNameConstraint: "Oczekiwano unikalnej nazwy firmy"
+    expectedUniqueDepartmentNameConstraint: "Oczekiwano unikalnej nazwy firmy."
   internalCode:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    required: "Kod wewnętrzny departamentu jest wymagany"
-    alreadyExists: "Departament o podanym kodzie wewnętrznym \":internalCode\" już istnieje"
-    notExists: "Departament o podanym kodzie wewnętrznym :internalCode nie istnieje lub został usunięty"
+    required: "Kod wewnętrzny departamentu jest wymagany."
+    alreadyExists: "Departament o podanym kodzie wewnętrznym \":internalCode\" już istnieje."
+    notExists: "Departament o podanym kodzie wewnętrznym :internalCode nie istnieje lub został usunięty."
   description:
     minimumLength: "Opis - minimalnie znaków :qty"
     maximumLength: "Opis - maksymalnie znaków :qty"
   active:
-    invalid: "Nieprawidłowa wartość pola active"
+    invalid: "Nieprawidłowa wartość pola active."
   email:
-    alreadyExists: "Departament o podanym email \":email\" już istnieje"
+    alreadyExists: "Departament o podanym email \":email\" już istnieje."
   add:
-    success: "Departament został pomyślnie zapisany"
-    error: "Wystąpił błąd - departament nie został dodany"
+    success: "Departament został pomyślnie zapisany."
+    error: "Wystąpił błąd - departament nie został dodany."
   update:
-    success: "Departament został pomyślnie zaktualizowany"
-    error: "Wystąpił błąd - departament nie został zaktualizowany"
+    success: "Departament został pomyślnie zaktualizowany."
+    error: "Wystąpił błąd - departament nie został zaktualizowany."
   delete:
-    success: "Departament został pomyślnie usunięty"
-    error: "Wystąpił błąd - departament nie został usunięty"
+    success: "Departament został pomyślnie usunięty."
+    error: "Wystąpił błąd - departament nie został usunięty."
     multiple:
-      success: "Departamenty zostały pomyślnie usunięte"
-      error: "Wystąpił błąd - departamenty nie zostały usunięte"
+      success: "Departamenty zostały pomyślnie usunięte."
+      error: "Wystąpił błąd - departamenty nie zostały usunięte."
   restore:
-    success: "Department został pomyślnie przywrócony"
-    error: "Wystąpił błąd - department nie został przywrócony"
+    success: "Department został pomyślnie przywrócony."
+    error: "Wystąpił błąd - department nie został przywrócony."
   import:
     enqueued: "Import departamentów został rozpoczęty i oczekuje w kolejce. Po jego zakończeniu wyślemy Ci powiadomienie o statusie."
-    success: "Departamenty zostały pomyślnie zaimportowane"
-    error: "Wystąpił błąd - departamenty nie zostały zaimportowane"
+    success: "Departamenty zostały pomyślnie zaimportowane."
+    error: "Wystąpił błąd - departamenty nie zostały zaimportowane."
     file:
-      required: "Plik importu departamentów jest wymagany"
+      required: "Plik importu departamentów jest wymagany."
   view:
-    error: "Wystapił błąd przy pobieraniu wybranego departamentu"
+    error: "Wystapił błąd przy pobieraniu wybranego departamentu."
   list:
-    error: "Wystapił błąd przy pobieraniu listy departamentów"
+    error: "Wystapił błąd przy pobieraniu listy departamentów."
   address:
     street:
-      required: "Ulica wymagana"
+      required: "Ulica wymagana."
     postcode:
-      required: "Kod pcztowy wymagany"
+      required: "Kod pcztowy wymagany."
     city:
-      required: "Miasto wymagane"
+      required: "Miasto wymagane."
     country:
-      required: "Kraj wymagany"
+      required: "Kraj wymagany."
   contact:
     phone:
-      required: "Telefon departamentu jest wymagany"
+      required: "Telefon departamentu jest wymagany."
     email:
-      required: "Email departementu jest wymagany"
+      required: "Email departementu jest wymagany."
   companyUUID:
-    required: "UUID firmy jest wymagane"
+    required: "UUID firmy jest wymagane."

@@ -14,10 +14,11 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 final class DepartmentAggregateUpdater extends AggregateAbstract
 {
-    public function update(array $row, ?DepartmentUUID $parentUUID): void
+    public function update(array $row, ?DepartmentUUID $parentUUID, UserUUID $loggedUserUUID): void
     {
         $departmentAggregate = $this->departmentAggregateReaderRepository->getDepartmentAggregateByUUID(
             DepartmentUUID::fromString($row[DepartmentImportColumnEnum::DYNAMIC_AGGREGATE_UUID->value]),
@@ -33,6 +34,7 @@ final class DepartmentAggregateUpdater extends AggregateAbstract
                 $row[DepartmentImportColumnEnum::CITY->value],
                 $row[DepartmentImportColumnEnum::COUNTRY->value]
             ),
+            $loggedUserUUID,
             (bool) $row[DepartmentImportColumnEnum::ACTIVE->value],
             $row[DepartmentImportColumnEnum::DEPARTMENT_DESCRIPTION->value],
             $row[DepartmentImportColumnEnum::PHONE->value] ? Phones::fromArray([$row[DepartmentImportColumnEnum::PHONE->value]]) : null,

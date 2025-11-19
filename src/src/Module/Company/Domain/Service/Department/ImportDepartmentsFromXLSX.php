@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Service\Department;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Common\XLSX\XLSXIterator;
@@ -19,6 +20,7 @@ use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Domain\ValueObject\UserUUID;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
+use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -110,7 +112,11 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
-                    new LogFileEvent($this->messageService->get('department.import.error', [], 'departments').': '.$error)
+                    new LogFileEvent(
+                        $this->messageService->get('department.import.error', [], 'departments').': '.$error,
+                        LogLevel::ERROR,
+                        MonologChanelEnum::IMPORT
+                    )
                 );
             }
 
@@ -130,7 +136,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
                 if (!$row[DepartmentImportColumnEnum::DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS->value]) {
                     $this->departmentAggregateCreator->create($row, $uuid, $parentUUID, $loggedUserUUID);
                 } else {
-                    $this->departmentAggregateUpdater->update($row, $parentUUID);
+                    $this->departmentAggregateUpdater->update($row, $parentUUID, $loggedUserUUID);
                 }
             }
 

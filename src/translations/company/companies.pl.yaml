@@ -1,79 +1,79 @@
 company:
-  alreadyExists: "Firma o padanym NIP :nip lub REGON :regon już istnieje"
+  alreadyExists: "Firma o padanym NIP :nip lub REGON :regon już istnieje."
   deleted:
-    notExists: "Nie ma usuniętej firmy o podanym UUID :uuid lub firma nie została usunięta"
+    notExists: "Nie ma usuniętej firmy o podanym UUID :uuid lub firma nie została usunięta."
     address:
-      notExists: "Nie ma usuniętego adresu firmy o podanym UUID :uuid lub adres firmy nie został usunięty"
+      notExists: "Nie ma usuniętego adresu firmy o podanym UUID :uuid lub adres firmy nie został usunięty."
     contacts:
-      notExists: "Nie ma usunietego kontaktu firmy o podanym UUID :uuid lub kontakt firmy nie został usunięty"
+      notExists: "Nie ma usunietego kontaktu firmy o podanym UUID :uuid lub kontakt firmy nie został usunięty."
   uuid:
-    notFound: "Firma o podanym UUID nie istnieje"
-    notExists: "Firma o podanym UUID :uuid nie istnieje"
-    required: "UUID firmy jest wymagane"
+    notFound: "Firma o podanym UUID nie istnieje."
+    notExists: "Firma o podanym UUID :uuid nie istnieje."
+    required: "UUID firmy jest wymagane."
   fullName:
-    alreadyExists: "Firma o podanej nazwie \":fullName\"  już istnieje"
-    required: "Nazwa firmy jest wymagana"
+    alreadyExists: "Firma o podanej nazwie \":fullName\" już istnieje."
+    required: "Nazwa firmy jest wymagana."
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    expectedUniqueCompanyNameConstraint: "Oczekiwano unikalnej nazwy firmy"
+    expectedUniqueCompanyNameConstraint: "Oczekiwano unikalnej nazwy firmy."
   internalCode:
-    alreadyExists: "Firma o podanym kodzie wewnętrznym \":internalCode\" już istnieje"
+    alreadyExists: "Firma o podanym kodzie wewnętrznym \":internalCode\" już istnieje."
   nip:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    exactLength: "NIP musi mieć dokładnie 10 cyfr"
-    alreadyExists: "Firma o podanym NIP już istnieje"
+    exactLength: "NIP musi mieć dokładnie 10 cyfr."
+    alreadyExists: "Firma o podanym NIP już istnieje."
     required: "NIP firmy jest wymagany"
-    notExists: "Firma o podanym NIP :nip nie istnieje lub została usunięta"
+    notExists: "Firma o podanym NIP :nip nie istnieje lub została usunięta."
   regon:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    alreadyExists: "Firma o podanym REGON już istnieje"
-    required: "REGON firmy jest wymagany"
+    alreadyExists: "Firma o podanym REGON już istnieje."
+    required: "REGON firmy jest wymagany."
   industryUUID:
-    required: "Wymagane uuid branży"
+    required: "Wymagane uuid branży."
   description:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
   email:
-    alreadyExists: "Firma o podanym email \":email\" już istnieje"
+    alreadyExists: "Firma o podanym email \":email\" już istnieje."
   add:
-    success: "Firma została pomyślnie zapisana"
-    error: "Wystąpił błąd - firma nie została dodana"
+    success: "Firma została pomyślnie zapisana."
+    error: "Wystąpił błąd - firma nie została dodana."
   update:
-    success: "Firma została pomyślnie zaktualizowana"
-    error: "Wystąpił błąd - firma nie została zaktualizowana"
+    success: "Firma została pomyślnie zaktualizowana."
+    error: "Wystąpił błąd - firma nie została zaktualizowana."
   delete:
-    success: "Firma została pomyślnie usunięta"
-    error: "Wystąpił błąd - firma nie została usunięta"
+    success: "Firma została pomyślnie usunięta."
+    error: "Wystąpił błąd - firma nie została usunięta."
     multiple:
-      success: "Firmy zostały pomyślnie usunięte"
-      error: "Wystąpił błąd - firmy nie zostały usunięte"
+      success: "Firmy zostały pomyślnie usunięte."
+      error: "Wystąpił błąd - firmy nie zostały usunięte."
   restore:
-    success: "Firma została pomyślnie przywrócona"
-    error: "Wystąpił błąd - firma nie została przywrócona"
+    success: "Firma została pomyślnie przywrócona."
+    error: "Wystąpił błąd - firma nie została przywrócona."
   import:
     enqueued: "Import firm został rozpoczęty i oczekuje w kolejce. Po jego zakończeniu wyślemy Ci powiadomienie o statusie."
-    success: "Firmy zostały pomyślnie zaimportowane"
-    error: "Wystąpił błąd - firmy nie zostały zaimportowane"
+    success: "Firmy zostały pomyślnie zaimportowane."
+    error: "Wystąpił błąd - firmy nie zostały zaimportowane."
     file:
-      required: "Plik importu firm jest wymagany"
+      required: "Plik importu firm jest wymagany."
   view:
-    error: "Wystapił błąd przy pobieraniu wybranej firmy"
+    error: "Wystapił błąd przy pobieraniu wybranej firmy."
   list:
-    error: "Wystapił błąd przy pobieraniu listy firm"
+    error: "Wystapił błąd przy pobieraniu listy firm."
   address:
     street:
-      required: "Ulica wymagana"
+      required: "Ulica wymagana."
     postcode:
-      required: "Kod pcztowy wymagany"
+      required: "Kod pcztowy wymagany."
     city:
-      required: "Miasto wymagane"
+      required: "Miasto wymagane."
     country:
-      required: "Kraj wymagany"
+      required: "Kraj wymagany."
   contact:
     phone:
-      required: "Telefon jest wymagany"
+      required: "Telefon jest wymagany."
     email:
-      required: "Email jest wymagany"
+      required: "Email jest wymagany."
 

@@ -14,9 +14,9 @@ use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Factory\ImporterFactory;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use Ramsey\Uuid\Uuid;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Serializer\SerializerInterface;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
 final readonly class ImportEmployeesCommandHandler
@@ -25,9 +25,10 @@ final readonly class ImportEmployeesCommandHandler
         private ImportReaderInterface $importReaderRepository,
         private UserReaderInterface $userReaderRepository,
         private EventStoreCreator $eventStoreCreator,
-        private Security $security,
+
         private SerializerInterface $serializer,
         private ImporterFactory $importerFactory,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
     }
 
@@ -48,8 +49,10 @@ final readonly class ImportEmployeesCommandHandler
                 $multiEvent::class,
                 EmployeeAggregate::class,
                 $this->serializer->serialize($multiEvent, 'json'),
-                $this->security->getUser(),
+                $import->getUser(),
             )
         );
+
+        $this->eventDispatcher->dispatch($multiEvent);
     }
 }

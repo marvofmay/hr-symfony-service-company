@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Domain\Event\Company;
+namespace App\Module\Company\Domain\Event\Employee;
 
 use App\Common\Domain\Interface\NotifiableEventInterface;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Domain\Trait\ClassNameExtractorTrait;
+use App\Module\Company\Domain\Event\Company\CompanyImportedEvent;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use App\Module\System\Notification\Domain\Interface\Event\NotificationEventPayloadProviderInterface;
 
-final readonly class CompanyImportedEventNotificationPayloadProvider implements NotificationEventPayloadProviderInterface
+final readonly class EmployeeImportedEventNotificationPayloadProvider  implements NotificationEventPayloadProviderInterface
 {
     use ClassNameExtractorTrait;
 
@@ -27,7 +28,7 @@ final readonly class CompanyImportedEventNotificationPayloadProvider implements 
     {
         $import = $this->importReaderRepository->getImportByUuid($notifiableEvent->importUUID);
         $payload = [
-            'importKind' => $this->messageService->get('import.kind.company', [], 'imports'),
+            'importKind' => $this->messageService->get('import.kind.employee', [], 'imports'),
             'importStatus' => $this->messageService->get('import.status.'. $import->getStatus()->value, [], 'imports'),
         ];
 

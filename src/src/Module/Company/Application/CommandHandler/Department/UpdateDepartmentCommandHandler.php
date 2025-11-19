@@ -17,6 +17,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInterface;
+use App\Module\System\Domain\ValueObject\UserUUID;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
@@ -45,6 +46,9 @@ final class UpdateDepartmentCommandHandler extends CommandHandlerAbstract
     {
         $this->validate($command);
 
+        $user = $this->security->getUser();
+        $loggedUserUUID = $user->getUuid()->toString();
+
         $departmentAggregate = $this->departmentAggregateReaderRepository->getDepartmentAggregateByUUID(
             DepartmentUUID::fromString($command->departmentUUID)
         );
@@ -54,6 +58,7 @@ final class UpdateDepartmentCommandHandler extends CommandHandlerAbstract
             Name::fromString($command->name),
             $command->internalCode,
             Address::fromDTO($command->address),
+            UserUUID::fromString($loggedUserUUID),
             $command->active,
             $command->description,
             $command->phones ? Phones::fromArray($command->phones) : null,

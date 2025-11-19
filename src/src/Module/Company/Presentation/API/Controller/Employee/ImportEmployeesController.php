@@ -24,7 +24,7 @@ class ImportEmployeesController extends AbstractController
     {
     }
 
-    #[Route('/api/employees/import', name: 'import', methods: ['POST'])]
+    #[Route('/api/employees/import', name: 'api.employees.import', methods: ['POST'])]
     public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
         $this->denyAccessUnlessGranted(
