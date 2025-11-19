@@ -8,7 +8,7 @@ use App\Common\Domain\Interface\CommandInterface;
 
 final readonly class ImportDepartmentsCommand implements CommandInterface
 {
-    public function __construct(public string $importUUID)
+    public function __construct(public string $importUUID, public string $loggedUserUUID)
     {
     }
 }

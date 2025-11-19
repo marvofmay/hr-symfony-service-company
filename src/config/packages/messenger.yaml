@@ -39,8 +39,8 @@ framework:
                   type: direct
         routing:
             'App\Module\Company\Application\Command\Company\ImportCompaniesCommand': company_xlsx_import
-            #'App\Module\Company\Application\Command\Department\ImportDepartmentsCommand': department_xlsx_import
-            #'App\Module\Company\Application\Command\Employee\ImportEmployeesCommand': employee_xlsx_import
+            'App\Module\Company\Application\Command\Department\ImportDepartmentsCommand': department_xlsx_import
+            'App\Module\Company\Application\Command\Employee\ImportEmployeesCommand': employee_xlsx_import
             'App\Module\System\Application\Command\Email\SendEmailCommand': send_email
 
 # when@test:

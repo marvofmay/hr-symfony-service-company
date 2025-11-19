@@ -17,16 +17,21 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class ImportDepartmentsController extends AbstractController
 {
-    public function __construct(private readonly ImportDepartmentsFacade $importDepartmentsFacade, private readonly MessageService $messageService)
+    public function __construct(
+        private readonly ImportDepartmentsFacade $importDepartmentsFacade,
+        private readonly MessageService $messageService
+    )
     {
     }
 
     #[Route('/api/departments/import', name: 'import', methods: ['POST'])]
     public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::DEPARTMENT)) {
-            return new JsonResponse(['message' => $this->messageService->get('accessDenied')], Response::HTTP_FORBIDDEN);
-        }
+        $this->denyAccessUnlessGranted(
+            PermissionEnum::IMPORT,
+            AccessEnum::DEPARTMENT,
+            $this->messageService->get('accessDenied')
+        );
 
         if (!$file) {
             return new JsonResponse(
@@ -35,13 +40,11 @@ class ImportDepartmentsController extends AbstractController
             );
         }
 
-        $result = $this->importDepartmentsFacade->handle($file);
+        $this->importDepartmentsFacade->enqueue($file);
 
-        $responseData = ['message' => $result['message']];
-        if (!empty($result['errors'])) {
-            $responseData['errors'] = $result['errors'];
-        }
-
-        return new JsonResponse($responseData, $result['success'] ? Response::HTTP_CREATED : Response::HTTP_UNPROCESSABLE_ENTITY);
+        return new JsonResponse([
+            'success' => true,
+            'message' => $this->messageService->get('department.import.enqueued', [], 'departments'),
+        ], Response::HTTP_ACCEPTED);
     }
 }

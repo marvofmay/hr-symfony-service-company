@@ -9,6 +9,7 @@ use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Module\Company\Application\Command\Department\ImportDepartmentsCommand;
 use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
 use App\Module\Company\Domain\Event\Department\DepartmentImportedEvent;
+use App\Module\Company\Domain\Interface\User\UserReaderInterface;
 use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Factory\ImporterFactory;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
@@ -22,6 +23,7 @@ final readonly class ImportDepartmentsCommandHandler
 {
     public function __construct(
         private ImportReaderInterface $importReaderRepository,
+        private UserReaderInterface $userReaderRepository,
         private EventStoreCreator $eventStoreCreator,
         private Security $security,
         private SerializerInterface $serializer,
@@ -32,13 +34,14 @@ final readonly class ImportDepartmentsCommandHandler
     public function __invoke(ImportDepartmentsCommand $command): void
     {
         $import = $this->importReaderRepository->getImportByUUID($command->importUUID);
+        $loggedUser = $this->userReaderRepository->getUserByUUID($command->loggedUserUUID);
 
         $importer = $this->importerFactory->getImporter(ImportKindEnum::IMPORT_DEPARTMENTS);
         $importer->setFilePath(sprintf('%s/%s', $import->getFile()->getFilePath(), $import->getFile()->getFileName()));
 
-        $preparedRows = $importer->run($import);
+        $preparedRows = $importer->run($import, $loggedUser);
 
-        $multiEvent = new DepartmentImportedEvent($preparedRows);
+        $multiEvent = new DepartmentImportedEvent($preparedRows, $command->importUUID);
         $this->eventStoreCreator->create(
             new EventStore(
                 Uuid::uuid4()->toString(),

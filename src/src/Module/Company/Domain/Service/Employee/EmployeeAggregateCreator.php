@@ -20,10 +20,11 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 final class EmployeeAggregateCreator extends AggregateAbstract
 {
-    public function create(array $row, EmployeeUUID $uuid, ?EmployeeUUID $parentUUID): void
+    public function create(array $row, EmployeeUUID $uuid, ?EmployeeUUID $parentUUID, UserUUID $loggedUserUUID): void
     {
         $employeeAggregate = EmployeeAggregate::create(
             FirstName::fromString($row[EmployeeImportColumnEnum::FIRST_NAME->value]),
@@ -41,6 +42,7 @@ final class EmployeeAggregateCreator extends AggregateAbstract
                 $row[EmployeeImportColumnEnum::CITY->value],
                 $row[EmployeeImportColumnEnum::COUNTRY->value]
             ),
+            $loggedUserUUID,
             $row[EmployeeImportColumnEnum::EXTERNAL_UUID->value],
             $row[EmployeeImportColumnEnum::INTERNAL_CODE->value],
             (bool) $row[EmployeeImportColumnEnum::ACTIVE->value],

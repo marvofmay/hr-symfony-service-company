@@ -10,6 +10,7 @@ use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -27,7 +28,7 @@ final class RestoreDepartmentCommandHandler extends CommandHandlerAbstract
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.department.restore.validator')] protected iterable $validators,
     ) {
     }

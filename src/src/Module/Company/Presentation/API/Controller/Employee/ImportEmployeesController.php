@@ -27,9 +27,11 @@ class ImportEmployeesController extends AbstractController
     #[Route('/api/employees/import', name: 'import', methods: ['POST'])]
     public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::EMPLOYEE)) {
-            return new JsonResponse(['message' => $this->messageService->get('accessDenied')], Response::HTTP_FORBIDDEN);
-        }
+        $this->denyAccessUnlessGranted(
+            PermissionEnum::IMPORT,
+            AccessEnum::EMPLOYEE,
+            $this->messageService->get('accessDenied')
+        );
 
         if (!$file) {
             return new JsonResponse(
@@ -38,13 +40,11 @@ class ImportEmployeesController extends AbstractController
             );
         }
 
-        $result = $this->importEmployeesFacade->handle($file);
+        $this->importEmployeesFacade->enqueue($file);
 
-        $responseData = ['message' => $result['message']];
-        if (!empty($result['errors'])) {
-            $responseData['errors'] = $result['errors'];
-        }
-
-        return new JsonResponse($responseData, $result['success'] ? Response::HTTP_CREATED : Response::HTTP_UNPROCESSABLE_ENTITY);
+        return new JsonResponse([
+            'success' => true,
+            'message' => $this->messageService->get('employee.import.enqueued', [], 'employees'),
+        ], Response::HTTP_ACCEPTED);
     }
 }

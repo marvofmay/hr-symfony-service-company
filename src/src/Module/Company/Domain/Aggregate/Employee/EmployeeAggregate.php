@@ -23,28 +23,30 @@ use App\Module\Company\Domain\Event\Employee\EmployeeCreatedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeDeletedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeRestoredEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 class EmployeeAggregate extends AggregateRootAbstract
 {
-    private EmployeeUUID $uuid;
-    private ?EmployeeUUID $parentEmployeeUUID = null;
-    private FirstName $firstName;
-    private LastName $lastName;
-    private PESEL $pesel;
+    private EmployeeUUID   $uuid;
+    private ?EmployeeUUID  $parentEmployeeUUID = null;
+    private FirstName      $firstName;
+    private LastName       $lastName;
+    private PESEL          $pesel;
     private EmploymentFrom $employmentFrom;
 
-    private DepartmentUUID $departmentUUID;
-    private PositionUUID $positionUUID;
+    private DepartmentUUID   $departmentUUID;
+    private PositionUUID     $positionUUID;
     private ContractTypeUUID $contractTypeUUID;
-    private RoleUUID $roleUUID;
-    private Emails $emails;
-    private Address $address;
-    private ?string $externalUUID = null;
-    private ?string $internalCode = null;
-    private ?EmploymentTo $employmentTo = null;
-    private bool $active = true;
-    private ?Phones $phones = null;
-    private bool $deleted = false;
+    private RoleUUID         $roleUUID;
+    private Emails           $emails;
+    private Address          $address;
+    private ?string          $externalUUID = null;
+    private ?string          $internalCode = null;
+    private ?EmploymentTo    $employmentTo = null;
+    private bool             $active       = true;
+    private ?Phones          $phones       = null;
+    private bool             $deleted      = false;
+    private UserUUID         $loggedUserUUID;
 
     public static function create(
         FirstName $firstName,
@@ -57,6 +59,7 @@ class EmployeeAggregate extends AggregateRootAbstract
         RoleUUID $roleUUID,
         Emails $emails,
         Address $address,
+        UserUUID $loggedUserUUID,
         ?string $externalUUID = null,
         ?string $internalCode = null,
         ?bool $active = true,
@@ -67,25 +70,28 @@ class EmployeeAggregate extends AggregateRootAbstract
     ): self {
         $aggregate = new self();
 
-        $aggregate->record(new EmployeeCreatedEvent(
-            $uuid ?? EmployeeUUID::generate(),
-            $firstName,
-            $lastName,
-            $pesel,
-            $employmentFrom,
-            $departmentUUID,
-            $positionUUID,
-            $contractTypeUUID,
-            $roleUUID,
-            $emails,
-            $address,
-            $active,
-            $externalUUID,
-            $internalCode,
-            $phones,
-            $parentEmployeeUUID,
-            $employmentTo,
-        ));
+        $aggregate->record(
+            new EmployeeCreatedEvent(
+                $uuid ?? EmployeeUUID::generate(),
+                $firstName,
+                $lastName,
+                $pesel,
+                $employmentFrom,
+                $departmentUUID,
+                $positionUUID,
+                $contractTypeUUID,
+                $roleUUID,
+                $emails,
+                $address,
+                $loggedUserUUID,
+                $active,
+                $externalUUID,
+                $internalCode,
+                $phones,
+                $parentEmployeeUUID,
+                $employmentTo,
+            )
+        );
 
         return $aggregate;
     }
@@ -112,25 +118,27 @@ class EmployeeAggregate extends AggregateRootAbstract
             throw new \DomainException('Cannot update a deleted employee.');
         }
 
-        $this->record(new EmployeeUpdatedEvent(
-            $this->uuid,
-            $firstName,
-            $lastName,
-            $pesel,
-            $employmentFrom,
-            $departmentUUID,
-            $positionUUID,
-            $contractTypeUUID,
-            $roleUUID,
-            $emails,
-            $address,
-            $active,
-            $externalUUID,
-            $internalCode,
-            $phones,
-            $parentEmployeeUUID,
-            $employmentTo,
-        ));
+        $this->record(
+            new EmployeeUpdatedEvent(
+                $this->uuid,
+                $firstName,
+                $lastName,
+                $pesel,
+                $employmentFrom,
+                $departmentUUID,
+                $positionUUID,
+                $contractTypeUUID,
+                $roleUUID,
+                $emails,
+                $address,
+                $active,
+                $externalUUID,
+                $internalCode,
+                $phones,
+                $parentEmployeeUUID,
+                $employmentTo,
+            )
+        );
 
         return $this;
     }
@@ -167,6 +175,7 @@ class EmployeeAggregate extends AggregateRootAbstract
             $this->roleUUID = $event->roleUUID;
             $this->emails = $event->emails;
             $this->address = $event->address;
+            $this->loggedUserUUID = $event->loggedUserUUID;
             $this->active = $event->active;
             $this->externalUUID = $event->externalUUID;
             $this->internalCode = $event->internalCode;

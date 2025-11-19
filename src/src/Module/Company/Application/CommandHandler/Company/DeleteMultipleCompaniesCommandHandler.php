@@ -13,6 +13,7 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Event\Company\CompanyMultipleDeletedEvent;
 use App\Module\Company\Domain\Interface\Company\CompanyAggregateReaderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -30,7 +31,7 @@ final class DeleteMultipleCompaniesCommandHandler extends CommandHandlerAbstract
         private readonly EventStoreCreator $eventStoreCreator,
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.company.delete_multiple.validator')] protected iterable $validators,
     ) {
     }

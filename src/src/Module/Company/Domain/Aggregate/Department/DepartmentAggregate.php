@@ -17,6 +17,7 @@ use App\Module\Company\Domain\Event\Department\DepartmentCreatedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentDeletedEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentRestoredEvent;
 use App\Module\Company\Domain\Event\Department\DepartmentUpdatedEvent;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 class DepartmentAggregate extends AggregateRootAbstract
 {
@@ -32,12 +33,14 @@ class DepartmentAggregate extends AggregateRootAbstract
     private ?Emails $emails = null;
     private ?Websites $websites = null;
     private bool $deleted = false;
+    private UserUUID $loggedUserUUID;
 
     public static function create(
         CompanyUUID $companyUUID,
         Name $name,
         string $internalCode,
         Address $address,
+        UserUUID $loggedUserUUID,
         bool $active = true,
         ?string $description = null,
         ?Phones $phones = null,
@@ -54,6 +57,7 @@ class DepartmentAggregate extends AggregateRootAbstract
             $name,
             $internalCode,
             $address,
+            $loggedUserUUID,
             $active,
             $description,
             $phones,
@@ -125,6 +129,7 @@ class DepartmentAggregate extends AggregateRootAbstract
             $this->description = $event->description;
             $this->companyUUID = $event->companyUUID;
             $this->parentDepartmentUUID = $event->parentDepartmentUUID;
+            $this->loggedUserUUID = $event->loggedUserUUID;
             $this->active = $event->active;
             $this->address = $event->address;
             $this->phones = $event->phones;

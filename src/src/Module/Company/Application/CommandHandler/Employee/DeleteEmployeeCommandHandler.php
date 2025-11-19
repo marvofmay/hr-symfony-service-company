@@ -10,6 +10,7 @@ use App\Module\Company\Domain\Aggregate\Employee\EmployeeAggregate;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
 use App\Module\Company\Domain\Interface\Employee\EmployeeAggregateReaderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -27,7 +28,7 @@ final class DeleteEmployeeCommandHandler extends CommandHandlerAbstract
         private readonly EventStoreCreator $eventStoreCreator,
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.employee.delete.validator')] protected iterable $validators,
     ) {
     }

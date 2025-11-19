@@ -12,6 +12,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 final readonly class DepartmentCreatedEvent implements DomainEventInterface
 {
@@ -21,6 +22,7 @@ final readonly class DepartmentCreatedEvent implements DomainEventInterface
         public Name $name,
         public string $internalCode,
         public Address $address,
+        public UserUUID $loggedUserUUID,
         public bool $active,
         public ?string $description = null,
         public ?Phones $phones = null,

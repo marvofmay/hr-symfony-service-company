@@ -23,6 +23,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -39,7 +40,7 @@ final class CreateEmployeeCommandHandler extends CommandHandlerAbstract
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.employee.create.validator')] protected iterable $validators,
     ) {
     }
@@ -47,6 +48,9 @@ final class CreateEmployeeCommandHandler extends CommandHandlerAbstract
     public function __invoke(CreateEmployeeCommand $command): void
     {
         $this->validate($command);
+
+        $user = $this->security->getUser();
+        $loggedUserUUID = $user->getUuid()->toString();
 
         $employeeAggregate = EmployeeAggregate::create(
             FirstName::fromString($command->firstName),
@@ -59,6 +63,7 @@ final class CreateEmployeeCommandHandler extends CommandHandlerAbstract
             RoleUUID::fromString($command->roleUUID),
             Emails::fromArray([$command->email]),
             Address::fromDTO($command->address),
+            $loggedUserUUID,
             $command->externalUUID,
             $command->internalCode,
             $command->active,

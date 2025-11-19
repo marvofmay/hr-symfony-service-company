@@ -62,6 +62,21 @@ class EventStore
         return $this->uuid;
     }
 
+    public function getAggregateUUID(): string
+    {
+        return $this->aggregateUUID;
+    }
+
+    public function getAggregateType(): string
+    {
+        return $this->aggregateType;
+    }
+
+    public function getAggregateClass(): string
+    {
+        return $this->aggregateClass;
+    }
+
     public function getPayload(): string
     {
         return $this->payload;

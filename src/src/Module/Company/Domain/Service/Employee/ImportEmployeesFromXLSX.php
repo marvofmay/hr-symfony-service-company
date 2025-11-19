@@ -17,11 +17,13 @@ use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
+use App\Module\System\Domain\ValueObject\UserUUID;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag(name: 'app.importer')]
@@ -36,9 +38,9 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         private readonly UpdateImportAction $updateImportAction,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly MessageService $messageService,
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         private readonly ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.employee.import.validator')] private readonly iterable $importEmployeesValidators,
     ) {
         parent::__construct($this->translator);
@@ -106,7 +108,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         return EmployeeUUID::fromString($existingParentEmployee->getUUID()->toString());
     }
 
-    public function run(Import $import): array
+    public function run(Import $import, UserInterface $loggedUser): array
     {
         $errors = $this->validateBeforeImport();
 
@@ -123,6 +125,9 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         } else {
             [$preparedRows, $peselMap] = $this->importEmployeesPreparer->prepare($this->import());
 
+            $loggedUserUUID = $loggedUser->getUUID()->toString();
+            $loggedUserUUID = UserUUID::fromString($loggedUserUUID);
+
             foreach ($preparedRows as $row) {
                 $parentUUID = $this->resolveParentUUID($row, $peselMap);
 
@@ -130,7 +135,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
                 $uuid = $peselMap[$pesel];
 
                 if (!$row[EmployeeImportColumnEnum::DYNAMIC_IS_EMPLOYEE_WITH_PESEL_ALREADY_EXISTS->value]) {
-                    $this->employeeAggregateCreator->create($row, $uuid, $parentUUID);
+                    $this->employeeAggregateCreator->create($row, $uuid, $parentUUID, $loggedUserUUID);
                 } else {
                     $this->employeeAggregateUpdater->update($row, $parentUUID);
                 }

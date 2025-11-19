@@ -14,10 +14,11 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
 use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 final class DepartmentAggregateCreator extends AggregateAbstract
 {
-    public function create(array $row, DepartmentUUID $uuid, ?DepartmentUUID $parentUUID): void
+    public function create(array $row, DepartmentUUID $uuid, ?DepartmentUUID $parentUUID, UserUUID $loggedUserUUID): void
     {
         $departmentAggregate = DepartmentAggregate::create(
             CompanyUUID::fromString($row[DepartmentImportColumnEnum::COMPANY_UUID->value]),
@@ -29,6 +30,7 @@ final class DepartmentAggregateCreator extends AggregateAbstract
                 $row[DepartmentImportColumnEnum::CITY->value],
                 $row[DepartmentImportColumnEnum::COUNTRY->value]
             ),
+            $loggedUserUUID,
             (bool) $row[DepartmentImportColumnEnum::ACTIVE->value],
             $row[DepartmentImportColumnEnum::DEPARTMENT_DESCRIPTION->value],
             Phones::fromArray([$row[DepartmentImportColumnEnum::PHONE->value]]),

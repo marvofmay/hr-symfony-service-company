@@ -68,7 +68,7 @@ employee:
     success: "Pracownik został pomyślnie przywrócony"
     error: "Wystąpił błąd - pracownik nie został przywrócony"
   import:
-    queued: "Plik został dodany do kolejki importu pracowników. Otrzymasz powiadmienie o statusie importu."
+    enqueued: "Import pracowników został rozpoczęty i oczekuje w kolejce. Po jego zakończeniu wyślemy Ci powiadomienie o statusie."
     success: "Pracownicy zostali pomyślnie zaimportowani"
     error: "Wystąpił błąd - pracownicy nie zostali zaimportowani"
     file:

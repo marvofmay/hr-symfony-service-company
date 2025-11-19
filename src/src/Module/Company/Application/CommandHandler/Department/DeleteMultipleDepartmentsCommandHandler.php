@@ -13,6 +13,7 @@ use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Event\Department\DepartmentMultipleDeletedEvent;
 use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -30,7 +31,7 @@ final class DeleteMultipleDepartmentsCommandHandler extends CommandHandlerAbstra
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.department.delete_multiple.validator')] protected iterable $validators,
     ) {
     }

@@ -17,10 +17,12 @@ use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
+use App\Module\System\Domain\ValueObject\UserUUID;
 use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag(name: 'app.importer')]
@@ -99,7 +101,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         return DepartmentUUID::fromString($existingParentDepartment->getUUID()->toString());
     }
 
-    public function run(Import $import): array
+    public function run(Import $import,  UserInterface $loggedUser): array
     {
         $errors = $this->validateBeforeImport();
 
@@ -116,6 +118,9 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         } else {
             [$preparedRows, $internalCodeMap] = $this->importDepartmentsPreparer->prepare($this->import());
 
+            $loggedUserUUID = $loggedUser->getUUID()->toString();
+            $loggedUserUUID = UserUUID::fromString($loggedUserUUID);
+
             foreach ($preparedRows as $row) {
                 $parentUUID = $this->resolveParentUUID($row, $internalCodeMap);
 
@@ -123,7 +128,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
                 $uuid = $internalCodeMap[$internalCode];
 
                 if (!$row[DepartmentImportColumnEnum::DYNAMIC_IS_DEPARTMENT_WITH_INTERNAL_CODE_ALREADY_EXISTS->value]) {
-                    $this->departmentAggregateCreator->create($row, $uuid, $parentUUID);
+                    $this->departmentAggregateCreator->create($row, $uuid, $parentUUID, $loggedUserUUID);
                 } else {
                     $this->departmentAggregateUpdater->update($row, $parentUUID);
                 }

@@ -24,6 +24,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Interface\Employee\EmployeeAggregateReaderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -41,7 +42,7 @@ final class UpdateEmployeeCommandHandler extends CommandHandlerAbstract
         private readonly SerializerInterface $serializer,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly EmployeeAggregateReaderInterface $employeeAggregateReaderRepository,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.employee.create.validator')] protected iterable $validators,
     ) {
     }

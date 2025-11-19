@@ -15,6 +15,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Aggregate\ValueObject\Websites;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 final readonly class CompanyUpdatedEvent implements DomainEventInterface
 {
@@ -27,6 +28,7 @@ final readonly class CompanyUpdatedEvent implements DomainEventInterface
         public bool $active,
         public Address $address,
         public Phones $phones,
+        public UserUUID $loggedUserUUID,
         public ?ShortName $shortName = null,
         public ?string $internalCode = null,
         public ?string $description = null,

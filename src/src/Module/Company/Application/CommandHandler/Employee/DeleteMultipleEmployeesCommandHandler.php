@@ -13,8 +13,10 @@ use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
 use App\Module\Company\Domain\Event\Employee\EmployeeMultipleDeletedEvent;
 use App\Module\Company\Domain\Interface\Employee\EmployeeAggregateReaderInterface;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -29,6 +31,7 @@ final class DeleteMultipleEmployeesCommandHandler extends CommandHandlerAbstract
         private readonly EventStoreCreator $eventStoreCreator,
         private readonly Security $security,
         private readonly SerializerInterface $serializer,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.employee.delete_multiple.validator')] protected iterable $validators,
     ) {
     }

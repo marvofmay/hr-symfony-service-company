@@ -20,7 +20,7 @@ trait HandleEventStoreTrait
     private readonly Security $security;
     private readonly SerializerInterface $serializer;
     private readonly EventDispatcherInterface $eventDispatcher;
-    #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus;
+    private readonly MessageBusInterface $eventBus;
 
     private function handleEvent(object $event, string $aggregateClass): void
     {

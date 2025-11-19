@@ -82,34 +82,33 @@ services:
     volumes:
       - ./src:/var/www/html
 
-#
-#  worker-department-xlsx-import:
-#    container_name: worker-department-xlsx-import
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile
-#    command: [ "php", "bin/console", "messenger:consume", "department_xlsx_import", "--verbose", "--no-interaction" ]
-#    depends_on:
-#      - rabbitmq
-#      - service-company
-#    environment:
-#      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
-#    volumes:
-#      - ./src:/var/www/html
+  worker-department-xlsx-import:
+    container_name: worker-department-xlsx-import
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: [ "php", "bin/console", "messenger:consume", "department_xlsx_import", "--verbose", "--no-interaction" ]
+    depends_on:
+      - rabbitmq
+      - service-company
+    environment:
+      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+    volumes:
+      - ./src:/var/www/html
 
-#  worker-employee-xlsx-import:
-#    container_name: worker-employee-xlsx-import
-#    build:
-#      context: ./
-#      dockerfile: Dockerfile
-#    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--verbose", "--no-interaction" ]
-#    depends_on:
-#      - rabbitmq
-#      - service-company
-#    environment:
-#      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
-#    volumes:
-#      - ./src:/var/www/html
+  worker-employee-xlsx-import:
+    container_name: worker-employee-xlsx-import
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--verbose", "--no-interaction" ]
+    depends_on:
+      - rabbitmq
+      - service-company
+    environment:
+      - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
+    volumes:
+      - ./src:/var/www/html
 
   worker-send-email:
     container_name: worker-send-email
