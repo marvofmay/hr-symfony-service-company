@@ -31,7 +31,7 @@ class DeleteMultipleCompaniesController extends AbstractController
     }
 
     #[Route('/api/companies/multiple', name: 'api.companies.delete_multiple', methods: ['DELETE'])]
-    public function delete(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
+    public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(

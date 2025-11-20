@@ -31,7 +31,7 @@ class UpdateCompanyController extends AbstractController
     }
 
     #[Route('/api/companies/{uuid}', name: 'api.company.update', methods: ['PUT'])]
-    public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): JsonResponse
+    public function __invoke(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(

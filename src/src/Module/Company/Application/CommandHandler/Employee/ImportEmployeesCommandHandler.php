@@ -25,7 +25,6 @@ final readonly class ImportEmployeesCommandHandler
         private ImportReaderInterface $importReaderRepository,
         private UserReaderInterface $userReaderRepository,
         private EventStoreCreator $eventStoreCreator,
-
         private SerializerInterface $serializer,
         private ImporterFactory $importerFactory,
         private EventDispatcherInterface $eventDispatcher,

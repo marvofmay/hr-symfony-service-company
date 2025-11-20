@@ -24,7 +24,7 @@ class ImportContractTypesController extends AbstractController
     }
 
     #[Route('/api/contract_types/import', name: 'app.contract_types.import', methods: ['POST'])]
-    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
+    public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
         $this->denyAccessUnlessGranted(
             PermissionEnum::IMPORT,

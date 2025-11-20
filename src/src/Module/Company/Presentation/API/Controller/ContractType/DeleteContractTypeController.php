@@ -29,7 +29,7 @@ class DeleteContractTypeController extends AbstractController
     }
 
     #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
-    public function delete(string $uuid): JsonResponse
+    public function __invokee(string $uuid): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(

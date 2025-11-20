@@ -31,7 +31,7 @@ class CreateCompanyController extends AbstractController
     }
 
     #[Route('/api/companies', name: 'api.companies.create', methods: ['POST'])]
-    public function create(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
+    public function __invoke(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(

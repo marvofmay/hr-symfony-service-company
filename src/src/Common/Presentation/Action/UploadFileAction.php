@@ -6,11 +6,12 @@ namespace App\Common\Presentation\Action;
 
 use App\Common\Application\Command\UploadFileCommand;
 use App\Common\Domain\DTO\UploadFileDTO;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 readonly class UploadFileAction
 {
-    public function __construct(#[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus)
+    public function __construct(#[Autowire(service: 'command.bus')] private MessageBusInterface $commandBus)
     {
     }
 

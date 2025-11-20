@@ -31,7 +31,7 @@ class UpdateContractTypeController extends AbstractController
     }
 
     #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.update', methods: ['PUT'])]
-    public function update(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): Response
+    public function __invoke(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): Response
     {
         try {
             $this->denyAccessUnlessGranted(

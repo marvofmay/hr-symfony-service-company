@@ -32,7 +32,7 @@ class ListEmployeesController extends AbstractController
     }
 
     #[Route('/api/employees', name: 'api.employees.list', methods: ['GET'])]
-    public function list(#[MapQueryString] EmployeesQueryDTO $queryDTO): Response
+    public function __invoke(#[MapQueryString] EmployeesQueryDTO $queryDTO): Response
     {
         try {
             $this->denyAccessUnlessGranted(

@@ -20,10 +20,11 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 final class EmployeeAggregateUpdater extends AggregateAbstract
 {
-    public function update(array $row, ?EmployeeUUID $parentUUID): void
+    public function update(array $row, ?EmployeeUUID $parentUUID, UserUUID $loggedUserUUID): void
     {
         $employeeAggregate = $this->employeeAggregateReaderRepository->getEmployeeAggregateByUUID(
             EmployeeUUID::fromString($row[EmployeeImportColumnEnum::DYNAMIC_AGGREGATE_UUID->value])
@@ -45,6 +46,7 @@ final class EmployeeAggregateUpdater extends AggregateAbstract
                 $row[EmployeeImportColumnEnum::CITY->value],
                 $row[EmployeeImportColumnEnum::COUNTRY->value]
             ),
+            $loggedUserUUID,
             $row[EmployeeImportColumnEnum::EXTERNAL_UUID->value],
             $row[EmployeeImportColumnEnum::INTERNAL_CODE->value],
             (bool) $row[EmployeeImportColumnEnum::ACTIVE->value],

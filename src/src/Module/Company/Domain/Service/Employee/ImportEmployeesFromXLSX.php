@@ -137,7 +137,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
                 if (!$row[EmployeeImportColumnEnum::DYNAMIC_IS_EMPLOYEE_WITH_PESEL_ALREADY_EXISTS->value]) {
                     $this->employeeAggregateCreator->create($row, $uuid, $parentUUID, $loggedUserUUID);
                 } else {
-                    $this->employeeAggregateUpdater->update($row, $parentUUID);
+                    $this->employeeAggregateUpdater->update($row, $parentUUID, $loggedUserUUID);
                 }
             }
 

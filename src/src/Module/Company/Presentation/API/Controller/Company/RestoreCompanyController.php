@@ -29,7 +29,7 @@ class RestoreCompanyController extends AbstractController
     }
 
     #[Route('/api/companies/{uuid}/restore', name: 'api.companies.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
-    public function restore(string $uuid): JsonResponse
+    public function __invoke(string $uuid): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(

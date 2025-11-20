@@ -30,7 +30,7 @@ class GetContractTypeController extends AbstractController
     }
 
     #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
-    public function get(string $uuid): JsonResponse
+    public function __invoke(string $uuid): JsonResponse
     {
         try {
             $this->denyAccessUnlessGranted(

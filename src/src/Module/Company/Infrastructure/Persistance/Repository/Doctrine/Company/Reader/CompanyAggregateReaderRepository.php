@@ -27,7 +27,7 @@ final class CompanyAggregateReaderRepository extends ServiceEntityRepository imp
         ], ['createdAt' => 'ASC']);
 
         if (empty($events)) {
-            throw new \RuntimeException('Aggregate not found: '.$uuid->toString());
+            throw new \RuntimeException('Aggregate company not found: '.$uuid->toString());
         }
 
         $domainEvents = [];

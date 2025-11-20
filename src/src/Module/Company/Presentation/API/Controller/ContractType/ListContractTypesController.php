@@ -32,7 +32,7 @@ class ListContractTypesController extends AbstractController
     }
 
     #[Route('/api/contract_types', name: 'api.contract_types.list', methods: ['GET'])]
-    public function list(#[MapQueryString] ContractTypesQueryDTO $queryDTO): Response
+    public function __invoke(#[MapQueryString] ContractTypesQueryDTO $queryDTO): Response
     {
         try {
             $this->denyAccessUnlessGranted(

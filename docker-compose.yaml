@@ -101,7 +101,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--verbose", "--no-interaction" ]
+    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--verbose", "--no-interaction", "--memory-limit=1024G"]
     depends_on:
       - rabbitmq
       - service-company

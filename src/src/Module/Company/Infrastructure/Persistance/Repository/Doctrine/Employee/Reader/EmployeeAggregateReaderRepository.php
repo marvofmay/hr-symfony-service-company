@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Infrastructure\Persistance\Repository\Doctrine\Employee\Reader;
 
 use App\Common\Domain\Entity\EventStore;
+use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Domain\Aggregate\Employee\EmployeeAggregate;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
 use App\Module\Company\Domain\Interface\Employee\EmployeeAggregateReaderInterface;
@@ -14,7 +15,11 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 final class EmployeeAggregateReaderRepository extends ServiceEntityRepository implements EmployeeAggregateReaderInterface
 {
-    public function __construct(ManagerRegistry $registry, private SerializerInterface $serializer)
+    public function __construct(
+        ManagerRegistry $registry,
+        private readonly SerializerInterface $serializer,
+        private readonly MessageService $messageService,
+    )
     {
         parent::__construct($registry, EventStore::class);
     }
@@ -27,7 +32,9 @@ final class EmployeeAggregateReaderRepository extends ServiceEntityRepository im
         ], ['createdAt' => 'ASC']);
 
         if (empty($events)) {
-            throw new \RuntimeException('Aggregate not found: '.$uuid->toString());
+            throw new \RuntimeException(
+                $this->messageService->get('employee.aggregate.uuid.notFound', [":uuid" => $uuid->toString()],'employees')
+            );
         }
 
         $domainEvents = [];

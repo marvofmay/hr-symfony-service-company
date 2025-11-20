@@ -18,6 +18,7 @@ use App\Module\Company\Domain\Aggregate\Employee\ValueObject\RoleUUID;
 use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
+use App\Module\System\Domain\ValueObject\UserUUID;
 
 final readonly class EmployeeUpdatedEvent implements DomainEventInterface
 {
@@ -33,6 +34,7 @@ final readonly class EmployeeUpdatedEvent implements DomainEventInterface
         public RoleUUID $roleUUID,
         public Emails $emails,
         public Address $address,
+        public UserUUID $loggedUserUUID,
         public bool $active,
         public ?string $externalUUID = null,
         public ?string $internalCode = null,
