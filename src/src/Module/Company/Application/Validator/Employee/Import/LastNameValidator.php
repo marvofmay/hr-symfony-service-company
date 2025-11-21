@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.employee.import.validator')]
-class LastNameValidator implements ImportRowValidatorInterface
+final readonly class LastNameValidator implements ImportRowValidatorInterface
 {
     public const int MINIMUM_LENGTH = 3;
 

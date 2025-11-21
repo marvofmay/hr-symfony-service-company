@@ -11,7 +11,7 @@ use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.department.import.validator')]
-class ParentDepartmentInternalCodeValidator implements ImportRowValidatorInterface
+final readonly class ParentDepartmentInternalCodeValidator implements ImportRowValidatorInterface
 {
     public function __construct(
         private DepartmentReaderInterface $departmentReaderRepository,

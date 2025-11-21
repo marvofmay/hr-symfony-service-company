@@ -11,7 +11,7 @@ use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.company.import.validator')]
-class ParentCompanyNIPValidator implements ImportRowValidatorInterface
+final readonly class ParentCompanyNIPValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
     {

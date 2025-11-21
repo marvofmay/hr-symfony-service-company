@@ -73,7 +73,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: [ "php", "bin/console", "messenger:consume", "company_xlsx_import", "--verbose", "--no-interaction" ]
+    command: [ "php", "-d", "memory_limit=12G", "bin/console", "messenger:consume", "company_xlsx_import", "--verbose", "--no-interaction" ]
     depends_on:
       - rabbitmq
       - service-company
@@ -87,7 +87,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: [ "php", "bin/console", "messenger:consume", "department_xlsx_import", "--verbose", "--no-interaction" ]
+    command: [ "php", "-d", "memory_limit=12G", "bin/console", "messenger:consume", "department_xlsx_import", "--verbose", "--no-interaction" ]
     depends_on:
       - rabbitmq
       - service-company
@@ -101,7 +101,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: [ "php", "bin/console", "messenger:consume", "employee_xlsx_import", "--verbose", "--no-interaction", "--memory-limit=1024G"]
+    command: [ "php", "-d", "memory_limit=12G", "bin/console", "messenger:consume", "employee_xlsx_import", "--verbose", "--no-interaction" ]
     depends_on:
       - rabbitmq
       - service-company
@@ -115,7 +115,7 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile
-    command: [ "php", "bin/console", "messenger:consume", "send_email", "--verbose", "--no-interaction" ]
+    command: [ "php", "-d", "memory_limit=12G", "bin/console", "messenger:consume", "send_email", "--verbose", "--no-interaction" ]
     depends_on:
       - rabbitmq
       - service-company

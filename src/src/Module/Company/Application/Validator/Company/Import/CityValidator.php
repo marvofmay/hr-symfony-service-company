@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.company.import.validator')]
-class CityValidator implements ImportRowValidatorInterface
+final readonly class CityValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
     {

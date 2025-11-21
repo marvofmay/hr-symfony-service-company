@@ -11,7 +11,7 @@ use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.employee.import.validator')]
-class ActiveValidator implements ImportRowValidatorInterface
+final readonly class ActiveValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
     {

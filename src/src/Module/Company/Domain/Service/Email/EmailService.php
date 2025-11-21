@@ -9,6 +9,7 @@ use App\Module\System\Domain\Entity\Email;
 use App\Module\System\Domain\Interface\Email\EmailWriterInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Twig\Environment as Twig;
 
@@ -61,7 +62,7 @@ final readonly class EmailService
 
         $this->emailWriterRepository->saveEmailInDB($email);
 
-        $this->commandBus->dispatch(new SendEmailCommand($email->getUUID()));
+        $this->commandBus->dispatch(new SendEmailCommand($email->getUUID()), [new DispatchAfterCurrentBusStamp()]);
 
         return $email;
     }

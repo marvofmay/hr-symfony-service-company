@@ -10,9 +10,9 @@ use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.department.import.validator')]
-class DescriptionValidator implements ImportRowValidatorInterface
+final readonly class DescriptionValidator implements ImportRowValidatorInterface
 {
-    public const MIN_LENGTH = 30;
+    public const int MIN_LENGTH = 30;
 
     public function __construct(private MessageService $messageService)
     {

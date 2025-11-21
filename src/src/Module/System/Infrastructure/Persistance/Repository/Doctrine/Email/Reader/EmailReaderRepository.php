@@ -16,7 +16,7 @@ class EmailReaderRepository extends ServiceEntityRepository implements EmailRead
         parent::__construct($registry, Email::class);
     }
 
-    public function getEmailByUUID(string $emailUUID): Email
+    public function getEmailByUUID(string $emailUUID): ?Email
     {
         return $this->findOneBy(['uuid' => $emailUUID]);
     }

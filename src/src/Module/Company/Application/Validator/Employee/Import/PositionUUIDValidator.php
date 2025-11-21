@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.employee.import.validator')]
-class PositionUUIDValidator implements ImportRowValidatorInterface
+final readonly class PositionUUIDValidator implements ImportRowValidatorInterface
 {
     public function __construct(private MessageService $messageService)
     {

@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.department.import.validator')]
-class InternalCodeValidator implements ImportRowValidatorInterface
+final readonly class InternalCodeValidator implements ImportRowValidatorInterface
 {
     public const int MINIMUM_LENGTH = 2;
 

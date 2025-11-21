@@ -10,12 +10,12 @@ use App\Module\Company\Domain\Enum\Industry\IndustryImportColumnEnum;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AutoconfigureTag('app.industry.import.validator')]
-class NameValidator implements ImportRowValidatorInterface
+final readonly class NameValidator implements ImportRowValidatorInterface
 {
     public const int MINIMUM_LENGTH = 3;
     public const int MAXIMUM_LENGTH = 100;
 
-    public function __construct(private readonly MessageService $messageService)
+    public function __construct(private MessageService $messageService)
     {
     }
 
