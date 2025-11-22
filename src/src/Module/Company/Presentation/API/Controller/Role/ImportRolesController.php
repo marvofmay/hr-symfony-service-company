@@ -31,9 +31,7 @@ final class ImportRolesController extends AbstractController
         $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
 
         if (!$file) {
-            throw new \InvalidArgumentException(
-                $this->messageService->get('role.import.file.required', [], 'roles')
-            );
+            throw new \Exception($this->messageService->get('role.import.file.required', [], 'roles'), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         $result = $this->importRolesFacade->handle($file);
