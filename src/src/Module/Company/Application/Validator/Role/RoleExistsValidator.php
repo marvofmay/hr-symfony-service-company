@@ -39,7 +39,7 @@ final readonly class RoleExistsValidator implements ValidatorInterface
         $roleUUID = $data->roleUUID;
         $roleExists = $this->roleReaderRepository->isRoleWithUUIDExists($roleUUID);
         if (!$roleExists) {
-            throw new \Exception($this->translator->trans('role.uuid.notExists', [':uuid' => $roleUUID], 'roles'), Response::HTTP_CONFLICT);
+            throw new \Exception($this->translator->trans('role.uuid.notExists', [':uuid' => $roleUUID], 'roles'), Response::HTTP_NOT_FOUND);
         }
     }
 }

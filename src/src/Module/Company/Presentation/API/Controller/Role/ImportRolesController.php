@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Role;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Facade\ImportRolesFacade;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
@@ -15,21 +17,23 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[ErrorChannel(MonologChanelEnum::IMPORT)]
 final class ImportRolesController extends AbstractController
 {
-    public function __construct(private readonly ImportRolesFacade $importRolesFacade, private readonly MessageService $messageService)
-    {
-    }
+    public function __construct(
+        private readonly ImportRolesFacade $importRolesFacade,
+        private readonly MessageService $messageService
+    ) {}
 
     #[Route('/api/roles/import', name: 'api.roles.import', methods: ['POST'])]
-    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
+    public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        if (!$this->isGranted(PermissionEnum::IMPORT, AccessEnum::ROLE)) {
-            return new JsonResponse(['message' => $this->messageService->get('accessDenied')], Response::HTTP_FORBIDDEN);
-        }
+        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
 
         if (!$file) {
-            return new JsonResponse(['message' => $this->messageService->get('role.import.file.required', [], 'roles')], Response::HTTP_UNPROCESSABLE_ENTITY);
+            throw new \InvalidArgumentException(
+                $this->messageService->get('role.import.file.required', [], 'roles')
+            );
         }
 
         $result = $this->importRolesFacade->handle($file);

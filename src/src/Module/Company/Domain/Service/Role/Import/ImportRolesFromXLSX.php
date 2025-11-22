@@ -31,12 +31,12 @@ class ImportRolesFromXLSX extends XLSXIterator
         private readonly TranslatorInterface $translator,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly MessageService $messageService,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         private readonly ImportRolesReferenceLoader $importRolesReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         private readonly ImportRolesPreparer $importRolesPreparer,
         private readonly RolesImporter $rolesImporter,
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.role.import.validator')] private readonly iterable $importRolesValidators,
     ) {
         parent::__construct($this->translator);
@@ -50,14 +50,8 @@ class ImportRolesFromXLSX extends XLSXIterator
     public function validateRow(array $row, int $index): array
     {
         $errorMessages = [];
-
         foreach ($this->importRolesValidators as $validator) {
-            $error = $validator->validate(
-                $row,
-                [
-                    'roles' => $this->roles,
-                ]
-            );
+            $error = $validator->validate($row, ['roles' => $this->roles,]);
             if (null !== $error) {
                 $errorMessages[] = sprintf('%s - %s', $error, $this->messageService->get('row', [':index' => $index]));
             }

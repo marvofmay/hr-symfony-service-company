@@ -33,7 +33,7 @@ final readonly class RoleAlreadyDeletedValidator implements ValidatorInterface
         $roleUUID = $data->roleUUID;
         $roleDeleted = $this->roleReaderRepository->getDeletedRoleByUUID($roleUUID);
         if (null === $roleDeleted) {
-            throw new \Exception($this->translator->trans('role.deleted.notExists', [':uuid' => $roleUUID], 'roles'), Response::HTTP_CONFLICT);
+            throw new \Exception($this->translator->trans('role.deleted.notExists', [':uuid' => $roleUUID], 'roles'), Response::HTTP_NOT_FOUND);
         }
     }
 }
