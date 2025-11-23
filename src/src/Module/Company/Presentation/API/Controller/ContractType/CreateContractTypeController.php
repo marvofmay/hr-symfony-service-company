@@ -6,12 +6,11 @@ namespace App\Module\Company\Presentation\API\Controller\ContractType;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Command\ContractType\CreateContractTypeCommand;
 use App\Module\Company\Domain\DTO\ContractType\CreateDTO;
-use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,35 +20,19 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CreateContractTypeController extends AbstractController
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
+final class CreateContractTypeController extends AbstractController
 {
     public function __construct(
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    ) {
-    }
+    ) {}
 
     #[Route('/api/contract_types', name: 'api.contract_types.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
-        try {
-            $this->denyAccessUnlessGranted(
-                PermissionEnum::CREATE,
-                AccessEnum::CONTRACT_TYPE,
-                $this->messageService->get('accessDenied')
-            );
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::CONTRACT_TYPE, $this->messageService->get('accessDenied'));
 
-            $this->dispatchCommand($createDTO);
-
-            return $this->successResponse();
-        } catch (\Throwable $exception) {
-            return $this->errorResponse($exception);
-        }
-    }
-
-    private function dispatchCommand(CreateDTO $createDTO): void
-    {
         try {
             $this->commandBus->dispatch(
                 new CreateContractTypeCommand(
@@ -58,31 +41,10 @@ class CreateContractTypeController extends AbstractController
                     active: $createDTO->active
                 )
             );
-        } catch (HandlerFailedException $exception) {
-            throw $exception->getPrevious();
+        } catch (HandlerFailedException $e) {
+            throw $e->getPrevious();
         }
-    }
 
-    private function successResponse(): JsonResponse
-    {
-        return new JsonResponse(
-            ['message' => $this->messageService->get('contractType.add.success', [], 'contract_types')],
-            Response::HTTP_CREATED
-        );
-    }
-
-    private function errorResponse(\Throwable $exception): JsonResponse
-    {
-        $message = sprintf(
-            '%s %s',
-            $this->messageService->get('contractType.add.error', [], 'contract_types'),
-            $exception->getMessage()
-        );
-
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
-
-        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
-
-        return new JsonResponse(['message' => $message], $code);
+        return new JsonResponse(['message' => $this->messageService->get('contractType.add.success', [], 'contract_types')], Response::HTTP_CREATED);
     }
 }

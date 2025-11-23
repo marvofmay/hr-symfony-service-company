@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\ContractType;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Facade\ImportContractTypesFacade;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
@@ -15,7 +17,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ImportContractTypesController extends AbstractController
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
+final class ImportContractTypesController extends AbstractController
 {
     public function __construct(
         private readonly ImportContractTypesFacade $importContractTypesFacade,
@@ -26,11 +29,7 @@ class ImportContractTypesController extends AbstractController
     #[Route('/api/contract_types/import', name: 'app.contract_types.import', methods: ['POST'])]
     public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        $this->denyAccessUnlessGranted(
-            PermissionEnum::IMPORT,
-            AccessEnum::CONTRACT_TYPE,
-            $this->messageService->get('accessDenied')
-        );
+        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::CONTRACT_TYPE, $this->messageService->get('accessDenied'));
 
         if (!$file) {
             return new JsonResponse(
