@@ -42,7 +42,7 @@ final readonly class NoteExistsValidator implements ValidatorInterface
         $noteUUID = $data->noteUUID;
         $noteExists = $this->noteReaderRepository->isNoteWithUUIDAndUserExists($noteUUID, $user);
         if (!$noteExists) {
-            throw new \Exception($this->translator->trans('note.uuid.notExists', [':uuid' => $noteUUID], 'notes'), Response::HTTP_CONFLICT);
+            throw new \Exception($this->translator->trans('note.uuid.notExists', [':uuid' => $noteUUID], 'notes'), Response::HTTP_NOT_FOUND);
         }
     }
 }

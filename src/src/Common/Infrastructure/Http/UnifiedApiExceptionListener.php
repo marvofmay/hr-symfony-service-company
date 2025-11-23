@@ -54,9 +54,9 @@ final readonly class UnifiedApiExceptionListener
 
         if ($exception instanceof HttpExceptionInterface) {
             $message = match (true) {
-                $exception instanceof NotFoundHttpException => $this->translator->trans('errors.not_found'),
+                $exception instanceof NotFoundHttpException => $this->translator->trans('notFound'),
                 $exception instanceof MethodNotAllowedHttpException =>
-                $this->translator->trans('errors.method_not_allowed'),
+                $this->translator->trans('methodNotAllowed'),
 
                 default => $exception->getMessage() ?: $this->translator->trans('errors.http'),
             };

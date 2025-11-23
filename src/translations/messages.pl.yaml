@@ -1,15 +1,16 @@
 name: "nazwa"
 row: "wiersz :index"
-expectedXLSXFile: "oczekiwano pliku XLSX"
-expectedPDFFile: "oczekiwano pliku PDF"
-notAllowedTypeFile: "niedozwolony typ pliku"
-unexpectedTypeFile: "oczekiwano inny typ pliku"
-accessDenied: "Zabroniony dostęp - brak uprawnień"
+expectedXLSXFile: "Oczekiwano pliku XLSX."
+expectedPDFFile: "Oczekiwano pliku PDF."
+notAllowedTypeFile: "Niedozwolony typ pliku."
+unexpectedTypeFile: "Oczekiwano inny typ pliku."
+accessDenied: "Zabroniony dostęp - brak uprawnień."
 role:
   delete:
     multiple:
-      selectedUUIDsRequired: "Wymagane uuid roli/ról"
+      selectedUUIDsRequired: "Wymagane uuid roli/ról."
 position:
   delete:
     multiple:
-      selectedUUIDsRequired: "Wymagane uuid stanowiska/stanowisk"
+      selectedUUIDsRequired: "Wymagane uuid stanowiska/stanowisk."
+methodNotAllowed: "Nie takiej metody lub endpoint nie istnieje."

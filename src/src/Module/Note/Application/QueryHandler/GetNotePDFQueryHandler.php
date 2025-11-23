@@ -18,10 +18,10 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 final class GetNotePDFQueryHandler extends GetQueryHandlerAbstract
 {
     public function __construct(
+        private readonly Security $security,
         private readonly PDFService $pdfService,
         private readonly NoteReaderInterface $noteReaderRepository,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly Security $security,
         #[AutowireIterator(tag: 'app.note.pdf.query.get.validator')] protected iterable $validators,
     ) {}
 

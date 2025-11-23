@@ -6,15 +6,12 @@ namespace App\Module\Note\Presentation\API\Controller;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Note\Application\Query\GetNotesPDFQuery;
 use App\Module\Note\Domain\DTO\NotesPDFQueryDTO;
-use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -22,64 +19,31 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class NotesPDFController extends AbstractController
 {
-    public function __construct(
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
-        #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
-        private readonly MessageService $messageService,
-    ) {
+    public function __construct(private readonly MessageBusInterface $queryBus, private readonly MessageService $messageService,)
+    {
     }
 
     #[Route('/api/employees/notes/pdf', name: 'api.employees.notes.pdf', methods: ['GET'])]
-    public function pdf(#[MapQueryString] NotesPDFQueryDTO $notesPDFQueryDTO): Response
+    public function __invoke(#[MapQueryString] NotesPDFQueryDTO $dto): Response
     {
+        $this->denyAccessUnlessGranted(PermissionEnum::PDF, AccessEnum::NOTE, $this->messageService->get('accessDenied'));
+
         try {
-            $this->denyAccessUnlessGranted(
-                PermissionEnum::PDF,
-                AccessEnum::NOTE,
-                $this->messageService->get('accessDenied')
-            );
-
-            $pdf = $this->dispatchQuery($notesPDFQueryDTO);
-
-            return $this->successResponse($pdf);
-        } catch (\Throwable $exception) {
-            return $this->errorResponse($exception);
+            $pdf = $this->queryBus->dispatch(new GetNotesPDFQuery($dto->uuids))->last(HandledStamp::class)->getResult();
+        } catch (HandlerFailedException $e) {
+            throw $e->getPrevious();
         }
-    }
 
-    private function dispatchQuery(NotesPDFQueryDTO $notesPDFQueryDTO): string
-    {
-        try {
-            $handledStamp = $this->queryBus->dispatch(new GetNotesPDFQuery($notesPDFQueryDTO->uuids));
-
-            return $handledStamp->last(HandledStamp::class)->getResult();
-        } catch (HandlerFailedException $exception) {
-            throw $exception->getPrevious();
-        }
-    }
-
-    private function successResponse(string $pdf): Response
-    {
-        return new Response($pdf, Response::HTTP_OK, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="notes.pdf"',
-        ]);
-    }
-
-    private function errorResponse(\Throwable $exception): JsonResponse
-    {
-        $message = sprintf(
-            '%s. %s',
-            $this->messageService->get('note.pdf.error', [], 'notes'),
-            $exception->getMessage()
+        return new Response(
+            $pdf,
+            Response::HTTP_OK,
+            [
+                'Content-Type' => 'application/pdf',
+                'Content-Disposition' => 'inline; filename="notes.pdf"',
+            ]
         );
-
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
-
-        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
-
-        return new JsonResponse(['message' => $message], $code);
     }
 }
