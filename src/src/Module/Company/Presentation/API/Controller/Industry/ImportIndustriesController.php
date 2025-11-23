@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Industry;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Facade\ImportIndustriesFacade;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class ImportIndustriesController extends AbstractController
 {
     public function __construct(
@@ -24,13 +27,9 @@ final class ImportIndustriesController extends AbstractController
     }
 
     #[Route('/api/industries/import', name: 'app.industries.import', methods: ['POST'])]
-    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
+    public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        $this->denyAccessUnlessGranted(
-            PermissionEnum::IMPORT,
-            AccessEnum::INDUSTRY,
-            $this->messageService->get('accessDenied')
-        );
+        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::INDUSTRY, $this->messageService->get('accessDenied'));
 
         if (!$file) {
             return new JsonResponse(

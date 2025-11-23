@@ -20,7 +20,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class NotePDFController extends AbstractController
 {
-    public function __construct(private readonly MessageBusInterface $queryBus, private readonly MessageService $messageService,)
+    public function __construct(
+        private readonly MessageBusInterface $queryBus,
+        private readonly MessageService $messageService,
+    )
     {
     }
 

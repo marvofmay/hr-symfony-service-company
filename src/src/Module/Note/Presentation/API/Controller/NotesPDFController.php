@@ -12,6 +12,7 @@ use App\Module\Note\Domain\DTO\NotesPDFQueryDTO;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
@@ -22,7 +23,10 @@ use Symfony\Component\Routing\Annotation\Route;
 #[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class NotesPDFController extends AbstractController
 {
-    public function __construct(private readonly MessageBusInterface $queryBus, private readonly MessageService $messageService,)
+    public function __construct(
+        #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
+        private readonly MessageService $messageService,
+    )
     {
     }
 

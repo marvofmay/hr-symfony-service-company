@@ -6,12 +6,11 @@ namespace App\Module\Company\Presentation\API\Controller\Industry;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Command\Industry\CreateIndustryCommand;
 use App\Module\Company\Domain\DTO\Industry\CreateDTO;
-use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,36 +20,20 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class CreateIndustryController extends AbstractController
 {
     public function __construct(
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/industries', name: 'api.industries.create', methods: ['POST'])]
-    public function create(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
+    public function __invoke(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
-        try {
-            $this->denyAccessUnlessGranted(
-                PermissionEnum::CREATE,
-                AccessEnum::INDUSTRY,
-                $this->messageService->get('accessDenied')
-            );
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::INDUSTRY, $this->messageService->get('accessDenied'));
 
-            $this->dispatchCommand($createDTO);
-
-            return $this->successResponse();
-        } catch (\Throwable $exception) {
-            return $this->errorResponse($exception);
-        }
-    }
-
-    private function dispatchCommand(CreateDTO $createDTO): void
-    {
         try {
             $this->commandBus->dispatch(new CreateIndustryCommand(
                 name: $createDTO->name,
@@ -59,28 +42,7 @@ final class CreateIndustryController extends AbstractController
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
-    }
 
-    private function successResponse(): JsonResponse
-    {
-        return new JsonResponse(
-            ['message' => $this->messageService->get('industry.add.success', [], 'industries')],
-            Response::HTTP_CREATED
-        );
-    }
-
-    private function errorResponse(\Throwable $exception): JsonResponse
-    {
-        $message = sprintf(
-            '%s %s',
-            $this->messageService->get('industry.add.error', [], 'industries'),
-            $exception->getMessage()
-        );
-
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
-
-        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
-
-        return new JsonResponse(['message' => $message], $code);
+        return new JsonResponse(['message' => $this->messageService->get('industry.add.success', [], 'industries')], Response::HTTP_CREATED);
     }
 }

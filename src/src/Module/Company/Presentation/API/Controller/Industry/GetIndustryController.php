@@ -6,8 +6,8 @@ namespace App\Module\Company\Presentation\API\Controller\Industry;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Query\Industry\GetIndustryByUUIDQuery;
-use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Psr\Log\LogLevel;
@@ -20,61 +20,31 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
-class GetIndustryController extends AbstractController
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
+final class GetIndustryController extends AbstractController
 {
     public function __construct(
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
     ) {
     }
 
     #[Route('/api/industries/{uuid}', name: 'api.industries.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
-    public function get(string $uuid): JsonResponse
+    public function __invoke(string $uuid): JsonResponse
     {
+        $this->denyAccessUnlessGranted(
+            PermissionEnum::VIEW,
+            AccessEnum::INDUSTRY,
+            $this->messageService->get('accessDenied')
+        );
+
         try {
-            $this->denyAccessUnlessGranted(
-                PermissionEnum::VIEW,
-                AccessEnum::INDUSTRY,
-                $this->messageService->get('accessDenied')
-            );
-
-            $data = $this->dispatchQuery($uuid);
-
-            return $this->successResponse($data);
-        } catch (\Throwable $exception) {
-            return $this->errorResponse($exception);
-        }
-    }
-
-    private function dispatchQuery(string $industryUUID): array
-    {
-        try {
-            $handledStamp = $this->queryBus->dispatch(new GetIndustryByUUIDQuery($industryUUID));
-
-            return $handledStamp->last(HandledStamp::class)->getResult();
+            $handledStamp = $this->queryBus->dispatch(new GetIndustryByUUIDQuery($uuid));
+            $data = $handledStamp->last(HandledStamp::class)->getResult();
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
-    }
 
-    private function successResponse(array $data): JsonResponse
-    {
         return new JsonResponse(['data' => $data], Response::HTTP_OK);
-    }
-
-    private function errorResponse(\Throwable $exception): JsonResponse
-    {
-        $message = sprintf(
-            '%s %s',
-            $this->messageService->get('industry.view.error', [], 'industries'),
-            $exception->getMessage()
-        );
-
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
-
-        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
-
-        return new JsonResponse(['message' => $message], $code);
     }
 }

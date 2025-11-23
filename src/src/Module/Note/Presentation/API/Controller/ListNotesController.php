@@ -12,6 +12,7 @@ use App\Module\Note\Domain\DTO\NotesQueryDTO;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryString;
@@ -23,7 +24,10 @@ use Symfony\Component\Routing\Attribute\Route;
 #[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class ListNotesController extends AbstractController
 {
-    public function __construct(private readonly MessageBusInterface $queryBus, private readonly MessageService $messageService,)
+    public function __construct(
+        #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
+        private readonly MessageService $messageService,
+    )
     {
     }
 

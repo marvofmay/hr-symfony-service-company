@@ -6,12 +6,11 @@ namespace App\Module\Company\Presentation\API\Controller\Industry;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Query\Industry\ListIndustriesQuery;
 use App\Module\Company\Domain\DTO\Industry\IndustriesQueryDTO;
-use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,61 +21,31 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class ListIndustriesController extends AbstractController
 {
     public function __construct(
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
     ) {
     }
 
     #[Route('/api/industries', name: 'api.industries.list', methods: ['GET'])]
-    public function list(#[MapQueryString] IndustriesQueryDTO $queryDTO): Response
+    public function __invoke(#[MapQueryString] IndustriesQueryDTO $queryDTO): Response
     {
+        $this->denyAccessUnlessGranted(
+            PermissionEnum::LIST,
+            AccessEnum::INDUSTRY,
+            $this->messageService->get('accessDenied')
+        );
+
         try {
-            $this->denyAccessUnlessGranted(
-                PermissionEnum::LIST,
-                AccessEnum::INDUSTRY,
-                $this->messageService->get('accessDenied')
-            );
-
-            $data = $this->dispatchQuery($queryDTO);
-
-            return $this->successResponse($data);
-        } catch (\Throwable $exception) {
-            return $this->errorResponse($exception);
-        }
-    }
-
-    private function dispatchQuery(IndustriesQueryDTO $queryDTO): array
-    {
-        try {
-            $handledStamp = $this->queryBus->dispatch(new ListIndustriesQuery($queryDTO));
-
-            return $handledStamp->last(HandledStamp::class)->getResult();
+            $handled = $this->queryBus->dispatch(new ListIndustriesQuery($queryDTO));
+            $data = $handled->last(HandledStamp::class)->getResult();
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
-    }
 
-    private function successResponse(array $data): JsonResponse
-    {
         return new JsonResponse(['data' => $data], Response::HTTP_OK);
-    }
-
-    private function errorResponse(\Throwable $exception): JsonResponse
-    {
-        $message = sprintf(
-            '%s %s',
-            $this->messageService->get('industry.list.error', [], 'industries'),
-            $exception->getMessage()
-        );
-
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
-
-        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
-
-        return new JsonResponse(['message' => $message], $code);
     }
 }
