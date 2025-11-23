@@ -37,7 +37,7 @@ final readonly class PositionExistsValidator implements ValidatorInterface
         $positionUUID = $data->positionUUID;
         $positionExists = $this->positionReaderRepository->isPositionWithUUIDExists($positionUUID);
         if (!$positionExists) {
-            throw new \Exception($this->translator->trans('position.uuid.notExists', [':uuid' => $positionUUID], 'positions'), Response::HTTP_CONFLICT);
+            throw new \Exception($this->translator->trans('position.uuid.notExists', [':uuid' => $positionUUID], 'positions'), Response::HTTP_NOT_FOUND);
         }
     }
 }

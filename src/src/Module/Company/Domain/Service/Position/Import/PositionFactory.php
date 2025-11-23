@@ -13,7 +13,7 @@ final class PositionFactory
     {
         return Position::create(
             trim($data[PositionImportColumnEnum::POSITION_NAME->value] ?? ''),
-            trim($data[PositionImportColumnEnum::POSITION_DESCRIPTION->value] ?? null),
+            $data[PositionImportColumnEnum::POSITION_DESCRIPTION->value] ? trim($data[PositionImportColumnEnum::POSITION_DESCRIPTION->value]) : null,
             (bool)$data[PositionImportColumnEnum::POSITION_ACTIVE->value],
         );
     }

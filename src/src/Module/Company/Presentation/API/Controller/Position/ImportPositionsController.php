@@ -15,20 +15,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class ImportPositionsController extends AbstractController
 {
-    public function __construct(private readonly ImportPositionsFacade $importPositionsFacade, private readonly MessageService $messageService)
-    {
+    public function __construct(
+        private readonly ImportPositionsFacade $importPositionsFacade,
+        private readonly MessageService $messageService
+    ) {
     }
 
     #[Route('/api/positions/import', name: 'api.positions.import', methods: ['POST'])]
-    public function import(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
+    public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        $this->denyAccessUnlessGranted(
-            PermissionEnum::IMPORT,
-            AccessEnum::POSITION,
-            $this->messageService->get('accessDenied')
-        );
+        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::POSITION, $this->messageService->get('accessDenied'));
 
         if (!$file) {
             return new JsonResponse(
