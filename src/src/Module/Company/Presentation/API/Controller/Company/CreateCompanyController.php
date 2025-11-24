@@ -6,12 +6,11 @@ namespace App\Module\Company\Presentation\API\Controller\Company;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Command\Company\CreateCompanyCommand;
 use App\Module\Company\Domain\DTO\Company\CreateDTO;
-use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -21,10 +20,10 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class CreateCompanyController extends AbstractController
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
+final class CreateCompanyController extends AbstractController
 {
     public function __construct(
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
     ) {
@@ -33,23 +32,8 @@ class CreateCompanyController extends AbstractController
     #[Route('/api/companies', name: 'api.companies.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
-        try {
-            $this->denyAccessUnlessGranted(
-                PermissionEnum::CREATE,
-                AccessEnum::COMPANY,
-                $this->messageService->get('accessDenied')
-            );
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
 
-            $this->dispatchCommand($createDTO);
-
-            return $this->successResponse();
-        } catch (\Throwable $exception) {
-            return $this->errorResponse($exception);
-        }
-    }
-
-    private function dispatchCommand(CreateDTO $createDTO): void
-    {
         try {
             $this->commandBus->dispatch(new CreateCompanyCommand(
                 $createDTO->fullName,
@@ -66,31 +50,10 @@ class CreateCompanyController extends AbstractController
                 $createDTO->websites,
                 $createDTO->address
             ));
-        } catch (HandlerFailedException $exception) {
-            throw $exception->getPrevious();
+        } catch (HandlerFailedException $e) {
+            throw $e->getPrevious();
         }
-    }
 
-    private function successResponse(): JsonResponse
-    {
-        return new JsonResponse(
-            ['message' => $this->messageService->get('company.add.success', [], 'companies')],
-            Response::HTTP_CREATED
-        );
-    }
-
-    private function errorResponse(\Throwable $exception): JsonResponse
-    {
-        $message = sprintf(
-            '%s %s',
-            $this->messageService->get('company.add.error', [], 'companies'),
-            $exception->getMessage()
-        );
-
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_STORE));
-
-        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
-
-        return new JsonResponse(['message' => $message], $code);
+        return new JsonResponse(['message' => $this->messageService->get('company.add.success', [], 'companies')], Response::HTTP_CREATED);
     }
 }

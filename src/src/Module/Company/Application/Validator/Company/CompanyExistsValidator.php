@@ -37,7 +37,7 @@ final readonly class CompanyExistsValidator implements ValidatorInterface
         $uuid = $data->companyUUID;
         $companyExists = $this->companyReaderRepository->isCompanyExistsWithUUID($uuid);
         if (!$companyExists) {
-            throw new \Exception($this->translator->trans('company.uuid.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_CONFLICT);
+            throw new \Exception($this->translator->trans('company.uuid.notExists', [':uuid' => $uuid], 'companies'), Response::HTTP_NOT_FOUND);
         }
     }
 }
