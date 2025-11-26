@@ -16,7 +16,7 @@ services:
     ports:
       - "81:80"
     volumes:
-      - ./src:/var/www/html
+      - ./:/var/www/html
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
       - MAILER_DSN=smtp://mailpit:1025
@@ -80,7 +80,8 @@ services:
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
+    restart: unless-stopped
 
   worker-department-xlsx-import:
     container_name: worker-department-xlsx-import
@@ -94,7 +95,8 @@ services:
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
+    restart: unless-stopped
 
   worker-employee-xlsx-import:
     container_name: worker-employee-xlsx-import
@@ -108,7 +110,8 @@ services:
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
+    restart: unless-stopped
 
   worker-send-email:
     container_name: worker-send-email
@@ -122,7 +125,7 @@ services:
     environment:
       - MESSENGER_TRANSPORT_DSN=amqp://guest:guest@rabbitmq:5672/%2f
     volumes:
-      - ./src:/var/www/html
+      - .:/var/www/html
 
   redis:
     image: redis:alpine
@@ -149,6 +152,7 @@ services:
       MERCURE_SUBSCRIBER_JWT_KEY: "kL3x9v2D8fP6tR1qB7wZ0mS4nV8yX5aQqwerty"
       MERCURE_JWT_ALG: "HS256"
       MERCURE_EXTRA_DIRECTIVES: |
+        cors_origins http://localhost:3000
         cors_origins http://localhost:3000
         anonymous
     ports:

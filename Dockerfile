@@ -53,7 +53,7 @@ RUN pecl install redis && docker-php-ext-enable redis
 
 
 # Skopiuj pliki aplikacji do katalogu Apache
-COPY ./src /var/www/html
+COPY ./ /var/www/html
 
 # Skopiuj własny plik konfiguracyjny Apache (opcjonalne)
 COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
