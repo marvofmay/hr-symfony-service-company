@@ -22,7 +22,7 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Start containers
+      - name: Start all containers
         run: docker compose up -d --build
 
       - name: Wait for MySQL to be healthy
