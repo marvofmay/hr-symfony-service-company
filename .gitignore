@@ -16,4 +16,4 @@
 .php-cs-fixer.cache
 /.env.local
 
-.idea/
+/.idea/
