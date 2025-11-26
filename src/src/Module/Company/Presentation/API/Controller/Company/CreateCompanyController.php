@@ -20,7 +20,7 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
+#[ErrorChannel(MonologChanelEnum::EVENT_STORE)]
 final class CreateCompanyController extends AbstractController
 {
     public function __construct(

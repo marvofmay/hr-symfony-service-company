@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Company;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Facade\ImportCompaniesFacade;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
@@ -15,23 +17,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ImportCompaniesController extends AbstractController
+#[ErrorChannel(MonologChanelEnum::IMPORT)]
+final class ImportCompaniesController extends AbstractController
 {
     public function __construct(
         private readonly ImportCompaniesFacade $importCompaniesFacade,
         private readonly MessageService $messageService
-    )
-    {
+    ) {
     }
 
     #[Route('/api/companies/import', name: 'api.companies.import', methods: ['POST'])]
     public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        $this->denyAccessUnlessGranted(
-            PermissionEnum::IMPORT,
-            AccessEnum::COMPANY,
-            $this->messageService->get('accessDenied')
-        );
+        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
 
         if (!$file) {
             return new JsonResponse(
@@ -43,7 +41,6 @@ class ImportCompaniesController extends AbstractController
         $this->importCompaniesFacade->enqueue($file);
 
         return new JsonResponse([
-            'success' => true,
             'message' => $this->messageService->get('company.import.enqueued', [], 'companies'),
         ], Response::HTTP_ACCEPTED);
     }
