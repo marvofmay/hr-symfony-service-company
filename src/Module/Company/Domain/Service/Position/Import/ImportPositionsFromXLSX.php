@@ -9,15 +9,16 @@ use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Common\XLSX\XLSXIterator;
 use App\Module\Company\Domain\Enum\Position\PositionImportColumnEnum;
+use App\Module\System\Application\Command\Import\UpdateImportCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Entity\Import;
 use App\Module\System\Domain\Enum\Import\ImportKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
-use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -31,14 +32,14 @@ class ImportPositionsFromXLSX extends XLSXIterator
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
-        private readonly UpdateImportAction $updateImportAction,
         private readonly MessageService $messageService,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         private readonly ImportPositionsReferenceLoader $importPositionsReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         private readonly ImportPositionsPreparer $importPositionsPreparer,
         private readonly PositionsImporter $positionsImporter,
         #[AutowireIterator(tag: 'app.position.import.validator')] private readonly iterable $importPositionsValidators,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
     ) {
         parent::__construct($this->translator);
     }
@@ -115,7 +116,7 @@ class ImportPositionsFromXLSX extends XLSXIterator
 
         $errors = $this->validateBeforeImport();
         if (!empty($errors)) {
-            $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
+            $this->commandBus->dispatch(new UpdateImportCommand($import, ImportStatusEnum::FAILED));
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
@@ -137,7 +138,7 @@ class ImportPositionsFromXLSX extends XLSXIterator
                 existingDepartments: $this->departments
             );
 
-            $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
+            $this->commandBus->dispatch(new UpdateImportCommand($import, ImportStatusEnum::DONE));
         }
         $this->entityReferenceCache->clear();
 

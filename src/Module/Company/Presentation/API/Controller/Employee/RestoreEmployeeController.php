@@ -6,11 +6,10 @@ namespace App\Module\Company\Presentation\API\Controller\Employee;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Command\Employee\RestoreEmployeeCommand;
-use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,10 +18,10 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class RestoreEmployeeController extends AbstractController
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
+final class RestoreEmployeeController extends AbstractController
 {
     public function __construct(
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
     ) {
@@ -31,50 +30,17 @@ class RestoreEmployeeController extends AbstractController
     #[Route('/api/employees/{uuid}/restore', name: 'api.employees.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        try {
-            $this->denyAccessUnlessGranted(
-                PermissionEnum::RESTORE,
-                AccessEnum::EMPLOYEE,
-                $this->messageService->get('accessDenied')
-            );
+        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::EMPLOYEE, $this->messageService->get('accessDenied'));
 
-            $this->dispatchCommand($uuid);
-
-            return $this->successResponse();
-        } catch (\Throwable $exception) {
-            return $this->errorResponse($exception);
-        }
-    }
-
-    private function dispatchCommand(string $uuid): void
-    {
         try {
             $this->commandBus->dispatch(new RestoreEmployeeCommand($uuid));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
-    }
 
-    private function successResponse(): JsonResponse
-    {
         return new JsonResponse(
             ['message' => $this->messageService->get('employee.restore.success', [], 'employees')],
             Response::HTTP_OK
         );
-    }
-
-    private function errorResponse(\Throwable $exception): JsonResponse
-    {
-        $message = sprintf(
-            '%s %s',
-            $this->messageService->get('employee.restore.error', [], 'employees'),
-            $exception->getMessage()
-        );
-
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_STORE));
-
-        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
-
-        return new JsonResponse(['message' => $message], $code);
     }
 }

@@ -29,7 +29,7 @@ final class UpdateContractTypeController extends AbstractController
     ) {
     }
 
-    #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.update', methods: ['PUT'])]
+    #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.update', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PUT'])]
     public function __invoke(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): Response
     {
         $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::CONTRACT_TYPE, $this->messageService->get('accessDenied'));

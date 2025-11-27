@@ -6,11 +6,10 @@ namespace App\Module\Company\Presentation\API\Controller\Department;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Command\Department\RestoreDepartmentCommand;
-use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -19,62 +18,31 @@ use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
-class RestoreDepartmentController extends AbstractController
+#[ErrorChannel(MonologChanelEnum::EVENT_STORE)]
+final class RestoreDepartmentController extends AbstractController
 {
     public function __construct(
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
     ) {
     }
 
     #[Route('/api/departments/{uuid}/restore', name: 'api.departments.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
-    public function restore(string $uuid): JsonResponse
+    public function __invoke(string $uuid): JsonResponse
     {
+        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
+
         try {
-            $this->denyAccessUnlessGranted(
-                PermissionEnum::RESTORE,
-                AccessEnum::COMPANY,
-                $this->messageService->get('accessDenied')
+            $this->commandBus->dispatch(
+                new RestoreDepartmentCommand($uuid)
             );
-
-            $this->dispatchCommand($uuid);
-
-            return $this->successResponse();
-        } catch (\Throwable $exception) {
-            return $this->errorResponse($exception);
-        }
-    }
-
-    private function dispatchCommand(string $uuid): void
-    {
-        try {
-            $this->commandBus->dispatch(new RestoreDepartmentCommand($uuid));
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
-    }
 
-    private function successResponse(): JsonResponse
-    {
         return new JsonResponse(
             ['message' => $this->messageService->get('department.restore.success', [], 'departments')],
             Response::HTTP_OK
         );
-    }
-
-    private function errorResponse(\Throwable $exception): JsonResponse
-    {
-        $message = sprintf(
-            '%s %s',
-            $this->messageService->get('department.restore.error', [], 'departments'),
-            $exception->getMessage()
-        );
-
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_STORE));
-
-        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
-
-        return new JsonResponse(['message' => $message], $code);
     }
 }

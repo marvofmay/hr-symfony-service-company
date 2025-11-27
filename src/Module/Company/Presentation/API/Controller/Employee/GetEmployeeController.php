@@ -6,11 +6,10 @@ namespace App\Module\Company\Presentation\API\Controller\Employee;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Query\Employee\GetEmployeeByUUIDQuery;
-use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
-use Psr\Log\LogLevel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -20,10 +19,10 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
-class GetEmployeeController extends AbstractController
+#[ErrorChannel(MonologChanelEnum::EVENT_STORE)]
+final class GetEmployeeController extends AbstractController
 {
     public function __construct(
-        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
     ) {
@@ -32,49 +31,15 @@ class GetEmployeeController extends AbstractController
     #[Route('/api/employees/{uuid}', name: 'api.employees.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function __invoke(string $uuid): JsonResponse
     {
+        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::EMPLOYEE, $this->messageService->get('accessDenied'));
+
         try {
-            $this->denyAccessUnlessGranted(
-                PermissionEnum::VIEW,
-                AccessEnum::EMPLOYEE,
-                $this->messageService->get('accessDenied')
-            );
-
-            $data = $this->dispatchQuery($uuid);
-
-            return $this->successResponse($data);
-        } catch (\Throwable $exception) {
-            return $this->errorResponse($exception);
-        }
-    }
-
-    private function dispatchQuery(string $employeeUUID): array
-    {
-        try {
-            $handledStamp = $this->queryBus->dispatch(new GetEmployeeByUUIDQuery($employeeUUID));
-
-            return $handledStamp->last(HandledStamp::class)->getResult();
+            $stamp = $this->queryBus->dispatch(new GetEmployeeByUUIDQuery($uuid));
+            $data = $stamp->last(HandledStamp::class)->getResult();
         } catch (HandlerFailedException $exception) {
             throw $exception->getPrevious();
         }
-    }
 
-    private function successResponse(array $data): JsonResponse
-    {
         return new JsonResponse(['data' => $data], Response::HTTP_OK);
-    }
-
-    private function errorResponse(\Throwable $exception): JsonResponse
-    {
-        $message = sprintf(
-            '%s %s',
-            $this->messageService->get('employee.view.error', [], 'employees'),
-            $exception->getMessage()
-        );
-
-        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::ERROR, MonologChanelEnum::EVENT_LOG));
-
-        $code = $exception->getCode() ?: Response::HTTP_BAD_REQUEST;
-
-        return new JsonResponse(['message' => $message], $code);
     }
 }

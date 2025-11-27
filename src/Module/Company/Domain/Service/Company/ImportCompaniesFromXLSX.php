@@ -12,6 +12,7 @@ use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
+use App\Module\System\Application\Command\Import\UpdateImportCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Entity\Import;
 use App\Module\System\Domain\Enum\Import\ImportKindEnum;
@@ -19,7 +20,6 @@ use App\Module\System\Domain\Enum\Import\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Domain\ValueObject\UserUUID;
-use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -38,13 +38,13 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         private readonly CompanyAggregateCreator $companyAggregateCreator,
         private readonly CompanyAggregateUpdater $companyAggregateUpdater,
         private readonly ImportCompaniesPreparer $importCompaniesPreparer,
-        private readonly UpdateImportAction $updateImportAction,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly MessageService $messageService,
         private readonly ImportCompaniesReferenceLoader $importCompaniesReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         #[AutowireIterator(tag: 'app.company.import.validator')] private readonly iterable $importCompaniesValidators,
         #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
     ) {
         parent::__construct($this->translator);
     }
@@ -109,7 +109,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
         $errors = $this->validateBeforeImport();
 
         if (!empty($errors)) {
-            $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
+            $this->commandBus->dispatch(new UpdateImportCommand($import, ImportStatusEnum::FAILED));
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
@@ -140,7 +140,7 @@ final class ImportCompaniesFromXLSX extends XLSXIterator
                     $this->companyAggregateUpdater->update($row, $parentUUID, $loggedUserUUID);
                 }
             }
-            $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
+            $this->commandBus->dispatch(new UpdateImportCommand($import, ImportStatusEnum::DONE));
         }
         $this->entityReferenceCache->clear();
 

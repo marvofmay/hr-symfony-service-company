@@ -26,8 +26,7 @@ final class DeleteMultipleCompaniesController extends AbstractController
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    ) {
-    }
+    ) {}
 
     #[Route('/api/companies/multiple', name: 'api.companies.delete_multiple', methods: ['DELETE'])]
     public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
@@ -35,14 +34,16 @@ final class DeleteMultipleCompaniesController extends AbstractController
         $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
 
         try {
-            $this->commandBus->dispatch(new DeleteMultipleCompaniesCommand($deleteMultipleDTO->companiesUUIDs));
+            $this->commandBus->dispatch(
+                new DeleteMultipleCompaniesCommand($deleteMultipleDTO->companiesUUIDs)
+            );
         } catch (HandlerFailedException $e) {
-            throw $e->getPrevious();
+            throw $e->getPrevious() ?? $e;
         }
 
         return new JsonResponse(
             ['message' => $this->messageService->get('company.multipleDelete.success', [], 'companies')],
-            Response::HTTP_NO_CONTENT
+            Response::HTTP_OK
         );
     }
 }

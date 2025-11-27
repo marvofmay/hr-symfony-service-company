@@ -11,6 +11,7 @@ use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
+use App\Module\System\Application\Command\Import\UpdateImportCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Entity\Import;
 use App\Module\System\Domain\Enum\Import\ImportKindEnum;
@@ -18,7 +19,6 @@ use App\Module\System\Domain\Enum\Import\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Domain\ValueObject\UserUUID;
-use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
@@ -35,13 +35,13 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         private readonly EmployeeAggregateCreator $employeeAggregateCreator,
         private readonly EmployeeAggregateUpdater $employeeAggregateUpdater,
         private readonly ImportEmployeesPreparer $importEmployeesPreparer,
-        private readonly UpdateImportAction $updateImportAction,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly MessageService $messageService,
         private readonly ImportEmployeesReferenceLoader $importEmployeesReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
         #[AutowireIterator(tag: 'app.employee.import.validator')] private readonly iterable $importEmployeesValidators,
+        #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
     ) {
         parent::__construct($this->translator);
     }
@@ -113,7 +113,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
         $errors = $this->validateBeforeImport();
 
         if (!empty($errors)) {
-            $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
+            $this->commandBus->dispatch(new UpdateImportCommand($import, ImportStatusEnum::FAILED));
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
@@ -141,7 +141,7 @@ final class ImportEmployeesFromXLSX extends XLSXIterator
                 }
             }
 
-            $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
+            $this->commandBus->dispatch(new UpdateImportCommand($import, ImportStatusEnum::DONE));
         }
         $this->entityReferenceCache->clear();
 

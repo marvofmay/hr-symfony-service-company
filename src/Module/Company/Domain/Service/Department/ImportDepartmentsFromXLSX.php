@@ -12,6 +12,7 @@ use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Enum\DepartmentImportColumnEnum;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
+use App\Module\System\Application\Command\Import\UpdateImportCommand;
 use App\Module\System\Application\Event\LogFileEvent;
 use App\Module\System\Domain\Entity\Import;
 use App\Module\System\Domain\Enum\Import\ImportKindEnum;
@@ -19,9 +20,9 @@ use App\Module\System\Domain\Enum\Import\ImportLogKindEnum;
 use App\Module\System\Domain\Enum\Import\ImportStatusEnum;
 use App\Module\System\Domain\Service\ImportLog\ImportLogMultipleCreator;
 use App\Module\System\Domain\ValueObject\UserUUID;
-use App\Module\System\Presentation\API\Action\Import\UpdateImportAction;
 use Psr\Log\LogLevel;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -37,13 +38,13 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         private readonly DepartmentAggregateCreator $departmentAggregateCreator,
         private readonly DepartmentAggregateUpdater $departmentAggregateUpdater,
         private readonly ImportDepartmentsPreparer $importDepartmentsPreparer,
-        private readonly UpdateImportAction $updateImportAction,
         private readonly ImportLogMultipleCreator $importLogMultipleCreator,
         private readonly MessageService $messageService,
-        #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
         private readonly ImportDepartmentsReferenceLoader $importDepartmentsReferenceLoader,
         private readonly EntityReferenceCache $entityReferenceCache,
         #[AutowireIterator(tag: 'app.department.import.validator')] private readonly iterable $importDepartmentsValidators,
+        #[Autowire(service: 'event.bus')] private readonly MessageBusInterface $eventBus,
+        #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
     ) {
         parent::__construct($this->translator);
     }
@@ -103,12 +104,12 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
         return DepartmentUUID::fromString($existingParentDepartment->getUUID()->toString());
     }
 
-    public function run(Import $import,  UserInterface $loggedUser): array
+    public function run(Import $import, UserInterface $loggedUser): array
     {
         $errors = $this->validateBeforeImport();
 
         if (!empty($errors)) {
-            $this->updateImportAction->execute($import, ImportStatusEnum::FAILED);
+            $this->commandBus->dispatch(new UpdateImportCommand($import, ImportStatusEnum::FAILED));
             $this->importLogMultipleCreator->multipleCreate($import, $errors, ImportLogKindEnum::IMPORT_ERROR);
             foreach ($errors as $error) {
                 $this->eventBus->dispatch(
@@ -140,7 +141,7 @@ final class ImportDepartmentsFromXLSX extends XLSXIterator
                 }
             }
 
-            $this->updateImportAction->execute($import, ImportStatusEnum::DONE);
+            $this->commandBus->dispatch(new UpdateImportCommand($import, ImportStatusEnum::DONE));
         }
         $this->entityReferenceCache->clear();
 

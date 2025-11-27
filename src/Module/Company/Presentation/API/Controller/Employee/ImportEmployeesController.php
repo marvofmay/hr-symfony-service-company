@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Employee;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Facade\ImportEmployeesFacade;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
@@ -15,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[ErrorChannel(MonologChanelEnum::IMPORT)]
 class ImportEmployeesController extends AbstractController
 {
     public function __construct(
