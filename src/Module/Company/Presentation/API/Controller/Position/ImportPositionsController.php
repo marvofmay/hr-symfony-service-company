@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Presentation\API\Controller\Position;
 
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Module\Company\Application\Facade\ImportPositionsFacade;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapUploadedFile;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 
 #[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class ImportPositionsController extends AbstractController
@@ -36,7 +38,7 @@ final class ImportPositionsController extends AbstractController
             );
         }
 
-        $result = $this->importPositionsFacade->handle($file);
+        $result = $this->importPositionsFacade->import($file);
 
         $responseData = ['message' => $result['message']];
         if (!empty($result['errors'])) {
