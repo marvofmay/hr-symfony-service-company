@@ -38,7 +38,7 @@ final class ImportContractTypesController extends AbstractController
             );
         }
 
-        $result = $this->importContractTypesFacade->handle($file);
+        $result = $this->importContractTypesFacade->import($file);
 
         $responseData = ['message' => $result['message']];
         if (!empty($result['errors'])) {

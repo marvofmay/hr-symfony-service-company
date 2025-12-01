@@ -38,7 +38,7 @@ final class ImportIndustriesController extends AbstractController
             );
         }
 
-        $result = $this->importIndustriesFacade->handle($file);
+        $result = $this->importIndustriesFacade->import($file);
 
         $responseData = ['message' => $result['message']];
         if (!empty($result['errors'])) {

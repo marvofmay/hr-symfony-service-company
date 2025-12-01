@@ -34,7 +34,7 @@ final class ImportRolesController extends AbstractController
             throw new \Exception($this->messageService->get('role.import.file.required', [], 'roles'), Response::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        $result = $this->importRolesFacade->handle($file);
+        $result = $this->importRolesFacade->import($file);
 
         $responseData = ['message' => $result['message']];
         if (!empty($result['errors'])) {
