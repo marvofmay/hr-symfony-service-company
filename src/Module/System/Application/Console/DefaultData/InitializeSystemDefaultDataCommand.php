@@ -9,16 +9,17 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 #[AsCommand(name: 'app:initialize-system-default-data')]
 class InitializeSystemDefaultDataCommand extends Command
 {
 
-    //public function __construct(
-    //    #[TaggedIterator('app.command.initialize-system-default-data')] private readonly iterable $commands
-    //) {
-    //    parent::__construct();
-    //}
+    public function __construct(
+        #[AutowireIterator('app.command.initialize-system-default-data')] private readonly iterable $commands
+    ) {
+        parent::__construct();
+    }
 
     protected function configure(): void
     {
@@ -34,49 +35,17 @@ class InitializeSystemDefaultDataCommand extends Command
             return Command::FAILURE;
         }
 
-
-        $commands = [
-            'app:add-record-to-user-table',
-            'app:add-record-to-module-table',
-            'app:add-record-to-access-table',
-            'app:add-record-to-permission-table',
-            'app:add-record-to-role-table',
-            'app:add-record-to-industry-table',
-            'app:add-record-to-contract-type-table',
-            'app:add-record-to-position-table',
-            'app:add-record-to-notification-channel-setting-table',
-            'app:add-record-to-notification-event-setting-table',
-            'app:add-record-to-notification-template-setting-table'
-        ];
-
-        $output->writeln('***********************************************************');
-
-        // ToDo:: refactor commands - use services and repositories instead hard coded query
-        //foreach ($this->commands as $command) {
-        //    $output->writeln('');
-        //    $output->writeln('--------------------------------------------------------------');
-        //    $output->writeln(sprintf('<info>Executing: %s</info>', $command->getName()));
-        //
-        //    $result = $command->run($input, $output);
-        //    if (Command::SUCCESS !== $result) {
-        //        $output->writeln(sprintf('<error>Error during %s</error>', $command->getName()));
-        //        return $result;
-        //    }
-        //    $output->writeln('--------------------------------------------------------------');
-        //}
-
-        foreach ($commands as $commandName) {
+        foreach ($this->commands as $command) {
+            $output->writeln('');
             $output->writeln('--------------------------------------------------------------');
-            $output->writeln("<info>Command execution: $commandName</info>");
-            $command = $application->find($commandName);
-            $result = $command->run(new ArrayInput([]), $output);
+            $output->writeln(sprintf('<info>Executing: %s</info>', $command->getName()));
 
+            $result = $command->run(new ArrayInput([]), $output);
             if (Command::SUCCESS !== $result) {
-                $output->writeln("<error>Error during execution: $commandName</error>");
+                $output->writeln(sprintf('<error>Error during %s</error>', $command->getName()));
 
                 return $result;
             }
-
             $output->writeln('--------------------------------------------------------------');
         }
 

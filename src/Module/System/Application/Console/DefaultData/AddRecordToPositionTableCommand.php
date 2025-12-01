@@ -11,9 +11,11 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsCommand(name: 'app:add-record-to-position-table')]
+#[AutoconfigureTag('app.command.initialize-system-default-data', ['priority' => -170])]
 class AddRecordToPositionTableCommand extends Command
 {
     private const string DESCRIPTION           = 'Add missing records to Position table';

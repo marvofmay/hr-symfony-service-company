@@ -14,7 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 
 #[AsCommand(name: 'app:add-record-to-user-table')]
-#[AutoconfigureTag(name: 'app.command.initialize-system-default-data')]
+#[AutoconfigureTag('app.command.initialize-system-default-data', ['priority' => -100])]
 class AddRecordToUserTableCommand extends Command
 {
     private const string DESCRIPTION = 'Fills the User table with default data';
@@ -55,7 +55,7 @@ class AddRecordToUserTableCommand extends Command
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        $output->writeln(sprintf('<comment>%s</comment>', self::SUCCESS_MESSAGE));
+        $output->writeln(sprintf('<info>%s</info>', self::SUCCESS_MESSAGE));
 
         return Command::SUCCESS;
     }
