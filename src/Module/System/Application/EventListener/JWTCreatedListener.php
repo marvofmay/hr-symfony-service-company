@@ -6,14 +6,12 @@ namespace App\Module\System\Application\EventListener;
 
 use App\Module\System\Application\Event\Auth\UserLoginEvent;
 use App\Module\System\Domain\Enum\Auth\AuthEventTypeEnum;
-use App\Module\System\Domain\Interface\Access\AccessReaderInterface;
-use App\Module\System\Domain\Interface\Module\ModuleReaderInterface;
-use App\Module\System\Domain\Interface\RoleAccessPermission\RoleAccessPermissionReaderInterface;
+use App\Module\System\Domain\Service\User\UserAuthorizationInfoProvider;
 use App\Module\System\Domain\Service\AuthEvent\AuthEventRecorder;
+use App\Module\System\Domain\Service\User\UserPersonalInfoProvider;
 use App\Module\System\Domain\ValueObject\TokenUUID;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsEventListener(event: 'lexik_jwt_authentication.on_jwt_created', method: 'onJWTCreated')]
@@ -22,9 +20,8 @@ final readonly class JWTCreatedListener
     public function __construct(
         private AuthEventRecorder $authEventRecorder,
         private EventDispatcherInterface $eventDispatcher,
-        private ModuleReaderInterface $moduleReaderRepository,
-        private AccessReaderInterface $accessReaderRepository,
-        private RoleAccessPermissionReaderInterface $roleAccessPermissionReaderRepository,
+        private UserAuthorizationInfoProvider $userAuthInfoProvider,
+        private UserPersonalInfoProvider $userPersonalInfoProvider
     ) {
     }
 
@@ -33,27 +30,12 @@ final readonly class JWTCreatedListener
         $user = $event->getUser();
         $payload = $event->getData();
 
-        $email = $user->getEmail();
-        $userUUID = $user->getUUID();
-        $employeeUUID = $user->getEmployee()?->getUUID();
-        $firstName = $user->getEmployee()?->getFirstName();
-        $lastName = $user->getEmployee()?->getLastName();
-
-        $payload = array_merge($payload, [
-            'user'        => [
-                'uuid'  => $userUUID,
-                'email' => $email,
-            ],
-            'employee'    => [
-                'uuid'      => $employeeUUID,
-                'firstName' => $firstName,
-                'lastName'  => $lastName,
-            ],
-            'roles'       => $user->getRoles(),
-            'modules'     => $this->getModules($user),
-            'accesses'    => $this->getAccesses($user),
-            'permissions' => $this->getPermissions($user),
-        ]);
+        $payload['user'] = $this->userPersonalInfoProvider->getUserInfo($user);
+        $payload['employee'] = $this->userPersonalInfoProvider->getEmployeeInfo($user);
+        $payload['roles'] = $this->userPersonalInfoProvider->getRoles($user);
+        $payload['modules'] = $this->userAuthInfoProvider->getModules($user);
+        $payload['accesses'] = $this->userAuthInfoProvider->getAccesses($user);
+        $payload['permissions'] = $this->userAuthInfoProvider->getPermissions($user);
 
         $tokenUUID = TokenUUID::generate();
         $payload['tokenUUID'] = $tokenUUID->toString();
@@ -67,68 +49,8 @@ final readonly class JWTCreatedListener
         );
 
         $this->eventDispatcher->dispatch(new UserLoginEvent([
-            'tokenUUID'    => $tokenUUID,
-            'userUUID'     => $userUUID,
-            'email'        => $email,
-            'employeeUUID' => $employeeUUID,
-            'firstName'    => $firstName,
+            'tokenUUID'    => $tokenUUID->toString(),
+            'userUUID'     => $user->getUUID()->toString(),
         ]));
     }
-
-    private function getModules(UserInterface $user): array
-    {
-        $employee = $user->getEmployee();
-
-        if (null === $employee) {
-            return $this->moduleReaderRepository
-                ->getModules()
-                ->map(fn ($module) => $module->getName())
-                ->toArray();
-        }
-
-        $role = $employee->getRole();
-
-        return array_unique(
-            $role->getAccesses()
-                ->map(fn ($access) => $access->getModule()->getName())
-                ->toArray()
-        );
-    }
-
-    private function getAccesses(UserInterface $user): array
-    {
-        $employee = $user->getEmployee();
-
-        if (null === $employee) {
-            return $this->accessReaderRepository
-                ->getAccesses()
-                ->map(fn ($access) => $access->getName())
-                ->toArray();
-        }
-
-        $role = $employee->getRole();
-
-        return $role->getAccesses()
-            ->map(fn ($access) => $access->getName())
-            ->toArray();
-    }
-
-    private function getPermissions(UserInterface $user): array
-    {
-        $employee = $user->getEmployee();
-
-        if (null === $employee) {
-            return $this->accessReaderRepository
-                ->getAccesses()
-                ->map(fn ($access) => $access->getName() . '.*')
-                ->toArray();
-        }
-
-        $role = $employee->getRole();
-
-        return $this->roleAccessPermissionReaderRepository->getRoleAccessAndPermission($role)
-            ->map(fn ($roleAccessPermission) => $roleAccessPermission->getAccess()->getName() . '.' . $roleAccessPermission->getPermission()->getName())
-            ->toArray();
-    }
-
 }
