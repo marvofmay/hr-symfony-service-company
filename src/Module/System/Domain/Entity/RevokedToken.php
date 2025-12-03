@@ -52,4 +52,9 @@ class RevokedToken
     {
         return $this->user;
     }
+
+    public function getExpiresAt(): ?\DateTime
+    {
+        return $this->expiresAt;
+    }
 }

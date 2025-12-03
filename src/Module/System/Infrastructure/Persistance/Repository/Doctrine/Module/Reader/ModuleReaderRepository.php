@@ -7,6 +7,8 @@ namespace App\Module\System\Infrastructure\Persistance\Repository\Doctrine\Modul
 use App\Module\System\Domain\Entity\Module;
 use App\Module\System\Domain\Interface\Module\ModuleReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class ModuleReaderRepository extends ServiceEntityRepository implements ModuleReaderInterface
@@ -14,6 +16,17 @@ class ModuleReaderRepository extends ServiceEntityRepository implements ModuleRe
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Module::class);
+    }
+
+    public function getModules(bool $active = true): Collection
+    {
+        return new ArrayCollection(
+            $this->createQueryBuilder(Module::ALIAS)
+                ->where(Module::ALIAS.'.'. Module::COLUMN_ACTIVE .' = :active')
+                ->setParameter('active', $active)
+                ->getQuery()
+                ->getResult()
+        );
     }
 
     public function getModuleByUUID(string $uuid): ?Module

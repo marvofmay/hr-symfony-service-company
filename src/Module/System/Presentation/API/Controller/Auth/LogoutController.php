@@ -2,26 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Presentation\API\Controller\Role;
+namespace App\Module\System\Presentation\API\Controller\Auth;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
-use App\Module\Company\Application\Command\Role\CreateRoleCommand;
-use App\Module\Company\Domain\DTO\Role\CreateDTO;
-use App\Module\System\Domain\Enum\Access\AccessEnum;
-use App\Module\System\Domain\Enum\Permission\PermissionEnum;
+use App\Module\System\Application\Command\Auth\LogoutCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
-final class CreateRoleController extends AbstractController
+class LogoutController extends AbstractController
 {
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
@@ -29,17 +26,15 @@ final class CreateRoleController extends AbstractController
     ) {
     }
 
-    #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
-    public function __invoke(#[MapRequestPayload] CreateDTO $dto): JsonResponse
+    #[Route('/api/logout', name: 'api.logout', methods: ['POST'])]
+    public function __invoke(Request $request): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
-
         try {
-            $this->commandBus->dispatch(new CreateRoleCommand(name: $dto->name, description: $dto->description));
+            $this->commandBus->dispatch(new LogoutCommand($request));
         } catch (HandlerFailedException $e) {
             throw $e->getPrevious();
         }
 
-        return new JsonResponse(['message' => $this->messageService->get('role.add.success', [], 'roles')], Response::HTTP_CREATED);
+        return new JsonResponse(['message' => $this->messageService->get('logout.success', [], 'security')], Response::HTTP_OK);
     }
 }
