@@ -10,16 +10,16 @@ enum ModuleEnum: string implements EnumInterface
 {
     case SYSTEM = 'system';
     case COMPANY = 'company';
-    case NOTE = 'note';
-    case DOCUMENT = 'document';
+    case NOTES = 'notes';
+    case DOCUMENTS = 'documents';
 
     public function label(): string
     {
         return match ($this) {
             self::SYSTEM => self::SYSTEM->value,
             self::COMPANY => self::COMPANY->value,
-            self::NOTE => self::NOTE->value,
-            self::DOCUMENT => self::DOCUMENT->value,
+            self::NOTES => self::NOTES->value,
+            self::DOCUMENTS => self::DOCUMENTS->value,
         };
     }
 

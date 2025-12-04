@@ -9,37 +9,38 @@ use App\Module\System\Domain\Enum\ModuleEnum;
 
 enum AccessEnum: string implements EnumInterface
 {
-    case COMPANY = ModuleEnum::COMPANY->value . '.company';
-    case DEPARTMENT = ModuleEnum::COMPANY->value . '.department';
-    case EMPLOYEE = ModuleEnum::COMPANY->value . '.employee';
-    case INDUSTRY = ModuleEnum::COMPANY->value . '.industry';
-    case ROLE = ModuleEnum::COMPANY->value . '.role';
-    case POSITION = ModuleEnum::COMPANY->value . '.position';
-    case CONTRACT_TYPE = ModuleEnum::COMPANY->value . '.contract_type';
-    case IMPORT = ModuleEnum::COMPANY->value . '.import';
-    case NOTIFICATION = ModuleEnum::SYSTEM->value . '.notification';
-    case NOTIFICATION_CHANNEL = ModuleEnum::SYSTEM->value . '.notification_channel';
-    case NOTIFICATION_EVENT = ModuleEnum::SYSTEM->value . '.notification_event';
-    case NOTIFICATION_TEMPLATE = ModuleEnum::SYSTEM->value . '.notification_template';
-    case ACCESS = ModuleEnum::SYSTEM->value . '.access';
-    case PERMISSION = ModuleEnum::SYSTEM->value . '.permission';
-    case NOTE = ModuleEnum::NOTE->value . '.note';
+    case COMPANIES = ModuleEnum::COMPANY->value . '.companies';
+    case DEPARTMENTS = ModuleEnum::COMPANY->value . '.departments';
+    case EMPLOYEES = ModuleEnum::COMPANY->value . '.employees';
+    case INDUSTRIES = ModuleEnum::COMPANY->value . '.industries';
+    case ROLES = ModuleEnum::COMPANY->value . '.roles';
+    case POSITIONS = ModuleEnum::COMPANY->value . '.positions';
+    case CONTRACT_TYPES = ModuleEnum::COMPANY->value . '.contract_types';
+    case IMPORTS = ModuleEnum::COMPANY->value . '.imports';
+    case NOTIFICATIONS = ModuleEnum::SYSTEM->value . '.notifications';
+    case NOTIFICATION_CHANNELS = ModuleEnum::SYSTEM->value . '.notification_channels';
+    case NOTIFICATION_EVENTS = ModuleEnum::SYSTEM->value . '.notification_events';
+    case NOTIFICATION_TEMPLATES = ModuleEnum::SYSTEM->value . '.notification_templates';
+    case ACCESSES = ModuleEnum::SYSTEM->value . '.accesses';
+    case PERMISSIONS = ModuleEnum::SYSTEM->value . '.permissions';
+    case NOTES = ModuleEnum::NOTES->value . '.notes';
+    case DOCUMENTS = ModuleEnum::DOCUMENTS->value . '.documents';
 
     public function label(): string
     {
         return match ($this) {
-            self::COMPANY => 'Company',
-            self::DEPARTMENT => 'Department',
-            self::EMPLOYEE => 'Employee',
-            self::INDUSTRY => 'Industry',
-            self::ROLE => 'Role',
-            self::POSITION => 'Position',
-            self::CONTRACT_TYPE => 'Contract Type',
-            self::IMPORT => 'Import',
-            self::NOTIFICATION => 'Notification',
-            self::ACCESS => 'Access',
-            self::PERMISSION => 'Permission',
-            self::NOTE => 'Note',
+            self::COMPANIES => 'Companies',
+            self::DEPARTMENTS => 'Departments',
+            self::EMPLOYEES => 'Employees',
+            self::INDUSTRIES => 'Industries',
+            self::ROLES => 'Roles',
+            self::POSITIONS => 'Positions',
+            self::CONTRACT_TYPES => 'Contract Types',
+            self::IMPORTS => 'Imports',
+            self::NOTIFICATIONS => 'Notifications',
+            self::ACCESSES => 'Accesses',
+            self::PERMISSIONS => 'Permissions',
+            self::NOTES => 'Notes',
         };
     }
 

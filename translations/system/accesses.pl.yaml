@@ -1,30 +1,40 @@
 access:
   company: #moduleName
-    company:
+    companies:
       description: "Dostęp do firm."
-    department:
+    departments:
       description: "Dostęp do działów firm."
-    employee:
+    employees:
       description: "Dostęp do pracowników"
-    role:
+    roles:
       description: "Dostęp do ról."
-    position:
+    positions:
       description: "Dostęp do stanowisk w firmie,"
-    contractType:
+    contract_types:
       description: "Dostęp do rodzajów umów."
-    industry:
+    industries:
       description: "Dostęp do branż."
-    import:
+    imports:
       description: "Dostęp do importów."
   system: #moduleName
-    notification:
+    notifications:
       description: "Dostęp do powiadomień."
-  note: #moduleName
-    note:
+    notification_channels:
+      description: "Dostęp do kanałów powadomień."
+    notification_events:
+      description: "Dostęp do wydarzeń wywołujących powiadomienia (np. import ról)."
+    notification_templates:
+      description: "Dostęp do szablonów treści powiadomień."
+    accesses:
+      description: "Dostęp do nadawania dostępów."
+    permissions:
+      description: "Dostep do nadawania uprawnień."
+  notes: #moduleName
+    notes:
       description: "Dostęp do notatek pracownika."
-  task: #moduleName
-    task:
-      description: "Dostęp do zadań."
+  documents: #moduleName
+    documents:
+      description: "Dostęp do notatek pracownika."
   uuid:
-    required: "Wymagane UUID dostępu"
-    notExists: "Dostęp o podanym UUID :uuid nie istnieje"
+    required: "Wymagane UUID dostępu."
+    notExists: "Dostęp o podanym UUID :uuid nie istnieje."
