@@ -31,7 +31,7 @@ final class ListDepartmentsController extends AbstractController
     #[Route('/api/departments', name: 'api.departments.list', methods: ['GET'])]
     public function __invoke(#[MapQueryString] DepartmentsQueryDTO $queryDTO): Response
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::DEPARTMENT, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::DEPARTMENTS, $this->messageService->get('accessDenied'));
 
         try {
             $stamp = $this->queryBus->dispatch(new ListDepartmentsQuery($queryDTO));

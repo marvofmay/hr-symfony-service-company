@@ -30,7 +30,7 @@ final class DeleteIndustryController extends AbstractController
     #[Route('/api/industries/{uuid}', name: 'api.industries.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::INDUSTRY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::INDUSTRIES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new DeleteIndustryCommand($uuid));

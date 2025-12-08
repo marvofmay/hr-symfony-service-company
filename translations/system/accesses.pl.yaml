@@ -1,5 +1,7 @@
 access:
   company: #moduleName
+    manage:
+      description: "Dostęp do zarządzania firmą - firmy, departamenty, pracownicy, role, stanowiska, itp."
     companies:
       description: "Dostęp do firm."
     departments:
@@ -25,10 +27,14 @@ access:
       description: "Dostęp do wydarzeń wywołujących powiadomienia (np. import ról)."
     notification_templates:
       description: "Dostęp do szablonów treści powiadomień."
+    messages:
+      description: "Dostęp do wewnętrznego systemu wiadomości."
     accesses:
       description: "Dostęp do nadawania dostępów."
     permissions:
       description: "Dostep do nadawania uprawnień."
+    s0ettings:
+      description: "Dostep do ustawień systemu."
   notes: #moduleName
     notes:
       description: "Dostęp do notatek pracownika."

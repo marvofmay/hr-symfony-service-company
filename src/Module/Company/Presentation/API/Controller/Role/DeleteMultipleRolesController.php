@@ -31,7 +31,7 @@ final class DeleteMultipleRolesController extends AbstractController
     #[Route('/api/roles/multiple', name: 'api.roles.delete_multiple', methods: ['DELETE'])]
     public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::ROLES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new DeleteMultipleRolesCommand($dto->rolesUUIDs));

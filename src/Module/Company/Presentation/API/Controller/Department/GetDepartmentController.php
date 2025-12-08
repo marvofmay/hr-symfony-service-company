@@ -31,7 +31,7 @@ final class GetDepartmentController extends AbstractController
     #[Route('/api/departments/{uuid}', name: 'api.departments.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::DEPARTMENT, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::DEPARTMENTS, $this->messageService->get('accessDenied'));
 
         try {
             $stamp = $this->queryBus->dispatch(new GetDepartmentByUUIDQuery($uuid));

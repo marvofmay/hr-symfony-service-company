@@ -31,7 +31,7 @@ final class GetCompanyController extends AbstractController
     #[Route('/api/companies/{uuid}', name: 'api.companies.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::COMPANIES, $this->messageService->get('accessDenied'));
 
         try {
             $handledStamp = $this->queryBus->dispatch(new GetCompanyByUUIDQuery($uuid));

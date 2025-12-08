@@ -29,7 +29,7 @@ final class DeletePositionController extends AbstractController
     #[Route('/api/positions/{uuid}', name: 'api.positions.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::POSITION, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new DeletePositionCommand($uuid));

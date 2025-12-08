@@ -31,7 +31,7 @@ final class UpdateRoleController extends AbstractController
     #[Route('/api/roles/{uuid}', name: 'api.roles.update', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PUT'])]
     public function __invoke(string $uuid, #[MapRequestPayload] UpdateDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::ROLES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new UpdateRoleCommand(roleUUID: $uuid, name: $dto->name, description: $dto->description));

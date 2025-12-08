@@ -32,7 +32,7 @@ final class UpdateCompanyController extends AbstractController
     #[Route('/api/companies/{uuid}', name: 'api.company.update', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PUT'])]
     public function __invoke(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::COMPANIES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(

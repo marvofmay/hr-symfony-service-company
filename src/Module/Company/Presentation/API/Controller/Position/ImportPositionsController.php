@@ -29,7 +29,7 @@ final class ImportPositionsController extends AbstractController
     #[Route('/api/positions/import', name: 'api.positions.import', methods: ['POST'])]
     public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::POSITION, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'));
 
         if (!$file) {
             return new JsonResponse(

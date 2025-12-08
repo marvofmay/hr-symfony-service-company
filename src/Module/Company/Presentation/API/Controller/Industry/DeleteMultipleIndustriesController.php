@@ -32,7 +32,7 @@ final class DeleteMultipleIndustriesController extends AbstractController
     #[Route('/api/industries/multiple', name: 'api.industries.delete_multiple', methods: ['DELETE'])]
     public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::INDUSTRY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::INDUSTRIES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new DeleteMultipleIndustriesCommand($deleteMultipleDTO->industriesUUIDs));

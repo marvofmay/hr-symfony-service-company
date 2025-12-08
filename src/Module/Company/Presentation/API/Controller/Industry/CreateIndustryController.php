@@ -32,7 +32,7 @@ final class CreateIndustryController extends AbstractController
     #[Route('/api/industries', name: 'api.industries.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::INDUSTRY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::INDUSTRIES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new CreateIndustryCommand(

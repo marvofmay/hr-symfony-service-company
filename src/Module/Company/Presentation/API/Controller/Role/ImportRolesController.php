@@ -28,7 +28,7 @@ final class ImportRolesController extends AbstractController
     #[Route('/api/roles/import', name: 'api.roles.import', methods: ['POST'])]
     public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::ROLES, $this->messageService->get('accessDenied'));
 
         if (!$file) {
             throw new \Exception($this->messageService->get('role.import.file.required', [], 'roles'), Response::HTTP_UNPROCESSABLE_ENTITY);

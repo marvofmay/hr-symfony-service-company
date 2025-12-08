@@ -30,7 +30,7 @@ final class RestoreIndustryController extends AbstractController
     #[Route('/api/industries/{uuid}/restore', name: 'api.industry.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::INDUSTRY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::INDUSTRIES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new RestoreIndustryCommand($uuid));

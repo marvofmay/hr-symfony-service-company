@@ -31,7 +31,7 @@ final class DeleteMultipleEmployeesController extends AbstractController
     #[Route('/api/employees/multiple', name: 'api.employees.delete_multiple', methods: ['DELETE'])]
     public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::EMPLOYEE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::EMPLOYEES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(

@@ -31,7 +31,7 @@ final class RolesPDFController extends AbstractController
     #[Route('/api/roles/pdf', name: 'api.roles.pdf', methods: ['GET'])]
     public function __invoke(#[MapQueryString] RolesPDFQueryDTO $dto): Response
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::PDF, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::PDF, AccessEnum::ROLES, $this->messageService->get('accessDenied'));
 
         try {
             $pdf = $this->queryBus->dispatch(new GetRolesPDFQuery($dto->uuids))

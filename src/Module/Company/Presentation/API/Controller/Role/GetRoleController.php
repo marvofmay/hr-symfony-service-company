@@ -30,7 +30,7 @@ final class GetRoleController extends AbstractController
     #[Route('/api/roles/{uuid}', name: 'api.roles.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::ROLES, $this->messageService->get('accessDenied'));
 
         try {
             $data = $this->queryBus->dispatch(new GetRoleByUUIDQuery($uuid))

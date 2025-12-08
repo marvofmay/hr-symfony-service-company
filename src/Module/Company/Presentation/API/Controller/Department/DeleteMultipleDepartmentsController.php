@@ -32,7 +32,7 @@ final class DeleteMultipleDepartmentsController extends AbstractController
     public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
     {
 
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::DEPARTMENT, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::DEPARTMENTS, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(

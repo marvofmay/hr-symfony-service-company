@@ -31,7 +31,7 @@ final class GetContractTypeController extends AbstractController
     #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::CONTRACT_TYPE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::CONTRACT_TYPES, $this->messageService->get('accessDenied'));
 
         try {
             $handled = $this->queryBus->dispatch(new GetContractTypeByUUIDQuery($uuid));

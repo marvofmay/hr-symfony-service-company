@@ -32,7 +32,7 @@ final class CreateDepartmentController extends AbstractController
     #[Route('/api/departments', name: 'api.departments.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::DEPARTMENT, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::DEPARTMENTS, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new CreateDepartmentCommand(

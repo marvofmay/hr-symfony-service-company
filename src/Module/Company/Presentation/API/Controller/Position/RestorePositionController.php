@@ -29,7 +29,7 @@ final class RestorePositionController extends AbstractController
     #[Route('/api/positions/{uuid}/restore', name: 'api.position.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::POSITION, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new RestorePositionCommand($uuid));

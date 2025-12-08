@@ -33,7 +33,7 @@ final class ListPositionsController extends AbstractController
     #[Route('/api/positions', name: 'api.positions.list', methods: ['GET'])]
     public function __invoke(#[MapQueryString] PositionsQueryDTO $queryDTO): Response
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::POSITION, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'));
 
         try {
             $handledStamp = $this->queryBus->dispatch(new ListPositionsQuery($queryDTO));

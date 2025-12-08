@@ -31,7 +31,7 @@ final class AssignAccessController extends AbstractController
     #[Route('/api/roles/{uuid}/accesses', name: 'api.roles.accesses.assign', methods: ['POST'])]
     public function __invoke(string $uuid, #[MapRequestPayload] AssignAccessesDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::ASSIGN_ACCESS_TO_ROLE, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::ASSIGN_ACCESS_TO_ROLE, AccessEnum::ROLESS, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new AssignAccessesCommand(roleUUID: $uuid, accessesUUIDs: $dto->accessesUUIDs));

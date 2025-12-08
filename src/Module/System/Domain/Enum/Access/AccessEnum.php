@@ -9,6 +9,7 @@ use App\Module\System\Domain\Enum\ModuleEnum;
 
 enum AccessEnum: string implements EnumInterface
 {
+    case MANAGE = ModuleEnum::COMPANY->value . '.manage';
     case COMPANIES = ModuleEnum::COMPANY->value . '.companies';
     case DEPARTMENTS = ModuleEnum::COMPANY->value . '.departments';
     case EMPLOYEES = ModuleEnum::COMPANY->value . '.employees';
@@ -17,6 +18,8 @@ enum AccessEnum: string implements EnumInterface
     case POSITIONS = ModuleEnum::COMPANY->value . '.positions';
     case CONTRACT_TYPES = ModuleEnum::COMPANY->value . '.contract_types';
     case IMPORTS = ModuleEnum::COMPANY->value . '.imports';
+    case SETTINGS = ModuleEnum::SYSTEM->value . '.settings';
+    case MESSAGES = ModuleEnum::SYSTEM->value . '.messages';
     case NOTIFICATIONS = ModuleEnum::SYSTEM->value . '.notifications';
     case NOTIFICATION_CHANNELS = ModuleEnum::SYSTEM->value . '.notification_channels';
     case NOTIFICATION_EVENTS = ModuleEnum::SYSTEM->value . '.notification_events';
@@ -29,6 +32,7 @@ enum AccessEnum: string implements EnumInterface
     public function label(): string
     {
         return match ($this) {
+            self::MANAGE => 'Manage',
             self::COMPANIES => 'Companies',
             self::DEPARTMENTS => 'Departments',
             self::EMPLOYEES => 'Employees',
@@ -46,6 +50,6 @@ enum AccessEnum: string implements EnumInterface
 
     public static function values(): array
     {
-        return array_map(fn(self $case) => $case->value, self::cases());
+        return array_map(fn (self $case) => $case->value, self::cases());
     }
 }

@@ -30,7 +30,7 @@ final class RestoreEmployeeController extends AbstractController
     #[Route('/api/employees/{uuid}/restore', name: 'api.employees.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::EMPLOYEE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::EMPLOYEES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new RestoreEmployeeCommand($uuid));

@@ -32,7 +32,7 @@ final class UpdateIndustryController extends AbstractController
     #[Route('/api/industries/{uuid}', name: 'api.industries.update', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PUT'])]
     public function __invoke(string $uuid, #[MapRequestPayload] UpdateDTO $updateDTO): Response
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::INDUSTRY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::INDUSTRIES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(

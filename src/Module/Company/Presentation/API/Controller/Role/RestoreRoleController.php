@@ -29,7 +29,7 @@ final class RestoreRoleController extends AbstractController
     #[Route('/api/roles/{uuid}/restore', name: 'api.role.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::ROLESS, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new RestoreRoleCommand($uuid));

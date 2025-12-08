@@ -35,7 +35,7 @@ final class ListIndustriesController extends AbstractController
     {
         $this->denyAccessUnlessGranted(
             PermissionEnum::LIST,
-            AccessEnum::INDUSTRY,
+            AccessEnum::INDUSTRIES,
             $this->messageService->get('accessDenied')
         );
 

@@ -29,7 +29,7 @@ final class ImportContractTypesController extends AbstractController
     #[Route('/api/contract_types/import', name: 'app.contract_types.import', methods: ['POST'])]
     public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::CONTRACT_TYPE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::CONTRACT_TYPES, $this->messageService->get('accessDenied'));
 
         if (!$file) {
             return new JsonResponse(

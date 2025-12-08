@@ -33,7 +33,7 @@ final class ListEmployeesController extends AbstractController
     #[Route('/api/employees', name: 'api.employees.list', methods: ['GET'])]
     public function __invoke(#[MapQueryString] EmployeesQueryDTO $queryDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::EMPLOYEE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::EMPLOYEES, $this->messageService->get('accessDenied'));
 
         try {
             $stamp = $this->queryBus->dispatch(new ListEmployeesQuery($queryDTO));

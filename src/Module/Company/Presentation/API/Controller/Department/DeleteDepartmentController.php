@@ -30,7 +30,7 @@ final class DeleteDepartmentController extends AbstractController
     #[Route('/api/departments/{uuid}', name: 'api.departments.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::DEPARTMENT, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::DEPARTMENTS, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(

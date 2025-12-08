@@ -30,7 +30,7 @@ final class DeleteContractTypeController extends AbstractController
     #[Route('/api/contract_types/{uuid}', name: 'api.contract_types.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::CONTRACT_TYPE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::CONTRACT_TYPES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new DeleteContractTypeCommand($uuid));

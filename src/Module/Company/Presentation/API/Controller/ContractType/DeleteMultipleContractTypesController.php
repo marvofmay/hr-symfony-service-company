@@ -32,7 +32,7 @@ final class DeleteMultipleContractTypesController extends AbstractController
     #[Route('/api/contract_types/multiple', name: 'api.contract_types.delete_multiple', methods: ['DELETE'])]
     public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::CONTRACT_TYPE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::CONTRACT_TYPES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new DeleteMultipleContractTypesCommand($deleteMultipleDTO->contractTypesUUIDs));

@@ -32,7 +32,7 @@ class ImportEmployeesController extends AbstractController
     {
         $this->denyAccessUnlessGranted(
             PermissionEnum::IMPORT,
-            AccessEnum::EMPLOYEE,
+            AccessEnum::EMPLOYEES,
             $this->messageService->get('accessDenied')
         );
 

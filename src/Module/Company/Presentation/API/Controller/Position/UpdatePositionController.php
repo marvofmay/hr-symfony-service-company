@@ -31,7 +31,7 @@ final class UpdatePositionController extends AbstractController
     #[Route('/api/positions/{uuid}', name: 'api.positions.update', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PUT'])]
     public function __invoke(string $uuid, #[MapRequestPayload] UpdateDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::POSITION, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(

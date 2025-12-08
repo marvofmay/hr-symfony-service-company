@@ -32,7 +32,7 @@ final class DeleteMultiplePositionsController extends AbstractController
     #[Route('/api/positions/multiple', name: 'api.positions.delete_multiple', methods: ['DELETE'])]
     public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $deleteMultipleDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::POSITION, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new DeleteMultiplePositionsCommand($deleteMultipleDTO->positionsUUIDs));

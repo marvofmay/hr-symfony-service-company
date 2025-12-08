@@ -26,12 +26,13 @@ final class ListRolesController extends AbstractController
     public function __construct(
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/roles', name: 'api.roles.list', methods: ['GET'])]
     public function __invoke(#[MapQueryString] RolesQueryDTO $queryDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::ROLES, $this->messageService->get('accessDenied'));
 
         try {
             $result = $this->queryBus->dispatch(new ListRolesQuery($queryDTO))->last(HandledStamp::class)->getResult();

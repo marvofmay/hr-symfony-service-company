@@ -29,7 +29,7 @@ final class ImportCompaniesController extends AbstractController
     #[Route('/api/companies/import', name: 'api.companies.import', methods: ['POST'])]
     public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::IMPORT, AccessEnum::COMPANIES, $this->messageService->get('accessDenied'));
 
         if (!$file) {
             return new JsonResponse(

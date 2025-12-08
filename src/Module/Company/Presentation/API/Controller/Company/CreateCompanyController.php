@@ -32,7 +32,7 @@ final class CreateCompanyController extends AbstractController
     #[Route('/api/companies', name: 'api.companies.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::COMPANIES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new CreateCompanyCommand(

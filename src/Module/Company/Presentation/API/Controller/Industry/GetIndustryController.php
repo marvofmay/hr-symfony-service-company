@@ -34,7 +34,7 @@ final class GetIndustryController extends AbstractController
     {
         $this->denyAccessUnlessGranted(
             PermissionEnum::VIEW,
-            AccessEnum::INDUSTRY,
+            AccessEnum::INDUSTRIES,
             $this->messageService->get('accessDenied')
         );
 

@@ -33,7 +33,7 @@ final class ListCompaniesController extends AbstractController
     #[Route('/api/companies', name: 'api.companies.list', methods: ['GET'])]
     public function __invoke(#[MapQueryString] CompaniesQueryDTO $queryDTO): Response
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::COMPANIES, $this->messageService->get('accessDenied'));
 
         try {
             $handledStamp = $this->queryBus->dispatch(new ListCompaniesQuery($queryDTO));

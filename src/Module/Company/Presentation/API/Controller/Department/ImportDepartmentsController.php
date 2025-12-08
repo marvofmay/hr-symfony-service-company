@@ -31,7 +31,7 @@ class ImportDepartmentsController extends AbstractController
     {
         $this->denyAccessUnlessGranted(
             PermissionEnum::IMPORT,
-            AccessEnum::DEPARTMENT,
+            AccessEnum::DEPARTMENTS,
             $this->messageService->get('accessDenied')
         );
 

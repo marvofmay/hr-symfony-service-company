@@ -31,7 +31,7 @@ final class CreatePositionController extends AbstractController
     #[Route('/api/positions', name: 'api.positions.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::POSITION, $this->messageService->get('accessDenied'),);
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'),);
 
         try {
             $this->commandBus->dispatch(new CreatePositionCommand(

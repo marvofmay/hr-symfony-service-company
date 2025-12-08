@@ -31,7 +31,7 @@ final class AssignPermissionController extends AbstractController
     #[Route('/api/roles/{uuid}/accesses/permissions', name: 'api.roles.accesses.permissions.create', methods: ['POST'])]
     public function __invoke(string $uuid, #[MapRequestPayload] AssignPermissionsDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::ASSIGN_PERMISSION_TO_ACCESS_ROLE, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::ASSIGN_PERMISSION_TO_ACCESS_ROLE, AccessEnum::ROLES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new AssignPermissionsCommand(roleUUID: $uuid, accesses: $dto->accesses));

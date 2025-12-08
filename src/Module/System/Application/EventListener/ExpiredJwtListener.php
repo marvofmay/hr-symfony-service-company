@@ -45,11 +45,11 @@ final readonly class ExpiredJwtListener
             throw new \Exception($this->messageService->get('tokenUUID.missing', [':uuid' => $payload['tokenUUID']], 'security'), Response::HTTP_BAD_REQUEST);
         }
 
-        if (!isset($payload['userUUID'])) {
-            throw new \Exception($this->messageService->get('userUUID.missing', [':uuid' => $payload['userUUID']], 'security'), Response::HTTP_BAD_REQUEST);
+        if (!isset($payload['user']['uuid'])) {
+            throw new \Exception($this->messageService->get('userUUID.missing', [], 'security'), Response::HTTP_BAD_REQUEST);
         }
 
-        $user = $this->userReaderRepository->getUserByUUID($payload['userUUID']);
+        $user = $this->userReaderRepository->getUserByUUID($payload['user']['uuid']);
         if (!$user instanceof UserInterface) {
             throw new \Exception($this->messageService->get('user.notFound', [], 'security'), Response::HTTP_BAD_REQUEST);
         }

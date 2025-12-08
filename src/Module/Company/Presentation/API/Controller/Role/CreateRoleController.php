@@ -32,7 +32,7 @@ final class CreateRoleController extends AbstractController
     #[Route('/api/roles', name: 'api.roles.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::ROLES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new CreateRoleCommand(name: $dto->name, description: $dto->description));

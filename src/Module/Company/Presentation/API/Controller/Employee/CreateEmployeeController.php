@@ -32,7 +32,7 @@ final class CreateEmployeeController extends AbstractController
     #[Route('/api/employees', name: 'api.employees.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::EMPLOYEE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::EMPLOYEES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new CreateEmployeeCommand(

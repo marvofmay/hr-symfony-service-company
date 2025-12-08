@@ -31,7 +31,7 @@ final class GetEmployeeController extends AbstractController
     #[Route('/api/employees/{uuid}', name: 'api.employees.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::EMPLOYEE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::EMPLOYEES, $this->messageService->get('accessDenied'));
 
         try {
             $stamp = $this->queryBus->dispatch(new GetEmployeeByUUIDQuery($uuid));

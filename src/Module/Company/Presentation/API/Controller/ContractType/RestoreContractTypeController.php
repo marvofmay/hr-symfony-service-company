@@ -30,7 +30,7 @@ final class RestoreContractTypeController extends AbstractController
     #[Route('/api/contract_types/{uuid}/restore', name: 'api.contract_types.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::CONTRACT_TYPE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::CONTRACT_TYPES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new RestoreContractTypeCommand($uuid));

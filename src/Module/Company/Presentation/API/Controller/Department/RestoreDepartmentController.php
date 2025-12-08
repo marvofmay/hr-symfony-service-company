@@ -30,7 +30,7 @@ final class RestoreDepartmentController extends AbstractController
     #[Route('/api/departments/{uuid}/restore', name: 'api.departments.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::RESTORE, AccessEnum::COMPANIES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(

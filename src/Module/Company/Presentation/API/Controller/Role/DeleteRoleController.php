@@ -29,7 +29,7 @@ final class DeleteRoleController extends AbstractController
     #[Route('/api/roles/{uuid}', name: 'api.roles.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::ROLE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::ROLES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new DeleteRoleCommand($uuid));

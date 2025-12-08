@@ -29,7 +29,7 @@ final class DeleteCompanyController extends AbstractController
     #[Route('/api/companies/{uuid}', name: 'api.companies.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
     public function __invoke(string $uuid): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::COMPANY, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::COMPANIES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(new DeleteCompanyCommand($uuid));
