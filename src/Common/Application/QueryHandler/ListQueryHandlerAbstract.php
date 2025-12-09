@@ -146,7 +146,6 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
 
     public function getTransformer(): object
     {
-        //return TransformerFactory::createForHandler(static::class);
         return $this->transformerFactory->createForHandler(static::class);
     }
 

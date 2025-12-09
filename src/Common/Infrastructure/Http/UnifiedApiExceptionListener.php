@@ -15,8 +15,8 @@ use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
-use Symfony\Component\Validator\Exception\ValidationFailedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -26,7 +26,8 @@ final readonly class UnifiedApiExceptionListener
     public function __construct(
         private TranslatorInterface $translator,
         private MessageBusInterface $eventBus,
-    ) {}
+    ) {
+    }
 
     public function __invoke(ExceptionEvent $event): void
     {
@@ -36,21 +37,28 @@ final readonly class UnifiedApiExceptionListener
         }
 
         $channel = $this->getControllerErrorChannel($event);
-        if ($exception instanceof ValidationFailedException) {
-            $errors = [];
-            foreach ($exception->getViolations() as $violation) {
-                $errors[$violation->getPropertyPath()] = $this->translator->trans($violation->getMessage());
+        if ($exception instanceof UnprocessableEntityHttpException) {
+            $validationException = $event->getThrowable()->getPrevious();
+            $errorMessages = [];
+            foreach ($validationException->getViolations() as $violation) {
+                $errorMessages[$this->translator->trans($violation->getPropertyPath())] = $violation->getMessage();
             }
 
-            $this->logError($channel, 'Validation error.');
+            $errorString = implode("; ", array_map(
+                fn ($field, $message) => "$field: $message",
+                array_keys($errorMessages),
+                $errorMessages
+            ));
+
+            $this->logError($channel, 'Validation errors: ' . $errorString);
 
             $event->setResponse(new JsonResponse([
-                'message' => $this->translator->trans('errors.validation'),
-                'errors' => $errors,
-            ], 422));
+                'message' => $this->translator->trans('errors.occurred', [], 'validators'),
+                'errors' => $errorMessages,
+            ]));
+
             return;
         }
-
 
         if ($exception instanceof HttpExceptionInterface) {
             $message = match (true) {

@@ -15,7 +15,7 @@ use App\Module\Company\Domain\Entity\Industry;
 use App\Module\Company\Domain\Enum\Industry\IndustryEntityFieldEnum;
 use Doctrine\Common\Collections\Collection;
 
-class CompanyDataTransformer  implements DataTransformerInterface
+class CompanyDataTransformer implements DataTransformerInterface
 {
     public static function supports(): string
     {
@@ -28,6 +28,7 @@ class CompanyDataTransformer  implements DataTransformerInterface
             Company::COLUMN_UUID => $company->getUUID()->toString(),
             Company::COLUMN_FULL_NAME => $company->getFullName(),
             Company::COLUMN_SHORT_NAME => $company->getShortName(),
+            Company::COLUMN_INTERNAL_CODE => $company->getInternalCode(),
             Company::COLUMN_NIP => $company->getNIP(),
             Company::COLUMN_REGON => $company->getREGON(),
             Company::COLUMN_DESCRIPTION => $company->getDescription(),

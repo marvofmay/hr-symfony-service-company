@@ -21,13 +21,13 @@ company:
   nip:
     minimumLength: "Minimalnie znaków :qty"
     maximumLength: "Maksymalnie znaków :qty"
-    exactLength: "NIP musi mieć dokładnie 10 cyfr."
+    exactLength: "Dokładnie 10 cyfr."
     alreadyExists: "Firma o podanym NIP już istnieje."
     required: "NIP firmy jest wymagany"
     notExists: "Firma o podanym NIP :nip nie istnieje lub została usunięta."
   regon:
-    minimumLength: "Minimalnie znaków :qty"
-    maximumLength: "Maksymalnie znaków :qty"
+    minimumLength: "REGON - minimalnie znaków :qty"
+    maximumLength: "REGON - maksymalnie znaków :qty"
     alreadyExists: "Firma o podanym REGON już istnieje."
     required: "REGON firmy jest wymagany."
   industryUUID:

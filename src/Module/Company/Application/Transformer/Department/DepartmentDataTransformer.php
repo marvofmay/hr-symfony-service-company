@@ -85,6 +85,10 @@ class DepartmentDataTransformer implements DataTransformerInterface
             Company::COLUMN_FULL_NAME => $company->getFullName(),
             Company::COLUMN_SHORT_NAME => $company->getShortName(),
             Company::COLUMN_NIP => $company->getNIP(),
+            Company::COLUMN_REGON => $company->getRegon(),
+            Company::COLUMN_INTERNAL_CODE => $company->getInternalCode(),
+            Company::COLUMN_DESCRIPTION => $company->getDescription(),
+            Company::COLUMN_ACTIVE => $company->getActive(),
         ];
     }
 }

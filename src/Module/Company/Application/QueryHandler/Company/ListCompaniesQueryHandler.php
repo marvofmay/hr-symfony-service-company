@@ -52,6 +52,7 @@ final class ListCompaniesQueryHandler extends ListQueryHandlerAbstract
         return [
             Company::COLUMN_FULL_NAME,
             Company::COLUMN_SHORT_NAME,
+            Company::COLUMN_INTERNAL_CODE,
             Company::COLUMN_DESCRIPTION,
             Company::COLUMN_NIP,
             Company::COLUMN_REGON,
