@@ -89,7 +89,7 @@ class CreateDTO implements DataTransferObjectInterface
         }
     }
 
-    #[MinMaxLength(min: 3, max: 500, message: [
+    #[MinMaxLength(min: 0, max: 500, message: [
         'tooShort' => 'company.description.minimumLength',
         'tooLong' => 'company.description.maximumLength',
         'domain' => 'companies',

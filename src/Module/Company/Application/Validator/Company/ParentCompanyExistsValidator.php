@@ -21,7 +21,7 @@ final readonly class ParentCompanyExistsValidator
 
     public function supports(CommandInterface|QueryInterface $data): bool
     {
-        return property_exists($data, 'parentCompanyUUID') && null !== $data->parentCompanyUUID;
+        return property_exists($data, 'parentCompanyUUID') && !empty($data->parentCompanyUUID);
     }
 
     public function validate(CommandInterface|QueryInterface $data): void
@@ -32,7 +32,7 @@ final readonly class ParentCompanyExistsValidator
 
         $parentUUID = $data->parentCompanyUUID;
         $companyExists = $this->companyReaderRepository->isCompanyExistsWithUUID($parentUUID);
-        if ($companyExists) {
+        if (!$companyExists) {
             throw new \Exception($this->translator->trans('company.uuid.notExists', [':uuid' => $parentUUID], 'companies'), Response::HTTP_CONFLICT);
         }
     }

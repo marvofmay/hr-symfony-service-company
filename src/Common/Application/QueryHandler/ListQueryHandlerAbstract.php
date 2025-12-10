@@ -31,46 +31,66 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
 
     abstract public function getRelations(): array;
 
+    abstract public function getPhraseSearchColumns(): array;
+
     public function handle(ListQueryInterface $query): array
     {
-        $queryBuilder = $this->createBaseQueryBuilder();
-        $queryBuilder = $this->setFilters($queryBuilder, $query->getFilters());
+        $alias = $this->getAlias();
 
-        $entityClass = $queryBuilder->getRootEntities()[0];
+        $baseQB = $this->createBaseQueryBuilder();
+        $baseQB = $this->setFilters($baseQB, $query->getFilters());
+
+        $entityClass = $baseQB->getRootEntities()[0];
         $metadata = $this->entityManager->getClassMetadata($entityClass);
-        $identifierField = $metadata->getSingleIdentifierFieldName();
+        $identifier = $metadata->getSingleIdentifierFieldName();
 
-        $totalItems = (clone $queryBuilder)
+        $total = (clone $baseQB)
             ->resetDQLPart('orderBy')
-            ->select(sprintf('COUNT(%s.%s)', $this->getAlias(), $identifierField))
+            ->select("COUNT($alias.$identifier)")
             ->getQuery()
             ->getSingleScalarResult();
 
+        $orderByField = $query->getOrderBy() ?? $this->getDefaultOrderBy();
+        if (!str_contains($orderByField, '.')) {
+            $orderByField = "$alias.$orderByField";
+        }
+
+        $ids = (clone $baseQB)
+            ->select("$alias.$identifier")
+            ->orderBy($orderByField, $query->getOrderDirection())
+            ->setFirstResult($query->getOffset())
+            ->setMaxResults($query->getLimit())
+            ->getQuery()
+            ->getScalarResult();
+
+        if (empty($ids)) {
+            return [
+                'total' => (int)$total,
+                'page'  => $query->getPage(),
+                'limit' => $query->getLimit(),
+                'items' => [],
+            ];
+        }
+
+        $ids = array_map(fn ($row) => array_values($row)[0], $ids);
+
+        $qb = $this->createBaseQueryBuilder();
+        $qb->andWhere($qb->expr()->in("$alias.$identifier", ':ids'))
+            ->setParameter('ids', $ids);
 
         foreach ($query->getIncludes() as $relation) {
             if (in_array($relation, $this->getRelations(), true)) {
-                $queryBuilder
-                    ->leftJoin(sprintf('%s.%s', $this->getAlias(), $relation), $relation)
+                $qb->leftJoin("$alias.$relation", $relation)
                     ->addSelect($relation);
             }
         }
 
+        $qb->orderBy("$alias.$identifier", 'ASC');
 
-        $orderByField = $query->getOrderBy() ?? $this->getDefaultOrderBy();
-        if (!str_contains($orderByField, '.')) {
-            $orderByField = sprintf('%s.%s', $this->getAlias(), $orderByField);
-        }
-
-        $queryBuilder
-            ->orderBy($orderByField, $query->getOrderDirection())
-            ->setMaxResults($query->getLimit())
-            ->setFirstResult($query->getOffset());
-
-
-        $items = $queryBuilder->getQuery()->getResult();
+        $items = $qb->getQuery()->getResult();
 
         return [
-            'total' => (int)$totalItems,
+            'total' => (int)$total,
             'page'  => $query->getPage(),
             'limit' => $query->getLimit(),
             'items' => $this->transformIncludes($items, $query->getIncludes()),
@@ -79,69 +99,69 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
 
     public function createBaseQueryBuilder(): QueryBuilder
     {
-        return $this->entityManager->getRepository($this->getEntityClass())->createQueryBuilder($this->getAlias());
+        return $this->entityManager
+            ->getRepository($this->getEntityClass())
+            ->createQueryBuilder($this->getAlias());
     }
 
-    abstract public function getPhraseSearchColumns(): array;
-
-    public function setFilters(QueryBuilder $queryBuilder, array $filters): QueryBuilder
+    public function setFilters(QueryBuilder $qb, array $filters): QueryBuilder
     {
         $alias = $this->getAlias();
-        $allowedFilters = $this->getAllowedFilters();
+        $allowed = $this->getAllowedFilters();
 
-        foreach ($filters as $fieldName => $fieldValue) {
-            if (!in_array($fieldName, $allowedFilters, true)) {
+        foreach ($filters as $field => $value) {
+
+            if (!in_array($field, $allowed, true)) {
                 continue;
             }
 
-            if ($fieldName === 'user') {
-                if (!in_array('user', $queryBuilder->getAllAliases(), true)) {
-                    $queryBuilder->leftJoin("$alias.user", 'user');
-                    $queryBuilder
-                        ->andWhere('user.uuid = :userUUID')
-                        ->setParameter('userUUID', $fieldValue);
+            if ($field === 'user') {
+                if (!in_array('user', $qb->getAllAliases(), true)) {
+                    $qb->leftJoin("$alias.user", 'user');
                 }
+                $qb->andWhere('user.uuid = :userUUID')
+                    ->setParameter('userUUID', $value);
                 continue;
             }
 
-            if (!is_null($fieldValue)) {
-                $queryBuilder
-                    ->andWhere($queryBuilder->expr()->like("$alias.$fieldName", ':' . $fieldName))
-                    ->setParameter($fieldName, "%$fieldValue%");
+            if (!is_null($value)) {
+                $qb->andWhere($qb->expr()->like("$alias.$field", ':' . $field))
+                    ->setParameter($field, '%' . $value . '%');
             }
         }
 
         if (array_key_exists('deleted', $filters)) {
-            $deletedColumn = "$alias.deletedAt";
+            $col = "$alias.deletedAt";
             switch ($filters['deleted']) {
                 case 0:
-                    $queryBuilder->andWhere($queryBuilder->expr()->isNull($deletedColumn));
+                    $qb->andWhere($qb->expr()->isNull($col));
                     break;
+
                 case 1:
                     $this->entityManager->getFilters()->disable('soft_delete');
-                    $queryBuilder->andWhere($queryBuilder->expr()->isNotNull($deletedColumn));
+                    $qb->andWhere($qb->expr()->isNotNull($col));
                     break;
             }
         } else {
-            $queryBuilder->andWhere($queryBuilder->expr()->isNull("$alias.deletedAt"));
+            $qb->andWhere($qb->expr()->isNull("$alias.deletedAt"));
         }
 
         if (!empty($filters['phrase'])) {
-            $phraseColumns = $this->getPhraseSearchColumns();
-            $expr = $queryBuilder->expr();
-            $orConditions = [];
+            $columns = $this->getPhraseSearchColumns();
+            $expr = $qb->expr();
+            $or = [];
 
-            foreach ($phraseColumns as $column) {
-                $orConditions[] = $expr->like("LOWER($alias.$column)", ':searchPhrase');
+            foreach ($columns as $col) {
+                $or[] = $expr->like("LOWER($alias.$col)", ':phrase');
             }
 
-            if (!empty($orConditions)) {
-                $queryBuilder->andWhere(call_user_func_array([$expr, 'orX'], $orConditions))
-                    ->setParameter('searchPhrase', '%' . strtolower($filters['phrase']) . '%');
+            if ($or) {
+                $qb->andWhere(call_user_func_array([$expr, 'orX'], $or))
+                    ->setParameter('phrase', '%' . strtolower($filters['phrase']) . '%');
             }
         }
 
-        return $queryBuilder;
+        return $qb;
     }
 
     public function getTransformer(): object
@@ -152,15 +172,19 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
     public function transformIncludes(array $items, array $includes): array
     {
         $transformer = $this->getTransformer();
-
-        return array_map(fn($item) => $this->transformItem($transformer, $item, $includes), $items);
+        return array_map(
+            fn ($item) => $this->transformItem($transformer, $item, $includes),
+            $items
+        );
     }
 
     public function transformItem($transformer, $item, array $includes): array
     {
-        return method_exists($transformer, 'transformToArray')
-            ? $transformer->transformToArray($item, $includes)
-            : throw new \RuntimeException('Transformer does not implement transformToArray method.');
+        if (!method_exists($transformer, 'transformToArray')) {
+            throw new \RuntimeException('Transformer must implement transformToArray()');
+        }
+
+        return $transformer->transformToArray($item, $includes);
     }
 
     protected function validate(QueryInterface $query): void

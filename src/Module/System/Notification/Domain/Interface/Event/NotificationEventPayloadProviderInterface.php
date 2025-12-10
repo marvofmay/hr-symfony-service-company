@@ -12,8 +12,5 @@ interface NotificationEventPayloadProviderInterface
 {
     public function supports(string $notifiableEventName): bool;
 
-    /**
-     * Return array [$payload, $recipientUUIDs]
-     */
     public function provide(NotifiableEventInterface $notifiableEvent): array;
 }
