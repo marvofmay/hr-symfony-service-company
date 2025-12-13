@@ -37,7 +37,7 @@ final class CompanyAggregateCreator extends AggregateAbstract
             ),
             Phones::fromArray([$row[CompanyImportColumnEnum::PHONE->value]]),
             $loggedUserUUID,
-            $row[CompanyImportColumnEnum::COMPANY_SHORT_NAME->value] ? ShortName::fromString($row[CompanyImportColumnEnum::COMPANY_SHORT_NAME->value]) : null,
+            ShortName::fromString($row[CompanyImportColumnEnum::COMPANY_SHORT_NAME->value]),
             $row[CompanyImportColumnEnum::COMPANY_INTERNAL_CODE->value],
             $row[CompanyImportColumnEnum::COMPANY_DESCRIPTION->value],
             $parentUUID,

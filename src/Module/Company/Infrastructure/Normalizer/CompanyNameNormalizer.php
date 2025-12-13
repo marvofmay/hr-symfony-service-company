@@ -15,7 +15,7 @@ class CompanyNameNormalizer implements NormalizerInterface, DenormalizerInterfac
         return $data instanceof CompanyNameAbstract;
     }
 
-    public function normalize(mixed $data, ?string $format = null, array $context = []): string
+    public function normalize(mixed $data, ?string $format = null, array $context = []): ?string
     {
         return $data->getValue();
     }

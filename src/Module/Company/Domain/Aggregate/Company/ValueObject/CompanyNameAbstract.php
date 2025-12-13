@@ -13,7 +13,7 @@ abstract class CompanyNameAbstract
         $this->value = null !== $value ? trim($value) : null;
     }
 
-    abstract public static function fromString(string $value): static;
+    abstract public static function fromString(?string $value): static;
 
     public function getValue(): ?string
     {

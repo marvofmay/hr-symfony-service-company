@@ -12,7 +12,7 @@ final class ShortName extends CompanyNameAbstract
         parent::__construct('' === $trimmed ? null : $trimmed);
     }
 
-    public static function fromString(string $value): static
+    public static function fromString(?string $value): static
     {
         return new self($value);
     }
