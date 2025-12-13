@@ -6,15 +6,26 @@ namespace App\Module\Company\Domain\Aggregate\ValueObject;
 
 use Symfony\Component\HttpFoundation\Response;
 
-final readonly class Websites
+final class Websites
 {
     public function __construct(private array $websites)
     {
         foreach ($websites as $url) {
+            if ($url === null || trim((string) $url) === '') {
+                continue;
+            }
+
             if (!filter_var($url, FILTER_VALIDATE_URL)) {
-                throw new \Exception("Invalid URL: $url", Response::HTTP_UNPROCESSABLE_ENTITY);
+                throw new \InvalidArgumentException(
+                    "Invalid URL: $url"
+                );
             }
         }
+
+        $this->websites = array_values(array_filter(
+            $websites,
+            fn ($url) => is_string($url) && trim($url) !== ''
+        ));
     }
 
     public static function fromArray(array $websites): self
