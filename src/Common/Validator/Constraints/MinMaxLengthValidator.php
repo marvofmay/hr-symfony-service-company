@@ -21,40 +21,45 @@ class MinMaxLengthValidator extends ConstraintValidator
         }
 
         $length = mb_strlen($value);
+        $domain = $constraint->message['domain'] ?? 'validators';
 
         if ($constraint->min === $constraint->max) {
             if ($length !== $constraint->min) {
                 $translatedMessage = $this->translator->trans(
                     $constraint->message['exactMessage'] ?? 'validation.exactLength',
-                    [':qty' => $constraint->min],
-                    $constraint->message['domain'] ?? 'validators'
+                    [
+                        ':qty' => $constraint->min,
+                    ],
+                    $domain
                 );
 
-                $this->context->buildViolation($translatedMessage)
-                    ->addViolation();
+                $this->context->buildViolation($translatedMessage)->addViolation();
             }
-        } else {
-            if ($length < $constraint->min) {
-                $translatedMessage = $this->translator->trans(
-                    $constraint->message['tooShort'] ?? 'validation.minLength',
-                    [':qty' => $constraint->min],
-                    $constraint->message['domain'] ?? 'validators'
-                );
+            return;
+        }
 
-                $this->context->buildViolation($translatedMessage)
-                    ->addViolation();
-            }
+        if ($length < $constraint->min) {
+            $translatedMessage = $this->translator->trans(
+                $constraint->message['tooShort'] ?? 'validation.minLength',
+                [
+                    ':qty' => $constraint->min,
+                ],
+                $domain
+            );
 
-            if ($length > $constraint->max) {
-                $translatedMessage = $this->translator->trans(
-                    $constraint->message['tooLong'] ?? 'validation.maxLength',
-                    [':qty' => $constraint->max],
-                    $constraint->message['domain'] ?? 'validators'
-                );
+            $this->context->buildViolation($translatedMessage)->addViolation();
+        }
 
-                $this->context->buildViolation($translatedMessage)
-                    ->addViolation();
-            }
+        if ($length > $constraint->max) {
+            $translatedMessage = $this->translator->trans(
+                $constraint->message['tooLong'] ?? 'validation.maxLength',
+                [
+                    ':qty' => $constraint->max,
+                ],
+                $domain
+            );
+
+            $this->context->buildViolation($translatedMessage)->addViolation();
         }
     }
 }

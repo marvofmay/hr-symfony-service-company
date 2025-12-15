@@ -23,8 +23,8 @@ department:
     alreadyExists: "Departament o podanym kodzie wewnętrznym \":internalCode\" już istnieje."
     notExists: "Departament o podanym kodzie wewnętrznym :internalCode nie istnieje lub został usunięty."
   description:
-    minimumLength: "Opis - minimalnie znaków :qty"
-    maximumLength: "Opis - maksymalnie znaków :qty"
+    minimumLength: "minimalnie znaków :qty"
+    maximumLength: "maksymalnie znaków :qty"
   active:
     invalid: "Nieprawidłowa wartość pola active."
   email:
@@ -70,3 +70,5 @@ department:
       required: "Email departementu jest wymagany."
   companyUUID:
     required: "UUID firmy jest wymagane."
+  field:
+    description: "Opis"

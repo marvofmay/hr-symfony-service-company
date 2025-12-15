@@ -10,15 +10,17 @@ use Symfony\Component\Validator\Constraint;
 class MinMaxLength extends Constraint
 {
     public function __construct(
-        public int $min,
-        public int $max,
-        public array $message = [
-            ':qty' => 'validation.minLength',
-            'domain' => 'validators',
-        ],
+        public readonly int $min,
+        public readonly int $max,
+        public readonly array $message = [],
         ?array $groups = null,
         mixed $payload = null,
     ) {
-        parent::__construct(['message' => $message], $groups, $payload);
+        parent::__construct([], $groups, $payload);
+    }
+
+    public function validatedBy(): string
+    {
+        return MinMaxLengthValidator::class;
     }
 }

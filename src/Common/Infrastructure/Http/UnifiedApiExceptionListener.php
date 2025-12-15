@@ -41,7 +41,7 @@ final readonly class UnifiedApiExceptionListener
             $validationException = $event->getThrowable()->getPrevious();
             $errorMessages = [];
             foreach ($validationException->getViolations() as $violation) {
-                $errorMessages[$this->translator->trans($violation->getPropertyPath())] = $violation->getMessage();
+                $errorMessages[$this->translator->trans($violation->getPropertyPath(), [], 'messages')] = $violation->getMessage();
             }
 
             $errorString = implode("; ", array_map(

@@ -15,11 +15,15 @@ class CreateDTO
         'text' => 'department.name.required',
         'domain' => 'departments',
     ])]
-    #[MinMaxLength(min: 3, max: 200, message: [
-        'tooShort' => 'department.name.minimumLength',
-        'tooLong' => 'department.name.maximumLength',
-        'domain' => 'departments',
-    ])]
+    #[MinMaxLength(
+        min: 3,
+        max: 200,
+        message: [
+            'tooShort' => 'department.name.minimumLength',
+            'tooLong' => 'department.name.maximumLength',
+            'domain' => 'departments'
+        ]
+    )]
     public string $name {
         get {
             return $this->name;
@@ -44,7 +48,7 @@ class CreateDTO
     #[MinMaxLength(min: 3, max: 500, message: [
         'tooShort' => 'department.description.minimumLength',
         'tooLong' => 'department.description.maximumLength',
-        'domain' => 'companies',
+        'domain' => 'departments',
     ])]
     public ?string $description = null {
         get {

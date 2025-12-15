@@ -15,3 +15,4 @@ position:
       selectedUUIDsRequired: "Wymagane uuid stanowiska/stanowisk."
 methodNotAllowed: "Nie takiej metody lub endpoint nie istnieje."
 fullName: "Pełna nazwa"
+description: "Opis"

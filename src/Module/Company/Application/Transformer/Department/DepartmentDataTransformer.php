@@ -6,7 +6,9 @@ namespace App\Module\Company\Application\Transformer\Department;
 
 use App\Common\Domain\Interface\DataTransformerInterface;
 use App\Module\Company\Application\QueryHandler\Department\ListDepartmentsQueryHandler;
+use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use Doctrine\Common\Collections\Collection;
@@ -23,6 +25,7 @@ class DepartmentDataTransformer implements DataTransformerInterface
         $data = [
             Department::COLUMN_UUID => $department->getUUID()->toString(),
             Department::COLUMN_NAME => $department->getName(),
+            Department::COLUMN_INTERNAL_CODE => $department->getInternalCode(),
             Department::COLUMN_DESCRIPTION => $department->getDescription(),
             Department::COLUMN_ACTIVE => $department->getActive(),
             Department::COLUMN_CREATED_AT => $department->createdAt?->format('Y-m-d H:i:s'),
@@ -45,6 +48,8 @@ class DepartmentDataTransformer implements DataTransformerInterface
             Department::RELATION_EMPLOYEES => $this->transformEmployees($department->getEmployees()),
             Department::RELATION_PARENT_DEPARTMENT => $this->transformParentDepartment($department->getParentDepartment()),
             Department::RELATION_COMPANY => $this->transformCompany($department->getCompany()),
+            Department::RELATION_ADDRESS => $this->transformAddress($department->getAddress()),
+            Department::RELATION_CONTACTS => $this->transformContacts($department->getContacts()),
             default => null,
         };
     }
@@ -90,5 +95,35 @@ class DepartmentDataTransformer implements DataTransformerInterface
             Company::COLUMN_DESCRIPTION => $company->getDescription(),
             Company::COLUMN_ACTIVE => $company->getActive(),
         ];
+    }
+
+    private function transformAddress(?Address $address): ?array
+    {
+        if (!$address) {
+            return null;
+        }
+
+        return [
+            Address::COLUMN_UUID => $address->getUUID()->toString(),
+            Address::COLUMN_STREET => $address->getStreet(),
+            Address::COLUMN_POSTCODE => $address->getPostcode(),
+            Address::COLUMN_CITY => $address->getCity(),
+            Address::COLUMN_COUNTRY => $address->getCountry(),
+        ];
+    }
+
+    private function transformContacts(?Collection $contacts): ?array
+    {
+        if (null === $contacts || $contacts->isEmpty()) {
+            return null;
+        }
+
+        return array_map(
+            fn (Contact $contact) => [
+                Contact::COLUMN_TYPE => $contact->getType(),
+                Contact::COLUMN_DATA => $contact->getData(),
+            ],
+            $contacts->toArray()
+        );
     }
 }

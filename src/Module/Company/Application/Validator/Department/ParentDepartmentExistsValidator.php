@@ -32,7 +32,7 @@ final readonly class ParentDepartmentExistsValidator
 
         $parentUUID = $data->parentDepartmentUUID;
         $departmentExists = $this->departmentReaderRepository->isDepartmentExistsWithUUID($parentUUID);
-        if ($departmentExists) {
+        if (!$departmentExists) {
             throw new \Exception($this->translator->trans('department.uuid.notExists', [':uuid' => $parentUUID], 'departments'), Response::HTTP_CONFLICT);
         }
     }
