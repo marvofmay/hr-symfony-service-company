@@ -42,7 +42,7 @@ final class DeleteMultipleEmployeesController extends AbstractController
         }
 
         return new JsonResponse(
-            ['message' => $this->messageService->get('employee.multipleDelete.success', [], 'employees')],
+            ['message' => $this->messageService->get('employee.delete.multiple.success', [], 'employees')],
             Response::HTTP_OK
         );
     }

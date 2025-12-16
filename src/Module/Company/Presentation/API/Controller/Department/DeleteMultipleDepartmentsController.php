@@ -43,7 +43,7 @@ final class DeleteMultipleDepartmentsController extends AbstractController
         }
 
         return new JsonResponse(
-            ['message' => $this->messageService->get('department.multipleDelete.success', [], 'departments')],
+            ['message' => $this->messageService->get('department.delete.multiple.success', [], 'departments')],
             Response::HTTP_OK
         );
     }

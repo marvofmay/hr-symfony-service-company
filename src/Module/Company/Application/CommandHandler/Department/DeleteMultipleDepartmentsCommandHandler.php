@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Department;
 
 use App\Common\Domain\Abstract\CommandHandlerAbstract;
+use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
+use App\Common\Domain\Trait\ClassNameExtractorTrait;
 use App\Common\Domain\Trait\HandleEventStoreTrait;
 use App\Module\Company\Application\Command\Department\DeleteMultipleDepartmentsCommand;
 use App\Module\Company\Domain\Aggregate\Department\DepartmentAggregate;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Event\Department\DepartmentMultipleDeletedEvent;
 use App\Module\Company\Domain\Interface\Department\DepartmentAggregateReaderInterface;
+use App\Module\System\Application\Event\LogFileEvent;
+use Psr\Log\LogLevel;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
@@ -24,6 +28,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 final class DeleteMultipleDepartmentsCommandHandler extends CommandHandlerAbstract
 {
     use HandleEventStoreTrait;
+    use ClassNameExtractorTrait;
 
     public function __construct(
         private readonly DepartmentAggregateReaderInterface $departmentAggregateReaderRepository,
@@ -54,7 +59,19 @@ final class DeleteMultipleDepartmentsCommandHandler extends CommandHandlerAbstra
             $deletedUUIDs[] = $uuid->toString();
         }
 
+        $user = $this->security->getUser();
+        $userUUID = $user->getUuid();
+
         $multiEvent = new DepartmentMultipleDeletedEvent($deletedUUIDs);
-        $this->handleEvent($multiEvent, DepartmentAggregate::class);
+        $message = sprintf(
+            'uuid: %s, eventClass: %s, aggregateClass: %s, data: %s, userUUID: %s',
+            implode(',', $deletedUUIDs),
+            $this->getShortClassName($multiEvent::class),
+            DepartmentAggregate::class,
+            $this->serializer->serialize($multiEvent, 'json'),
+            $userUUID
+        );
+
+        $this->eventBus->dispatch(new LogFileEvent($message, LogLevel::INFO, MonologChanelEnum::EVENT_STORE));
     }
 }

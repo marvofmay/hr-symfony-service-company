@@ -7,7 +7,7 @@ use App\Module\System\Notification\Domain\Interface\Message\NotificationResolveI
 
 final readonly class GenericEventNotifierSubscriber
 {
-    public function __construct(private NotificationResolveInterface $notificationResolve,)
+    public function __construct(private NotificationResolveInterface $notificationResolve)
     {
     }
 

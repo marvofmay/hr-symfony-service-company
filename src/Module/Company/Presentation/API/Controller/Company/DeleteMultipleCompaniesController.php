@@ -41,7 +41,7 @@ final class DeleteMultipleCompaniesController extends AbstractController
         }
 
         return new JsonResponse(
-            ['message' => $this->messageService->get('company.multipleDelete.success', [], 'companies')],
+            ['message' => $this->messageService->get('company.delete.multiple.success', [], 'companies')],
             Response::HTTP_OK
         );
     }
