@@ -16,7 +16,7 @@ class MinMaxLengthValidator extends ConstraintValidator
 
     public function validate(mixed $value, Constraint $constraint): void
     {
-        if (!$constraint instanceof MinMaxLength || !is_string($value)) {
+        if (!$constraint instanceof MinMaxLength || !is_string($value) || '' === $value) {
             return;
         }
 

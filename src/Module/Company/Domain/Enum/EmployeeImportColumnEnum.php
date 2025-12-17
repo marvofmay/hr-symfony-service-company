@@ -22,7 +22,7 @@ enum EmployeeImportColumnEnum: int
     case ROLE_UUID = 13;
     case PARENT_EMPLOYEE_PESEL = 14;
     case INTERNAL_CODE = 15;
-    case EXTERNAL_UUID = 16;
+    case EXTERNAL_CODE = 16;
     case EMPLOYMENT_TO = 17;
     case ACTIVE = 18;
 
@@ -48,7 +48,7 @@ enum EmployeeImportColumnEnum: int
             self::ROLE_UUID => 'roleUuid',
             self::PARENT_EMPLOYEE_PESEL => 'parentEmployeePESEL',
             self::INTERNAL_CODE => 'internalCode',
-            self::EXTERNAL_UUID => 'externalUUID',
+            self::EXTERNAL_CODE => 'externalUUID',
             self::EMPLOYMENT_TO => 'employmentTo',
             self::ACTIVE => 'active',
             self::DYNAMIC_IS_EMPLOYEE_WITH_PESEL_ALREADY_EXISTS => 'isEmployeeWithPESELAlreadyExists',

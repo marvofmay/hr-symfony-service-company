@@ -34,7 +34,7 @@ class Employee
     use RelationsEntityTrait;
 
     public const string COLUMN_UUID = 'uuid';
-    public const string COLUMN_EXTERNAL_UUID = 'externalUUID';
+    public const string COLUMN_EXTERNAL_CODE = 'externalUUID';
     public const string COLUMN_COMPANY_UUID = 'companyUUID';
     public const string COLUMN_DEPARTMENT_UUID = 'departmentUUID';
     public const string COLUMN_SUPERIOR_UUID = 'superiorUUID';
@@ -205,12 +205,12 @@ class Employee
 
     public function getExternalUUID(): ?string
     {
-        return $this->{self::COLUMN_EXTERNAL_UUID};
+        return $this->{self::COLUMN_EXTERNAL_CODE};
     }
 
     public function setExternalUUID(?string $externalUUID): void
     {
-        $this->{self::COLUMN_EXTERNAL_UUID} = $externalUUID;
+        $this->{self::COLUMN_EXTERNAL_CODE} = $externalUUID;
     }
 
     public function getFirstName(): string

@@ -43,7 +43,7 @@ final class EmployeeAggregateCreator extends AggregateAbstract
                 $row[EmployeeImportColumnEnum::COUNTRY->value]
             ),
             $loggedUserUUID,
-            $row[EmployeeImportColumnEnum::EXTERNAL_UUID->value],
+            $row[EmployeeImportColumnEnum::EXTERNAL_CODE->value],
             $row[EmployeeImportColumnEnum::INTERNAL_CODE->value],
             (bool) $row[EmployeeImportColumnEnum::ACTIVE->value],
             Phones::fromArray([$row[EmployeeImportColumnEnum::PHONE->value]]),

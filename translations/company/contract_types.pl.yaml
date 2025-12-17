@@ -38,7 +38,7 @@ contractType:
     fileNotExists: "Plik nie istnieje."
   defaultData:
     name:
-      employment: "Umowa o pracę."
+      employment: "Umowa o pracę"
       b2b: "Kontrakt B2B"
       internship: "Staż"
       contractor: "Umowa z wykonawcą"
