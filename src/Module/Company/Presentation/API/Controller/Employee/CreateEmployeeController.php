@@ -36,12 +36,13 @@ final class CreateEmployeeController extends AbstractController
 
         try {
             $this->commandBus->dispatch(new CreateEmployeeCommand(
+                $createDTO->companyUUID,
                 $createDTO->departmentUUID,
                 $createDTO->positionUUID,
                 $createDTO->contractTypeUUID,
                 $createDTO->roleUUID,
                 $createDTO->parentEmployeeUUID,
-                $createDTO->externalUUID,
+                $createDTO->externalCode,
                 $createDTO->internalCode,
                 $createDTO->email,
                 $createDTO->firstName,

@@ -17,6 +17,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 class CreateDTO
 {
     #[NotBlank(message: [
+        'text' => 'company.uuid.required',
+        'domain' => 'companies',
+    ])]
+    #[Assert\Uuid(message: 'department.invalidUUID')]
+    public string $companyUUID {
+        get {
+            return $this->companyUUID;
+        }
+    }
+    
+    #[NotBlank(message: [
         'text' => 'department.uuid.required',
         'domain' => 'departments',
     ])]
@@ -121,9 +132,9 @@ class CreateDTO
         }
     }
 
-    public ?string $externalUUID = null {
+    public ?string $externalCode = null {
         get {
-            return $this->externalUUID;
+            return $this->externalCode;
         }
     }
 

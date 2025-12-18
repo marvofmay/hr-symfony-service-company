@@ -36,7 +36,7 @@ final readonly class EmployeeUpdatedEvent implements DomainEventInterface
         public Address $address,
         public UserUUID $loggedUserUUID,
         public bool $active,
-        public ?string $externalUUID = null,
+        public ?string $externalCode = null,
         public ?string $internalCode = null,
         public ?Phones $phones = null,
         public ?EmployeeUUID $parentEmployeeUUID = null,

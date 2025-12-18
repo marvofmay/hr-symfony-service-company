@@ -48,7 +48,7 @@ enum EmployeeImportColumnEnum: int
             self::ROLE_UUID => 'roleUuid',
             self::PARENT_EMPLOYEE_PESEL => 'parentEmployeePESEL',
             self::INTERNAL_CODE => 'internalCode',
-            self::EXTERNAL_CODE => 'externalUUID',
+            self::EXTERNAL_CODE => 'externalCode',
             self::EMPLOYMENT_TO => 'employmentTo',
             self::ACTIVE => 'active',
             self::DYNAMIC_IS_EMPLOYEE_WITH_PESEL_ALREADY_EXISTS => 'isEmployeeWithPESELAlreadyExists',

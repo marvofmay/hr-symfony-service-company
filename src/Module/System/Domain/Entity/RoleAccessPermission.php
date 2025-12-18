@@ -33,7 +33,7 @@ class RoleAccessPermission
     private Role $role;
 
     #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Access::class)]
+    #[ORM\ManyToOne(targetEntity: Access::class, inversedBy: 'accessPermissions')]
     #[ORM\JoinColumn(name: 'access_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
     private Access $access;
 

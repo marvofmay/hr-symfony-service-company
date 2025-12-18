@@ -32,7 +32,7 @@ final readonly class ParentEmployeeExistsValidator
 
         $parentUUID = $data->parentEmployeeUUID;
         $employeeExists = $this->employeeReaderRepository->isEmployeeWithUUIDExists($parentUUID);
-        if ($employeeExists) {
+        if (!$employeeExists) {
             throw new \Exception($this->translator->trans('employee.uuid.notExists', [':uuid' => $parentUUID], 'employees'), Response::HTTP_CONFLICT);
         }
     }

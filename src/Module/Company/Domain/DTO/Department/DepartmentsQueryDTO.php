@@ -13,4 +13,6 @@ class DepartmentsQueryDTO extends QueryDTOAbstract
     public ?string $description = null;
 
     public ?bool $active = null;
+
+    public ?string $companyUUID = null;
 }

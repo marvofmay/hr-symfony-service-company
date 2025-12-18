@@ -43,7 +43,7 @@ final class UpdateEmployeeController extends AbstractController
                     $updateDTO->contractTypeUUID,
                     $updateDTO->roleUUID,
                     $updateDTO->parentEmployeeUUID,
-                    $updateDTO->externalUUID,
+                    $updateDTO->externalCode,
                     $updateDTO->internalCode,
                     $updateDTO->email,
                     $updateDTO->firstName,

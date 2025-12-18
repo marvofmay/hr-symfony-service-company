@@ -63,6 +63,7 @@ class Access
     #[ORM\OneToMany(
         targetEntity: RoleAccessPermission::class,
         mappedBy: 'access',
+        cascade: ['persist', 'remove'],
         orphanRemoval: true
     )]
     private Collection $accessPermissions;

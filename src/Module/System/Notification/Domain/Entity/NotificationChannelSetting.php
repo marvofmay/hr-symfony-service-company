@@ -8,6 +8,7 @@ use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\System\Notification\Domain\Interface\Channel\NotificationChannelInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -31,12 +32,17 @@ class NotificationChannelSetting
     #[ORM\Column(type: "boolean")]
     private bool $enabled;
 
-    #[ORM\OneToMany(targetEntity: NotificationTemplateSetting::class, mappedBy: 'channel')]
+    #[ORM\OneToMany(
+        targetEntity: NotificationTemplateSetting::class,
+        mappedBy: 'channel',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $templates;
 
     private function __construct()
     {
-
+        $this->templates = new ArrayCollection();
     }
 
     public static function create(NotificationChannelInterface $channel, bool $enabled = false): self

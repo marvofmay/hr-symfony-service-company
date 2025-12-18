@@ -34,7 +34,7 @@ class EmployeeFactory
             $employee->setEmploymentTo(\DateTime::createFromFormat('Y-m-d', $event->employmentTo->getValue()));
         }
         $employee->setInternalCode($event->internalCode);
-        $employee->setExternalUUID($event->externalUUID);
+        $employee->setExternalUUID($event->externalCode);
         $employee->setActive($event->active);
     }
 }

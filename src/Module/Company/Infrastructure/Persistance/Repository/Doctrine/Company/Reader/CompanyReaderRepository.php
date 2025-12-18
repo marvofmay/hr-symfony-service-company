@@ -16,7 +16,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class CompanyReaderRepository extends ServiceEntityRepository implements CompanyReaderInterface
 {
-    public function __construct(ManagerRegistry $registry, private readonly TranslatorInterface $translator)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Company::class);
     }
@@ -267,5 +267,26 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
         $results = $qb->getQuery()->getArrayResult();
 
         return new ArrayCollection($results);
+    }
+
+    public function getAllDescendantUUIDs(string $parentUuid): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = <<<SQL
+WITH RECURSIVE company_tree AS (
+    SELECT uuid, company_uuid
+    FROM company
+    WHERE uuid = :uuid
+    UNION ALL
+    SELECT c.uuid, c.company_uuid
+    FROM company c
+    INNER JOIN company_tree ct ON c.company_uuid = ct.uuid
+)
+SELECT uuid FROM company_tree WHERE uuid != :uuid;
+SQL;
+
+        $result = $conn->executeQuery($sql, ['uuid' => $parentUuid]);
+        return array_column($result->fetchAllAssociative(), 'uuid');
     }
 }

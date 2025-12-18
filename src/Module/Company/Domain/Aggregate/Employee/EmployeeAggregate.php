@@ -6,6 +6,7 @@ namespace App\Module\Company\Domain\Aggregate\Employee;
 
 use App\Common\Domain\Abstract\AggregateRootAbstract;
 use App\Common\Domain\Interface\DomainEventInterface;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\ContractTypeUUID;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\EmployeeUUID;
@@ -33,6 +34,7 @@ class EmployeeAggregate extends AggregateRootAbstract
     private LastName       $lastName;
     private PESEL          $pesel;
     private EmploymentFrom $employmentFrom;
+    private CompanyUUID    $companyUUID;
 
     private DepartmentUUID   $departmentUUID;
     private PositionUUID     $positionUUID;
@@ -40,7 +42,7 @@ class EmployeeAggregate extends AggregateRootAbstract
     private RoleUUID         $roleUUID;
     private Emails           $emails;
     private Address          $address;
-    private ?string          $externalUUID = null;
+    private ?string          $externalCode = null;
     private ?string          $internalCode = null;
     private ?EmploymentTo    $employmentTo = null;
     private bool             $active       = true;
@@ -53,6 +55,7 @@ class EmployeeAggregate extends AggregateRootAbstract
         LastName $lastName,
         PESEL $pesel,
         EmploymentFrom $employmentFrom,
+        CompanyUUID $companyUUID,
         DepartmentUUID $departmentUUID,
         PositionUUID $positionUUID,
         ContractTypeUUID $contractTypeUUID,
@@ -60,7 +63,7 @@ class EmployeeAggregate extends AggregateRootAbstract
         Emails $emails,
         Address $address,
         UserUUID $loggedUserUUID,
-        ?string $externalUUID = null,
+        ?string $externalCode = null,
         ?string $internalCode = null,
         ?bool $active = true,
         ?Phones $phones = null,
@@ -77,6 +80,7 @@ class EmployeeAggregate extends AggregateRootAbstract
                 $lastName,
                 $pesel,
                 $employmentFrom,
+                $companyUUID,
                 $departmentUUID,
                 $positionUUID,
                 $contractTypeUUID,
@@ -85,7 +89,7 @@ class EmployeeAggregate extends AggregateRootAbstract
                 $address,
                 $loggedUserUUID,
                 $active,
-                $externalUUID,
+                $externalCode,
                 $internalCode,
                 $phones,
                 $parentEmployeeUUID,
@@ -108,7 +112,7 @@ class EmployeeAggregate extends AggregateRootAbstract
         Emails $emails,
         Address $address,
         UserUUID $loggedUserUUID,
-        ?string $externalUUID = null,
+        ?string $externalCode = null,
         ?string $internalCode = null,
         ?bool $active = true,
         ?Phones $phones = null,
@@ -134,7 +138,7 @@ class EmployeeAggregate extends AggregateRootAbstract
                 $address,
                 $loggedUserUUID,
                 $active,
-                $externalUUID,
+                $externalCode,
                 $internalCode,
                 $phones,
                 $parentEmployeeUUID,
@@ -179,7 +183,7 @@ class EmployeeAggregate extends AggregateRootAbstract
             $this->address = $event->address;
             $this->loggedUserUUID = $event->loggedUserUUID;
             $this->active = $event->active;
-            $this->externalUUID = $event->externalUUID;
+            $this->externalCode = $event->externalCode;
             $this->internalCode = $event->internalCode;
             $this->phones = $event->phones;
             $this->parentEmployeeUUID = $event->parentEmployeeUUID;

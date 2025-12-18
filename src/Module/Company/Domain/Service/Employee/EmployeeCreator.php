@@ -7,12 +7,14 @@ namespace App\Module\Company\Domain\Service\Employee;
 use App\Common\Domain\Interface\DomainEventInterface;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Entity\Address;
+use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
 use App\Module\Company\Domain\Entity\Position;
 use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Entity\User;
+use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
@@ -31,6 +33,7 @@ final readonly class EmployeeCreator
         private AddressFactory $addressFactory,
         private ContactFactory $contactFactory,
         private EmployeeWriterInterface $employeeWriterRepository,
+        private CompanyReaderInterface $companyReaderRepository,
         private DepartmentReaderInterface $departmentReaderRepository,
         private EmployeeReaderInterface $employeeReaderRepository,
         private ContractTypeReaderInterface $contractTypeReaderRepository,
@@ -47,6 +50,12 @@ final readonly class EmployeeCreator
 
         $email = $event->emails->toArray()[0];
         $user = $this->userFactory->create($email, $email);
+
+        $company = $this->entityReferenceCache->get(
+            Company::class,
+            $event->companyUUID->toString(),
+            fn (string $uuid) => $this->companyReaderRepository->getCompanyByUUID($uuid)
+        );
 
         $department = $this->entityReferenceCache->get(
             Department::class,
@@ -83,13 +92,14 @@ final readonly class EmployeeCreator
         $address = $this->addressFactory->create($event->address);
         $contacts = $this->contactFactory->create($event->phones, $event->emails);
 
-        $this->setEmployeeRelations($employee, $department, $role, $position, $contractType, $parentEmployee, $address, $contacts, $user);
+        $this->setEmployeeRelations($employee, $company, $department, $role, $position, $contractType, $parentEmployee, $address, $contacts, $user);
 
         $this->employeeWriterRepository->saveEmployeeInDB($employee);
     }
 
     private function setEmployeeRelations(
         Employee $employee,
+        Company $company,
         Department $department,
         Role $role,
         Position $position,
@@ -99,6 +109,7 @@ final readonly class EmployeeCreator
         array $contacts,
         User $user,
     ): void {
+        $employee->setCompany($company);
         $employee->setDepartment($department);
         $employee->setRole($role);
         $employee->setPosition($position);

@@ -56,6 +56,7 @@ final class ListDepartmentsQueryHandler extends ListQueryHandlerAbstract
             Department::COLUMN_CREATED_AT,
             Department::COLUMN_UPDATED_AT,
             Department::COLUMN_DELETED_AT,
+            Department::RELATION_COMPANY,
         ];
     }
 

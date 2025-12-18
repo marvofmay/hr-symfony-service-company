@@ -60,6 +60,7 @@ final class ListCompaniesQueryHandler extends ListQueryHandlerAbstract
             Company::COLUMN_CREATED_AT,
             Company::COLUMN_UPDATED_AT,
             Company::COLUMN_DELETED_AT,
+            Company::RELATION_PARENT_COMPANY,
         ];
     }
 

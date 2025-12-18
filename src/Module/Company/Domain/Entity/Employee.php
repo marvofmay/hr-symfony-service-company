@@ -19,7 +19,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'employee')]
-#[ORM\Index(name: 'external_uuid', columns: ['external_uuid'])]
+#[ORM\Index(name: 'external_code', columns: ['external_code'])]
+#[ORM\Index(name: 'internal_code', columns: ['internal_code'])]
 #[ORM\Index(name: 'first_name', columns: ['first_name'])]
 #[ORM\Index(name: 'last_name', columns: ['last_name'])]
 #[ORM\Index(name: 'pesel', columns: ['pesel'])]
@@ -34,7 +35,7 @@ class Employee
     use RelationsEntityTrait;
 
     public const string COLUMN_UUID = 'uuid';
-    public const string COLUMN_EXTERNAL_CODE = 'externalUUID';
+    public const string COLUMN_EXTERNAL_CODE = 'externalCode';
     public const string COLUMN_COMPANY_UUID = 'companyUUID';
     public const string COLUMN_DEPARTMENT_UUID = 'departmentUUID';
     public const string COLUMN_SUPERIOR_UUID = 'superiorUUID';
@@ -70,10 +71,14 @@ class Employee
     private UuidInterface $uuid;
 
     #[ORM\Column(type: Types::STRING, length: 100, nullable: true)]
-    private ?string $externalUUID = null;
+    private ?string $externalCode = null;
+
+    #[ORM\ManyToOne(targetEntity: Company::class, inversedBy: 'employees')]
+    #[ORM\JoinColumn(name: 'company_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
+    private ?Company $company;
 
     #[ORM\ManyToOne(targetEntity: Department::class, inversedBy: 'employees')]
-    #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'department_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private ?Department $department;
 
     #[ORM\ManyToOne(targetEntity: Employee::class)]
@@ -81,15 +86,15 @@ class Employee
     private ?Employee $parentEmployee = null;
 
     #[ORM\ManyToOne(targetEntity: Position::class, inversedBy: 'employees')]
-    #[ORM\JoinColumn(name: 'position_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'position_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private Position $position;
 
     #[ORM\ManyToOne(targetEntity: ContractType::class, inversedBy: 'employees')]
-    #[ORM\JoinColumn(name: 'contract_type_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'contract_type_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private ContractType $contractType;
 
     #[ORM\ManyToOne(targetEntity: Role::class, inversedBy: 'employees')]
-    #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'role_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private Role $role;
 
     #[ORM\Column(type: Types::STRING, length: 50, nullable: false)]
@@ -153,12 +158,22 @@ class Employee
         }
     }
 
-    public function getDepartment(): ?Department
+    public function getCompany(): Company
+    {
+        return $this->company;
+    }
+
+    public function setCompany(Company $company): void
+    {
+        $this->company = $company;
+    }
+
+    public function getDepartment(): Department
     {
         return $this->department;
     }
 
-    public function setDepartment(?Department $department): void
+    public function setDepartment(Department $department): void
     {
         $this->department = $department;
     }
@@ -203,14 +218,14 @@ class Employee
         $this->parentEmployee = $parentEmployee;
     }
 
-    public function getExternalUUID(): ?string
+    public function getExternalCode(): ?string
     {
         return $this->{self::COLUMN_EXTERNAL_CODE};
     }
 
-    public function setExternalUUID(?string $externalUUID): void
+    public function setExternalUUID(?string $externalCode): void
     {
-        $this->{self::COLUMN_EXTERNAL_CODE} = $externalUUID;
+        $this->{self::COLUMN_EXTERNAL_CODE} = $externalCode;
     }
 
     public function getFirstName(): string

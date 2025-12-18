@@ -8,6 +8,7 @@ use App\Common\Domain\Abstract\CommandHandlerAbstract;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Common\Domain\Trait\HandleEventStoreTrait;
 use App\Module\Company\Application\Command\Employee\CreateEmployeeCommand;
+use App\Module\Company\Domain\Aggregate\Company\ValueObject\CompanyUUID;
 use App\Module\Company\Domain\Aggregate\Department\ValueObject\DepartmentUUID;
 use App\Module\Company\Domain\Aggregate\Employee\EmployeeAggregate;
 use App\Module\Company\Domain\Aggregate\Employee\ValueObject\ContractTypeUUID;
@@ -58,6 +59,7 @@ final class CreateEmployeeCommandHandler extends CommandHandlerAbstract
             LastName::fromString($command->lastName),
             PESEL::fromString($command->pesel),
             EmploymentFrom::fromString($command->employmentFrom),
+            CompanyUUID::fromString($command->companyUUID),
             DepartmentUUID::fromString($command->departmentUUID),
             PositionUUID::fromString($command->positionUUID),
             ContractTypeUUID::fromString($command->contractTypeUUID),
@@ -65,7 +67,7 @@ final class CreateEmployeeCommandHandler extends CommandHandlerAbstract
             Emails::fromArray([$command->email]),
             Address::fromDTO($command->address),
             UserUUID::fromString($loggedUserUUID),
-            $command->externalUUID,
+            $command->externalCode,
             $command->internalCode,
             $command->active,
             Phones::fromArray($command->phones),

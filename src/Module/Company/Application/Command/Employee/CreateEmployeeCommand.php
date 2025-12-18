@@ -10,12 +10,13 @@ use App\Common\Domain\Interface\CommandInterface;
 final readonly class CreateEmployeeCommand implements CommandInterface
 {
     public function __construct(
+        public string $companyUUID,
         public string $departmentUUID,
         public string $positionUUID,
         public string $contractTypeUUID,
         public string $roleUUID,
         public ?string $parentEmployeeUUID,
-        public ?string $externalUUID,
+        public ?string $externalCode,
         public ?string $internalCode,
         public string $email,
         public string $firstName,

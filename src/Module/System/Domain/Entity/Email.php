@@ -31,9 +31,18 @@ class Email
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
-    #[ORM\JoinColumn(name: 'sender_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'SET NULL')]
-    private ?UserInterface $sender;
+    //#[ORM\ManyToOne(targetEntity: User::class)]
+    //#[ORM\JoinColumn(name: 'sender_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'SET NULL')]
+    //private ?User $sender;
+
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'sentEmails')]
+    #[ORM\JoinColumn(
+        name: 'sender_uuid',
+        referencedColumnName: 'uuid',
+        nullable: true,
+        onDelete: 'SET NULL'
+    )]
+    private ?User $sender;
 
     #[ORM\Column(type: Types::STRING, length: 255)]
     #[Assert\NotBlank]

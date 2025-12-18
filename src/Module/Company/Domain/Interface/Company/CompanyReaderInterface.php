@@ -45,4 +45,6 @@ interface CompanyReaderInterface
     public function getDeletedContactsByCompanyUUID(string $uuid): Collection;
 
     public function getCompaniesNIPByEmails(array $emails): Collection;
+
+    public function getAllDescendantUUIDs(string $parentUuid): array;
 }

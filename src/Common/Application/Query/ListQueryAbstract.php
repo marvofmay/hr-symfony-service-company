@@ -27,7 +27,18 @@ abstract class ListQueryAbstract implements ListQueryInterface
 
         $this->filters = array_filter(
             (array) $this->queryDTO,
-            fn ($key) => in_array($key, $this->getAttributes()),
+            function (string $key): bool {
+                if (in_array($key, $this->getAttributes(), true)) {
+                    return true;
+                }
+
+                if (str_ends_with($key, 'UUID')) {
+                    $relation = lcfirst(substr($key, 0, -4));
+                    return in_array($relation, $this->getRelations(), true);
+                }
+
+                return false;
+            },
             ARRAY_FILTER_USE_KEY
         );
 

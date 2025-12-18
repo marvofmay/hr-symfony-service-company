@@ -30,11 +30,11 @@ class NotificationTemplateSetting
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidInterface $uuid;
 
-    #[ORM\ManyToOne(targetEntity: NotificationEventSetting::class)]
+    #[ORM\ManyToOne(targetEntity: NotificationEventSetting::class, inversedBy: 'templates')]
     #[ORM\JoinColumn(name: 'event_name', referencedColumnName: 'event_name', nullable: false, onDelete: 'CASCADE')]
     private NotificationEventSetting $event;
 
-    #[ORM\ManyToOne(targetEntity: NotificationChannelSetting::class)]
+    #[ORM\ManyToOne(targetEntity: NotificationChannelSetting::class, inversedBy: 'templates')]
     #[ORM\JoinColumn(name: 'channel_code', referencedColumnName: 'channel_code', nullable: false, onDelete: 'CASCADE')]
     private NotificationChannelSetting $channel;
 

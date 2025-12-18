@@ -9,6 +9,7 @@ use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\System\Notification\Domain\Interface\Event\NotificationEventInterface;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
@@ -31,11 +32,17 @@ class NotificationEventSetting
     #[ORM\Column(type: "boolean")]
     private bool $enabled;
 
-    #[ORM\OneToMany(targetEntity: NotificationTemplateSetting::class, mappedBy: 'event')]
+    #[ORM\OneToMany(
+        targetEntity: NotificationTemplateSetting::class,
+        mappedBy: 'event',
+        cascade: ['persist', 'remove'],
+        orphanRemoval: true
+    )]
     private Collection $templates;
 
     private function __construct()
     {
+        $this->templates = new ArrayCollection();
     }
 
     public static function create(NotificationEventInterface $event, bool $enabled = false): self

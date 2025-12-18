@@ -6,7 +6,9 @@ namespace App\Module\Company\Application\Transformer\Employee;
 
 use App\Common\Domain\Interface\DataTransformerInterface;
 use App\Module\Company\Application\QueryHandler\Employee\ListEmployeesQueryHandler;
+use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
+use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\ContractType;
 use App\Module\Company\Domain\Entity\Department;
 use App\Module\Company\Domain\Entity\Employee;
@@ -15,6 +17,7 @@ use App\Module\Company\Domain\Entity\Role;
 use App\Module\Company\Domain\Enum\ContractType\ContractTypeEntityFieldEnum;
 use App\Module\Company\Domain\Enum\Position\PositionEntityFieldEnum;
 use App\Module\Company\Domain\Enum\Role\RoleEntityFieldEnum;
+use Doctrine\Common\Collections\Collection;
 
 class EmployeeDataTransformer implements DataTransformerInterface
 {
@@ -30,10 +33,12 @@ class EmployeeDataTransformer implements DataTransformerInterface
             Employee::COLUMN_FIRST_NAME => $employee->getFirstName(),
             Employee::COLUMN_LAST_NAME => $employee->getLastName(),
             Employee::COLUMN_PESEL => $employee->getPesel(),
-            Employee::COLUMN_EMPLOYMENT_FROM => $employee->getEmploymentFrom(),
+            Employee::COLUMN_INTERNAL_CODE => $employee->getInternalCode(),
+            Employee::COLUMN_EXTERNAL_CODE => $employee->getExternalCode(),
+            Employee::COLUMN_EMPLOYMENT_FROM => $employee->getEmploymentFrom()->format('Y-m-d'),
             Employee::COLUMN_EMPLOYMENT_TO => $employee->getEmploymentTo(),
             Employee::COLUMN_ACTIVE => $employee->getActive(),
-            Employee::COLUMN_CREATED_AT => $employee->createdAt?->format('Y-m-d H:i:s'),
+            Employee::COLUMN_CREATED_AT => $employee->getcreatedAt()->format('Y-m-d H:i:s'),
             Employee::COLUMN_UPDATED_AT => $employee->getUpdatedAt()?->format('Y-m-d H:i:s'),
             Employee::COLUMN_DELETED_AT => $employee->getDeletedAt()?->format('Y-m-d H:i:s'),
         ];
@@ -56,6 +61,8 @@ class EmployeeDataTransformer implements DataTransformerInterface
             Employee::RELATION_POSITION => $this->transformPosition($employee->getPosition()),
             Employee::RELATION_ROLE => $this->transformRole($employee->getRole()),
             Employee::RELATION_CONTRACT_TYPE => $this->transformContractType($employee->getContractType()),
+            Department::RELATION_ADDRESS => $this->transformAddress($employee->getAddress()),
+            Department::RELATION_CONTACTS => $this->transformContacts($employee->getContacts()),
             default => null,
         };
     }
@@ -117,5 +124,35 @@ class EmployeeDataTransformer implements DataTransformerInterface
             ContractTypeEntityFieldEnum::NAME->value => $contractType->getName(),
             ContractTypeEntityFieldEnum::DESCRIPTION->value => $contractType->getDescription(),
         ];
+    }
+
+    private function transformAddress(?Address $address): ?array
+    {
+        if (!$address) {
+            return null;
+        }
+
+        return [
+            Address::COLUMN_UUID => $address->getUUID()->toString(),
+            Address::COLUMN_STREET => $address->getStreet(),
+            Address::COLUMN_POSTCODE => $address->getPostcode(),
+            Address::COLUMN_CITY => $address->getCity(),
+            Address::COLUMN_COUNTRY => $address->getCountry(),
+        ];
+    }
+
+    private function transformContacts(?Collection $contacts): ?array
+    {
+        if (null === $contacts || $contacts->isEmpty()) {
+            return null;
+        }
+
+        return array_map(
+            fn (Contact $contact) => [
+                Contact::COLUMN_TYPE => $contact->getType(),
+                Contact::COLUMN_DATA => $contact->getData(),
+            ],
+            $contacts->toArray()
+        );
     }
 }

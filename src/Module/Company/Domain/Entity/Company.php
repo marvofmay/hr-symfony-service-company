@@ -93,9 +93,13 @@ class Company
     #[ORM\OneToMany(targetEntity: Department::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
     private Collection $departments;
 
+    #[ORM\OneToMany(targetEntity: Employee::class, mappedBy: 'company', cascade: ['persist', 'remove'])]
+    private Collection $employees;
+
     public function __construct()
     {
         $this->departments = new ArrayCollection();
+        $this->employees = new ArrayCollection();
         $this->contacts = new ArrayCollection();
     }
 
@@ -253,5 +257,10 @@ class Company
                 $department->setCompany(null);
             }
         }
+    }
+
+    public function getEmployees(): Collection
+    {
+        return $this->employees;
     }
 }

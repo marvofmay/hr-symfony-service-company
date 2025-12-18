@@ -69,7 +69,7 @@ final class UpdateEmployeeCommandHandler extends CommandHandlerAbstract
             RoleUUID::fromString($command->roleUUID),
             Emails::fromArray([$command->email]),
             Address::fromDTO($command->address),
-            $command->externalUUID,
+            $command->externalCode,
             $command->internalCode,
             $command->active,
             Phones::fromArray($command->phones),

@@ -56,6 +56,11 @@ final class ListEmployeesQueryHandler extends ListQueryHandlerAbstract
             Employee::COLUMN_CREATED_AT,
             Employee::COLUMN_UPDATED_AT,
             Employee::COLUMN_DELETED_AT,
+            Employee::RELATION_COMPANY,
+            Employee::RELATION_DEPARTMENT,
+            Employee::RELATION_ROLE,
+            Employee::RELATION_POSITION,
+            Employee::RELATION_CONTRACT_TYPE,
         ];
     }
 

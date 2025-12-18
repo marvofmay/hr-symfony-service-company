@@ -22,7 +22,7 @@ final class Version20251112170928 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE email DROP FOREIGN KEY `FK_E7927C742E95A675`');
         $this->addSql('ALTER TABLE email ADD CONSTRAINT FK_E7927C742E95A675 FOREIGN KEY (sender_uuid) REFERENCES user (uuid) ON DELETE SET NULL');
-        $this->addSql('ALTER TABLE employee RENAME INDEX index_external_uuid TO external_uuid');
+        $this->addSql('ALTER TABLE employee RENAME INDEX index_external_code TO external_code');
         $this->addSql('ALTER TABLE employee RENAME INDEX index_first_name TO first_name');
         $this->addSql('ALTER TABLE employee RENAME INDEX index_last_name TO last_name');
         $this->addSql('ALTER TABLE employee RENAME INDEX index_pesel TO pesel');
@@ -65,7 +65,7 @@ final class Version20251112170928 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE email DROP FOREIGN KEY FK_E7927C742E95A675');
         $this->addSql('ALTER TABLE email ADD CONSTRAINT `FK_E7927C742E95A675` FOREIGN KEY (sender_uuid) REFERENCES employee (uuid) ON UPDATE NO ACTION ON DELETE SET NULL');
-        $this->addSql('ALTER TABLE employee RENAME INDEX external_uuid TO index_external_uuid');
+        $this->addSql('ALTER TABLE employee RENAME INDEX external_code TO index_external_code');
         $this->addSql('ALTER TABLE employee RENAME INDEX first_name TO index_first_name');
         $this->addSql('ALTER TABLE employee RENAME INDEX last_name TO index_last_name');
         $this->addSql('ALTER TABLE employee RENAME INDEX pesel TO index_pesel');

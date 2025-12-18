@@ -44,20 +44,24 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
         $metadata = $this->entityManager->getClassMetadata($entityClass);
         $identifier = $metadata->getSingleIdentifierFieldName();
 
+        // całkowita liczba rekordów
         $total = (clone $baseQB)
             ->resetDQLPart('orderBy')
             ->select("COUNT($alias.$identifier)")
             ->getQuery()
             ->getSingleScalarResult();
 
+        // ustawienie pola i kierunku sortowania
         $orderByField = $query->getOrderBy() ?? $this->getDefaultOrderBy();
+        $orderDirection = strtoupper($query->getOrderDirection() ?? 'ASC');
         if (!str_contains($orderByField, '.')) {
             $orderByField = "$alias.$orderByField";
         }
 
+        // pobranie tylko ID w kolejności sortowania
         $ids = (clone $baseQB)
             ->select("$alias.$identifier")
-            ->orderBy($orderByField, $query->getOrderDirection())
+            ->orderBy($orderByField, $orderDirection)
             ->setFirstResult($query->getOffset())
             ->setMaxResults($query->getLimit())
             ->getQuery()
@@ -72,12 +76,14 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
             ];
         }
 
-        $ids = array_map(fn ($row) => array_values($row)[0], $ids);
+        $ids = array_map(fn($row) => array_values($row)[0], $ids);
 
+        // pobranie pełnych encji wg wybranych ID
         $qb = $this->createBaseQueryBuilder();
         $qb->andWhere($qb->expr()->in("$alias.$identifier", ':ids'))
             ->setParameter('ids', $ids);
 
+        // dołączenie relacji
         foreach ($query->getIncludes() as $relation) {
             if (in_array($relation, $this->getRelations(), true)) {
                 $qb->leftJoin("$alias.$relation", $relation)
@@ -85,7 +91,8 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
             }
         }
 
-        $qb->orderBy("$alias.$identifier", 'ASC');
+        // zachowanie sortowania wg zapytania
+        $qb->orderBy($orderByField, $orderDirection);
 
         $items = $qb->getQuery()->getResult();
 
@@ -110,51 +117,75 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
         $allowed = $this->getAllowedFilters();
 
         foreach ($filters as $field => $value) {
+            if ($value === null) {
+                continue;
+            }
+
+            if (str_ends_with($field, 'UUID')) {
+                $relationName = lcfirst(substr($field, 0, -4));
+                if (!in_array($relationName, $allowed, true)) {
+                    continue;
+                }
+                if (!in_array($relationName, $qb->getAllAliases(), true)) {
+                    $qb->leftJoin("$alias.$relationName", $relationName);
+                }
+                $qb->andWhere("$relationName.uuid = :$field")->setParameter($field, $value);
+                continue;
+            }
 
             if (!in_array($field, $allowed, true)) {
                 continue;
             }
 
-            if ($field === 'user') {
-                if (!in_array('user', $qb->getAllAliases(), true)) {
-                    $qb->leftJoin("$alias.user", 'user');
+            if (is_bool($value) || in_array($field, ['active'], true)) {
+                $boolValue = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE);
+                if ($boolValue !== null) {
+                    $qb->andWhere("$alias.$field = :$field")->setParameter($field, $boolValue);
                 }
-                $qb->andWhere('user.uuid = :userUUID')
-                    ->setParameter('userUUID', $value);
                 continue;
             }
 
-            if (!is_null($value)) {
-                $qb->andWhere($qb->expr()->like("$alias.$field", ':' . $field))
-                    ->setParameter($field, '%' . $value . '%');
+            if (is_numeric($value)) {
+                $qb->andWhere("$alias.$field = :$field")->setParameter($field, $value);
+                continue;
             }
+
+            if (is_array($value) && isset($value['from'], $value['to'])) {
+                if ($value['from'] !== null) {
+                    $qb->andWhere("$alias.$field >= :{$field}_from")->setParameter("{$field}_from", $value['from']);
+                }
+                if ($value['to'] !== null) {
+                    $qb->andWhere("$alias.$field <= :{$field}_to")->setParameter("{$field}_to", $value['to']);
+                }
+                continue;
+            }
+
+            $qb->andWhere($qb->expr()->like("LOWER($alias.$field)", ":$field"))
+                ->setParameter($field, '%' . strtolower($value) . '%');
         }
 
+        $deletedCol = "$alias.deletedAt";
         if (array_key_exists('deleted', $filters)) {
-            $col = "$alias.deletedAt";
             switch ($filters['deleted']) {
                 case 0:
-                    $qb->andWhere($qb->expr()->isNull($col));
+                    $qb->andWhere($qb->expr()->isNull($deletedCol));
                     break;
-
                 case 1:
                     $this->entityManager->getFilters()->disable('soft_delete');
-                    $qb->andWhere($qb->expr()->isNotNull($col));
+                    $qb->andWhere($qb->expr()->isNotNull($deletedCol));
                     break;
             }
         } else {
-            $qb->andWhere($qb->expr()->isNull("$alias.deletedAt"));
+            $qb->andWhere($qb->expr()->isNull($deletedCol));
         }
 
         if (!empty($filters['phrase'])) {
             $columns = $this->getPhraseSearchColumns();
             $expr = $qb->expr();
             $or = [];
-
             foreach ($columns as $col) {
                 $or[] = $expr->like("LOWER($alias.$col)", ':phrase');
             }
-
             if ($or) {
                 $qb->andWhere(call_user_func_array([$expr, 'orX'], $or))
                     ->setParameter('phrase', '%' . strtolower($filters['phrase']) . '%');
@@ -172,10 +203,7 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
     public function transformIncludes(array $items, array $includes): array
     {
         $transformer = $this->getTransformer();
-        return array_map(
-            fn ($item) => $this->transformItem($transformer, $item, $includes),
-            $items
-        );
+        return array_map(fn($item) => $this->transformItem($transformer, $item, $includes), $items);
     }
 
     public function transformItem($transformer, $item, array $includes): array
@@ -183,7 +211,6 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
         if (!method_exists($transformer, 'transformToArray')) {
             throw new \RuntimeException('Transformer must implement transformToArray()');
         }
-
         return $transformer->transformToArray($item, $includes);
     }
 

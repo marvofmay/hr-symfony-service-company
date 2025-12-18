@@ -19,4 +19,5 @@ class CompaniesQueryDTO extends QueryDTOAbstract
     public ?string $regon = null;
 
     public ?bool $active = null;
+    public ?string $parentCompanyUUID = null;
 }
