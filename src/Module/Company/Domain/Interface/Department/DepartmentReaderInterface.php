@@ -35,4 +35,8 @@ interface DepartmentReaderInterface
     public function getDeletedContactsByDepartmentByUUID(string $uuid): Collection;
 
     public function getDepartmentsInternalCodeByEmails(array $emails): Collection;
+
+    public function getAvailableParentDepartmentOptions(string $companyUUID, ?string $departmentUUID = null): array;
+
+    public function isDepartmentBelongsToCompany(string $companyUUID, string $departmentUUID): bool;
 }

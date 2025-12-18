@@ -12,13 +12,8 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-#[AutoconfigureTag('app.department.update.validator')]
-#[AutoconfigureTag('app.department.delete.validator')]
-#[AutoconfigureTag('app.department.query.get.validator')]
-#[AutoconfigureTag('app.employee.create.validator')]
-#[AutoconfigureTag('app.employee.update.validator')]
 #[AutoconfigureTag('app.department.query.parent_department_options.validator')]
-final readonly class DepartmentExistsValidator implements ValidatorInterface
+final readonly class DepartmentBelongsToCompanyValidator implements ValidatorInterface
 {
     public function __construct(private DepartmentReaderInterface $departmentReaderRepository, private TranslatorInterface $translator)
     {
@@ -26,15 +21,23 @@ final readonly class DepartmentExistsValidator implements ValidatorInterface
 
     public function supports(CommandInterface|QueryInterface $data): bool
     {
-        return property_exists($data, 'departmentUUID') && null !== $data->departmentUUID;
+        return property_exists($data, 'companyUUID') && null !== $data->companyUUID & property_exists($data, 'departmentUUID') && null !== $data->departmentUUID;
     }
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        $uuid = $data->departmentUUID;
-        $departmentExists = $this->departmentReaderRepository->isDepartmentExistsWithUUID($uuid);
+        $companyUUID = $data->companyUUID;
+        $departmentUUID = $data->departmentUUID;
+        $departmentExists = $this->departmentReaderRepository->isDepartmentBelongsToCompany($companyUUID, $departmentUUID);
         if (!$departmentExists) {
-            throw new \Exception($this->translator->trans('department.uuid.notExists', [':uuid' => $uuid], 'departments'), Response::HTTP_CONFLICT);
+            throw new \Exception(
+                $this->translator->trans(
+                    'department.uuid.notExistsInCompany',
+                    [':companyUUID' => $companyUUID, ':departmentUUID' => $departmentUUID],
+                    'departments'
+                ),
+                Response::HTTP_CONFLICT
+            );
         }
     }
 }

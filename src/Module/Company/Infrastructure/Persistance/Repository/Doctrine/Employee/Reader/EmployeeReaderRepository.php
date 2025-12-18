@@ -257,4 +257,57 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
 
         return new ArrayCollection($results);
     }
+
+    public function getAvailableParentEmployeeOptions(string $companyUUID, ?string $employeeUUID = null, ?string $departmentUUID = null): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        if ($employeeUUID !== null) {
+            $sql = <<<SQL
+WITH RECURSIVE employee_tree AS (
+    SELECT uuid
+    FROM employee
+    WHERE uuid = :employeeUuid
+
+    UNION ALL
+
+    SELECT e.uuid
+    FROM employee e
+    INNER JOIN employee_tree et ON e.employee_uuid = et.uuid
+)
+SELECT 
+    e.uuid,
+    CONCAT(e.last_name, ' ', e.first_name) AS "fullName"
+FROM employee e
+WHERE e.company_uuid = :companyUuid
+  AND e.uuid NOT IN (SELECT uuid FROM employee_tree)
+SQL;
+
+            $params = [
+                'employeeUuid' => $employeeUUID,
+                'companyUuid'  => $companyUUID,
+            ];
+        } else {
+            $sql = <<<SQL
+SELECT 
+    e.uuid,
+    CONCAT(e.last_name, ' ', e.first_name) AS "fullName"
+FROM employee e
+WHERE e.company_uuid = :companyUuid
+SQL;
+
+            $params = [
+                'companyUuid' => $companyUUID,
+            ];
+        }
+
+        if ($departmentUUID !== null) {
+            $sql .= "\nAND e.department_uuid = :departmentUuid";
+            $params['departmentUuid'] = $departmentUUID;
+        }
+
+        $sql .= "\nORDER BY e.last_name, e.first_name";
+
+        return $conn->executeQuery($sql, $params)->fetchAllAssociative();
+    }
 }

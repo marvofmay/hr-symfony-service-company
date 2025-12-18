@@ -17,6 +17,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag('app.company.query.get.validator')]
 #[AutoconfigureTag('app.department.create.validator')]
 #[AutoconfigureTag('app.department.update.validator')]
+#[AutoconfigureTag('app.department.query.parent_department_options.validator')]
 final readonly class CompanyExistsValidator implements ValidatorInterface
 {
     public function __construct(private CompanyReaderInterface $companyReaderRepository, private TranslatorInterface $translator)
@@ -25,15 +26,11 @@ final readonly class CompanyExistsValidator implements ValidatorInterface
 
     public function supports(CommandInterface|QueryInterface $data): bool
     {
-        return true;
+        return property_exists($data, 'companyUUID') && null !== $data->companyUUID;
     }
 
     public function validate(CommandInterface|QueryInterface $data): void
     {
-        if (!property_exists($data, 'companyUUID')) {
-            return;
-        }
-
         $uuid = $data->companyUUID;
         $companyExists = $this->companyReaderRepository->isCompanyExistsWithUUID($uuid);
         if (!$companyExists) {

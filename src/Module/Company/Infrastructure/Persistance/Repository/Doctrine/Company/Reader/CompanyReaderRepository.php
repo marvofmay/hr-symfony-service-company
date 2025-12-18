@@ -275,18 +275,63 @@ final class CompanyReaderRepository extends ServiceEntityRepository implements C
 
         $sql = <<<SQL
 WITH RECURSIVE company_tree AS (
-    SELECT uuid, company_uuid
+    SELECT uuid, company_uuid, full_name
     FROM company
     WHERE uuid = :uuid
+
     UNION ALL
-    SELECT c.uuid, c.company_uuid
+
+    SELECT c.uuid, c.company_uuid, c.full_name
     FROM company c
     INNER JOIN company_tree ct ON c.company_uuid = ct.uuid
 )
-SELECT uuid FROM company_tree WHERE uuid != :uuid;
+SELECT uuid
+FROM company_tree
+WHERE uuid != :uuid
+ORDER BY full_name;
 SQL;
 
         $result = $conn->executeQuery($sql, ['uuid' => $parentUuid]);
+
         return array_column($result->fetchAllAssociative(), 'uuid');
+    }
+
+    public function getAvailableParentCompanyOptions(?string $companyUUID = null): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        if ($companyUUID !== null) {
+            $sql = <<<SQL
+WITH RECURSIVE company_tree AS (
+    SELECT uuid
+    FROM company
+    WHERE uuid = :companyUuid
+
+    UNION ALL
+
+    SELECT c.uuid
+    FROM company c
+    INNER JOIN company_tree ct ON c.company_uuid = ct.uuid
+)
+SELECT c.uuid, c.full_name AS name
+FROM company c
+WHERE c.uuid NOT IN (SELECT uuid FROM company_tree)
+ORDER BY c.full_name;
+SQL;
+
+            $params = [
+                'companyUuid' => $companyUUID,
+            ];
+        } else {
+            $sql = <<<SQL
+SELECT c.uuid, c.full_name AS name
+FROM company c
+ORDER BY c.full_name;
+SQL;
+
+            $params = [];
+        }
+
+        return $conn->executeQuery($sql, $params)->fetchAllAssociative();
     }
 }

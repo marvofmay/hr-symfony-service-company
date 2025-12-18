@@ -38,4 +38,5 @@ interface EmployeeReaderInterface
     public function getDeletedUserByEmployeeUUID(string $uuid): ?User;
 
     public function getEmployeesPESELByEmails(array $emails): Collection;
+    public function getAvailableParentEmployeeOptions(string $companyUUID, ?string $employeeUUID = null, ?string $departmentUUID = null): array;
 }

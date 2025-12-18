@@ -47,4 +47,5 @@ interface CompanyReaderInterface
     public function getCompaniesNIPByEmails(array $emails): Collection;
 
     public function getAllDescendantUUIDs(string $parentUuid): array;
+    public function getAvailableParentCompanyOptions(?string $companyUUID = null): array;
 }

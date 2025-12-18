@@ -11,6 +11,7 @@ use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -214,5 +215,70 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
         $results = $qb->getQuery()->getArrayResult();
 
         return new ArrayCollection($results);
+    }
+
+    public function getAvailableParentDepartmentOptions(string $companyUUID, ?string $departmentUUID = null): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+
+        if ($departmentUUID !== null) {
+            $sql = <<<SQL
+WITH RECURSIVE department_tree AS (
+    SELECT uuid
+    FROM department
+    WHERE uuid = :departmentUuid
+
+    UNION ALL
+
+    SELECT d.uuid
+    FROM department d
+    INNER JOIN department_tree dt ON d.department_uuid = dt.uuid
+)
+SELECT d.uuid, d.name
+FROM department d
+WHERE d.company_uuid = :companyUuid
+  AND d.uuid NOT IN (SELECT uuid FROM department_tree)
+ORDER BY d.name;
+SQL;
+
+            $params = [
+                'departmentUuid' => $departmentUUID,
+                'companyUuid'    => $companyUUID,
+            ];
+        } else {
+            $sql = <<<SQL
+SELECT d.uuid, d.name
+FROM department d
+WHERE d.company_uuid = :companyUuid
+ORDER BY d.name;
+SQL;
+
+            $params = [
+                'companyUuid' => $companyUUID,
+            ];
+        }
+
+        return $conn->executeQuery($sql, $params)->fetchAllAssociative();
+    }
+
+    public function isDepartmentBelongsToCompany(string $companyUUID, string $departmentUUID): bool
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('d')
+            ->from(Department::class, 'd')
+            ->join('d.company', 'c')
+            ->where('d.uuid = :departmentUUID')
+            ->andWhere('c.uuid = :companyUUID')
+            ->setParameters(new ArrayCollection([
+                new Parameter('departmentUUID', $departmentUUID),
+                new Parameter('companyUUID', $companyUUID),
+            ]))
+            ->setMaxResults(1);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result !== null;
     }
 }

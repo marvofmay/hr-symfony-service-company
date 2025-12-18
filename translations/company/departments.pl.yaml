@@ -10,6 +10,7 @@ department:
     notExists: "Departament o podanym UUID nie istnieje :uuid"
     notFound: "Departament o podanym UUID nie istnieje."
     required: "UUID departamentu jest wymagane."
+    notExistsInCompany: "Departament o podanym UUID :departmentUUID nie istnieje w firmie o uuid :companyUUID."
   name:
     alreadyExists: "Departament o podanej nazwie już istnieje."
     required: "Nazwa departamentu jest wymagana."
