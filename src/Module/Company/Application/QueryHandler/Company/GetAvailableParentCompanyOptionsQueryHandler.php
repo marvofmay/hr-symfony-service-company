@@ -15,7 +15,7 @@ final readonly class GetAvailableParentCompanyOptionsQueryHandler
 {
     public function __construct(
         private CompanyReaderInterface $companyReaderRepository,
-        #[AutowireIterator(tag: 'app.department.query.parent_company_options.validator')] protected iterable $validators,
+        #[AutowireIterator(tag: 'app.company.query.parent_company_options.validator')] protected iterable $validators,
     ) {
     }
 
