@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('app.department.query.parent_department_options.validator')]
+#[AutoconfigureTag('app.employee.query.parent_employee_options.validator')]
 final readonly class DepartmentBelongsToCompanyValidator implements ValidatorInterface
 {
     public function __construct(private DepartmentReaderInterface $departmentReaderRepository, private TranslatorInterface $translator)
