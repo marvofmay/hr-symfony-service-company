@@ -11,6 +11,7 @@ employee:
     notFound: "Pracownik o podanym UUID nie istnieje."
     notExists: "Pracownik o podanym UUID nie istnieje :uuid"
     required: "UUID pracownika jest wymagane."
+    notExistsInDepartment: "Pracownik o podanym UUID :employeeUUID nie istnieje w departamencie o uuid :departmentUUID."
   aggregate:
     uuid:
       notFound: "Nie zanaleziono pracownika o UUID :uuid"

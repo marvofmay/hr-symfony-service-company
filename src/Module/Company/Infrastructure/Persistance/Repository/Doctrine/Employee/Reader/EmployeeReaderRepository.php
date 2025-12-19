@@ -13,6 +13,7 @@ use App\Module\Company\Domain\Interface\Employee\EmployeeReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -309,5 +310,25 @@ SQL;
         $sql .= "\nORDER BY e.last_name, e.first_name";
 
         return $conn->executeQuery($sql, $params)->fetchAllAssociative();
+    }
+
+    public function isEmployeeBelongsToDepartmentCompany(string $departmentUUID, string $employeeUUID): bool
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('e')
+            ->from(Employee::class, 'e')
+            ->join('e.department', 'd')
+            ->where('e.uuid = :employeeUUID')
+            ->andWhere('d.uuid = :departmentUUID')
+            ->setParameters(new ArrayCollection([
+                new Parameter('employeeUUID', $employeeUUID),
+                new Parameter('departmentUUID', $departmentUUID),
+            ]))
+            ->setMaxResults(1);
+
+        $result = $qb->getQuery()->getOneOrNullResult();
+
+        return $result !== null;
     }
 }
