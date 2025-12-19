@@ -324,7 +324,7 @@ SQL;
             ];
         } else {
             $sql = <<<SQL
-SELECT c.uuid, c.full_name AS name
+SELECT c.uuid, c.full_name AS fullName
 FROM company c
 ORDER BY c.full_name;
 SQL;
