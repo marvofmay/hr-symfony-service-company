@@ -313,7 +313,7 @@ WITH RECURSIVE company_tree AS (
     FROM company c
     INNER JOIN company_tree ct ON c.company_uuid = ct.uuid
 )
-SELECT c.uuid, c.full_name AS name
+SELECT c.uuid, c.full_name AS fullName
 FROM company c
 WHERE c.uuid NOT IN (SELECT uuid FROM company_tree)
 ORDER BY c.full_name;
