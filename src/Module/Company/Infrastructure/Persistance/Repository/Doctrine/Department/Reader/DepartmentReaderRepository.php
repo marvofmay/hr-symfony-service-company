@@ -217,10 +217,11 @@ final class DepartmentReaderRepository extends ServiceEntityRepository implement
         return new ArrayCollection($results);
     }
 
-    public function getAvailableParentDepartmentOptions(string $companyUUID, ?string $departmentUUID = null): array
-    {
+    public function getAvailableParentDepartmentOptions(
+        string $companyUUID,
+        ?string $departmentUUID = null
+    ): array {
         $conn = $this->getEntityManager()->getConnection();
-
 
         if ($departmentUUID !== null) {
             $sql = <<<SQL
@@ -235,11 +236,15 @@ WITH RECURSIVE department_tree AS (
     FROM department d
     INNER JOIN department_tree dt ON d.department_uuid = dt.uuid
 )
-SELECT d.uuid, d.name
+SELECT 
+    d.uuid,
+    d.name
 FROM department d
 WHERE d.company_uuid = :companyUuid
+  AND d.active = TRUE
+  AND d.deleted_at IS NULL
   AND d.uuid NOT IN (SELECT uuid FROM department_tree)
-ORDER BY d.name;
+ORDER BY d.name
 SQL;
 
             $params = [
@@ -248,10 +253,14 @@ SQL;
             ];
         } else {
             $sql = <<<SQL
-SELECT d.uuid, d.name
+SELECT 
+    d.uuid,
+    d.name
 FROM department d
 WHERE d.company_uuid = :companyUuid
-ORDER BY d.name;
+  AND d.active = TRUE
+  AND d.deleted_at IS NULL
+ORDER BY d.name
 SQL;
 
             $params = [

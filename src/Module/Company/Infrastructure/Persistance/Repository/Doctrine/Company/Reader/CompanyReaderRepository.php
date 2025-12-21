@@ -306,16 +306,22 @@ WITH RECURSIVE company_tree AS (
     SELECT uuid
     FROM company
     WHERE uuid = :companyUuid
+      AND active = true
+      AND deleted_at IS NULL
 
     UNION ALL
 
     SELECT c.uuid
     FROM company c
     INNER JOIN company_tree ct ON c.company_uuid = ct.uuid
+    WHERE c.active = true
+      AND c.deleted_at IS NULL
 )
 SELECT c.uuid, c.full_name AS fullName
 FROM company c
 WHERE c.uuid NOT IN (SELECT uuid FROM company_tree)
+  AND c.active = true
+  AND c.deleted_at IS NULL
 ORDER BY c.full_name;
 SQL;
 
@@ -326,6 +332,8 @@ SQL;
             $sql = <<<SQL
 SELECT c.uuid, c.full_name AS fullName
 FROM company c
+WHERE c.active = true
+  AND c.deleted_at IS NULL
 ORDER BY c.full_name;
 SQL;
 

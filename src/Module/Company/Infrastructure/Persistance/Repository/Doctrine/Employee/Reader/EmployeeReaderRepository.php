@@ -259,8 +259,11 @@ final class EmployeeReaderRepository extends ServiceEntityRepository implements 
         return new ArrayCollection($results);
     }
 
-    public function getAvailableParentEmployeeOptions(string $companyUUID, ?string $employeeUUID = null, ?string $departmentUUID = null): array
-    {
+    public function getAvailableParentEmployeeOptions(
+        string $companyUUID,
+        ?string $employeeUUID = null,
+        ?string $departmentUUID = null
+    ): array {
         $conn = $this->getEntityManager()->getConnection();
 
         if ($employeeUUID !== null) {
@@ -281,6 +284,8 @@ SELECT
     CONCAT(e.last_name, ' ', e.first_name) AS "fullName"
 FROM employee e
 WHERE e.company_uuid = :companyUuid
+  AND e.active = TRUE
+  AND e.deleted_at IS NULL
   AND e.uuid NOT IN (SELECT uuid FROM employee_tree)
 SQL;
 
@@ -295,6 +300,8 @@ SELECT
     CONCAT(e.last_name, ' ', e.first_name) AS "fullName"
 FROM employee e
 WHERE e.company_uuid = :companyUuid
+  AND e.active = TRUE
+  AND e.deleted_at IS NULL
 SQL;
 
             $params = [
