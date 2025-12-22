@@ -79,8 +79,12 @@ class PositionDataTransformer implements DataTransformerInterface
             fn (Department $department) => [
                 Department::COLUMN_UUID => $department->getUUID()->toString(),
                 Department::COLUMN_NAME => $department->getName(),
+                Department::COLUMN_INTERNAL_CODE => $department->getInternalCode(),
                 Department::COLUMN_DESCRIPTION => $department->getDescription(),
                 Department::COLUMN_ACTIVE => $department->getActive(),
+                Department::COLUMN_CREATED_AT => $department->createdAt?->format('Y-m-d H:i:s'),
+                Department::COLUMN_UPDATED_AT => $department->getUpdatedAt()?->format('Y-m-d H:i:s'),
+                Department::COLUMN_DELETED_AT => $department->getDeletedAt()?->format('Y-m-d H:i:s'),
             ],
             $departments->toArray()
         );

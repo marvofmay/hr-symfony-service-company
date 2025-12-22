@@ -56,7 +56,8 @@ class AddRecordToPositionTableCommand extends Command
             if (!in_array($translatedName, $existingNames, true)) {
                 $position = Position::create(
                     $translatedName,
-                    $this->translator->trans(sprintf('position.defaultData.description.%s', $enum->value), [], 'positions')
+                    $this->translator->trans(sprintf('position.defaultData.description.%s', $enum->value), [], 'positions'),
+                    true
                 );
                 $this->entityManager->persist($position);
                 $positionsToPersist[] = $enum->value;
