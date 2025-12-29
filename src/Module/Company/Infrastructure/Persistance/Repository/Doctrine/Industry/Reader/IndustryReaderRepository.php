@@ -101,4 +101,15 @@ final class IndustryReaderRepository extends ServiceEntityRepository implements 
 
         return new ArrayCollection($industries);
     }
+
+    public function getSelectOptions(): array
+    {
+        return $this->createQueryBuilder(Industry::ALIAS)
+            ->select(Industry::ALIAS.'.' . IndustryEntityFieldEnum::UUID->value. ' AS uuid, ' . Industry::ALIAS .'.' . IndustryEntityFieldEnum::NAME->value .' AS name')
+            ->where(Industry::ALIAS.'. '. TimeStampableEntityFieldEnum::DELETED_AT->value.' IS NULL')
+            ->orderBy(Industry::ALIAS.'.'. IndustryEntityFieldEnum::NAME->value, 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
+
 }

@@ -13,7 +13,7 @@ final class ContractTypeFactory
     {
         return ContractType::create(
             trim($data[ContractTypeImportColumnEnum::CONTRACT_TYPE_NAME->value] ?? ''),
-            trim($data[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value] ?? null),
+            !is_null($data[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value]) ? trim($data[ContractTypeImportColumnEnum::CONTRACT_TYPE_DESCRIPTION->value]) : null,
             (bool)$data[ContractTypeImportColumnEnum::CONTRACT_TYPE_ACTIVE->value]
         );
     }

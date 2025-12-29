@@ -100,4 +100,18 @@ final class ContractTypeReaderRepository extends ServiceEntityRepository impleme
 
         return new ArrayCollection($contractTypes);
     }
+
+    public function getSelectOptions(bool $onlyActive = true): array
+    {
+        $qb = $this->createQueryBuilder('ct')
+            ->select('ct.uuid AS uuid, ct.name AS name')
+            ->where('ct.deletedAt IS NULL')
+            ->orderBy('ct.name', 'ASC');
+
+        if ($onlyActive) {
+            $qb->andWhere('ct.active = true');
+        }
+
+        return $qb->getQuery()->getArrayResult();
+    }
 }

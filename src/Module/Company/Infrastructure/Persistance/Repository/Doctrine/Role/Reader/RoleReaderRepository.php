@@ -97,4 +97,14 @@ final class RoleReaderRepository extends ServiceEntityRepository implements Role
 
         return new ArrayCollection($roles);
     }
+
+    public function getSelectOptions(): array
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r.uuid AS uuid, r.name AS name')
+            ->where('r.deletedAt IS NULL')
+            ->orderBy('r.name', 'ASC')
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

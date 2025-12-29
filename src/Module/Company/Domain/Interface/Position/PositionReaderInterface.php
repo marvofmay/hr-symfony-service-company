@@ -22,4 +22,5 @@ interface PositionReaderInterface
     public function getDeletedPositionByUUID(string $uuid): ?Position;
 
     public function getPositionsByNames(array $names): Collection;
+    public function getSelectOptionsByDepartment(?string $departmentUUID): array;
 }

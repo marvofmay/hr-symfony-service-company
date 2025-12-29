@@ -20,4 +20,5 @@ interface RoleReaderInterface
     public function isRoleWithUUIDExists(string $uuid): bool;
     public function getDeletedRoleByUUID(string $uuid): ?Role;
     public function getRolesByNames(array $names): Collection;
+    public function getSelectOptions(): array;
 }

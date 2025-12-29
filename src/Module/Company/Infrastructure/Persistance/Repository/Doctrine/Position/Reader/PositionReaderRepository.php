@@ -102,4 +102,29 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
 
         return new ArrayCollection($positions);
     }
+
+    public function getSelectOptionsByDepartment(?string $departmentUUID): array
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('DISTINCT p.uuid AS uuid', 'p.name AS name')
+            ->leftJoin(
+                'p.positionDepartments',
+                'pd',
+                'WITH',
+                'pd.deletedAt IS NULL'
+            )
+            ->where('p.active = true')
+            ->andWhere('p.deletedAt IS NULL')
+            ->orderBy('p.name', 'ASC');
+
+        if ($departmentUUID !== null) {
+            $qb
+                ->andWhere(
+                    'pd.id IS NULL OR pd.department = :departmentUUID'
+                )
+                ->setParameter('departmentUUID', $departmentUUID);
+        }
+
+        return $qb->getQuery()->getArrayResult();
+    }
 }
