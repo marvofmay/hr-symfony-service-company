@@ -34,7 +34,7 @@ final class GetAvailableParentCompanyOptionsController extends AbstractControlle
     public function __invoke(#[MapQueryString] ParentCompanyOptionsQueryDTO $queryDTO): JsonResponse
     {
         $this->denyAccessUnlessGranted(
-            PermissionEnum::CREATE,
+            PermissionEnum::LIST,
             AccessEnum::COMPANIES,
             $this->messageService->get('accessDenied')
         );

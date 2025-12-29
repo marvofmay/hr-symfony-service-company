@@ -28,7 +28,7 @@ final class GetPositionController extends AbstractController
     ) {
     }
 
-    #[Route('/api/positions/{uuid}', name: 'api.positions.get', methods: ['GET'])]
+    #[Route('/api/positions/{uuid}', name: 'api.positions.get', requirements: ['uuid' => '[0-9a-fA-F\-]{36}'], methods: ['GET'], )]
     public function __invoke(string $uuid): JsonResponse
     {
         $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'));

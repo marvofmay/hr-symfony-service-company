@@ -7,9 +7,7 @@ namespace App\Module\Company\Presentation\API\Controller\Employee;
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
-use App\Module\Company\Application\Query\Department\GetAvailableParentDepartmentOptionsQuery;
 use App\Module\Company\Application\Query\Employee\GetAvailableParentEmployeeOptionsQuery;
-use App\Module\Company\Domain\DTO\Department\ParentDepartmentOptionsQueryDTO;
 use App\Module\Company\Domain\DTO\Employee\ParentEmployeeOptionsQueryDTO;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
@@ -36,7 +34,7 @@ final class GetAvailableParentEmployeeOptionsController extends AbstractControll
     public function __invoke(#[MapQueryString] ParentEmployeeOptionsQueryDTO $queryDTO): JsonResponse
     {
         $this->denyAccessUnlessGranted(
-            PermissionEnum::CREATE,
+            PermissionEnum::LIST,
             AccessEnum::EMPLOYEES,
             $this->messageService->get('accessDenied')
         );

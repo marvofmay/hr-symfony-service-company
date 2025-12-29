@@ -120,7 +120,7 @@ final class PositionReaderRepository extends ServiceEntityRepository implements 
         if ($departmentUUID !== null) {
             $qb
                 ->andWhere(
-                    'pd.id IS NULL OR pd.department = :departmentUUID'
+                    'pd.department IS NULL OR pd.department = :departmentUUID'
                 )
                 ->setParameter('departmentUUID', $departmentUUID);
         }

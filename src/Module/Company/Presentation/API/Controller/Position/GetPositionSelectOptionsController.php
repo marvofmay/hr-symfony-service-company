@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace App\Module\Company\Presentation\API\Controller\Department;
+namespace App\Module\Company\Presentation\API\Controller\Position;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
-use App\Module\Company\Application\Query\Department\GetAvailableParentDepartmentOptionsQuery;
-use App\Module\Company\Domain\DTO\Department\ParentDepartmentOptionsQueryDTO;
+use App\Module\Company\Application\Query\Position\GetPositionSelectOptionsQuery;
+use App\Module\Company\Domain\DTO\Department\DepartmentsQueryDTO;
+use App\Module\Company\Domain\DTO\Position\PositionSelectOptionsQueryDTO;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -22,7 +23,7 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
-final class GetAvailableParentDepartmentOptionsController extends AbstractController
+final class GetPositionSelectOptionsController extends AbstractController
 {
     public function __construct(
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
@@ -30,19 +31,13 @@ final class GetAvailableParentDepartmentOptionsController extends AbstractContro
     ) {
     }
 
-    #[Route('/api/departments/parent-options', name: 'api.departments.parent-options', methods: ['GET'])]
-    public function __invoke(#[MapQueryString] ParentDepartmentOptionsQueryDTO $queryDTO): JsonResponse
+    #[Route('/api/positions/select-options', name: 'api.positions.select-options', methods: ['GET'])]
+    public function __invoke(#[MapQueryString] PositionSelectOptionsQueryDTO $queryDTO): JsonResponse
     {
-        $this->denyAccessUnlessGranted(
-            PermissionEnum::LIST,
-            AccessEnum::DEPARTMENTS,
-            $this->messageService->get('accessDenied')
-        );
+        $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'));
 
         try {
-            $envelope = $this->queryBus->dispatch(
-                new GetAvailableParentDepartmentOptionsQuery($queryDTO)
-            );
+            $envelope = $this->queryBus->dispatch(new GetPositionSelectOptionsQuery($queryDTO));
 
             $data = $envelope->last(HandledStamp::class)->getResult();
         } catch (HandlerFailedException $e) {
