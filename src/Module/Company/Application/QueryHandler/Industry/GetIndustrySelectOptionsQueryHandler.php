@@ -12,12 +12,12 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 final readonly class GetIndustrySelectOptionsQueryHandler
 {
     public function __construct(
-        private IndustryReaderInterface $roleReaderRepository,
+        private IndustryReaderInterface $industryReaderRepository,
     ) {
     }
 
     public function __invoke(GetIndustrySelectOptionsQuery $query): array
     {
-        return $this->roleReaderRepository->getSelectOptions();
+        return $this->industryReaderRepository->getSelectOptions();
     }
 }
