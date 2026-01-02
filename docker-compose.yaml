@@ -168,7 +168,6 @@ volumes:
 
 networks:
   hr-network:
-    external: true
 
 services:
   service-company-db:
