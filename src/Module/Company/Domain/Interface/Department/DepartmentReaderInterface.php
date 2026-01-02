@@ -39,4 +39,5 @@ interface DepartmentReaderInterface
     public function getAvailableParentDepartmentOptions(string $companyUUID, ?string $departmentUUID = null): array;
 
     public function isDepartmentBelongsToCompany(string $companyUUID, string $departmentUUID): bool;
+    public function getSelectOptions(): array;
 }

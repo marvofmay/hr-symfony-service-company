@@ -11,6 +11,7 @@ use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Order;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\HttpFoundation\Response;
@@ -289,5 +290,17 @@ SQL;
         $result = $qb->getQuery()->getOneOrNullResult();
 
         return $result !== null;
+    }
+
+    public function getSelectOptions(): array
+    {
+        return $this->createQueryBuilder(Department::ALIAS)
+            ->select(Department::ALIAS.'.uuid , '.Department::ALIAS.'.name')
+            ->where(Department::ALIAS.'.active = :active')
+            ->andWhere(Department::ALIAS.'.deletedAt IS NULL')
+            ->setParameter('active', true)
+            ->orderBy(Department::ALIAS.'.name', Order::Ascending->value)
+            ->getQuery()
+            ->getArrayResult();
     }
 }

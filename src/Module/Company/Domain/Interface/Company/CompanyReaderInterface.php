@@ -48,4 +48,5 @@ interface CompanyReaderInterface
 
     public function getAllDescendantUUIDs(string $parentUuid): array;
     public function getAvailableParentCompanyOptions(?string $companyUUID = null): array;
+    public function getSelectOptions(): array;
 }
