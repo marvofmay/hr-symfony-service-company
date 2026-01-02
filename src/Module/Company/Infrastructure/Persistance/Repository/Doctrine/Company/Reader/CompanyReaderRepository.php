@@ -11,8 +11,8 @@ use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\Order;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class CompanyReaderRepository extends ServiceEntityRepository implements CompanyReaderInterface
 {
@@ -341,5 +341,17 @@ SQL;
         }
 
         return $conn->executeQuery($sql, $params)->fetchAllAssociative();
+    }
+
+    public function getSelectOptions(): array
+    {
+        return $this->createQueryBuilder(Company::ALIAS)
+            ->select(Company::ALIAS.'.uuid , '.Company::ALIAS.'.fullName')
+            ->where(Company::ALIAS.'.active = :active')
+            ->andWhere(Company::ALIAS.'.deletedAt IS NULL')
+            ->setParameter('active', true)
+            ->orderBy(Company::ALIAS.'.fullName', Order::Ascending->value)
+            ->getQuery()
+            ->getArrayResult();
     }
 }
