@@ -65,7 +65,7 @@ final readonly class GenericEventLoggerSubscriber
             eventClass: $eventClass,
             entityClass: $entityClass,
             jsonData: $jsonData,
-            user: $user
+            user: $user,
         );
     }
 }

@@ -46,7 +46,7 @@ class EventLog
     {
     }
 
-    public static function create(string $event, string $entity, ?string $data = null, ?UserInterface $user): self
+    public static function create(string $event, string $entity, ?string $data = null, ?UserInterface $user = null): self
     {
         $self = new self();
         $self->uuid = Uuid::uuid4();
