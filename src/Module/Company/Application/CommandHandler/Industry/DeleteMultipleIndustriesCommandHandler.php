@@ -19,8 +19,7 @@ final class DeleteMultipleIndustriesCommandHandler extends CommandHandlerAbstrac
         private readonly IndustryMultipleDeleter $industryMultipleDeleter,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.industry.delete_multiple.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(DeleteMultipleIndustriesCommand $command): void

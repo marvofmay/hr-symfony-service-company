@@ -26,7 +26,8 @@ final class DeleteMultipleRolesController extends AbstractController
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/roles/multiple', name: 'api.roles.delete_multiple', methods: ['DELETE'])]
     public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $dto): JsonResponse

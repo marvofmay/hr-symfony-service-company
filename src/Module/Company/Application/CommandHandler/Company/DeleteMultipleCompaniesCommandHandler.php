@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\CommandHandler\Company;
 
 use App\Common\Domain\Abstract\CommandHandlerAbstract;
-use App\Common\Domain\Entity\EventStore;
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\EventStore\EventStoreCreator;
 use App\Common\Domain\Trait\ClassNameExtractorTrait;

@@ -19,8 +19,7 @@ final class CreateRoleCommandHandler extends CommandHandlerAbstract
         private readonly RoleCreatorInterface $roleCreator,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.role.create.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(CreateRoleCommand $command): void

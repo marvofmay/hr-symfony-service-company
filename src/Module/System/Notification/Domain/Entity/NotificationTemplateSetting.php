@@ -7,10 +7,10 @@ namespace App\Module\System\Notification\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
-use Ramsey\Uuid\Uuid;
-use Ramsey\Uuid\UuidInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'notification_template_setting')]
@@ -38,19 +38,21 @@ class NotificationTemplateSetting
     #[ORM\JoinColumn(name: 'channel_code', referencedColumnName: 'channel_code', nullable: false, onDelete: 'CASCADE')]
     private NotificationChannelSetting $channel;
 
-    #[ORM\Column(type: "string", length: 255)]
+    #[ORM\Column(type: 'string', length: 255)]
     private string $title;
 
-    #[ORM\Column(type: "text")]
+    #[ORM\Column(type: 'text')]
     private string $content;
 
-    #[ORM\Column(type: "boolean", options: ["default" => false])]
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isDefault;
 
-    #[ORM\Column(type: "boolean", options: ["default" => false])]
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
     private bool $isActive;
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     public static function create(
         NotificationEventSetting $event,

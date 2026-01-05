@@ -11,7 +11,8 @@ final readonly class AccessSynchronizer implements AccessSynchronizerInterface
 {
     public function __construct(
         private RoleAccessWriterInterface $roleAccessWriterRepository,
-    ) {}
+    ) {
+    }
 
     public function syncAccesses(Role $role, array $accessUUIDs, array $existingAccesses): void
     {

@@ -37,7 +37,7 @@ final readonly class LogoutCommandHandler
         }
 
         $jwt = substr($authHeader, 7);
-        $payload = json_decode(base64_decode(explode('.', $jwt)[1]), true);
+        $payload = json_decode(base64_decode(explode('.', $jwt)[1], true), true);
 
         if (!isset($payload['tokenUUID'])) {
             throw new \Exception($this->messageService->get('tokenUUID.param.missing', [], 'security'), Response::HTTP_BAD_REQUEST);

@@ -13,7 +13,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AsEventListener(event: 'lexik_jwt_authentication.on_jwt_invalid', method: 'onJWTInvalid')]
 final readonly class InvalidJwtListener
 {
-    public function __construct(private TranslatorInterface $translator) {}
+    public function __construct(private TranslatorInterface $translator)
+    {
+    }
 
     public function onJWTInvalid(JWTInvalidEvent $event): void
     {

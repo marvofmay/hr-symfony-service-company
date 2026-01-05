@@ -26,8 +26,7 @@ final class NotesPDFController extends AbstractController
     public function __construct(
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/employees/notes/pdf', name: 'api.employees.notes.pdf', methods: ['GET'])]

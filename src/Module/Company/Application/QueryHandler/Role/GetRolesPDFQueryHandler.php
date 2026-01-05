@@ -18,7 +18,8 @@ final readonly class GetRolesPDFQueryHandler
         private PDFService $pdfService,
         private RoleReaderInterface $roleReaderRepository,
         private EventDispatcherInterface $eventDispatcher
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetRolesPDFQuery $query): string
     {

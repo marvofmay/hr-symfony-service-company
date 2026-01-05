@@ -26,7 +26,8 @@ final class RolesPDFController extends AbstractController
     public function __construct(
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/roles/pdf', name: 'api.roles.pdf', methods: ['GET'])]
     public function __invoke(#[MapQueryString] RolesPDFQueryDTO $dto): Response

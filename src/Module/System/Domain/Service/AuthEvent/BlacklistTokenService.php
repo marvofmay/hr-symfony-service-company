@@ -15,8 +15,7 @@ final readonly class BlacklistTokenService
     public function __construct(
         private RevokedTokenReaderInterface $revokedTokenReaderRepository,
         private RevokedTokenWriterInterface $revokedTokenWriterRepository,
-    )
-    {
+    ) {
 
     }
     public function revoke(UserInterface $user, TokenUUID $tokenUUID, ?\DateTimeInterface $expiresAt = null): void

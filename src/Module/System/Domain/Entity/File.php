@@ -65,7 +65,9 @@ class File
     #[ORM\JoinColumn(name: 'email_uuid', referencedColumnName: 'uuid', nullable: true, onDelete: 'CASCADE')]
     private ?Email $email = null;
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     public static function create(string $fileName, string $filePath, $fileExtension, $fileKind, UserInterface $user): self
     {

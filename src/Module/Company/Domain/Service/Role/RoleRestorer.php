@@ -11,7 +11,8 @@ use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
 final readonly class RoleRestorer implements RoleRestorerInterface
 {
     public function __construct(private RoleWriterInterface $roleWriterRepository)
-    {}
+    {
+    }
 
     public function restore(Role $role): void
     {

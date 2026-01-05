@@ -9,7 +9,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final readonly class NotificationChannelFactory
 {
-    public function __construct(#[AutowireIterator(tag: 'app.notification.channel')] private iterable $channels,) {}
+    public function __construct(#[AutowireIterator(tag: 'app.notification.channel')] private iterable $channels)
+    {
+    }
 
     public function getChannel(string $code): ?NotificationChannelInterface
     {

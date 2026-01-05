@@ -50,7 +50,7 @@ class ImportIndustriesFromXLSX extends XLSXIterator
     public function validateRow(array $row, int $index): array
     {
         $errorMessages = [];
-        
+
         foreach ($this->importIndustriesValidators as $validator) {
             $error = $validator->validate(
                 $row,

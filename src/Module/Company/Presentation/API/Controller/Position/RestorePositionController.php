@@ -24,7 +24,8 @@ final class RestorePositionController extends AbstractController
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/positions/{uuid}/restore', name: 'api.position.restore', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PATCH'])]
     public function __invoke(string $uuid): JsonResponse

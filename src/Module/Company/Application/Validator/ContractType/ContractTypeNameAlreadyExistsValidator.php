@@ -19,8 +19,7 @@ final readonly class ContractTypeNameAlreadyExistsValidator implements Validator
     public function __construct(
         private ContractTypeReaderInterface $contractTypeReaderRepository,
         private TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function supports(CommandInterface|QueryInterface $data): bool

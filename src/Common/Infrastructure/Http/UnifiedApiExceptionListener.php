@@ -17,8 +17,8 @@ use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsEventListener(event: 'kernel.exception', priority: 300)]
 final readonly class UnifiedApiExceptionListener
@@ -44,7 +44,7 @@ final readonly class UnifiedApiExceptionListener
                 $errorMessages[$this->translator->trans($violation->getPropertyPath(), [], 'messages')] = $violation->getMessage();
             }
 
-            $errorString = implode("; ", array_map(
+            $errorString = implode('; ', array_map(
                 fn ($field, $message) => "$field: $message",
                 array_keys($errorMessages),
                 $errorMessages

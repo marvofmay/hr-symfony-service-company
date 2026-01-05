@@ -23,7 +23,8 @@ final class ImportRolesController extends AbstractController
     public function __construct(
         private readonly ImportRolesFacade $importRolesFacade,
         private readonly MessageService $messageService
-    ) {}
+    ) {
+    }
 
     #[Route('/api/roles/import', name: 'api.roles.import', methods: ['POST'])]
     public function __invoke(#[MapUploadedFile] ?UploadedFile $file): JsonResponse

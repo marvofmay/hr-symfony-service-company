@@ -104,10 +104,9 @@ class Email
         ?UserInterface $sender = null,
         string $message = '',
         ?string $templateName = null,
-        ?string $templateBody = null ,
+        ?string $templateBody = null,
         ?array $context = null,
-    ): self
-    {
+    ): self {
         if (empty($subject)) {
             throw new \InvalidArgumentException('Email subject cannot be empty.');
         }

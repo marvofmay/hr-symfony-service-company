@@ -29,7 +29,8 @@ final readonly class ExpiredJwtListener
         private MessageService $messageService,
         private EventDispatcherInterface $eventDispatcher,
         private UserReaderInterface $userReaderRepository,
-    ) {}
+    ) {
+    }
 
     public function onJWTExpired(JWTExpiredEvent $event): void
     {
@@ -39,7 +40,7 @@ final readonly class ExpiredJwtListener
         }
 
         $jwt = substr($authHeader, 7);
-        $payload = json_decode(base64_decode(explode('.', $jwt)[1]), true);
+        $payload = json_decode(base64_decode(explode('.', $jwt)[1], true), true);
 
         if (!isset($payload['tokenUUID'])) {
             throw new \Exception($this->messageService->get('tokenUUID.missing', [':uuid' => $payload['tokenUUID']], 'security'), Response::HTTP_BAD_REQUEST);

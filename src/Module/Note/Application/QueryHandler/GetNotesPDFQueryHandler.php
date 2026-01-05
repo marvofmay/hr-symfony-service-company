@@ -23,7 +23,8 @@ final class GetNotesPDFQueryHandler extends GetQueryHandlerAbstract
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly Security $security,
         #[AutowireIterator(tag: 'app.notes.pdf.query.get.validator')] protected iterable $validators,
-    ) {}
+    ) {
+    }
 
     public function __invoke(GetNotesPDFQuery $query): string
     {

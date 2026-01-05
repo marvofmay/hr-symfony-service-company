@@ -76,7 +76,7 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
             ];
         }
 
-        $ids = array_map(fn($row) => array_values($row)[0], $ids);
+        $ids = array_map(fn ($row) => array_values($row)[0], $ids);
 
         // pobranie pełnych encji wg wybranych ID
         $qb = $this->createBaseQueryBuilder();
@@ -203,7 +203,7 @@ abstract class ListQueryHandlerAbstract implements ListQueryHandlerInterface
     public function transformIncludes(array $items, array $includes): array
     {
         $transformer = $this->getTransformer();
-        return array_map(fn($item) => $this->transformItem($transformer, $item, $includes), $items);
+        return array_map(fn ($item) => $this->transformItem($transformer, $item, $includes), $items);
     }
 
     public function transformItem($transformer, $item, array $includes): array

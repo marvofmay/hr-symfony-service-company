@@ -7,7 +7,6 @@ namespace App\Module\System\Notification\Domain\Event;
 use App\Common\Domain\Trait\ClassNameExtractorTrait;
 use App\Module\Company\Domain\Event\Company\CompanyImportedEvent;
 use App\Module\System\Notification\Domain\Interface\Event\NotificationEventInterface;
-use ReflectionClass;
 
 class CompanyImportNotificationEvent implements NotificationEventInterface
 {

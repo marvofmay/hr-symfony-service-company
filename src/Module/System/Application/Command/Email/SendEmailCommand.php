@@ -10,5 +10,7 @@ final readonly class SendEmailCommand
 {
     public const string EMAIL_UUID = 'emailUUID';
 
-    public function __construct(public UuidInterface $emailUUID) {}
+    public function __construct(public UuidInterface $emailUUID)
+    {
+    }
 }

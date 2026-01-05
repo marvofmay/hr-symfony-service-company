@@ -26,7 +26,7 @@ class CreateDTO
             return $this->companyUUID;
         }
     }
-    
+
     #[NotBlank(message: [
         'text' => 'department.uuid.required',
         'domain' => 'departments',

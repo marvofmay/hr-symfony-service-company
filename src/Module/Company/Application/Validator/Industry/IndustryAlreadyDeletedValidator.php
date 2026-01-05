@@ -7,7 +7,6 @@ namespace App\Module\Company\Application\Validator\Industry;
 use App\Common\Domain\Interface\CommandInterface;
 use App\Common\Domain\Interface\QueryInterface;
 use App\Common\Domain\Interface\ValidatorInterface;
-use App\Module\Company\Application\Command\Industry\DeleteIndustryCommand;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;

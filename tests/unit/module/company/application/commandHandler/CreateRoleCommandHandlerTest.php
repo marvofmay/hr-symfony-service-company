@@ -4,7 +4,9 @@ namespace App\tests\unit\module\company\application\commandHandler;
 
 use App\Module\Company\Application\Command\Role\CreateRoleCommand;
 use App\Module\Company\Application\CommandHandler\Role\CreateRoleCommandHandler;
-use App\Module\Company\Application\Event\Role\RoleCreatedEvent;;
+use App\Module\Company\Application\Event\Role\RoleCreatedEvent;
+
+;
 use App\Module\Company\Domain\Interface\Role\RoleCreatorInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

@@ -19,8 +19,7 @@ final class DeleteContractTypeCommandHandler extends CommandHandlerAbstract
         private readonly ContractTypeDeleter $contractTypeDeleter,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.contract_type.delete.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(DeleteContractTypeCommand $command): void

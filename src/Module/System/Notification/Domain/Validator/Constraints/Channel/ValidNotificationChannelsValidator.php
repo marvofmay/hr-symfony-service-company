@@ -10,7 +10,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ValidNotificationChannelsValidator  extends ConstraintValidator
+class ValidNotificationChannelsValidator extends ConstraintValidator
 {
     public function __construct(private readonly NotificationChannelFactory $factory, private readonly TranslatorInterface $translator)
     {
@@ -27,7 +27,7 @@ class ValidNotificationChannelsValidator  extends ConstraintValidator
         }
 
         $availableCodes = array_map(
-            fn($channel) => $channel->getCode(),
+            fn ($channel) => $channel->getCode(),
             $this->factory->all()
         );
 

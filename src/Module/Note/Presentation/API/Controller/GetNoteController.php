@@ -25,8 +25,7 @@ final class GetNoteController extends AbstractController
     public function __construct(
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/employees/notes/{uuid}', name: 'api.employees.notes.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]

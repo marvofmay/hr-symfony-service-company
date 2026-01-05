@@ -20,7 +20,8 @@ final readonly class EmailService
         private Twig $twig,
         #[Autowire(service: 'command.bus')] private MessageBusInterface $commandBus,
         private string $projectDir
-    ) {}
+    ) {
+    }
 
     public function sendEmail(
         array $recipients,

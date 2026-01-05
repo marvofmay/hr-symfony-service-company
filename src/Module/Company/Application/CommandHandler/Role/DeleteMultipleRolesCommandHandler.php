@@ -21,8 +21,7 @@ final class DeleteMultipleRolesCommandHandler extends CommandHandlerAbstract
         private readonly RoleMultipleDeleter $roleMultipleDeleter,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.role.delete_multiple.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(DeleteMultipleRolesCommand $command): void

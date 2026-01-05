@@ -21,8 +21,7 @@ final class DeleteNoteCommandHandler extends CommandHandlerAbstract
         private readonly NoteDeleter $noteDeleter,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.note.delete.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(DeleteNoteCommand $command): void

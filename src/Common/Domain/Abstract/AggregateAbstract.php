@@ -23,7 +23,6 @@ class AggregateAbstract
         protected DepartmentAggregateReaderInterface $departmentAggregateReaderRepository,
         protected EmployeeAggregateReaderInterface $employeeAggregateReaderRepository,
         protected UserReaderInterface $userReaderReaderRepository,
-
     ) {
     }
 

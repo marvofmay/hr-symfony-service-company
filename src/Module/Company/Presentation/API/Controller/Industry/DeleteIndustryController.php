@@ -6,6 +6,7 @@ namespace App\Module\Company\Presentation\API\Controller\Industry;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Command\Industry\DeleteIndustryCommand;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
@@ -16,7 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 
 #[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class DeleteIndustryController extends AbstractController

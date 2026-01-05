@@ -16,8 +16,7 @@ final readonly class AccessExistsValidator implements ValidatorInterface
     public function __construct(
         private AccessReaderInterface $accessReaderRepository,
         private TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function supports(CommandInterface|QueryInterface $data): bool

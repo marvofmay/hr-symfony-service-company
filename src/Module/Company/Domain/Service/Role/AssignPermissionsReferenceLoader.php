@@ -16,8 +16,7 @@ final class AssignPermissionsReferenceLoader
 
     public function __construct(
         private readonly AccessReaderInterface $accessReaderRepository,
-    )
-    {
+    ) {
     }
 
     public function preload(array $parsedPayload): void

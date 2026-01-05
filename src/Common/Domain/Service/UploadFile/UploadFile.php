@@ -27,8 +27,7 @@ class UploadFile implements UploadFileInterface
         private readonly string $uploadDir,
         private readonly FileExtensionEnum $expectedUploadedFileExtension,
         private ?string $fileName = null,
-    )
-    {
+    ) {
     }
 
     public function uploadFile(UploadedFile $file): bool

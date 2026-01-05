@@ -27,8 +27,7 @@ final class ListNotesController extends AbstractController
     public function __construct(
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/employees/notes', name: 'api.employees.notes.list', methods: ['GET'])]

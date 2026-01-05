@@ -34,8 +34,8 @@ final class GetDescendantUUIDsCompanyController extends AbstractController
         $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::COMPANIES, $this->messageService->get('accessDenied'));
 
         try {
-           $handledStamp = $this->queryBus->dispatch(new GetDescendantUUIDsByUUIDQuery($uuid));
-           $data = $handledStamp->last(HandledStamp::class)->getResult();
+            $handledStamp = $this->queryBus->dispatch(new GetDescendantUUIDsByUUIDQuery($uuid));
+            $data = $handledStamp->last(HandledStamp::class)->getResult();
         } catch (HandlerFailedException $e) {
             throw $e->getPrevious();
         }

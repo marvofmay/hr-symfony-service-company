@@ -23,8 +23,7 @@ class ImportEmployeesController extends AbstractController
     public function __construct(
         private readonly ImportEmployeesFacade $importEmployeesFacade,
         private readonly MessageService $messageService
-    )
-    {
+    ) {
     }
 
     #[Route('/api/employees/import', name: 'api.employees.import', methods: ['POST'])]

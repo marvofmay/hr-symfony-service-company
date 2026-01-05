@@ -45,7 +45,7 @@ final class AddRecordToNotificationChannelSettingTableCommand extends Command
     {
         $output->writeln('Checking and updating "notification_channel_setting" table...');
         $existingChannelValues = array_map(
-            fn($setting) => $setting->getChannelCode(),
+            fn ($setting) => $setting->getChannelCode(),
             $this->notificationChannelSettingReader->getAll()->toArray()
         );
 

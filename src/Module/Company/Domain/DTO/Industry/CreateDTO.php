@@ -8,5 +8,5 @@ use App\Module\Company\Domain\Trait\Industry\IndustryDTOTrait;
 
 class CreateDTO
 {
-  use IndustryDTOTrait;
+    use IndustryDTOTrait;
 }

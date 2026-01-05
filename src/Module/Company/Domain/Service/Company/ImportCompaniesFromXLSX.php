@@ -31,7 +31,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[AutoconfigureTag(name: 'app.importer')]
 final class ImportCompaniesFromXLSX extends XLSXIterator
 {
-
     public function __construct(
         private readonly TranslatorInterface $translator,
         private readonly CompanyReaderInterface $companyReaderRepository,

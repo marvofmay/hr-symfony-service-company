@@ -16,8 +16,7 @@ final readonly class ParentDepartmentInternalCodeValidator implements ImportRowV
     public function __construct(
         private DepartmentReaderInterface $departmentReaderRepository,
         private MessageService $messageService
-    )
-    {
+    ) {
     }
 
     public function validate(array $row, array $additionalData = []): ?string

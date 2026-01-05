@@ -24,7 +24,8 @@ final class DeletePositionController extends AbstractController
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/positions/{uuid}', name: 'api.positions.delete', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['DELETE'])]
     public function __invoke(string $uuid): JsonResponse

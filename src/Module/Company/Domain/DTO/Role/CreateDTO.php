@@ -9,5 +9,5 @@ use App\Module\Company\Domain\Trait\Role\RoleDTOTrait;
 
 class CreateDTO implements DTOInterface
 {
-  use RoleDTOTrait;
+    use RoleDTOTrait;
 }

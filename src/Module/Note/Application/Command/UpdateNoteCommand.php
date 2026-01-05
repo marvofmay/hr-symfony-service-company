@@ -13,7 +13,7 @@ final readonly class UpdateNoteCommand implements CommandInterface
     public const string TITLE   = 'title';
     public const string CONTENT  = 'content';
     public const string PRIORITY = 'priority';
-    
+
     public function __construct(
         public string $noteUUID,
         public string $title,

@@ -19,8 +19,7 @@ final class CreateNoteCommandHandler extends CommandHandlerAbstract
         private readonly NoteCreator $noteCreator,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly Security $security
-    )
-    {
+    ) {
     }
 
     public function __invoke(CreateNoteCommand $command): void

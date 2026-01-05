@@ -21,8 +21,7 @@ final class UpdateRoleCommandHandler extends CommandHandlerAbstract
         private readonly RoleUpdaterInterface $roleUpdater,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.role.update.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(UpdateRoleCommand $command): void

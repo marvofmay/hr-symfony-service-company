@@ -18,8 +18,7 @@ final readonly class UserNotesValidator implements ValidatorInterface
     public function __construct(
         private TranslatorInterface $translator,
         private Security $security
-    )
-    {
+    ) {
     }
 
     public function supports(CommandInterface|QueryInterface $data): bool

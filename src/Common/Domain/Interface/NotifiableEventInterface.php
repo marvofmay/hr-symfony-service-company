@@ -9,5 +9,4 @@ use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 #[AutoconfigureTag('app.notifiable.event')]
 interface NotifiableEventInterface
 {
-
 }

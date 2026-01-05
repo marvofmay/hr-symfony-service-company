@@ -12,7 +12,6 @@ use App\Module\System\Notification\Domain\Enum\NotificationChannelSettingEntityF
 
 class NotificationChannelSettingDataTransformer implements DataTransformerInterface
 {
-
     public static function supports(): string
     {
         return ListNotificationChannelSettingQueryHandler::class;

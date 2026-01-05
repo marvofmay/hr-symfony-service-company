@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Aggregate\ValueObject;
 
-use Symfony\Component\HttpFoundation\Response;
-
 final class Websites
 {
     public function __construct(private array $websites)

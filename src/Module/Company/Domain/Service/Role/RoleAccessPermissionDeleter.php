@@ -12,7 +12,7 @@ use App\Module\System\Domain\Interface\RoleAccessPermission\RoleAccessPermission
 
 final readonly class RoleAccessPermissionDeleter implements RoleAccessPermissionDeleterInterface
 {
-    public function __construct(private RoleAccessPermissionWriterInterface $roleAccessPermissionWriterRepository,)
+    public function __construct(private RoleAccessPermissionWriterInterface $roleAccessPermissionWriterRepository)
     {
     }
 

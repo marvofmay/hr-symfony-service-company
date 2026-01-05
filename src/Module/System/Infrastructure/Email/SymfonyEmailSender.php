@@ -14,7 +14,8 @@ use Symfony\Component\Mime\Part\DataPart;
 final readonly class SymfonyEmailSender implements EmailSenderInterface
 {
     public function __construct(private MailerInterface $mailer)
-    {}
+    {
+    }
 
     public function send(Email $email, ?string $template = null, array $context = []): void
     {

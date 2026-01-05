@@ -26,7 +26,8 @@ final class UpdateRoleController extends AbstractController
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/roles/{uuid}', name: 'api.roles.update', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['PUT'])]
     public function __invoke(string $uuid, #[MapRequestPayload] UpdateDTO $dto): JsonResponse

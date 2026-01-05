@@ -9,7 +9,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final readonly class NotificationTemplateFactory
 {
-    public function __construct(#[AutowireIterator(tag: 'app.notification.template')] private iterable $templates) {}
+    public function __construct(#[AutowireIterator(tag: 'app.notification.template')] private iterable $templates)
+    {
+    }
 
     public function getTemplate(bool $isDefault): ?NotificationTemplateInterface
     {

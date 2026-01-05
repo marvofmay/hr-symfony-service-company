@@ -10,5 +10,7 @@ final readonly class UpdateNotificationChannelSettingsCommand implements Command
 {
     public const string CHANNEL_CODES = 'channelCodes';
 
-    public function __construct(public array $channelCodes = []) {}
+    public function __construct(public array $channelCodes = [])
+    {
+    }
 }

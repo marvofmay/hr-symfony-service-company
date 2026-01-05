@@ -47,7 +47,8 @@ final class EntityReferenceCache
                 $className.':'.$uuid.' not exists in cache - '.$additionalInfo,
                 LogLevel::INFO,
                 MonologChanelEnum::LOCAL_CACHE
-            ));
+            )
+        );
     }
 
     public function clear(): void

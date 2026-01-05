@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
-#[ORM\Table(name: "notification_channel_setting")]
+#[ORM\Table(name: 'notification_channel_setting')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class NotificationChannelSetting
@@ -26,10 +26,10 @@ class NotificationChannelSetting
     public const string ALIAS = 'notification_channel_setting';
 
     #[ORM\Id]
-    #[ORM\Column(name: "channel_code", type: "string", length: 50)]
+    #[ORM\Column(name: 'channel_code', type: 'string', length: 50)]
     private string $channelCode;
 
-    #[ORM\Column(type: "boolean")]
+    #[ORM\Column(type: 'boolean')]
     private bool $enabled;
 
     #[ORM\OneToMany(

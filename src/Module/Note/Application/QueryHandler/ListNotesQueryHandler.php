@@ -25,8 +25,7 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
         protected TransformerFactory $transformerFactory,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.note.query.list.validator')] protected iterable $validators,
-    )
-    {
+    ) {
         parent::__construct($entityManager, $transformerFactory);
     }
 

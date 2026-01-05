@@ -17,8 +17,7 @@ final class CreateIndustryCommandHandler extends CommandHandlerAbstract
         private readonly IndustryCreator $industryCreator,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.industry.create.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(CreateIndustryCommand $command): void

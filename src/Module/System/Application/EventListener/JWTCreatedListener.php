@@ -6,8 +6,8 @@ namespace App\Module\System\Application\EventListener;
 
 use App\Module\System\Application\Event\Auth\UserLoginEvent;
 use App\Module\System\Domain\Enum\Auth\AuthEventTypeEnum;
-use App\Module\System\Domain\Service\User\UserAuthorizationInfoProvider;
 use App\Module\System\Domain\Service\AuthEvent\AuthEventRecorder;
+use App\Module\System\Domain\Service\User\UserAuthorizationInfoProvider;
 use App\Module\System\Domain\Service\User\UserPersonalInfoProvider;
 use App\Module\System\Domain\ValueObject\TokenUUID;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;

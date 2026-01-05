@@ -20,8 +20,7 @@ final readonly class NotificationTemplateSettingUpdater implements NotificationT
         string $content,
         bool $searchDefault,
         bool $markAsActive
-    ): void
-    {
+    ): void {
         $notificationTemplateSetting->changeTitle($title);
         $notificationTemplateSetting->changeContent($content);
         $markAsActive ? $notificationTemplateSetting->activate() : $notificationTemplateSetting->deactivate();

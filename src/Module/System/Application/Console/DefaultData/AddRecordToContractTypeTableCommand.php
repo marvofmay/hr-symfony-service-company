@@ -55,13 +55,13 @@ class AddRecordToContractTypeTableCommand extends Command
             $translatedName = $this->translator->trans(sprintf('contractType.defaultData.name.%s', $enum->value), [], 'contract_types');
             if (!in_array($translatedName, $existingNames, true)) {
                 $contractType = ContractType::create(
-                $translatedName,
-                $this->translator->trans(
-                    sprintf('contractType.defaultData.description.%s', $enum->value),
-                    [],
-                    'contract_types'
-                ),
-                true
+                    $translatedName,
+                    $this->translator->trans(
+                        sprintf('contractType.defaultData.description.%s', $enum->value),
+                        [],
+                        'contract_types'
+                    ),
+                    true
                 );
                 $this->entityManager->persist($contractType);
                 $contractTypesToPersist[] = $enum->value;

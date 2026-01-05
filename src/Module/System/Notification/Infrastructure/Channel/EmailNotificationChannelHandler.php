@@ -16,7 +16,8 @@ final readonly class EmailNotificationChannelHandler implements NotificationChan
     public function __construct(
         private EmailService $emailService,
         private UserReaderInterface $userReaderRepository,
-    ) {}
+    ) {
+    }
 
     public function supports(NotificationChannelSetting $channel): bool
     {

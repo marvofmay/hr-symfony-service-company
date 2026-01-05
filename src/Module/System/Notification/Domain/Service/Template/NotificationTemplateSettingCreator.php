@@ -23,8 +23,7 @@ final readonly class NotificationTemplateSettingCreator implements NotificationT
         string $content,
         bool $isDefault,
         bool $isActive
-    ): void
-    {
+    ): void {
         $notificationTemplateSetting = NotificationTemplateSetting::create($event, $channel, $title, $content, $isDefault, $isActive);
         $this->notificationTemplateSettingWriter->save($notificationTemplateSetting);
     }

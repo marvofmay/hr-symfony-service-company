@@ -16,12 +16,13 @@ final class RoleUpdaterTest extends TestCase
         $name = 'Updated Name';
         $description = 'Updated Description';
 
-        $role = Role::create('Old Name','Old Description');
+        $role = Role::create('Old Name', 'Old Description');
 
         $writer = $this->createMock(RoleWriterInterface::class);
         $writer->expects($this->once())
             ->method('saveRole')
-            ->with($this->callback(fn(Role $r) =>
+            ->with($this->callback(
+                fn (Role $r) =>
                 $r->getName() === $name &&
                 $r->getDescription() === $description
             ));

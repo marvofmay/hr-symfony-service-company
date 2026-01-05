@@ -8,11 +8,11 @@ use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\Company\Domain\Entity\User;
 use App\Module\System\Domain\Enum\Auth\AuthEventTypeEnum;
 use App\Module\System\Domain\ValueObject\TokenUUID;
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
-use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'auth_event')]

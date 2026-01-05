@@ -22,8 +22,7 @@ final class ListIndustriesQueryHandler extends ListQueryHandlerAbstract
         protected EntityManagerInterface $entityManager,
         protected TransformerFactory $transformerFactory,
         private EventDispatcherInterface $eventDispatcher
-    )
-    {
+    ) {
         parent::__construct($entityManager, $transformerFactory);
     }
 

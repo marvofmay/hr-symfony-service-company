@@ -13,8 +13,7 @@ final readonly class RoleAccessAssigner implements RoleAccessAssignerInterface
     public function __construct(
         private RoleWriterInterface $roleWriterRepository,
         private RoleAccessUpdater  $roleAccessUpdater,
-    )
-    {
+    ) {
     }
 
     public function assign(Role $role, array $accessesUUIDs): void

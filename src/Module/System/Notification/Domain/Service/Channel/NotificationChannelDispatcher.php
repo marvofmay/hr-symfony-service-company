@@ -24,6 +24,6 @@ final readonly class NotificationChannelDispatcher
             }
         }
 
-        throw new \RuntimeException(sprintf("No handler found for channel: %s", $channel->getChannelCode()));
+        throw new \RuntimeException(sprintf('No handler found for channel: %s', $channel->getChannelCode()));
     }
 }

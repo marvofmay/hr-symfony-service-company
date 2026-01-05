@@ -12,7 +12,9 @@ use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 #[AsEventListener(event: 'lexik_jwt_authentication.on_jwt_decoded', method: 'onJWTDecoded')]
 final readonly class JWTDecodedListener
 {
-    public function __construct(private BlacklistTokenService $blacklist) {}
+    public function __construct(private BlacklistTokenService $blacklist)
+    {
+    }
 
     public function onJWTDecoded(JWTDecodedEvent $event): void
     {

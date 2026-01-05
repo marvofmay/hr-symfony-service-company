@@ -9,5 +9,7 @@ use App\Common\Domain\Enum\MonologChanelEnum;
 #[\Attribute(\Attribute::TARGET_CLASS)]
 final readonly class ErrorChannel
 {
-    public function __construct(public MonologChanelEnum $channel = MonologChanelEnum::MAIN) {}
+    public function __construct(public MonologChanelEnum $channel = MonologChanelEnum::MAIN)
+    {
+    }
 }

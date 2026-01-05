@@ -21,8 +21,7 @@ final readonly class GetIndustryByUUIDQueryHandler
         private IndustryReaderInterface $industryReaderRepository,
         private EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.industry.query.get.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(GetIndustryByUUIDQuery $query): array

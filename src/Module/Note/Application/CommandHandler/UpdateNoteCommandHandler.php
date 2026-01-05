@@ -21,8 +21,7 @@ final class UpdateNoteCommandHandler extends CommandHandlerAbstract
         private readonly NoteUpdater $noteUpdater,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.note.update.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(UpdateNoteCommand $command): void

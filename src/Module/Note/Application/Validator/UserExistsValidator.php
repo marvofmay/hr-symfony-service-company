@@ -18,8 +18,7 @@ final readonly class UserExistsValidator implements ValidatorInterface
     public function __construct(
         private UserReaderInterface $userReaderRepository,
         private TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function supports(CommandInterface|QueryInterface $data): bool

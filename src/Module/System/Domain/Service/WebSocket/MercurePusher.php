@@ -11,7 +11,9 @@ use Symfony\Component\Mercure\Update;
 
 final readonly class MercurePusher implements WebSocketPusherInterface
 {
-    public function __construct(private HubInterface $hub) {}
+    public function __construct(private HubInterface $hub)
+    {
+    }
 
     public function pushToUser(UuidInterface $userUUID, string $event, array $payload): void
     {

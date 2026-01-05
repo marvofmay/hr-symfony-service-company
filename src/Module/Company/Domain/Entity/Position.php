@@ -133,7 +133,7 @@ class Position
 
     public function getDepartments(): Collection
     {
-        return $this->positionDepartments->map(fn(PositionDepartment $pd) => $pd->department);
+        return $this->positionDepartments->map(fn (PositionDepartment $pd) => $pd->department);
     }
 
     public function removeDepartment(Department $department): void

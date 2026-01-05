@@ -26,12 +26,13 @@ final class CreatePositionController extends AbstractController
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/positions', name: 'api.positions.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'),);
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::POSITIONS, $this->messageService->get('accessDenied'), );
 
         try {
             $this->commandBus->dispatch(new CreatePositionCommand(

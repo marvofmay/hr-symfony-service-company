@@ -7,7 +7,6 @@ namespace App\Module\Company\Application\Validator\Position;
 use App\Common\Domain\Interface\CommandInterface;
 use App\Common\Domain\Interface\QueryInterface;
 use App\Common\Domain\Interface\ValidatorInterface;
-use App\Module\Company\Application\Command\Position\DeletePositionCommand;
 use App\Module\Company\Domain\Interface\Position\PositionReaderInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;

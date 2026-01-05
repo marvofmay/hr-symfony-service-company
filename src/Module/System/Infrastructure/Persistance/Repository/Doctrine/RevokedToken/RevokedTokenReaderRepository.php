@@ -24,6 +24,6 @@ class RevokedTokenReaderRepository extends ServiceEntityRepository implements Re
 
     public function isRevoked(TokenUUID $tokenUUID): bool
     {
-       return null !== $this->getByTokenUUID($tokenUUID);
+        return null !== $this->getByTokenUUID($tokenUUID);
     }
 }

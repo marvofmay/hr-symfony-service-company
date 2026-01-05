@@ -8,7 +8,9 @@ use App\Common\Domain\Interface\CommandInterface;
 use App\Common\Domain\Interface\QueryInterface;
 use App\Common\Domain\Interface\ValidatorInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
-use App\Module\Company\Domain\Service\Role\AssignPermissionsPayloadParser;;
+use App\Module\Company\Domain\Service\Role\AssignPermissionsPayloadParser;
+
+;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -20,8 +22,7 @@ final readonly class AccessAssignedToRoleValidator implements ValidatorInterface
         private RoleReaderInterface $roleReaderRepository,
         private AssignPermissionsPayloadParser $assignPermissionsPayloadParser,
         private TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function supports(CommandInterface|QueryInterface $data): bool

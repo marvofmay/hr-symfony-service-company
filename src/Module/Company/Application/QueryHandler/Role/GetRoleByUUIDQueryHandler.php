@@ -20,8 +20,7 @@ final readonly class GetRoleByUUIDQueryHandler
         private RoleReaderInterface $roleReaderRepository,
         private EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.role.query.get.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(GetRoleByUUIDQuery $query): array

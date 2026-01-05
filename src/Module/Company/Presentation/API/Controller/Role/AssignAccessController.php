@@ -26,7 +26,8 @@ final class AssignAccessController extends AbstractController
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/roles/{uuid}/accesses', name: 'api.roles.accesses.assign', methods: ['POST'])]
     public function __invoke(string $uuid, #[MapRequestPayload] AssignAccessesDTO $dto): JsonResponse

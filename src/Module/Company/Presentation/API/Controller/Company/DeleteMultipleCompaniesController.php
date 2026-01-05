@@ -6,6 +6,7 @@ namespace App\Module\Company\Presentation\API\Controller\Company;
 
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
+use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Command\Company\DeleteMultipleCompaniesCommand;
 use App\Module\Company\Domain\DTO\Company\DeleteMultipleDTO;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
@@ -18,7 +19,6 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 
 #[ErrorChannel(MonologChanelEnum::EVENT_STORE)]
 final class DeleteMultipleCompaniesController extends AbstractController

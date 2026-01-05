@@ -16,7 +16,6 @@ class CreateImportCommand
         public ImportStatusEnum $statusEnum,
         public File $file,
         public UserInterface $user
-    )
-    {
+    ) {
     }
 }

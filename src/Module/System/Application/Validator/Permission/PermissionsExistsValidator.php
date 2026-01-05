@@ -20,8 +20,7 @@ final readonly class PermissionsExistsValidator implements ValidatorInterface
         private PermissionReaderInterface $permissionReaderRepository,
         private AssignPermissionsPayloadParser $assignPermissionsPayloadParser,
         private TranslatorInterface $translator
-    )
-    {
+    ) {
     }
 
     public function supports(CommandInterface|QueryInterface $data): bool

@@ -22,8 +22,7 @@ final class ListPositionsQueryHandler extends ListQueryHandlerAbstract
         protected EntityManagerInterface $entityManager,
         protected TransformerFactory $transformerFactory,
         private readonly EventDispatcherInterface $eventDispatcher
-    )
-    {
+    ) {
         parent::__construct($entityManager, $transformerFactory);
     }
 

@@ -45,7 +45,7 @@ final class AddRecordToNotificationEventSettingTableCommand extends Command
     {
         $output->writeln('Checking and updating "notification_event_setting" table...');
         $existingEventValues = array_map(
-            fn($setting) => $setting->getEventName(),
+            fn ($setting) => $setting->getEventName(),
             $this->notificationEventSettingReader->getAll()->toArray()
         );
 

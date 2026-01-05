@@ -12,7 +12,6 @@ use App\Module\System\Notification\Domain\Enum\NotificationEventSettingEntityFie
 
 class NotificationEventSettingDataTransformer implements DataTransformerInterface
 {
-
     public static function supports(): string
     {
         return ListNotificationEventSettingQueryHandler::class;

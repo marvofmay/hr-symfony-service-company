@@ -44,11 +44,11 @@ abstract class ListQueryAbstract implements ListQueryInterface
 
         $this->includes = array_filter(
             explode(',', $this->queryDTO->includes ?? ''),
-            fn ($relation) => in_array($relation, $this->getRelations())
+            fn ($relation) => in_array($relation, $this->getRelations(), true)
         );
 
         foreach ((array) $this->queryDTO as $key => $val) {
-            if ('deleted' === $key && in_array($val, ['0', '1', 'true', 'false'])) {
+            if ('deleted' === $key && in_array($val, ['0', '1', 'true', 'false'], true)) {
                 $this->filters[$key] = $val;
             }
             if ('phrase' === $key) {

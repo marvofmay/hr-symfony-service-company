@@ -93,7 +93,7 @@ class ImportPositionsFromXLSX extends XLSXIterator
                 ];
             }
 
-            if (!in_array($departmentInternalCode, $groupedPositions[$key][PositionImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value])) {
+            if (!in_array($departmentInternalCode, $groupedPositions[$key][PositionImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value], true)) {
                 if (null !== $departmentInternalCode) {
                     $groupedPositions[$key][PositionImportColumnEnum::DEPARTMENT_INTERNAL_CODE->value][] = $departmentInternalCode;
                 }

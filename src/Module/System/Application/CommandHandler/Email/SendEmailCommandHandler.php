@@ -25,7 +25,8 @@ final readonly class SendEmailCommandHandler
         private EmailSenderInterface $emailSender,
         private MessageService $messageService,
         #[Autowire(service: 'event.bus')] private MessageBusInterface $eventBus,
-    ) {}
+    ) {
+    }
 
     public function __invoke(SendEmailCommand $command): void
     {

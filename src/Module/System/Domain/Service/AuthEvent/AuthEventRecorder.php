@@ -16,7 +16,8 @@ final readonly class AuthEventRecorder
     public function __construct(
         private AuthEventWriterInterface $authEventWriterRepository,
         private RequestStack $requestStack,
-    ) {}
+    ) {
+    }
 
     public function record(UserInterface $user, AuthEventTypeEnum $type, ?TokenUUID $tokenUUID = null, ?array $meta = null): void
     {

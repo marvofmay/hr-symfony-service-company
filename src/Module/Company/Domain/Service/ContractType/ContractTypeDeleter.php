@@ -10,7 +10,7 @@ use App\Module\Company\Domain\Interface\ContractType\ContractTypeWriterInterface
 
 final readonly class ContractTypeDeleter implements ContractTypeDeleterInterface
 {
-    public function __construct(private ContractTypeWriterInterface $contractTypeWriterRepository,)
+    public function __construct(private ContractTypeWriterInterface $contractTypeWriterRepository)
     {
     }
 

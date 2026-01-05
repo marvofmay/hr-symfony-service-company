@@ -25,7 +25,8 @@ final class GetRoleController extends AbstractController
     public function __construct(
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/roles/{uuid}', name: 'api.roles.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function __invoke(string $uuid): JsonResponse

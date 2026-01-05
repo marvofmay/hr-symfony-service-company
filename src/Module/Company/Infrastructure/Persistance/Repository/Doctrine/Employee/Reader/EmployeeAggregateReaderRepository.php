@@ -19,8 +19,7 @@ final class EmployeeAggregateReaderRepository extends ServiceEntityRepository im
         ManagerRegistry $registry,
         private readonly SerializerInterface $serializer,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
         parent::__construct($registry, EventStore::class);
     }
 
@@ -33,7 +32,7 @@ final class EmployeeAggregateReaderRepository extends ServiceEntityRepository im
 
         if (empty($events)) {
             throw new \RuntimeException(
-                $this->messageService->get('employee.aggregate.uuid.notFound', [":uuid" => $uuid->toString()],'employees')
+                $this->messageService->get('employee.aggregate.uuid.notFound', [':uuid' => $uuid->toString()], 'employees')
             );
         }
 

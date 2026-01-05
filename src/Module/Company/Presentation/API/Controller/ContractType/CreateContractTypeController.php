@@ -26,7 +26,8 @@ final class CreateContractTypeController extends AbstractController
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
-    ) {}
+    ) {
+    }
 
     #[Route('/api/contract_types', name: 'api.contract_types.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $createDTO): JsonResponse

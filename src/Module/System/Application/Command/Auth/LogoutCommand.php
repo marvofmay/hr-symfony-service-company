@@ -10,5 +10,7 @@ final readonly class LogoutCommand
 {
     public const string TOKEN_UUID = 'tokenUUID';
 
-    public function __construct(public Request $request) {}
+    public function __construct(public Request $request)
+    {
+    }
 }

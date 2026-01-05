@@ -10,7 +10,7 @@ use Symfony\Component\Validator\ConstraintValidator;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-class ValidNotificationEventsValidator  extends ConstraintValidator
+class ValidNotificationEventsValidator extends ConstraintValidator
 {
     public function __construct(private readonly NotificationEventFactory $factory, private readonly TranslatorInterface $translator)
     {
@@ -27,7 +27,7 @@ class ValidNotificationEventsValidator  extends ConstraintValidator
         }
 
         $availableNames = array_map(
-            fn($event) => $event->getName(),
+            fn ($event) => $event->getName(),
             $this->factory->all()
         );
 

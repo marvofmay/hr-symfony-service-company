@@ -26,7 +26,8 @@ final class AssignPermissionController extends AbstractController
     public function __construct(
         #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService
-    ) {}
+    ) {
+    }
 
     #[Route('/api/roles/{uuid}/accesses/permissions', name: 'api.roles.accesses.permissions.create', methods: ['POST'])]
     public function __invoke(string $uuid, #[MapRequestPayload] AssignPermissionsDTO $dto): JsonResponse

@@ -53,7 +53,7 @@ final class AddRecordToNotificationTemplateSettingTableCommand extends Command
         $output->writeln('Checking and updating "notification_template_setting" table...');
 
         $existingTemplateValues = array_map(
-            fn($setting) => sprintf(
+            fn ($setting) => sprintf(
                 '%s|%s|%s',
                 $setting->getEvent()->getEventName(),
                 $setting->getChannel()->getChannelCode(),

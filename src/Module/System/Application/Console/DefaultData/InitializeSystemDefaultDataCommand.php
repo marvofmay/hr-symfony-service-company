@@ -14,7 +14,6 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 #[AsCommand(name: 'app:initialize-system-default-data')]
 class InitializeSystemDefaultDataCommand extends Command
 {
-
     public function __construct(
         #[AutowireIterator('app.command.initialize-system-default-data')] private readonly iterable $commands
     ) {

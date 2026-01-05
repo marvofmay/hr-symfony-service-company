@@ -9,7 +9,9 @@ use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 final readonly class NotificationEventFactory
 {
-    public function __construct(#[AutowireIterator(tag: 'app.notification.event')] private iterable $events,) {}
+    public function __construct(#[AutowireIterator(tag: 'app.notification.event')] private iterable $events)
+    {
+    }
 
     public function getEvent(string $name): ?NotificationEventInterface
     {

@@ -6,7 +6,6 @@ namespace App\Module\System\Domain\Service\Pdf;
 
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
 final class PDFService

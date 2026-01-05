@@ -9,7 +9,9 @@ use App\Module\System\Domain\Interface\RoleAccessPermission\RoleAccessPermission
 
 final readonly class AccessPermissionSynchronizer
 {
-    public function __construct(private RoleAccessPermissionWriterInterface $roleAccessPermissionWriterRepository,) {}
+    public function __construct(private RoleAccessPermissionWriterInterface $roleAccessPermissionWriterRepository)
+    {
+    }
 
     public function syncAccessPermissions(Role $role, Access $access, array $payloadPermissionsUUIDs, array $existingPermissions): void
     {

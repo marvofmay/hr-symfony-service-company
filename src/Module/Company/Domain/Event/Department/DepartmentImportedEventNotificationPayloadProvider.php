@@ -10,7 +10,7 @@ use App\Common\Domain\Trait\ClassNameExtractorTrait;
 use App\Module\System\Domain\Interface\Import\ImportReaderInterface;
 use App\Module\System\Notification\Domain\Interface\Event\NotificationEventPayloadProviderInterface;
 
-final readonly class DepartmentImportedEventNotificationPayloadProvider  implements NotificationEventPayloadProviderInterface
+final readonly class DepartmentImportedEventNotificationPayloadProvider implements NotificationEventPayloadProviderInterface
 {
     use ClassNameExtractorTrait;
 

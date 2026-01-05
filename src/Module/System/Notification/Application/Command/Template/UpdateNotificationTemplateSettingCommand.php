@@ -22,5 +22,6 @@ final readonly class UpdateNotificationTemplateSettingCommand implements Command
         public string $content,
         public bool $searchDefault = false,
         public bool $markAsActive = false,
-    ) {}
+    ) {
+    }
 }

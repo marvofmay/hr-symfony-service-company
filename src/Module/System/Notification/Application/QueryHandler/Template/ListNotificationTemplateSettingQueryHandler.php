@@ -22,8 +22,7 @@ final class ListNotificationTemplateSettingQueryHandler extends ListQueryHandler
         public EntityManagerInterface $entityManager,
         protected TransformerFactory $transformerFactory,
         private readonly EventDispatcherInterface $eventDispatcher
-    )
-    {
+    ) {
         parent::__construct($entityManager, $transformerFactory);
     }
 

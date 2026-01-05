@@ -23,8 +23,7 @@ final class NotePDFController extends AbstractController
     public function __construct(
         private readonly MessageBusInterface $queryBus,
         private readonly MessageService $messageService,
-    )
-    {
+    ) {
     }
 
     #[Route('/api/employees/notes/{uuid}/pdf', name: 'api.employees.note.pdf', methods: ['GET'])]

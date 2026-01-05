@@ -10,5 +10,7 @@ final readonly class UpdateNotificationEventSettingsCommand implements CommandIn
 {
     public const string EVENT_NAMES = 'eventNames';
 
-    public function __construct(public array $eventNames = []) {}
+    public function __construct(public array $eventNames = [])
+    {
+    }
 }

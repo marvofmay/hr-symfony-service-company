@@ -12,15 +12,14 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 #[AsMessageHandler(bus: 'command.bus')]
-final class DeleteRoleCommandHandler  extends CommandHandlerAbstract
+final class DeleteRoleCommandHandler extends CommandHandlerAbstract
 {
     public function __construct(
         private readonly RoleReaderInterface $roleReaderRepository,
         private readonly RoleDeleterInterface $roleDeleter,
         private readonly EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.role.delete.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(DeleteRoleCommand $command): void

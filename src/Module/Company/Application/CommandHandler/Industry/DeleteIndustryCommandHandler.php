@@ -17,8 +17,7 @@ final class DeleteIndustryCommandHandler extends CommandHandlerAbstract
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly IndustryReaderInterface $industryReaderRepository,
         #[AutowireIterator(tag: 'app.industry.delete.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(DeleteIndustryCommand $command): void

@@ -8,13 +8,13 @@ use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
 use App\Module\System\Notification\Domain\Interface\Event\NotificationEventInterface;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity]
-#[ORM\Table(name: "notification_event_setting")]
+#[ORM\Table(name: 'notification_event_setting')]
 #[ORM\HasLifecycleCallbacks]
 #[Gedmo\SoftDeleteable(fieldName: 'deletedAt', timeAware: false, hardDelete: true)]
 class NotificationEventSetting
@@ -26,10 +26,10 @@ class NotificationEventSetting
     public const string ALIAS = 'notification_event_setting';
 
     #[ORM\Id]
-    #[ORM\Column(name: "event_name", type: "string", length: 250)]
+    #[ORM\Column(name: 'event_name', type: 'string', length: 250)]
     private string $eventName;
 
-    #[ORM\Column(type: "boolean")]
+    #[ORM\Column(type: 'boolean')]
     private bool $enabled;
 
     #[ORM\OneToMany(

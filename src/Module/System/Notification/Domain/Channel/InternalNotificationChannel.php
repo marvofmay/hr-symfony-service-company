@@ -6,7 +6,7 @@ namespace App\Module\System\Notification\Domain\Channel;
 
 use App\Module\System\Notification\Domain\Abstract\NotificationChannelAbstract;
 
-final class InternalNotificationChannel  extends NotificationChannelAbstract
+final class InternalNotificationChannel extends NotificationChannelAbstract
 {
     public function getCode(): string
     {

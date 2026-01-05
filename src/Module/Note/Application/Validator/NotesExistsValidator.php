@@ -20,8 +20,7 @@ final readonly class NotesExistsValidator implements ValidatorInterface
         private NoteReaderInterface $noteReaderRepository,
         private TranslatorInterface $translator,
         private Security $security
-    )
-    {
+    ) {
     }
 
     public function supports(CommandInterface|QueryInterface $data): bool

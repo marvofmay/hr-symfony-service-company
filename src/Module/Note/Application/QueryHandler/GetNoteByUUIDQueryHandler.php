@@ -20,8 +20,7 @@ final readonly class GetNoteByUUIDQueryHandler
         private NoteReaderInterface $noteReaderRepository,
         private EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.note.query.get.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(GetNoteByUUIDQuery $query): array

@@ -20,8 +20,7 @@ final readonly class GetContractTypeByUUIDQueryHandler
         private ContractTypeReaderInterface $contractTypeReaderRepository,
         private EventDispatcherInterface $eventDispatcher,
         #[AutowireIterator(tag: 'app.contract_type.query.get.validator')] protected iterable $validators,
-    )
-    {
+    ) {
     }
 
     public function __invoke(GetContractTypeByUUIDQuery $query): array
