@@ -32,11 +32,11 @@ final readonly class UserNotesValidator implements ValidatorInterface
             return;
         }
 
-        if (!property_exists($data->getQueryDTO(), 'user')) {
+        if (!property_exists($data->getQueryDTO(), 'userUUID')) {
             return;
         }
 
-        $userUUIDFromQuery = $data->getQueryDTO()->user;
+        $userUUIDFromQuery = $data->getQueryDTO()->userUUID;
         $loggedUser = $this->security->getUser();
 
         if ($userUUIDFromQuery === null) {

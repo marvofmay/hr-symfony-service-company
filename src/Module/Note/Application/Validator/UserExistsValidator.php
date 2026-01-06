@@ -23,7 +23,7 @@ final readonly class UserExistsValidator implements ValidatorInterface
 
     public function supports(CommandInterface|QueryInterface $data): bool
     {
-        $userUUID = $data->getQueryDTO()->user;
+        $userUUID = $data->getQueryDTO()->userUUID;
 
         return is_string($userUUID) && $userUUID !== 'null';
 
@@ -35,11 +35,11 @@ final readonly class UserExistsValidator implements ValidatorInterface
             return;
         }
 
-        if (!property_exists($data->getQueryDTO(), 'user')) {
+        if (!property_exists($data->getQueryDTO(), 'userUUID')) {
             return;
         }
 
-        $userUUID = $data->getQueryDTO()->user;
+        $userUUID = $data->getQueryDTO()->userUUID;
 
         if (!preg_match('/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/', $userUUID)) {
             throw new \Exception($this->translator->trans('uuid.invalid', [], 'validators'), Response::HTTP_CONFLICT);
