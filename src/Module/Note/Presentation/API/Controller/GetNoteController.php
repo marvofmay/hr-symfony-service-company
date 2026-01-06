@@ -31,7 +31,7 @@ final class GetNoteController extends AbstractController
     #[Route('/api/employees/notes/{uuid}', name: 'api.employees.notes.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
     public function __invoke(string $uuid): Response
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::NOTE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::NOTES, $this->messageService->get('accessDenied'));
 
         try {
             $stamp = $this->queryBus->dispatch(new GetNoteByUUIDQuery($uuid))->last(HandledStamp::class);

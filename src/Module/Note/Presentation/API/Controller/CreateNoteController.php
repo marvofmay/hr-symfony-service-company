@@ -32,7 +32,7 @@ final class CreateNoteController extends AbstractController
     #[Route('/api/users/notes', name: 'api.users.notes.create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] CreateDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::NOTE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::CREATE, AccessEnum::NOTES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(

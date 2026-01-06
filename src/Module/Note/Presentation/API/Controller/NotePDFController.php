@@ -29,7 +29,7 @@ final class NotePDFController extends AbstractController
     #[Route('/api/employees/notes/{uuid}/pdf', name: 'api.employees.note.pdf', methods: ['GET'])]
     public function __invoke(string $uuid): Response
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::PDF, AccessEnum::NOTE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::PDF, AccessEnum::NOTES, $this->messageService->get('accessDenied'));
 
         try {
             $pdf = $this->queryBus->dispatch(new GetNotePDFQuery($uuid))->last(HandledStamp::class)->getResult();

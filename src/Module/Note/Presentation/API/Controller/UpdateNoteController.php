@@ -32,7 +32,7 @@ final class UpdateNoteController extends AbstractController
     #[Route('/api/employees/notes/{uuid}', name: 'api.employees.notes.update', methods: ['PUT'])]
     public function __invoke(string $uuid, #[MapRequestPayload] UpdateDTO $dto): Response
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::NOTE, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::UPDATE, AccessEnum::NOTES, $this->messageService->get('accessDenied'));
 
         try {
             $this->commandBus->dispatch(
