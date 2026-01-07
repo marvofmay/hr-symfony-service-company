@@ -7,6 +7,7 @@ namespace App\Module\Note\Application\QueryHandler;
 use App\Common\Application\Factory\TransformerFactory;
 use App\Common\Application\QueryHandler\ListQueryHandlerAbstract;
 use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
+use App\Common\Domain\Interface\ListQueryInterface;
 use App\Module\Note\Application\Event\NoteListedEvent;
 use App\Module\Note\Application\Query\ListNotesQuery;
 use App\Module\Note\Domain\Entity\Note;
@@ -50,7 +51,7 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
 
     public function getDefaultOrderBy(): string
     {
-        return TimeStampableEntityFieldEnum::CREATED_AT->value;
+        return NoteEntityFieldEnum::PRIORITY->value;
     }
 
     public function getAllowedFilters(): array
@@ -78,5 +79,85 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
     public function getRelations(): array
     {
         return Note::getRelations();
+    }
+
+    public function handle(ListQueryInterface $query): array
+    {
+        $alias = $this->getAlias();
+        $qb = $this->createBaseQueryBuilder();
+        $qb = $this->setFilters($qb, $query->getFilters());
+
+        $entityClass = $qb->getRootEntities()[0];
+        $metadata = $this->entityManager->getClassMetadata($entityClass);
+        $idField = $metadata->getSingleIdentifierFieldName();
+
+        // całkowita liczba rekordów
+        $total = (clone $qb)
+            ->select("COUNT($alias.$idField)")
+            ->resetDQLPart('orderBy')
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // sortowanie
+        $orderByField = $query->getOrderBy() ?? $this->getDefaultOrderBy();
+        $x = $query->getOrderDirection();
+
+        $orderDirection = strtoupper($query->getOrderDirection() ?? 'DESC');
+
+        // Custom sort tylko dla priority
+        if ($orderByField === NoteEntityFieldEnum::PRIORITY->value) {
+            $orderByExpr = "CASE $alias.priority
+            WHEN 'high' THEN 3
+            WHEN 'medium' THEN 2
+            WHEN 'low' THEN 1
+            ELSE 0
+        END";
+        } else {
+            $orderByExpr = str_contains($orderByField, '.') ? $orderByField : "$alias.$orderByField";
+        }
+
+        // pobranie ID do paginacji
+        $ids = (clone $qb)
+            ->select("$alias.$idField")
+            ->orderBy($orderByExpr, $orderDirection)
+            ->setFirstResult($query->getOffset())
+            ->setMaxResults($query->getLimit())
+            ->getQuery()
+            ->getScalarResult();
+
+        if (empty($ids)) {
+            return [
+                'total' => (int)$total,
+                'page'  => $query->getPage(),
+                'limit' => $query->getLimit(),
+                'items' => [],
+            ];
+        }
+
+        $ids = array_map(fn($row) => array_values($row)[0], $ids);
+
+        // pobranie pełnych encji wg ID
+        $qb = $this->createBaseQueryBuilder()
+            ->andWhere($qb->expr()->in("$alias.$idField", ':ids'))
+            ->setParameter('ids', $ids);
+
+        foreach ($query->getIncludes() as $relation) {
+            if (in_array($relation, $this->getRelations(), true)) {
+                $qb->leftJoin("$alias.$relation", $relation)
+                    ->addSelect($relation);
+            }
+        }
+
+        // zachowanie sortowania
+        $qb->orderBy($orderByExpr, $orderDirection);
+
+        $items = $qb->getQuery()->getResult();
+
+        return [
+            'total' => (int)$total,
+            'page'  => $query->getPage(),
+            'limit' => $query->getLimit(),
+            'items' => $this->transformIncludes($items, $query->getIncludes()),
+        ];
     }
 }
