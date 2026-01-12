@@ -7,10 +7,12 @@ namespace App\Module\System\Notification\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
+use App\Module\Company\Domain\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'notification_recipient')]
@@ -32,8 +34,14 @@ class NotificationRecipient
     #[ORM\JoinColumn(name: 'message_uuid', referencedColumnName: 'uuid', nullable: false, onDelete: 'CASCADE')]
     private NotificationMessage $message;
 
-    #[ORM\Column(name: 'user_uuid', type: 'uuid')]
-    private UuidInterface $userUUID;
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'notificationRecipients')]
+    #[ORM\JoinColumn(
+        name: 'user_uuid',
+        referencedColumnName: 'uuid',
+        nullable: false,
+        onDelete: 'CASCADE'
+    )]
+    private UserInterface $user;
 
     #[ORM\Column(type: 'datetime', nullable: true)]
     private ?\DateTimeInterface $receivedAt = null;
@@ -45,12 +53,12 @@ class NotificationRecipient
     {
     }
 
-    public static function create(NotificationMessage $message, UuidInterface $userUUID): self
+    public static function create(NotificationMessage $message, UserInterface $user): self
     {
         $self = new self();
         $self->uuid = Uuid::uuid4();
         $self->message = $message;
-        $self->userUUID = $userUUID;
+        $self->user = $user;
         $self->receivedAt = new \DateTime();
         $message->addRecipient($self);
 
@@ -67,9 +75,9 @@ class NotificationRecipient
         return $this->uuid;
     }
 
-    public function getUserUUID(): UuidInterface
+    public function getUser(): UserInterface
     {
-        return $this->userUUID;
+        return $this->user;
     }
 
     public function getReadAt(): ?\DateTimeInterface

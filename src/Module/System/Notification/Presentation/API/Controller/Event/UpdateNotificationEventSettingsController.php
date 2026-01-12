@@ -36,7 +36,7 @@ class UpdateNotificationEventSettingsController extends AbstractController
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::SETTINGS,
-                AccessEnum::NOTIFICATION_EVENT,
+                AccessEnum::NOTIFICATION_EVENTS,
                 $this->messageService->get('accessDenied')
             );
 

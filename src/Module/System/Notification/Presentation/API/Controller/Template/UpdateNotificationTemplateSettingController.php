@@ -36,7 +36,7 @@ class UpdateNotificationTemplateSettingController extends AbstractController
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::SETTINGS,
-                AccessEnum::NOTIFICATION_TEMPLATE,
+                AccessEnum::NOTIFICATION_TEMPLATES,
                 $this->messageService->get('accessDenied')
             );
 

@@ -36,7 +36,7 @@ class UpdateNotificationChannelSettingsController extends AbstractController
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::SETTINGS,
-                AccessEnum::NOTIFICATION_CHANNEL,
+                AccessEnum::NOTIFICATION_CHANNELS,
                 $this->messageService->get('accessDenied')
             );
 

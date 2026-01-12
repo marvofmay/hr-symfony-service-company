@@ -24,12 +24,17 @@ final readonly class EmailNotificationChannelHandler implements NotificationChan
         return $channel->getChannelCode() === EmailNotificationChannel::getChanelCode();
     }
 
-    public function send(NotificationEventSetting $event, array $recipientUUIDs, string $title, string $content, array $payload = []): void
+    public function send(NotificationEventSetting $event, array $recipients, string $title, string $content, array $payload = []): void
     {
-        $recipients = $this->userReaderRepository->getUsersEmailsByUUIDs($recipientUUIDs);
+        $emails = array_map(
+            static fn ($user) => $user->getEmail(),
+            $recipients
+        );
+        //$recipients = $this->userReaderRepository->getUsersEmailsByUUIDs($recipientUUIDs);
 
         $this->emailService->sendEmail(
-            recipients: $recipients,
+            //recipients: $recipients,
+            recipients: $emails,
             subject: $title,
             templateName: 'emails/notification.html.twig',
             context: [

@@ -14,11 +14,11 @@ final readonly class NotificationChannelDispatcher
     {
     }
 
-    public function dispatch(NotificationEventSetting $event, NotificationChannelSetting $channel, array $recipientUUIDs, string $title, string $content, array $payload): void
+    public function dispatch(NotificationEventSetting $event, NotificationChannelSetting $channel, array $recipients, string $title, string $content, array $payload): void
     {
         foreach ($this->handlers as $handler) {
             if ($handler->supports($channel)) {
-                $handler->send($event, $recipientUUIDs, $title, $content, $payload);
+                $handler->send($event, $recipients, $title, $content, $payload);
 
                 return;
             }

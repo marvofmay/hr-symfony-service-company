@@ -24,11 +24,11 @@ final readonly class NotificationMessageCreator implements NotificationMessageCr
         ?NotificationTemplateSetting $template,
         string $title,
         string $content,
-        array $recipientUUIDs
+        array $recipients
     ): void {
         $notificationMessage = NotificationMessage::create($event, $channel, $template, $title, $content);
-        foreach ($recipientUUIDs as $userUUID) {
-            $recipient = NotificationRecipient::create($notificationMessage, $userUUID);
+        foreach ($recipients as $user) {
+            $recipient = NotificationRecipient::create($notificationMessage, $user);
             $notificationMessage->addRecipient($recipient);
         }
 
