@@ -31,9 +31,6 @@ final readonly class CompanyImportedEventNotificationPayloadProvider implements 
             'importStatus' => $this->messageService->get('import.status.'. $import->getStatus()->value, [], 'imports'),
         ];
 
-        //$recipientUUIDs = [$import->getUser()->getUuid()];
-        //return [$payload, $recipientUUIDs];
-
         $recipients = [$import->getUser()];
         return [$payload, $recipients];
     }

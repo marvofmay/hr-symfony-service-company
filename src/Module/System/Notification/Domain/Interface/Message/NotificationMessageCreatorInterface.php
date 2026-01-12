@@ -16,7 +16,6 @@ interface NotificationMessageCreatorInterface
         ?NotificationTemplateSetting $template,
         string $title,
         string $content,
-        //array $recipientUUIDs
         array $recipients
     ): void;
 }

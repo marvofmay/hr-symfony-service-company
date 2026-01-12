@@ -13,6 +13,5 @@ interface NotificationChannelHandlerInterface
 {
     public function supports(NotificationChannelSetting $channel): bool;
 
-    //public function send(NotificationEventSetting $event, array $recipientUUIDs, string $title, string $content, array $payload = []): void;
     public function send(NotificationEventSetting $event, array $recipients, string $title, string $content, array $payload = []): void;
 }
