@@ -17,6 +17,9 @@ note:
   delete:
     success: "Notatka została pomyślnie usunięta."
     error: "Wystąpił błąd - notatka nie została usunięta."
+    multiple:
+      success: "Notatki zostały pomyślnie usunięte."
+      error: "Wystąpił błąd - notatki nie zostały usunięte."
   view:
     error: "Wystapił błąd przy pobieraniu wybranej notatki."
   list:

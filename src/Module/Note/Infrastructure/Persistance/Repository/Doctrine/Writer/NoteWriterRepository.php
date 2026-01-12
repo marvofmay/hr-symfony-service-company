@@ -7,6 +7,7 @@ namespace App\Module\Note\Infrastructure\Persistance\Repository\Doctrine\Writer;
 use App\Module\Note\Domain\Entity\Note;
 use App\Module\Note\Domain\Interface\NoteWriterInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Persistence\ManagerRegistry;
 
 class NoteWriterRepository extends ServiceEntityRepository implements NoteWriterInterface
@@ -25,6 +26,15 @@ class NoteWriterRepository extends ServiceEntityRepository implements NoteWriter
     public function delete(Note $note): void
     {
         $this->getEntityManager()->remove($note);
+        $this->getEntityManager()->flush();
+    }
+
+    public function deleteMultipleNotes(Collection $notes): void
+    {
+        foreach ($notes as $note) {
+            $this->getEntityManager()->remove($note);
+        }
+
         $this->getEntityManager()->flush();
     }
 }

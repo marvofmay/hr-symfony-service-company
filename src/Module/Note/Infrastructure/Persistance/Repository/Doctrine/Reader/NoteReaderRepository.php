@@ -66,4 +66,17 @@ final class NoteReaderRepository extends ServiceEntityRepository implements Note
                 NoteEntityRelationFieldEnum::USER->value => $user,
             ]);
     }
+
+    public function getNotesByUUIDs(array $uuids): Collection
+    {
+        return new ArrayCollection(
+            empty($uuids)
+                ? []
+                : $this->createQueryBuilder(Note::ALIAS)
+                ->where(Note::ALIAS.'.' . NoteEntityFieldEnum::UUID->value . ' IN (:uuids)')
+                ->setParameter('uuids', $uuids)
+                ->getQuery()
+                ->getResult()
+        );
+    }
 }

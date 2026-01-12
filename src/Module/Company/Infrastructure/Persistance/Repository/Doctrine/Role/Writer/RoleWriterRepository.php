@@ -39,10 +39,6 @@ final class RoleWriterRepository extends ServiceEntityRepository implements Role
 
     public function deleteMultipleRoles(Collection $roles): void
     {
-        if (empty($roles)) {
-            return;
-        }
-
         foreach ($roles as $role) {
             $this->getEntityManager()->remove($role);
         }

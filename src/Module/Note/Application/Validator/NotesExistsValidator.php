@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AutoconfigureTag('app.notes.pdf.query.get.validator')]
+#[AutoconfigureTag('app.note.delete_multiple.validator')]
 final readonly class NotesExistsValidator implements ValidatorInterface
 {
     public function __construct(

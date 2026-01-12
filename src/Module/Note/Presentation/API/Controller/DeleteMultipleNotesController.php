@@ -7,39 +7,39 @@ namespace App\Module\Note\Presentation\API\Controller;
 use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
-use App\Module\Note\Application\Query\GetNoteByUUIDQuery;
+use App\Module\Note\Application\Command\DeleteMultipleNotesCommand;
+use App\Module\Note\Domain\DTO\DeleteMultipleDTO;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
-final class GetNoteController extends AbstractController
+final class DeleteMultipleNotesController extends AbstractController
 {
     public function __construct(
-        #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,
+        #[Autowire(service: 'command.bus')] private readonly MessageBusInterface $commandBus,
         private readonly MessageService $messageService,
     ) {
     }
 
-    #[Route('/api/users/notes/{uuid}', name: 'api.users.notes.get', requirements: ['uuid' => '[0-9a-fA-F-]{36}'], methods: ['GET'])]
-    public function __invoke(string $uuid): Response
+    #[Route('/api/users/notes/multiple', name: 'api.notes.delete_multiple', methods: ['DELETE'])]
+    public function __invoke(#[MapRequestPayload] DeleteMultipleDTO $dto): JsonResponse
     {
-        $this->denyAccessUnlessGranted(PermissionEnum::VIEW, AccessEnum::NOTES, $this->messageService->get('accessDenied'));
+        $this->denyAccessUnlessGranted(PermissionEnum::DELETE, AccessEnum::NOTES, $this->messageService->get('accessDenied'));
 
         try {
-            $stamp = $this->queryBus->dispatch(new GetNoteByUUIDQuery($uuid))->last(HandledStamp::class);
-            $data = $stamp->getResult();
+            $this->commandBus->dispatch(new DeleteMultipleNotesCommand($dto->notesUUIDs));
         } catch (HandlerFailedException $e) {
             throw $e->getPrevious();
         }
 
-        return new JsonResponse(['data' => $data], Response::HTTP_OK);
+        return new JsonResponse(['message' => $this->messageService->get('note.delete.multiple.success', [], 'notes')], Response::HTTP_OK);
     }
 }

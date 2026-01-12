@@ -30,7 +30,7 @@ final class ListNotesController extends AbstractController
     ) {
     }
 
-    #[Route('/api/employees/notes', name: 'api.employees.notes.list', methods: ['GET'])]
+    #[Route('/api/users/notes', name: 'api.users.notes.list', methods: ['GET'])]
     public function __invoke(#[MapQueryString] NotesQueryDTO $queryDTO): Response
     {
         $this->denyAccessUnlessGranted(PermissionEnum::LIST, AccessEnum::NOTES, $this->messageService->get('accessDenied'));

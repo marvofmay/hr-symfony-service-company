@@ -26,7 +26,7 @@ final class NotePDFController extends AbstractController
     ) {
     }
 
-    #[Route('/api/employees/notes/{uuid}/pdf', name: 'api.employees.note.pdf', methods: ['GET'])]
+    #[Route('/api/users/notes/{uuid}/pdf', name: 'api.users.note.pdf', methods: ['GET'])]
     public function __invoke(string $uuid): Response
     {
         $this->denyAccessUnlessGranted(PermissionEnum::PDF, AccessEnum::NOTES, $this->messageService->get('accessDenied'));

@@ -16,4 +16,5 @@ interface NoteReaderInterface
 
     public function isNoteWithUUIDExists(string $uuid): bool;
     public function isNoteWithUUIDAndUserExists(string $uuid, UserInterface $user): bool;
+    public function getNotesByUUIDs(array $uuids): Collection;
 }
