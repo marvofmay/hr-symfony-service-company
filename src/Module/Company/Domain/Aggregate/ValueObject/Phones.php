@@ -9,6 +9,10 @@ final readonly class Phones
     public function __construct(private array $phones)
     {
         foreach ($phones as $phone) {
+            if ($phone === null || trim((string) $phone) === '') {
+                continue;
+            }
+
             if (!is_string($phone)) {
                 throw new \InvalidArgumentException('Phone must be string');
             }

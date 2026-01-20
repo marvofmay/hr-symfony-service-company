@@ -29,7 +29,7 @@ final readonly class InternalNotificationChannelHandler implements NotificationC
         return $channel->getChannelCode() === InternalNotificationChannel::getChanelCode();
     }
 
-    public function send(NotificationEventSetting $event, array $recipientUUIDs, string $title, string $content, array $payload = []): void
+    public function send(NotificationEventSetting $event, array $recipients, string $title, string $content, array $payload = []): void
     {
         try {
             $eventName = $event->getEventName();
@@ -38,9 +38,9 @@ final readonly class InternalNotificationChannelHandler implements NotificationC
                 'event'          => $eventName,
             ];
 
-            foreach ($recipientUUIDs as $recipientUUID) {
+            foreach ($recipients as $recipient) {
                 $this->websocketPusher->pushToUser(
-                    userUUID: $recipientUUID,
+                    userUUID: $recipient->getUuid(),
                     event: $eventName,
                     payload: $message
                 );

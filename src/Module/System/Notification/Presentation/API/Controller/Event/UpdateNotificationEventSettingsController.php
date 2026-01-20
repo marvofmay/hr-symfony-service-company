@@ -19,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class UpdateNotificationEventSettingsController extends AbstractController
 {
@@ -36,7 +36,7 @@ class UpdateNotificationEventSettingsController extends AbstractController
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::SETTINGS,
-                AccessEnum::NOTIFICATION_EVENT,
+                AccessEnum::NOTIFICATION_EVENTS,
                 $this->messageService->get('accessDenied')
             );
 

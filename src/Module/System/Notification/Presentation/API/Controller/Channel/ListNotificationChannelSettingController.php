@@ -37,7 +37,7 @@ final class ListNotificationChannelSettingController extends AbstractController
         try {
             $this->denyAccessUnlessGranted(
                 PermissionEnum::LIST,
-                AccessEnum::NOTIFICATION_CHANNEL,
+                AccessEnum::NOTIFICATION_CHANNELS,
                 $this->messageService->get('accessDenied')
             );
 

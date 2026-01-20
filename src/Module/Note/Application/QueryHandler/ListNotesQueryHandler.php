@@ -84,6 +84,7 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
     public function handle(ListQueryInterface $query): array
     {
         $alias = $this->getAlias();
+
         $qb = $this->createBaseQueryBuilder();
         $qb = $this->setFilters($qb, $query->getFilters());
 
@@ -91,35 +92,56 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
         $metadata = $this->entityManager->getClassMetadata($entityClass);
         $idField = $metadata->getSingleIdentifierFieldName();
 
-        // całkowita liczba rekordów
+        // -----------------------------------------
+        // TOTAL
+        // -----------------------------------------
         $total = (clone $qb)
             ->select("COUNT($alias.$idField)")
             ->resetDQLPart('orderBy')
             ->getQuery()
             ->getSingleScalarResult();
 
-        // sortowanie
-        $orderByField = $query->getOrderBy() ?? $this->getDefaultOrderBy();
-        $x = $query->getOrderDirection();
-
+        // -----------------------------------------
+        // SORTING
+        // -----------------------------------------
+        $orderByField = $query->getOrderBy();
         $orderDirection = strtoupper($query->getOrderDirection() ?? 'DESC');
 
-        // Custom sort tylko dla priority
-        if ($orderByField === NoteEntityFieldEnum::PRIORITY->value) {
-            $orderByExpr = "CASE $alias.priority
-            WHEN 'high' THEN 3
-            WHEN 'medium' THEN 2
-            WHEN 'low' THEN 1
-            ELSE 0
-        END";
-        } else {
-            $orderByExpr = str_contains($orderByField, '.') ? $orderByField : "$alias.$orderByField";
+        // CASE dla priority
+        $priorityOrderExpr = "CASE $alias.priority
+        WHEN 'high' THEN 3
+        WHEN 'medium' THEN 2
+        WHEN 'low' THEN 1
+        ELSE 0
+    END";
+
+        // -----------------------------------------
+        // IDS (pagination-safe)
+        // -----------------------------------------
+        $qbIds = (clone $qb)->select("$alias.$idField");
+
+        // DOMYŚLNE: priority DESC + createdAt DESC
+        if ($orderByField === null) {
+            $qbIds
+                ->orderBy($priorityOrderExpr, 'DESC')
+                ->addOrderBy("$alias.createdAt", 'DESC');
+        }
+        // PRIORITY (zawsze + createdAt DESC)
+        elseif ($orderByField === NoteEntityFieldEnum::PRIORITY->value) {
+            $qbIds
+                ->orderBy($priorityOrderExpr, $orderDirection)
+                ->addOrderBy("$alias.createdAt", 'DESC');
+        }
+        // INNE POLA
+        else {
+            $field = str_contains($orderByField, '.')
+                ? $orderByField
+                : "$alias.$orderByField";
+
+            $qbIds->orderBy($field, $orderDirection);
         }
 
-        // pobranie ID do paginacji
-        $ids = (clone $qb)
-            ->select("$alias.$idField")
-            ->orderBy($orderByExpr, $orderDirection)
+        $ids = $qbIds
             ->setFirstResult($query->getOffset())
             ->setMaxResults($query->getLimit())
             ->getQuery()
@@ -127,16 +149,18 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
 
         if (empty($ids)) {
             return [
-                'total' => (int)$total,
+                'total' => (int) $total,
                 'page'  => $query->getPage(),
                 'limit' => $query->getLimit(),
                 'items' => [],
             ];
         }
 
-        $ids = array_map(fn($row) => array_values($row)[0], $ids);
+        $ids = array_map(static fn ($row) => array_values($row)[0], $ids);
 
-        // pobranie pełnych encji wg ID
+        // -----------------------------------------
+        // FETCH ENTITIES
+        // -----------------------------------------
         $qb = $this->createBaseQueryBuilder()
             ->andWhere($qb->expr()->in("$alias.$idField", ':ids'))
             ->setParameter('ids', $ids);
@@ -148,13 +172,19 @@ final class ListNotesQueryHandler extends ListQueryHandlerAbstract
             }
         }
 
-        // zachowanie sortowania
-        $qb->orderBy($orderByExpr, $orderDirection);
+        // MUSI być to samo sortowanie
+        if ($orderByField === null || $orderByField === NoteEntityFieldEnum::PRIORITY->value) {
+            $qb
+                ->orderBy($priorityOrderExpr, 'DESC')
+                ->addOrderBy("$alias.createdAt", 'DESC');
+        } else {
+            $qb->orderBy($field, $orderDirection);
+        }
 
         $items = $qb->getQuery()->getResult();
 
         return [
-            'total' => (int)$total,
+            'total' => (int) $total,
             'page'  => $query->getPage(),
             'limit' => $query->getLimit(),
             'items' => $this->transformIncludes($items, $query->getIncludes()),

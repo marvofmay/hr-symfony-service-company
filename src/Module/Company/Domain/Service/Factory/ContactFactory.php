@@ -17,7 +17,7 @@ class ContactFactory
         $contacts = [];
 
         $dataSets = [
-            ContactTypeEnum::PHONE->value => $phones->toArray(),
+            ContactTypeEnum::PHONE->value => $phones->toArray() ?? [],
             ContactTypeEnum::EMAIL->value => $emails?->toArray() ?? [],
             ContactTypeEnum::WEBSITE->value => $websites?->toArray() ?? [],
         ];
