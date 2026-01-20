@@ -16,8 +16,9 @@ final readonly class SmsNotificationChannelHandler implements NotificationChanne
         return $channel->getChannelCode() === SmsNotificationChannel::getChanelCode();
     }
 
-    public function send(NotificationEventSetting $event, array $recipientUUIDs, string $title, string $content, array $payload = []): void
+    public function send(NotificationEventSetting $event, array $recipients, string $title, string $content, array $payload = []): void
     {
+        // ToDo:: dispatch new SendSmsCommand
         // dispatch new SendSmsCommand(...)
     }
 }

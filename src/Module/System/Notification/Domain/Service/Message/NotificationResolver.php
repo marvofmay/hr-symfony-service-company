@@ -26,7 +26,7 @@ final readonly class NotificationResolver implements NotificationResolveInterfac
 
     public function resolve(NotifiableEventInterface $notifiableEvent): void
     {
-        [$payload, $recipientUUIDs] = $this->payloadDispatcher->getPayloadData($notifiableEvent);
+        [$payload, $recipients] = $this->payloadDispatcher->getPayloadData($notifiableEvent);
 
         $notifiableEventClassName = $this->getShortClassName($notifiableEvent::class);
         $templates = $this->templateReaderRepository->getActiveByEventName($notifiableEventClassName);
@@ -36,9 +36,8 @@ final readonly class NotificationResolver implements NotificationResolveInterfac
             $title = $this->renderTemplate($template->getTitle(), $payload);
             $content = $this->renderTemplate($template->getContent(), $payload);
 
-            $this->messageCreator->create($event, $channel, $template, $title, $content, $recipientUUIDs);
-
-            $this->channelDispatcher->dispatch($event, $channel, $recipientUUIDs, $title, $content, $payload);
+            $this->messageCreator->create($event, $channel, $template, $title, $content, $recipients);
+            $this->channelDispatcher->dispatch($event, $channel, $recipients, $title, $content, $payload);
         }
     }
 

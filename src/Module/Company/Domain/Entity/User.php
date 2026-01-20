@@ -11,6 +11,7 @@ use App\Module\System\Domain\Entity\Email;
 use App\Module\System\Domain\Entity\EventLog;
 use App\Module\System\Domain\Entity\File;
 use App\Module\System\Domain\Entity\Import;
+use App\Module\System\Notification\Domain\Entity\NotificationRecipient;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -84,6 +85,12 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     #[ORM\OneToMany(targetEntity: Email::class, mappedBy: 'sender')]
     private Collection $sentEmails;
 
+    #[ORM\OneToMany(
+        targetEntity: NotificationRecipient::class,
+        mappedBy: 'user',
+        cascade: ['remove']
+    )]
+    private Collection $notificationRecipients;
 
     public function __construct()
     {
@@ -92,6 +99,7 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
         $this->eventLogs = new ArrayCollection();
         $this->notes = new ArrayCollection();
         $this->sentEmails = new ArrayCollection();
+        $this->notificationRecipients = new ArrayCollection();
     }
 
     public static function create(string $email): self

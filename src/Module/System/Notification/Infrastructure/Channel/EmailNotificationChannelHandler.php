@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Module\System\Notification\Infrastructure\Channel;
 
-use App\Module\Company\Domain\Interface\User\UserReaderInterface;
 use App\Module\Company\Domain\Service\Email\EmailService;
 use App\Module\System\Notification\Domain\Channel\EmailNotificationChannel;
 use App\Module\System\Notification\Domain\Entity\NotificationChannelSetting;
@@ -13,10 +12,8 @@ use App\Module\System\Notification\Domain\Interface\Channel\NotificationChannelH
 
 final readonly class EmailNotificationChannelHandler implements NotificationChannelHandlerInterface
 {
-    public function __construct(
-        private EmailService $emailService,
-        private UserReaderInterface $userReaderRepository,
-    ) {
+    public function __construct(private EmailService $emailService)
+    {
     }
 
     public function supports(NotificationChannelSetting $channel): bool
@@ -24,12 +21,12 @@ final readonly class EmailNotificationChannelHandler implements NotificationChan
         return $channel->getChannelCode() === EmailNotificationChannel::getChanelCode();
     }
 
-    public function send(NotificationEventSetting $event, array $recipientUUIDs, string $title, string $content, array $payload = []): void
+    public function send(NotificationEventSetting $event, array $recipients, string $title, string $content, array $payload = []): void
     {
-        $recipients = $this->userReaderRepository->getUsersEmailsByUUIDs($recipientUUIDs);
+        $emails = array_map(static fn ($user) => $user->getEmail(), $recipients);
 
         $this->emailService->sendEmail(
-            recipients: $recipients,
+            recipients: $emails,
             subject: $title,
             templateName: 'emails/notification.html.twig',
             context: [
