@@ -99,7 +99,6 @@ final class ListNotificationMessagesQueryHandler extends ListQueryHandlerAbstrac
         $baseQb = $this->setFilters($baseQb, $query->getFilters());
 
         $baseQb
-            ->select($alias, $messageAlias)
             ->from(NotificationRecipient::class, $alias)
             ->innerJoin("$alias.message", $messageAlias)
             ->andWhere("$alias.user = :user")
@@ -114,23 +113,25 @@ final class ListNotificationMessagesQueryHandler extends ListQueryHandlerAbstrac
         $orderByField = $query->getOrderBy();
         $orderDirection = strtoupper($query->getOrderDirection() ?? 'DESC');
 
+        $allowedMessageFields = ['title'];
+
         $readOrderExpr = "CASE WHEN $alias.readAt IS NULL THEN 0 ELSE 1 END";
 
         $qbIds = (clone $baseQb)
             ->resetDQLPart('select')
-            ->select("$alias.uuid")
-            ->addSelect("$readOrderExpr AS HIDDEN read_status");
+            ->select("$alias.uuid");
 
-        if ($orderByField === null || $orderByField === 'readAt') {
+        if ($orderByField === null) {
             $qbIds
+                ->addSelect("$readOrderExpr AS HIDDEN read_status")
                 ->orderBy('read_status', 'ASC')
                 ->addOrderBy("$alias.receivedAt", 'DESC');
+        } elseif ($orderByField === 'receivedAt') {
+            $qbIds->orderBy("$alias.receivedAt", $orderDirection);
+        } elseif (in_array($orderByField, $allowedMessageFields, true)) {
+            $qbIds->orderBy("$messageAlias.$orderByField", $orderDirection);
         } else {
-            $field = str_contains($orderByField, '.')
-                ? $orderByField
-                : "$alias.$orderByField";
-
-            $qbIds->orderBy($field, $orderDirection);
+            $qbIds->orderBy("$alias.receivedAt", 'DESC');
         }
 
         $ids = $qbIds
@@ -155,10 +156,23 @@ final class ListNotificationMessagesQueryHandler extends ListQueryHandlerAbstrac
             ->from(NotificationRecipient::class, $alias)
             ->innerJoin("$alias.message", $messageAlias)
             ->andWhere("$alias.uuid IN (:ids)")
-            ->setParameter('ids', $ids)
-            ->addSelect("$readOrderExpr AS HIDDEN read_status")
-            ->orderBy('read_status', 'ASC')
-            ->addOrderBy("$alias.receivedAt", 'DESC');
+            ->setParameter('ids', $ids);
+
+        if ($orderByField === null) {
+            $qb
+                ->addSelect("$readOrderExpr AS HIDDEN read_status")
+                ->orderBy('read_status', 'ASC')
+                ->addOrderBy("$alias.receivedAt", 'DESC');
+
+        } elseif ($orderByField === 'receivedAt') {
+            $qb->orderBy("$alias.receivedAt", $orderDirection);
+
+        } elseif (in_array($orderByField, $allowedMessageFields, true)) {
+            $qb->orderBy("$messageAlias.$orderByField", $orderDirection);
+
+        } else {
+            $qb->orderBy("$alias.receivedAt", 'DESC');
+        }
 
         $items = $qb->getQuery()->getResult();
 
@@ -170,9 +184,10 @@ final class ListNotificationMessagesQueryHandler extends ListQueryHandlerAbstrac
         ];
     }
 
+
     public function setFilters(QueryBuilder $qb, array $filters): QueryBuilder
     {
-        $messageAlias   = NotificationMessage::ALIAS;
+        $messageAlias = NotificationMessage::ALIAS;
         foreach ($filters as $field => $value) {
             if ($value === null || !in_array($field, $this->getAllowedFilters(), true)) {
                 continue;
