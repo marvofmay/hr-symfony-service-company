@@ -25,6 +25,9 @@ final class NotificationMessageDataTransformer implements DataTransformerInterfa
             NotificationRecipientEntityFieldEnum::READ_AT->value =>
                 $notificationRecipient->getReadAt()?->format('Y-m-d H:i:s'),
 
+            NotificationRecipientEntityFieldEnum::RECEIVED_AT->value =>
+                $notificationRecipient->getReceivedAt()?->format('Y-m-d H:i:s'),
+
             TimeStampableEntityFieldEnum::CREATED_AT->value =>
                 $notificationRecipient->createdAt->format('Y-m-d H:i:s'),
 
