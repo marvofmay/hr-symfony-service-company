@@ -7,7 +7,7 @@ namespace App\Module\System\Notification\Application\Query\Message;
 use App\Common\Application\Query\ListQueryAbstract;
 use App\Common\Domain\Interface\QueryDTOInterface;
 use App\Common\Domain\Interface\QueryInterface;
-use App\Module\System\Notification\Domain\Entity\NotificationMessage;
+use App\Module\System\Notification\Domain\Entity\NotificationRecipient;
 
 class ListNotificationMessagesQuery extends ListQueryAbstract implements QueryInterface
 {
@@ -18,11 +18,11 @@ class ListNotificationMessagesQuery extends ListQueryAbstract implements QueryIn
 
     public function getAttributes(): array
     {
-        return NotificationMessage::getAttributes();
+        return NotificationRecipient::getAttributes();
     }
 
     public function getRelations(): array
     {
-        return NotificationMessage::getRelations();
+        return NotificationRecipient::getRelations();
     }
 }

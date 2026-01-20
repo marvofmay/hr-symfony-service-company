@@ -26,6 +26,8 @@ class NotificationRecipient
     use AttributesEntityTrait;
     use RelationsEntityTrait;
 
+    public const string ALIAS = 'notification_recipient';
+
     #[ORM\Id]
     #[ORM\Column(type: 'uuid', unique: true)]
     private UuidInterface $uuid;
@@ -88,5 +90,10 @@ class NotificationRecipient
     public function getReceivedAt(): ?\DateTimeInterface
     {
         return $this->receivedAt;
+    }
+    
+    public function getMessage(): NotificationMessage
+    {
+        return $this->message;
     }
 }
