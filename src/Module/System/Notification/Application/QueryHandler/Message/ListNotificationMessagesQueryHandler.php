@@ -10,6 +10,8 @@ use App\Common\Domain\Enum\TimeStampableEntityFieldEnum;
 use App\Common\Domain\Interface\ListQueryInterface;
 use App\Module\System\Notification\Application\Event\Message\NotificationMessageListedEvent;
 use App\Module\System\Notification\Application\Query\Message\ListNotificationMessagesQuery;
+use App\Module\System\Notification\Domain\Channel\InternalNotificationChannel;
+use App\Module\System\Notification\Domain\Entity\NotificationChannelSetting;
 use App\Module\System\Notification\Domain\Entity\NotificationMessage;
 use App\Module\System\Notification\Domain\Entity\NotificationRecipient;
 use App\Module\System\Notification\Domain\Enum\NotificationMessageEntityFieldEnum;
@@ -94,6 +96,7 @@ final class ListNotificationMessagesQueryHandler extends ListQueryHandlerAbstrac
 
         $alias = $this->getAlias();
         $messageAlias = NotificationMessage::ALIAS;
+        $channelAlias = NotificationChannelSetting::ALIAS;
 
         $baseQb = $this->entityManager->createQueryBuilder();
         $baseQb = $this->setFilters($baseQb, $query->getFilters());
@@ -101,8 +104,14 @@ final class ListNotificationMessagesQueryHandler extends ListQueryHandlerAbstrac
         $baseQb
             ->from(NotificationRecipient::class, $alias)
             ->innerJoin("$alias.message", $messageAlias)
+            ->innerJoin("$messageAlias.channel", $channelAlias)
             ->andWhere("$alias.user = :user")
-            ->setParameter('user', $user);
+            ->andWhere("$channelAlias.channelCode = :channelCode")
+            ->setParameter('user', $user)
+            ->setParameter(
+                'channelCode',
+                InternalNotificationChannel::getChanelCode()
+            );
 
         $total = (clone $baseQb)
             ->resetDQLPart('orderBy')
@@ -183,7 +192,6 @@ final class ListNotificationMessagesQueryHandler extends ListQueryHandlerAbstrac
             'items' => $this->transformIncludes($items, []),
         ];
     }
-
 
     public function setFilters(QueryBuilder $qb, array $filters): QueryBuilder
     {

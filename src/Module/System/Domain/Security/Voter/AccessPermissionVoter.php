@@ -8,6 +8,8 @@ use App\Module\Company\Domain\Entity\Employee;
 use App\Module\System\Domain\Entity\Access;
 use App\Module\System\Domain\Entity\Module;
 use App\Module\System\Domain\Entity\Permission;
+use App\Module\System\Domain\Enum\Access\AccessEnum;
+use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use App\Module\System\Domain\Interface\Access\AccessReaderInterface;
 use App\Module\System\Domain\Interface\Module\ModuleReaderInterface;
 use App\Module\System\Domain\Interface\Permission\PermissionReaderInterface;
@@ -34,26 +36,37 @@ abstract class AccessPermissionVoter extends Voter
 
     protected function supports(mixed $attribute, mixed $subject): bool
     {
+        if (!$attribute instanceof PermissionEnum) {
+            return false;
+        }
+
+        if (!$subject instanceof AccessEnum) {
+            return false;
+        }
+
         if ($attribute->value !== $this->getAttributeName()) {
             return false;
         }
 
         $data = explode('.', $subject->value);
-        $moduleName = $data[0];
-        $accessName = $data[1];
+        if (count($data) !== 2) {
+            return false;
+        }
+
+        [$moduleName, $accessName] = $data;
 
         $this->module = $this->moduleReaderRepository->getModuleByName($moduleName);
-        if (null === $this->module || !$this->module->getActive()) {
+        if (!$this->module?->getActive()) {
             return false;
         }
 
         $this->access = $this->accessReaderRepository->getAccessByNameAndModuleUUID($accessName, $this->module);
-        if (null === $this->access || !$this->access->getActive()) {
+        if (!$this->access?->getActive()) {
             return false;
         }
 
         $this->permission = $this->permissionReaderRepository->getPermissionByName($this->getAttributeName());
-        if (null === $this->permission || !$this->permission->getActive()) {
+        if (!$this->permission?->getActive()) {
             return false;
         }
 

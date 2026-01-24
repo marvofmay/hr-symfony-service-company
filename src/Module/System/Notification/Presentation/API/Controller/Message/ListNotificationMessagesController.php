@@ -22,7 +22,7 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
-final class ListNotificationMessageController extends AbstractController
+final class ListNotificationMessagesController extends AbstractController
 {
     public function __construct(
         #[Autowire(service: 'query.bus')] private readonly MessageBusInterface $queryBus,

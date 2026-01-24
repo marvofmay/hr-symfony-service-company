@@ -22,21 +22,18 @@ final class NotificationMessageDataTransformer implements DataTransformerInterfa
     public function transformToArray(NotificationRecipient $notificationRecipient): array
     {
         return [
+            NotificationRecipientEntityFieldEnum::UUID->value =>
+                $notificationRecipient->getUUID(),
             NotificationRecipientEntityFieldEnum::READ_AT->value =>
                 $notificationRecipient->getReadAt()?->format('Y-m-d H:i:s'),
-
             NotificationRecipientEntityFieldEnum::RECEIVED_AT->value =>
                 $notificationRecipient->getReceivedAt()?->format('Y-m-d H:i:s'),
-
             TimeStampableEntityFieldEnum::CREATED_AT->value =>
                 $notificationRecipient->createdAt->format('Y-m-d H:i:s'),
-
             TimeStampableEntityFieldEnum::UPDATED_AT->value =>
                 $notificationRecipient->updatedAt?->format('Y-m-d H:i:s'),
-
             TimeStampableEntityFieldEnum::DELETED_AT->value =>
                 $notificationRecipient->deletedAt?->format('Y-m-d H:i:s'),
-
             'message' => $this->transformNotificationMessage(
                 $notificationRecipient->getMessage()
             ),
@@ -52,10 +49,8 @@ final class NotificationMessageDataTransformer implements DataTransformerInterfa
         return [
             NotificationMessageEntityFieldEnum::TITLE->value =>
                 $message->getTitle(),
-
             NotificationMessageEntityFieldEnum::CONTENT->value =>
                 $message->getContent(),
-
             TimeStampableEntityFieldEnum::CREATED_AT->value =>
                 $message->getCreatedAt()?->format('Y-m-d H:i:s'),
         ];
