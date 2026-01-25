@@ -7,7 +7,7 @@ namespace App\Module\Company\Domain\Service\Company;
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Enum\CompanyImportColumnEnum;
-use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Enum\Contact\ContactTypeEnum;
 use App\Module\Company\Domain\Interface\Company\CompanyReaderInterface;
 use App\Module\Company\Domain\Interface\Industry\IndustryReaderInterface;
 
