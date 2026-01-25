@@ -2,6 +2,8 @@
 /vendor/
 /storage/
 
+/config/reference.php
+
 .env.dev
 
 ###> lexik/jwt-authentication-bundle ###
