@@ -4,10 +4,6 @@ declare(strict_types=1);
 
 namespace App\tests\unit\module\company\domain\service\role;
 
-use App\Module\Company\Domain\Entity\Role;
-use App\Module\Company\Domain\Interface\Role\RoleWriterInterface;
-use App\Module\System\Domain\Entity\Access;
-use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
 class RoleAccessAssignerTest extends TestCase
