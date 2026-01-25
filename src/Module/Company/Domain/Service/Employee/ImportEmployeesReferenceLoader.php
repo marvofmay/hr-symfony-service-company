@@ -6,7 +6,7 @@ namespace App\Module\Company\Domain\Service\Employee;
 
 use App\Common\Infrastructure\Cache\EntityReferenceCache;
 use App\Module\Company\Domain\Entity\Employee;
-use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Enum\Contact\ContactTypeEnum;
 use App\Module\Company\Domain\Enum\EmployeeImportColumnEnum;
 use App\Module\Company\Domain\Interface\ContractType\ContractTypeReaderInterface;
 use App\Module\Company\Domain\Interface\Department\DepartmentReaderInterface;

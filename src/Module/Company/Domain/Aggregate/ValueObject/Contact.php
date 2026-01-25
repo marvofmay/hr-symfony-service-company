@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Aggregate\ValueObject;
 
-use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Enum\Contact\ContactTypeEnum;
 
 final class Contact
 {

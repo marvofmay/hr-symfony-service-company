@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Module\Company\Application\Facade;
 
 use App\Common\Application\Command\UploadFileCommand;
-use App\Common\Domain\DTO\UploadFileDTO;
+use App\Common\Application\DTO\UploadFileDTO;
 use App\Common\Domain\Enum\FileExtensionEnum;
 use App\Common\Domain\Enum\FileKindEnum;
 use App\Common\Domain\Enum\MonologChanelEnum;

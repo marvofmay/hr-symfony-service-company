@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Application\Command\Employee;
 
-use App\Common\Domain\DTO\AddressDTO;
+use App\Common\Application\DTO\AddressDTO;
 use App\Common\Domain\Interface\CommandInterface;
 
 class UpdateEmployeeCommand implements CommandInterface

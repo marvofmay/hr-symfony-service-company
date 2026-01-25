@@ -9,7 +9,7 @@ use App\Module\Company\Domain\Entity\Address;
 use App\Module\Company\Domain\Entity\Company;
 use App\Module\Company\Domain\Entity\Contact;
 use App\Module\Company\Domain\Entity\Department;
-use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Enum\Contact\ContactTypeEnum;
 use App\Module\System\Application\Console\FakeData\Data\Company as CompanyFakeData;
 use App\Module\System\Application\Console\FakeData\Data\Department as DepartmentFakeData;
 use Doctrine\Common\Collections\ArrayCollection;

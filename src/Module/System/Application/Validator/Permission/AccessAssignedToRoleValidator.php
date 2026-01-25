@@ -9,11 +9,11 @@ use App\Common\Domain\Interface\QueryInterface;
 use App\Common\Domain\Interface\ValidatorInterface;
 use App\Module\Company\Domain\Interface\Role\RoleReaderInterface;
 use App\Module\Company\Domain\Service\Role\AssignPermissionsPayloadParser;
-
-;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Translation\TranslatorInterface;
+
+;
 
 #[AutoconfigureTag('app.role.assignPermissions.validator')]
 final readonly class AccessAssignedToRoleValidator implements ValidatorInterface

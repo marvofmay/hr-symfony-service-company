@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Module\Company\Domain\Aggregate\ValueObject;
 
-use App\Common\Domain\DTO\AddressDTO;
+use App\Common\Application\DTO\AddressDTO;
 
 final class Address
 {

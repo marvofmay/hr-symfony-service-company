@@ -7,7 +7,7 @@ namespace App\Module\Company\Domain\Entity;
 use App\Common\Domain\Trait\AttributesEntityTrait;
 use App\Common\Domain\Trait\RelationsEntityTrait;
 use App\Common\Domain\Trait\TimeStampableTrait;
-use App\Module\Company\Domain\Enum\ContactTypeEnum;
+use App\Module\Company\Domain\Enum\Contact\ContactTypeEnum;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

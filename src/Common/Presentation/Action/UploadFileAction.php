@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Common\Presentation\Action;
 
 use App\Common\Application\Command\UploadFileCommand;
-use App\Common\Domain\DTO\UploadFileDTO;
+use App\Common\Application\DTO\UploadFileDTO;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\Messenger\MessageBusInterface;
 
