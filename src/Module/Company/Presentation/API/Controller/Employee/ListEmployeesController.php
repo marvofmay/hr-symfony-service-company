@@ -8,7 +8,7 @@ use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Query\Employee\ListEmployeesQuery;
-use App\Module\Company\Domain\DTO\Employee\EmployeesQueryDTO;
+use App\Module\Company\Application\DTO\Employee\EmployeesQueryDTO;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

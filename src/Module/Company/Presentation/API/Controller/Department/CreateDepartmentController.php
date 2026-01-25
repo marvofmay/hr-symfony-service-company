@@ -8,7 +8,7 @@ use App\Common\Domain\Enum\MonologChanelEnum;
 use App\Common\Domain\Service\MessageTranslator\MessageService;
 use App\Common\Infrastructure\Http\Attribute\ErrorChannel;
 use App\Module\Company\Application\Command\Department\CreateDepartmentCommand;
-use App\Module\Company\Domain\DTO\Department\CreateDTO;
+use App\Module\Company\Application\DTO\Department\CreateDTO;
 use App\Module\System\Domain\Enum\Access\AccessEnum;
 use App\Module\System\Domain\Enum\Permission\PermissionEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

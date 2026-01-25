@@ -4,17 +4,29 @@ declare(strict_types=1);
 
 namespace App\Common\Domain\Trait;
 
+use Doctrine\DBAL\Schema\DefaultExpression\CurrentTimestamp;
 use Doctrine\ORM\Mapping as ORM;
 
 trait TimeStampableTrait
 {
-    #[ORM\Column(type: 'datetime', options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(
+        type: 'datetime',
+        options: ['default' => new CurrentTimestamp()]
+    )]
     public \DateTimeInterface $createdAt;
 
-    #[ORM\Column(type: 'datetime', nullable: true, options: ['default' => 'CURRENT_TIMESTAMP'])]
+    #[ORM\Column(
+        type: 'datetime',
+        nullable: true,
+        options: ['default' => new CurrentTimestamp()]
+    )]
     public ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(type: 'datetime', nullable: true)]
+    #[ORM\Column(
+        type: 'datetime',
+        nullable: true,
+        options: ['default' => new CurrentTimestamp()]
+    )]
     public ?\DateTimeInterface $deletedAt = null;
 
     #[ORM\PrePersist]
