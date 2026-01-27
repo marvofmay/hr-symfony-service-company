@@ -23,6 +23,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Event\Employee\EmployeeCreatedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeDeletedEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeRestoredEvent;
+use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedAvatarEvent;
 use App\Module\Company\Domain\Event\Employee\EmployeeUpdatedEvent;
 use App\Module\System\Domain\ValueObject\UserUUID;
 
@@ -49,6 +50,9 @@ class EmployeeAggregate extends AggregateRootAbstract
     private ?Phones          $phones       = null;
     private bool             $deleted      = false;
     private UserUUID         $loggedUserUUID;
+    private string $avatarType = 'default';
+    private ?string $defaultAvatar = null;
+    private ?string $avatarPath = null;
 
     public static function create(
         FirstName $firstName,
@@ -105,6 +109,7 @@ class EmployeeAggregate extends AggregateRootAbstract
         LastName $lastName,
         PESEL $pesel,
         EmploymentFrom $employmentFrom,
+        CompanyUUID $companyUUID,
         DepartmentUUID $departmentUUID,
         PositionUUID $positionUUID,
         ContractTypeUUID $contractTypeUUID,
@@ -130,6 +135,7 @@ class EmployeeAggregate extends AggregateRootAbstract
                 $lastName,
                 $pesel,
                 $employmentFrom,
+                $companyUUID,
                 $departmentUUID,
                 $positionUUID,
                 $contractTypeUUID,
@@ -167,6 +173,37 @@ class EmployeeAggregate extends AggregateRootAbstract
         return $this;
     }
 
+    public function changeAvatar(
+        string $avatarType,
+        ?string $defaultAvatar,
+        ?string $avatarPath,
+        UserUUID $loggedUserUUID
+    ): self {
+        if ($this->deleted) {
+            throw new \DomainException('Cannot change avatar of deleted employee.');
+        }
+
+        if ($avatarType === 'custom' && $avatarPath === null) {
+            throw new \DomainException('Custom avatar requires avatar path.');
+        }
+
+        if ($avatarType === 'default') {
+            $avatarPath = null;
+        }
+
+        $this->record(
+            new EmployeeUpdatedAvatarEvent(
+                $this->uuid,
+                $avatarType,
+                $defaultAvatar,
+                $avatarPath,
+                $loggedUserUUID
+            )
+        );
+
+        return $this;
+    }
+
     protected function apply(DomainEventInterface $event): void
     {
         if ($event instanceof EmployeeCreatedEvent || $event instanceof EmployeeUpdatedEvent) {
@@ -175,6 +212,7 @@ class EmployeeAggregate extends AggregateRootAbstract
             $this->lastName = $event->lastName;
             $this->pesel = $event->pesel;
             $this->employmentFrom = $event->employmentFrom;
+            $this->companyUUID= $event->companyUUID;
             $this->departmentUUID = $event->departmentUUID;
             $this->positionUUID = $event->positionUUID;
             $this->contractTypeUUID = $event->contractTypeUUID;
@@ -197,10 +235,31 @@ class EmployeeAggregate extends AggregateRootAbstract
         if ($event instanceof EmployeeRestoredEvent) {
             $this->deleted = false;
         }
+
+        if ($event instanceof EmployeeUpdatedAvatarEvent) {
+            $this->avatarType = $event->avatarType;
+            $this->defaultAvatar = $event->defaultAvatar;
+            $this->avatarPath = $event->avatarPath;
+        }
     }
 
     public function getUUID(): EmployeeUUID
     {
         return $this->uuid;
+    }
+
+    public function getAvatarType(): string
+    {
+        return $this->avatarType;
+    }
+
+    public function getDefaultAvatar(): ?string
+    {
+        return $this->defaultAvatar;
+    }
+
+    public function getAvatarPath(): ?string
+    {
+        return $this->avatarPath;
     }
 }

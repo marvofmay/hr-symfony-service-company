@@ -59,8 +59,8 @@ abstract readonly class AbstractImportFacade
 
         try {
             $user = $this->security->getUser();
-            $uploadFilePath = sprintf('%s/%s', $this->params->get('upload_file_path'), $folder);
-            $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX);
+            $uploadFilePath = sprintf('%s/%s', $this->params->get('upload_import_file_path'), $folder);
+            $fileName = UploadFile::generateUniqueFileName(FileExtensionEnum::XLSX->value);
 
             $uploadFileDTO = new UploadFileDTO($file, $uploadFilePath, $fileName);
 
@@ -84,8 +84,8 @@ abstract readonly class AbstractImportFacade
                     File::create(
                         fileName: $fileName,
                         filePath: $uploadFilePath,
-                        fileExtension: FileExtensionEnum::XLSX,
-                        fileKind: FileKindEnum::IMPORT_XLSX,
+                        fileExtension: FileExtensionEnum::XLSX->value,
+                        fileKind: FileKindEnum::IMPORT_XLSX->value,
                         user: $user
                     )
                 ));

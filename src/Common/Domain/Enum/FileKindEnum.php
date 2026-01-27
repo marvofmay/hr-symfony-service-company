@@ -8,7 +8,7 @@ use App\Common\Domain\Interface\EnumInterface;
 
 enum FileKindEnum: string implements EnumInterface
 {
-    case USER_PHOTO_PROFILE = 'user_photo_profile';
+    case USER_AVATAR_PROFILE = 'user_avatar_profile';
     case COMPANY_LOGO = 'company_logo';
     case EMPLOYEE_AGREEMENT = 'employee_agreement';
     case IMPORT_XLSX = 'import_xlsx';
@@ -17,7 +17,7 @@ enum FileKindEnum: string implements EnumInterface
     public function label(): string
     {
         return match ($this) {
-            self::USER_PHOTO_PROFILE => 'userPhotoProfile',
+            self::USER_AVATAR_PROFILE => 'userAvatarProfile',
             self::COMPANY_LOGO => 'companyLogo',
             self::EMPLOYEE_AGREEMENT => 'employeeAgreement',
             self::IMPORT_XLSX => 'importXlsx',

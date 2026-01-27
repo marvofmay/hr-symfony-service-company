@@ -23,6 +23,7 @@ use App\Module\Company\Domain\Aggregate\ValueObject\Address;
 use App\Module\Company\Domain\Aggregate\ValueObject\Emails;
 use App\Module\Company\Domain\Aggregate\ValueObject\Phones;
 use App\Module\Company\Domain\Interface\Employee\EmployeeAggregateReaderInterface;
+use App\Module\System\Domain\ValueObject\UserUUID;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
@@ -69,6 +70,7 @@ final class UpdateEmployeeCommandHandler extends CommandHandlerAbstract
             RoleUUID::fromString($command->roleUUID),
             Emails::fromArray([$command->email]),
             Address::fromDTO($command->address),
+            UserUUID::fromString($loggedUserUUID),
             $command->externalCode,
             $command->internalCode,
             $command->active,

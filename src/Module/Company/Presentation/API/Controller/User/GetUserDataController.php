@@ -16,7 +16,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[ErrorChannel(MonologChanelEnum::EVENT_STORE)]
+#[ErrorChannel(MonologChanelEnum::EVENT_LOG)]
 final class GetUserDataController extends AbstractController
 {
     public function __construct(
